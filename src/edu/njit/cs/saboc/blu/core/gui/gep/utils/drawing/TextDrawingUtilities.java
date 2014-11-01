@@ -51,6 +51,7 @@ public class TextDrawingUtilities {
             if ((lines.size() * g.getFontMetrics().getHeight()) > bounds.height) {
                 fontSize -= 1;
                 g.setFont(new Font(font.getFontName(), font.getStyle(), fontSize));
+                
                 lines.clear();
                 Collections.addAll(queue, text.split("\\s+"));
             } else {
@@ -61,16 +62,12 @@ public class TextDrawingUtilities {
         int y = bounds.y;
 
         for (String line : lines) {
-            int x = (centeringBounds.width - g.getFontMetrics().stringWidth(line)) / 2;
+            int x = bounds.x + (centeringBounds.width - g.getFontMetrics().stringWidth(line)) / 2;
             
-            if(g.getFontMetrics().stringWidth(line) > bounds.width) {
-                System.err.println("Line is wider then bounds.");
-            }
-
             g.drawString(line, x, y += g.getFontMetrics().getHeight());
         }
 
-        g.setFont(new Font("Ariel", Font.PLAIN, 20));
+        g.setFont(new Font("Ariel", Font.PLAIN, 11));
     }
     
     public static void drawGroupLabel(Graphics2D g, GenericGroupEntry group, Rectangle bounds, Rectangle centeringBounds) {

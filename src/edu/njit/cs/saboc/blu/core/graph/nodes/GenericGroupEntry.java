@@ -163,7 +163,7 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
                 
             case Default:
                 this.setBackground(Color.WHITE);
-                
+                                
                 break;
         }
     }

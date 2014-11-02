@@ -124,6 +124,8 @@ public class GraphSelectionStateMonitor {
     }
     
     private void resetSelectedGroupEntry() {
+        unhighlightAllGroups();
+        
         if (selectedGroupEntry != null) {
             selectedGroupEntry.setState(GroupEntryState.Default);
             
@@ -142,6 +144,7 @@ public class GraphSelectionStateMonitor {
     }
     
     private void resetSelectedPartitionEntry() {
+        
         if(selectedPartitionEntry != null) {
             selectedPartitionEntry.setState(PartitionEntryState.Default);
             selectedPartitionEntry = null;

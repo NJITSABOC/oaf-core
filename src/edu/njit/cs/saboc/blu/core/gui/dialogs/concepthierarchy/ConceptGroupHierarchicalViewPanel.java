@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ import javax.swing.JPanel;
  *
  * @author Chris
  */
-public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel{
+public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
 
     private SingleRootedHierarchy<T> hierarchy;
     

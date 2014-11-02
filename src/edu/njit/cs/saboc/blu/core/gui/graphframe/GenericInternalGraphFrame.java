@@ -15,10 +15,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -32,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.filechooser.FileFilter;
 
 // Blugraph is the most generic, of which there are
 // OWLPAreaBluGraph, PAreaBluGraph, and ClusterBluGraph -Vlad
@@ -53,6 +58,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     protected JPanel menuPanel = new JPanel();
     
     private JPanel reportsPanel = new JPanel();
+    
     private JPanel optionsPanel = new JPanel();
     
     private ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<PopupToggleButton>();
@@ -342,24 +348,43 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     }
 
     private void saveCurrentView() {
-//        final JFileChooser chooser = MainToolFrame.getMainFrame().getImageFileChooser();
-//        
-//        int returnVal = chooser.showSaveDialog(null);
-//
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//            BufferedImage graphImage = gep.getCurrentViewImage();
-//
-//            try {
-//                String file = chooser.getSelectedFile().getAbsolutePath();
-//
-//                if (!file.toLowerCase().endsWith(".png")) {
-//                    file += ".png";
-//                }
-//
-//                ImageIO.write(graphImage, "png", new File(file));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        final JFileChooser chooser = new JFileChooser();
+        
+        chooser.setFileFilter(new FileFilter() {
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+
+                if (f.getName().endsWith(".png")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            public String getDescription() {
+                return "Portal Network Graphics (.png) Images";
+            }
+        });
+        
+        int returnVal = chooser.showSaveDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            BufferedImage graphImage = gep.getCurrentViewImage();
+
+            try {
+                String file = chooser.getSelectedFile().getAbsolutePath();
+
+                if (!file.toLowerCase().endsWith(".png")) {
+                    file += ".png";
+                }
+
+                ImageIO.write(graphImage, "png", new File(file));
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

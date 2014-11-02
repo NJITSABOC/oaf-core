@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
@@ -78,187 +74,10 @@ public class PartitionOptionsPanel extends JPanel {
 
         super.setOpaque(false);
         
-
         //added by Vladimir
         elementLabel.setBounds(150, 4, 300, 24);
         
         this.add(elementLabel);
-        
-        //changed by Harsh:
-        /*this.add(option3Button);
-        this.add(option4Button);
-        */
-        
-        //previously deleted by Harsh, does't affect code:
-                
-        
-        
-        /*
-        final JButton option1Button = new JButton();
-        option1Button.setBounds(elementLabel.getX() - 100, 4, 30, 30);
-
-        final JButton option2Button = new JButton();
-        option2Button.setBounds(elementLabel.getX() - 60, 4, 30, 30);
-
-        final JButton option3Button = new JButton();
-        option3Button.setBounds(elementLabel.getX() + elementLabel.getWidth() + 30, 4, 30, 30);
-
-        final JButton option4Button = new JButton();
-        option4Button.setBounds(elementLabel.getX() + elementLabel.getWidth() + 70, 4, 30, 30);
-
-        option1Button.setBackground(new Color(120, 120, 255));
-        option2Button.setBackground(new Color(120, 120, 255));
-        option3Button.setBackground(new Color(120, 120, 255));
-        option4Button.setBackground(new Color(120, 120, 255));
-
-        option1Button.setBorder(BorderFactory.createEtchedBorder());
-        option2Button.setBorder(BorderFactory.createEtchedBorder());
-        option3Button.setBorder(BorderFactory.createEtchedBorder());
-        option4Button.setBorder(BorderFactory.createEtchedBorder());
-
-        option1Button.setIcon(new ImageIcon(MainToolFrame.class.getResource("groupDetailsIcon.png")));
-        option2Button.setIcon(new ImageIcon(MainToolFrame.class.getResource("viewRootInConceptBrowserIcon.png")));
-        option3Button.setIcon(new ImageIcon(MainToolFrame.class.getResource("createRootConstrainedIcon.png")));
-        option4Button.setIcon(new ImageIcon(MainToolFrame.class.getResource("viewPAreaInHybridIcon.png")));
-
-        if(graph instanceof PAreaBluGraph) {
-
-        } else if (graph instanceof ClusterBluGraph) {
-            option3Button.setEnabled(false);
-            option4Button.setEnabled(false);
-        } else {
-            option1Button.setEnabled(false);
-            option2Button.setEnabled(false);
-            option3Button.setEnabled(false);
-            option4Button.setEnabled(false);
-        }
-
-        option1Button.addMouseListener(new MouseAdapter() {
-
-            public void mouseEntered(MouseEvent e) {
-                if(option1Button.isEnabled()) {
-                    setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.RED,
-                            "Get detailed information about this Partial-area");
-                }
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.BLACK,
-                        getGroupTextForLabel());
-            }
-        });
-
-        option2Button.addMouseListener(new MouseAdapter() {
-
-            public void mouseEntered(MouseEvent e) {
-                if(option2Button.isEnabled()) {
-                    setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.RED,
-                            "View root of this Partial-area in the Concept Browser");
-                }
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.BLACK,
-                        getGroupTextForLabel());
-            }
-        });
-
-        option3Button.addMouseListener(new MouseAdapter() {
-
-            public void mouseEntered(MouseEvent e) {
-                if(option3Button.isEnabled()) {
-                    setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.RED,
-                            "Create Root-constrained Partial-area Subtaxonomy");
-                }
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.BLACK,
-                        getGroupTextForLabel());
-            }
-        });
-
-        option4Button.addMouseListener(new MouseAdapter() {
-
-            public void mouseEntered(MouseEvent e) {
-                if(option4Button.isEnabled()) {
-                    setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.RED,
-                            "View Partial-area in Hybrid Browser");
-                }
-            }
-
-            public void mouseExited(MouseEvent e) {
-                setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.BLACK,
-                        getGroupTextForLabel());
-            }
-        });
-
-        option1Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                new ConceptGroupDetailsDialog(entry.getGroup(), graph.getHierarchyData(),
-                        ConceptGroupDetailsDialog.DialogType.PartialArea);
-            }
-        });
-
-        option2Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                MainToolFrame.getMainFrame().addNewBrowserFrame(entry.getGroup().getRoot(), 
-                        graph.getHierarchyData().getVersion());
-            }
-        });
-
-        option3Button.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                final MainToolFrame mainFrame = MainToolFrame.getMainFrame();
-                JProgressBar progress = new JProgressBar();
-                progress.setIndeterminate(true);
-
-                final Popup waitPopup = PopupFactory.getSharedInstance().getPopup(mainFrame, progress, 200, 100);
-                waitPopup.show();
-
-                final SwingWorker t = new SwingWorker() {
-
-                    public Object doInBackground() {
-                        mainFrame.addNewPAreaGraphFrame(
-                                ((PAreaHierarchyData)graph.getHierarchyData()).getHierarchyRootedAt(
-                                    (PAreaSummary)entry.getGroup()),
-                                graph.getIsAreaGraph(),
-                                graph.showingConceptCountLabels());
-
-                        return new Object();
-                    }
-
-                    @Override
-                    public void done() {
-                        waitPopup.hide();
-                    }
-                };
-                t.execute();
-                requestFocusInWindow();
-            }
-        });
-
-        option4Button.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae) {
-                try {
-                    graph.getParentInternalFrame().viewInTextBrowser((PAreaSummary)entry.getGroup());
-                } catch (Exception e) {
-                }
-            }
-        });
-
-        this.add(option1Button);
-        this.add(option2Button);
-        this.add(option3Button);
-        this.add(option4Button);
-        
-        */
-
-        
-        
-        
-        
     }
 
     
@@ -271,8 +90,6 @@ public class PartitionOptionsPanel extends JPanel {
         }
 
         setLabelText(new Font("Tahoma", Font.BOLD, 11), Color.BLACK, getGroupTextForLabel());
-        
-        
     }
 
     private String getGroupTextForLabel() {
@@ -281,24 +98,7 @@ public class PartitionOptionsPanel extends JPanel {
         }
         
         String text = entry.getPartitionName();
-        
-        
-        
-        
-//added by Harsh, disabled by Vlad
-//        this.elementLabel.setText("<html> <center>" + text + "</center> </html>");
-//end
-        
 
-//        int width = elementLabel.getFontMetrics(elementLabel.getFont()).stringWidth(text);
-//
-//        if (width > 400) {
-//            int charWidth = elementLabel.getFontMetrics(elementLabel.getFont()).charWidth('A');
-//
-//            int charCount = 400 / charWidth;
-//
-//            text = text.substring(0, charCount - 3) + "...";
-//        }
 
         return text;
     }

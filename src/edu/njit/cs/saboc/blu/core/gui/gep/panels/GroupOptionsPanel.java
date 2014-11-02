@@ -74,8 +74,10 @@ public class GroupOptionsPanel extends JPanel {
     });
 
     private GenericGroupEntry entry;
+    
+    private JButton [] optionButtons = new JButton[5];
 
-    public GroupOptionsPanel(final BluGraph graph) {
+    public GroupOptionsPanel(final BluGraph graph, final GroupOptionsPanelConfiguration configuration) {
         this.setLayout(null);
         this.setBounds(200, -36, 600, 40);
 
@@ -85,33 +87,41 @@ public class GroupOptionsPanel extends JPanel {
         
         this.add(elementLabel);
 
-        final JButton option1Button = createPanelButton("groupDetailsIcon.png", "Get information about this partial-area");
-        option1Button.setBounds(elementLabel.getX() - 100, 4, 30, 30);
+        optionButtons[0] = createPanelButton("groupDetailsIcon.png", "Get information about this partial-area");
+        optionButtons[0].setBounds(elementLabel.getX() - 100, 4, 30, 30);
 
-        final JButton option2Button = createPanelButton("viewRootInConceptBrowserIcon.png", "View root of this Partial-area in the Concept Browser");
-        option2Button.setBounds(elementLabel.getX() - 60, 4, 30, 30);
+        optionButtons[1] = createPanelButton("viewRootInConceptBrowserIcon.png", "View root of this Partial-area in the Concept Browser");
+        optionButtons[1].setBounds(elementLabel.getX() - 60, 4, 30, 30);
 
-        final JButton option3Button = createPanelButton("createRootConstrainedIcon.png", "Create Root-constrained Partial-area Subtaxonomy");
-        option3Button.setBounds(elementLabel.getX() + elementLabel.getWidth() + 20, 4, 30, 30);
+        optionButtons[2] = createPanelButton("createRootConstrainedIcon.png", "Create Root-constrained Partial-area Subtaxonomy");
+        optionButtons[2].setBounds(elementLabel.getX() + elementLabel.getWidth() + 20, 4, 30, 30);
 
-        final JButton option4Button = createPanelButton("viewPAreaInHybridIcon.png", "View Partial-area in Hybrid Browser");
-        option4Button.setBounds(elementLabel.getX() + elementLabel.getWidth() + 54, 4, 30, 30);
+        optionButtons[3] = createPanelButton("viewPAreaInHybridIcon.png", "View Partial-area in Hybrid Browser");
+        optionButtons[3].setBounds(elementLabel.getX() + elementLabel.getWidth() + 54, 4, 30, 30);
         
-        final JButton option5Button = createPanelButton("deriveTanIcon.png", "Derive a Tribal Abstraction Network");
-        option5Button.setBounds(elementLabel.getX() + elementLabel.getWidth() + 88, 4, 30, 30);
+        optionButtons[4] = createPanelButton("deriveTanIcon.png", "Derive a Tribal Abstraction Network");
+        optionButtons[4].setBounds(elementLabel.getX() + elementLabel.getWidth() + 88, 4, 30, 30);
+        
+        for (int c = 0; c < optionButtons.length; c++) {
+            if (configuration.isButtonEnabled(c)) {
+                final int index = c;
+                
+                optionButtons[c].setEnabled(true);
+                optionButtons[c].addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ae) {
+                        if(entry != null) {
+                            configuration.getAction(index).actionPerformedOn(entry.getGroup());
+                        }
+                    }
+                });
+            } else {
+                optionButtons[c].setEnabled(false);
+            }
+            
+            this.add(optionButtons[c]);
+        }
 
-//        if(graph instanceof PAreaBluGraph) {
-//
-//        } else if (graph instanceof ClusterBluGraph) {
-//            option3Button.setEnabled(false);
-//            option4Button.setEnabled(false);
-//        } else {
-//            option2Button.setEnabled(false);
-//            option3Button.setEnabled(false);
-//            option4Button.setEnabled(false);
-//            option5Button.setEnabled(false);
-//        }
-
+        /*
         option1Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
 //                if (graph instanceof PAreaBluGraph) {
@@ -200,13 +210,9 @@ public class GroupOptionsPanel extends JPanel {
 //                MainToolFrame.getMainFrame().addNewClusterGraphFrame(chd, true, false);
             }
         });
-
-        this.add(option1Button);
-        this.add(option2Button);
-        this.add(option3Button);
-        this.add(option4Button);
-        this.add(option5Button);
+                */
     }
+                
     
     private JButton createPanelButton(final String iconFile, final String description) {
         JButton button = new JButton();

@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanelConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
@@ -320,7 +321,9 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, GEPActionListener gepActionListener) {
+    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, GEPActionListener gepActionListener, 
+            GroupOptionsPanelConfiguration groupOptionsConfiguration) {
+        
         this.graph = graph;
         
         tabbedPane.removeAll();
@@ -331,7 +334,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
 
         tabbedPane.addTab("Edit Abstraction Network", scroller);
         
-        tabbedPane.addTab("Explore Abstraction Network", gep = new EnhancedGraphExplorationPanel(graph, painter, gepActionListener));
+        tabbedPane.addTab("Explore Abstraction Network", gep = new EnhancedGraphExplorationPanel(graph, painter, 
+                gepActionListener, groupOptionsConfiguration));
         
         tabbedPane.setToolTipTextAt(0,
                 "<html><b>Edit Hierarchy Graph</b> allows you to edit the selected graph <br>"

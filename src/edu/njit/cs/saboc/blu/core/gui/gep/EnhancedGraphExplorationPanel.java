@@ -12,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupMetricsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanelConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.PartitionOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -116,7 +117,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private AbNPainter painter;
     
-    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, GEPActionListener gepActionListener) {
+    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, 
+            GEPActionListener gepActionListener, GroupOptionsPanelConfiguration configuration) {
         this.graph = graph;
         this.painter = painter;
         
@@ -127,15 +129,15 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.gepActionListener = gepActionListener;
 
         setFocusable(true);
-        intitializeUIComponents();
+        intitializeUIComponents(configuration);
         initializeListeners();
 
         updateTimer.start();
         drawThread.start();
     }
 
-    private void intitializeUIComponents() {
-        groupOptionsPanel = new GroupOptionsPanel(graph);
+    private void intitializeUIComponents(GroupOptionsPanelConfiguration groupOptionsConfiguration) {
+        groupOptionsPanel = new GroupOptionsPanel(graph, groupOptionsConfiguration);
         groupMetricsPanel = new GroupMetricsPanel(graph);
         partitionOptionsPanel = new PartitionOptionsPanel(graph);
         

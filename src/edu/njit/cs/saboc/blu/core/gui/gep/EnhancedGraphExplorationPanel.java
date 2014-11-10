@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
@@ -72,6 +73,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         }
     });
     
+    private volatile boolean doDraw = false;
+    
     private Thread drawThread = new Thread(new Runnable() {
         public void run() {
             
@@ -81,16 +84,26 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 
                 long currentDraw = System.currentTimeMillis();
                 
-                while(currentDraw - lastDraw < 50) { // Draw a frame every 20ms or so
+                while(currentDraw - lastDraw < 50) { // Draw a frame every 20ms or so (if neccessary)
                     currentDraw = System.currentTimeMillis();
                 }
                 
-                repaint();
-                
-                lastDraw = currentDraw;
+                if (doDraw) {
+                    repaint();
+                    lastDraw = currentDraw;
+                    
+                    System.out.println("DRAWING: " + System.currentTimeMillis());
+                    
+                    doDraw = false;
+                }
+
             }
         }
     });
+    
+    private void requestRedraw() {
+        this.doDraw = true;
+    }
     
     private JSlider zoomSlider;
     private JButton moveUpBtn;
@@ -152,6 +165,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     viewport.setZoom(zoomSlider.getValue(), 
                             EnhancedGraphExplorationPanel.this.getWidth(), 
                             EnhancedGraphExplorationPanel.this.getHeight());
+                    
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
@@ -196,6 +211,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     mouseStateMonitor.setClickedLocation(e.getPoint());
+                    
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
 
@@ -203,6 +220,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     mouseStateMonitor.setClickedLocation(null);
                     mouseStateMonitor.setCurrentDraggedLocation(null);
+                    
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
 
@@ -251,6 +270,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             partitionOptionsPanel.doHide();
                         }
                     }
+                    
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
@@ -266,6 +287,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
                     }
                 }
+                
+                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
 
             public void mouseMoved(MouseEvent e) {
@@ -296,7 +319,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         selectionStateMonitor.resetMousedOver();
                     }
                 }
-
+                
+                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
 
@@ -309,6 +333,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 viewport.setZoom(zoomSlider.getValue(), 
                             EnhancedGraphExplorationPanel.this.getWidth(), 
                             EnhancedGraphExplorationPanel.this.getHeight());
+                
+                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
 
@@ -325,6 +351,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     viewport.setZoom(newZoomLevel,
                             EnhancedGraphExplorationPanel.this.getWidth(),
                             EnhancedGraphExplorationPanel.this.getHeight());
+                    
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
@@ -346,6 +374,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         viewport.moveHorizontal(64);
                         break;
                 }
+                
+                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
 
@@ -407,6 +437,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         }
         
         viewport.focusOnPoint(root.getAbsoluteX(), 0, this.getWidth(), this.getHeight());
+        
+        this.requestRedraw();
     }
     
     public void centerOnRoot() {
@@ -524,6 +556,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     private void drawAbstractionNetwork(Graphics2D g2d, Viewport viewport) {
+               
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, getWidth(), getHeight());
         
@@ -556,12 +589,19 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     public BufferedImage getCurrentViewImage() {
+        Rectangle viewportRegion = viewport.region;
+        
         BufferedImage image = new BufferedImage(
-                Math.min(viewport.region.width, graph.getWidth()),
-                Math.min(viewport.region.height, graph.getHeight()), BufferedImage.TYPE_INT_RGB);
+                Math.min(viewportRegion.width, graph.getWidth()),
+                Math.min(viewportRegion.height, graph.getHeight()), BufferedImage.TYPE_INT_RGB);
+        
+        Rectangle drawRegion = new Rectangle(viewportRegion);
+        
+        drawRegion.x = Math.max(viewportRegion.x, 0);
+        drawRegion.y = Math.max(viewportRegion.y, 0);
         
         Viewport drawingViewport = new Viewport(graph);
-        drawingViewport.setLocation(viewport.region.getLocation());
+        drawingViewport.setLocation(drawRegion.getLocation());
         drawingViewport.setSizeAbsolute(image.getWidth(), image.getHeight());
 
         Graphics2D graphics = image.createGraphics();
@@ -675,14 +715,24 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     private void updateNavButtonPressed() {
+        boolean buttonPressed = false;
+        
         if (moveUpBtn.getModel().isPressed()) {
             viewport.moveVertical(-16);
+            buttonPressed = true;
         } else if (moveDownBtn.getModel().isPressed()) {
             viewport.moveVertical(16);
+            buttonPressed = true;
         } else if (moveLeftBtn.getModel().isPressed()) {
             viewport.moveHorizontal(-16);
+            buttonPressed = true;
         } else if (moveRightBtn.getModel().isPressed()) {
             viewport.moveHorizontal(16);
+            buttonPressed = true;
+        }
+        
+        if(buttonPressed) {
+            EnhancedGraphExplorationPanel.this.requestRedraw();
         }
     }
     
@@ -697,6 +747,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     (currentMousePoint.y - lastClickedPoint.y) / 5);
 
             viewport.moveScaled(delta);
+            
+            EnhancedGraphExplorationPanel.this.requestRedraw();
         }
     }
     
@@ -721,6 +773,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             } else {
                 groupPopouts.get(group).doContract();
             }
+            
+            EnhancedGraphExplorationPanel.this.requestRedraw();
         }
     }
     
@@ -741,6 +795,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             double angle = Math.atan2(dy, dx);
             viewport.moveScaled(new Point((int) (40 * Math.cos(angle)), (int) (40 * Math.sin(angle))));
         }
+        
+        this.requestRedraw();
     }
     
     /**

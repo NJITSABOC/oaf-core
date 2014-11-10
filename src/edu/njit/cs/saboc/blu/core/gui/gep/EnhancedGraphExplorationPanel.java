@@ -92,8 +92,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     repaint();
                     lastDraw = currentDraw;
                     
-                    System.out.println("DRAWING: " + System.currentTimeMillis());
-                    
                     doDraw = false;
                 }
 

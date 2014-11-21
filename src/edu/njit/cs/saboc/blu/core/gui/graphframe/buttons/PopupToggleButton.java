@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 
 /**
@@ -24,7 +24,7 @@ public class PopupToggleButton extends JToggleButton {
     
     protected BluGraph graph;
     
-    public PopupToggleButton(Frame parent, String text) {
+    public PopupToggleButton(JFrame parent, String text) {
         this.setText(text);
         
         popup = new JDialog(parent);

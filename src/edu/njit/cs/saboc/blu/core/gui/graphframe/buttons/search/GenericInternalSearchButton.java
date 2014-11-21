@@ -7,7 +7,6 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableListModel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -22,8 +21,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -72,7 +71,7 @@ public class GenericInternalSearchButton extends PopupToggleButton {
     
     private ArrayList<SearchActionEntry> searchActionList = new ArrayList<SearchActionEntry>();
 
-    public GenericInternalSearchButton(Frame parent) {
+    public GenericInternalSearchButton(JFrame parent) {
         super(parent, "Search");
         
         conceptModel = new FilterableListModel(true);

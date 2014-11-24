@@ -162,7 +162,7 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
         
         this.groupMenu = new GenericGroupEditMenu(this);
         this.labelManager = new AbNLabelManager(hierarchyData);
-
+        
         setOpaque(true);
         setBackground(Color.white);
         setLayout(null);

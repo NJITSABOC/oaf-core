@@ -7,6 +7,7 @@ package edu.njit.cs.saboc.blu.core.gui.dialogs.panels;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -34,7 +35,7 @@ public abstract class GroupDetailsPanel extends JPanel {
     private GroupType groupType;
 
     public GroupDetailsPanel(AbstractionNetwork hierarchyData, GroupType groupType) {
-        super(new GridLayout(4, 0));
+        super(new GridLayout(2, 2));
         
         this.abstractionNetwork = hierarchyData;
         
@@ -44,9 +45,8 @@ public abstract class GroupDetailsPanel extends JPanel {
         this.add(groupParentsPanel);
         this.add(groupConceptsPanel);
         this.add(groupChildrenPanel);
-        
-        this.initialize();
     }
+    
     
     public GroupType getGroupType() {
         return groupType;

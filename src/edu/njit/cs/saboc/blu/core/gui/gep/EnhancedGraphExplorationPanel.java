@@ -425,6 +425,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     public void focusOnPoint(int x, int y) {
         viewport.focusOnPoint(x, y, this.getWidth(), this.getHeight());
+        
+        this.doDraw = true;
     }
 
     public void jumpToRoot() {

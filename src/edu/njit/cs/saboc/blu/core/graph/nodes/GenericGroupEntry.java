@@ -70,7 +70,7 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
     
     private boolean showSemanticTag;
 
-    public GenericGroupEntry(GenericConceptGroup group, BluGraph g, GenericPartitionEntry r,
+    public GenericGroupEntry(GenericConceptGroup group, BluGraph g, GenericPartitionEntry partitionEntry,
             int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie, boolean showSemanticTag) {
         
         this.state = GroupEntryState.Default;

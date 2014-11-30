@@ -184,7 +184,9 @@ public abstract class TargetAbstractionNetworkGenerator<T, V extends TargetGroup
             }
         }
         
-        return createTargetAbstractionNetwork(targetGroups, groupHierarchy);
+        V rootGroup = targetGroups.get(groupIds.get(targetHierarchy.getRoot()));
+        
+        return createTargetAbstractionNetwork(rootGroup, targetGroups, groupHierarchy);
 
     }
     
@@ -206,5 +208,5 @@ public abstract class TargetAbstractionNetworkGenerator<T, V extends TargetGroup
     
     public abstract V createGroup(int id, T root, int conceptCount, HashSet<Integer> parentIds);
     
-    protected abstract U createTargetAbstractionNetwork(HashMap<Integer, V> groups, HashMap<Integer, HashSet<Integer>> groupHierarchy);
+    protected abstract U createTargetAbstractionNetwork(V rootGroup, HashMap<Integer, V> groups, HashMap<Integer, HashSet<Integer>> groupHierarchy);
 }

@@ -12,15 +12,20 @@ import java.util.HashSet;
  */
 public class TargetAbstractionNetwork<V extends TargetGroup> extends AbstractionNetwork {
     
+    private V rootGroup;
+    
     public TargetAbstractionNetwork(
+            V rootGroup,
             ArrayList<? extends TargetContainer> containers,
             HashMap<Integer, V> groups,
             HashMap<Integer, HashSet<Integer>> groupHierarchy) {
         
         super(containers, groups, groupHierarchy);
+        
+        this.rootGroup = rootGroup;
     }
     
     public V getRootGroup() {
-        return null;
+        return rootGroup;
     }
 }

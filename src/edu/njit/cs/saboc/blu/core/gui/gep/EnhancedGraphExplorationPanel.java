@@ -553,14 +553,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         viewport.setSizeScaled(this.getWidth(), this.getHeight());
         
-        long startTime = System.nanoTime();
-        
         drawAbstractionNetwork(g2d, viewport);
-        
-        long endTime = System.nanoTime();
-        long totalTime = endTime - startTime;
-        
-        System.out.println(this.toString() + "\t" + totalTime + "\t" + System.currentTimeMillis());
         
         drawPopups(g);
 

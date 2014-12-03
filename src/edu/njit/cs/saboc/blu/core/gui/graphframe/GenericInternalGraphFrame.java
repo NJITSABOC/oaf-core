@@ -80,6 +80,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                 for(PopupToggleButton button : toggleMenuButtons) {
                     button.disposePopup();
                 }
+                
+                gep.killGEP();
             }
             public void internalFrameDeactivated(InternalFrameEvent e) {
                 for(PopupToggleButton button : toggleMenuButtons) {

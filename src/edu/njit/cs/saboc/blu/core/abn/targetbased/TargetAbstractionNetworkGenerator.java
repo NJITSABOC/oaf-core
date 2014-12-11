@@ -91,6 +91,8 @@ public abstract class TargetAbstractionNetworkGenerator<T, V extends TargetGroup
 
         HashSet<T> concepts = targetHierarchy.getNodesInHierarchy();
         
+        roots.add(targetHierarchy.getRoot());
+        
         int nextGroupId = 0;
 
         for (T concept : concepts) {

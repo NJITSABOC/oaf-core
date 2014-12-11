@@ -7,7 +7,6 @@ package edu.njit.cs.saboc.blu.core.gui.dialogs.panels;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -22,7 +21,8 @@ public abstract class GroupDetailsPanel extends JPanel {
     public static enum GroupType {
         PartialArea,
         Cluster,
-        DisjointPArea
+        DisjointPArea,
+        Target
     }
 
     private final JPanel groupSummaryPanel = new JPanel(new BorderLayout());

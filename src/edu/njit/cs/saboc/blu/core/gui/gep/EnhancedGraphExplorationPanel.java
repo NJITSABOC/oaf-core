@@ -61,6 +61,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private boolean drawingInitialized = false;
     
+    private boolean gepAlive = true;
+    
     private BluGraph graph;
     private Viewport viewport;
      
@@ -75,26 +77,29 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private volatile boolean doDraw = false;
     
-    private Thread drawThread = new Thread(new Runnable() {
+    private final Thread drawThread = new Thread(new Runnable() {
         public void run() {
             
             long lastDraw = System.currentTimeMillis();
             
-            while(true) {
+            while(gepAlive) {
                 
                 long currentDraw = System.currentTimeMillis();
                 
-                while(currentDraw - lastDraw < 50) { // Draw a frame every 20ms or so (if neccessary)
+                while (currentDraw - lastDraw < 50 && !doDraw) { // Draw a frame every 20ms or so (if neccessary)
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        
+                    }
+                    
                     currentDraw = System.currentTimeMillis();
                 }
-                
-                if (doDraw) {
-                    repaint();
-                    lastDraw = currentDraw;
-                    
-                    doDraw = false;
-                }
 
+                repaint();
+                lastDraw = currentDraw;
+
+                doDraw = false;
             }
         }
     });
@@ -145,6 +150,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         updateTimer.start();
         drawThread.start();
+    }
+    
+    public void killGEP() {
+        this.gepAlive = false;
     }
 
     private void intitializeUIComponents(GroupOptionsPanelConfiguration groupOptionsConfiguration) {

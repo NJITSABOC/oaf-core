@@ -8,29 +8,29 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericRegion<T, R, P extends GenericPArea<T,R>> extends GenericContainerPartition<P> {
+public class GenericRegion<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEPT_T,REL_T>> extends GenericContainerPartition<PAREA_T> {
     
-    private HashSet<R> relationships;
+    private HashSet<REL_T> relationships;
     
-    protected GenericRegion(P firstPArea) {
+    protected GenericRegion(PAREA_T firstPArea) {
         addGroupToPartition(firstPArea);
         
         relationships = firstPArea.getRelationships();
     }
     
-    public HashSet<R> getRelationships() {
+    public HashSet<REL_T> getRelationships() {
         return relationships;
     }
     
-    public ArrayList<P> getPAreasInRegion() {
+    public ArrayList<PAREA_T> getPAreasInRegion() {
         return groups;
     }
     
-    public boolean isPAreaInRegion(P parea) {
+    public boolean isPAreaInRegion(PAREA_T parea) {
         return parea.getRelationships().equals(this.getRelationships());
     }
     
-    public void addPAreaToRegion(P parea) {
+    public void addPAreaToRegion(PAREA_T parea) {
         addGroupToPartition(parea);
     }
 }

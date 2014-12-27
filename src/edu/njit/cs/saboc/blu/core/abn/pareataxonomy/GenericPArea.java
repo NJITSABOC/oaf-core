@@ -9,17 +9,17 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public abstract class GenericPArea<T, R> extends GenericConceptGroup {
+public abstract class GenericPArea<CONCEPT_T, REL_T> extends GenericConceptGroup {
     
-    protected SingleRootedHierarchy<T> conceptHierarchy;
+    protected SingleRootedHierarchy<CONCEPT_T> conceptHierarchy;
     
-    protected HashSet<R> relationships;
+    protected HashSet<REL_T> relationships;
     
     protected GenericPArea(int id, 
             Concept root, 
-            SingleRootedHierarchy<T> conceptHierarchy, 
+            SingleRootedHierarchy<CONCEPT_T> conceptHierarchy, 
             HashSet<Integer> parentIds,
-            HashSet<R> relationships) {
+            HashSet<REL_T> relationships) {
         
         super(id, root, conceptHierarchy.getNodesInHierarchy().size(), parentIds);
         
@@ -28,13 +28,13 @@ public abstract class GenericPArea<T, R> extends GenericConceptGroup {
         this.relationships = relationships;
     }
     
-    public SingleRootedHierarchy<T> getHierarchy() {
+    public SingleRootedHierarchy<CONCEPT_T> getHierarchy() {
         return conceptHierarchy;
     }
     
-    public HashSet<R> getRelationships() {
+    public HashSet<REL_T> getRelationships() {
         return relationships;
     }
     
-    public abstract HashSet<R> getRelsWithoutInheritanceInfo();
+    public abstract HashSet<REL_T> getRelsWithoutInheritanceInfo();
 }

@@ -6,28 +6,27 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
 public abstract class GenericPAreaTaxonomy<
-        P extends GenericPArea<T, R>,
-        A extends GenericArea<T, R, P, REGION_T>,
-        REGION_T extends GenericRegion<T, R, P>,
-        T,
-        R>  extends AbstractionNetwork {
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T>,
+        AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
+        REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
+        CONCEPT_T,
+        REL_T>  extends AbstractionNetwork {
     
-    protected P rootPArea;
+    protected PAREA_T rootPArea;
 
-    protected SingleRootedHierarchy<T> conceptHierarchy;
+    protected SingleRootedHierarchy<CONCEPT_T> conceptHierarchy;
     
     protected GenericPAreaTaxonomy(
-            SingleRootedHierarchy<T> conceptHierarchy,
-            P rootPArea,
-            ArrayList<A> areas,
-            HashMap<Integer, P> pareas,
+            SingleRootedHierarchy<CONCEPT_T> conceptHierarchy,
+            PAREA_T rootPArea,
+            ArrayList<AREA_T> areas,
+            HashMap<Integer, PAREA_T> pareas,
             HashMap<Integer, HashSet<Integer>> pareaHierarchy) {
 
         super(areas, pareas, pareaHierarchy);
@@ -37,7 +36,7 @@ public abstract class GenericPAreaTaxonomy<
         this.rootPArea = rootPArea;
     }
     
-    public SingleRootedHierarchy<T> getConceptHierarchy() {
+    public SingleRootedHierarchy<CONCEPT_T> getConceptHierarchy() {
         return conceptHierarchy;
     }
     
@@ -45,7 +44,12 @@ public abstract class GenericPAreaTaxonomy<
         return this.getRootPArea();
     }
     
-    public P getRootPArea() {
+    public PAREA_T getRootPArea() {
         return rootPArea;
     }
+    
+    public ArrayList<AREA_T> getAreas() {
+        return (ArrayList<AREA_T>)this.getContainers();
+    }
+    
 }

@@ -12,7 +12,7 @@ import java.util.Stack;
  * @author Chris O
  */
 public abstract class PAreaTaxonomyGenerator<
-        TAXONOMY_T extends GenericPAreaTaxonomy<PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T>,
+        TAXONOMY_T extends GenericPAreaTaxonomy<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T>,
         PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
         AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,

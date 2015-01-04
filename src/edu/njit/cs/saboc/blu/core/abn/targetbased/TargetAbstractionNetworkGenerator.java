@@ -12,7 +12,8 @@ import java.util.Stack;
  *
  * @author Chris O
  */
-public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T extends TargetGroup, TARGETABN_T extends TargetAbstractionNetwork<GROUP_T>, REL_T> {
+public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T extends TargetGroup, 
+        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>, REL_T> {
     
     public TARGETABN_T deriveTargetAbstractionNetwork(HashSet<CONCEPT_T> sourceConcepts, REL_T relationshipType, CONCEPT_T targetHierarchyRoot) {
         

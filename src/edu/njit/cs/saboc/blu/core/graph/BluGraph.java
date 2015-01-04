@@ -12,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.GenericGroupEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
+import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 
 import java.awt.Color;
@@ -153,15 +154,14 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
 
     /**
      * Sets up the graph based on the hierarchy information passed in.
-     * @param hierarchyData An object containing the information for the hierarchy this graph represents.
      */
-    public BluGraph(final AbstractionNetwork hierarchyData, boolean areaGraph, boolean conceptLabels) {
+    public BluGraph(final AbstractionNetwork hierarchyData, boolean areaGraph, boolean conceptLabels, GroupEntryLabelCreator labelCreator) {
         this.abstractionNetwork = hierarchyData;
         this.isAreaGraph = areaGraph;
         this.showConceptCountLabels = conceptLabels;
         
         this.groupMenu = new GenericGroupEditMenu(this);
-        this.labelManager = new AbNLabelManager(hierarchyData);
+        this.labelManager = new AbNLabelManager(hierarchyData, labelCreator);
         
         setOpaque(true);
         setBackground(Color.white);

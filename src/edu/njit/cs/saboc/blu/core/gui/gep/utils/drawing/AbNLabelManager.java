@@ -45,7 +45,12 @@ public class AbNLabelManager {
         
     private final ArrayList<BufferedImage> labelSheets = new ArrayList<BufferedImage>();
     
-    public AbNLabelManager(AbstractionNetwork abn) {
+    
+    private final GroupEntryLabelCreator labelCreator;
+    
+    public AbNLabelManager(AbstractionNetwork abn, GroupEntryLabelCreator labelCreator) {
+        this.labelCreator = labelCreator;
+        
         HashMap<Integer, ? extends GenericConceptGroup> groups = abn.getGroups();
 
         ArrayList<GenericConceptGroup> groupList = new ArrayList<GenericConceptGroup>(groups.values());
@@ -169,9 +174,7 @@ public class AbNLabelManager {
         if(entry == null) {
             return;
         }
-        
-        //TODO: Pick correct approach (either mipmap or interpolation) based on scale
-        
+                
         int labelWidth = GenericGroupEntry.ENTRY_WIDTH;
         int labelHeight = GenericGroupEntry.ENTRY_HEIGHT;
         
@@ -202,8 +205,8 @@ public class AbNLabelManager {
     
     private void drawGroupLabelAtPosition(int xPos, int yPos, GenericConceptGroup group, Graphics2D g, boolean showSemanticTag) {
 
-        String rootName = group.getRoot().getName().replaceAll("_", " ");
-        String conceptCountLabel = String.format("(%d)", group.getConceptCount());
+        String rootName = labelCreator.getRootNameStr(group);
+        String conceptCountLabel = labelCreator.getCountStr(group);
 
         if (!showSemanticTag) {
             if (rootName.lastIndexOf("(") != -1) {

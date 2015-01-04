@@ -98,17 +98,8 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
 
             ArrayList<PAREA_T> areaPAreas = a.getAllPAreas();
 
-            if (options != null) {
-                for (PAREA_T parea : areaPAreas) {
-                    int conceptCount = parea.getConceptCount();
-
-                    if (conceptCount <= options.pareaMaxThreshold && conceptCount >= options.pareaMinThreshold) {
-                        pareaCount++;
-                    }
-                }
-            } else {
-                pareaCount = areaPAreas.size();
-            }
+            pareaCount = areaPAreas.size();
+            
             
             // Take the number of cells and find the square root of it (rounded up) to
             // find the minimum width required for a square that could hold all the pAreas.
@@ -198,17 +189,8 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
 
             REGIONENTRY_T r;
 
-            if (options != null) {
-                for (PAREA_T parea : areaPAreas) {
-                    int conceptCount = parea.getConceptCount();
+            pareaCount = areaPAreas.size();
 
-                    if (conceptCount <= options.pareaMaxThreshold && conceptCount >= options.pareaMinThreshold) {
-                        pareaCount++;
-                    }
-                }
-            } else {
-                pareaCount = areaPAreas.size();
-            }
 
             int horizontalPAreas;
 
@@ -257,15 +239,6 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
                 currentPAreaLevel = currentRegion.getGroupLevels().get(pAreaY);
 
                 pAreaPanel = createPAreaPanel(p, r, x2, y2, pAreaX, currentPAreaLevel);
-
-                if (options != null) {
-                    int conceptCount = p.getConceptCount();
-
-                    if (conceptCount > options.pareaMaxThreshold || conceptCount < options.pareaMinThreshold) {
-                        r.getHiddenGroups().add(pAreaPanel);
-                        continue;
-                    }
-                }
 
                 r.getVisibleGroups().add(pAreaPanel);
 

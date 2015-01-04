@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public abstract class GenericPAreaTaxonomy<
         return isReduced;
     }
     
+    protected void setReduced(boolean reduced) {
+        this.isReduced = reduced;
+    }
+    
     public SingleRootedHierarchy<CONCEPT_T> getConceptHierarchy() {
         return conceptHierarchy;
     }
@@ -62,15 +67,46 @@ public abstract class GenericPAreaTaxonomy<
         return (ArrayList<AREA_T>)this.getContainers();
     }
     
+    public HashMap<Integer, PAREA_T> getPAreas() {
+        return (HashMap<Integer, PAREA_T>)this.getGroups();
+    }
+    
     protected TAXONOMY_T createReducedTaxonomy(
             PAreaTaxonomyGenerator generator,
             ReducedAbNGenerator<PAREA_T> reducedGenerator, 
             int min,
             int max) {
         
+        ReducedAbNHierarchy<PAREA_T> reducedPAreaHierarchy = reducedGenerator.createReducedAbN(rootPArea, this.getPAreas(), groupHierarchy, min, max);
         
+        HashMap<Integer, PAREA_T> reducedPAreas = reducedPAreaHierarchy.reducedGroups;
         
-        return null;
+        ArrayList<AREA_T> reducedAreas = new ArrayList<AREA_T>();
+        int areaId = 0;
+        
+        HashMap<HashSet<REL_T>, AREA_T> areaMap = new HashMap<HashSet<REL_T>, AREA_T>();
+        
+        for(PAREA_T parea : reducedPAreas.values()) {
+            AREA_T area;
+            
+            if(!areaMap.containsKey(parea.getRelsWithoutInheritanceInfo())) {
+                area = (AREA_T)generator.createArea(areaId++, parea.getRelsWithoutInheritanceInfo());
+                
+                areaMap.put(area.getRelationships(), area);
+                
+                reducedAreas.add(area);
+            } else {
+                area = areaMap.get(parea.getRelsWithoutInheritanceInfo());
+            }
+            
+            area.addPArea(parea);
+        }
+        
+        TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)generator.createPAreaTaxonomy(conceptHierarchy, reducedPAreas.get(rootPArea.getId()), reducedAreas, reducedPAreas, reducedPAreaHierarchy.reducedGroupHierarchy);
+        
+        reducedTaxonomy.setReduced(true);
+        
+        return reducedTaxonomy;
     }
     
 }

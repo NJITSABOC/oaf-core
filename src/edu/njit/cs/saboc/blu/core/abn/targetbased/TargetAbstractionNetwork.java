@@ -53,7 +53,10 @@ public abstract class TargetAbstractionNetwork<GROUP_T extends TargetGroup,
         ReducedAbNHierarchy<GROUP_T> reducedGroupHierarchy = reducedGroupGenerator.createReducedAbN(rootGroup,
                 (HashMap<Integer, GROUP_T>)this.groups, groupHierarchy, minGroupSize, maxGroupSize);
         
-        TARGETABN_T reducedTargetAbN = (TARGETABN_T)generator.createTargetAbstractionNetwork(rootGroup, reducedGroupHierarchy.reducedGroups, reducedGroupHierarchy.reducedGroupHierarchy);
+        TARGETABN_T reducedTargetAbN = (TARGETABN_T)generator.createTargetAbstractionNetwork(
+                reducedGroupHierarchy.reducedGroups.get(rootGroup.getId()), 
+                reducedGroupHierarchy.reducedGroups, 
+                reducedGroupHierarchy.reducedGroupHierarchy);
 
         reducedTargetAbN.setReduced(true);
         

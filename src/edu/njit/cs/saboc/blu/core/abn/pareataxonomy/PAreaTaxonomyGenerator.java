@@ -12,7 +12,8 @@ import java.util.Stack;
  * @author Chris O
  */
 public abstract class PAreaTaxonomyGenerator<
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T>,
+        TAXONOMY_T extends GenericPAreaTaxonomy<PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
         AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
         CONCEPT_T, // Concept type
@@ -20,11 +21,13 @@ public abstract class PAreaTaxonomyGenerator<
 
 {
     
-    public GenericPAreaTaxonomy<PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T> derivePAreaTaxonomy() {
+    public TAXONOMY_T derivePAreaTaxonomy() {
         
         HashMap<CONCEPT_T, HashSet<REL_T>> conceptRelationships = new HashMap<CONCEPT_T, HashSet<REL_T>>();
         
         SingleRootedHierarchy<CONCEPT_T> conceptHierarchy = this.getConceptHierarchy();
+        
+        RelationshipEquality<REL_T> relEquality = this.getRelationshipEquality();
 
         HashSet<CONCEPT_T> concepts = conceptHierarchy.getNodesInHierarchy();
         
@@ -45,13 +48,12 @@ public abstract class PAreaTaxonomyGenerator<
         for (CONCEPT_T concept : concepts) {
             Set<CONCEPT_T> parents = conceptHierarchy.getParents(concept);
 
-            Set<REL_T> rels = conceptRelationships.get(concept);
+            HashSet<REL_T> rels = conceptRelationships.get(concept);
 
             boolean equalsParent = false;
 
             for (CONCEPT_T parent : parents) {
-                if (rels.equals(conceptRelationships.get(parent))) {
-                    
+                if (relEquality.equalsNoInheritance(rels, conceptRelationships.get(parent))) {
                     equalsParent = true;
                     break;
                 }
@@ -109,7 +111,7 @@ public abstract class PAreaTaxonomyGenerator<
                         childPartialAreas.get(root).add(child);
                         
                     } else {
-                        if (!stack.contains(child) && conceptRelationships.get(root).equals(conceptRelationships.get(child))) {
+                        if (!stack.contains(child) && relEquality.equalsNoInheritance(conceptRelationships.get(root), conceptRelationships.get(child))) {
                             
                             pareaHierarchy.addIsA(child, concept);
                             
@@ -165,7 +167,7 @@ public abstract class PAreaTaxonomyGenerator<
             boolean areaFound = false;
 
             for (AREA_T area : areas) {
-                if (area.getRelationships().equals(parea.getRelsWithoutInheritanceInfo())) {
+                if (relEquality.equalsNoInheritance(area.getRelationships(), parea.getRelationships())) {
                     area.addPArea(parea);
                     areaFound = true;
                     break;
@@ -179,21 +181,44 @@ public abstract class PAreaTaxonomyGenerator<
                 areas.add(area);
             }
         }
+        
+        for(PAREA_T parea : pareas.values()) {
+            CONCEPT_T root = parea.getHierarchy().getRoot();
+            
+            HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(root);
+            
+            HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> parentPAreaInfo = new HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>>();
+            
+            for(CONCEPT_T parent : parents) {
+                HashSet<CONCEPT_T> parentPAreaRoots = conceptPAreas.get(parent);
+                
+                for(CONCEPT_T parentPAreaRoot : parentPAreaRoots) {
+                    int parentPAreaId = partialAreaIds.get(parentPAreaRoot);
+                    
+                    parentPAreaInfo.add(new GenericParentPAreaInfo<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
+                }
+            }
+            
+            parea.setParentPAreaInfo(parentPAreaInfo);
+        }
 
         return createPAreaTaxonomy(conceptHierarchy, rootPArea, areas, pareas, pareaHierarchy);
     }
     
     protected abstract SingleRootedHierarchy<CONCEPT_T> getConceptHierarchy();
     
+    protected abstract RelationshipEquality<REL_T> getRelationshipEquality();
+    
     protected abstract HashSet<REL_T> getDefiningConceptRelationships(CONCEPT_T concept);
     
     protected abstract SingleRootedHierarchy<CONCEPT_T> initPAreaConceptHierarchy(CONCEPT_T root);
     
-    protected abstract PAREA_T createPArea(int id, SingleRootedHierarchy<CONCEPT_T> pareaHierarchy, HashSet<Integer> parentIds, HashSet<REL_T> relationships);
+    protected abstract PAREA_T createPArea(int id, SingleRootedHierarchy<CONCEPT_T> pareaHierarchy, HashSet<Integer> parentIds, 
+             HashSet<REL_T> relationships);
     
     protected abstract AREA_T createArea(int id, HashSet<REL_T> relationships);
     
-    protected abstract GenericPAreaTaxonomy<PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T> createPAreaTaxonomy(
+    protected abstract TAXONOMY_T createPAreaTaxonomy(
             SingleRootedHierarchy<CONCEPT_T> conceptHierarchy, PAREA_T rootPArea, 
             ArrayList<AREA_T> areas, HashMap<Integer, PAREA_T> pareas, 
             HashMap<Integer, HashSet<Integer>> pareaHierarchy);

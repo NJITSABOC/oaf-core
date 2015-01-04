@@ -18,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.Popup;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputListener;
 
@@ -49,9 +48,7 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
     private JLabel panelLabel;
 
     private boolean selectable = false;
-    
-    private Popup detailedPopup;
-    
+        
     protected BluGraph graph;
     
     /**

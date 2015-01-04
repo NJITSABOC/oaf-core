@@ -12,7 +12,7 @@ import java.util.HashSet;
  * @author Chris O
  */
 public abstract class GenericPAreaTaxonomy<
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
         AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
         CONCEPT_T,

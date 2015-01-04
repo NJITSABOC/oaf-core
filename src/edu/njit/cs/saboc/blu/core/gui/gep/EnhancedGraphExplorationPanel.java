@@ -762,10 +762,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     private void updatePopups() {
-        GenericGroupEntry currentPArea = null;
+        GenericGroupEntry mousedOverPArea = null;
 
         if (mouseStateMonitor.getCurrentMouseLocation() != null) {
-            currentPArea = selectionStateMonitor.getMouseOverGroupEntry();
+            mousedOverPArea = selectionStateMonitor.getMouseOverGroupEntry();
         }
 
         ArrayList<GenericGroupEntry> keys = new ArrayList<GenericGroupEntry>(groupPopouts.keySet());
@@ -777,10 +777,14 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 continue;
             }
 
-            if (group == currentPArea) {
+            if (group == mousedOverPArea) {
                 groupPopouts.get(group).doExpand();
+                
+                System.out.println("EXPANDING...");
             } else {
                 groupPopouts.get(group).doContract();
+                
+                System.out.println("CONTRACTING...");
             }
             
             EnhancedGraphExplorationPanel.this.requestRedraw();

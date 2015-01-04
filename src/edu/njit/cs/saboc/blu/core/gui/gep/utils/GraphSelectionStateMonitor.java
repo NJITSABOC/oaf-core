@@ -83,9 +83,9 @@ public class GraphSelectionStateMonitor {
             resetMousedOverGroupEntry();
             
             entry.setState(GroupEntryState.MousedOver);
-            
-            this.mousedOverGroupEntry = entry;
         }
+        
+        this.mousedOverGroupEntry = entry;
     }
     
     public void setMousedOverPartition(GenericPartitionEntry entry) {
@@ -153,7 +153,7 @@ public class GraphSelectionStateMonitor {
     
     private void resetMousedOverGroupEntry() {
         if(mousedOverGroupEntry != null) {
-            if(mousedOverGroupEntry != selectedGroupEntry) {
+            if(mousedOverGroupEntry.getState() == GroupEntryState.MousedOver) {
                 mousedOverGroupEntry.setState(GroupEntryState.Default);
             }
 

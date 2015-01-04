@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 public abstract class GenericNoRegionsPAreaGraphLayout<
         TAXONOMY_T extends GenericPAreaTaxonomy,
         AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
         AREAENTRY_T extends GenericBluArea<AREA_T>,
         PAREAENTRY_T extends GenericBluPArea<PAREA_T, REGIONENTRY_T>,

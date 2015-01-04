@@ -11,34 +11,47 @@ import java.util.HashSet;
  * 
  * @author Chris O
  */
-public abstract class TargetGroup<T extends Concept, V> extends GenericConceptGroup {
+public abstract class TargetGroup<CONCEPT_T> extends GenericConceptGroup {
     
-    private SingleRootedHierarchy<V> hierarchy;
+    private SingleRootedHierarchy<CONCEPT_T> hierarchy;
     
-    private HashMap<V, HashSet<V>> incomingRelSources;
+    private HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources;
     
-    public TargetGroup(int id, T root, int conceptCount, HashSet<Integer> parentIds, 
-            SingleRootedHierarchy<V> groupHierarchy, HashMap<V, HashSet<V>> incomingRelSources) {
-        super(id, root, conceptCount, parentIds);
+    public TargetGroup(int id, Concept root, HashSet<Integer> parentIds, 
+            SingleRootedHierarchy<CONCEPT_T> groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources) {
+        
+        super(id, root, groupHierarchy.getNodesInHierarchy().size(), parentIds);
         
         this.hierarchy = groupHierarchy;
         this.incomingRelSources = incomingRelSources;
     }
     
-    public SingleRootedHierarchy<V> getGroupHierarchy() {
+    public SingleRootedHierarchy<CONCEPT_T> getGroupHierarchy() {
         return hierarchy;
     }
     
-    public HashMap<V, HashSet<V>> getGroupIncomingRelSources() {
-        HashMap<V, HashSet<V>> groupIncomingSources = new HashMap<V, HashSet<V>>();
+    public HashMap<CONCEPT_T, HashSet<CONCEPT_T>> getGroupIncomingRelSources() {
+        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> groupIncomingSources = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
         
-        for(V concept : hierarchy.getNodesInHierarchy()) {
-            if(!incomingRelSources.get(concept).isEmpty()) {
+        for(CONCEPT_T concept : hierarchy.getNodesInHierarchy()) {
+            if(incomingRelSources.containsKey(concept) && !incomingRelSources.get(concept).isEmpty()) {
                 groupIncomingSources.put(concept, incomingRelSources.get(concept));
             }
         }
         
         return groupIncomingSources;
+    }
+    
+    public boolean equals(Object o) {
+        if(!(o instanceof TargetGroup)) {
+            return false;
+        }
+        
+        return ((TargetGroup)o).getRoot().equals(this.getRoot());
+    }
+    
+    public int hashCode() {
+        return this.getRoot().hashCode();
     }
     
 }

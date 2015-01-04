@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import SnomedShared.generic.GenericContainerPartition;
+import SnomedShared.pareataxonomy.InheritedRelationship;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -8,7 +9,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericRegion<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEPT_T,REL_T>> extends GenericContainerPartition<PAREA_T> {
+public class GenericRegion<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEPT_T,REL_T, PAREA_T>> extends GenericContainerPartition<PAREA_T> {
     
     private HashSet<REL_T> relationships;
     
@@ -26,10 +27,10 @@ public class GenericRegion<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEP
         return groups;
     }
     
-    public boolean isPAreaInRegion(PAREA_T parea) {
+    public boolean isPAreaInRegion(PAREA_T parea) {        
         return parea.getRelationships().equals(this.getRelationships());
     }
-    
+
     public void addPAreaToRegion(PAREA_T parea) {
         addGroupToPartition(parea);
     }

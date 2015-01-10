@@ -34,15 +34,17 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
             
             if (group.getConceptCount() >= minGroupSize && group.getConceptCount() <= maxGroupSize) {
                 remainingGroups.add(group);
-                
-                reducedGroupMembers.put(group, new HashSet<GROUP_T>());
-                
-                reducedParents.put(group, new HashSet<Integer>());
-                
-                reducedGroupHierarchy.put(group.getId(), new HashSet<Integer>());
             }
 
             groupSet.put(group, new HashSet<GROUP_T>());
+        }
+        
+        for (GROUP_T group : remainingGroups) {
+            reducedGroupMembers.put(group, new HashSet<GROUP_T>());
+
+            reducedParents.put(group, new HashSet<Integer>());
+
+            reducedGroupHierarchy.put(group.getId(), new HashSet<Integer>());
         }
         
         Queue<GROUP_T> queue = new LinkedList<GROUP_T>();
@@ -66,7 +68,6 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
                         
                         reducedGroupHierarchy.get(reducedGroup.getId()).add(group.getId());
                     }
-                    
                 }
                 
             } else {

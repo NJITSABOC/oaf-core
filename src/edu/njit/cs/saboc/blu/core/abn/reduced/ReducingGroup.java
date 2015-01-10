@@ -7,6 +7,10 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public interface ReducingGroup<GROUP_T extends GenericConceptGroup> {
+public interface ReducingGroup<CONCEPT_T, GROUP_T extends GenericConceptGroup> {
     public HashSet<GROUP_T> getReducedGroups();
+    
+    public HashSet<CONCEPT_T> getAllGroupsConcepts();
+    
+    public HashSet<CONCEPT_T> getAllGroupsSourceConcepts();
 }

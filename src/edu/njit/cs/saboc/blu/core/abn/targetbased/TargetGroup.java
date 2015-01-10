@@ -42,6 +42,22 @@ public abstract class TargetGroup<CONCEPT_T> extends GenericConceptGroup {
         return groupIncomingSources;
     }
     
+    public int getConceptCount() {
+        return getGroupIncomingRelSources().keySet().size();
+    }
+    
+    public HashSet<CONCEPT_T> getSourceConcepts() {
+        HashSet<CONCEPT_T> uniqueSources = new HashSet<CONCEPT_T>();
+        
+        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> rels = getGroupIncomingRelSources();
+        
+        for(HashSet<CONCEPT_T> sources : rels.values()) {
+            uniqueSources.addAll(sources);
+        }
+        
+        return uniqueSources;
+    }
+    
     public boolean equals(Object o) {
         if(!(o instanceof TargetGroup)) {
             return false;

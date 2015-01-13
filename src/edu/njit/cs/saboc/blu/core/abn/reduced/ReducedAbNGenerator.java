@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.reduced;
 
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.ConceptGroupHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
         
         HashMap<GROUP_T, HashSet<Integer>> reducedParents = new HashMap<GROUP_T, HashSet<Integer>>();
         
-        HashMap<GROUP_T, HashSet<GROUP_T>> reducedGroupMembers = new HashMap<GROUP_T, HashSet<GROUP_T>>();
+        HashMap<GROUP_T, ConceptGroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<GROUP_T, ConceptGroupHierarchy<GROUP_T>>();
         
         HashMap<Integer, HashSet<Integer>> reducedGroupHierarchy = new HashMap<Integer, HashSet<Integer>>();
         
@@ -40,7 +41,7 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
         }
         
         for (GROUP_T group : remainingGroups) {
-            reducedGroupMembers.put(group, new HashSet<GROUP_T>());
+            reducedGroupMembers.put(group, new ConceptGroupHierarchy<GROUP_T>(group));
 
             reducedParents.put(group, new HashSet<Integer>());
 
@@ -73,12 +74,15 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
             } else {
                 if (parentGroupIds != null) {
                     for (int parentGroupId : parentGroupIds) {
-                        GROUP_T parentGroup = groups.get(parentGroupId);
+                        // Get the parent group
+                        GROUP_T parentGroup = groups.get(parentGroupId); 
                         
-                        groupSet.get(group).addAll(groupSet.get(parentGroup));
-
+                        // Mark that this group belongs to the same reduced group as its parents
+                        groupSet.get(group).addAll(groupSet.get(parentGroup)); 
+                        
+                        // Add this group to that reducing group too
                         for (GROUP_T reducedGroup : groupSet.get(parentGroup)) {
-                            reducedGroupMembers.get(reducedGroup).add(group);
+                            reducedGroupMembers.get(reducedGroup).addIsA(group, parentGroup);
                         }
                     }
                 }
@@ -109,5 +113,5 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
         return new ReducedAbNHierarchy<GROUP_T>(reducedGroups, reducedGroupHierarchy);
     }
     
-    protected abstract GROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, HashSet<GROUP_T> reducedGroups);
+    protected abstract GROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, ConceptGroupHierarchy<GROUP_T> reducedGroupHierarchy);
 }

@@ -8,7 +8,7 @@ public abstract class GroupOptionsPanelConfiguration {
     private final GroupOptionsPanelActionListener [] actions;
     
     public GroupOptionsPanelConfiguration() {
-        this. actions = new GroupOptionsPanelActionListener[5];
+        this. actions = new GroupOptionsPanelActionListener[6];
     }
     
     public boolean isButtonEnabled(int index) {

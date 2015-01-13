@@ -46,6 +46,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     private boolean CUIsVisible;
     private String filter = "";
+    
     private DelegateListModel delegateLM = new DelegateListModel();
 
     public FilterableListModel(boolean CUIsVisible) {
@@ -83,13 +84,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
     public void setConceptIdsVisible(boolean CUIsVisible) {
         if(this.CUIsVisible != CUIsVisible) {
             this.CUIsVisible = CUIsVisible;
-            
-//            for (Filterable flt: modelledVector) {
-//            	if (flt instanceof FilterableConceptEntry) {
-//            		((FilterableConceptEntry) flt).setShowConceptIds(CUIsVisible);
-//            	}
-//            }
-            
+                        
             delegateLM.fireContentsChanged(this, 0, size() - 1);
         }
     }

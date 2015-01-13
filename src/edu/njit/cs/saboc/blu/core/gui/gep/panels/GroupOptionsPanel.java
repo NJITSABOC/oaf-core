@@ -75,7 +75,7 @@ public class GroupOptionsPanel extends JPanel {
 
     private GenericGroupEntry entry;
     
-    private JButton [] optionButtons = new JButton[5];
+    private JButton [] optionButtons = new JButton[6];
 
     public GroupOptionsPanel(final BluGraph graph, final GroupOptionsPanelConfiguration configuration) {
         this.setLayout(null);
@@ -88,19 +88,22 @@ public class GroupOptionsPanel extends JPanel {
         this.add(elementLabel);
 
         optionButtons[0] = createPanelButton("groupDetailsIcon.png", "Get information about this partial-area");
-        optionButtons[0].setBounds(elementLabel.getX() - 100, 4, 30, 30);
+        optionButtons[0].setBounds(elementLabel.getX() - 120, 4, 30, 30);
 
         optionButtons[1] = createPanelButton("viewRootInConceptBrowserIcon.png", "View root of this Partial-area in the Concept Browser");
-        optionButtons[1].setBounds(elementLabel.getX() - 60, 4, 30, 30);
-
-        optionButtons[2] = createPanelButton("createRootConstrainedIcon.png", "Create Root-constrained Partial-area Subtaxonomy");
-        optionButtons[2].setBounds(elementLabel.getX() + elementLabel.getWidth() + 20, 4, 30, 30);
-
-        optionButtons[3] = createPanelButton("viewPAreaInHybridIcon.png", "View Partial-area in Hybrid Browser");
-        optionButtons[3].setBounds(elementLabel.getX() + elementLabel.getWidth() + 54, 4, 30, 30);
+        optionButtons[1].setBounds(elementLabel.getX() - 85, 4, 30, 30);
         
+        optionButtons[2] = createPanelButton("viewPAreaInHybridIcon.png", "View Partial-area in Hybrid Browser");
+        optionButtons[2].setBounds(elementLabel.getX() - 50, 4, 30, 30);
+
+        optionButtons[3] = createPanelButton("createRootConstrainedIcon.png", "Create Root-constrained Partial-area Subtaxonomy");
+        optionButtons[3].setBounds(elementLabel.getX() + elementLabel.getWidth() + 20, 4, 30, 30);
+
         optionButtons[4] = createPanelButton("deriveTanIcon.png", "Derive a Tribal Abstraction Network");
-        optionButtons[4].setBounds(elementLabel.getX() + elementLabel.getWidth() + 88, 4, 30, 30);
+        optionButtons[4].setBounds(elementLabel.getX() + elementLabel.getWidth() + 55, 4, 30, 30);
+        
+        optionButtons[5] = createPanelButton("filter.png", "Expand Reduced Partial-area");
+        optionButtons[5].setBounds(elementLabel.getX() + elementLabel.getWidth() + 90, 4, 30, 30);
         
         for (int c = 0; c < optionButtons.length; c++) {
             if (configuration.isButtonEnabled(c)) {
@@ -120,100 +123,8 @@ public class GroupOptionsPanel extends JPanel {
             
             this.add(optionButtons[c]);
         }
-
-        /*
-        option1Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-//                if (graph instanceof PAreaBluGraph) {
-//                    ConceptGroupDetailsDialog dialog = new ConceptGroupDetailsDialog(entry.getGroup(), 
-//                            (SCTAbstractionNetwork)graph.getAbstractionNetwork(),
-//                            ConceptGroupDetailsDialog.DialogType.PartialArea);
-//                } else if (graph instanceof ClusterBluGraph) {
-//                    ConceptGroupDetailsDialog dialog = new ConceptGroupDetailsDialog(entry.getGroup(), 
-//                            (SCTAbstractionNetwork)graph.getAbstractionNetwork(),
-//                            ConceptGroupDetailsDialog.DialogType.Cluster);
-//                } else if (graph instanceof OWLPAreaBluGraph) {
-//                    OWLPAreaDetailsDialog dialog = new OWLPAreaDetailsDialog((OWLPArea) entry.getGroup(),
-//                            (OWLPAreaTaxonomy) graph.getAbstractionNetwork());
-//                }
-            }
-        });
-
-        option2Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-//                SCTAbstractionNetwork abn = (SCTAbstractionNetwork)graph.getAbstractionNetwork();
-//                
-//                MainToolFrame.getMainFrame().addNewBrowserFrame(entry.getGroup().getRoot(), 
-//                        abn.getSCTDataSource());
-            }
-        });
-
-        option3Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-//                final MainToolFrame mainFrame = MainToolFrame.getMainFrame();
-//
-//                final SwingWorker t = new SwingWorker() {
-//
-//                    public Object doInBackground() {
-//                        PAreaTaxonomy origTaxonomy = (PAreaTaxonomy)graph.getAbstractionNetwork();
-//                        
-//                        PAreaTaxonomy subtaxonomy = origTaxonomy.getRootSubtaxonomy((PAreaSummary)entry.getGroup());
-//                        
-//                        mainFrame.addNewPAreaGraphFrame(
-//                                subtaxonomy,
-//                                graph.getIsAreaGraph(),
-//                                graph.showingConceptCountLabels());
-//
-//                        return new Object();
-//                    }
-//                };
-//                
-//                t.execute();
-//                requestFocusInWindow();
-            }
-        });
-
-        option4Button.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae) {
-//                try {
-//                    graph.getParentInternalFrame().viewInTextBrowser((PAreaSummary)entry.getGroup());
-//                } catch (Exception e) {
-//                }
-            }
-        });
-        
-        option5Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-//                SCTConceptHierarchy hierarchy = null;
-//                SCTAbstractionNetwork abn = (SCTAbstractionNetwork)graph.getAbstractionNetwork();
-//                
-//                if(graph instanceof PAreaBluGraph) {
-//                    PAreaSummary parea = (PAreaSummary)entry.getGroup();
-//
-//                    hierarchy = abn.getSCTDataSource().getPAreaConceptHierarchy(
-//                            (PAreaTaxonomy)abn, parea);
-//                
-//                } else if (graph instanceof ClusterBluGraph) {
-//                    ClusterSummary cluster = (ClusterSummary) entry.getGroup();
-//
-//                    hierarchy = abn.getSCTDataSource().getClusterConceptHierarchy(
-//                            (TribalAbstractionNetwork) abn, cluster);
-//                } else {
-//                    // What happened here?
-//                }
-//                
-//                TribalAbstractionNetwork chd = TANUtilities.createTANFromConceptHierarchy(
-//                        entry.getGroup().getRoot(), 
-//                        abn.getVersion(),
-//                        hierarchy);
-//                
-//                MainToolFrame.getMainFrame().addNewClusterGraphFrame(chd, true, false);
-            }
-        });
-                */
     }
                 
-    
     private JButton createPanelButton(final String iconFile, final String description) {
         JButton button = new JButton();
         

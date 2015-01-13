@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,6 +101,29 @@ public abstract class GenericPAreaTaxonomy<
             }
             
             area.addPArea(parea);
+            
+            HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>>();
+            
+            PAREA_T originalRoot = (PAREA_T)((ReducingGroup)parea).getReducedGroupHierarchy().getRoot();
+            
+            HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
+            
+            for(GenericParentPAreaInfo<CONCEPT_T, PAREA_T> originalParent : originalParents) {
+                if(reducedPAreas.containsKey(originalParent.getParentPArea().getId())) {
+                    reducedParentInfo.add(originalParent);
+                } else {
+                    for(PAREA_T reducedPArea : reducedPAreas.values()) {
+                        ReducingGroup reducedGroup = (ReducingGroup)reducedPArea;
+                        
+                        if(reducedGroup.getAllGroupsConcepts().contains(originalParent.getParentConcept())) {
+                            reducedParentInfo.add(new GenericParentPAreaInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), reducedPArea));
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            parea.setParentPAreaInfo(reducedParentInfo);
         }
         
         TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)generator.createPAreaTaxonomy(conceptHierarchy, reducedPAreas.get(rootPArea.getId()), reducedAreas, reducedPAreas, reducedPAreaHierarchy.reducedGroupHierarchy);

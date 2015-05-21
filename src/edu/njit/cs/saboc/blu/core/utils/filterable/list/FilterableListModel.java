@@ -44,13 +44,12 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
         }
     }
 
-    private boolean CUIsVisible;
     private String filter = "";
     
     private DelegateListModel delegateLM = new DelegateListModel();
 
-    public FilterableListModel(boolean CUIsVisible) {
-        this.CUIsVisible = CUIsVisible;
+    public FilterableListModel() {
+
     }
 
     @Override
@@ -79,18 +78,6 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     public void setFilter(String filter) {
         this.filter = filter;
-    }
-
-    public void setConceptIdsVisible(boolean CUIsVisible) {
-        if(this.CUIsVisible != CUIsVisible) {
-            this.CUIsVisible = CUIsVisible;
-                        
-            delegateLM.fireContentsChanged(this, 0, size() - 1);
-        }
-    }
-
-    public boolean areCUIsVisible() {
-        return CUIsVisible;
     }
 
     @Override

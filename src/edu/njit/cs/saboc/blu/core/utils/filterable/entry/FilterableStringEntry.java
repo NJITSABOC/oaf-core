@@ -1,13 +1,12 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.entry;
 
-import SnomedShared.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 
 /**
  *
  * @author harsh
  */
-public class FilterableStringEntry extends Filterable {
+public class FilterableStringEntry extends Filterable<String> {
     private String entry;
     
     public FilterableStringEntry(String entry) {
@@ -23,7 +22,7 @@ public class FilterableStringEntry extends Filterable {
     }
 
     @Override
-    public Concept getNavigableConcept() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getObject() {
+        return entry;
     }
 }

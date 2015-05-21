@@ -6,12 +6,12 @@ import SnomedShared.Concept;
  *
  * @author Chris
  */
-public abstract class Filterable {
+public abstract class Filterable<T> {
     
     public abstract String getFilterText(String filter);
     public abstract String getInitialText();
     
-    public abstract Concept getNavigableConcept();
+    public abstract T getObject();
 
     public String filter(String text, String filter) {
         String filtered = text.replace("<", "&lt;");

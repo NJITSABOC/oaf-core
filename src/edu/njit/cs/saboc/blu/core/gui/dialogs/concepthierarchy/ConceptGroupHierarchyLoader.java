@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  *
@@ -29,34 +31,59 @@ public abstract class ConceptGroupHierarchyLoader<T, V extends GenericConceptGro
 
         SingleRootedHierarchy<T> hierarchy = getGroupHierarchy(group);
 
-        HashSet<T> visitedConcepts = new HashSet<T>();
-
         ArrayList<ArrayList<T>> levels = new ArrayList<ArrayList<T>>();
 
-        HashSet<T> levelConcepts = new HashSet<T>();
+        T root = hierarchy.getRoot();
+        
+        HashMap<T, Integer> parentCount = new HashMap<T, Integer>();
+        
+        HashSet<T> concepts = hierarchy.getNodesInHierarchy();
+        
+        for(T concept : concepts) {
+            parentCount.put(concept, hierarchy.getParents(concept).size());
+        }
+        
+        Queue<T> queue = new LinkedList<T>();
+        queue.add(root);
+        
+        HashMap<T, Integer> conceptDepth = new HashMap<T, Integer>();
 
-        levelConcepts.add(getGroupRoot(group));
-
-        while (!levelConcepts.isEmpty()) {
-
-            levels.add(new ArrayList<T>(levelConcepts));
-
-            HashSet<T> nextLevel = new HashSet<T>();
-
-            for (T c : levelConcepts) {
-                HashSet<T> conceptChildren = hierarchy.getChildren(c);
-                visitedConcepts.add(c);
-
-                if (conceptChildren != null) {
-                    for (T child : conceptChildren) {
-                        if (!visitedConcepts.contains(child)) {
-                            nextLevel.add(child);
-                        }
-                    }
+        while(!queue.isEmpty()) {
+            T concept = queue.remove();
+            
+            HashSet<T> parents = hierarchy.getParents(concept);
+            
+            int maxParentDepth = -1;
+            
+            for(T parent : parents) {
+                int parentDepth = conceptDepth.get(parent);
+                
+                if(parentDepth > maxParentDepth) {
+                    maxParentDepth = parentDepth;
                 }
             }
+            
+            int depth = maxParentDepth + 1;
+            
+            conceptDepth.put(concept, depth);
+            
+            if(levels.size() < depth + 1) {
+                levels.add(new ArrayList<T>());
+            }
+            
+            levels.get(depth).add(concept);
 
-            levelConcepts = nextLevel;
+            HashSet<T> children = hierarchy.getChildren(concept);
+            
+            for(T child : children) {
+                int childParentCount = parentCount.get(child) - 1;
+                
+                if(childParentCount == 0) {
+                    queue.add(child);
+                } else {
+                    parentCount.put(child, childParentCount);
+                }
+            }
         }
         
         ArrayList<ArrayList<ConceptEntry<T>>> levelEntries = new ArrayList<ArrayList<ConceptEntry<T>>>();

@@ -161,7 +161,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
                 String title = "";
 
                 if(l == 0) {
-                    title = String.format("%s Root %s (NOTE: Shortest path distance is used for calculation)",
+                    title = String.format("%s Root %s (NOTE: Longest path is shown)",
                             this.hierarchyGroupType, this.conceptType);
 
                 } else if (l == 1) {
@@ -181,10 +181,15 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
 
                 int fit = this.getWidth() / (ConceptEntry.CONCEPT_WIDTH + 8);
                 int current = 0;
+                
+                System.out.println();
+                System.out.println();
 
                 for(ConceptEntry<T> ce : conceptEntries.get(l)) {
                     ce.drawConceptAt(conceptPainter, (Graphics2D)bufferedGraphics, xPos, yPos);
                     xPos += (ConceptEntry.CONCEPT_WIDTH + 8);
+                    
+                    System.out.println(ce.getConceptName(ce.getConcept()));
 
                     current++;
 
@@ -197,6 +202,9 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
 
                 yPos += ConceptEntry.CONCEPT_HEIGHT + 50;
             }
+            
+                    
+            this.setPreferredSize(new Dimension(this.getWidth(), yPos));
         }
 
         g.drawImage(bi, 0, 0, null);

@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSearchEntry;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.SearchResultListNavigateSelectionAction;
 import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -196,7 +197,10 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         c.weightx = c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
 
-        searchList = new BrowserNavigableFilterableList(mainPanel.getFocusConcept(), mainPanel.getOptions());
+        searchList = new BrowserNavigableFilterableList(mainPanel.getFocusConcept(), 
+                mainPanel.getOptions(), 
+                new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept()));
+        
         searchList.setFilterPanelOpen(false, null);
 
         pnlSearch.add(searchList, c);

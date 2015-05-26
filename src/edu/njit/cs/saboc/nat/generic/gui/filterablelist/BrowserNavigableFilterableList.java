@@ -1,8 +1,10 @@
 package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.FilterableListSelectionAction;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JList;
@@ -11,18 +13,20 @@ import javax.swing.JList;
  *
  * @author Chris O
  */
-public class BrowserNavigableFilterableList extends FilterableList {
+public class BrowserNavigableFilterableList<T> extends FilterableList {
 
-    public BrowserNavigableFilterableList(final FocusConcept focusConcept, final Options options) {
+    public BrowserNavigableFilterableList(final FocusConcept focusConcept, final Options options, final FilterableListSelectionAction<T> selectionAction) {
 
         super.addListMouseListener(new MouseAdapter() {
+            
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2 && list.getModel() == conceptModel) {
-                    NavigableEntry entry = (NavigableEntry) conceptModel.getFilterableAtModelIndex(
+                    
+                    Filterable<T> entry = (Filterable<T>) conceptModel.getFilterableAtModelIndex(
                             ((JList) evt.getComponent()).getSelectedIndex());
-
-                    focusConcept.navigate(entry.getNavigableConcept());
+                    
+                    selectionAction.handleEntrySelection(entry.getObject());
                 }
             }
         });

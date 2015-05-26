@@ -1,23 +1,11 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
-import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.data.HierarchyMetrics;
-import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableConceptEntry;
-import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterablePathEntry;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import javax.swing.JPanel;
 import javax.swing.table.AbstractTableModel;
 
 
@@ -25,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Chris
  */
-public class HierarchyMetricsPanel extends BaseNavPanel {
+public class HierarchyMetricsPanel extends JPanel {
     
     private class HierarchyMetricsTableModel extends AbstractTableModel {
                 
@@ -90,7 +78,6 @@ public class HierarchyMetricsPanel extends BaseNavPanel {
     private MultiNavPanel navPanel;
     
     public HierarchyMetricsPanel(final GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
-        super(mainPanel, dataSource);
 
         this.setLayout(new BorderLayout());
         

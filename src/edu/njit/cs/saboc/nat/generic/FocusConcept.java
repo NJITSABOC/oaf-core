@@ -3,11 +3,13 @@ package edu.njit.cs.saboc.nat.generic;
 
 import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.fields.CommonDataFields;
+import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNavPanel;
 import javax.swing.SwingUtilities;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,44 +24,25 @@ public class FocusConcept {
     
     private BrowserConcept activeFocusConcept = null;
 
-    public enum Fields {
-        CONCEPT, 
-        PARENTS, 
-        CHILDREN, 
-        SYNONYMS, 
-        SIBLINGS, 
-        CONCEPTREL, 
-        
-        PARTIALAREA, 
-        TRIBALAN, 
-        
-        HIERARCHYMETRICS, 
-        ALLANCESTORS,
-        ALLDESCENDANTS, 
-        ALLPATHS
-    };
-
     // Concept data
-    private Map<Fields, Object> dataLists =
-            new EnumMap<Fields, Object>(Fields.class);
+    private final Map<NATDataField, Object> dataLists = new HashMap<>();
 
     // Whether or not a given field has already been filled
-    private Map<Fields, Boolean> alreadyFilled =
-            new EnumMap<Fields, Boolean>(Fields.class);
+    private final Map<NATDataField, Boolean> alreadyFilled = new HashMap<>();
     
     // The panels that actually display concepts
-    private Map<Fields, BaseNavPanel> displayPanels =
-            new EnumMap<Fields, BaseNavPanel>(Fields.class);
+    private final Map<NATDataField, BaseNavPanel> displayPanels = new HashMap<>();
 
     // The panels that need to be notified of a concept change
-    private ArrayList<BaseNavPanel> listeners =
-            new ArrayList<BaseNavPanel>();
+    private final ArrayList<BaseNavPanel> listeners = new ArrayList<>();
 
     private History history = new History();
 
     private Options options;
 
-    private ArrayList<UpdateThread> updateThreads = new ArrayList<UpdateThread>();
+    private ArrayList<UpdateThread> updateThreads = new ArrayList<>();
+    
+    public final CommonDataFields COMMON_DATA_FIELDS;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -70,6 +53,8 @@ public class FocusConcept {
         this.browser = browser;
         this.options = options;
         this.dataSource = dataSource;
+        
+        this.COMMON_DATA_FIELDS = new CommonDataFields(dataSource);
     }
 
     public History getHistory() {
@@ -82,7 +67,7 @@ public class FocusConcept {
         listeners.add(fcl);
     }
 
-    public void addDisplayPanel(Fields displayField, BaseNavPanel panel) {
+    public void addDisplayPanel(NATDataField displayField, BaseNavPanel panel) {
         displayPanels.put(displayField, panel);
     }
 
@@ -101,11 +86,8 @@ public class FocusConcept {
         activeFocusConcept = c;
 
         history.addHistoryConcept(c);
-
-        // We know nothing about this concept yet
-        for(Fields f : Fields.values()) {
-            alreadyFilled.put(f, false);
-        }
+        
+        displayPanels.keySet().forEach((NATDataField field) -> { alreadyFilled.put(field, false); });
 
         // Clear out the old stuff
         dataLists.clear();
@@ -134,55 +116,24 @@ public class FocusConcept {
     }
 
     // Returns the concepts in a field
-    public Object getConceptList(Fields field) {
+    public Object getConceptList(NATDataField field) {
         return dataLists.get(field);
     }
 
     public void setAllDataEmpty() {
-        for(Fields f : Fields.values()) {
-            displayPanels.get(f).dataEmpty();
-        }
+        displayPanels.keySet().forEach((NATDataField field) -> {displayPanels.get(field).dataEmpty(); });
     }
 
     public void updateAll() {
-
-        // Notify listeners that the concept has changed
-        for(BaseNavPanel panel : listeners) {
-            panel.focusConceptChanged();
-        }
-
-        update(Fields.CONCEPT);
-
-        update(Fields.CHILDREN);
-
-        update(Fields.PARENTS);
-
-        update(Fields.SYNONYMS);
-
-        update(Fields.CONCEPTREL);
-
-        update(Fields.SIBLINGS);
-
-        /*
-        update(Fields.PARTIALAREA);
-
-        update(Fields.TRIBALAN);
-
-        update(Fields.TRIBALAN);
-
-        update(Fields.HIERARCHYMETRICS);
-
-        update(Fields.ALLANCESTORS);
-
-        update(Fields.ALLDESCENDANTS);
-
-        update(Fields.ALLPATHS);     
-        */
+        listeners.forEach((BaseNavPanel panel) -> {panel.focusConceptChanged();});
+        
+        displayPanels.keySet().forEach( (NATDataField field) -> { update(field); });
     }
 
     // Updates the given field of the Focus Concept
-    public void update(Fields field) {
-        // Don't update a panel that has not yet been created.
+    public void update(NATDataField field) {
+        
+        // Don't update a panel that does not exist.
         if(displayPanels.get(field) == null) {
             return;
         }
@@ -214,14 +165,14 @@ public class FocusConcept {
     }
 
     private class UpdateThread extends Thread {
-        public Fields field;
+        public NATDataField field;
 
         public Object result = null;
         
         private boolean cancelled = false;
         private boolean executing = true;
 
-        public UpdateThread(Fields field) {
+        public UpdateThread(NATDataField field) {
             this.field = field;
         }
 
@@ -241,55 +192,7 @@ public class FocusConcept {
         @Override
         public void run() {
 
-            switch(field) {
-                case PARENTS:
-                    result = dataSource.getConceptParents(activeFocusConcept);
-                    break;
-                case CHILDREN:
-                    result = dataSource.getConceptChildren(activeFocusConcept);
-                    break;
-                case SYNONYMS:
-                    result = dataSource.getConceptSynonyms(activeFocusConcept);
-                    break;
-                case SIBLINGS:
-                    result = dataSource.getConceptSiblings(activeFocusConcept);
-                    break;
-                case CONCEPTREL:
-                    result = dataSource.getOutgoingLateralRelationships(activeFocusConcept);
-                    break;
-                case CONCEPT:
-                    result = activeFocusConcept;
-                    break;
-                
-                /*
-                case PARTIALAREA:
-                    result = dataSource.getSummaryOfPAreasContainingConcept(concept);
-                    break;
-               
-                case TRIBALAN:
-                    result = ((SCTLocalDataSource)dataSource).getSummaryOfClustersContainingConcept(concept);
-                    break;
-                
-                    
-                case HIERARCHYMETRICS:
-                    result = ((SCTLocalDataSource)dataSource).getHierarchyMetrics(concept);
-                    break;
-                        
-                */
-                    
-                case ALLANCESTORS:
-                    result = dataSource.getAllAncestorsAsList(activeFocusConcept);
-                    break;
-                    
-                case ALLDESCENDANTS:
-                    result = dataSource.getAllDescendantsAsList(activeFocusConcept);
-                    break;
-                    
-                case ALLPATHS:
-                    result = dataSource.getAllPathsToConcept(activeFocusConcept);
-                    break;
-                    
-            }
+            result = field.getData(activeFocusConcept);
 
             // Send the notification to the main thread that we're done.
             try {
@@ -302,39 +205,20 @@ public class FocusConcept {
                 });
             }
             catch(Exception e) {
+                
             }
         }
     }
 
     // Executed by the main thread after an OracleThread finishes
     private void finished(UpdateThread thread) {
-        boolean badResult = false;
-
         // If the thread was cancelled, then this information is outdated.
-        if(!thread.isCancelled()) {
-
-            // Store the result of the thread
-            switch(thread.field) {
-                case CONCEPT:
-                    if(thread.result == null) {
-                        badResult = true;
-                    }
-                    else {
-                        activeFocusConcept = (BrowserConcept)thread.result;
-                    }
-
-                    break;
-                default:
-                    dataLists.put(thread.field, thread.result);
-                    break;
-            }
+        if (!thread.isCancelled()) {
+            dataLists.put(thread.field, thread.result);
 
             alreadyFilled.put(thread.field, true);
 
-            if(!badResult) {
-                // Inform the cooresponding panel that the data is ready.
-                displayPanels.get(thread.field).dataReady();
-            }
+            displayPanels.get(thread.field).dataReady();
         }
     }
 }

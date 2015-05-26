@@ -25,7 +25,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.EventHandler;
 import java.util.ArrayList;
-import javax.naming.directory.SearchResult;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -70,7 +69,7 @@ public class FocusConceptPanel extends BaseNavPanel {
         Color bgColor = mainPanel.getNeighborhoodBGColor();
         setLayout(new BorderLayout());
         setBackground(bgColor);
-        focusConcept.addDisplayPanel(FocusConcept.Fields.CONCEPT, this);
+        focusConcept.addDisplayPanel(mainPanel.getFocusConcept().COMMON_DATA_FIELDS.CONCEPT, this);
 
         history = focusConcept.getHistory();
 
@@ -408,22 +407,10 @@ public class FocusConceptPanel extends BaseNavPanel {
 
     private void doConceptChange(String str) {
         
-        try {
-            BrowserConcept c = dataSource.getConceptFromId(str);
+        BrowserConcept c = dataSource.getConceptFromId(str);
 
-            if( c == null ) {
-                JOptionPane.showMessageDialog(
-                    this, "The Concept with ConceptID '" + str + "' was not found.\n" +
-                    "No Concept found with this ConceptID.",
-                    "ConceptId Not Found", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
+        if (c != null) {
             focusConcept.navigate(c);
-
-            return;
-        } catch (NumberFormatException nfe) {
-            
         }
 
         ArrayList<BrowserSearchResult> results = dataSource.searchExact(str);
@@ -435,8 +422,7 @@ public class FocusConceptPanel extends BaseNavPanel {
                     "Concept Not Found", JOptionPane.ERROR_MESSAGE);
         }
         else if(results.size() == 1) {
-            focusConcept.navigate(dataSource.getConceptFromId(
-                    results.get(0).getName()));
+            focusConcept.navigate(results.get(0).getConcept());
         }
         else {
             Object sel = JOptionPane.showInputDialog(this,

@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
-import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSearchEntry;
 import javax.swing.JOptionPane;
@@ -46,7 +45,7 @@ import javax.swing.SwingUtilities;
  * NOTES: This code is more or less copied from the NAT, and is probably
  * from 2006.
  */
-public class SearchPanel extends BaseNavPanel implements ActionListener {
+public class SearchPanel extends NATLayoutPanel implements ActionListener {
     // Search Panel
     private JPanel pnlSearch;
     private JRadioButton optAnywhere;
@@ -55,6 +54,7 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
     private SpinnerTextField txtSearchBox;
     private JButton btnDoSearch;
     private JButton btnCancelSearch;
+    
     private FilterableList searchList;
     
     // History Panel
@@ -71,8 +71,6 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
     
     // Other stuff
     private History history;
-
-    private Options options = mainPanel.getOptions();
 
     private volatile int searchID = 0;
 
@@ -132,14 +130,19 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
         cb.addActionListener(this);
         return cb;
     }
+    
+    private GenericNATBrowser mainPanel;
+    
+    private ConceptBrowserDataSource dataSource;
 
     // Construtor!
     public SearchPanel(final GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
-        super(mainPanel, dataSource);
+        
+        this.mainPanel = mainPanel;
+        this.dataSource = dataSource;
 
         this.history = mainPanel.getFocusConcept().getHistory();
         
-        focusConcept.addFocusConceptListener(this);
         setLayout(new BorderLayout());
 
         // Search Panel
@@ -221,7 +224,7 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
                 if(evt.getClickCount() == 2 && lstHistory.getSelectedIndex() >= 0) {
                     history.setPosition(history.getHistoryList().size() - 1
                             - lstHistory.getSelectedIndex());
-                    focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
+                    mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
                 }
             }
         });
@@ -233,7 +236,7 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
                     lstHistory.setSelectedIndex(lstHistory.getSelectedIndex());
                     history.setPosition(history.getHistoryList().size() - 1
                             - lstHistory.getSelectedIndex());
-                    focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
+                    mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
                 }
             }
         });
@@ -251,7 +254,6 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
         updateHistory();
     }
 
-    @Override
     public void focusConceptChanged() {
         updateHistory();
     }
@@ -279,13 +281,13 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
         if(ae.getSource() == btnBack) {
             if(history.getPosition() > 0) {
                 history.minusPosition();
-                focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
+                mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
             }
         }
         else if(ae.getSource() == btnForward) {
             if(history.getPosition() < (history.getHistoryList().size() - 1)) {
                 history.plusPosition();
-                focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
+                mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
             }
         }
         else if(ae.getSource() == btnDoSearch) {
@@ -297,33 +299,31 @@ public class SearchPanel extends BaseNavPanel implements ActionListener {
             }
             searchThread.interrupt();
         }
-        else if(ae.getSource() == chkCUI) {
-            options.setCUIsVisible(chkCUI.isSelected());
-        }
+
     }
 
     private void doSearch() {
         String searchText = txtSearchBox.getTextField().getText().trim();
 
         if(searchText.isEmpty()) {
-            JOptionPane.showMessageDialog(mainPanel, "Cannot search for a blank string.",
+            JOptionPane.showMessageDialog(mainPanel, "Please enter a search term.",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
-            BrowserConcept c = dataSource.getConceptFromId(searchText);
 
+        BrowserConcept c = dataSource.getConceptFromId(searchText);
+        
+        if (c != null) {
             BrowserSearchResult sr = new BrowserSearchResult(c.getName(), c);
-            
+
             ArrayList<Filterable> entry = new ArrayList<Filterable>();
             entry.add(new FilterableSearchEntry(sr));
-            
+
             searchList.setContents(entry);
             txtSearchBox.getTextField().selectAll();
+            
             return;
-        }
-        catch(NumberFormatException e) {
         }
 
         searchList.setContents(new ArrayList<Filterable>());

@@ -2,7 +2,8 @@ package edu.njit.cs.saboc.nat.generic;
 
 import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.gui.layout.ClassicLayoutPanel;
+import edu.njit.cs.saboc.nat.generic.gui.layout.ClassicLayout;
+import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -22,35 +23,38 @@ public class GenericNATBrowser extends JPanel {
    
     private JFrame parentFrame;
      
-    private ClassicLayoutPanel layoutPanel;
+    private NATLayout layout;
     
-    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource) {
+    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource, NATLayout layout) {
         this.setLayout(new BorderLayout());
                
-        
-        
         this.options = new Options();
         this.dataSource = dataSource;
         
         this.parentFrame = parentFrame;
+        
+        this.layout = layout;
                 
         focusConcept = new FocusConcept(this, options, dataSource);
         
-        initConceptBrowser(this);
+        initConceptBrowser();
                 
         navigateTo(dataSource.getRoot());
 
         // Update
         focusConcept.updateAll();
     }
+    
+    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource) {
+        this(parentFrame, dataSource, new ClassicLayout(dataSource));
+    }
 
     public void navigateTo(BrowserConcept c) {
         focusConcept.navigate(c);
     }
 
-    public void initConceptBrowser(JPanel panel) {
-        this.layoutPanel = new ClassicLayoutPanel(this, dataSource);
-        this.add(layoutPanel, BorderLayout.CENTER);
+    public void initConceptBrowser() {
+        this.add(layout.doLayout(this), BorderLayout.CENTER);
     }
 
     public Color getNeighborhoodBGColor() {

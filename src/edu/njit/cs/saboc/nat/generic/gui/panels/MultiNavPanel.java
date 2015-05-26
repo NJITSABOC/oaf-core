@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
+import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.utils.ButtonTabbedPaneUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,9 +22,9 @@ import javax.swing.JTabbedPane;
  * @author Chris O
  */
 public class MultiNavPanel extends JPanel {
-    private HashMap<FocusConcept.Fields, BaseNavPanel> navPanels = new HashMap<FocusConcept.Fields, BaseNavPanel>();
+    private HashMap<NATDataField, BaseNavPanel> navPanels = new HashMap<>();
     
-    private HashMap<FocusConcept.Fields, Integer> panelIndexes = new HashMap<FocusConcept.Fields, Integer>();
+    private HashMap<NATDataField, Integer> panelIndexes = new HashMap<>();
     
     private FocusConcept focusConcept;
     
@@ -57,7 +58,7 @@ public class MultiNavPanel extends JPanel {
 
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        for(Entry<FocusConcept.Fields, Integer> indexEntry : panelIndexes.entrySet()) {
+                        for(Entry<NATDataField, Integer> indexEntry : panelIndexes.entrySet()) {
                             if(indexEntry.getValue() == tabbedPane.getSelectedIndex()) {
                                 BaseNavPanel navPanel = navPanels.get(indexEntry.getKey());
                                 
@@ -86,15 +87,17 @@ public class MultiNavPanel extends JPanel {
         this.focusConcept = mainPanel.getFocusConcept();
     }
     
-    public void addNavPanel(FocusConcept.Fields field, BaseNavPanel panel, String panelTitle) {       
-        tabbedPane.add(panelTitle, panel);
+    public void addNavPanel(NATDataField field, BaseNavPanel panel, String panelTitle) {              
+        navPanels.put(field, panel);
         
-        panelIndexes.put(field, tabbedPane.getTabCount() - 1);
+        panelIndexes.put(field, tabbedPane.getTabCount());
         
         focusConcept.addDisplayPanel(field, panel);
+        
+        tabbedPane.add(panelTitle, panel);
     } 
     
-    public void updateTabTitle(FocusConcept.Fields field, String title) {
+    public void updateTabTitle(NATDataField field, String title) {
         tabbedPane.setTitleAt(panelIndexes.get(field), title);
     }
 }

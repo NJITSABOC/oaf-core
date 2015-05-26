@@ -15,14 +15,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 /**
  * The base class for all NAT panels.
  */
-public class BaseNavPanel extends JPanel {
+public abstract class BaseNavPanel extends NATLayoutPanel {
     protected ConceptBrowserDataSource dataSource;
     
     protected GenericNATBrowser mainPanel;
@@ -39,17 +38,11 @@ public class BaseNavPanel extends JPanel {
         throw new UnsupportedOperationException("Not supported.");
     }
 
-    public void dataPending() {
-        throw new UnsupportedOperationException("Not supported.");
-    }
+    public abstract void dataPending();
 
-    public void dataReady() {
-        throw new UnsupportedOperationException("Not supported.");
-    }
-
-    public void dataEmpty() {
-        throw new UnsupportedOperationException("Not supported.");
-    }
+    public abstract void dataReady();
+    
+    public abstract void dataEmpty();
 
     @Override
     public Dimension getPreferredSize() {

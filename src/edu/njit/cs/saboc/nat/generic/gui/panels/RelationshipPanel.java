@@ -1,13 +1,11 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 /**
  * A class that displays lateral relationships of the Focus Concept.
@@ -15,7 +13,7 @@ import javax.swing.JPanel;
  * further deconstructed into Term Relationships, which also have their own
  * tab.
  */
-public class RelationshipPanel extends JPanel {
+public class RelationshipPanel extends NATLayoutPanel {
 
     private MultiNavPanel multiNavPanel;
 
@@ -27,14 +25,17 @@ public class RelationshipPanel extends JPanel {
         
         setLayout(new BorderLayout());
  
-        multiNavPanel.addNavPanel(FocusConcept.Fields.SIBLINGS, 
-                new ConceptListPanel(mainPanel, FocusConcept.Fields.SIBLINGS, dataSource,
+        multiNavPanel.addNavPanel(mainPanel.getFocusConcept().COMMON_DATA_FIELDS.SIBLINGS, 
+                new ConceptListPanel(mainPanel, mainPanel.getFocusConcept().COMMON_DATA_FIELDS.SIBLINGS, dataSource,
                     new DataLoadedListener<ArrayList<BrowserConcept>>() {
                         public void dataLoaded(ArrayList<BrowserConcept> data) {
-                            multiNavPanel.updateTabTitle(FocusConcept.Fields.SIBLINGS, String.format("Siblings (%d)", data.size()));
+                            multiNavPanel.updateTabTitle(mainPanel.getFocusConcept().COMMON_DATA_FIELDS.SIBLINGS, 
+                                    String.format("Siblings (%d)", data.size()));
                         }
-                    }
+                    }, false
                 ), "Siblings");
+        
+        this.add(multiNavPanel, BorderLayout.CENTER);
 
         /*
 

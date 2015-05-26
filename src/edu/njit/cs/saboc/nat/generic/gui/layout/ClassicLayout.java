@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class ClassicLayoutPanel extends JPanel {
+public class ClassicLayout extends NATLayout {
 
     private LogoPanel logoPanel;
     private ParentChildPanel parentPanel;
@@ -27,10 +27,19 @@ public class ClassicLayoutPanel extends JPanel {
     private HierarchyMetricsPanel hierarchyMetricsPanel;
 
     private FocusConceptPanel focusConceptPanel;
+    
     private RelationshipPanel relationshipPanel;
 
-    public ClassicLayoutPanel(GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
-        this.setLayout(new GridBagLayout());
+    private final ConceptBrowserDataSource dataSource;
+
+    public ClassicLayout(ConceptBrowserDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+    
+    public JPanel doLayout(GenericNATBrowser mainPanel) {
+        
+        JPanel layout = new JPanel();
+        layout.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = c.weighty = 1.0;
@@ -39,43 +48,45 @@ public class ClassicLayoutPanel extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         logoPanel = new LogoPanel(mainPanel, dataSource);
-        this.add(logoPanel, c);
+        layout.add(logoPanel, c);
 
         c.gridx = 1;
         c.gridy = 0;
         parentPanel = new ParentChildPanel(mainPanel, ParentChildPanel.PanelType.PARENT, dataSource);
-        this.add(parentPanel, c);
+        layout.add(parentPanel, c);
 
         c.gridx = 2;
         c.gridy = 0;
         searchPanel = new SearchPanel(mainPanel, dataSource);
-        this.add(searchPanel, c);
+        layout.add(searchPanel, c);
 
         c.gridx = 0;
         c.gridy = 1;
         synonymPanel = new SynonymPanel(mainPanel, dataSource);
-        this.add(synonymPanel, c);
+        layout.add(synonymPanel, c);
 
         c.gridx = 1;
         c.gridy = 1;
         focusConceptPanel = new FocusConceptPanel(mainPanel, dataSource);
-        this.add(focusConceptPanel, c);
+        layout.add(focusConceptPanel, c);
 
         c.gridx = 2;
         c.gridy = 1;
         relationshipPanel = new RelationshipPanel(mainPanel, dataSource);
-        this.add(relationshipPanel, c);
+        layout.add(relationshipPanel, c);
 
         c.gridx = 1;
         c.gridy = 2;
         childPanel = new ParentChildPanel(mainPanel, ParentChildPanel.PanelType.CHILD, dataSource);
-        this.add(childPanel, c);
+        layout.add(childPanel, c);
 
         c.gridx = 2;
         c.gridy = 2;
 
         hierarchyMetricsPanel = new HierarchyMetricsPanel(mainPanel, dataSource);
 
-        this.add(hierarchyMetricsPanel, c);
+        layout.add(hierarchyMetricsPanel, c);
+        
+        return layout;
     }
 }

@@ -2,12 +2,11 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
+import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
-import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
-import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableConceptEntry;
+import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSynonymEntry;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -23,32 +22,32 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class ConceptListPanel extends BaseNavPanel implements Toggleable {
-    private BrowserNavigableFilterableList list;
+public class StringListPanel extends BaseNavPanel implements Toggleable {
+
+    private FilterableList list = new FilterableList();
     
-    private NATDataField field;
+    private NATDataField<ArrayList<String>> field;
     
-    private DataLoadedListener<ArrayList<BrowserConcept>> dataLoadedListener;
-    
-    public ConceptListPanel(GenericNATBrowser mainPanel, NATDataField field, 
-            ConceptBrowserDataSource dataSource, DataLoadedListener<ArrayList<BrowserConcept>> listener,
+    private DataLoadedListener<ArrayList<String>> dataLoadedListener;
+
+    public StringListPanel(final GenericNATBrowser mainPanel, NATDataField<ArrayList<String>> field, 
+            ConceptBrowserDataSource dataSource, 
+            DataLoadedListener<ArrayList<String>> dataLoadedListener, 
             boolean showFilter) {
         
         super(mainPanel, dataSource);
         
-        list = new BrowserNavigableFilterableList(mainPanel.getFocusConcept(), mainPanel.getOptions());
-        
         this.field = field;
-        
-        this.dataLoadedListener = listener;
-        
-        mainPanel.getFocusConcept().addDisplayPanel(field, this);
-        
-        this.setLayout(new BorderLayout());
-        
-        this.add(list, BorderLayout.CENTER);
-        
+        this.dataLoadedListener = dataLoadedListener;
+
+        focusConcept.addDisplayPanel(field, this);
+
+        setBackground(mainPanel.getNeighborhoodBGColor());
+        setLayout(new BorderLayout());
+        add(list, BorderLayout.CENTER);
+
         if (showFilter) {
+
             JButton filterButton = new JButton();
             filterButton.setBackground(mainPanel.getNeighborhoodBGColor());
             filterButton.setPreferredSize(new Dimension(24, 24));
@@ -71,23 +70,8 @@ public class ConceptListPanel extends BaseNavPanel implements Toggleable {
             add(northPanel, BorderLayout.NORTH);
         }
     }
-    
-    public void dataReady() {
-        ArrayList<BrowserConcept> concepts = (ArrayList<BrowserConcept>) focusConcept.getConceptList(field);
 
-        ArrayList<Filterable> conceptEntries = new ArrayList<Filterable>();
-
-        for (BrowserConcept c : concepts) {
-            conceptEntries.add(new FilterableConceptEntry(c));
-        }
-
-        list.setContents(conceptEntries);
-        
-        if(dataLoadedListener != null) {
-            dataLoadedListener.dataLoaded(concepts);
-        }
-    }
-
+    @Override
     public void dataPending() {
         list.showPleaseWait();
     }
@@ -95,7 +79,22 @@ public class ConceptListPanel extends BaseNavPanel implements Toggleable {
     public void dataEmpty() {
         list.showDataEmpty();
     }
-    
+
+    @Override
+    public void dataReady() {
+        ArrayList<String> strs = field.getData(focusConcept.getConcept());
+        
+        ArrayList<Filterable> strEntries = new ArrayList<Filterable>();
+
+        for (String s : strs) {
+            strEntries.add(new FilterableSynonymEntry(s));
+        }
+
+        list.setContents(strEntries);
+        
+        dataLoadedListener.dataLoaded(strs);
+    }
+
     public void toggle() {
         list.toggleFilterPanel();
     }

@@ -43,7 +43,7 @@ import javax.swing.SwingUtilities;
  * The upper right panel of the NAT.  Contains tabs for the search bar, the
  * history list, and user-specified options.
  * 
- * NOTES: This code is more or less copied from the NAT, and is probably
+ * NOTES: This code is more or less copied from the UMLS NAT, and is probably
  * from 2006.
  */
 public class SearchPanel extends NATLayoutPanel implements ActionListener {
@@ -59,7 +59,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
     private FilterableList searchList;
     
     // History Panel
-    private JPanel pnlHistory;
+    private BaseNavPanel pnlHistory;
     private JButton btnBack;
     private JButton btnForward;
     private DefaultListModelEx mdlHistory;
@@ -154,8 +154,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         optAnywhere = makeRadioButton("Anywhere", group, buttonPanel);
         optExact = makeRadioButton("Exact", group, buttonPanel);
         pnlSearch = new JPanel(new GridBagLayout());
-        
-        
+
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = 2;
         c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -218,7 +217,27 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         buttonPanel.add(btnBack);
         buttonPanel.add(btnForward);
 
-        pnlHistory = new JPanel(new BorderLayout());
+        pnlHistory = new BaseNavPanel(mainPanel, dataSource) {
+            public void dataEmpty() {
+
+            }
+
+            public void dataReady() {
+
+            }
+
+            public void dataPending() {
+
+            }
+
+            public void focusConceptChanged() {
+                updateHistory();
+            }
+        };      
+        
+        pnlHistory.setLayout(new BorderLayout());
+        mainPanel.getFocusConcept().addDisplayPanel(mainPanel.getFocusConcept().COMMON_DATA_FIELDS.HISTORY, pnlHistory);
+        
         mdlHistory = new DefaultListModelEx();
         lstHistory = new JList(mdlHistory);
 
@@ -228,6 +247,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
                 if(evt.getClickCount() == 2 && lstHistory.getSelectedIndex() >= 0) {
                     history.setPosition(history.getHistoryList().size() - 1
                             - lstHistory.getSelectedIndex());
+                    
                     mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
                 }
             }
@@ -240,6 +260,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
                     lstHistory.setSelectedIndex(lstHistory.getSelectedIndex());
                     history.setPosition(history.getHistoryList().size() - 1
                             - lstHistory.getSelectedIndex());
+                    
                     mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
                 }
             }
@@ -255,10 +276,6 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         tpane.addTab("History", pnlHistory);
         add(tpane, BorderLayout.CENTER);
 
-        updateHistory();
-    }
-
-    public void focusConceptChanged() {
         updateHistory();
     }
 
@@ -313,8 +330,13 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
             JOptionPane.showMessageDialog(mainPanel, "Please enter a search term.",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
+        } else {
+            if (this.optAnywhere.isSelected() && searchText.length() < 3) {
+                JOptionPane.showMessageDialog(mainPanel, "When searching anywhere please enter at least three characters.",
+                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-
 
         BrowserConcept c = dataSource.getConceptFromId(searchText);
         

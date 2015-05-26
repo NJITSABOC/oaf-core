@@ -19,8 +19,6 @@ public class History {
         if(!conceptHistory.isEmpty() && conceptHistory.get(getPosition()).equals(concept)) {
             return;
         }
-
-        clearFuture();
         
         conceptHistory.add(concept);
         position++;

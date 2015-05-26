@@ -32,4 +32,8 @@ public class NATDataField<T> {
     public T getData(BrowserConcept concept) {
         return retriever.retrieveData(concept);
     }
+    
+    public String toString() {
+        return String.format("NATDataField: %s", fieldName);
+    }
 }

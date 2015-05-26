@@ -9,15 +9,17 @@ import java.util.ArrayList;
  * @author Chris O
  */
 public class CommonDataFields {
-    public final NATDataField CONCEPT;
+    public final NATDataField<BrowserConcept> CONCEPT;
     
-    public final NATDataField SYNONYMS;
+    public final NATDataField<ArrayList<String>> SYNONYMS;
     
-    public final NATDataField PARENTS;
+    public final NATDataField<ArrayList<BrowserConcept>> PARENTS;
     
-    public final NATDataField CHILDREN;
+    public final NATDataField<ArrayList<BrowserConcept>> CHILDREN;
     
-    public final NATDataField SIBLINGS;
+    public final NATDataField<ArrayList<BrowserConcept>> SIBLINGS;
+    
+    public final NATDataField<String> HISTORY;
     
     public CommonDataFields(ConceptBrowserDataSource dataSource) {
         this.CONCEPT = new NATDataField<BrowserConcept>("Concept", new DataSourceDataRetriever<BrowserConcept>(dataSource) {
@@ -47,6 +49,12 @@ public class CommonDataFields {
         this.SIBLINGS = new NATDataField<ArrayList<BrowserConcept>>("Siblings", new DataSourceDataRetriever<ArrayList<BrowserConcept>>(dataSource) {
             public ArrayList<BrowserConcept> retrieveData(BrowserConcept concept) {
                 return dataSource.getConceptSiblings(concept);
+            }
+        });
+        
+        this.HISTORY = new NATDataField<String>("History", new DataSourceDataRetriever<String>(dataSource) {
+            public String retrieveData(BrowserConcept concept) {
+                return "";
             }
         });
     }

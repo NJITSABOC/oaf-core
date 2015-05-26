@@ -111,6 +111,10 @@ public abstract class GenericResultListPanel<T> extends BaseNavPanel implements 
             dataLoadedListener.get().dataLoaded(results);
         }
     }
+    
+    public void focusConceptChanged() {
+        
+    }
 
     public void toggle() {
         list.toggleFilterPanel();

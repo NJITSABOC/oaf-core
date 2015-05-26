@@ -34,9 +34,7 @@ public abstract class BaseNavPanel extends NATLayoutPanel {
         this.dataSource = dataSource;
     }
 
-    public void focusConceptChanged() {
-        throw new UnsupportedOperationException("Not supported.");
-    }
+    public abstract void focusConceptChanged();
 
     public abstract void dataPending();
 

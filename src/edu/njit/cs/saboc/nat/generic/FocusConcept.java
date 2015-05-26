@@ -125,9 +125,9 @@ public class FocusConcept {
     }
 
     public void updateAll() {
-        listeners.forEach((BaseNavPanel panel) -> {panel.focusConceptChanged();});
-        
         displayPanels.keySet().forEach( (NATDataField field) -> { update(field); });
+        
+        displayPanels.values().forEach((BaseNavPanel panel) -> {panel.focusConceptChanged();});
     }
 
     // Updates the given field of the Focus Concept

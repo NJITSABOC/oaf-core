@@ -37,4 +37,10 @@ public class FilterableSearchEntry extends Filterable<BrowserSearchResult> imple
                 filter(entry.getConcept().getName(), filter),
                 filter(entry.getConcept().getId(), filter));
     }
+    
+    public boolean containsFilter(String filter) {
+        return entry.getName().toLowerCase().contains(filter) || 
+                entry.getConcept().getName().toLowerCase().contains(filter) ||
+                entry.getConcept().getId().contains(filter);
+    }
 }

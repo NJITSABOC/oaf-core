@@ -112,7 +112,7 @@ public class FocusConcept {
     }
 
     public String getConceptName() {
-        return dataSource.getConceptName(activeFocusConcept);
+        return activeFocusConcept.getName();
     }
 
     // Returns the concepts in a field

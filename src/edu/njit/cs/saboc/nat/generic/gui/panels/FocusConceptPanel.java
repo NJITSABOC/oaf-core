@@ -22,7 +22,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.EventHandler;
 import java.util.ArrayList;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.ImageIcon;
@@ -176,8 +175,11 @@ public class FocusConceptPanel extends BaseNavPanel {
         homeButton = new JButton("Root");
 
         homeButton.setPreferredSize(new Dimension(300, 22));
-        homeButton.addActionListener(
-        		EventHandler.create(ActionListener.class, focusConcept, "navigateRoot"));
+        homeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                focusConcept.navigateRoot();
+            }
+        });
         
         backButton.setIcon(IconManager.getIconManager().getIcon("left-arrow.png"));
         backButton.setPreferredSize(new Dimension(128, 20));
@@ -210,7 +212,7 @@ public class FocusConceptPanel extends BaseNavPanel {
 
                     backButton.setEnabled(true);
 
-                    if(history.getPosition() == history.getHistoryList().size() -1) {
+                    if(history.getPosition() == history.getHistoryList().size() - 1) {
                         forwardButton.setEnabled(false);
                     }
                 }
@@ -304,6 +306,7 @@ public class FocusConceptPanel extends BaseNavPanel {
                     else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
                             && e.getKeyCode() == KeyEvent.VK_V
                             && !jtf.isEditable()) {
+                        
                         openEditorPane();
                     }
                     else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK

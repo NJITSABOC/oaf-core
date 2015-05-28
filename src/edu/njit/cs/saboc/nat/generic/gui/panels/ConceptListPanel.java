@@ -17,8 +17,11 @@ import java.util.ArrayList;
  */
 public class ConceptListPanel extends GenericResultListPanel<BrowserConcept> {
 
-    public ConceptListPanel(GenericNATBrowser mainPanel, NATDataField<ArrayList<BrowserConcept>> field, 
-            ConceptBrowserDataSource dataSource, DataLoadedListener<ArrayList<BrowserConcept>> listener,
+    public ConceptListPanel(
+            GenericNATBrowser mainPanel, 
+            NATDataField<ArrayList<BrowserConcept>> field, 
+            ConceptBrowserDataSource dataSource, 
+            DataLoadedListener<ArrayList<BrowserConcept>> listener,
             boolean showFilter) {
         
         super(mainPanel, 

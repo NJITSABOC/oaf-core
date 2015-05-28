@@ -25,4 +25,8 @@ public abstract class BrowserConcept<CONCEPT_T> {
     public String getId() {
         return dataSource.getConceptId(this);
     }
+    
+    public String toString() {
+        return String.format("%s {%s}", getName(), getId());
+    }
 }

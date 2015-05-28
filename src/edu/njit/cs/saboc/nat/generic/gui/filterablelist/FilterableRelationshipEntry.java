@@ -35,4 +35,9 @@ public class FilterableRelationshipEntry extends Filterable<BrowserRelationship>
                 filter(relationship.getRelationshipName(), filter),
                 filter(relationship.getRelationshipTarget().getName(), filter));
     }
+    
+    public boolean containsFilter(String filter) {
+        return relationship.getRelationshipName().toLowerCase().contains(filter) ||
+                relationship.getRelationshipTarget().getName().toLowerCase().contains(filter);
+    }
 }

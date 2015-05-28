@@ -37,6 +37,10 @@ public class FilterablePathEntry extends Filterable<ArrayList<BrowserConcept>> {
         return path;
     }
     
+    public boolean containsFilter(String filter) {
+        return true;
+    }
+    
     public String getInitialText() {
         return pathStr;
     }

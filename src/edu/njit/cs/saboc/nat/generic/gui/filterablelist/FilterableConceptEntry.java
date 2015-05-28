@@ -40,4 +40,8 @@ public class FilterableConceptEntry extends Filterable<BrowserConcept> implement
             return getInitialText();
         }
     }
+    
+    public boolean containsFilter(String filter) {
+        return concept.getName().toLowerCase().contains(filter) || concept.getId().toLowerCase().contains(filter);
+    }
 }

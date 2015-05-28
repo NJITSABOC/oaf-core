@@ -21,8 +21,11 @@ public class FilterableStringEntry extends Filterable<String> {
         return String.format("<html>%s</html>", filter(entry, filter));
     }
 
-    @Override
     public String getObject() {
         return entry;
+    }
+    
+    public boolean containsFilter(String filter) {
+        return entry.toLowerCase().contains(filter);
     }
 }

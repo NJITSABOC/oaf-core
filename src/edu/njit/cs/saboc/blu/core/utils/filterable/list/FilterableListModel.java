@@ -111,6 +111,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
     }
 
     public void updateFilter() {
+        
         if(!filter.isEmpty()) {
             assert modelledVector != this;
             int size = modelledVector.size();
@@ -121,7 +122,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
             }
 
             for(Filterable f : this) {
-                if(f.getInitialText().toLowerCase().contains(filter)) {
+                if(f.containsFilter(filter.toLowerCase())) {
                     modelledVector.add(f);
                 }
             }
@@ -134,6 +135,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     public void changeFilter(String newFilter) {
         newFilter = newFilter.toLowerCase();
+        
         if(newFilter.equals(filter)) {
             return;
         }
@@ -150,14 +152,18 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
         else {
             filter = newFilter;
             ListIterator<Filterable> iter = modelledVector.listIterator();
+            
             while(iter.hasNext()) {
                 String text = iter.next().getInitialText().toLowerCase();
+                
                 if(!text.contains(filter)) {
                     int index = iter.nextIndex() - 1;
                     iter.remove();
                     delegateLM.fireIntervalRemoved(this, index, index);
                 }
+                
             }
+            
             delegateLM.fireContentsChanged(this, 0, modelledVector.size() - 1);
         }
     }

@@ -64,6 +64,8 @@ public class FilterableList extends JPanel {
                 }
 
                 if(index > -1) {
+                    Filterable obj = conceptModel.get(index);
+                    
                     return getModel().getElementAt(index).toString();
                 }
 
@@ -86,8 +88,8 @@ public class FilterableList extends JPanel {
 
         // Sets list members to fixed size for faster refresh.
         // For more info read Yakup's journal on 08 august 07.
-        list.setFixedCellHeight(17);
-        list.setFixedCellWidth(1536); // Larger arbitary number to fix wrapping issue - Chris 8/18/09
+        //list.setFixedCellHeight(17);
+        //list.setFixedCellWidth(4000); // Larger arbitary number to fix wrapping issue - Chris 8/18/09
         
         
         JScrollPane scrollpane = new JScrollPane(list);
@@ -134,6 +136,12 @@ public class FilterableList extends JPanel {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 conceptModel.changeFilter(filterField.getText());
+            }
+        });
+        
+        list.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                setFilterPanelOpen(true, e);
             }
         });
     }

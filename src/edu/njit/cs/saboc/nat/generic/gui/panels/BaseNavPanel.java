@@ -21,14 +21,15 @@ import javax.swing.border.TitledBorder;
 /**
  * The base class for all NAT panels.
  */
-public abstract class BaseNavPanel extends NATLayoutPanel {
-    protected ConceptBrowserDataSource dataSource;
+public abstract class BaseNavPanel<T> extends NATLayoutPanel {
     
-    protected GenericNATBrowser mainPanel;
-    protected FocusConcept focusConcept;
+    protected ConceptBrowserDataSource<T> dataSource;
+    
+    protected GenericNATBrowser<T> mainPanel;
+    protected FocusConcept<T> focusConcept;
     protected Color baseColor = Color.darkGray;
 
-    public BaseNavPanel(GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
+    public BaseNavPanel(GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         this.mainPanel = mainPanel;
         this.focusConcept = mainPanel.getFocusConcept();
         this.dataSource = dataSource;

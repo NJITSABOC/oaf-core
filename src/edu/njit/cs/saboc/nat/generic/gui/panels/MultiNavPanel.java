@@ -21,16 +21,16 @@ import javax.swing.JTabbedPane;
  *
  * @author Chris O
  */
-public class MultiNavPanel extends JPanel {
-    private HashMap<NATDataField, BaseNavPanel> navPanels = new HashMap<>();
+public class MultiNavPanel<T> extends JPanel {
+    private HashMap<NATDataField, BaseNavPanel<T>> navPanels = new HashMap<>();
     
     private HashMap<NATDataField, Integer> panelIndexes = new HashMap<>();
     
-    private FocusConcept focusConcept;
+    private FocusConcept<T> focusConcept;
     
     private JTabbedPane tabbedPane = new JTabbedPane();
     
-    public MultiNavPanel(GenericNATBrowser mainPanel) {
+    public MultiNavPanel(GenericNATBrowser<T> mainPanel) {
         super(new BorderLayout());
         
         focusConcept = mainPanel.getFocusConcept();
@@ -87,7 +87,7 @@ public class MultiNavPanel extends JPanel {
         this.focusConcept = mainPanel.getFocusConcept();
     }
     
-    public void addNavPanel(NATDataField field, BaseNavPanel panel, String panelTitle) {              
+    public void addNavPanel(NATDataField field, BaseNavPanel<T> panel, String panelTitle) {              
         navPanels.put(field, panel);
         
         panelIndexes.put(field, tabbedPane.getTabCount());

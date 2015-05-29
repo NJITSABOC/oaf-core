@@ -1,25 +1,28 @@
 package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
+import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 
 /**
  *
  * @author Chris
  */
-public class FilterableConceptEntry extends Filterable<BrowserConcept> implements NavigableEntry {
+public class FilterableConceptEntry<T> extends Filterable<T> implements NavigableEntry<T> {
 
-    private BrowserConcept concept;
+    private final T concept;
+    
+    private final ConceptBrowserDataSource<T> dataSource;
 
-    public FilterableConceptEntry(BrowserConcept c) {
+    public FilterableConceptEntry(T c, ConceptBrowserDataSource<T> dataSource) {
         this.concept = c;
+        this.dataSource = dataSource;
     }
 
-    public BrowserConcept getObject() {
+    public T getObject() {
         return concept;
     }
 
-    public BrowserConcept getNavigableConcept() {
+    public T getNavigableConcept() {
         return getObject();
     }
 
@@ -30,18 +33,18 @@ public class FilterableConceptEntry extends Filterable<BrowserConcept> implement
     }
 
     public String getInitialText() {
-        return createEntryStr(concept.getName(), concept.getId());
+        return createEntryStr(dataSource.getConceptName(concept), dataSource.getConceptId(concept));
     }
 
     public String getFilterText(String filter) {
         if (!filter.isEmpty()) {
-            return createEntryStr(filter(concept.getName(), filter), filter(concept.getId(), filter));
+            return createEntryStr(filter(dataSource.getConceptName(concept), filter), filter(dataSource.getConceptId(concept), filter));
         } else {
             return getInitialText();
         }
     }
     
     public boolean containsFilter(String filter) {
-        return concept.getName().toLowerCase().contains(filter) || concept.getId().toLowerCase().contains(filter);
+        return dataSource.getConceptName(concept).toLowerCase().contains(filter) || dataSource.getConceptId(concept).toLowerCase().contains(filter);
     }
 }

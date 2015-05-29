@@ -1,20 +1,19 @@
 package edu.njit.cs.saboc.nat.generic.gui.listeners;
 
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 
 /**
  *
  * @author Chris O
  */
-public class ConceptListNavigateSelectionAction implements FilterableListSelectionAction<BrowserConcept> {
-    private FocusConcept focusConcept;
+public class ConceptListNavigateSelectionAction<T> implements FilterableListSelectionAction<T> {
+    private FocusConcept<T> focusConcept;
     
-    public ConceptListNavigateSelectionAction(FocusConcept focusConcept) {
+    public ConceptListNavigateSelectionAction(FocusConcept<T> focusConcept) {
         this.focusConcept = focusConcept;
     }
     
-    public void handleEntrySelection(BrowserConcept c) {
+    public void handleEntrySelection(T c) {
         focusConcept.navigate(c);
     }
 }

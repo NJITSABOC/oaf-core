@@ -4,17 +4,20 @@ package edu.njit.cs.saboc.nat.generic.data;
  *
  * @author Chris O
  */
-public class BrowserSearchResult {
+public class BrowserSearchResult<T> {
 
     /**
      * The term of the search result
      */
-    private String term;
+    private String conceptName;
+    
+    private String conceptId;
 
-    private BrowserConcept concept;
+    private T concept;
 
-    public BrowserSearchResult(String term, BrowserConcept concept) {
-        this.term = term;
+    public BrowserSearchResult(String conceptName, String conceptId, T concept) {
+        this.conceptName = conceptName;
+        this.conceptId = conceptId;
         this.concept = concept;
     }
 
@@ -24,18 +27,22 @@ public class BrowserSearchResult {
      * @return The term of the search result
      */
     public String getName() {
-        return term;
+        return conceptName;
+    }
+    
+    public String getConceptId() {
+        return conceptId;
     }
 
     /**
      * Returns the fully specified name of the concept matched to the found term
      *
      */
-    public BrowserConcept getConcept() {
+    public T getConcept() {
         return concept;
     }
 
     public String toString() {
-        return String.format("%s {%s} (%s)", term, concept.getName(), concept.getId());
+        return String.format("%s {%s}", conceptName, conceptId);
     }
 }

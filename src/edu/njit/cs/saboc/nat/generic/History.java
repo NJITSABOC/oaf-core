@@ -1,13 +1,12 @@
 package edu.njit.cs.saboc.nat.generic;
 
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import java.util.ArrayList;
 
 /**
  * A  class that keeps track of the user's browsing history.
  */
-public class History {
-    private ArrayList<BrowserConcept> conceptHistory = new ArrayList<BrowserConcept>();
+public class History<T> {
+    private ArrayList<T> conceptHistory = new ArrayList<>();
     
     private int position = -1;
 
@@ -15,7 +14,7 @@ public class History {
         
     }
 
-    public void addHistoryConcept(BrowserConcept concept) {
+    public void addHistoryConcept(T concept) {
         if(!conceptHistory.isEmpty() && conceptHistory.get(getPosition()).equals(concept)) {
             return;
         }
@@ -40,11 +39,11 @@ public class History {
         position = pos;
     }
 
-    public ArrayList<BrowserConcept> getHistoryList() {
+    public ArrayList<T> getHistoryList() {
         return conceptHistory;
     }
 
-    public BrowserConcept getCurrentConcept() {
+    public T getCurrentConcept() {
         return conceptHistory.get(position);
     }
 

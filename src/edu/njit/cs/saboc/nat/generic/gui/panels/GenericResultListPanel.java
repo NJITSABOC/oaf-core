@@ -22,20 +22,20 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class GenericResultListPanel<T> extends BaseNavPanel implements Toggleable {
+public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> implements Toggleable {
 
     private FilterableList list;
     
-    private NATDataField<ArrayList<T>> field;
+    private NATDataField<T, ArrayList<V>> field;
     
-    private Optional<DataLoadedListener<ArrayList<T>>> dataLoadedListener;
+    private Optional<DataLoadedListener<ArrayList<V>>> dataLoadedListener;
 
     public GenericResultListPanel(
-            final GenericNATBrowser mainPanel, 
+            final GenericNATBrowser<T> mainPanel, 
             FilterableList list,
-            NATDataField<ArrayList<T>> field, 
-            ConceptBrowserDataSource dataSource, 
-            DataLoadedListener<ArrayList<T>> dataLoadedListener, 
+            NATDataField<T, ArrayList<V>> field, 
+            ConceptBrowserDataSource<T> dataSource, 
+            DataLoadedListener<ArrayList<V>> dataLoadedListener, 
             boolean showFilter) {
         
         super(mainPanel, dataSource);
@@ -77,9 +77,9 @@ public abstract class GenericResultListPanel<T> extends BaseNavPanel implements 
 
     public GenericResultListPanel (
             final GenericNATBrowser mainPanel, 
-            NATDataField<ArrayList<T>> field,
-            ConceptBrowserDataSource dataSource, 
-            DataLoadedListener<ArrayList<T>> dataLoadedListener, 
+            NATDataField<T, ArrayList<V>> field,
+            ConceptBrowserDataSource<T> dataSource, 
+            DataLoadedListener<ArrayList<V>> dataLoadedListener, 
             boolean showFilter) {
         
         this(mainPanel, new FilterableList(), field, dataSource, dataLoadedListener, showFilter);
@@ -97,11 +97,11 @@ public abstract class GenericResultListPanel<T> extends BaseNavPanel implements 
 
     @Override
     public void dataReady() {
-        ArrayList<T> results = field.getData(focusConcept.getConcept());
+        ArrayList<V> results = field.getData(focusConcept.getConcept());
         
-        ArrayList<Filterable<T>> entries = new ArrayList<>();
+        ArrayList<Filterable<V>> entries = new ArrayList<>();
 
-        results.forEach((T result) -> {
+        results.forEach((V result) -> {
             entries.add(createFilterableEntry(result));
         });
         
@@ -120,5 +120,5 @@ public abstract class GenericResultListPanel<T> extends BaseNavPanel implements 
         list.toggleFilterPanel();
     }
     
-    protected abstract Filterable<T> createFilterableEntry(T item);
+    protected abstract Filterable<V> createFilterableEntry(V item);
 }

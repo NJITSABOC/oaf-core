@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
@@ -23,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Optional;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -43,7 +43,7 @@ import javax.swing.undo.UndoManager;
  * The center panel, which displays the information about the Focus
  * Concept.
  */
-public class FocusConceptPanel extends BaseNavPanel {
+public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     private UndoManager undoManager;
     private Document document;
     private JEditorPane jtf;
@@ -59,9 +59,9 @@ public class FocusConceptPanel extends BaseNavPanel {
     private JButton acceptButton;
     private JButton cancelButton;
 
-    private History history;
+    private History<T> history;
 
-    public FocusConceptPanel(final GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
+    public FocusConceptPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         super(mainPanel, dataSource);
 
         Color bgColor = mainPanel.getNeighborhoodBGColor();
@@ -387,10 +387,9 @@ public class FocusConceptPanel extends BaseNavPanel {
         jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN));
         Options options = mainPanel.getOptions();
 
-        BrowserConcept fc = focusConcept.getConcept();
+        T fc = focusConcept.getConcept();
         
-        
-        String conceptString = String.format("%s\n%s", fc.getName(), fc.getId());
+        String conceptString = String.format("%s\n%s", dataSource.getConceptName(fc), dataSource.getConceptId(fc));
 
         jtf.setText(conceptString);
 
@@ -409,13 +408,13 @@ public class FocusConceptPanel extends BaseNavPanel {
 
     private void doConceptChange(String str) {
         
-        BrowserConcept c = dataSource.getConceptFromId(str);
+        Optional<T> c = dataSource.getConceptFromId(str);
 
-        if (c != null) {
-            focusConcept.navigate(c);
+        if (c.isPresent()) {
+            focusConcept.navigate(c.get());
         }
 
-        ArrayList<BrowserSearchResult> results = dataSource.searchExact(str);
+        ArrayList<BrowserSearchResult<T>> results = dataSource.searchExact(str);
 
         if(results.isEmpty()) {
             JOptionPane.showMessageDialog(
@@ -433,7 +432,7 @@ public class FocusConceptPanel extends BaseNavPanel {
                     JOptionPane.QUESTION_MESSAGE, null, results.toArray(), null);
 
             if(sel != null) {
-                focusConcept.navigate(((BrowserSearchResult)sel).getConcept());
+                focusConcept.navigate(((BrowserSearchResult<T>)sel).getConcept());
             }
         }
     }
@@ -462,11 +461,10 @@ public class FocusConceptPanel extends BaseNavPanel {
         if(history.getPosition() > 0) {
             backButton.setEnabled(true);
             
-            BrowserConcept prev = history.getHistoryList().get(history.getPosition() - 1);
+            T prev = history.getHistoryList().get(history.getPosition() - 1);
             
             
-            backButton.setToolTipText(
-                    prev.getName());
+            backButton.setToolTipText(dataSource.getConceptName(prev));
         } else {
             backButton.setEnabled(false);
             backButton.setToolTipText(null);
@@ -475,10 +473,10 @@ public class FocusConceptPanel extends BaseNavPanel {
         if(history.getPosition() < (history.getHistoryList().size() - 1)) {
             forwardButton.setEnabled(true);
             
-            BrowserConcept prev = history.getHistoryList().get(history.getPosition() + 1);
+            T prev = history.getHistoryList().get(history.getPosition() + 1);
             
             
-            forwardButton.setToolTipText(prev.getName());
+            forwardButton.setToolTipText(dataSource.getConceptName(prev));
         } else {
             forwardButton.setEnabled(false);
             forwardButton.setToolTipText(null);

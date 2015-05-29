@@ -7,8 +7,6 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class NATLayout {
-    
-    
-    public abstract JPanel doLayout(GenericNATBrowser mainPanel);
+public abstract class NATLayout<T> {
+    public abstract JPanel doLayout(GenericNATBrowser<T> mainPanel);
 }

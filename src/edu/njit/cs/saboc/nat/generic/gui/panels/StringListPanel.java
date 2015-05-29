@@ -12,10 +12,10 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class StringListPanel extends GenericResultListPanel<String> {
+public class StringListPanel<T> extends GenericResultListPanel<T, String> {
 
-    public StringListPanel(final GenericNATBrowser mainPanel, NATDataField<ArrayList<String>> field, 
-            ConceptBrowserDataSource dataSource, 
+    public StringListPanel(final GenericNATBrowser mainPanel, NATDataField<T, ArrayList<String>> field, 
+            ConceptBrowserDataSource<T> dataSource, 
             DataLoadedListener<ArrayList<String>> dataLoadedListener, 
             boolean showFilter) {
         

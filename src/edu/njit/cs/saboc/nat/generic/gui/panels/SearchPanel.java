@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.DefaultListModelEx;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
@@ -24,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 import javax.swing.ButtonGroup;
@@ -46,7 +46,7 @@ import javax.swing.SwingUtilities;
  * NOTES: This code is more or less copied from the UMLS NAT, and is probably
  * from 2006.
  */
-public class SearchPanel extends NATLayoutPanel implements ActionListener {
+public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
     // Search Panel
     private JPanel pnlSearch;
     private JRadioButton optAnywhere;
@@ -59,7 +59,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
     private FilterableList searchList;
     
     // History Panel
-    private BaseNavPanel pnlHistory;
+    private BaseNavPanel<T> pnlHistory;
     private JButton btnBack;
     private JButton btnForward;
     private DefaultListModelEx mdlHistory;
@@ -71,7 +71,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
     private JCheckBox chkToolTip;
     
     // Other stuff
-    private History history;
+    private History<T> history;
 
     private volatile int searchID = 0;
 
@@ -132,12 +132,12 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         return cb;
     }
     
-    private GenericNATBrowser mainPanel;
+    private GenericNATBrowser<T> mainPanel;
     
-    private ConceptBrowserDataSource dataSource;
+    private ConceptBrowserDataSource<T> dataSource;
 
     // Construtor!
-    public SearchPanel(final GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
+    public SearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         
         this.mainPanel = mainPanel;
         this.dataSource = dataSource;
@@ -281,12 +281,12 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
 
     public void updateHistory() {
         mdlHistory.clear();
-        ArrayList<BrowserConcept> historyVector = history.getHistoryList();
+        ArrayList<T> historyVector = history.getHistoryList();
 
         for(int i = historyVector.size() - 1; i >= 0; --i) {
-            BrowserConcept c = historyVector.get(i);
+            T c = historyVector.get(i);
 
-            String cs = c.getName().replaceAll("<", "&lt;");
+            String cs = dataSource.getConceptName(c).replaceAll("<", "&lt;");
 
             String entry = String.format("<html> <FONT color=%s><b>%s</b></FONT>",
                     i == history.getPosition() ? "black" : "gray", cs);
@@ -338,12 +338,13 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
             }
         }
 
-        BrowserConcept c = dataSource.getConceptFromId(searchText);
+        Optional<T> c = dataSource.getConceptFromId(searchText);
         
-        if (c != null) {
-            BrowserSearchResult sr = new BrowserSearchResult(c.getName(), c);
+        if (c.isPresent()) {
+            BrowserSearchResult<T> sr = new BrowserSearchResult<>(dataSource.getConceptName(c.get()), 
+                    dataSource.getConceptId(c.get()), c.get());
 
-            ArrayList<Filterable> entry = new ArrayList<Filterable>();
+            ArrayList<Filterable> entry = new ArrayList<>();
             entry.add(new FilterableSearchEntry(sr));
 
             searchList.setContents(entry);
@@ -352,7 +353,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
             return;
         }
 
-        searchList.setContents(new ArrayList<Filterable>());
+        searchList.setContents(new ArrayList<>());
 
         // Gray everything out, set up the spinner.
         txtSearchBox.getTextField().setEnabled(false);
@@ -390,7 +391,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
 
         @Override
         public void run() {
-            ArrayList<BrowserSearchResult> results = new ArrayList<BrowserSearchResult>();
+            ArrayList<BrowserSearchResult<T>> results = new ArrayList<>();
 
             if(optExact.isSelected()) {
                 results = dataSource.searchExact(term);
@@ -409,10 +410,10 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
 
     // This will be used to send the results back through the main thread
     private class ResultSender implements Runnable {
-        private ArrayList<BrowserSearchResult> results;
+        private ArrayList<BrowserSearchResult<T>> results;
         private int id;
 
-        public ResultSender(ArrayList<BrowserSearchResult> results, int id) {
+        public ResultSender(ArrayList<BrowserSearchResult<T>> results, int id) {
             this.results = results;
             this.id = id;
         }
@@ -423,7 +424,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
         }
     }
 
-    private void displaySearchResults(ArrayList<BrowserSearchResult> results, int id) {
+    private void displaySearchResults(ArrayList<BrowserSearchResult<T>> results, int id) {
         if(id != searchID) {
             return;
         }
@@ -438,7 +439,7 @@ public class SearchPanel extends NATLayoutPanel implements ActionListener {
             optStarting.setEnabled(true);
         }
 
-        ArrayList<Filterable> searchEntries = new ArrayList<Filterable>();
+        ArrayList<Filterable> searchEntries = new ArrayList<>();
 
         for(BrowserSearchResult sr : results) {
             searchEntries.add(new FilterableSearchEntry(sr));

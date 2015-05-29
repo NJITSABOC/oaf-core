@@ -1,18 +1,16 @@
 package edu.njit.cs.saboc.nat.generic.fields;
 
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
-
 /**
  *
  * @author Chris O
  */
-public class NATDataField<T> {
+public class NATDataField<T, V> {
     
     private String fieldName;
     
-    private FieldDataRetriever<T> retriever;
+    private FieldDataRetriever<T, V> retriever;
     
-    public NATDataField(String fieldName, FieldDataRetriever<T> retriever) {
+    public NATDataField(String fieldName, FieldDataRetriever<T, V> retriever) {
         this.fieldName = fieldName;
         this.retriever = retriever;
     }
@@ -29,7 +27,7 @@ public class NATDataField<T> {
         return false;
     }
     
-    public T getData(BrowserConcept concept) {
+    public V getData(T concept) {
         return retriever.retrieveData(concept);
     }
     

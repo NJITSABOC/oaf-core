@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.nat.generic;
 
 
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.CommonDataFields;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
@@ -17,12 +16,12 @@ import java.util.Map;
  * the concepts related to it.
  * @author Paul Accisano
  */
-public class FocusConcept {
+public class FocusConcept<T> {
     
-    private ConceptBrowserDataSource dataSource;
+    private ConceptBrowserDataSource<T> dataSource;
     private GenericNATBrowser browser;
     
-    private BrowserConcept activeFocusConcept = null;
+    private T activeFocusConcept = null;
 
     // Concept data
     private final Map<NATDataField, Object> dataLists = new HashMap<>();
@@ -31,12 +30,12 @@ public class FocusConcept {
     private final Map<NATDataField, Boolean> alreadyFilled = new HashMap<>();
     
     // The panels that actually display concepts
-    private final Map<NATDataField, BaseNavPanel> displayPanels = new HashMap<>();
+    private final Map<NATDataField, BaseNavPanel<T>> displayPanels = new HashMap<>();
 
     // The panels that need to be notified of a concept change
-    private final ArrayList<BaseNavPanel> listeners = new ArrayList<>();
+    private final ArrayList<BaseNavPanel<T>> listeners = new ArrayList<>();
 
-    private History history = new History();
+    private History<T> history = new History<T>();
 
     private Options options;
 
@@ -49,7 +48,7 @@ public class FocusConcept {
         throw new CloneNotSupportedException();
     }
 
-    public FocusConcept(GenericNATBrowser browser, Options options, ConceptBrowserDataSource dataSource) {
+    public FocusConcept(GenericNATBrowser browser, Options options, ConceptBrowserDataSource<T> dataSource) {
         this.browser = browser;
         this.options = options;
         this.dataSource = dataSource;
@@ -82,7 +81,7 @@ public class FocusConcept {
     }
 
     // Sets the Focus Concept.
-    public void navigate(BrowserConcept c) {
+    public void navigate(T c) {
         activeFocusConcept = c;
 
         history.addHistoryConcept(c);
@@ -102,17 +101,17 @@ public class FocusConcept {
         return browser;
     }
 
-    public BrowserConcept getConcept() {
+    public T getConcept() {
         return activeFocusConcept;
     }
 
     // Convenience methods
     public String getConceptId() {
-        return getConcept().getId();
+        return dataSource.getConceptId(activeFocusConcept);
     }
 
     public String getConceptName() {
-        return activeFocusConcept.getName();
+        return dataSource.getConceptName(activeFocusConcept);
     }
 
     // Returns the concepts in a field

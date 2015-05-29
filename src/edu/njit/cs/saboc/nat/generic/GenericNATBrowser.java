@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.nat.generic;
 
-import edu.njit.cs.saboc.nat.generic.data.BrowserConcept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.gui.layout.ClassicLayout;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,20 +10,20 @@ import javax.swing.JPanel;
 /**
  * The main class of the NAT.
  */
-public class GenericNATBrowser extends JPanel {
+public class GenericNATBrowser<T> extends JPanel {
     
     private final Color neighborhoodBGColor = new Color(150, 190, 220);
 
-    private ConceptBrowserDataSource dataSource;
+    private ConceptBrowserDataSource<T> dataSource;
 
-    private FocusConcept focusConcept;
+    private FocusConcept<T> focusConcept;
     private Options options;
    
     private JFrame parentFrame;
      
     private NATLayout layout;
     
-    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource, NATLayout layout) {
+    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource<T> dataSource, NATLayout layout) {
         this.setLayout(new BorderLayout());
                
         this.options = new Options();
@@ -44,12 +42,8 @@ public class GenericNATBrowser extends JPanel {
         // Update
         focusConcept.updateAll();
     }
-    
-    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource) {
-        this(parentFrame, dataSource, new ClassicLayout(dataSource));
-    }
 
-    public void navigateTo(BrowserConcept c) {
+    public void navigateTo(T c) {
         focusConcept.navigate(c);
     }
 

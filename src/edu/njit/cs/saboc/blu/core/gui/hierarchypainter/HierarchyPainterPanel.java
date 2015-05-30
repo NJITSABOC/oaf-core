@@ -7,11 +7,14 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
@@ -68,9 +71,9 @@ public class HierarchyPainterPanel<T> extends JPanel {
 
         final int COL_DIVIDE_WIDTH = CONCEPT_WIDTH;
         final int ROW_DIVIDE_HEIGHT = CONCEPT_HEIGHT * 2;
-        final int LEVEL_DIVIDE_HEIGHT = 70;
+        final int LEVEL_DIVIDE_HEIGHT = 40;
         
-        final int MAX_CONCEPTS_PER_ROW = 2000 / (CONCEPT_WIDTH + COL_DIVIDE_WIDTH);
+        final int MAX_CONCEPTS_PER_ROW = 6000 / (CONCEPT_WIDTH + COL_DIVIDE_WIDTH);
         
         ArrayList<LevelMetrics> metrics = new ArrayList<LevelMetrics>();
         
@@ -147,12 +150,10 @@ public class HierarchyPainterPanel<T> extends JPanel {
             Color.BLUE,
             Color.RED,
             Color.GREEN,
-            Color.YELLOW,
-            Color.PINK,
             Color.ORANGE,
             Color.MAGENTA,
             Color.CYAN,
-            new Color(255, 0, 255),
+            Color.BLACK,
             new Color(181, 31, 31),
             new Color(104, 189, 132)
         };
@@ -208,6 +209,12 @@ public class HierarchyPainterPanel<T> extends JPanel {
         }
         
         this.conceptHierarchyImage = hierarchyImage;
+
+//        try {
+//            ImageIO.write(hierarchyImage, "png", new File("C:\\Users\\Den\\Desktop\\test.png"));
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
     }
 
     private ArrayList<ArrayList<T>> getConceptsByLevel(MultiRootedHierarchy<T> hierarchy) {

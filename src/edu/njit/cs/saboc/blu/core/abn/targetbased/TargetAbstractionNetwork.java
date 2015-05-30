@@ -13,7 +13,8 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public abstract class TargetAbstractionNetwork<GROUP_T extends TargetGroup, 
+public abstract class TargetAbstractionNetwork<
+        GROUP_T extends TargetGroup, 
         TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> extends AbstractionNetwork 
 
     implements ReducibleAbstractionNetwork<TARGETABN_T> {

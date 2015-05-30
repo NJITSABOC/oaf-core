@@ -12,8 +12,12 @@ import java.util.Stack;
  *
  * @author Chris O
  */
-public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T extends TargetGroup, 
-        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>, REL_T> {
+public abstract class TargetAbstractionNetworkGenerator<
+        CONCEPT_T, 
+        REL_T,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        GROUP_T extends TargetGroup, 
+        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> {
     
     public TARGETABN_T deriveTargetAbstractionNetwork(HashSet<CONCEPT_T> sourceConcepts, REL_T relationshipType, CONCEPT_T targetHierarchyRoot) {
         
@@ -31,7 +35,7 @@ public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T exten
             uniqueTargets.addAll(targets);
         }
         
-        SingleRootedHierarchy<CONCEPT_T> targetHierarchy = getTargetHierarchy(targetHierarchyRoot);
+        HIERARCHY_T targetHierarchy = getTargetHierarchy(targetHierarchyRoot);
         
         HashMap<CONCEPT_T, HashSet<CONCEPT_T>> lowestNontargetAncestors = getLowestNontargetIngredients(uniqueTargets, targetHierarchy);
         
@@ -44,7 +48,7 @@ public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T exten
         return generateTargetAbstractionNetwork(targetHierarchy, targetGroupRoots, relationshipTargets);
     }
     
-    private HashMap<CONCEPT_T, HashSet<CONCEPT_T>> getLowestNontargetIngredients(HashSet<CONCEPT_T> targets, SingleRootedHierarchy<CONCEPT_T> hierarchy) {
+    private HashMap<CONCEPT_T, HashSet<CONCEPT_T>> getLowestNontargetIngredients(HashSet<CONCEPT_T> targets, HIERARCHY_T hierarchy) {
         
         HashMap<CONCEPT_T, HashSet<CONCEPT_T>> lowestNontargetConcepts = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
         
@@ -76,13 +80,13 @@ public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T exten
     }
     
     private TARGETABN_T generateTargetAbstractionNetwork(
-            SingleRootedHierarchy<CONCEPT_T> targetHierarchy, 
+            HIERARCHY_T targetHierarchy, 
             HashSet<CONCEPT_T> roots, 
             HashMap<CONCEPT_T, HashSet<CONCEPT_T>> sourceConceptTargets) {
        
         HashMap<CONCEPT_T, HashSet<CONCEPT_T>> conceptsGroups = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
 
-        HashMap<CONCEPT_T, SingleRootedHierarchy<CONCEPT_T>> conceptsInGroup = new HashMap<CONCEPT_T, SingleRootedHierarchy<CONCEPT_T>>();
+        HashMap<CONCEPT_T, HIERARCHY_T> conceptsInGroup = new HashMap<CONCEPT_T, HIERARCHY_T>();
         
         HashMap<CONCEPT_T, HashSet<Integer>> parentIds = new HashMap<CONCEPT_T, HashSet<Integer>>();
         
@@ -181,7 +185,7 @@ public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T exten
         for (CONCEPT_T root : roots) {
             int groupId = groupIds.get(root);
             HashSet<Integer> groupParentIds = parentIds.get(root);
-            SingleRootedHierarchy<CONCEPT_T> groupConceptHierarchy = conceptsInGroup.get(root);
+            HIERARCHY_T groupConceptHierarchy = conceptsInGroup.get(root);
 
             targetGroups.put(groupId, createGroup(groupId, root, groupParentIds, groupConceptHierarchy, incomingRelSourceConcepts));
         }
@@ -205,12 +209,12 @@ public abstract class TargetAbstractionNetworkGenerator<CONCEPT_T, GROUP_T exten
     
     protected abstract HashSet<GenericRelationship<REL_T, CONCEPT_T>> getConceptRelationships(CONCEPT_T concept);
     
-    protected abstract SingleRootedHierarchy<CONCEPT_T> getTargetHierarchy(CONCEPT_T root);
+    protected abstract HIERARCHY_T getTargetHierarchy(CONCEPT_T root);
     
     protected abstract GROUP_T createGroup(int id, CONCEPT_T root, HashSet<Integer> parentIds, 
-            SingleRootedHierarchy<CONCEPT_T> groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources);
+            HIERARCHY_T groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources);
     
     protected abstract TARGETABN_T createTargetAbstractionNetwork(GROUP_T rootGroup, HashMap<Integer, GROUP_T> groups, HashMap<Integer, HashSet<Integer>> groupHierarchy);
     
-    protected abstract SingleRootedHierarchy<CONCEPT_T> createGroupHierarchy(CONCEPT_T root);
+    protected abstract HIERARCHY_T createGroupHierarchy(CONCEPT_T root);
 }

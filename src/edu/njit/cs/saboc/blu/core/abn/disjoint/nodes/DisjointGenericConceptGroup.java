@@ -12,27 +12,32 @@ import java.util.HashSet;
  *
  * @author Chris
  */
-public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup, V, T extends DisjointGenericConceptGroup> {
+public abstract class DisjointGenericConceptGroup<
+        U extends GenericConceptGroup, 
+        CONCEPT_T, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        T extends DisjointGenericConceptGroup> {
+    
     private HashSet<U> overlapsIn;
     
-    private SingleRootedHierarchy<V> conceptHierarchy;
+    private HIERARCHY_T conceptHierarchy;
 
-    private final HashMap<V, T> parents = new HashMap<V, T>();
+    private final HashMap<CONCEPT_T, T> parents = new HashMap<CONCEPT_T, T>();
     
-    public DisjointGenericConceptGroup(V root, HashSet<U> overlapsIn) {
+    public DisjointGenericConceptGroup(CONCEPT_T root, HashSet<U> overlapsIn) {
         this.conceptHierarchy = this.createGroupHierarchy(root);
         this.overlapsIn = overlapsIn;
     }
     
-    protected abstract SingleRootedHierarchy<V> createGroupHierarchy(V root);
+    protected abstract HIERARCHY_T createGroupHierarchy(CONCEPT_T root);
     
-    protected abstract Comparator<V> getConceptComparator();
+    protected abstract Comparator<CONCEPT_T> getConceptComparator();
 
      /**
      * Returns the root of the disjoint partial-area
      * @return 
      */
-    public V getRoot() {
+    public CONCEPT_T getRoot() {
         return conceptHierarchy.getRoot();
     }
 
@@ -57,7 +62,7 @@ public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup,
      * @param parent
      * @param parentDisjointGroup 
      */
-    public void registerParent(V parent, T parentDisjointGroup) {
+    public void registerParent(CONCEPT_T parent, T parentDisjointGroup) {
         parents.put(parent, parentDisjointGroup);
     }
 
@@ -65,7 +70,7 @@ public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup,
      * Returns this disjoint partial-area's parents and the disjoint partial-areas they belong to.
      * @return 
      */
-    public HashMap<V, T> getParents() {
+    public HashMap<CONCEPT_T, T> getParents() {
         return parents;
     }
 
@@ -74,7 +79,7 @@ public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup,
      * @param c
      * @param parent 
      */
-    public void addConcept(V c, V parent) {
+    public void addConcept(CONCEPT_T c, CONCEPT_T parent) {
         conceptHierarchy.addIsA(c, parent);
     }
 
@@ -82,7 +87,7 @@ public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup,
      * Returns the hierarchy of concepts summarized by this disjoint partial-area
      * @return 
      */
-    public SingleRootedHierarchy<V> getConceptHierarchy() {
+    public HIERARCHY_T getConceptHierarchy() {
         return conceptHierarchy;
     }
 
@@ -91,8 +96,8 @@ public abstract class DisjointGenericConceptGroup<U extends GenericConceptGroup,
      * Returns the concepts summarized by this disjoint partial-area as a list, sorted by FSN
      * @return 
      */
-    public ArrayList<V> getConceptsAsList() {
-        ArrayList<V> concepts = new ArrayList<V>(conceptHierarchy.getNodesInHierarchy());
+    public ArrayList<CONCEPT_T> getConceptsAsList() {
+        ArrayList<CONCEPT_T> concepts = new ArrayList<CONCEPT_T>(conceptHierarchy.getNodesInHierarchy());
 
         Collections.sort(concepts, getConceptComparator());
 

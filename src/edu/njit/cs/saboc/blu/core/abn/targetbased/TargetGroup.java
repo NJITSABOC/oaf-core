@@ -11,14 +11,14 @@ import java.util.HashSet;
  * 
  * @author Chris O
  */
-public abstract class TargetGroup<CONCEPT_T> extends GenericConceptGroup {
+public abstract class TargetGroup<CONCEPT_T, HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends GenericConceptGroup {
     
-    private SingleRootedHierarchy<CONCEPT_T> hierarchy;
+    private HIERARCHY_T hierarchy;
     
     private HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources;
     
     public TargetGroup(int id, Concept root, HashSet<Integer> parentIds, 
-            SingleRootedHierarchy<CONCEPT_T> groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources) {
+            HIERARCHY_T groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources) {
         
         super(id, root, groupHierarchy.getNodesInHierarchy().size(), parentIds);
         
@@ -26,7 +26,7 @@ public abstract class TargetGroup<CONCEPT_T> extends GenericConceptGroup {
         this.incomingRelSources = incomingRelSources;
     }
     
-    public SingleRootedHierarchy<CONCEPT_T> getGroupHierarchy() {
+    public HIERARCHY_T getGroupHierarchy() {
         return hierarchy;
     }
     

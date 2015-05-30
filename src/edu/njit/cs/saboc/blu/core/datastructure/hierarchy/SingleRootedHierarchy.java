@@ -8,7 +8,7 @@ import java.util.HashSet;
  * 
  * @author Chris
  */
-public abstract class SingleRootedHierarchy<T> extends MultiRootedHierarchy<T> {
+public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T, V>> extends MultiRootedHierarchy<T> {
     
     public SingleRootedHierarchy(T root) {
         super(new HashSet<T>(Arrays.asList(root)));
@@ -18,11 +18,13 @@ public abstract class SingleRootedHierarchy<T> extends MultiRootedHierarchy<T> {
         super(new HashSet<T>(Arrays.asList(root)), conceptHierarchy);
     }
     
-    public SingleRootedHierarchy(T root, SingleRootedHierarchy<T> hierarchy) {
+    public SingleRootedHierarchy(T root, V hierarchy) {
         this(root, hierarchy.children);
     }
     
     public T getRoot() {
         return getRoots().iterator().next();
     }
+    
+    protected abstract V createHierarchy(T root);
 }

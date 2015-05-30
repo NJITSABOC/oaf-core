@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import SnomedShared.generic.GenericGroupContainer;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,9 +11,12 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public abstract class GenericArea<CONCEPT_T, REL_T, 
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
-        REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>> extends GenericGroupContainer<REGION_T> {
+public abstract class GenericArea<
+        CONCEPT_T, 
+        REL_T, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>> extends GenericGroupContainer<REGION_T> {
     
     protected HashSet<REL_T> relationships;
     
@@ -33,7 +37,7 @@ public abstract class GenericArea<CONCEPT_T, REL_T,
     public void addPArea(PAREA_T parea) {
         boolean regionFound = false;
         
-        for (GenericRegion<CONCEPT_T, REL_T, PAREA_T> region : partitions) {
+        for (GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T> region : partitions) {
             if (region.isPAreaInRegion(parea)) {
                 regionFound = true;
                 region.addPAreaToRegion(parea);

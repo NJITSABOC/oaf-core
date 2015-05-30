@@ -12,12 +12,13 @@ import java.util.Stack;
  * @author Chris O
  */
 public abstract class PAreaTaxonomyGenerator<
-        TAXONOMY_T extends GenericPAreaTaxonomy<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T>,
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
-        AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
-        REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
+        TAXONOMY_T extends GenericPAreaTaxonomy<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        AREA_T extends GenericArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
+        REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T, // Concept type
-        REL_T> // Relationship type
+        REL_T,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> // Relationship type
 
 {
     
@@ -25,7 +26,7 @@ public abstract class PAreaTaxonomyGenerator<
         
         HashMap<CONCEPT_T, HashSet<REL_T>> conceptRelationships = new HashMap<CONCEPT_T, HashSet<REL_T>>();
         
-        SingleRootedHierarchy<CONCEPT_T> conceptHierarchy = this.getConceptHierarchy();
+        HIERARCHY_T conceptHierarchy = this.getConceptHierarchy();
         
         RelationshipEquality<REL_T> relEquality = this.getRelationshipEquality();
 
@@ -69,7 +70,7 @@ public abstract class PAreaTaxonomyGenerator<
         // Partial area collections
         HashMap<CONCEPT_T, Integer> partialAreaIds = new HashMap<CONCEPT_T, Integer>();
         
-        HashMap<CONCEPT_T, SingleRootedHierarchy<CONCEPT_T>> partialAreas = new HashMap<CONCEPT_T, SingleRootedHierarchy<CONCEPT_T>>();
+        HashMap<CONCEPT_T, HIERARCHY_T> partialAreas = new HashMap<CONCEPT_T, HIERARCHY_T>();
         
         HashMap<CONCEPT_T, Set<CONCEPT_T>> parentPartialAreas = new HashMap<CONCEPT_T, Set<CONCEPT_T>>();
         HashMap<CONCEPT_T, Set<CONCEPT_T>> childPartialAreas = new HashMap<CONCEPT_T, Set<CONCEPT_T>>();
@@ -94,7 +95,7 @@ public abstract class PAreaTaxonomyGenerator<
             while (!stack.isEmpty()) {
                 CONCEPT_T concept = stack.pop();
 
-                SingleRootedHierarchy<CONCEPT_T> pareaHierarchy = partialAreas.get(root);
+                HIERARCHY_T pareaHierarchy = partialAreas.get(root);
 
                 if (!conceptPAreas.containsKey(concept)) {
                     conceptPAreas.put(concept, new HashSet<CONCEPT_T>());
@@ -205,21 +206,21 @@ public abstract class PAreaTaxonomyGenerator<
         return createPAreaTaxonomy(conceptHierarchy, rootPArea, areas, pareas, pareaHierarchy);
     }
     
-    protected abstract SingleRootedHierarchy<CONCEPT_T> getConceptHierarchy();
+    protected abstract HIERARCHY_T getConceptHierarchy();
     
     protected abstract RelationshipEquality<REL_T> getRelationshipEquality();
     
     protected abstract HashSet<REL_T> getDefiningConceptRelationships(CONCEPT_T concept);
     
-    protected abstract SingleRootedHierarchy<CONCEPT_T> initPAreaConceptHierarchy(CONCEPT_T root);
+    protected abstract HIERARCHY_T initPAreaConceptHierarchy(CONCEPT_T root);
     
-    protected abstract PAREA_T createPArea(int id, SingleRootedHierarchy<CONCEPT_T> pareaHierarchy, HashSet<Integer> parentIds, 
+    protected abstract PAREA_T createPArea(int id, HIERARCHY_T pareaHierarchy, HashSet<Integer> parentIds, 
              HashSet<REL_T> relationships);
     
     protected abstract AREA_T createArea(int id, HashSet<REL_T> relationships);
     
     protected abstract TAXONOMY_T createPAreaTaxonomy(
-            SingleRootedHierarchy<CONCEPT_T> conceptHierarchy, PAREA_T rootPArea, 
+            HIERARCHY_T conceptHierarchy, PAREA_T rootPArea, 
             ArrayList<AREA_T> areas, HashMap<Integer, PAREA_T> pareas, 
             HashMap<Integer, HashSet<Integer>> pareaHierarchy);
 }

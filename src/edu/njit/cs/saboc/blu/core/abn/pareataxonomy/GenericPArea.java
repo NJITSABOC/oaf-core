@@ -10,9 +10,13 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public abstract class GenericPArea<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>> extends GenericConceptGroup {
+public abstract class GenericPArea<
+        CONCEPT_T, 
+        REL_T, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>, 
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>> extends GenericConceptGroup {
     
-    protected SingleRootedHierarchy<CONCEPT_T> conceptHierarchy;
+    protected HIERARCHY_T conceptHierarchy;
     
     protected HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> parentPAreas;
     
@@ -20,7 +24,7 @@ public abstract class GenericPArea<CONCEPT_T, REL_T, PAREA_T extends GenericPAre
     
     protected GenericPArea(int id, 
             Concept root, 
-            SingleRootedHierarchy<CONCEPT_T> conceptHierarchy, 
+            HIERARCHY_T conceptHierarchy, 
             HashSet<Integer> parentIds,
             HashSet<REL_T> relationships) {
         
@@ -31,7 +35,7 @@ public abstract class GenericPArea<CONCEPT_T, REL_T, PAREA_T extends GenericPAre
         this.relationships = relationships;
     }
     
-    public SingleRootedHierarchy<CONCEPT_T> getHierarchy() {
+    public HIERARCHY_T getHierarchy() {
         return conceptHierarchy;
     }
     

@@ -101,7 +101,7 @@ public abstract class MultiRootedHierarchy<T> {
         }
     }
     
-    public abstract SingleRootedHierarchy<T> getSubhierarchyRootedAt(T root);
+    public abstract SingleRootedHierarchy<T, ? extends SingleRootedHierarchy> getSubhierarchyRootedAt(T root);
     
     public HashSet<T> getNodesInHierarchy() {
         HashSet<T> allNodes = new HashSet<T>(children.keySet());

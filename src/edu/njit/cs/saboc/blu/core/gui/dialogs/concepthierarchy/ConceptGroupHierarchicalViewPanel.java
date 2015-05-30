@@ -21,9 +21,9 @@ import javax.swing.JPanel;
  *
  * @author Chris
  */
-public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
+public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends SingleRootedHierarchy<T, HIERARCHY_T>> extends JPanel {
 
-    private SingleRootedHierarchy<T> hierarchy;
+    private HIERARCHY_T hierarchy;
     
     protected AbstractionNetwork abstractionNetwork;
     protected GenericConceptGroup group;
@@ -222,9 +222,9 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
         return null;
     }
     
-    public abstract ConceptGroupHierarchyLoader<T, ? extends GenericConceptGroup> getHierarchyLoader();
+    public abstract ConceptGroupHierarchyLoader<T, HIERARCHY_T, ? extends GenericConceptGroup> getHierarchyLoader();
     
-    public void initialize(SingleRootedHierarchy<T> hierarchy, 
+    public void initialize(HIERARCHY_T hierarchy, 
             ArrayList<ArrayList<ConceptEntry<T>>> conceptEntries, 
             HashMap<T, ConceptEntry<T>> conceptEntryMap) {
         

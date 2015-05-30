@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import SnomedShared.generic.GenericContainerPartition;
-import SnomedShared.pareataxonomy.InheritedRelationship;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -9,7 +9,11 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericRegion<CONCEPT_T, REL_T, PAREA_T extends GenericPArea<CONCEPT_T,REL_T, PAREA_T>> extends GenericContainerPartition<PAREA_T> {
+public class GenericRegion<
+        CONCEPT_T, 
+        REL_T, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T,REL_T, HIERARCHY_T, PAREA_T>> extends GenericContainerPartition<PAREA_T> {
     
     private HashSet<REL_T> relationships;
     

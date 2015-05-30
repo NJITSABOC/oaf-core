@@ -4,6 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,8 +17,12 @@ import java.util.Stack;
  *
  * @author Chris
  */
-public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, V extends GenericConceptGroup, U, 
-        Y extends DisjointGenericConceptGroup<V, U, Y>> {
+public abstract class DisjointAbstractionNetwork <
+        T extends AbstractionNetwork,
+        V extends GenericConceptGroup, 
+        CONCEPT_T, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        Y extends DisjointGenericConceptGroup<V, CONCEPT_T, HIERARCHY_T, Y>> {
     
     protected HashSet<V> allGroups;
     
@@ -29,31 +34,31 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
     
     protected int levels;
     
-    public DisjointAbstractionNetwork(T abstractionNetwork, HashSet<V> groups, MultiRootedHierarchy<U> conceptHierarchy) {
+    public DisjointAbstractionNetwork(T abstractionNetwork, HashSet<V> groups, MultiRootedHierarchy<CONCEPT_T> conceptHierarchy) {
         
         this.abstractionNetwork = abstractionNetwork;
         this.allGroups = groups;
         
-        HashSet<U> roots = new HashSet<U>();
+        HashSet<CONCEPT_T> roots = new HashSet<CONCEPT_T>();
         
         // A mapping of concepts to the group(s) they belong to.
-        HashMap<U, HashSet<V>> conceptGroupMap = new HashMap<U, HashSet<V>>();
+        HashMap<CONCEPT_T, HashSet<V>> conceptGroupMap = new HashMap<CONCEPT_T, HashSet<V>>();
         
         HashSet<V> identifiedOverlappingGroups = new HashSet<V>();
         
         for (V group : groups) {
-            U root = this.getGroupRoot(group);
+            CONCEPT_T root = this.getGroupRoot(group);
 
             roots.add(root);
 
-            Stack<U> stack = new Stack<U>();
+            Stack<CONCEPT_T> stack = new Stack<CONCEPT_T>();
             stack.push(root);
 
-            Set<U> processedConcepts = new HashSet<U>();
+            Set<CONCEPT_T> processedConcepts = new HashSet<CONCEPT_T>();
 
             // Traverse this partial-area's hierarchy, mark which concepts belong to the partial-area
             while (!stack.isEmpty()) {
-                U c = stack.pop();
+                CONCEPT_T c = stack.pop();
 
                 if (!conceptGroupMap.containsKey(c)) {
                     conceptGroupMap.put(c, new HashSet<V>());
@@ -67,9 +72,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
 
                 processedConcepts.add(c);
 
-                HashSet<U> children = conceptHierarchy.getChildren(c);
+                HashSet<CONCEPT_T> children = conceptHierarchy.getChildren(c);
 
-                for (U child : children) {
+                for (CONCEPT_T child : children) {
                     if (!stack.contains(child) && !processedConcepts.contains(child)) {
                         stack.push(child);
                     }
@@ -81,7 +86,7 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         
         int maxOverlap = 0;
 
-        for (Map.Entry<U, HashSet<V>> entry : conceptGroupMap.entrySet()) {
+        for (Map.Entry<CONCEPT_T, HashSet<V>> entry : conceptGroupMap.entrySet()) {
             if (entry.getValue().size() > maxOverlap) {
                 maxOverlap = entry.getValue().size();
             }
@@ -89,28 +94,28 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         
         this.levels = maxOverlap;
 
-        HashSet<U> allArticulationPoints = new HashSet<U>();
+        HashSet<CONCEPT_T> allArticulationPoints = new HashSet<CONCEPT_T>();
         
         for (int c = 2; c <= maxOverlap; c++) {
             
-            HashMap<U, HashSet<V>> overlappingConcepts = new HashMap<U, HashSet<V>>();
+            HashMap<CONCEPT_T, HashSet<V>> overlappingConcepts = new HashMap<CONCEPT_T, HashSet<V>>();
 
-            for (Map.Entry<U, HashSet<V>> entry : conceptGroupMap.entrySet()) {
+            for (Map.Entry<CONCEPT_T, HashSet<V>> entry : conceptGroupMap.entrySet()) {
                 if (entry.getValue().size() == c) {
                     overlappingConcepts.put(entry.getKey(), entry.getValue());
                 }
             }
 
-            HashSet<U> conceptSet = new HashSet<U>(overlappingConcepts.keySet());
+            HashSet<CONCEPT_T> conceptSet = new HashSet<CONCEPT_T>(overlappingConcepts.keySet());
 
-            HashSet<U> copyConceptSet;
+            HashSet<CONCEPT_T> copyConceptSet;
 
-            HashSet<U> articulationPoints = new HashSet<U>();
+            HashSet<CONCEPT_T> articulationPoints = new HashSet<CONCEPT_T>();
 
-            for (U concept : overlappingConcepts.keySet()) {
-                HashSet<U> parents = conceptHierarchy.getParents(concept);
+            for (CONCEPT_T concept : overlappingConcepts.keySet()) {
+                HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(concept);
 
-                copyConceptSet = new HashSet<U>(conceptSet);
+                copyConceptSet = new HashSet<CONCEPT_T>(conceptSet);
                 copyConceptSet.retainAll(parents);
 
                 if (copyConceptSet.isEmpty()) {
@@ -123,9 +128,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
             }
         }
         
-        HashSet<U> allRoots = new HashSet<U>();
+        HashSet<CONCEPT_T> allRoots = new HashSet<CONCEPT_T>();
 
-        for (U root : allArticulationPoints) {
+        for (CONCEPT_T root : allArticulationPoints) {
             HashSet<V> conceptGroups = conceptGroupMap.get(root);
 
             for (V group : conceptGroups) {
@@ -135,9 +140,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
 
         allRoots.addAll(allArticulationPoints);
         
-        HashMap<U, Integer> parentCounts = new HashMap<U, Integer>();
+        HashMap<CONCEPT_T, Integer> parentCounts = new HashMap<CONCEPT_T, Integer>();
         
-        for(U node : conceptHierarchy.getNodesInHierarchy()) {
+        for(CONCEPT_T node : conceptHierarchy.getNodesInHierarchy()) {
             
             if(allArticulationPoints.contains(node)) {
                 parentCounts.put(node, 0);
@@ -146,27 +151,27 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
             }
         }
         
-        Queue<U> queue = new LinkedList<U>();
+        Queue<CONCEPT_T> queue = new LinkedList<CONCEPT_T>();
         
         queue.addAll(allRoots);
         
-        HashMap<U, HashSet<U>> reachableFrom = new HashMap<U, HashSet<U>>();
+        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> reachableFrom = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
         
         while(!queue.isEmpty()) {
-            U node = queue.remove();
+            CONCEPT_T node = queue.remove();
             
-            HashSet<U> conceptRoots = new HashSet<U>();
+            HashSet<CONCEPT_T> conceptRoots = new HashSet<CONCEPT_T>();
             
-            HashSet<U> parents = conceptHierarchy.getParents(node);
+            HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(node);
             
             if (allArticulationPoints.contains(node)) {
                 conceptRoots.add(node);
             } else {
-                for (U parent : parents) {
+                for (CONCEPT_T parent : parents) {
                     conceptRoots.addAll(reachableFrom.get(parent));
                 }
                 
-                for(U parent : parents) {
+                for(CONCEPT_T parent : parents) {
                     if(!conceptRoots.equals(reachableFrom.get(parent))) {
                         conceptRoots.clear();
                         conceptRoots.add(node);
@@ -180,9 +185,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
             
             reachableFrom.put(node, conceptRoots);
 
-            HashSet<U> children = conceptHierarchy.getChildren(node);
+            HashSet<CONCEPT_T> children = conceptHierarchy.getChildren(node);
                        
-            for(U child : children) {
+            for(CONCEPT_T child : children) {
                 int childParentCount = parentCounts.get(child);
                 
                 if(childParentCount - 1 == 0) {
@@ -194,71 +199,14 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         }
         
         
-        /*
-        // Used to find complex overlapping roots
-        HashMap<U, HashSet<U>> reachableFromRoots = new HashMap<U, HashSet<U>>();
-
-        for (U root : allRoots) {
-            Stack<U> stack = new Stack<U>();
-            stack.add(root);
-
-            Set<U> processedConcepts = new HashSet<U>();
-
-            while (!stack.isEmpty()) {
-                U concept = stack.pop();
-
-                if (!reachableFromRoots.containsKey(concept)) {
-                    reachableFromRoots.put(concept, new HashSet<U>());
-                }
-
-                reachableFromRoots.get(concept).add(root);
-                processedConcepts.add(concept);
-
-                HashSet<U> children = conceptHierarchy.getChildren(concept);
-
-                for (U child : children) {
-                    if (!allRoots.contains(child)
-                            && !stack.contains(child)
-                            && !processedConcepts.contains(child)) {
-
-                        stack.add(child);
-                    }
-                }
-            }
-        }
-        
-        for (Map.Entry<U, HashSet<U>> entry : reachableFromRoots.entrySet()) {
-            if (!allRoots.contains(entry.getKey()) && !roots.contains(entry.getKey())) {
-                
-                boolean parentsMatch = true;
-
-                HashSet<U> disjointRoots = entry.getValue();
-                HashSet<U> parents = conceptHierarchy.getParents(entry.getKey());
-
-                for (U parent : parents) {
-                    HashSet<U> parentRoots = reachableFromRoots.get(parent);
-
-                    if (!parentRoots.equals(disjointRoots)) {
-                        parentsMatch = false;
-                        break;
-                    }
-                }
-
-                if (!parentsMatch) {
-                    allRoots.add(entry.getKey());
-                }
-            }
-        }
-        */
-        
          // The list of Disjoint Groups Created
         HashSet<Y> disjointGroups = new HashSet<Y>();
 
         // A map from the root of Disjoint Group to the Disjoint Group Itself
-        HashMap<U, Y> rootMap = new HashMap<U, Y>();
+        HashMap<CONCEPT_T, Y> rootMap = new HashMap<CONCEPT_T, Y>();
 
         // HashMap containing mapping from a concept to the disjoint group it exists in
-        HashMap<U, Y> conceptToDisjointGroup = new HashMap<U, Y>();
+        HashMap<CONCEPT_T, Y> conceptToDisjointGroup = new HashMap<CONCEPT_T, Y>();
 
         HashSet<Y> disjointGroupHierarchyRoots = new HashSet<Y>();
         
@@ -273,7 +221,7 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         disjointGroupHierarchy = createDisjointGroupHierarchy(disjointGroupHierarchyRoots);
         
         // For all of the roots, create a disjoint partial area
-        for (U root : allRoots) {
+        for (CONCEPT_T root : allRoots) {
             if (!rootMap.containsKey(root)) {
                 Y disjointGroup = createDisjointGroup(root, conceptGroupMap.get(root));
                 disjointGroups.add(disjointGroup);
@@ -283,17 +231,17 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
 
         // Add all concepts to their respective disjoint partial areas
         for (Y disjointGroup : disjointGroups) {
-            U root = disjointGroup.getRoot();
+            CONCEPT_T root = disjointGroup.getRoot();
 
             disjointGroups.add(disjointGroup);
 
-            Stack<U> stack = new Stack<U>();
+            Stack<CONCEPT_T> stack = new Stack<CONCEPT_T>();
             stack.add(root);
 
-            Set<U> processedConcepts = new HashSet<U>();
+            Set<CONCEPT_T> processedConcepts = new HashSet<CONCEPT_T>();
 
             while (!stack.isEmpty()) {
-                U concept = stack.pop();
+                CONCEPT_T concept = stack.pop();
                 
                 if(conceptToDisjointGroup.containsKey(concept)) {
                     System.err.println("ERROR (concept already in group): " + concept);
@@ -303,9 +251,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
 
                 processedConcepts.add(concept);
 
-                HashSet<U> children = conceptHierarchy.getChildren(concept);
+                HashSet<CONCEPT_T> children = conceptHierarchy.getChildren(concept);
 
-                for (U child : children) {
+                for (CONCEPT_T child : children) {
                     if (allRoots.contains(child)) {
                         disjointGroupHierarchy.addIsA(rootMap.get(child), disjointGroup);
                     } else {
@@ -319,9 +267,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         }
         
         for(Y disjointGroup : disjointGroups) {
-            HashSet<U> parents = conceptHierarchy.getParents(disjointGroup.getRoot());
+            HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(disjointGroup.getRoot());
             
-            for(U parent : parents) {
+            for(CONCEPT_T parent : parents) {
                 Y parentGroup = conceptToDisjointGroup.get(parent);
                 
                 disjointGroup.registerParent(parent, parentGroup);
@@ -349,9 +297,9 @@ public abstract class DisjointAbstractionNetwork <T extends AbstractionNetwork, 
         return levels;
     }
     
-    protected abstract U getGroupRoot(V group);
+    protected abstract CONCEPT_T getGroupRoot(V group);
     
-    protected abstract Y createDisjointGroup(U root, HashSet<V> overlaps);
+    protected abstract Y createDisjointGroup(CONCEPT_T root, HashSet<V> overlaps);
     
     protected abstract MultiRootedHierarchy<Y> createDisjointGroupHierarchy(HashSet<Y> roots);
 }

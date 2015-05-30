@@ -174,6 +174,8 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
         if (e.getButton() == MouseEvent.BUTTON3) {
             requestFocusInWindow();
             partitionMenu.setLocation(e.getLocationOnScreen());
+            
+            partitionMenu.setVisible(true);
         } else {
             graph.requestFocusInWindow();
         }

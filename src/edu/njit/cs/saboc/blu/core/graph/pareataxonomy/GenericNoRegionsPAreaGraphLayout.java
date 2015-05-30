@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericRegion;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
@@ -13,6 +14,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.options.GraphOptions;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.swing.JLabel;
 
 /**
@@ -21,14 +23,18 @@ import javax.swing.JLabel;
  */
 public abstract class GenericNoRegionsPAreaGraphLayout<
         TAXONOMY_T extends GenericPAreaTaxonomy,
-        AREA_T extends GenericArea<CONCEPT_T, REL_T, PAREA_T, REGION_T>,
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, PAREA_T>,
-        REGION_T extends GenericRegion<CONCEPT_T, REL_T, PAREA_T>,
+        AREA_T extends GenericArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
+        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         AREAENTRY_T extends GenericBluArea<AREA_T>,
         PAREAENTRY_T extends GenericBluPArea<PAREA_T, REGIONENTRY_T>,
         REGIONENTRY_T extends GenericBluRegion<REGION_T, AREAENTRY_T>,
         CONCEPT_T,
-        REL_T> extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T> {
+        REL_T,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> 
+
+        extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, 
+            AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T, HIERARCHY_T> {
 
     public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy) {
         super(graph, taxonomy);
@@ -125,15 +131,15 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
             String countStr = "UNSET COUNT STR";
 
             if(showConceptCounts) {
-                /*
-                Set<OWLClass> clses = a.getAreaClasses();
                 
-                if(clses.size() == 1) {
-                    countStr = "(1 Class)";
+                HashSet<CONCEPT_T> concepts = a.getConcepts();
+                
+                if(concepts.size() == 1) {
+                    countStr = "(1 Concept)";
                 } else {
-                    countStr = "(" + clses.size() + " Classes)";
+                    countStr = "(" + concepts.size() + " Concepts)";
                 }
-                */
+                
             } else {
                 ArrayList<PAREA_T> pareas = a.getAllPAreas();
                 

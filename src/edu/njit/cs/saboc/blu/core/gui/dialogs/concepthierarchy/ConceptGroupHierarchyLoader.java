@@ -14,7 +14,9 @@ import java.util.Queue;
  *
  * @author Chris
  */
-public abstract class ConceptGroupHierarchyLoader<T, V extends GenericConceptGroup> implements Runnable {
+public abstract class ConceptGroupHierarchyLoader<T, 
+        HIERARCHY_T extends SingleRootedHierarchy<T, HIERARCHY_T>, 
+        V extends GenericConceptGroup> implements Runnable {
 
     private V group;
     
@@ -22,14 +24,14 @@ public abstract class ConceptGroupHierarchyLoader<T, V extends GenericConceptGro
     
     private HashMap<T, ConceptEntry<T>> conceptEntryMap = new HashMap<T, ConceptEntry<T>>();
 
-    public ConceptGroupHierarchyLoader(V group, ConceptGroupHierarchicalViewPanel<T> hierarchyViewPanel) {
+    public ConceptGroupHierarchyLoader(V group, ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T> hierarchyViewPanel) {
         this.group = group;
         this.hierarchyViewPanel = hierarchyViewPanel;
     }
 
     public void run() {
 
-        SingleRootedHierarchy<T> hierarchy = getGroupHierarchy(group);
+        HIERARCHY_T hierarchy = getGroupHierarchy(group);
 
         ArrayList<ArrayList<T>> levels = new ArrayList<ArrayList<T>>();
 
@@ -106,7 +108,7 @@ public abstract class ConceptGroupHierarchyLoader<T, V extends GenericConceptGro
         hierarchyViewPanel.initialize(hierarchy, levelEntries, conceptEntryMap);
     }
     
-    public abstract SingleRootedHierarchy<T> getGroupHierarchy(V group);
+    public abstract HIERARCHY_T getGroupHierarchy(V group);
     
     public abstract ConceptEntry<T> createConceptEntry(T concept);
     

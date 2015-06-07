@@ -233,5 +233,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
         this.conceptEntryMap = conceptEntryMap;
         
         this.initialized = true;
+        
+        this.repaint();
     }
 }

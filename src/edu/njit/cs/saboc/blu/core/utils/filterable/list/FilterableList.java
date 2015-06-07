@@ -66,7 +66,7 @@ public class FilterableList extends JPanel {
                 if(index > -1) {
                     Filterable obj = conceptModel.get(index);
                     
-                    return getModel().getElementAt(index).toString();
+                    return obj.getToolTipText();
                 }
 
                 return null;

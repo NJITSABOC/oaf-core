@@ -97,7 +97,7 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
 
     @Override
     public void dataReady() {
-        ArrayList<V> results = field.getData(focusConcept.getConcept());
+        ArrayList<V> results = (ArrayList<V>)focusConcept.getConceptList(field);
         
         ArrayList<Filterable<V>> entries = new ArrayList<>();
 

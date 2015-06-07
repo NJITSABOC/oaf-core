@@ -34,7 +34,7 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
         
         this.listPanel = new ConceptListPanel<T>(mainPanel, field, dataSource, new DataLoadedListener<ArrayList<T>>() {
             public void dataLoaded(ArrayList<T> concepts) {
-                setBorder(BaseNavPanel.createConceptBorder(String.format("%s (%d)", name, concepts.size())));
+                setBorder(BaseNavPanel.createTitledLineBorder(String.format("%s (%d)", name, concepts.size())));
             }
         }, true);
 
@@ -46,7 +46,7 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
             name = "Children";
         }
         
-        setBorder(BaseNavPanel.createConceptBorder(name));
+        setBorder(BaseNavPanel.createTitledLineBorder(name));
           
         add(listPanel, BorderLayout.CENTER);
     }

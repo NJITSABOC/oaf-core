@@ -54,7 +54,7 @@ public abstract class BaseNavPanel<T> extends NATLayoutPanel {
     }
 
     // Creates a new line boarder with the given title
-    public static TitledBorder createConceptBorder(String title){
+    public static TitledBorder createTitledLineBorder(String title){
         return (new TitledBorder(new LineBorder(Color.black, 1), title) {
             
             public Insets getBorderInsets(Component c, Insets insets) {

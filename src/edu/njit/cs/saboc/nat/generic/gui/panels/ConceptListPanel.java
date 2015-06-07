@@ -36,5 +36,4 @@ public class ConceptListPanel<T> extends GenericResultListPanel<T, T> {
     protected Filterable<T> createFilterableEntry(T item) {
         return new FilterableConceptEntry<T>(item, dataSource);
     }
-
 }

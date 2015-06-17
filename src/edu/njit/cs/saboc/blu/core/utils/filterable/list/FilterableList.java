@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -224,5 +225,11 @@ public class FilterableList extends JPanel {
     
     public int getSelectedIndex() {
         return list.getSelectedIndex();
+    }
+    
+    public void setListFontSize(int size) {
+        if(size > 0) {
+            list.setFont(list.getFont().deriveFont(Font.PLAIN, (float)size));
+        }
     }
 }

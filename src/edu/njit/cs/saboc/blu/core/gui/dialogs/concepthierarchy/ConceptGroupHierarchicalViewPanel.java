@@ -172,7 +172,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
                         title += "Great-";
                     }
                     
-                    title += String.format("Grandchildren of Root %s", conceptType);
+                    title += String.format("Grandchildren of Root %s (Depth: %d, # Concepts: %d)", conceptType, l, conceptEntries.get(l).size());
                 }
 
                 bufferedGraphics.drawString(title, xPos, yPos);

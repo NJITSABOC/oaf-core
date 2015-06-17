@@ -4,9 +4,11 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
+import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -15,7 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Optional;
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
@@ -29,6 +33,8 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
     private NATDataField<T, ArrayList<V>> field;
     
     private Optional<DataLoadedListener<ArrayList<V>>> dataLoadedListener;
+    
+    private JPanel optionsPanel;
 
     public GenericResultListPanel(
             final GenericNATBrowser<T> mainPanel, 
@@ -40,7 +46,17 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         
         super(mainPanel, dataSource);
         
+        Options options = mainPanel.getOptions();
+        
+        options.addOptionsListener(new NATOptionsAdapter() {
+            public void fontSizeChanged(int fontSize) {
+                list.setListFontSize(fontSize);
+            }
+        });
+        
         this.list = list;
+        this.list.setListFontSize(options.getFontSize());
+        
         this.field = field;
         this.dataLoadedListener = Optional.ofNullable(dataLoadedListener);
 
@@ -49,9 +65,19 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         setBackground(mainPanel.getNeighborhoodBGColor());
         setLayout(new BorderLayout());
         add(list, BorderLayout.CENTER);
+        
+        FlowLayout buttonLayout = new FlowLayout(FlowLayout.TRAILING);
+        buttonLayout.setHgap(0);
+
+        this.optionsPanel = new JPanel(buttonLayout);
+        this.optionsPanel.setBackground(mainPanel.getNeighborhoodBGColor());
+        this.optionsPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        
+        this.optionsPanel.setVisible(false);
+
+        add(optionsPanel, BorderLayout.NORTH);
 
         if (showFilter) {
-
             JButton filterButton = new JButton();
             filterButton.setBackground(mainPanel.getNeighborhoodBGColor());
             filterButton.setPreferredSize(new Dimension(24, 24));
@@ -63,16 +89,15 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
                     list.toggleFilterPanel();
                 }
             });
-
-            FlowLayout buttonLayout = new FlowLayout(FlowLayout.TRAILING);
-            buttonLayout.setHgap(0);
-            JPanel northPanel = new JPanel(buttonLayout);
-            northPanel.setBackground(mainPanel.getNeighborhoodBGColor());
-            northPanel.add(filterButton);
-            northPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-
-            add(northPanel, BorderLayout.NORTH);
+            
+            this.addOptionsPanelItem(filterButton);
         }
+    }
+    
+    public void addOptionsPanelItem(JComponent component) {
+        optionsPanel.setVisible(true);
+        optionsPanel.add(component);
+        optionsPanel.add(Box.createHorizontalStrut(16));
     }
 
     public GenericResultListPanel (

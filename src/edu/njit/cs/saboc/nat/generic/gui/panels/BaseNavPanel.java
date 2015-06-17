@@ -8,13 +8,18 @@ focus concept.
  ******************************************************************************/
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -54,8 +59,8 @@ public abstract class BaseNavPanel<T> extends NATLayoutPanel {
     }
 
     // Creates a new line boarder with the given title
-    public static TitledBorder createTitledLineBorder(String title){
-        return (new TitledBorder(new LineBorder(Color.black, 1), title) {
+    public static TitledBorder createTitledLineBorder(String title, int fontSize){
+        return (new TitledBorder(new LineBorder(Color.black, 1), title, 0, 0, new Font("Arial", Font.BOLD, fontSize)) {
             
             public Insets getBorderInsets(Component c, Insets insets) {
                 super.getBorderInsets(c, insets);
@@ -69,5 +74,15 @@ public abstract class BaseNavPanel<T> extends NATLayoutPanel {
                 return insets;
             }
         });
+    }
+    
+    public static JButton createFilterButton(ActionListener action) {
+        JButton filterButton = new JButton();
+        filterButton.setPreferredSize(new Dimension(24, 24));
+        filterButton.setIcon(IconManager.getIconManager().getIcon("filter.png"));
+        filterButton.setToolTipText("Filter these entries");
+        filterButton.addActionListener(action);
+        
+        return filterButton;
     }
 }

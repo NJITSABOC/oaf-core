@@ -8,14 +8,18 @@ import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
+import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSearchEntry;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.SearchResultListNavigateSelectionAction;
 import javax.swing.JOptionPane;
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -47,6 +51,9 @@ import javax.swing.SwingUtilities;
  * from 2006.
  */
 public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
+    private JTabbedPane tpane = new JTabbedPane();
+    
+    
     // Search Panel
     private JPanel pnlSearch;
     private JRadioButton optAnywhere;
@@ -67,8 +74,8 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
     
     // Options Panel
     private JPanel pnlOptions;
-    private JCheckBox chkCUI;
-    private JCheckBox chkToolTip;
+        
+    private JCheckBox chkID;
     
     // Other stuff
     private History<T> history;
@@ -137,12 +144,24 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
     private ConceptBrowserDataSource<T> dataSource;
 
     // Construtor!
-    public SearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
-        
+    public SearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {       
         this.mainPanel = mainPanel;
         this.dataSource = dataSource;
 
         this.history = mainPanel.getFocusConcept().getHistory();
+        
+        Options options = mainPanel.getOptions();
+        
+        this.tpane.setFont(tpane.getFont().deriveFont(Font.BOLD, options.getFontSize()));
+        
+        options.addOptionsListener(new NATOptionsAdapter() {
+            public void fontSizeChanged(int fontSize) {
+                searchList.setListFontSize(fontSize);
+                lstHistory.setFont(lstHistory.getFont().deriveFont(Font.BOLD, fontSize));
+                
+                tpane.setFont(tpane.getFont().deriveFont(Font.BOLD, options.getFontSize()));
+            }
+        });
         
         setLayout(new BorderLayout());
 
@@ -181,7 +200,7 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
         btnDoSearch = new JButton(IconManager.getIconManager().getIcon("search.png"));
         btnDoSearch.addActionListener(this);
         pnlSearch.add(btnDoSearch, c);
-
+                
         btnCancelSearch = new JButton(IconManager.getIconManager().getIcon("cancel.png"));
         btnCancelSearch.setToolTipText("Cancel serach");
         btnCancelSearch.addActionListener(this);
@@ -189,16 +208,26 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
         pnlSearch.add(btnCancelSearch, c);
         btnCancelSearch.setVisible(false);
         btnCancelSearch.setEnabled(false);
+        
+        c.gridx = 2;
+        c.weightx = 0;
+                
+        JButton filterButton = BaseNavPanel.createFilterButton(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                searchList.toggleFilterPanel();
+            }
+        });
+        
+        pnlSearch.add(filterButton, c);
 
         c.gridx = 0;
         c.gridy = 2;
-        c.gridwidth = 2;
+        c.gridwidth = 3;
         c.weightx = c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
 
-        searchList = new BrowserNavigableFilterableList(mainPanel.getFocusConcept(), 
-                mainPanel.getOptions(), 
-                new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept()));
+        searchList = new BrowserNavigableFilterableList(new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept()));
+        searchList.setListFontSize(options.getFontSize());
         
         searchList.setFilterPanelOpen(false, null);
 
@@ -240,6 +269,7 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
         
         mdlHistory = new DefaultListModelEx();
         lstHistory = new JList(mdlHistory);
+        lstHistory.setFont(lstHistory.getFont().deriveFont(Font.BOLD, options.getFontSize()));
 
         lstHistory.addMouseListener(new MouseAdapter() {
             @Override
@@ -270,10 +300,9 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
         pnlHistory.add(new JScrollPane(lstHistory), BorderLayout.CENTER);
 
 
-        // Glue
-        JTabbedPane tpane = new JTabbedPane();
         tpane.addTab("Search", pnlSearch);
         tpane.addTab("History", pnlHistory);
+        tpane.addTab("Options", new OptionsPanel());
         add(tpane, BorderLayout.CENTER);
 
         updateHistory();
@@ -454,4 +483,50 @@ public class SearchPanel<T> extends NATLayoutPanel implements ActionListener {
         btnBack.setEnabled(history.getPosition() > 0);
         btnForward.setEnabled(history.getPosition() < (history.getHistoryList().size() - 1));
     }
+
+    private class OptionsPanel extends JPanel {
+        public OptionsPanel() {
+            JPanel fontSizePanel = new JPanel(new GridLayout(1, 2));
+            
+            fontSizePanel.add(new JLabel("Font Size: "));
+            
+            ButtonGroup fontSizeGroup = new ButtonGroup();
+            JPanel fontSizeOptionsPanel = new JPanel();
+            
+            JRadioButton tinyBtn = makeRadioButton("Tiny", fontSizeGroup, fontSizeOptionsPanel);
+            JRadioButton smallBtn = makeRadioButton("Small", fontSizeGroup, fontSizeOptionsPanel);
+            JRadioButton normalBtn = makeRadioButton("Normal", fontSizeGroup, fontSizeOptionsPanel);
+            JRadioButton largeBtn = makeRadioButton("Large", fontSizeGroup, fontSizeOptionsPanel);
+            JRadioButton hugeBtn = makeRadioButton("Huge", fontSizeGroup, fontSizeOptionsPanel);
+            
+            tinyBtn.addActionListener((ActionEvent ae) -> {
+                mainPanel.getOptions().setFontSize(10);
+            });
+            
+            smallBtn.addActionListener((ActionEvent ae) -> {
+                mainPanel.getOptions().setFontSize(12);
+            });
+            
+            normalBtn.addActionListener((ActionEvent ae) -> {
+                mainPanel.getOptions().setFontSize(14);
+            });
+            
+            largeBtn.addActionListener((ActionEvent ae) -> {
+                mainPanel.getOptions().setFontSize(16);
+            });
+
+            hugeBtn.addActionListener((ActionEvent ae) -> {
+                mainPanel.getOptions().setFontSize(22);
+            });
+
+            normalBtn.setSelected(true);
+            
+            fontSizePanel.add(fontSizeOptionsPanel);
+            
+            this.setLayout(new BorderLayout());
+            
+            this.add(fontSizePanel, BorderLayout.NORTH);
+        }
+    }
+
 }

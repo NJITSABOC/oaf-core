@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
 import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +24,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Optional;
+import javax.swing.BorderFactory;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,7 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.text.Document;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -60,9 +62,15 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     private JButton cancelButton;
 
     private History<T> history;
+    
+    private JPanel optionsPanel;
+    
+    private JPanel focusConceptPanel;
 
     public FocusConceptPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         super(mainPanel, dataSource);
+        
+        Options options = mainPanel.getOptions();
 
         Color bgColor = mainPanel.getNeighborhoodBGColor();
         setLayout(new BorderLayout());
@@ -142,13 +150,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
             }
         });
 
-        mainPanel.getOptions().addOptionListener(new Options.Listener() {
-            @Override
-            public void optionsUpdated() {
-                display();
-            }
-        });
-
         editPanel = new JPanel( new BorderLayout() );
 
         JPanel tempPanel = new JPanel();
@@ -165,13 +166,18 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
                 BorderLayout.WEST);
         editPanel.add(tempPanel, BorderLayout.EAST);
 
-        JPanel fcp = new JPanel();
-        fcp.setLayout(new BorderLayout());
-        fcp.setBackground(bgColor);
-        fcp.setBorder(new TitledBorder("FOCUS CONCEPT"));
-
+        focusConceptPanel = new JPanel();
+        focusConceptPanel.setLayout(new BorderLayout());
+        focusConceptPanel.setBackground(bgColor);
+        
+        focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, options.getFontSize())));
+       
         backButton = new JButton("Back");
         forwardButton = new JButton("Forward");
+        
+        this.optionsPanel = new JPanel();
+        this.optionsPanel.setOpaque(false);
+                
         homeButton = new JButton("Root");
 
         homeButton.setPreferredSize(new Dimension(300, 22));
@@ -180,6 +186,10 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
                 focusConcept.navigateRoot();
             }
         });
+        
+        homeButton.setToolTipText("Return to the root of the ontology (OWL:Thing)");
+        
+        this.addOptionButton(homeButton);
         
         backButton.setIcon(IconManager.getIconManager().getIcon("left-arrow.png"));
         backButton.setPreferredSize(new Dimension(128, 20));
@@ -198,8 +208,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
                 }
             }
         });
-
-        homeButton.setBackground(bgColor);
 
         forwardButton.setIcon(IconManager.getIconManager().getIcon("right-arrow.png"));
         forwardButton.setPreferredSize(new Dimension(128, 20));
@@ -222,7 +230,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         jtf = new JEditorPane() {
             @Override
             public String getToolTipText(MouseEvent evt) {
-                if(mainPanel.getOptions().areToolTipsVisible() && !editPanel.isVisible()) {
+                if(!editPanel.isVisible()) {
                     Rectangle conceptRect = new Rectangle(jtf.getX(),
                             jtf.getY(),jtf.getWidth(),jtf.getPreferredSize().height);
                     if(!conceptRect.contains(evt.getPoint())) {
@@ -243,6 +251,8 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
                 return new Point(evt.getX(), evt.getY() + 21);
             }
         };
+        
+        jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, 14f));
         
         undoManager = new UndoManager() {
             @Override
@@ -274,21 +284,16 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         alignmentPanel.setBackground(mainPanel.getNeighborhoodBGColor());
         alignmentPanel.add(backButton, BorderLayout.WEST);
         alignmentPanel.add(forwardButton, BorderLayout.EAST);
-        ImageIcon arrow = IconManager.getIconManager().getIcon("arrow.gif");
+        ImageIcon arrow = IconManager.getIconManager().getIcon("arrow.gif");        
+        
+        alignmentPanel.add(optionsPanel, BorderLayout.CENTER);
 
-        JPanel centerPanel = new JPanel();
-        centerPanel.add(homeButton);
-        homeButton.setPreferredSize(new Dimension(80, 24));
-        centerPanel.setBackground(new Color(0, true));
-        alignmentPanel.add(centerPanel, BorderLayout.CENTER);
-
-        fcp.add(editPanel, BorderLayout.NORTH);
-        fcp.add(pane, BorderLayout.CENTER);
+        focusConceptPanel.add(editPanel, BorderLayout.NORTH);
+        focusConceptPanel.add(pane, BorderLayout.CENTER);
 
         add(alignmentPanel, BorderLayout.NORTH);
-        add(fcp, BorderLayout.CENTER);
-        add(new JLabel(arrow), BorderLayout.SOUTH);
-
+        add(focusConceptPanel, BorderLayout.CENTER);
+        
         jtf.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -375,30 +380,39 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         display();
     }
     
-    public void addHomeActionListener(ActionListener listener) {
-        homeButton.addActionListener(listener);
+    public void addOptionButton(JButton button) {
+        button.setPreferredSize(new Dimension(80, 24));
+        button.setBackground(mainPanel.getNeighborhoodBGColor());
+        optionsPanel.add(button);
     }
 
     public void display() {
+        Options options = mainPanel.getOptions();
+        
         // When the focus concept is changed, hide the edit panel.
         editPanel.setVisible(false);
         document = null;
 
-        jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN));
-        Options options = mainPanel.getOptions();
+        jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, options.getFontSize()));
+
+        options.addOptionsListener(new NATOptionsAdapter() {
+            public void fontSizeChanged(int fontSize) {
+                focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, fontSize)));
+                
+                if(editPanel.isEnabled()) {
+                    jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
+                } else {
+                    jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, fontSize));
+                }
+            }
+        });
 
         T fc = focusConcept.getConcept();
         
         String conceptString = String.format("%s\n%s", dataSource.getConceptName(fc), dataSource.getConceptId(fc));
 
         jtf.setText(conceptString);
-
-        if(options.areToolTipsVisible()) {
-            jtf.setToolTipText(conceptString);
-        }
-        else {
-            jtf.setToolTipText("");
-        }
+        jtf.setToolTipText(conceptString);
 
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);

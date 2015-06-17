@@ -32,15 +32,13 @@ public class GenericNATBrowser<T> extends JPanel {
         this.parentFrame = parentFrame;
         
         this.layout = layout;
-                
-        focusConcept = new FocusConcept(this, options, dataSource);
         
-        initConceptBrowser();
-                
-        navigateTo(dataSource.getRoot());
+        this.add(layout, BorderLayout.CENTER);    
+        
+        focusConcept = new FocusConcept(this, options, dataSource);
 
-        // Update
-        focusConcept.updateAll();
+        this.initConceptBrowser();
+        this.navigateTo(dataSource.getRoot());
     }
 
     public void navigateTo(T c) {
@@ -48,7 +46,7 @@ public class GenericNATBrowser<T> extends JPanel {
     }
 
     public void initConceptBrowser() {
-        this.add(layout.doLayout(this), BorderLayout.CENTER);
+        layout.createLayout(this);
     }
 
     public Color getNeighborhoodBGColor() {
@@ -65,5 +63,9 @@ public class GenericNATBrowser<T> extends JPanel {
 
     public JFrame getParentFrame() {
         return parentFrame;
+    }
+    
+    public NATLayout getNATLayout() {
+        return layout;
     }
 }

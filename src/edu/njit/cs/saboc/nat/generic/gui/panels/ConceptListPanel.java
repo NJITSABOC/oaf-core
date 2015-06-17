@@ -24,10 +24,7 @@ public class ConceptListPanel<T> extends GenericResultListPanel<T, T> {
             boolean showFilter) {
         
         super(mainPanel, 
-                new BrowserNavigableFilterableList(
-                        mainPanel.getFocusConcept(), 
-                        mainPanel.getOptions(),
-                        new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
+                new BrowserNavigableFilterableList(new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
                 
                 field, dataSource,
                 listener, showFilter);

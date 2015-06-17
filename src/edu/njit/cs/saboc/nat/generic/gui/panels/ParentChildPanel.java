@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
+import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.awt.BorderLayout;
@@ -29,12 +30,14 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
         
         this.setBackground(mainPanel.getNeighborhoodBGColor());
         
+        final Options options = mainPanel.getOptions();
+        
         NATDataField field = panelType == PanelType.CHILD ? mainPanel.getFocusConcept().COMMON_DATA_FIELDS.CHILDREN : 
                 mainPanel.getFocusConcept().COMMON_DATA_FIELDS.PARENTS;
         
         this.listPanel = new ConceptListPanel<T>(mainPanel, field, dataSource, new DataLoadedListener<ArrayList<T>>() {
             public void dataLoaded(ArrayList<T> concepts) {
-                setBorder(BaseNavPanel.createTitledLineBorder(String.format("%s (%d)", name, concepts.size())));
+                setBorder(BaseNavPanel.createTitledLineBorder(String.format("%s (%d)", name, concepts.size()), options.getFontSize()));
             }
         }, true);
 
@@ -46,7 +49,7 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
             name = "Children";
         }
         
-        setBorder(BaseNavPanel.createTitledLineBorder(name));
+        setBorder(BaseNavPanel.createTitledLineBorder(name, options.getFontSize()));
           
         add(listPanel, BorderLayout.CENTER);
     }

@@ -2,8 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
-import edu.njit.cs.saboc.nat.generic.FocusConcept;
-import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.FilterableListSelectionAction;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,7 +13,7 @@ import javax.swing.JList;
  */
 public class BrowserNavigableFilterableList<T> extends FilterableList {
 
-    public BrowserNavigableFilterableList(final FocusConcept focusConcept, final Options options, final FilterableListSelectionAction<T> selectionAction) {
+    public BrowserNavigableFilterableList(final FilterableListSelectionAction<T> selectionAction) {
 
         super.addListMouseListener(new MouseAdapter() {
             

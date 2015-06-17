@@ -3,10 +3,13 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
+import edu.njit.cs.saboc.nat.generic.Options;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
+import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import edu.njit.cs.saboc.nat.generic.gui.utils.ButtonTabbedPaneUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +25,9 @@ import javax.swing.JTabbedPane;
  * @author Chris O
  */
 public class MultiNavPanel<T> extends JPanel {
-    private HashMap<NATDataField, BaseNavPanel<T>> navPanels = new HashMap<>();
+    private HashMap<String, NATLayoutPanel> navPanels = new HashMap<>();
     
-    private HashMap<NATDataField, Integer> panelIndexes = new HashMap<>();
+    private HashMap<String, Integer> panelIndexes = new HashMap<>();
     
     private FocusConcept<T> focusConcept;
     
@@ -58,12 +61,12 @@ public class MultiNavPanel<T> extends JPanel {
 
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        for(Entry<NATDataField, Integer> indexEntry : panelIndexes.entrySet()) {
+                        for(Entry<String, Integer> indexEntry : panelIndexes.entrySet()) {
                             if(indexEntry.getValue() == tabbedPane.getSelectedIndex()) {
-                                BaseNavPanel navPanel = navPanels.get(indexEntry.getKey());
+                                NATLayoutPanel layoutPanel = navPanels.get(indexEntry.getKey());
                                 
-                                if(navPanel instanceof Toggleable) {
-                                    ((Toggleable)navPanel).toggle();
+                                if(layoutPanel instanceof Toggleable) {
+                                    ((Toggleable)layoutPanel).toggle();
                                 }
                             }
                         }
@@ -74,8 +77,17 @@ public class MultiNavPanel<T> extends JPanel {
             }
         };
         
+        Options options = mainPanel.getOptions();
+        
+        options.addOptionsListener(new NATOptionsAdapter() {
+            public void fontSizeChanged(int fontSize) {
+                tabbedPane.setFont(tabbedPane.getFont().deriveFont(Font.BOLD, fontSize));
+            }
+        });
+        
         tabbedPane.setUI(tabbedUI);
-
+        tabbedPane.setFont(tabbedPane.getFont().deriveFont(Font.BOLD, options.getFontSize()));
+               
         tabbedPane.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
@@ -87,17 +99,19 @@ public class MultiNavPanel<T> extends JPanel {
         this.focusConcept = mainPanel.getFocusConcept();
     }
     
-    public void addNavPanel(NATDataField field, BaseNavPanel<T> panel, String panelTitle) {              
-        navPanels.put(field, panel);
-        
-        panelIndexes.put(field, tabbedPane.getTabCount());
-        
+    public void addNavPanel(NATDataField field, BaseNavPanel<T> panel, String panelTitle) {
         focusConcept.addDisplayPanel(field, panel);
         
-        tabbedPane.add(panelTitle, panel);
-    } 
+        addLayoutPanel(field.getFieldName(), panel);
+    }
     
-    public void updateTabTitle(NATDataField field, String title) {
-        tabbedPane.setTitleAt(panelIndexes.get(field), title);
+    public void addLayoutPanel(String panelName, NATLayoutPanel panel) {
+        navPanels.put(panelName, panel);
+        panelIndexes.put(panelName, tabbedPane.getTabCount());
+        tabbedPane.add(panelName, panel);
+    }
+
+    public void updateTabTitle(String fieldName, String title) {
+        tabbedPane.setTitleAt(panelIndexes.get(fieldName), title);
     }
 }

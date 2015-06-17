@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.nat.generic;
 
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
@@ -21,10 +23,12 @@ public class InternalConceptBrowserFrame<T> extends JInternalFrame {
                 true);//iconifiable
         
         browser = new GenericNATBrowser<T>(parentFrame, dataSource, layout);
+        
 
-        setSize(1200, 550);
-
+        this.setSize(1200, 550);
+ 
         this.add(browser);
+        
         this.setVisible(true);
     }
 

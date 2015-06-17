@@ -31,6 +31,10 @@ public class NATDataField<T, V> {
         return retriever.retrieveData(concept);
     }
     
+    public String getFieldName() {
+        return fieldName;
+    }
+    
     public String toString() {
         return String.format("NATDataField: %s", fieldName);
     }

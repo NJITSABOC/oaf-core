@@ -7,6 +7,10 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class NATLayout<T> {
-    public abstract JPanel doLayout(GenericNATBrowser<T> mainPanel);
+public abstract class NATLayout<T> extends JPanel{
+    public abstract void createLayout(GenericNATBrowser<T> mainPanel);
+    
+    public void handleResize(int newWidth, int newHeight) {
+        
+    }
 }

@@ -8,7 +8,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JList;
 
 /**
- *
+ * A generic filterable list that allows a user to navigate within the NAT via 
+ * double clicking on a entry in the list
  * @author Chris O
  */
 public class BrowserNavigableFilterableList<T> extends FilterableList {

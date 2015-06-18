@@ -4,20 +4,36 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 
 /**
- *
+ * A filterable entry for a search result list
  * @author Chris
  */
 public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>> implements NavigableEntry<T> {
+   
+    /**
+     * The search result
+     */
     private BrowserSearchResult<T> entry;
 
+    /**
+     * 
+     * @param entry The search result
+     */
     public FilterableSearchEntry(BrowserSearchResult<T> entry) {
         this.entry = entry;
     }
     
+    /**
+     * 
+     * @return The search result
+     */
     public BrowserSearchResult<T> getObject() {
         return entry;
     }
 
+    /**
+     * 
+     * @return The search result concept
+     */
     public T getNavigableConcept() {
         return entry.getConcept();
     }
@@ -34,6 +50,11 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
                 filter(entry.getConceptId(), filter));
     }
     
+    /**
+     * 
+     * @param filter The filter
+     * @return True if the search result's term or search result concept's unique ID contains the filter
+     */
     public boolean containsFilter(String filter) {
         return entry.getName().toLowerCase().contains(filter) || 
                 entry.getConceptId().contains(filter);

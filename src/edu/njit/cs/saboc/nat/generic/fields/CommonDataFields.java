@@ -4,23 +4,45 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.util.ArrayList;
 
 /**
- *
+ * A container class for holding generic data fields that can be used across all NAT implementations
  * @author Chris O
  */
 public class CommonDataFields<T> {
+    /**
+     * The focus concept data field
+     */
     public final NATDataField<T, T> CONCEPT;
     
+    /**
+     * The synonyms data field
+     */
     public final NATDataField<T, ArrayList<String>> SYNONYMS;
     
+    /**
+     * The parents data field
+     */
     public final NATDataField<T, ArrayList<T>> PARENTS;
     
+    /**
+     * The children data field
+     */
     public final NATDataField<T, ArrayList<T>> CHILDREN;
     
+    /**
+     * The siblings data field
+     */
     public final NATDataField<T, ArrayList<T>> SIBLINGS;
     
+    /**
+     * The history data field
+     */
     public final NATDataField<T, String> HISTORY;
     
-    public CommonDataFields(ConceptBrowserDataSource dataSource) {
+    /**
+     * 
+     * @param dataSource The data source to be used by the data fields
+     */
+    public CommonDataFields(ConceptBrowserDataSource<T> dataSource) {
         this.CONCEPT = new NATDataField<T, T>("Concept", new DataSourceDataRetriever<T, T>(dataSource) {
             public T retrieveData(T concept) {
                 return concept;

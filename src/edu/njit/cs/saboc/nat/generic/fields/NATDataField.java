@@ -1,15 +1,27 @@
 package edu.njit.cs.saboc.nat.generic.fields;
 
 /**
- *
+ * Generic class which represents a data field. A data field handles information about
+ * a piece of information for a given concept, e.g., its parents, siblings, relationships, etc.
  * @author Chris O
  */
 public class NATDataField<T, V> {
     
-    private String fieldName;
+    /**
+     * The unique name of the data field (MUST BE UNIQUE!)
+     */
+    private final String fieldName;
     
-    private FieldDataRetriever<T, V> retriever;
+    /**
+     * The data retriever for this field
+     */
+    private final FieldDataRetriever<T, V> retriever;
     
+    /**
+     * 
+     * @param fieldName The unique name of the field (MUST BE UNIQUE AND MEANINGFUL!)
+     * @param retriever The data retriever for this field
+     */
     public NATDataField(String fieldName, FieldDataRetriever<T, V> retriever) {
         this.fieldName = fieldName;
         this.retriever = retriever;
@@ -27,10 +39,19 @@ public class NATDataField<T, V> {
         return false;
     }
     
+    /**
+     * 
+     * @param concept The concept
+     * @return The data for the concept
+     */
     public V getData(T concept) {
         return retriever.retrieveData(concept);
     }
     
+    /**
+     * 
+     * @return The unique name of the data field
+     */
     public String getFieldName() {
         return fieldName;
     }

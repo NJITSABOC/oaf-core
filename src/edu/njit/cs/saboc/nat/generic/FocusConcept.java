@@ -14,6 +14,7 @@ import java.util.Map;
 /**
  * This class encapsulates the Focus Concept and handles getting
  * the concepts related to it.
+ * 
  * @author Paul Accisano
  */
 public class FocusConcept<T> {

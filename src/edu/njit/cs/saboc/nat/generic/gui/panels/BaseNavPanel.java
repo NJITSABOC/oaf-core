@@ -65,8 +65,8 @@ public abstract class BaseNavPanel<T> extends NATLayoutPanel {
             public Insets getBorderInsets(Component c, Insets insets) {
                 super.getBorderInsets(c, insets);
                 insets.top += 2;
-                insets.left += 4;
-                insets.right += 4;
+                insets.left += 2;
+                insets.right += 2;
                 
                 if(insets.top < 0) {
                     insets.top = 0;

@@ -20,7 +20,7 @@ public class BrowserNavigableFilterableList<T> extends FilterableList {
             
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (evt.getClickCount() == 2 && list.getModel() == conceptModel) {
+                if (selectionAction != null && evt.getClickCount() == 2 && list.getModel() == conceptModel) {
                     
                     Filterable<T> entry = (Filterable<T>) conceptModel.getFilterableAtModelIndex(
                             ((JList) evt.getComponent()).getSelectedIndex());

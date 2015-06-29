@@ -35,11 +35,12 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
         NATDataField field = panelType == PanelType.CHILD ? mainPanel.getFocusConcept().COMMON_DATA_FIELDS.CHILDREN : 
                 mainPanel.getFocusConcept().COMMON_DATA_FIELDS.PARENTS;
         
-        this.listPanel = new ConceptListPanel<T>(mainPanel, field, dataSource, new DataLoadedListener<ArrayList<T>>() {
+        this.listPanel = new ConceptListPanel<T>(mainPanel, field, dataSource, true);
+        listPanel.addDataLoadedListener(new DataLoadedListener<ArrayList<T>>() {
             public void dataLoaded(ArrayList<T> concepts) {
                 setBorder(BaseNavPanel.createTitledLineBorder(String.format("%s (%d)", name, concepts.size()), options.getFontSize()));
             }
-        }, true);
+        });
 
         this.panelType = panelType;
         

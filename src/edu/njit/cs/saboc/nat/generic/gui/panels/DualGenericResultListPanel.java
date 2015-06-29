@@ -31,17 +31,15 @@ public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel
             NATDataField<T, ArrayList<U>> secondaryField,
             FilterableList primaryFilterableList,
             FilterableList secondaryFilterableList,
-            DataLoadedListener<ArrayList<V>> primaryDataLoadedListener, 
-            DataLoadedListener<ArrayList<U>> secondaryDataLoadedListener,
             boolean showFilterButton) {
                 
-        primaryResultList = new GenericResultListPanel<T, V>(mainPanel, primaryFilterableList, primaryField, dataSource, primaryDataLoadedListener, false) {
+        primaryResultList = new GenericResultListPanel<T, V>(mainPanel, primaryFilterableList, primaryField, dataSource, false) {
             public Filterable<V> createFilterableEntry(V entry) {
                 return createPrimaryFilterableEntry(entry);
             }
         };
 
-        secondaryResultList = new GenericResultListPanel<T, U>(mainPanel, secondaryFilterableList, secondaryField, dataSource, secondaryDataLoadedListener, false) {
+        secondaryResultList = new GenericResultListPanel<T, U>(mainPanel, secondaryFilterableList, secondaryField, dataSource, false) {
             public Filterable<U> createFilterableEntry(U entry) {
                 return createSecondaryFilterableEntry(entry);
             }
@@ -73,6 +71,14 @@ public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel
         this.setLayout(new BorderLayout());
         
         this.add(dualNavPanel, BorderLayout.CENTER);
+    }
+    
+    public void addPrimaryDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {
+        primaryResultList.addDataLoadedListener(listener);
+    }
+    
+    public void addSecondaryDataLoadedListener(DataLoadedListener<ArrayList<U>> listener) {
+        secondaryResultList.addDataLoadedListener(listener);
     }
     
     public void toggle() {

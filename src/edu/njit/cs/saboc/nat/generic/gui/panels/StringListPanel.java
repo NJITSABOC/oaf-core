@@ -16,10 +16,9 @@ public class StringListPanel<T> extends GenericResultListPanel<T, String> {
 
     public StringListPanel(final GenericNATBrowser mainPanel, NATDataField<T, ArrayList<String>> field, 
             ConceptBrowserDataSource<T> dataSource, 
-            DataLoadedListener<ArrayList<String>> dataLoadedListener, 
             boolean showFilter) {
         
-        super(mainPanel, field, dataSource, dataLoadedListener, showFilter);
+        super(mainPanel, field, dataSource, showFilter);
     }
     
     @Override

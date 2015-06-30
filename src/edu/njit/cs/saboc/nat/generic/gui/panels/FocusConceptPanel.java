@@ -174,6 +174,17 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
        
         backButton = new JButton("Back");
         forwardButton = new JButton("Forward");
+             
+        options.addOptionsListener(new NATOptionsAdapter() {
+            public void fontSizeChanged(int fontSize) {
+                backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
+                forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
+                homeButton.setFont(homeButton.getFont().deriveFont(Font.BOLD, fontSize));
+            }
+        });
+        
+        
+        
         
         this.optionsPanel = new JPanel();
         this.optionsPanel.setOpaque(false);

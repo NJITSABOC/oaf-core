@@ -17,7 +17,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
@@ -65,8 +64,8 @@ public abstract class BaseNavPanel<T> extends NATLayoutPanel {
             public Insets getBorderInsets(Component c, Insets insets) {
                 super.getBorderInsets(c, insets);
                 insets.top += 2;
-                insets.left += 4;
-                insets.right += 4;
+                insets.left += 2;
+                insets.right += 2;
                 
                 if(insets.top < 0) {
                     insets.top = 0;

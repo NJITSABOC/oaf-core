@@ -19,15 +19,12 @@ public class ConceptListPanel<T> extends GenericResultListPanel<T, T> {
     public ConceptListPanel(
             GenericNATBrowser<T> mainPanel, 
             NATDataField<T, ArrayList<T>> field, 
-            ConceptBrowserDataSource<T> dataSource, 
-            DataLoadedListener<ArrayList<T>> listener,
+            ConceptBrowserDataSource<T> dataSource,
             boolean showFilter) {
         
         super(mainPanel, 
                 new BrowserNavigableFilterableList(new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
-                
-                field, dataSource,
-                listener, showFilter);
+                field, dataSource,showFilter);
     }
     
     protected Filterable<T> createFilterableEntry(T item) {

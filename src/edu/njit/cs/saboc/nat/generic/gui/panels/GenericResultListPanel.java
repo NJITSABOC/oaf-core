@@ -32,7 +32,7 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
     
     private NATDataField<T, ArrayList<V>> field;
     
-    private Optional<DataLoadedListener<ArrayList<V>>> dataLoadedListener;
+    private ArrayList<DataLoadedListener<ArrayList<V>>> dataLoadedListeners;
     
     private JPanel optionsPanel;
 
@@ -40,8 +40,7 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
             final GenericNATBrowser<T> mainPanel, 
             FilterableList list,
             NATDataField<T, ArrayList<V>> field, 
-            ConceptBrowserDataSource<T> dataSource, 
-            DataLoadedListener<ArrayList<V>> dataLoadedListener, 
+            ConceptBrowserDataSource<T> dataSource,
             boolean showFilter) {
         
         super(mainPanel, dataSource);
@@ -52,7 +51,8 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         this.list.setListFontSize(options.getFontSize());
         
         this.field = field;
-        this.dataLoadedListener = Optional.ofNullable(dataLoadedListener);
+        
+        this.dataLoadedListeners = new ArrayList<>();
 
         focusConcept.addDisplayPanel(field, this);
 
@@ -97,11 +97,14 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
     public GenericResultListPanel (
             final GenericNATBrowser mainPanel, 
             NATDataField<T, ArrayList<V>> field,
-            ConceptBrowserDataSource<T> dataSource, 
-            DataLoadedListener<ArrayList<V>> dataLoadedListener, 
+            ConceptBrowserDataSource<T> dataSource,
             boolean showFilter) {
         
-        this(mainPanel, new FilterableList(), field, dataSource, dataLoadedListener, showFilter);
+        this(mainPanel, new FilterableList(), field, dataSource, showFilter);
+    }
+    
+    public void addDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {
+        this.dataLoadedListeners.add(listener);
     }
     
     protected void setFontSize(int fontSize) {
@@ -130,9 +133,9 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         
         list.setContents(entries);
         
-        if(dataLoadedListener.isPresent()) {
-            dataLoadedListener.get().dataLoaded(results);
-        }
+        dataLoadedListeners.forEach((DataLoadedListener<ArrayList<V>> listener) -> {
+            listener.dataLoaded(results);
+        });
     }
     
     public void focusConceptChanged() {

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class DualNavPanel<T> extends NATLayoutPanel {
+public class DualNavPanel<T> extends NATLayoutPanel<T> {
     private final BaseNavPanel<T> primaryNavPanel;
     private final BaseNavPanel<T> secondaryNavPanel;
         
@@ -25,6 +25,8 @@ public class DualNavPanel<T> extends NATLayoutPanel {
     private final String secondaryName;
     
     public DualNavPanel(GenericNATBrowser<T> mainPanel, String secondaryName, BaseNavPanel<T> primaryNavPanel, BaseNavPanel<T> secondaryNavPanel) {
+        super(mainPanel);
+        
         this.primaryNavPanel = primaryNavPanel;
         this.secondaryNavPanel = secondaryNavPanel;
         
@@ -52,18 +54,7 @@ public class DualNavPanel<T> extends NATLayoutPanel {
         });
                 
         secondaryFieldCheckBox.setOpaque(false);
-        
-        Options options = mainPanel.getOptions();
-        
-        secondaryFieldCheckBox.setFont(secondaryFieldCheckBox.getFont().deriveFont(Font.BOLD, options.getFontSize()));
-        
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                secondaryFieldCheckBox.setFont(secondaryFieldCheckBox.getFont().deriveFont(Font.BOLD, fontSize));
-            }
-        });
-        
-               
+                       
         northPanel = new JPanel(new BorderLayout());
         northPanel.setBackground(mainPanel.getNeighborhoodBGColor());
         
@@ -71,6 +62,10 @@ public class DualNavPanel<T> extends NATLayoutPanel {
         
         this.add(northPanel, BorderLayout.NORTH);
         this.add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        secondaryFieldCheckBox.setFont(secondaryFieldCheckBox.getFont().deriveFont(Font.BOLD, fontSize));
     }
     
     public void setOptionsMenuPanel(JPanel optionsPanel) {

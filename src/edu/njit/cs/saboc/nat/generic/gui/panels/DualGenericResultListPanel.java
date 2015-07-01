@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel implements Toggleable {
+public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel<T> implements Toggleable {
     
     private final GenericResultListPanel<T, V> primaryResultList;
     private final GenericResultListPanel<T, U> secondaryResultList;
@@ -34,6 +34,8 @@ public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel
             DataLoadedListener<ArrayList<V>> primaryDataLoadedListener, 
             DataLoadedListener<ArrayList<U>> secondaryDataLoadedListener,
             boolean showFilterButton) {
+        
+        super(mainPanel);
                 
         primaryResultList = new GenericResultListPanel<T, V>(mainPanel, primaryFilterableList, primaryField, dataSource, primaryDataLoadedListener, false) {
             public Filterable<V> createFilterableEntry(V entry) {
@@ -89,6 +91,10 @@ public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel
     
     public void setSecondaryCount(int count) {
         dualNavPanel.setSecondaryCount(count);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        
     }
 
     protected abstract Filterable<V> createPrimaryFilterableEntry(V entry);

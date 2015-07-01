@@ -74,4 +74,8 @@ public class Options {
             listener.fontSizeChanged(fontSize);
         });
     }
+    
+    public void forceFontSizeRefresh() {
+        setFontSize(fontSize);
+    }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * A class that displays the parents or children of the Focus Concept.  The
  * top middle and bottom middle NAT panels are instances of this class.
  */
-public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
+public class ParentChildPanel<T> extends NATLayoutPanel<T> implements Toggleable {
     
     public enum PanelType {
         PARENT, CHILD
@@ -26,6 +26,8 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
     private String name;
     
     public ParentChildPanel(final GenericNATBrowser<T> mainPanel, PanelType panelType, ConceptBrowserDataSource<T> dataSource) {
+        super(mainPanel);
+        
         this.setLayout(new BorderLayout());
         
         this.setBackground(mainPanel.getNeighborhoodBGColor());
@@ -52,6 +54,10 @@ public class ParentChildPanel<T> extends NATLayoutPanel implements Toggleable {
         setBorder(BaseNavPanel.createTitledLineBorder(name, options.getFontSize()));
           
         add(listPanel, BorderLayout.CENTER);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        setBorder(BaseNavPanel.createTitledLineBorder(name, fontSize));
     }
     
     public void toggle() {

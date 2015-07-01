@@ -174,18 +174,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
        
         backButton = new JButton("Back");
         forwardButton = new JButton("Forward");
-             
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
-                forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
-                homeButton.setFont(homeButton.getFont().deriveFont(Font.BOLD, fontSize));
-            }
-        });
-        
-        
-        
-        
+
         this.optionsPanel = new JPanel();
         this.optionsPanel.setOpaque(false);
                 
@@ -370,6 +359,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
                 }
             }
         });
+        
         jtf.addFocusListener(new FocusAdapter() {
         	@Override
         	public void focusLost(FocusEvent e) {
@@ -403,20 +393,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         // When the focus concept is changed, hide the edit panel.
         editPanel.setVisible(false);
         document = null;
-
-        jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, options.getFontSize()));
-
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, fontSize)));
-                
-                if(editPanel.isEnabled()) {
-                    jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
-                } else {
-                    jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, fontSize));
-                }
-            }
-        });
 
         T fc = focusConcept.getConcept();
         
@@ -506,6 +482,21 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
             forwardButton.setEnabled(false);
             forwardButton.setToolTipText(null);
         }
+    }
+    
+    protected void setFontSize(int fontSize) {
+        
+        focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, fontSize)));
+
+        if (editPanel.isEnabled()) {
+            jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
+        } else {
+            jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, fontSize));
+        }
+        
+        backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
+        forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
+        homeButton.setFont(homeButton.getFont().deriveFont(Font.BOLD, fontSize));
     }
 
     @Override

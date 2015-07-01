@@ -39,7 +39,7 @@ import javax.swing.JTabbedPane;
  * NOTES: This code is more or less copied from the UMLS NAT, and is probably
  * from 2006.
  */
-public class OptionsAndSearchPanel<T> extends NATLayoutPanel implements ActionListener {
+public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements ActionListener {
     
     private JTabbedPane tpane = new JTabbedPane();
        
@@ -88,34 +88,17 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel implements ActionLi
         
         return cb;
     }
-    
-    private GenericNATBrowser<T> mainPanel;
-    
+        
     private ConceptBrowserDataSource<T> dataSource;
 
     // Construtor!
-    public OptionsAndSearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {       
-        this.mainPanel = mainPanel;
+    public OptionsAndSearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+        super(mainPanel);
+
         this.dataSource = dataSource;
 
         this.history = mainPanel.getFocusConcept().getHistory();
-        
-        Options options = mainPanel.getOptions();
-        
-        this.tpane.setFont(tpane.getFont().deriveFont(Font.BOLD, options.getFontSize()));
-        
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                lstHistory.setFont(lstHistory.getFont().deriveFont(Font.BOLD, fontSize));
-                
-                tpane.setFont(tpane.getFont().deriveFont(Font.BOLD, options.getFontSize()));
-            }
-        });
-        
         setLayout(new BorderLayout());
-
-        // Search Panel
-       
 
         // History Panel
         JPanel historyPanel = new JPanel(new BorderLayout());
@@ -131,6 +114,10 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel implements ActionLi
         buttonPanel.add(btnForward);
 
         pnlHistory = new BaseNavPanel(mainPanel, dataSource) {
+            protected void setFontSize(int fontSize) {
+                lstHistory.setFont(lstHistory.getFont().deriveFont(Font.BOLD, fontSize));
+            }
+            
             public void dataEmpty() {
 
             }
@@ -153,7 +140,6 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel implements ActionLi
         
         mdlHistory = new DefaultListModelEx();
         lstHistory = new JList(mdlHistory);
-        lstHistory.setFont(lstHistory.getFont().deriveFont(Font.BOLD, options.getFontSize()));
 
         lstHistory.addMouseListener(new MouseAdapter() {
             @Override
@@ -187,9 +173,14 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel implements ActionLi
         tpane.addTab("Search", new SearchPanel(mainPanel, dataSource, new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept())));
         tpane.addTab("History", pnlHistory);
         tpane.addTab("Options", new OptionsPanel());
+        
         add(tpane, BorderLayout.CENTER);
 
         updateHistory();
+    }
+    
+    protected void setFontSize(int fontSize) {
+        tpane.setFont(tpane.getFont().deriveFont(Font.BOLD, fontSize));
     }
 
     public void updateHistory() {

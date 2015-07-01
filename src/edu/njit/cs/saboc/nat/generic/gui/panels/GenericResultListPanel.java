@@ -47,13 +47,7 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         super(mainPanel, dataSource);
         
         Options options = mainPanel.getOptions();
-        
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                list.setListFontSize(fontSize);
-            }
-        });
-        
+
         this.list = list;
         this.list.setListFontSize(options.getFontSize());
         
@@ -108,6 +102,10 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
             boolean showFilter) {
         
         this(mainPanel, new FilterableList(), field, dataSource, dataLoadedListener, showFilter);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        list.setListFontSize(fontSize);
     }
     
     @Override

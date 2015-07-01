@@ -18,16 +18,13 @@ import javax.swing.JPanel;
  * The upper left panel of the NAT.  Displays the NJIT log as well as the
  * sources, print, help, and about buttons.
  */
-public class LogoPanel<T> extends NATLayoutPanel {
+public class LogoPanel<T> extends NATLayoutPanel<T> {
     private JLabel njitLogoLabel;
     private JLabel printLabel;
     
-    private final GenericNATBrowser mainPanel;
-
     public LogoPanel(GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+        super(mainPanel);
         
-        this.mainPanel = mainPanel;
-
         setLayout(new BorderLayout(5, 5));
 
         JPanel centerPanel = new JPanel(new BorderLayout(0, 5));
@@ -72,6 +69,10 @@ public class LogoPanel<T> extends NATLayoutPanel {
         add(eastPanel, BorderLayout.EAST);
 
         add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        
     }
     
     private void imagelabelMouseEntered(MouseEvent evt) {

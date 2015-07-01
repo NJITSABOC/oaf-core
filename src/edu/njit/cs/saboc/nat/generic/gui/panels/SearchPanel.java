@@ -37,7 +37,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Den
  */
-public class SearchPanel<T> extends JPanel {
+public class SearchPanel<T> extends NATLayoutPanel<T> {
 
     private JRadioButton optAnywhere;
     private JRadioButton optStarting;
@@ -96,19 +96,9 @@ public class SearchPanel<T> extends JPanel {
     public SearchPanel(GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource, 
             FilterableListSelectionAction<T> resultSelectionAction) {
         
-        super(new GridBagLayout());
-
-        Options options = mainPanel.getOptions();
+        super(mainPanel);
         
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                searchList.setListFontSize(fontSize);
-                
-                optStarting.setFont(optStarting.getFont().deriveFont(Font.BOLD, fontSize));
-                optAnywhere.setFont(optAnywhere.getFont().deriveFont(Font.BOLD, fontSize));
-                optExact.setFont(optExact.getFont().deriveFont(Font.BOLD, fontSize));
-            }
-        });
+        this.setLayout(new GridBagLayout());
 
         this.mainPanel = mainPanel;
         this.dataSource = dataSource;
@@ -181,11 +171,19 @@ public class SearchPanel<T> extends JPanel {
         c.fill = GridBagConstraints.BOTH;
 
         searchList = new BrowserNavigableFilterableList(resultSelectionAction);
-        searchList.setListFontSize(options.getFontSize());
 
         searchList.setFilterPanelOpen(false, null);
 
         this.add(searchList, c);
+    }
+    
+    protected void setFontSize(int fontSize) {
+        searchList.setListFontSize(fontSize);
+        txtSearchBox.textField.setFont(txtSearchBox.getFont().deriveFont(Font.PLAIN, fontSize));
+
+        optStarting.setFont(optStarting.getFont().deriveFont(Font.BOLD, fontSize));
+        optAnywhere.setFont(optAnywhere.getFont().deriveFont(Font.BOLD, fontSize));
+        optExact.setFont(optExact.getFont().deriveFont(Font.BOLD, fontSize));
     }
     
     public void addResultListMouseListener(MouseListener listener) {

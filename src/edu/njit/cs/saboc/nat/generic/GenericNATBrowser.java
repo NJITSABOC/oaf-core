@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * The main panel (and top-level container of functionality) of the NAT
@@ -66,6 +67,12 @@ public class GenericNATBrowser<T> extends JPanel {
 
         this.initConceptBrowser();
         this.navigateTo(dataSource.getRoot());
+        
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                options.setFontSize(options.getFontSize());
+            }
+        });
     }
 
     /**

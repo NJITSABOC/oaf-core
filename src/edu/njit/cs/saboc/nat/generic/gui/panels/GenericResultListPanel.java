@@ -104,9 +104,11 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
     }
     
     public void addDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {
-        this.dataLoadedListeners.add(listener);
+        if (listener != null) {
+            this.dataLoadedListeners.add(listener);
+        }
     }
-    
+
     protected void setFontSize(int fontSize) {
         list.setListFontSize(fontSize);
     }

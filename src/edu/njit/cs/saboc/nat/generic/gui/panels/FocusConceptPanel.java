@@ -53,7 +53,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
 
     private JButton backButton;
     private JButton forwardButton;
-    private JButton homeButton;
     
     private JPanel editPanel;
     private JButton undoButton;
@@ -177,22 +176,8 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
 
         this.optionsPanel = new JPanel();
         this.optionsPanel.setOpaque(false);
-                
-        homeButton = new JButton("Root");
-
-        homeButton.setPreferredSize(new Dimension(300, 22));
-        homeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                focusConcept.navigateRoot();
-            }
-        });
-        
-        homeButton.setToolTipText("Return to the root of the ontology (OWL:Thing)");
-        
-        this.addOptionButton(homeButton);
         
         backButton.setIcon(IconManager.getIconManager().getIcon("left-arrow.png"));
-        backButton.setPreferredSize(new Dimension(128, 20));
         backButton.setBackground(mainPanel.getNeighborhoodBGColor());
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -210,7 +195,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         });
 
         forwardButton.setIcon(IconManager.getIconManager().getIcon("right-arrow.png"));
-        forwardButton.setPreferredSize(new Dimension(128, 20));
         forwardButton.setBackground(mainPanel.getNeighborhoodBGColor());
         forwardButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -382,7 +366,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     }
     
     public void addOptionButton(JButton button) {
-        button.setPreferredSize(new Dimension(80, 24));
         button.setBackground(mainPanel.getNeighborhoodBGColor());
         optionsPanel.add(button);
     }
@@ -496,7 +479,6 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         
         backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
         forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
-        homeButton.setFont(homeButton.getFont().deriveFont(Font.BOLD, fontSize));
     }
 
     @Override

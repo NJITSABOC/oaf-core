@@ -7,7 +7,6 @@ import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableConceptEntry;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.ConceptListNavigateSelectionAction;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.util.ArrayList;
 
 /**
@@ -23,7 +22,7 @@ public class ConceptListPanel<T> extends GenericResultListPanel<T, T> {
             boolean showFilter) {
         
         super(mainPanel, 
-                new BrowserNavigableFilterableList(new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
+                new BrowserNavigableFilterableList(mainPanel, new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
                 field, dataSource,showFilter);
     }
     

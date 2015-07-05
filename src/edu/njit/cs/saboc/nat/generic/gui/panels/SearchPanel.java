@@ -170,7 +170,7 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
         c.weightx = c.weighty = 1;
         c.fill = GridBagConstraints.BOTH;
 
-        searchList = new BrowserNavigableFilterableList(resultSelectionAction);
+        searchList = new BrowserNavigableFilterableList(mainPanel, resultSelectionAction);
 
         searchList.setFilterPanelOpen(false, null);
 

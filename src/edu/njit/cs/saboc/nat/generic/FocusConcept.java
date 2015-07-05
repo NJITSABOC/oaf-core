@@ -20,7 +20,7 @@ import java.util.Map;
 public class FocusConcept<T> {
     
     private ConceptBrowserDataSource<T> dataSource;
-    private GenericNATBrowser browser;
+    private GenericNATBrowser<T> browser;
     
     private T activeFocusConcept = null;
 
@@ -38,16 +38,11 @@ public class FocusConcept<T> {
 
     private History<T> history = new History<T>();
 
-    private Options options;
+    private final Options options;
 
     private ArrayList<UpdateThread> updateThreads = new ArrayList<>();
     
     public final CommonDataFields COMMON_DATA_FIELDS;
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
-    }
 
     public FocusConcept(GenericNATBrowser browser, Options options, ConceptBrowserDataSource<T> dataSource) {
         this.browser = browser;
@@ -59,6 +54,16 @@ public class FocusConcept<T> {
 
     public History getHistory() {
         return history;
+    }
+    
+    public void setNATEnabled(boolean value) {
+        if(value) {
+            this.reloadCurrentConcept();
+            options.setNavigationLocked(false);
+        } else {
+            options.setNavigationLocked(true);
+            this.setAllDataPending();
+        }
     }
 
     // Sets panel corresponding to the given field.  Called by NATtab upon
@@ -98,7 +103,7 @@ public class FocusConcept<T> {
         updateAll();
     }
     
-    public GenericNATBrowser getAssociatedBrowser() {
+    public GenericNATBrowser<T> getAssociatedBrowser() {
         return browser;
     }
 
@@ -122,6 +127,10 @@ public class FocusConcept<T> {
 
     public void setAllDataEmpty() {
         displayPanels.keySet().forEach((NATDataField field) -> {displayPanels.get(field).dataEmpty(); });
+    }
+    
+    public void setAllDataPending() {
+        displayPanels.keySet().forEach((NATDataField field) -> { displayPanels.get(field).dataPending(); });
     }
 
     public void updateAll() {

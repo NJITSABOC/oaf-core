@@ -22,6 +22,9 @@ public class Options {
      * Current font size of the NAT
      */
     private int fontSize = 14;
+    
+    
+    private boolean lockNavigation = false;
 
     public Options() {
         
@@ -77,5 +80,13 @@ public class Options {
     
     public void forceFontSizeRefresh() {
         setFontSize(fontSize);
+    }
+    
+    public boolean navigationLocked() {
+        return lockNavigation;
+    }
+    
+    public void setNavigationLocked(boolean value) {
+        this.lockNavigation = value;
     }
 }

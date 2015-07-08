@@ -6,7 +6,6 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
 import edu.njit.cs.saboc.nat.generic.Options;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -65,6 +64,8 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     private JPanel optionsPanel;
     
     private JPanel focusConceptPanel;
+    
+    private ArrayList<JButton> optionButtons = new ArrayList<>();
 
     public FocusConceptPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         super(mainPanel, dataSource);
@@ -169,7 +170,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         focusConceptPanel.setLayout(new BorderLayout());
         focusConceptPanel.setBackground(bgColor);
         
-        focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, options.getFontSize())));
+        focusConceptPanel.setBorder(BaseNavPanel.createTitledLineBorder("Focus Concept", options.getFontSize()));
        
         backButton = new JButton("Back");
         forwardButton = new JButton("Forward");
@@ -367,7 +368,10 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     
     public void addOptionButton(JButton button) {
         button.setBackground(mainPanel.getNeighborhoodBGColor());
+        
+        button.setFont(button.getFont().deriveFont(Font.BOLD, mainPanel.getOptions().getFontSize()));
         optionsPanel.add(button);
+        optionButtons.add(button);
     }
 
     public void display() {
@@ -469,7 +473,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     
     protected void setFontSize(int fontSize) {
         
-        focusConceptPanel.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.BLACK), "Focus Concept", 0, 0, new Font("Arial", Font.BOLD, fontSize)));
+        focusConceptPanel.setBorder(BaseNavPanel.createTitledLineBorder("Focus Concept", fontSize));
 
         if (editPanel.isEnabled()) {
             jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
@@ -479,6 +483,10 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         
         backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
         forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
+        
+        optionButtons.forEach((JButton btn) -> {
+            btn.setFont(btn.getFont().deriveFont(Font.BOLD, fontSize));
+        });
     }
 
     @Override

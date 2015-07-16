@@ -59,7 +59,11 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     @Override
     public Object getElementAt(int index) {
-        return modelledVector.get(index).getFilterText(filter);
+        if(filter.isEmpty()) {
+            return modelledVector.get(index).getInitialText();
+        } else {
+            return modelledVector.get(index).getFilterText(filter);
+        }
     }
 
     public Filterable getFilterableAtModelIndex(int index) {

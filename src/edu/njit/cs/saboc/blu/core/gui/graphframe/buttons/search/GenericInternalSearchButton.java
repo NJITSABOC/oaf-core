@@ -63,9 +63,15 @@ public class GenericInternalSearchButton extends PopupToggleButton {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         SearchAction searchAction = getSelectedAction();
-                        SearchButtonResult result = searchResultsList.get(resultList.getSelectedIndex());
+                        String selectedResultStr = (String)resultList.getSelectedValues().get(0).getObject();
 
-                        searchAction.resultSelected(result);
+                        for (SearchButtonResult result : searchResultsList) {
+                            if (result.toString().equals(selectedResultStr)) {
+
+                                searchAction.resultSelected(result);
+                                return;
+                            }
+                        }
                     }
                 });
             }
@@ -104,15 +110,15 @@ public class GenericInternalSearchButton extends PopupToggleButton {
 
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        ArrayList<Filterable> filterableResults = new ArrayList<Filterable>();
+                        ArrayList<Filterable> filterableResults = new ArrayList<>();
 
                         ArrayList<SearchButtonResult> results = searchAction.doSearch(searchText.getText().trim());
 
                         searchResultsList = results;
-
-                        for (Object result : results) {
+                        
+                        results.forEach((SearchButtonResult result) -> {
                             filterableResults.add(new FilterableStringEntry(result.toString()));
-                        }
+                        });
                         
                         resultList.setContents(filterableResults);
                     }

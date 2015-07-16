@@ -38,7 +38,7 @@ public class FilterableList extends JPanel {
     private DefaultListModel pleaseWaitModel = new DefaultListModel();
     private DefaultListModel dataEmptyModel = new DefaultListModel();
     
-    protected FilterableListModel conceptModel;
+    protected FilterableListModel entryModel;
     
     protected JList list;
     private JPanel filterPanel = new JPanel();
@@ -47,13 +47,13 @@ public class FilterableList extends JPanel {
 
         setLayout(new BorderLayout());
 
-        conceptModel = new FilterableListModel();
+        entryModel = new FilterableListModel();
 
         list = new JList() {
             // This method is called as the cursor moves within the list.
             @Override
             public String getToolTipText(MouseEvent evt) {
-                if(getModel() != conceptModel) {
+                if(getModel() != entryModel) {
                     return null;
                 }
 
@@ -65,7 +65,7 @@ public class FilterableList extends JPanel {
                 }
 
                 if(index > -1) {
-                    Filterable obj = conceptModel.get(index);
+                    Filterable obj = entryModel.get(index);
                     
                     return obj.getToolTipText();
                 }
@@ -82,16 +82,10 @@ public class FilterableList extends JPanel {
             }
         };
         
-        list.setModel(conceptModel);
+        list.setModel(entryModel);
 
         pleaseWaitModel.addElement("Please wait...");
         dataEmptyModel.addElement(" ");
-
-        // Sets list members to fixed size for faster refresh.
-        // For more info read Yakup's journal on 08 august 07.
-        //list.setFixedCellHeight(17);
-        //list.setFixedCellWidth(4000); // Larger arbitary number to fix wrapping issue - Chris 8/18/09
-        
         
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
@@ -126,45 +120,48 @@ public class FilterableList extends JPanel {
         filterField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                conceptModel.changeFilter(filterField.getText());
+                entryModel.changeFilter(filterField.getText());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                conceptModel.changeFilter(filterField.getText());
+                entryModel.changeFilter(filterField.getText());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                conceptModel.changeFilter(filterField.getText());
+                entryModel.changeFilter(filterField.getText());
             }
         });
         
         list.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                setFilterPanelOpen(true, e);
+                
+                if (!e.isControlDown() && !e.isAltDown()) {
+                    setFilterPanelOpen(true, e);
+                }
             }
         });
     }
 
     public void showPleaseWait() {
         list.setModel(pleaseWaitModel);
-        conceptModel.changeFilter("");
+        entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
 
     public void showDataEmpty() {
         list.setModel(dataEmptyModel);
-        conceptModel.changeFilter("");
+        entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
 
     public void setContents(Collection<? extends Filterable> content) {
-        conceptModel.changeFilter("");
+        entryModel.changeFilter("");
         filterPanel.setVisible(false);
-        conceptModel.clear();
-        conceptModel.addAll(content);
-        list.setModel(conceptModel);
+        entryModel.clear();
+        entryModel.addAll(content);
+        list.setModel(entryModel);
     }
 
     /* opens (open = true) or closes the filter panel */
@@ -182,17 +179,17 @@ public class FilterableList extends JPanel {
         if(open) {
             if(!filterPanel.isVisible()) {
                 filterPanel.setVisible(true);
+                
                 if(e != null) {
-                    filterField.setText("" + e.getKeyChar());
-                }
-                else {
+                    filterField.setText(Character.toString(e.getKeyChar()));
+                } else {
                     filterField.setText("");
                 }
+                
                 filterField.requestFocus();
             }
-        }
-        else {
-            conceptModel.changeFilter("");
+        } else {
+            entryModel.changeFilter("");
             filterPanel.setVisible(false);
             list.grabFocus();
         }
@@ -217,7 +214,7 @@ public class FilterableList extends JPanel {
         int [] selectedIndices = list.getSelectedIndices();
         
         for(int index : selectedIndices) {
-            selectedItems.add(conceptModel.getFilterableAtModelIndex(index));
+            selectedItems.add(entryModel.getFilterableAtModelIndex(index));
         }
 
         return selectedItems;

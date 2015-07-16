@@ -23,9 +23,9 @@ public class BrowserNavigableFilterableList<T> extends FilterableList {
             public void mouseClicked(MouseEvent evt) {
                 if (!mainPanel.getOptions().navigationLocked() && 
                         selectionAction != null && evt.getClickCount() == 2 && 
-                        list.getModel() == conceptModel) {
+                        list.getModel() == entryModel) {
                     
-                    Filterable<T> entry = (Filterable<T>) conceptModel.getFilterableAtModelIndex(
+                    Filterable<T> entry = (Filterable<T>) entryModel.getFilterableAtModelIndex(
                             ((JList) evt.getComponent()).getSelectedIndex());
                     
                     selectionAction.handleEntrySelection(entry.getObject());

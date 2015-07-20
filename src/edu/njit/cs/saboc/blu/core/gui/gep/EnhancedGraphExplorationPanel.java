@@ -291,8 +291,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             }
                         } else {
                             selectionStateMonitor.resetAll();
-                            
-                            partitionOptionsPanel.doHide();
                         }
                     }
                     

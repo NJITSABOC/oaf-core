@@ -6,21 +6,21 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.GenericSlideoutPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupMetricsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanelConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.PartitionOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
@@ -114,9 +115,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private JButton moveLeftBtn;
     private JButton moveRightBtn;
 
-    private GroupOptionsPanel groupOptionsPanel;
-    private GroupMetricsPanel groupMetricsPanel;
-    private PartitionOptionsPanel partitionOptionsPanel;
+    private GenericSlideoutPanel slideoutPanel;
 
     private Point targetEntryPoint = null;
 
@@ -135,6 +134,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, 
             GEPActionListener gepActionListener, GroupOptionsPanelConfiguration configuration) {
+        
         this.graph = graph;
         this.painter = painter;
         
@@ -157,10 +157,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
 
     private void intitializeUIComponents(GroupOptionsPanelConfiguration groupOptionsConfiguration) {
-        groupOptionsPanel = new GroupOptionsPanel(graph, groupOptionsConfiguration);
-        groupMetricsPanel = new GroupMetricsPanel(graph);
-        partitionOptionsPanel = new PartitionOptionsPanel(graph);
-        
+
         zoomSlider = new JSlider(JSlider.VERTICAL, 10, 200, 100);
         zoomSlider.setBounds(10, 10, 40, 150);
         zoomSlider.setMajorTickSpacing(10);
@@ -200,15 +197,34 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 magnifyGroupMode = toggle.isSelected();
             }
         });
+        
+        
+        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 100), new Dimension(500, 600));
+        
+        if(groupOptionsConfiguration.getNavigatePanel().isPresent()) {
+            JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
+            
+            slideoutPanel.setContent(comp);
+            
+            if(comp instanceof AbstractGroupPanel) {
+                AbstractGroupPanel panel = (AbstractGroupPanel)comp;
+                panel.initUI();
+                
+                panel.setContents(this.getGraph().getAbstractionNetwork().getGroups().get(0));
+
+            }
+            
+        }
+        
+        this.add(slideoutPanel);
+        
 
         this.add(moveUpBtn);
         this.add(moveLeftBtn);
         this.add(moveDownBtn);
         this.add(moveRightBtn);
         this.add(toggle);
-        this.add(groupOptionsPanel);
-        this.add(groupMetricsPanel);
-        this.add(partitionOptionsPanel);
+
 
         this.setLayout(null);
     }
@@ -273,8 +289,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             }
                         } else {
                             selectionStateMonitor.deselectAll();
-                            
-                            partitionOptionsPanel.doHide();
                         }
                     }
                     
@@ -333,13 +347,16 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                groupOptionsPanel.setInitialized(false);
-                groupMetricsPanel.setInitialized(false);
-                partitionOptionsPanel.setInitialized(false);
                 
                 viewport.setZoom(zoomSlider.getValue(), 
                             EnhancedGraphExplorationPanel.this.getWidth(), 
                             EnhancedGraphExplorationPanel.this.getHeight());
+                
+                if(slideoutPanel.isHidden()) {
+                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getCollapsedSize(), 100);
+                } else {
+                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getWidth(), 100);
+                }
                 
                 EnhancedGraphExplorationPanel.this.requestRedraw();
             }
@@ -521,36 +538,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         Graphics2D g2d = (Graphics2D)g;
 
-        if(!groupOptionsPanel.isInitialized()) {
-            groupOptionsPanel.setLocation(this.getWidth() / 2 - groupOptionsPanel.getWidth() / 2 - 20,
-                    groupOptionsPanel.getY());
-
-            groupOptionsPanel.setInitialized(true);
-        }
-        
-        if(!groupMetricsPanel.isInitialized()) {
-            if(!groupMetricsPanel.isHidden())
-            {
-                groupMetricsPanel.setLocation(this.getWidth() - 134,
-                        groupMetricsPanel.getY());                
-            }
-            else
-            {
-                groupMetricsPanel.setLocation(this.getWidth() - 4,
-                        groupMetricsPanel.getY());                
-            }
-
-            groupMetricsPanel.setInitialized(true);
-            groupMetricsPanel.setMoveBounds(this.getWidth());            
-        }
-        
-        if(!partitionOptionsPanel.isInitialized()) {
-            partitionOptionsPanel.setLocation(this.getWidth() / 2 - partitionOptionsPanel.getWidth() / 2 + 20,
-                    partitionOptionsPanel.getY());
-
-            partitionOptionsPanel.setInitialized(true);
-        }        
-        
         viewport.setSizeScaled(this.getWidth(), this.getHeight());
         
         drawAbstractionNetwork(g2d, viewport);
@@ -817,28 +804,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
         
-        // Hide partition panel when you click on a Concept
-        if (selectionStateMonitor.getSelectedPartitionEntry() != null) {
-            partitionOptionsPanel.doHide();
-        }
-
-        centerOnEntry(entry);
-
-        groupOptionsPanel.setCurrentGroup(entry);
-        groupMetricsPanel.setCurrentGroup(entry);
-
-        if (groupOptionsPanel.isHidden()) {
-            groupOptionsPanel.doShow();
-        }
-
-        if (groupMetricsPanel.isHidden()) {
-            groupMetricsPanel.setMoveBounds(this.getWidth());
-            groupMetricsPanel.doShow();            
-        }
-        
-        if(!partitionOptionsPanel.isHidden()) {
-            partitionOptionsPanel.doHide();
-        }
 
     }
     
@@ -847,21 +812,12 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      */
     private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
 
-        partitionOptionsPanel.setCurrentPartition(entry);
-
-        if (partitionOptionsPanel.isHidden()) {
-            partitionOptionsPanel.doShow();
-        }
+       
 
     }
 
     private void handleClickOutsideAnyGroupEntry() {
-        groupOptionsPanel.setCurrentGroup(null);
-        groupOptionsPanel.doHide();
 
-        groupMetricsPanel.setCurrentGroup(null);
-        groupMetricsPanel.setMoveBounds(this.getWidth());
-        groupMetricsPanel.doHide();
         
         targetEntryPoint = null;
     }

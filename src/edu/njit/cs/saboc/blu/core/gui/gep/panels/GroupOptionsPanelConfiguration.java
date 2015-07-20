@@ -1,5 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
+import java.util.Optional;
+import javax.swing.JComponent;
+
 /**
  *
  * @author Chris
@@ -7,8 +10,20 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 public abstract class GroupOptionsPanelConfiguration {
     private final GroupOptionsPanelActionListener [] actions;
     
+    private Optional<JComponent> slideoutComp = Optional.empty();
+    
     public GroupOptionsPanelConfiguration() {
-        this. actions = new GroupOptionsPanelActionListener[6];
+        this.actions = new GroupOptionsPanelActionListener[6];
+    }
+    
+    public GroupOptionsPanelConfiguration(JComponent slideoutComp) {
+        this();
+        
+        this.slideoutComp = Optional.ofNullable(slideoutComp);
+    }
+    
+    public Optional<JComponent> getNavigatePanel() {
+        return slideoutComp;
     }
     
     public boolean isButtonEnabled(int index) {

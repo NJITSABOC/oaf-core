@@ -236,6 +236,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 EnhancedGraphExplorationPanel.this.requestFocus();
 
                 if (e.getButton() == MouseEvent.BUTTON1) {
+                    targetEntryPoint = null;
+                    
                     int clickCount = e.getClickCount();
 
                     Point pointOnGraph = viewport.getPointOnGraph(e.getPoint());

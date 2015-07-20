@@ -10,21 +10,18 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.MouseInputListener;
 
 /**
  *
  * @author Chris
  */
-public class GenericContainerEntry extends JPanel implements ActionListener, MouseInputListener {
+public class GenericContainerEntry extends AbNNodeEntry {
 
     protected GenericGroupContainer container;
 
@@ -76,9 +73,7 @@ public class GenericContainerEntry extends JPanel implements ActionListener, Mou
         collapseExpand.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         collapseExpand.setFont(new Font("Tahoma", Font.BOLD, 12));
         collapseExpand.setText("-");
-        collapseExpand.addActionListener(this);
 
-        this.addMouseListener(this);
         add(collapseExpand);
     }
 
@@ -281,33 +276,7 @@ public class GenericContainerEntry extends JPanel implements ActionListener, Mou
             containerEntryToRight = containerEntryToRight.getContainerEntryRightOf();
         }
     }
-
-    public void mouseClicked(MouseEvent e) {
-        requestFocusInWindow();
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-        if (graph.getSelectedEdge() != null) {
-            graph.deactivateSelectedEdge();
-        }
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    public void mouseMoved(MouseEvent e) {
-    }
-
+    
     public ArrayList<GenericPartitionEntry> getContainerPartitions() {
         return partitions;
     }

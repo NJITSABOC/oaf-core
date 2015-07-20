@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
+import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
@@ -33,23 +34,26 @@ public class AbNPainter {
         g2d.setColor(partition.getBackground());
         
         g2d.fillRect(p.x, p.y, (int)(partition.getWidth() * scale), (int)(partition.getHeight() * scale));
-        
-        switch(partition.getState()) {
-            case MousedOver:
-                g2d.setStroke(new BasicStroke(2));
-                g2d.setPaint(Color.CYAN);
-                
-                break;
-            case Selected: 
-                g2d.setStroke(new BasicStroke(3));
-                g2d.setPaint(Color.YELLOW);
-                
-                break;
-            case Default:
-                g2d.setStroke(new BasicStroke(1));
-                g2d.setPaint(Color.BLACK);
+
+        switch (partition.getHighlightState()) {
+            case Selected:
+                if (partition.isMousedOver()) {
+                    g2d.setStroke(new BasicStroke(5));
+                    g2d.setPaint(Color.YELLOW);
+                } else {
+                    g2d.setStroke(new BasicStroke(3));
+                    g2d.setPaint(Color.YELLOW);
+                }
 
                 break;
+            default:
+                if (partition.isMousedOver()) {
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.setPaint(Color.CYAN);
+                } else {
+                    g2d.setStroke(new BasicStroke(1));
+                    g2d.setPaint(Color.BLACK);
+                }
         }
 
         g2d.drawRect(p.x, p.y, (int)(partition.getWidth() * scale), (int)(partition.getHeight() * scale));
@@ -58,19 +62,57 @@ public class AbNPainter {
     }
     
     public void paintGroupAtPoint(Graphics2D g2d, GenericGroupEntry group, Point p, double scale) {
-        g2d.setPaint(group.getBackground());
+        
+        Color bgColor;
+        
+        switch(group.getHighlightState()) {
+                
+            case Parent:
+                bgColor = new Color(150, 150, 255);
+                break;
+                
+            case Child:
+                bgColor = new Color(255, 150, 255);
+                break;
+                
+            case Selected:
+                bgColor = new Color(255, 255, 100);
+                break;
+                
+            case SearchResult:
+                bgColor = new Color(255, 150, 150);
+                break;
+                
+            default:
+                bgColor = Color.WHITE;
+        }
+        
+        if(group.isMousedOver()) {
+            bgColor = bgColor.brighter();
+        }
+        
+        g2d.setPaint(bgColor);
         
         g2d.fillRect(p.x, p.y, (int)(group.getWidth() * scale), (int)(group.getHeight() * scale));
 
         Stroke savedStroke = g2d.getStroke();
         
-        if (!group.getBackground().equals(Color.WHITE)) {
+        Color outlineColor;
+        
+        if(group.isMousedOver()) {
             g2d.setStroke(new BasicStroke(2));
+            outlineColor = Color.CYAN;
         } else {
-            g2d.setStroke(new BasicStroke(1));
+            if(group.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
+                g2d.setStroke(new BasicStroke(2));
+            } else {
+                g2d.setStroke(new BasicStroke(1));
+            }
+            
+            outlineColor = Color.BLACK;
         }
 
-        g2d.setPaint(Color.BLACK);
+        g2d.setPaint(outlineColor);
 
         g2d.drawRect(p.x, p.y, (int)(group.getWidth() * scale), (int)(group.getHeight() * scale));
 

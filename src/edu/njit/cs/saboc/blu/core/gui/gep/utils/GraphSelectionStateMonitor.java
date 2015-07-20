@@ -1,17 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package edu.njit.cs.saboc.blu.core.gui.gep.utils;
 
+import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry.GroupEntryState;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry.PartitionEntryState;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Enforces the following rules:
@@ -29,10 +27,21 @@ public class GraphSelectionStateMonitor {
     private GenericGroupEntry mousedOverGroupEntry = null;
     private GenericPartitionEntry mousedOverPartitionEntry = null;
     
-    private BluGraph graph;
+    private final Collection<? extends GenericGroupEntry> groupEntries;
+    private final ArrayList<GenericPartitionEntry> partitionEntries = new ArrayList<>();
+    
+    private final BluGraph graph;
     
     public GraphSelectionStateMonitor(BluGraph graph) {
-        this.graph = graph;
+        this.graph =  graph;
+        
+        this.groupEntries = graph.getGroupEntries().values();
+        
+        Collection<? extends GenericContainerEntry> containers = graph.getContainerEntries().values();
+        
+        containers.forEach((GenericContainerEntry entry) -> {
+            partitionEntries.addAll(entry.getPartitionEntries());
+        });
     }
     
     public GenericGroupEntry getSelectedGroupEntry() {
@@ -51,136 +60,110 @@ public class GraphSelectionStateMonitor {
         return mousedOverPartitionEntry;
     }
     
-    public void deselectAll() {
-        resetSelectedGroupEntry();
-        resetSelectedPartitionEntry();
+    public void resetAll() {
+        this.selectedGroupEntry = null;
+        this.selectedPartitionEntry = null;
         
-        unhighlightAllSearchResults();
+        this.mousedOverGroupEntry = null;
+        this.mousedOverPartitionEntry = null;
+        
+        groupEntries.forEach((GenericGroupEntry entry) -> {
+            entry.setMousedOver(false);
+            entry.setHighlightState(AbNNodeEntry.HighlightState.None);
+        });
+        
+        partitionEntries.forEach((GenericPartitionEntry entry) -> {
+            entry.setMousedOver(false);
+            entry.setHighlightState(AbNNodeEntry.HighlightState.None);
+        });
     }
     
     public void resetMousedOver() {
-        resetMousedOverGroupEntry();
-        resetMousedOverPartitionEntry();
+        this.mousedOverGroupEntry = null;
+        this.mousedOverPartitionEntry = null;
+        
+         groupEntries.forEach((GenericGroupEntry entry) -> {
+            entry.setMousedOver(false);
+        });
+        
+        partitionEntries.forEach((GenericPartitionEntry entry) -> {
+            entry.setMousedOver(false);
+        });
     }
     
-    public void setSelectedGroup(GenericGroupEntry entry) {
-        resetSelectedPartitionEntry();
-        unhighlightAllGroups();
-        setGroupEntrySelected(entry);
+    public void setSelectedGroup(GenericGroupEntry group) {
+        if(group != selectedGroupEntry) {           
+            resetAll();
+            
+            this.selectedGroupEntry = group;
+            
+            group.setHighlightState(AbNNodeEntry.HighlightState.Selected);
+            group.setMousedOver(true);
+            
+            highlightGroupParents(group);
+            highlightGroupChildren(group);
+        }
     }
     
     public void setSelectedPartition(GenericPartitionEntry partition) {
-        resetSelectedGroupEntry();
-        unhighlightAllGroups();
-        setPartitionEntrySelected(partition);
-    }
-    
-    public void setMousedOverGroup(GenericGroupEntry entry) {
-        
-        resetMousedOverPartitionEntry();
-
-        if (mousedOverGroupEntry != entry && entry.getState() == GroupEntryState.Default) {
-            resetMousedOverGroupEntry();
+        if(partition != selectedPartitionEntry) {
+            resetAll();
             
-            entry.setState(GroupEntryState.MousedOver);
+            this.selectedPartitionEntry = partition;
+            
+            partition.setHighlightState(AbNNodeEntry.HighlightState.Selected);
+            partition.setMousedOver(true);
         }
-        
-        this.mousedOverGroupEntry = entry;
     }
     
-    public void setMousedOverPartition(GenericPartitionEntry entry) {
-        resetMousedOverGroupEntry();
-        
-        if(mousedOverPartitionEntry != entry && entry.getState() == PartitionEntryState.Default) {
-            resetMousedOverPartitionEntry();
+    public void setMousedOverGroup(GenericGroupEntry group) {
+        if(group != mousedOverGroupEntry) {
+            resetMousedOver();
             
-            entry.setState(PartitionEntryState.MousedOver);
+            this.mousedOverGroupEntry = group;
             
-            this.mousedOverPartitionEntry = entry;
+            group.setMousedOver(true);
+        }
+    }
+    
+    public void setMousedOverPartition(GenericPartitionEntry partition) {
+        if(partition != mousedOverPartitionEntry) {
+            resetMousedOver();
+            
+            this.mousedOverPartitionEntry = partition;
+            
+            partition.setMousedOver(true);
         }
     }
     
     public void setSearchResults(ArrayList<Integer> entryIds) {
+        resetAll();
         
-        unhighlightAllSearchResults();
-        
-        for(int entryId : entryIds) {
-            GenericGroupEntry entry = graph.getGroupEntries().get(entryId);
-            
-            if(entry != selectedGroupEntry) {
-                entry.setState(GroupEntryState.HighlightedForSearch);
-            }
-        }
-    }
+        entryIds.forEach((Integer entryId) -> {
+            GenericGroupEntry group = graph.getGroupEntries().get(entryId);
+            group.setHighlightState(AbNNodeEntry.HighlightState.SearchResult);
+        });
+    }   
     
-    private void setGroupEntrySelected(GenericGroupEntry entry) {
-        if(selectedGroupEntry != entry) {
-            resetSelectedGroupEntry();
-            
-            entry.setState(GroupEntryState.Selected);
-            
-            selectedGroupEntry = entry;
-        }
-    }
-    
-    private void resetSelectedGroupEntry() {
-        unhighlightAllGroups();
-        
-        if (selectedGroupEntry != null) {
-            selectedGroupEntry.setState(GroupEntryState.Default);
-            
-            selectedGroupEntry = null;
-        }
-    }
-    
-    private void setPartitionEntrySelected(GenericPartitionEntry entry) {
-        if(selectedPartitionEntry != entry) {
-            resetSelectedPartitionEntry();
-            
-            entry.setState(PartitionEntryState.Selected);
-            
-            selectedPartitionEntry = entry;
-        }
-    }
-    
-    private void resetSelectedPartitionEntry() {
-        
-        if(selectedPartitionEntry != null) {
-            selectedPartitionEntry.setState(PartitionEntryState.Default);
-            selectedPartitionEntry = null;
-        }
-    }
-    
-    private void resetMousedOverGroupEntry() {
-        if(mousedOverGroupEntry != null) {
-            if(mousedOverGroupEntry.getState() == GroupEntryState.MousedOver) {
-                mousedOverGroupEntry.setState(GroupEntryState.Default);
-            }
+    private void highlightGroupParents(GenericGroupEntry group) {
+        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
 
-            mousedOverGroupEntry = null;
-        }
-    }
-    
-    private void resetMousedOverPartitionEntry() {
-        if(mousedOverPartitionEntry != null) {
-            if(mousedOverPartitionEntry != selectedPartitionEntry) {
-                mousedOverPartitionEntry.setState(PartitionEntryState.Default);
+        for (int parentId : group.getGroup().getParentIds()) {
+            if (graphGroupEntries.containsKey(parentId)) {
+                GenericGroupEntry entry = graphGroupEntries.get(parentId);
+                entry.setHighlightState(AbNNodeEntry.HighlightState.Parent);
             }
-
-            mousedOverPartitionEntry = null;
         }
     }
     
-    private void unhighlightAllGroups() {
-        for (GenericGroupEntry entry : graph.getGroupEntries().values()) {
-            entry.setState(GroupEntryState.Default);
-        }
-    }
- 
-    private void unhighlightAllSearchResults() {
-        for(GenericGroupEntry entry : graph.getGroupEntries().values()) {
-            if(entry.getState() == GroupEntryState.HighlightedForSearch) {
-                entry.setState(GroupEntryState.Default);
+    private void highlightGroupChildren(GenericGroupEntry group) {
+        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
+        HashSet<Integer> children = graph.getAbstractionNetwork().getGroupChildren(group.getGroup().getId());
+
+        for (int cid : children) {
+            if (graphGroupEntries.containsKey(cid)) {
+                GenericGroupEntry entry = graphGroupEntries.get(cid);
+                entry.setHighlightState(AbNNodeEntry.HighlightState.Child);
             }
         }
     }

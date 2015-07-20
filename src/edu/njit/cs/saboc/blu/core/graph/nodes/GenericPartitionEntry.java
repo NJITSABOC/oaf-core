@@ -6,31 +6,21 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.Popup;
 import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputListener;
 
 /**
  *
  * @author Chris
  */
-public class GenericPartitionEntry extends JPanel implements MouseInputListener, FocusListener {
-    
-    public static enum PartitionEntryState {
-        Default,
-        Selected,
-        MousedOver
-    }
+public class GenericPartitionEntry extends AbNNodeEntry {
 
     /**
      * List of the levels of pAreas in this area
@@ -55,16 +45,13 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
 
     protected GenericContainerPartition partition;
 
-    private ArrayList<GenericGroupEntry> visibleGroups = new ArrayList<GenericGroupEntry>();
-    private ArrayList<GenericGroupEntry> hiddenGroups = new ArrayList<GenericGroupEntry>();
+    private ArrayList<GenericGroupEntry> visibleGroups = new ArrayList<>();
+    private ArrayList<GenericGroupEntry> hiddenGroups = new ArrayList<>();
 
     private Color originalColor;
-    private Popup detailedPopup;
-
-    protected boolean treatAsContainer = false; // When regions are disabled, Region objects are used as areas
     
-    private PartitionEntryState state = PartitionEntryState.Default;
-
+    protected boolean treatAsContainer = false; // When regions are disabled, Region objects are used as areas
+  
     public GenericPartitionEntry(GenericContainerPartition partition, String regionName,
             int width, int height, BluGraph g, GenericContainerEntry p, Color c, boolean treatAsContainer) {
 
@@ -78,7 +65,6 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
         this.parent = p;
 
         this.partitionLabel = new JLabel("<HTML><center>" + regionName + "</center></HTML>");
-        this.partitionLabel.addMouseListener(this);
 
         this.graph = g;
 
@@ -87,9 +73,6 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
         //Setup the panel's dimensions, etc.
         setLayout(null);
         setBorder(BorderFactory.createLineBorder(Color.black));
-
-        this.addMouseListener(this);
-        this.addFocusListener(this);
 
         //Setup the panel's label
         partitionLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -106,46 +89,6 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
         this.partitionLabel = label;
     }
     
-    public void setState(PartitionEntryState state) {
-        this.state = state;
-        
-        switch(state) {
-            case Selected: 
-                this.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
-                
-                this.setBackground(originalColor);
-                
-                break;
-            
-            case MousedOver:
-                int r = Math.min(255, (int) (originalColor.getRed() * 1.2));
-                int g = Math.min(255, (int) (originalColor.getGreen() * 1.2));
-                int b = Math.min(255, (int) (originalColor.getBlue() * 1.2));
-
-                this.setBackground(new Color(r, g, b));
-
-                break;
-                
-            case Default:
-                this.setBackground(originalColor);
-                this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                
-                break;
-        }
-    }
-    
-    public PartitionEntryState getState() {
-        return state;
-    }
-        
-    public void resetSelectedState() {        
-        this.setState(PartitionEntryState.Default);
-    }
-    
-    public void setSelected() {        
-        this.setState(PartitionEntryState.Selected);
-    }
-
     public GenericContainerPartition getPartition() {
         return partition;
     }
@@ -156,53 +99,6 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
 
     public ArrayList<GenericGroupEntry> getHiddenGroups() {
         return hiddenGroups;
-    }
-
-    public void mouseClicked(MouseEvent e) {
-        
-        this.setState(PartitionEntryState.Selected);
-
-        if (graph.getSelectedEdge() != null) {
-            graph.deactivateSelectedEdge();
-        }
-
-        //Show/Hide Partial-Areas within the region dialogue
-        JPopupMenu partitionMenu = graph.getPartitionMenu();
-
-        graph.setCurrentPartitionEntry(this);
-        
-        if (e.getButton() == MouseEvent.BUTTON3) {
-            requestFocusInWindow();
-            partitionMenu.setLocation(e.getLocationOnScreen());
-            
-            partitionMenu.setVisible(true);
-        } else {
-            graph.requestFocusInWindow();
-        }
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-        if (graph.getSelectedEdge() != null) {
-            graph.deactivateSelectedEdge();
-        }
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-        this.setState(PartitionEntryState.MousedOver);
-    }
-
-    public void mouseExited(MouseEvent e) {
-        this.setState(PartitionEntryState.Default);
-    }
-
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    public void mouseMoved(MouseEvent e) {
     }
 
     public JLabel getLabel() {
@@ -333,10 +229,8 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
         //Expand the region to accomodate added partial-areas
         if (horizontalGroups > this.groupLevels.get(0).getGroupEntryCount()) {
 
-            System.out.println("Expand,\n\told: " + this.groupLevels.get(0).getGroupEntryCount() + "\n\tnew: " + horizontalGroups);
         } //Collapse the region to accomodate removed partial-areas
         else if (horizontalGroups < this.groupLevels.get(0).getGroupEntryCount()) {
-            System.out.println("Collapse,\n\told: " + this.groupLevels.get(0).getGroupEntryCount() + "\n\tnew: " + horizontalGroups);
             ArrayList<GenericGroupEntry> toBeMoved = new ArrayList<GenericGroupEntry>();
 
             for (GraphGroupLevel x : groupLevels) {
@@ -348,13 +242,5 @@ public class GenericPartitionEntry extends JPanel implements MouseInputListener,
                 }
             }
         }
-    }
-
-    public void focusLost(FocusEvent e) {
-
-    }
-
-    public void focusGained(FocusEvent e) {
-
     }
 }

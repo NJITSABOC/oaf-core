@@ -272,7 +272,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                                 displayPartitionDetailsDialog(partition);
                             }
                         } else {
-                            selectionStateMonitor.deselectAll();
+                            selectionStateMonitor.resetAll();
                             
                             partitionOptionsPanel.doHide();
                         }

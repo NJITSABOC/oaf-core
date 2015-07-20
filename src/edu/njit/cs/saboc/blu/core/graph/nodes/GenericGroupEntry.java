@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -19,29 +18,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
-import javax.swing.event.MouseInputListener;
 
 /**
  *
  * @author
  */
-public class GenericGroupEntry extends JPanel implements MouseInputListener, FocusListener {
+public class GenericGroupEntry extends AbNNodeEntry {
     
-    public static enum GroupEntryState {
-        Default,
-        Selected,
-        MousedOver,
-        HighlightedAsParent,
-        HighlightedAsChild,
-        HighlightedForSearch
-    }
-
     public final static int ENTRY_WIDTH = 128;
     public final static int ENTRY_HEIGHT = 40;
 
     protected GenericConceptGroup group;
-    
-    private GroupEntryState state;
 
     private String labelText;
 
@@ -69,8 +56,6 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
 
     public GenericGroupEntry(GenericConceptGroup group, BluGraph g, GenericPartitionEntry partitionEntry,
             int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie, boolean showSemanticTag) {
-        
-        this.state = GroupEntryState.Default;
         
         this.groupX = pX;
         this.parentGroupLevel = parent;
@@ -103,10 +88,6 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
         setLayout(null);
         setBorder(BorderFactory.createLineBorder(Color.black));
 
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
-        this.addFocusListener(this);
-
         //Setup the panel's label
         panelLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         panelLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -114,94 +95,11 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
 
         panelLabel.setToolTipText(group.getRoot().getName() + " (" + group.getConceptCount() + " concepts)");
 
-        panelLabel.addMouseListener(this);
-        panelLabel.addMouseMotionListener(this);
-        panelLabel.addFocusListener(this);
-
         setBackground(Color.WHITE);
 
         add(panelLabel);
     }
     
-    public GroupEntryState getState() {
-        return state;
-    }
-    
-    public void setState(GroupEntryState state) {
-        this.state = state;
-        
-        switch(state) {
-            case Selected: 
-                this.setBackground(Color.YELLOW);
-                
-                this.highlightParents(true);
-                this.highlightChildren(true);
-                
-                break;
-            
-            case HighlightedAsParent:
-                this.setBackground(new Color(150, 150, 255));
-                
-                break;
-                
-            case HighlightedAsChild:
-                this.setBackground(new Color(255, 150, 255));
-                
-                break;
-                
-            case HighlightedForSearch:
-                this.setBackground(Color.PINK);
-                break;
-                
-            case MousedOver:
-                this.setBackground(Color.CYAN);
-                
-                break;
-                
-            case Default:
-                this.setBackground(Color.WHITE);
-                                
-                break;
-        }
-    }
-    
-    private void highlightParents(boolean highlight) {
-        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
-
-        for (int parentId : group.getParentIds()) {
-            if (graphGroupEntries.containsKey(parentId)) {
-                GenericGroupEntry entry = graphGroupEntries.get(parentId);
-
-                if (highlight) {
-                    entry.setState(GroupEntryState.HighlightedAsParent);
-                } else {
-                    entry.setState(GroupEntryState.Default);
-                }
-            }
-        }
-    }
-    
-    private void highlightChildren(boolean highlight) {
-        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
-        HashSet<Integer> children = graph.getAbstractionNetwork().getGroupChildren(group.getId());
-
-        if (children == null) {
-            return;
-        }
-
-        for (int cid : children) {
-            if (graphGroupEntries.containsKey(cid)) {
-                GenericGroupEntry entry = graphGroupEntries.get(cid);
-                               
-                if(highlight) {
-                    entry.setState(GroupEntryState.HighlightedAsChild);
-                } else {
-                    entry.setState(GroupEntryState.Default);
-                }
-            }
-        }
-    }
-
     public GenericConceptGroup getGroup() {
         return group;
     }
@@ -246,34 +144,6 @@ public class GenericGroupEntry extends JPanel implements MouseInputListener, Foc
 
             pAreaMenu.setLocation(e.getLocationOnScreen());
         }
-    }
-
-    public void highlightForSearch() {
-        this.setState(GroupEntryState.HighlightedForSearch);
-    }
-
-    public void lowlightNoSearch() {
-        this.setState(GroupEntryState.Default);
-    }
-
-    public void mousePressed(MouseEvent e) {
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    public void mouseMoved(MouseEvent e) {
     }
 
     public int getGroupX() {

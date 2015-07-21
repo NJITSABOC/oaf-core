@@ -7,31 +7,31 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Chris O
  */
-public abstract class AbstractConceptTableModel<T> extends AbstractTableModel {
+public abstract class BLUAbstractTableModel<T> extends AbstractTableModel {
     
-    protected final ArrayList<T> concepts = new ArrayList<>();
+    protected final ArrayList<T> items = new ArrayList<>();
     
     private final String[] columnNames;
     
     private Object[][] data = new Object[0][0];
             
-    public AbstractConceptTableModel() {
+    public BLUAbstractTableModel() {
         this.columnNames = getColumnNames();
     }
     
     protected abstract String[] getColumnNames();
     
-    protected abstract Object[] createRow(T concept);
+    protected abstract Object[] createRow(T item);
     
-    public void setContents(ArrayList<T> concepts) {
-        this.concepts.clear();
-        this.concepts.addAll(concepts);
+    public void setContents(ArrayList<T> items) {
+        this.items.clear();
+        this.items.addAll(items);
         
-        data = new Object[concepts.size()][this.getColumnCount()];
+        data = new Object[items.size()][this.getColumnCount()];
         
         int r = 0;
         
-        for(T concept : concepts) {
+        for(T concept : items) {
             data[r] = createRow(concept);
             r++;
         }
@@ -59,7 +59,7 @@ public abstract class AbstractConceptTableModel<T> extends AbstractTableModel {
         return getValueAt(0, c).getClass();
     }
     
-    public T getConceptAtRow(int row) {
-        return concepts.get(row);
+    public T getItemAtRow(int row) {
+        return items.get(row);
     }
 }

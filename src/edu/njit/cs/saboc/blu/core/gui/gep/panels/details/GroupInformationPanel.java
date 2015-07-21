@@ -11,4 +11,6 @@ public abstract class GroupInformationPanel<T extends GenericConceptGroup> exten
     public abstract void setContents(T group);
     
     public abstract void initUI();
+    
+    public abstract void clearContents();
 }

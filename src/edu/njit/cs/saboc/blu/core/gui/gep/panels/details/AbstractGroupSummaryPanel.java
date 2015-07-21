@@ -16,4 +16,8 @@ public abstract class AbstractGroupSummaryPanel<T extends GenericConceptGroup> e
     public void setContents(T group) {
         
     }
+    
+    public void clearContents() {
+        
+    }
 }

@@ -52,9 +52,14 @@ public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGr
     }
     
     public void setContents(GROUP_T conceptGroup) {
-        
         optionsMenuPanel.enableOptionsForGroup(conceptGroup);
         groupConceptList.setContents(getSortedConceptList(conceptGroup));
+    }
+    
+    public void clearContents() {
+        groupSummaryPanel.clearContents();
+        optionsMenuPanel.clearContents();
+        groupConceptList.clearContents();
     }
     
     public static JSplitPane createStyledSplitPane(int alignment) {

@@ -41,7 +41,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
     
     private ConceptPainter conceptPainter;
 
-    public ConceptGroupHierarchicalViewPanel(final GenericConceptGroup group, 
+    public ConceptGroupHierarchicalViewPanel(
             final AbstractionNetwork abstractionNetwork,
             final String hierarchyGroupType,
             final String conceptType, 
@@ -140,11 +140,15 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
         bufferedGraphics.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         if(!initialized) {
+            bufferedGraphics.setColor(Color.WHITE);
+            
+            bufferedGraphics.fillRect(0, 0, getWidth(), getHeight());
+            
             bufferedGraphics.setColor(Color.BLACK);
             bufferedGraphics.setFont(new Font("Ariel", Font.BOLD, 18));
             bufferedGraphics.drawString("LOADING... PLEASE WAIT...", 200, 100);
 
-            if(!loading) {
+            if(group != null && !loading) {
                 new Thread(getHierarchyLoader()).start();
             }
         } else {
@@ -181,15 +185,10 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
 
                 int fit = this.getWidth() / (ConceptEntry.CONCEPT_WIDTH + 8);
                 int current = 0;
-                
-                System.out.println();
-                System.out.println();
 
                 for(ConceptEntry<T> ce : conceptEntries.get(l)) {
                     ce.drawConceptAt(conceptPainter, (Graphics2D)bufferedGraphics, xPos, yPos);
                     xPos += (ConceptEntry.CONCEPT_WIDTH + 8);
-                    
-                    System.out.println(ce.getConceptName(ce.getConcept()));
 
                     current++;
 
@@ -205,6 +204,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
             
                     
             this.setPreferredSize(new Dimension(this.getWidth(), yPos));
+            getParent().revalidate();
         }
 
         g.drawImage(bi, 0, 0, null);
@@ -235,5 +235,12 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
         this.initialized = true;
         
         this.repaint();
+    }
+    
+    public void setGroup(GenericConceptGroup group) {
+        this.initialized = false;
+        this.loading = false;
+        
+        this.group = group;
     }
 }

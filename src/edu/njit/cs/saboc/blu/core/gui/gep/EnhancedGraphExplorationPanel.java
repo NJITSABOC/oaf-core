@@ -62,10 +62,13 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private boolean drawingInitialized = false;
     
+    
     private boolean gepAlive = true;
     
     private BluGraph graph;
     private Viewport viewport;
+    
+    private AbstractGroupPanel groupDetailsPanel;
      
     private Timer updateTimer = new Timer(50, new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
@@ -207,11 +210,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             slideoutPanel.setContent(comp);
             
             if(comp instanceof AbstractGroupPanel) {
-                AbstractGroupPanel panel = (AbstractGroupPanel)comp;
-                panel.initUI();
-                
-                panel.setContents(this.getGraph().getAbstractionNetwork().getGroups().get(0));
-
+                groupDetailsPanel = (AbstractGroupPanel)comp;
+                groupDetailsPanel.initUI();
             }
             
         }
@@ -805,8 +805,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
-        
-
+        groupDetailsPanel.setContents(entry.getGroup());
     }
     
      /**
@@ -814,12 +813,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      */
     private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
 
-       
-
     }
 
     private void handleClickOutsideAnyGroupEntry() {
-
+        groupDetailsPanel.clearContents();
         
         targetEntryPoint = null;
     }

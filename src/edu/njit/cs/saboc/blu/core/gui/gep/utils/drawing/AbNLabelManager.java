@@ -98,7 +98,7 @@ public class AbNLabelManager {
 
                     groupLabelMap.put(group.getId(), new GroupLabelPositionEntry(x, y));
 
-                    drawGroupLabelAtPosition(x * GenericGroupEntry.ENTRY_WIDTH, y * GenericGroupEntry.ENTRY_HEIGHT, group, g, false);
+                    drawGroupLabelAtPosition(x * GenericGroupEntry.ENTRY_WIDTH, y * GenericGroupEntry.ENTRY_HEIGHT, group, g);
 
                     totalProcessed++;
                     processedGroups.add(group);
@@ -203,16 +203,10 @@ public class AbNLabelManager {
         g.drawImage(entry.labelSheet, x, y, x + (int) (labelWidth * scale), y + (int) (labelHeight * scale), srcX, srcY, srcX + srcWidth, srcY + srcHeight, null);
     }
     
-    private void drawGroupLabelAtPosition(int xPos, int yPos, GenericConceptGroup group, Graphics2D g, boolean showSemanticTag) {
+    private void drawGroupLabelAtPosition(int xPos, int yPos, GenericConceptGroup group, Graphics2D g) {
 
         String rootName = labelCreator.getRootNameStr(group);
         String conceptCountLabel = labelCreator.getCountStr(group);
-
-        if (!showSemanticTag) {
-            if (rootName.lastIndexOf("(") != -1) {
-                rootName = rootName.substring(0, rootName.lastIndexOf("("));
-            }
-        }
 
         boolean finished = false;
 

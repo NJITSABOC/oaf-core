@@ -45,7 +45,7 @@ public class Viewport {
     public void setLocation(Point point) {
         
         // Max size locks horizontal movement. Better option is to maintain this in some kind of state variable
-        if(region.width == graph.getWidth()) {
+        if(region.width == graph.getAbNWidth()) {
             region.y = point.y;
             
             return;
@@ -57,7 +57,7 @@ public class Viewport {
     public void moveHorizontal(int distance) {
         
         // Max size locks horizontal movement
-        if(region.width >= graph.getWidth()) {
+        if(region.width >= graph.getAbNWidth()) {
             return;
         }
         
@@ -65,8 +65,8 @@ public class Viewport {
 
         if(region.x < 0) {
             region.x = 0;
-        } else if(region.x + region.width > graph.getWidth()) {
-            region.x = Math.max(graph.getWidth() - region.width, 0);
+        } else if(region.x + region.width > graph.getAbNWidth()) {
+            region.x = Math.max(graph.getAbNWidth() - region.width, 0);
         }
     }
 
@@ -75,8 +75,8 @@ public class Viewport {
 
         if(region.y < 0) {
             region.y = 0;
-        } else if(region.y + region.height > graph.getHeight()) {
-            region.y = Math.max(graph.getHeight() - region.height, 0);
+        } else if(region.y + region.height > graph.getAbNHeight()) {
+            region.y = Math.max(graph.getAbNHeight() - region.height, 0);
         }
     }
     
@@ -112,42 +112,35 @@ public class Viewport {
         region.width = (int)(frameWidth / scale); // TODO: change to frame size
         region.height = (int)(frameHeight / scale);
 
-        if(region.height > graph.getHeight()) {
-            region.height = graph.getHeight();
+        if(region.height > graph.getAbNHeight()) {
+            region.height = graph.getAbNHeight();
         }
 
-        boolean maxWidth = false;
-        
-        if(region.width >= graph.getWidth()) {
-            region.width = graph.getWidth();
+        if(region.width > graph.getAbNWidth()) {
+
+            region.width = graph.getAbNWidth();
             
-            maxWidth = true;
-        }
-        
-        if (maxWidth) {
             int x = frameWidth - (int)(region.width * scale);
             
             x /= 2;
             
             region.x = -(int)(x / scale);
-            
         } else {
             region.x = midPointX - region.width / 2;
 
             if (region.x < 0) {
                 region.x = 0;
-            } else if (region.x + region.getWidth() > graph.getWidth()) {
-                region.x = graph.getWidth() - (int) region.getWidth();
+            } else if (region.x + region.getWidth() > graph.getAbNWidth()) {
+                region.x = graph.getAbNWidth() - (int) region.getWidth();
             }
         }
-
         
         region.y = midPointY - region.height / 2;
 
         if(region.y < 0) {
             region.y = 0;
-        } else if(region.y + region.getHeight() > graph.getHeight()) {
-            region.y = graph.getHeight() - (int)region.getHeight();
+        } else if(region.y + region.getHeight() > graph.getAbNHeight()) {
+            region.y = graph.getAbNHeight() - (int)region.getHeight();
         }
     }
     
@@ -166,14 +159,14 @@ public class Viewport {
 
         if (xView < 0) {
             xView = 0;
-        } else if (xView > (graph.getWidth() - region.width)) {
-            xView = graph.getWidth() - region.width;
+        } else if (xView > (graph.getAbNWidth() - region.width)) {
+            xView = graph.getAbNWidth() - region.width;
         }
 
         if (yView < 0) {
             yView = 0;
-        } else if (yView > (graph.getHeight() - region.height)) {
-            yView = graph.getHeight() - region.height;
+        } else if (yView > (graph.getAbNHeight() - region.height)) {
+            yView = graph.getAbNHeight() - region.height;
         }
         
         region.setLocation(xView, yView);

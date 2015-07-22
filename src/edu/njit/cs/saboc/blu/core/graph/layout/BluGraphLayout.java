@@ -9,10 +9,10 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -580,6 +580,38 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
                 entry.setLocation(location);
             }
         }
+    }
+    
+    public int getAbNWidth() {
+        int maxX = 0;
+        
+        Collection<V> containers = containerEntries.values();
+        
+        for(V container : containers) {
+            int containerX = container.getX() + container.getWidth();
+            
+            if(containerX > maxX) {
+                maxX = containerX;
+            }
+        }
+        
+        return maxX;
+    }
+    
+    public int getAbNHeight() {
+        int maxY = 0;
+        
+        Collection<V> containers = containerEntries.values();
+        
+        for(V container : containers) {
+            int containerY = container.getY() + container.getHeight();
+            
+            if(containerY > maxY) {
+                maxY = containerY;
+            }
+        }
+        
+        return maxY;
     }
     
     protected JLabel createFittedPartitionLabel(String[] entries, int boundingWidth, FontMetrics fontMetrics) {

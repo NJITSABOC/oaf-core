@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
+import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
 import java.util.HashMap;
 
@@ -7,7 +8,7 @@ import java.util.HashMap;
  *
  * @author Chris
  */
-public abstract class NATAdjustableLayout<T> extends NATLayout<T> {
+public abstract class NATAdjustableLayout<T, BROWSER_T extends GenericNATBrowser<T>> extends NATLayout<T, BROWSER_T> {
     
     protected int myWidth;
     protected int myHeight;

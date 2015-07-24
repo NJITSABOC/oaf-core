@@ -99,19 +99,19 @@ public class MultiNavPanel<T> extends JPanel {
         this.focusConcept = mainPanel.getFocusConcept();
     }
     
-    public void addNavPanel(NATDataField field, BaseNavPanel<T> panel, String panelTitle) {
+    public void addDataPanel(NATDataField field, BaseNavPanel<T> panel, String panelTitle) {
         focusConcept.addDisplayPanel(field, panel);
         
-        addLayoutPanel(field.getFieldName(), panel);
+        addLayoutPanel(field.getFieldName(), field.getFieldName(), panel);
     }
     
-    public void addLayoutPanel(String panelName, NATLayoutPanel panel) {
-        navPanels.put(panelName, panel);
-        panelIndexes.put(panelName, tabbedPane.getTabCount());
+    public void addLayoutPanel(String panelId, String panelName, NATLayoutPanel panel) {
+        navPanels.put(panelId, panel);
+        panelIndexes.put(panelId, tabbedPane.getTabCount());
         tabbedPane.add(panelName, panel);
     }
 
-    public void updateTabTitle(String fieldName, String title) {
-        tabbedPane.setTitleAt(panelIndexes.get(fieldName), title);
+    public void updateTabTitle(String panelId, String title) {
+        tabbedPane.setTitleAt(panelIndexes.get(panelId), title);
     }
 }

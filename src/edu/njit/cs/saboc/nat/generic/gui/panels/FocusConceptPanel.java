@@ -162,7 +162,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
         tempPanel.add(acceptButton);
         tempPanel.add(cancelButton);
 
-        editPanel.add(new JLabel("     Enter Concept Name or CUI:"),
+        editPanel.add(new JLabel("     Enter Concept Name (exactly) or Unique ID:"),
                 BorderLayout.WEST);
         editPanel.add(tempPanel, BorderLayout.EAST);
 

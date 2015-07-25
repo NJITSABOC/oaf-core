@@ -225,6 +225,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
+                    
+                    if(mouseStateMonitor.getClickedLocation().distance(e.getPoint()) < 16) {
+                        mouseClicked(e);
+                    }
+                    
                     mouseStateMonitor.setClickedLocation(null);
                     mouseStateMonitor.setCurrentDraggedLocation(null);
                     
@@ -291,7 +296,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
                     mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
                 } else {
-                    if (e.getPoint().distance(mouseStateMonitor.getClickedLocation()) > 8) {
+                    if (e.getPoint().distance(mouseStateMonitor.getClickedLocation()) > 16) {
                         mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
                         mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
                     }

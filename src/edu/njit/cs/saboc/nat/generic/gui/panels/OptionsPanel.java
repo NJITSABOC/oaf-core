@@ -31,7 +31,7 @@ public class OptionsPanel<T> extends NATLayoutPanel<T> {
         this.addOptionsPanel(new FontSizeOptionPanel<T>(mainPanel));
     }
     
-    public void addOptionsPanel(OptionPanel<T> optionsPanel) {
+    public final void addOptionsPanel(OptionPanel<T> optionsPanel) {
         optionPanels.add(optionsPanel);
         
         optionsListPanel.add(optionsPanel);

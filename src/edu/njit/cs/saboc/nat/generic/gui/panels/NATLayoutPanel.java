@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -17,7 +17,7 @@ public abstract class NATLayoutPanel<T> extends JPanel {
     public NATLayoutPanel(GenericNATBrowser<T> mainPanel) {
         this.mainPanel = mainPanel;
         
-        Options options = mainPanel.getOptions();
+        NATOptions options = mainPanel.getOptions();
         
         options.addOptionsListener(new NATOptionsAdapter() {
             public void fontSizeChanged(int fontSize) {

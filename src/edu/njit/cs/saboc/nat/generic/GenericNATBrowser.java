@@ -33,7 +33,7 @@ public class GenericNATBrowser<T> extends JPanel {
     /**
      * The options for this NAT
      */
-    private Options options;
+    private NATOptions options;
    
     /**
      * The parent frame of this NAT
@@ -51,10 +51,10 @@ public class GenericNATBrowser<T> extends JPanel {
      * @param dataSource A data source
      * @param layout The visual layout of the NAT's elements
      */
-    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource<T> dataSource, NATLayout layout) {
+    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource<T> dataSource, NATLayout layout, NATOptions options) {
         this.setLayout(new BorderLayout());
                
-        this.options = new Options();
+        this.options = options;
         this.dataSource = dataSource;
         
         this.parentFrame = parentFrame;
@@ -102,7 +102,7 @@ public class GenericNATBrowser<T> extends JPanel {
      * 
      * @return The options for this NAT
      */
-    public Options getOptions() {
+    public NATOptions getOptions() {
         return options;
     }
 

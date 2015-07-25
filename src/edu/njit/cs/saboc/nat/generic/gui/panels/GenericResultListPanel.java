@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
@@ -45,7 +45,7 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
         
         super(mainPanel, dataSource);
         
-        Options options = mainPanel.getOptions();
+        NATOptions options = mainPanel.getOptions();
 
         this.list = list;
         this.list.setListFontSize(options.getFontSize());

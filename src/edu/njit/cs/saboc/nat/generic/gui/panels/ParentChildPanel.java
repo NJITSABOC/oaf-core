@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.awt.BorderLayout;
@@ -32,7 +32,7 @@ public class ParentChildPanel<T> extends NATLayoutPanel<T> implements Toggleable
         
         this.setBackground(mainPanel.getNeighborhoodBGColor());
         
-        final Options options = mainPanel.getOptions();
+        final NATOptions options = mainPanel.getOptions();
         
         NATDataField field = panelType == PanelType.CHILD ? mainPanel.getFocusConcept().COMMON_DATA_FIELDS.CHILDREN : 
                 mainPanel.getFocusConcept().COMMON_DATA_FIELDS.PARENTS;

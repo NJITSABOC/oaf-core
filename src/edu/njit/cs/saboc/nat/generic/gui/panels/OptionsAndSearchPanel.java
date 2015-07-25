@@ -5,10 +5,9 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.SearchResultListNavigateSelectionAction;
+import edu.njit.cs.saboc.nat.generic.gui.panels.options.OptionPanel;
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -18,12 +17,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -47,43 +43,10 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
     private DefaultListModelEx mdlHistory;
     private JList lstHistory;
     
-    // Options Panel
-    private JPanel pnlOptions;
-        
-    private JCheckBox chkID;
+    private OptionsPanel optionsPanel;
     
     // Other stuff
     private History<T> history;
-
-    // Convenience methods for control creation
-    private JRadioButton makeRadioButton(String text, ButtonGroup group, Container panel) {
-        return makeRadioButton(text, group, panel, null);
-    }
-
-    private JRadioButton makeRadioButton(String text, ButtonGroup group, Container panel, GridBagConstraints c) {
-        JRadioButton rb = new JRadioButton(text);
-        group.add(rb);
-        
-        if(c == null) {
-            panel.add(rb);
-        }
-        else {
-            panel.add(rb, c);
-        }
-        
-        rb.addActionListener(this);
-        return rb;
-    }
-
-    private JCheckBox makeCheckBox(String text, Container panel, boolean sel, GridBagConstraints c) {
-        JCheckBox cb = new JCheckBox(text);
-        
-        panel.add(cb, c);
-        cb.setSelected(sel);
-        cb.addActionListener(this);
-        
-        return cb;
-    }
         
     private ConceptBrowserDataSource<T> dataSource;
 
@@ -169,7 +132,7 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
 
         tpane.addTab("Search", new SearchPanel(mainPanel, dataSource, new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept())));
         tpane.addTab("History", pnlHistory);
-        tpane.addTab("Options", new OptionsPanel(mainPanel));
+        tpane.addTab("Options", optionsPanel = new OptionsPanel(mainPanel));
         
         add(tpane, BorderLayout.CENTER);
 
@@ -218,74 +181,8 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
         btnBack.setEnabled(history.getPosition() > 0);
         btnForward.setEnabled(history.getPosition() < (history.getHistoryList().size() - 1));
     }
-
-    private class OptionsPanel extends NATLayoutPanel<T> {
-        
-        private final JRadioButton tinyBtn = new JRadioButton("Tiny");
-        private final JRadioButton smallBtn = new JRadioButton("Small");
-        private final JRadioButton normalBtn = new JRadioButton("Normal");
-        private final JRadioButton largeBtn = new JRadioButton("Large");
-        private final JRadioButton hugeBtn = new JRadioButton("Huge");
-        
-        private final JPanel fontSizePanel = new JPanel();
-        
-        public OptionsPanel(GenericNATBrowser<T> mainPanel) {
-            super(mainPanel);
-                        
-            this.setLayout(new BorderLayout());
-            
-            fontSizePanel.setBorder(BaseNavPanel.createTitledLineBorder("Font Size", mainPanel.getOptions().getFontSize()));
-
-            tinyBtn.addActionListener((ActionEvent ae) -> {
-                mainPanel.getOptions().setFontSize(10);
-            });
-            
-            smallBtn.addActionListener((ActionEvent ae) -> {
-                mainPanel.getOptions().setFontSize(12);
-            });
-            
-            normalBtn.addActionListener((ActionEvent ae) -> {
-                mainPanel.getOptions().setFontSize(14);
-            });
-            
-            largeBtn.addActionListener((ActionEvent ae) -> {
-                mainPanel.getOptions().setFontSize(16);
-            });
-
-            hugeBtn.addActionListener((ActionEvent ae) -> {
-                mainPanel.getOptions().setFontSize(22);
-            });
-
-            ButtonGroup fontSizeGroup = new ButtonGroup();
-            fontSizeGroup.add(tinyBtn);
-            fontSizeGroup.add(smallBtn);
-            fontSizeGroup.add(normalBtn);
-            fontSizeGroup.add(largeBtn);
-            fontSizeGroup.add(hugeBtn);
-            
-            fontSizePanel.add(tinyBtn);
-            fontSizePanel.add(smallBtn);
-            fontSizePanel.add(normalBtn);
-            fontSizePanel.add(largeBtn);
-            fontSizePanel.add(hugeBtn);
-
-            normalBtn.setSelected(true);
-
-            this.add(fontSizePanel, BorderLayout.NORTH);
-        }
-
-        protected void setFontSize(int fontSize) {
-            Font optFont = tinyBtn.getFont().deriveFont(Font.BOLD, fontSize);
-            
-            tinyBtn.setFont(optFont);
-            smallBtn.setFont(optFont);
-            normalBtn.setFont(optFont);
-            largeBtn.setFont(optFont);
-            hugeBtn.setFont(optFont);
-            
-            fontSizePanel.setBorder(BaseNavPanel.createTitledLineBorder("Font Size", mainPanel.getOptions().getFontSize()));
-        }
+    
+    public void addOptionPanel(OptionPanel panel) {
+        optionsPanel.addOptionsPanel(panel);
     }
-
-
 }

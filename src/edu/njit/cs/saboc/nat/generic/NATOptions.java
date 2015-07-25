@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * A singleton class that keeps track of user-specified options and initial settings.
  */
-public class Options {
+public class NATOptions {
     
     /**
      * List of attached listeners
@@ -26,7 +26,7 @@ public class Options {
     
     private boolean lockNavigation = false;
 
-    public Options() {
+    public NATOptions() {
         
     }
     

@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.History;
-import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.NATOptions;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -70,7 +70,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     public FocusConceptPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         super(mainPanel, dataSource);
         
-        Options options = mainPanel.getOptions();
+        NATOptions options = mainPanel.getOptions();
 
         Color bgColor = mainPanel.getNeighborhoodBGColor();
         setLayout(new BorderLayout());
@@ -375,7 +375,7 @@ public class FocusConceptPanel<T> extends BaseNavPanel<T> {
     }
 
     public void display() {
-        Options options = mainPanel.getOptions();
+        NATOptions options = mainPanel.getOptions();
         
         // When the focus concept is changed, hide the edit panel.
         editPanel.setVisible(false);

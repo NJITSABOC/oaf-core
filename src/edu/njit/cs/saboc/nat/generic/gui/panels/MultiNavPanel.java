@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.nat.generic.FocusConcept;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.Options;
+import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import edu.njit.cs.saboc.nat.generic.gui.utils.ButtonTabbedPaneUI;
@@ -77,7 +77,7 @@ public class MultiNavPanel<T> extends JPanel {
             }
         };
         
-        Options options = mainPanel.getOptions();
+        NATOptions options = mainPanel.getOptions();
         
         options.addOptionsListener(new NATOptionsAdapter() {
             public void fontSizeChanged(int fontSize) {

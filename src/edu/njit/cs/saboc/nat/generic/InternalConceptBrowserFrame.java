@@ -25,7 +25,7 @@ public class InternalConceptBrowserFrame<T> extends JInternalFrame {
                 true, //maximizable
                 true);//iconifiable
         
-        browser = new GenericNATBrowser<T>(parentFrame, dataSource, layout);
+        browser = new GenericNATBrowser<T>(parentFrame, dataSource, layout, new NATOptions());
         
 
         this.setSize(1200, 550);

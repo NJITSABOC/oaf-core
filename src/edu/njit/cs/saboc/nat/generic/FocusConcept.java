@@ -38,13 +38,13 @@ public class FocusConcept<T> {
 
     private History<T> history = new History<T>();
 
-    private final Options options;
+    private final NATOptions options;
 
     private ArrayList<UpdateThread> updateThreads = new ArrayList<>();
     
     public final CommonDataFields COMMON_DATA_FIELDS;
 
-    public FocusConcept(GenericNATBrowser browser, Options options, ConceptBrowserDataSource<T> dataSource) {
+    public FocusConcept(GenericNATBrowser browser, NATOptions options, ConceptBrowserDataSource<T> dataSource) {
         this.browser = browser;
         this.options = options;
         this.dataSource = dataSource;

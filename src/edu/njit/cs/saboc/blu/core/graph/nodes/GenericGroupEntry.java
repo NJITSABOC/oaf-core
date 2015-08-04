@@ -10,9 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,9 +28,9 @@ public class GenericGroupEntry extends AbNNodeEntry {
 
     protected GenericConceptGroup group;
 
-    private String labelText;
+    private final String labelText;
 
-    private JLabel panelLabel;
+    private final JLabel panelLabel;
 
     private boolean selectable = false;
         

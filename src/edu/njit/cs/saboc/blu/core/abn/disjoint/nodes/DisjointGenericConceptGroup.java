@@ -18,9 +18,9 @@ public abstract class DisjointGenericConceptGroup<
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
         T extends DisjointGenericConceptGroup> {
     
-    private HashSet<U> overlapsIn;
+    private final HashSet<U> overlapsIn;
     
-    private HIERARCHY_T conceptHierarchy;
+    private final HIERARCHY_T conceptHierarchy;
 
     private final HashMap<CONCEPT_T, T> parents = new HashMap<CONCEPT_T, T>();
     

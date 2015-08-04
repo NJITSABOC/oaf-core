@@ -94,8 +94,8 @@ public abstract class AbstractGroupPanel<GROUP_T extends GenericConceptGroup, CO
         this.groupDetailsPanel = createGroupDetailsPanel();
         this.groupHierarchyPanel = createGroupHierarchyPanel();
 
-        addGroupDetailsTab(groupDetailsPanel, "Details");
-        addGroupDetailsTab(groupHierarchyPanel, "Hierarchy");
+        addGroupDetailsTab(groupDetailsPanel, String.format("%s Details", getGroupType()));
+        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", getGroupType()));
 
         groupDetailsPanels.forEach((GroupInformationPanel<GROUP_T> gdp) -> {
             gdp.initUI();
@@ -106,6 +106,8 @@ public abstract class AbstractGroupPanel<GROUP_T extends GenericConceptGroup, CO
         tabbedPane.addTab(tabName, panel);
         groupDetailsPanels.add(panel);
     }
+    
+    protected abstract String getGroupType();
     
     protected abstract AbstractGroupDetailsPanel<GROUP_T, CONCEPT_T> createGroupDetailsPanel();
     

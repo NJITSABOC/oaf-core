@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -17,8 +19,8 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class GenericSlideoutPanel extends JPanel {
-    
+public class GenericSlideoutPanel extends JPanel  {
+
     // State variables
     private boolean hidden = false;
     private final int COLLAPSED_SIZE = 16;
@@ -50,6 +52,12 @@ public class GenericSlideoutPanel extends JPanel {
 
         this.add(contentPane);
         this.add(collapseBtn);
+        
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                e.consume();
+            }
+        });
         
         this.setBounds(initialPosition.x, initialPosition.y, size.width, size.height);
     }

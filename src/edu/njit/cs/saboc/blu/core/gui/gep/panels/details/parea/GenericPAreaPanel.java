@@ -26,13 +26,17 @@ public abstract class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea,
         
         conceptHierarchyPanel.initUI();
         
-        this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy", conceptType));
+        this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy in Partial-area", conceptType));
     }
     
     public void setContents(PAREA_T parea) {
         super.setContents(parea);
         
         conceptHierarchyPanel.setContents(parea);
+    }
+    
+    public String getGroupType() {
+        return "Partial-area";
     }
     
     protected abstract PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> createPAreaConceptHierarchyPanel();

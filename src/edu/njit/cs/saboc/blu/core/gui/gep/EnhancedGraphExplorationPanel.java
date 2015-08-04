@@ -62,7 +62,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private boolean drawingInitialized = false;
     
-    
     private boolean gepAlive = true;
     
     private BluGraph graph;
@@ -202,7 +201,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         });
         
         
-        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 100), new Dimension(500, 600));
+        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 100), new Dimension(600, 600));
         
         if(groupOptionsConfiguration.getNavigatePanel().isPresent()) {
             JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
@@ -259,7 +258,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     Point pointOnGraph = viewport.getPointOnGraph(e.getPoint());
 
                     GenericGroupEntry groupEntry = getGroupEntryAtPoint(pointOnGraph);
-
 
                     if (groupEntry != null) {
                         selectionStateMonitor.setSelectedGroup(groupEntry);
@@ -812,7 +810,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
-
+        
     }
 
     private void handleClickOutsideAnyGroupEntry() {

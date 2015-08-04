@@ -15,6 +15,6 @@ public class GenericBluPArea<PAREA_T extends GenericPArea,
         REGIONENTRY_T extends GenericBluRegion> extends GenericGroupEntry {
     
     public GenericBluPArea(PAREA_T parea, BluGraph g, REGIONENTRY_T r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
-        super(parea, g, r, pX, parent, ie, true);
+        super(parea, g, r, pX, parent, ie);
     }
 }

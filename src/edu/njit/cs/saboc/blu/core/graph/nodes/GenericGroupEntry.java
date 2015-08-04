@@ -10,9 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -52,10 +50,8 @@ public class GenericGroupEntry extends AbNNodeEntry {
     
     private boolean menuOn;
     
-    private boolean showSemanticTag;
-
     public GenericGroupEntry(GenericConceptGroup group, BluGraph g, GenericPartitionEntry partitionEntry,
-            int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie, boolean showSemanticTag) {
+            int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
         
         this.groupX = pX;
         this.parentGroupLevel = parent;
@@ -63,21 +59,9 @@ public class GenericGroupEntry extends AbNNodeEntry {
         this.graph = g;
         this.incidentEdges = ie;
         
-        this.showSemanticTag = showSemanticTag;
-
         setFocusable(true);
 
         String rootName = group.getRoot().getName();
-
-        if(!showSemanticTag) {
-            if(rootName.lastIndexOf("(") != -1) {
-                rootName = rootName.substring(0, rootName.lastIndexOf("("));
-            }
-        }
-
-        if(rootName.length() > 24) {
-            rootName = rootName.substring(0, 24) + "...";
-        }
         
         labelText = rootName;
 
@@ -112,10 +96,6 @@ public class GenericGroupEntry extends AbNNodeEntry {
         return labelText;
     }
     
-    public boolean getShowSemanticTag() {
-        return showSemanticTag;
-    }
-
     public void mouseClicked(MouseEvent e) {
 
         if (graph.getSelectedEdge() != null) {

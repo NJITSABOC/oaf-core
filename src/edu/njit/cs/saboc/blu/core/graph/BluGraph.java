@@ -43,7 +43,6 @@ import javax.swing.event.MouseInputListener;
  * @author David Daudelin and Chris Ochs
  */
 public class BluGraph extends JLayeredPane implements MouseInputListener, FocusListener {
-
     
     /**
      * Defines the thickness of the edges.
@@ -954,6 +953,14 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
 
     public BluGraphLayout getGraphLayout() {
         return layout;
+    }
+    
+    public int getAbNWidth() {
+        return layout.getAbNWidth();
+    }
+    
+    public int getAbNHeight() {
+        return layout.getAbNHeight();
     }
     
     public AbNLabelManager getLabelManager() {

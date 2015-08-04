@@ -19,6 +19,11 @@ public class NATOptions {
     private boolean idsVisible = true;
     
     /**
+     * If URIs are displayed in after entries in result lists
+     */
+    private boolean urisVisible = false;
+    
+    /**
      * Current font size of the NAT
      */
     private int fontSize = 14;
@@ -55,6 +60,26 @@ public class NATOptions {
         
         listeners.forEach((NATOptionsListener listener) -> {
             listener.showIDChanged(value);
+        });
+    }
+    
+    /**
+     * 
+     * @return true if URIs are to be displayed in result lists, false otherwise
+     */
+    public boolean areURIsVisible() {
+        return urisVisible;
+    }
+    
+    /**
+     * 
+     * @param value true if ids should be displayed in result lists, false otherwise
+     */
+    public void setURIsVisible(boolean value) {
+        this.urisVisible = value;
+        
+        listeners.forEach((NATOptionsListener listener) -> {
+            listener.showURIChanged(value);
         });
     }
     

@@ -16,4 +16,9 @@ public class NATOptionsAdapter implements NATOptionsListener {
         
     }
     
+    @Override
+    public void showURIChanged(boolean showURI) {
+        
+    }
+    
 }

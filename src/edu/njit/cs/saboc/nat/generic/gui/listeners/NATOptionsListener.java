@@ -8,4 +8,6 @@ public interface NATOptionsListener {
     public void fontSizeChanged(int fontSize);
     
     public void showIDChanged(boolean showId);
+    
+    public void showURIChanged(boolean showURI);
 }

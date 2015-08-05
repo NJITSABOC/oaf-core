@@ -22,7 +22,7 @@ public abstract class DisjointGenericConceptGroup<
     
     private final HIERARCHY_T conceptHierarchy;
 
-    private final HashMap<CONCEPT_T, T> parents = new HashMap<CONCEPT_T, T>();
+    private final HashMap<CONCEPT_T, T> parents = new HashMap<>();
     
     public DisjointGenericConceptGroup(CONCEPT_T root, HashSet<U> overlapsIn) {
         this.conceptHierarchy = this.createGroupHierarchy(root);

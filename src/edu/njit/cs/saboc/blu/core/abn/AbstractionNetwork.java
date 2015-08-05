@@ -16,15 +16,15 @@ import java.util.Stack;
  *
  * @author Chris
  */
-public abstract class AbstractionNetwork {
+public abstract class AbstractionNetwork<CONTAINER_T extends GenericGroupContainer, GROUP_T extends GenericConceptGroup> {
 
-    protected ArrayList<? extends GenericGroupContainer> containers;
-    protected HashMap<Integer, ? extends GenericConceptGroup> groups;
+    protected ArrayList<? extends CONTAINER_T> containers;
+    protected HashMap<Integer, GROUP_T> groups;
     protected HashMap<Integer, HashSet<Integer>> groupHierarchy;
     
     protected AbstractionNetwork(
-            ArrayList<? extends GenericGroupContainer> containers,
-            HashMap<Integer, ? extends GenericConceptGroup> groups,
+            ArrayList<CONTAINER_T> containers,
+            HashMap<Integer, GROUP_T> groups,
             HashMap<Integer, HashSet<Integer>> groupHierarchy) {
 
         this.containers = containers;
@@ -79,8 +79,8 @@ public abstract class AbstractionNetwork {
         return descendents;
     }
     
-    public GenericConceptGroup getGroupFromRootConceptId(long rootConceptId) {
-        for (GenericConceptGroup group : groups.values()) {
+    public GROUP_T getGroupFromRootConceptId(long rootConceptId) {
+        for (GROUP_T group : groups.values()) {
             if (group.getRoot().getId() == rootConceptId) {
                 return group;
             }
@@ -89,11 +89,11 @@ public abstract class AbstractionNetwork {
         return null;
     }
 
-    public List<GenericConceptGroup> searchAnywhereInGroupRoots(String term) {
-        List<GenericConceptGroup> results = new ArrayList<GenericConceptGroup>();
+    public List<GROUP_T> searchAnywhereInGroupRoots(String term) {
+        List<GROUP_T> results = new ArrayList<>();
         String[] terms = term.trim().split("\\s*,\\s*");
 
-        for (Entry<Integer, ? extends GenericConceptGroup> entry : groups.entrySet()) {
+        for (Entry<Integer, GROUP_T> entry : groups.entrySet()) {
             for (String s : terms) {
                 if (entry.getValue().getRoot().getName().toLowerCase().contains(s.toLowerCase())) {
                     results.add(entry.getValue());
@@ -102,8 +102,8 @@ public abstract class AbstractionNetwork {
             }
         }
 
-        Collections.sort(results, new Comparator<GenericConceptGroup>() {
-            public int compare(GenericConceptGroup a, GenericConceptGroup b) {
+        Collections.sort(results, new Comparator<GROUP_T>() {
+            public int compare(GROUP_T a, GROUP_T b) {
                 return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
             }
         });

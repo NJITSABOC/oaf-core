@@ -16,8 +16,9 @@ public abstract class TargetAbstractionNetworkGenerator<
         CONCEPT_T, 
         REL_T,
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        CONTAINER_T extends TargetContainer,
         GROUP_T extends TargetGroup, 
-        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> {
+        TARGETABN_T extends TargetAbstractionNetwork<CONTAINER_T, GROUP_T, TARGETABN_T>> {
     
     public TARGETABN_T deriveTargetAbstractionNetwork(HashSet<CONCEPT_T> sourceConcepts, REL_T relationshipType, CONCEPT_T targetHierarchyRoot) {
         

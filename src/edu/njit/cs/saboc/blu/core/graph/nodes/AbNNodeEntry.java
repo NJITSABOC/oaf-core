@@ -6,7 +6,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class AbNNodeEntry extends JPanel {
+public abstract class AbNNodeEntry extends JPanel {
 
     public enum HighlightState {
         None,

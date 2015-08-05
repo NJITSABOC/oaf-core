@@ -22,7 +22,7 @@ public abstract class GenericPAreaTaxonomy<
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T,
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>>  extends AbstractionNetwork
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbstractionNetwork<AREA_T, PAREA_T>
 
                 implements ReducibleAbstractionNetwork<TAXONOMY_T> {
     

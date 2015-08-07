@@ -176,10 +176,12 @@ public class FilterableTablePanel extends JPanel {
     }
     
     private void newFilter() {
+        
         RowFilter<TableModel, Object> rf = null;
         try {
-            rf = RowFilter.regexFilter(filterField.getText());
+            rf = RowFilter.regexFilter("(?i)" + filterField.getText());
         }   catch (java.util.regex.PatternSyntaxException e) {
+            System.out.println(e.toString());
             return;
         }
         sorter.setRowFilter(rf);

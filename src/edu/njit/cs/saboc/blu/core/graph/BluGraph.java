@@ -875,7 +875,6 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
     }
 
     public HashMap<Integer, ? extends GenericContainerEntry> getContainerEntries() {
-
         return layout.getContainerEntries();
     }
 

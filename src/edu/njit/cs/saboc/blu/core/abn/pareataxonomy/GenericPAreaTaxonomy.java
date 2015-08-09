@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
@@ -22,7 +22,7 @@ public abstract class GenericPAreaTaxonomy<
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T,
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbstractionNetwork<AREA_T, PAREA_T>
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends PartitionedAbstractionNetwork<AREA_T, PAREA_T>
 
                 implements ReducibleAbstractionNetwork<TAXONOMY_T> {
     
@@ -58,7 +58,7 @@ public abstract class GenericPAreaTaxonomy<
         return conceptHierarchy;
     }
     
-    public GenericConceptGroup getRootGroup() {
+    public PAREA_T getRootGroup() {
         return this.getRootPArea();
     }
     

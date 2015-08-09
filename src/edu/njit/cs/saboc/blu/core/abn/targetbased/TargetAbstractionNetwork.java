@@ -14,9 +14,8 @@ import java.util.HashSet;
  * @author Chris O
  */
 public abstract class TargetAbstractionNetwork<
-        CONTAINER_T extends TargetContainer,
         GROUP_T extends TargetGroup, 
-        TARGETABN_T extends TargetAbstractionNetwork<CONTAINER_T, GROUP_T, TARGETABN_T>> extends AbstractionNetwork<CONTAINER_T, GROUP_T> 
+        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> extends AbstractionNetwork<GROUP_T> 
 
     implements ReducibleAbstractionNetwork<TARGETABN_T> {
     
@@ -26,11 +25,10 @@ public abstract class TargetAbstractionNetwork<
     
     public TargetAbstractionNetwork(
             GROUP_T rootGroup,
-            ArrayList<CONTAINER_T> containers,
             HashMap<Integer, GROUP_T> groups,
             HashMap<Integer, HashSet<Integer>> groupHierarchy) {
         
-        super(containers, groups, groupHierarchy);
+        super(groups, groupHierarchy);
         
         this.rootGroup = rootGroup;
     }

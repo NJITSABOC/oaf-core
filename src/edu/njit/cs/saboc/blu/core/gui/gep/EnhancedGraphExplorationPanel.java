@@ -203,7 +203,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 100), new Dimension(600, 600));
         
-        if(groupOptionsConfiguration.getNavigatePanel().isPresent()) {
+        if(groupOptionsConfiguration != null && groupOptionsConfiguration.getNavigatePanel().isPresent()) {
             JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
             
             slideoutPanel.setContent(comp);
@@ -461,6 +461,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
 
     public void jumpToRoot() {
+        if(graph.getAbstractionNetwork().getRootGroup() == null) {
+            return;
+        }
+        
         GenericGroupEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
 
         if(root == null) {
@@ -819,7 +823,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
 
     private void handleClickOutsideAnyGroupEntry() {
-        groupDetailsPanel.clearContents();
+        
+        if(groupDetailsPanel != null) {
+            groupDetailsPanel.clearContents();
+        }
+        
         
         targetEntryPoint = null;
     }

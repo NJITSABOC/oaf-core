@@ -69,9 +69,7 @@ public abstract class PAreaTaxonomyGenerator<
 
         // Partial area collections
         HashMap<CONCEPT_T, Integer> partialAreaIds = new HashMap<CONCEPT_T, Integer>();
-        
         HashMap<CONCEPT_T, HIERARCHY_T> partialAreas = new HashMap<CONCEPT_T, HIERARCHY_T>();
-        
         HashMap<CONCEPT_T, Set<CONCEPT_T>> parentPartialAreas = new HashMap<CONCEPT_T, Set<CONCEPT_T>>();
         HashMap<CONCEPT_T, Set<CONCEPT_T>> childPartialAreas = new HashMap<CONCEPT_T, Set<CONCEPT_T>>();
 

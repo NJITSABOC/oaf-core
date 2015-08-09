@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn;
 
 import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,28 +15,21 @@ import java.util.Stack;
  *
  * @author Chris
  */
-public abstract class AbstractionNetwork<CONTAINER_T extends GenericGroupContainer, GROUP_T extends GenericConceptGroup> {
+public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
 
-    protected ArrayList<? extends CONTAINER_T> containers;
     protected HashMap<Integer, GROUP_T> groups;
     protected HashMap<Integer, HashSet<Integer>> groupHierarchy;
     
     protected AbstractionNetwork(
-            ArrayList<CONTAINER_T> containers,
             HashMap<Integer, GROUP_T> groups,
             HashMap<Integer, HashSet<Integer>> groupHierarchy) {
 
-        this.containers = containers;
         this.groups = groups;
         this.groupHierarchy = groupHierarchy;
     }
 
     protected int getGroupCount() {
         return groups.keySet().size();
-    }
-
-    protected int getContainerCount() {
-        return containers.size();
     }
 
     public HashSet<Integer> getGroupChildren(int groupId) {
@@ -111,13 +103,33 @@ public abstract class AbstractionNetwork<CONTAINER_T extends GenericGroupContain
         return results;
     }
     
-    public abstract GenericConceptGroup getRootGroup();
+    public abstract GROUP_T getRootGroup();
     
-    public HashMap<Integer, ? extends GenericConceptGroup> getGroups() {
+    public HashMap<Integer, GROUP_T> getGroups() {
         return groups;
     }
     
-    public ArrayList<? extends GenericGroupContainer> getContainers() {
-        return containers;
+    public HashSet<GROUP_T> getChildGroups(GROUP_T group) {
+        HashSet<GROUP_T> childGroups = new HashSet<>();
+        
+        HashSet<Integer> childIds = groupHierarchy.get(group.getId());
+        
+        childIds.forEach( (Integer childId) -> {
+            childGroups.add(groups.get(childId));
+        });
+        
+        return childGroups;
+    }
+    
+    public HashSet<GROUP_T> getParentGroups(GROUP_T group) {
+        HashSet<GROUP_T> parentGroups = new HashSet<>();
+
+        HashSet<Integer> parentIds = group.getParentIds();
+
+        parentIds.forEach((Integer childId) -> {
+            parentGroups.add(groups.get(childId));
+        });
+
+        return parentGroups;
     }
 }

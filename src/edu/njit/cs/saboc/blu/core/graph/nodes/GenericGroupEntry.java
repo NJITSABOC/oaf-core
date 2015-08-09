@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -21,12 +22,12 @@ import javax.swing.SwingConstants;
  *
  * @author
  */
-public class GenericGroupEntry extends AbNNodeEntry {
+public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNNodeEntry {
     
     public final static int ENTRY_WIDTH = 128;
     public final static int ENTRY_HEIGHT = 40;
 
-    protected GenericConceptGroup group;
+    protected GROUP_T group;
 
     private final String labelText;
 
@@ -34,7 +35,7 @@ public class GenericGroupEntry extends AbNNodeEntry {
 
     private boolean selectable = false;
         
-    protected BluGraph graph;
+    protected final BluGraph graph;
     
     /**
      * Index of this group in the <i>group</i> arrayList from GraphPAreaLevel
@@ -50,8 +51,14 @@ public class GenericGroupEntry extends AbNNodeEntry {
     
     private boolean menuOn;
     
-    public GenericGroupEntry(GenericConceptGroup group, BluGraph g, GenericPartitionEntry partitionEntry,
-            int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
+    private Point labelOffset;
+        
+    public GenericGroupEntry(GROUP_T group, 
+            BluGraph g, 
+            GenericPartitionEntry partitionEntry,
+            int pX, 
+            GraphGroupLevel parent, 
+            ArrayList<GraphEdge> ie) {
         
         this.groupX = pX;
         this.parentGroupLevel = parent;
@@ -59,13 +66,14 @@ public class GenericGroupEntry extends AbNNodeEntry {
         this.graph = g;
         this.incidentEdges = ie;
         
+        this.labelOffset = new Point(0, 0);
+        
         setFocusable(true);
 
         String rootName = group.getRoot().getName();
         
         labelText = rootName;
 
-        //this.panelLabel = new JLabel("<HTML><center>" + rootName + "</center></HTML>");
         this.panelLabel = new JLabel(rootName);
 
         //Setup the panel's dimensions, etc.
@@ -84,7 +92,17 @@ public class GenericGroupEntry extends AbNNodeEntry {
         add(panelLabel);
     }
     
-    public GenericConceptGroup getGroup() {
+    public GenericGroupEntry labelOffset(Point offset) {
+        this.labelOffset = offset;
+        
+        return this;
+    }
+    
+    public Point getLabelOffset() {
+        return labelOffset;
+    }
+    
+    public GROUP_T getGroup() {
         return group;
     }
 

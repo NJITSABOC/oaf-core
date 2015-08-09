@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Chris O
  */
 public class GenericBluPArea<PAREA_T extends GenericPArea, 
-        REGIONENTRY_T extends GenericBluRegion> extends GenericGroupEntry {
+        REGIONENTRY_T extends GenericBluRegion> extends GenericGroupEntry<PAREA_T> {
     
     public GenericBluPArea(PAREA_T parea, BluGraph g, REGIONENTRY_T r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
         super(parea, g, r, pX, parent, ie);

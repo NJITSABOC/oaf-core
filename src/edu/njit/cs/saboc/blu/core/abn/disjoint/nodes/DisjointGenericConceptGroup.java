@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.nodes;
 
+import SnomedShared.Concept;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public abstract class DisjointGenericConceptGroup<
         U extends GenericConceptGroup, 
         CONCEPT_T, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
-        T extends DisjointGenericConceptGroup> {
+        T extends DisjointGenericConceptGroup> extends GenericConceptGroup {
     
     private final HashSet<U> overlapsIn;
     
@@ -24,22 +25,21 @@ public abstract class DisjointGenericConceptGroup<
 
     private final HashMap<CONCEPT_T, T> parents = new HashMap<>();
     
-    public DisjointGenericConceptGroup(CONCEPT_T root, HashSet<U> overlapsIn) {
-        this.conceptHierarchy = this.createGroupHierarchy(root);
+    public DisjointGenericConceptGroup(
+            int id, 
+            Concept root, 
+            HIERARCHY_T conceptHierarchy, 
+            HashSet<Integer> parentIds,
+            HashSet<U> overlapsIn) {
+        
+        super(id, root, conceptHierarchy.getNodesInHierarchy().size(), parentIds);
+
+        this.conceptHierarchy = conceptHierarchy;
         this.overlapsIn = overlapsIn;
     }
-    
-    protected abstract HIERARCHY_T createGroupHierarchy(CONCEPT_T root);
-    
+        
     protected abstract Comparator<CONCEPT_T> getConceptComparator();
 
-     /**
-     * Returns the root of the disjoint partial-area
-     * @return 
-     */
-    public CONCEPT_T getRoot() {
-        return conceptHierarchy.getRoot();
-    }
 
     /**
      * Returns the total number of concepts summarized by the disjoint partial-area
@@ -75,15 +75,6 @@ public abstract class DisjointGenericConceptGroup<
     }
 
     /**
-     * Adds a concept to this disjoint partial-area
-     * @param c
-     * @param parent 
-     */
-    public void addConcept(CONCEPT_T c, CONCEPT_T parent) {
-        conceptHierarchy.addIsA(c, parent);
-    }
-
-    /**
      * Returns the hierarchy of concepts summarized by this disjoint partial-area
      * @return 
      */
@@ -91,7 +82,6 @@ public abstract class DisjointGenericConceptGroup<
         return conceptHierarchy;
     }
 
-    
     /**
      * Returns the concepts summarized by this disjoint partial-area as a list, sorted by FSN
      * @return 

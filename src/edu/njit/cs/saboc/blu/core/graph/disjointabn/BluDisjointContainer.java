@@ -4,6 +4,6 @@ package edu.njit.cs.saboc.blu.core.graph.disjointabn;
  *
  * @author Chris O
  */
-public class GenericBluDisjointPArea {
+public class BluDisjointContainer {
     
 }

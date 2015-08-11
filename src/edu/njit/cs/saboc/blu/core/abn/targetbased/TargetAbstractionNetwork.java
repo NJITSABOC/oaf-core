@@ -5,9 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
-import java.util.ArrayList;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -26,7 +25,7 @@ public abstract class TargetAbstractionNetwork<
     public TargetAbstractionNetwork(
             GROUP_T rootGroup,
             HashMap<Integer, GROUP_T> groups,
-            HashMap<Integer, HashSet<Integer>> groupHierarchy) {
+            GroupHierarchy<GROUP_T> groupHierarchy) {
         
         super(groups, groupHierarchy);
         

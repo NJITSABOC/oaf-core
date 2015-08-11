@@ -28,15 +28,10 @@ public abstract class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends Gene
     }
     
     protected void loadChildGroupInfo(PAREA_T parea) {
-        HashSet<Integer> childIds = taxonomy.getGroupChildren(parea.getId());
+        HashSet<PAREA_T> children = taxonomy.getChildGroups(parea);
         
-        ArrayList<PAREA_T> childPAreas = new ArrayList<>();
-        
-        childIds.forEach((Integer childId) -> {
-            PAREA_T childPArea = (PAREA_T)taxonomy.getPAreas().get(childId);
-            childPAreas.add(childPArea);
-        });
-        
+        ArrayList<PAREA_T> childPAreas = new ArrayList<>(children);
+
         Collections.sort(childPAreas, getChildPAreaComparator());
         
         childModel.setContents(childPAreas);

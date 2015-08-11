@@ -190,8 +190,7 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
         
         return visitor.getAllPaths();
     }
-    
-    
+        
     public V getDescendantHierarchyWithinDistance(T node, int maxDistance) {
         V hierarchy = createHierarchy(node);
         

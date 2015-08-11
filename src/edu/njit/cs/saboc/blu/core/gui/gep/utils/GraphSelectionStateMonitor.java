@@ -158,11 +158,11 @@ public class GraphSelectionStateMonitor {
     
     private void highlightGroupChildren(GenericGroupEntry group) {
         HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
-        HashSet<Integer> children = graph.getAbstractionNetwork().getGroupChildren(group.getGroup().getId());
+        HashSet<GenericConceptGroup> children = graph.getAbstractionNetwork().getChildGroups(group.getGroup());
 
-        for (int cid : children) {
-            if (graphGroupEntries.containsKey(cid)) {
-                GenericGroupEntry entry = graphGroupEntries.get(cid);
+        for (GenericConceptGroup child : children) {
+            if (graphGroupEntries.containsKey(child.getId())) {
+                GenericGroupEntry entry = graphGroupEntries.get(child.getId());
                 entry.setHighlightState(AbNNodeEntry.HighlightState.Child);
             }
         }

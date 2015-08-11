@@ -138,10 +138,10 @@ public class GroupMetricsPanel extends JPanel {
             text = Integer.toString(entry.getGroup().getParentIds().size());
         }
         else if(labelType.equals("children")) {
-            text = Integer.toString(currentGraph.getAbstractionNetwork().getGroupChildren(entry.getGroup().getId()).size());
+            text = Integer.toString(currentGraph.getAbstractionNetwork().getChildGroups(entry.getGroup()).size());
         }
         else if(labelType.equals("descendants")) {            
-            text = Integer.toString(currentGraph.getAbstractionNetwork().getGroupDescendants(entry.getGroup().getId()).size());
+            text = Integer.toString(currentGraph.getAbstractionNetwork().getChildGroups(entry.getGroup()).size());
         }
 
         return text;

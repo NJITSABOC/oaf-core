@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,8 +93,6 @@ public abstract class TargetAbstractionNetworkGenerator<
         
         HashMap<CONCEPT_T, Integer> groupIds = new HashMap<CONCEPT_T, Integer>();
 
-        HashMap<Integer, HashSet<Integer>> groupHierarchy = new HashMap<Integer, HashSet<Integer>>();
-
         HashMap<CONCEPT_T, Integer> parentCounts = new HashMap<CONCEPT_T, Integer>();
 
         HashSet<CONCEPT_T> concepts = targetHierarchy.getNodesInHierarchy();
@@ -118,7 +117,6 @@ public abstract class TargetAbstractionNetworkGenerator<
                 
                 int groupId = nextGroupId++;
                 groupIds.put(concept, groupId);
-                groupHierarchy.put(groupId, new HashSet<Integer>());
                 parentIds.put(concept, new HashSet<Integer>());
             }
         }
@@ -160,8 +158,6 @@ public abstract class TargetAbstractionNetworkGenerator<
                         int parentGroupId = groupIds.get(parentGroupRoot);
 
                         parentIds.get(concept).add(parentGroupId);
-
-                        groupHierarchy.get(parentGroupId).add(groupId);
                     }
                 }
             }
@@ -192,6 +188,16 @@ public abstract class TargetAbstractionNetworkGenerator<
 
         GROUP_T rootGroup = targetGroups.get(groupIds.get(targetHierarchy.getRoot()));
         
+        GroupHierarchy<GROUP_T> groupHierarchy = new GroupHierarchy<>(rootGroup);
+        
+        targetGroups.values().forEach((GROUP_T group) -> {
+            HashSet<Integer> parentGroupIds = group.getParentIds();
+            
+            parentGroupIds.forEach((Integer parentId) -> {
+                groupHierarchy.addIsA(group, targetGroups.get(parentId));
+            });
+        });
+        
         return createTargetAbstractionNetwork(rootGroup, targetGroups, groupHierarchy);
     }
     
@@ -214,7 +220,7 @@ public abstract class TargetAbstractionNetworkGenerator<
     protected abstract GROUP_T createGroup(int id, CONCEPT_T root, HashSet<Integer> parentIds, 
             HIERARCHY_T groupHierarchy, HashMap<CONCEPT_T, HashSet<CONCEPT_T>> incomingRelSources);
     
-    protected abstract TARGETABN_T createTargetAbstractionNetwork(GROUP_T rootGroup, HashMap<Integer, GROUP_T> groups, HashMap<Integer, HashSet<Integer>> groupHierarchy);
+    protected abstract TARGETABN_T createTargetAbstractionNetwork(GROUP_T rootGroup, HashMap<Integer, GROUP_T> groups, GroupHierarchy<GROUP_T> groupHierarchy);
     
     protected abstract HIERARCHY_T createGroupHierarchy(CONCEPT_T root);
 }

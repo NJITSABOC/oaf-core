@@ -1,7 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.reduced;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.ConceptGroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,14 +15,13 @@ import java.util.Queue;
 public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
     
     public ReducedAbNHierarchy<GROUP_T> createReducedAbN(GROUP_T rootGroup, HashMap<Integer, GROUP_T> groups, 
-            HashMap<Integer, HashSet<Integer>> groupHierarchy, int minGroupSize, int maxGroupSize) {
-        
+            GroupHierarchy<GROUP_T> groupHierarchy, int minGroupSize, int maxGroupSize) {
         
         HashMap<GROUP_T, HashSet<Integer>> reducedParents = new HashMap<GROUP_T, HashSet<Integer>>();
         
-        HashMap<GROUP_T, ConceptGroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<GROUP_T, ConceptGroupHierarchy<GROUP_T>>();
+        HashMap<GROUP_T, GroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<GROUP_T, GroupHierarchy<GROUP_T>>();
         
-        HashMap<Integer, HashSet<Integer>> reducedGroupHierarchy = new HashMap<Integer, HashSet<Integer>>();
+        GroupHierarchy<GROUP_T> reducedGroupHierarchy = new GroupHierarchy(rootGroup);
         
         HashMap<Integer, Integer> groupParentCounts = new HashMap<Integer, Integer>();
         
@@ -41,11 +41,9 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
         }
         
         for (GROUP_T group : remainingGroups) {
-            reducedGroupMembers.put(group, new ConceptGroupHierarchy<GROUP_T>(group));
+            reducedGroupMembers.put(group, new GroupHierarchy<GROUP_T>(group));
 
             reducedParents.put(group, new HashSet<Integer>());
-
-            reducedGroupHierarchy.put(group.getId(), new HashSet<Integer>());
         }
         
         Queue<GROUP_T> queue = new LinkedList<GROUP_T>();
@@ -67,7 +65,7 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
                     for(GROUP_T reducedGroup : parentReducedGroups) {
                         reducedParents.get(group).add(reducedGroup.getId());
                         
-                        reducedGroupHierarchy.get(reducedGroup.getId()).add(group.getId());
+                        reducedGroupHierarchy.addIsA(group, parentGroup);
                     }
                 }
                 
@@ -88,16 +86,16 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
                 }
             }
 
-            HashSet<Integer> childGroupIds = groupHierarchy.get(group.getId());
+            HashSet<GROUP_T> childGroups = groupHierarchy.getChildren(group);
 
-            if (!childGroupIds.isEmpty()) {
-                for (int childGroupId : childGroupIds) {
-                    int childParentCount = groupParentCounts.get(childGroupId);
+            if (!childGroups.isEmpty()) {
+                for (GROUP_T childGroup : childGroups) {
+                    int childParentCount = groupParentCounts.get(childGroup.getId());
                     
                     if(childParentCount - 1 == 0) {
-                        queue.add(groups.get(childGroupId));
+                        queue.add(childGroup);
                     } else {
-                        groupParentCounts.put(childGroupId, childParentCount - 1);
+                        groupParentCounts.put(childGroup.getId(), childParentCount - 1);
                     }
                 }
             }
@@ -113,5 +111,5 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
         return new ReducedAbNHierarchy<GROUP_T>(reducedGroups, reducedGroupHierarchy);
     }
     
-    protected abstract GROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, ConceptGroupHierarchy<GROUP_T> reducedGroupHierarchy);
+    protected abstract GROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, GroupHierarchy<GROUP_T> reducedGroupHierarchy);
 }

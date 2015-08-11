@@ -1,11 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public abstract class GenericPAreaTaxonomy<
             PAREA_T rootPArea,
             ArrayList<AREA_T> areas,
             HashMap<Integer, PAREA_T> pareas,
-            HashMap<Integer, HashSet<Integer>> pareaHierarchy) {
+            GroupHierarchy<PAREA_T> pareaHierarchy) {
 
         super(areas, pareas, pareaHierarchy);
 
@@ -106,7 +106,7 @@ public abstract class GenericPAreaTaxonomy<
             
             HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>>();
             
-            PAREA_T originalRoot = (PAREA_T)((ReducingGroup)parea).getReducedGroupHierarchy().getRoot();
+            PAREA_T originalRoot = (PAREA_T)((ReducingGroup)parea).getReducedGroupHierarchy().getRoots().iterator().next();
             
             HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
             
@@ -128,7 +128,12 @@ public abstract class GenericPAreaTaxonomy<
             parea.setParentPAreaInfo(reducedParentInfo);
         }
         
-        TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)generator.createPAreaTaxonomy(conceptHierarchy, reducedPAreas.get(rootPArea.getId()), reducedAreas, reducedPAreas, reducedPAreaHierarchy.reducedGroupHierarchy);
+        TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)generator.createPAreaTaxonomy(
+                conceptHierarchy, 
+                reducedPAreas.get(rootPArea.getId()), 
+                reducedAreas, 
+                reducedPAreas, 
+                reducedPAreaHierarchy.reducedGroupHierarchy);
         
         reducedTaxonomy.setReduced(true);
         

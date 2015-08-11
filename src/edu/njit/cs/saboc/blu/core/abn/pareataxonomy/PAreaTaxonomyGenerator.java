@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,8 +127,6 @@ public abstract class PAreaTaxonomyGenerator<
 
         HashMap<Integer, PAREA_T> pareas = new HashMap<Integer, PAREA_T>();
 
-        HashMap<Integer, HashSet<Integer>> pareaHierarchy = new HashMap<Integer, HashSet<Integer>>();
-
         ArrayList<AREA_T> areas = new ArrayList<AREA_T>();
 
         int areaId = 0;
@@ -152,8 +151,6 @@ public abstract class PAreaTaxonomyGenerator<
             for (CONCEPT_T childPArea : childPAreas) {
                 childIds.add(partialAreaIds.get(childPArea));
             }
-
-            pareaHierarchy.put(id, childIds);
 
             PAREA_T parea = createPArea(id, partialAreas.get(root), parentIds, conceptRelationships.get(root));
 
@@ -181,6 +178,8 @@ public abstract class PAreaTaxonomyGenerator<
             }
         }
         
+        GroupHierarchy<PAREA_T> pareaHierarchy = new GroupHierarchy<>(rootPArea);
+        
         for(PAREA_T parea : pareas.values()) {
             CONCEPT_T root = parea.getHierarchy().getRoot();
             
@@ -193,6 +192,8 @@ public abstract class PAreaTaxonomyGenerator<
                 
                 for(CONCEPT_T parentPAreaRoot : parentPAreaRoots) {
                     int parentPAreaId = partialAreaIds.get(parentPAreaRoot);
+                    
+                    pareaHierarchy.addIsA(parea, pareas.get(parentPAreaId));
                     
                     parentPAreaInfo.add(new GenericParentPAreaInfo<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
                 }
@@ -220,5 +221,5 @@ public abstract class PAreaTaxonomyGenerator<
     protected abstract TAXONOMY_T createPAreaTaxonomy(
             HIERARCHY_T conceptHierarchy, PAREA_T rootPArea, 
             ArrayList<AREA_T> areas, HashMap<Integer, PAREA_T> pareas, 
-            HashMap<Integer, HashSet<Integer>> pareaHierarchy);
+            GroupHierarchy<PAREA_T> pareaHierarchy);
 }

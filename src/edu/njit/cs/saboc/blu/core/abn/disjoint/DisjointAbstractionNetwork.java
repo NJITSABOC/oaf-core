@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +30,7 @@ public abstract class DisjointAbstractionNetwork<
     
     public DisjointAbstractionNetwork(PARENTABN_T abstractionNetwork, 
             HashMap<Integer, DISJOINTGROUP_T> disjointGroups, 
-            HashMap<Integer, HashSet<Integer>> groupHierarchy,
+            GroupHierarchy<DISJOINTGROUP_T> groupHierarchy,
             int levels,
             HashSet<GROUP_T> allGroups,
             HashSet<GROUP_T> overlappingGroups) {

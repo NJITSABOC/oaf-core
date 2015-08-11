@@ -66,14 +66,14 @@ public class GenericGroupEditMenu extends JPopupMenu {
             public void actionPerformed(ActionEvent me) {
                 int currentSummaryId = group.getId();
 
-                HashSet<Integer> pareaChildren = graph.getAbstractionNetwork().getGroupChildren(currentSummaryId);
+                HashSet<GenericConceptGroup> pareaChildren = graph.getAbstractionNetwork().getChildGroups(group);
 
                 if (pareaChildren != null) {
-                    for (int cid : pareaChildren) {
-                        if (graph.getGroupEntries().containsKey(cid) && !graph.edgeAlreadyDrawn(cid, currentSummaryId)
-                                && graph.getGroupEntries().get(cid).getGroupLevelParent().getParentPartition().isVisible()) {
+                    for (GenericConceptGroup child : pareaChildren) {
+                        if (graph.getGroupEntries().containsKey(child.getId()) && !graph.edgeAlreadyDrawn(child.getId(), currentSummaryId)
+                                && graph.getGroupEntries().get(child.getId()).getGroupLevelParent().getParentPartition().isVisible()) {
                             
-                            graph.drawRoutedEdge(cid, currentSummaryId);
+                            graph.drawRoutedEdge(child.getId(), currentSummaryId);
                         }
                     }
                 }

@@ -200,8 +200,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
-        
-        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 100), new Dimension(600, 600));
+        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 20), new Dimension(600, 750));
         
         if(groupOptionsConfiguration != null && groupOptionsConfiguration.getNavigatePanel().isPresent()) {
             JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
@@ -812,9 +811,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
-        groupDetailsPanel.setContents(entry.getGroup());
+        if (groupDetailsPanel != null) {
+            groupDetailsPanel.setContents(entry.getGroup());
+        }
     }
-    
+
      /**
      * Section for handling mouse clicks
      */

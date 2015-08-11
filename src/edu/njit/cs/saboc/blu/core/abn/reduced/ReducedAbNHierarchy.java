@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.reduced;
 
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -11,9 +11,9 @@ import java.util.HashSet;
 public class ReducedAbNHierarchy<GROUP_T extends GenericConceptGroup> {
     public final HashMap<Integer, GROUP_T> reducedGroups;
     
-    public final HashMap<Integer, HashSet<Integer>> reducedGroupHierarchy;
+    public final GroupHierarchy<GROUP_T> reducedGroupHierarchy;
     
-    public ReducedAbNHierarchy(HashMap<Integer, GROUP_T> reducedGroups, HashMap<Integer, HashSet<Integer>> reducedGroupHierarchy) {
+    public ReducedAbNHierarchy(HashMap<Integer, GROUP_T> reducedGroups, GroupHierarchy<GROUP_T> reducedGroupHierarchy) {
         this.reducedGroups = reducedGroups;
         this.reducedGroupHierarchy = reducedGroupHierarchy;
     }

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Stack;
 
 /**
  *
@@ -18,11 +17,12 @@ import java.util.Stack;
 public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
 
     protected HashMap<Integer, GROUP_T> groups;
-    protected HashMap<Integer, HashSet<Integer>> groupHierarchy;
+
+    protected GroupHierarchy<GROUP_T> groupHierarchy;
     
     protected AbstractionNetwork(
             HashMap<Integer, GROUP_T> groups,
-            HashMap<Integer, HashSet<Integer>> groupHierarchy) {
+            GroupHierarchy<GROUP_T> groupHierarchy) {
 
         this.groups = groups;
         this.groupHierarchy = groupHierarchy;
@@ -32,45 +32,6 @@ public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
         return groups.keySet().size();
     }
 
-    public HashSet<Integer> getGroupChildren(int groupId) {
-        HashSet<Integer> children = groupHierarchy.get(groupId);
-        
-        if(children == null) {
-            return new HashSet<Integer>();
-        }
-        
-        return children;
-    }
-
-    public HashSet<Integer> getGroupDescendants(int groupId) {
-        HashSet<Integer> descendents = new HashSet<Integer>();
-
-        Stack<Integer> stack = new Stack<Integer>();
-
-        if (groupHierarchy.containsKey(groupId) && groupHierarchy.get(groupId) != null) {
-            stack.addAll(groupHierarchy.get(groupId));
-        }
-
-        while (!stack.isEmpty()) {
-            int descendentId = stack.pop();
-
-            descendents.add(descendentId);
-
-            HashSet<Integer> children = groupHierarchy.get(descendentId);
-
-            if (children != null) {
-                for (int child : children) {
-                    if (!descendents.contains(child) && !stack.contains(child)) {
-                        stack.add(child);
-                    }
-                }
-            }
-
-        }
-
-        return descendents;
-    }
-    
     public GROUP_T getGroupFromRootConceptId(long rootConceptId) {
         for (GROUP_T group : groups.values()) {
             if (group.getRoot().getId() == rootConceptId) {
@@ -109,27 +70,15 @@ public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
         return groups;
     }
     
-    public HashSet<GROUP_T> getChildGroups(GROUP_T group) {
-        HashSet<GROUP_T> childGroups = new HashSet<>();
-        
-        HashSet<Integer> childIds = groupHierarchy.get(group.getId());
-        
-        childIds.forEach( (Integer childId) -> {
-            childGroups.add(groups.get(childId));
-        });
-        
-        return childGroups;
+    public HashSet<GROUP_T> getChildGroups(GROUP_T group) {       
+        return groupHierarchy.getChildren(group);
     }
     
     public HashSet<GROUP_T> getParentGroups(GROUP_T group) {
-        HashSet<GROUP_T> parentGroups = new HashSet<>();
-
-        HashSet<Integer> parentIds = group.getParentIds();
-
-        parentIds.forEach((Integer childId) -> {
-            parentGroups.add(groups.get(childId));
-        });
-
-        return parentGroups;
+        return groupHierarchy.getParents(group);
+    }
+    
+    public HashSet<GROUP_T> getDescendantGroups(GROUP_T group) {
+        return groupHierarchy.getSubhierarchyRootedAt(group).getDescendants(group);
     }
 }

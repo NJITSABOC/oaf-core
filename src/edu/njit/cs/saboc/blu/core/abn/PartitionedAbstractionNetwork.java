@@ -4,7 +4,6 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  *
@@ -18,7 +17,7 @@ public abstract class PartitionedAbstractionNetwork<
     
     public PartitionedAbstractionNetwork(ArrayList<CONTAINER_T> containers,
             HashMap<Integer, GROUP_T> groups,
-            HashMap<Integer, HashSet<Integer>> groupHierarchy) {
+            GroupHierarchy<GROUP_T> groupHierarchy) {
         
         super(groups, groupHierarchy);
         
@@ -32,5 +31,4 @@ public abstract class PartitionedAbstractionNetwork<
     public ArrayList<CONTAINER_T> getContainers() {
         return containers;
     }
-
 }

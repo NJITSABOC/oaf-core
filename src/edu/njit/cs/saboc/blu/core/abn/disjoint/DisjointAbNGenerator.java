@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
@@ -241,11 +242,8 @@ public abstract class DisjointAbNGenerator<
         }
         
         HashMap<Integer, DISJOINTGROUP_T> disjointGroups = new HashMap<>();
-        HashMap<Integer, HashSet<Integer>> disjointGroupHierarchy = new HashMap<>();
         
-        for(int disjointGroupId : disjointGroupIds.values()) {
-            disjointGroupHierarchy.put(disjointGroupId, new HashSet<>());
-        }
+        HashSet<DISJOINTGROUP_T> rootGroups = new HashSet<DISJOINTGROUP_T>();
         
         for(CONCEPT_T disjointGroupRoot : disjointGroupIds.keySet()) {
             
@@ -259,16 +257,23 @@ public abstract class DisjointAbNGenerator<
             
             parentGroupRoots.forEach((CONCEPT_T parentGroupRoot) -> {
                 int parentGroupId = disjointGroupIds.get(parentGroupRoot);
-                
-                disjointGroupHierarchy.get(parentGroupId).add(currentGroupId);
-                
                 parentIds.add(parentGroupId);
             });
 
             disjointGroups.put(currentGroupId, createDisjointGroup(currentGroupId, groupHierarchy, parentIds, overlapsIn));
         }
         
-        return createDisjointAbN(parentAbN, disjointGroups, disjointGroupHierarchy, maxOverlap, groups, identifiedOverlappingGroups);
+        GroupHierarchy<DISJOINTGROUP_T> groupHierarchy = new GroupHierarchy<>(rootGroups);
+        
+        disjointGroups.values().forEach((DISJOINTGROUP_T group) -> {
+            HashSet<Integer> parentGroupIds = group.getParentIds();
+            
+            parentGroupIds.forEach((Integer parentId) -> {
+               groupHierarchy.addIsA(group, disjointGroups.get(parentId));
+            });
+        });
+
+        return createDisjointAbN(parentAbN, disjointGroups, groupHierarchy, maxOverlap, groups, identifiedOverlappingGroups);
     }
     
     protected abstract HIERARCHY_T createConceptHierarchy(CONCEPT_T root);
@@ -285,7 +290,7 @@ public abstract class DisjointAbNGenerator<
     protected abstract DISJOINTABN_T createDisjointAbN(
             PARENTABN_T abstractionNetwork, 
             HashMap<Integer, DISJOINTGROUP_T> disjointGroups, 
-            HashMap<Integer, HashSet<Integer>> groupHierarchy,
+            GroupHierarchy<DISJOINTGROUP_T> groupHierarchy,
             int levels,
             HashSet<GROUP_T> allGroups,
             HashSet<GROUP_T> overlappingGroups);

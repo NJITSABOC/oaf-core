@@ -55,5 +55,19 @@ public abstract class GenericPArea<
         return new ArrayList<CONCEPT_T>(conceptHierarchy.getNodesInHierarchy());
     }
     
+    public boolean equals(Object o) {
+        if(o instanceof GenericPArea) {
+            GenericPArea otherPArea = (GenericPArea)o;
+            
+            return otherPArea.getRoot().getId() == this.getRoot().getId();
+        }
+        
+        return false;
+    }
+    
+    public int hashCode() {
+        return Long.hashCode(this.getRoot().getId());
+    }
+    
     public abstract HashSet<REL_T> getRelsWithoutInheritanceInfo();
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -155,7 +156,7 @@ public class FilterableTablePanel extends JPanel {
         table.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
-                if (!e.isControlDown() && !e.isAltDown()) {
+                if (!e.isControlDown() && !e.isAltDown() && !e.isShiftDown() && !e.isActionKey()) {
                     if(!filterPanel.isVisible())
                         setFilterPanelOpen(true, e);
                     else {
@@ -179,7 +180,9 @@ public class FilterableTablePanel extends JPanel {
         
         RowFilter<TableModel, Object> rf = null;
         try {
-            rf = RowFilter.regexFilter("(?i)" + filterField.getText());
+            String s = filterField.getText();
+            s = Pattern.quote(s);
+            rf = RowFilter.regexFilter("(?i)" + s);
         }   catch (java.util.regex.PatternSyntaxException e) {
             System.out.println(e.toString());
             return;

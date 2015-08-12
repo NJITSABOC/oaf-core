@@ -15,26 +15,26 @@ import javax.swing.JTable;
  *
  * @author Chris O
  */
-public abstract class AbstractConceptList<T> extends JPanel {
-    private final JTable conceptListTable;
+public abstract class AbstractEntityList<T> extends JPanel {
+    private final JTable entityTable;
     
     private BLUAbstractTableModel<T> tableModel = null;
     
-    protected AbstractConceptList() {
+    protected AbstractEntityList() {
         super(new BorderLayout());
 
-        this.conceptListTable = new JTable();
-        this.conceptListTable.setFont(conceptListTable.getFont().deriveFont(Font.PLAIN, 14));
+        this.entityTable = new JTable();
+        this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         
-        this.add(new JScrollPane(conceptListTable), BorderLayout.CENTER);
+        this.add(new JScrollPane(entityTable), BorderLayout.CENTER);
         
         setBorderText(getBorderText(Optional.empty()));
     }
     
-    public void setContents(ArrayList<T> concepts) {
-        tableModel.setContents(concepts);
+    public void setContents(ArrayList<T> entities) {
+        tableModel.setContents(entities);
         
-        setBorderText(getBorderText(Optional.of(concepts)));
+        setBorderText(getBorderText(Optional.of(entities)));
     }
     
     public void clearContents() {
@@ -42,12 +42,12 @@ public abstract class AbstractConceptList<T> extends JPanel {
     }
     
     public void initUI() {
-        conceptListTable.setModel(tableModel = createTableModel());
+        entityTable.setModel(tableModel = createTableModel());
     }
 
     protected abstract BLUAbstractTableModel<T> createTableModel();
     
-    protected abstract String getBorderText(Optional<ArrayList<T>> concepts);
+    protected abstract String getBorderText(Optional<ArrayList<T>> entities);
     
     private final void setBorderText(String text) {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), text));

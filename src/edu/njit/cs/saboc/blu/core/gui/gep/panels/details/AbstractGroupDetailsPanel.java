@@ -21,7 +21,7 @@ public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGr
 
     private AbstractGroupOptionsPanel<GROUP_T> optionsMenuPanel;
 
-    private AbstractConceptList<CONCEPT_T> groupConceptList;
+    private AbstractEntityList<CONCEPT_T> groupConceptList;
 
     private final JSplitPane splitPane;
 
@@ -90,5 +90,5 @@ public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGr
     
     protected abstract ArrayList<CONCEPT_T> getSortedConceptList(GROUP_T conceptGroup);
     
-    protected abstract AbstractConceptList<CONCEPT_T> createGroupConceptList();
+    protected abstract AbstractEntityList<CONCEPT_T> createGroupConceptList();
 }

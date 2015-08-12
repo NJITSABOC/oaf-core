@@ -117,6 +117,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private JButton moveLeftBtn;
     private JButton moveRightBtn;
 
+    private final Point slideoutOffset = new Point(0, 20);
+    
     private GenericSlideoutPanel slideoutPanel;
 
     private Point targetEntryPoint = null;
@@ -200,7 +202,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
-        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + 20), new Dimension(600, 750));
+        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + slideoutOffset.y), new Dimension(600, 700));
         
         if(groupOptionsConfiguration != null && groupOptionsConfiguration.getNavigatePanel().isPresent()) {
             JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
@@ -357,9 +359,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             EnhancedGraphExplorationPanel.this.getHeight());
                 
                 if(slideoutPanel.isHidden()) {
-                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getCollapsedSize(), 100);
+                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getCollapsedSize(), slideoutOffset.y);
                 } else {
-                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getWidth(), 100);
+                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getWidth(), slideoutOffset.y);
                 }
                 
                 EnhancedGraphExplorationPanel.this.requestRedraw();

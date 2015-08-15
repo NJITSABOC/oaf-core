@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,9 +17,11 @@ import javax.swing.JTable;
  * @author Chris O
  */
 public abstract class AbstractEntityList<T> extends JPanel {
-    private final JTable entityTable;
+    protected final JTable entityTable;
     
-    private BLUAbstractTableModel<T> tableModel = null;
+    protected BLUAbstractTableModel<T> tableModel = null;
+    
+    private JPanel optionsPanel;
     
     protected AbstractEntityList() {
         super(new BorderLayout());
@@ -27,6 +30,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         
         this.add(new JScrollPane(entityTable), BorderLayout.CENTER);
+        
+        optionsPanel = new JPanel();
+        this.add(optionsPanel, BorderLayout.SOUTH);
         
         setBorderText(getBorderText(Optional.empty()));
     }
@@ -43,6 +49,10 @@ public abstract class AbstractEntityList<T> extends JPanel {
     
     public void initUI() {
         entityTable.setModel(tableModel = createTableModel());
+    }
+    
+    protected void addOptionButton(JButton btn) {
+        optionsPanel.add(btn);
     }
 
     protected abstract BLUAbstractTableModel<T> createTableModel();

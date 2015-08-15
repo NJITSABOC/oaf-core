@@ -281,7 +281,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
         return partitions;
     }
 
-    protected GenericGroupContainer getGroupContainer() {
+    public GenericGroupContainer getGroupContainer() {
         return container;
     }
 

@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import SnomedShared.generic.GenericConceptGroup;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -15,52 +14,52 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
  *
  * @author Chris O
  */
-public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGroup, CONCEPT_T> extends GroupInformationPanel<GROUP_T> {
+public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNodeInformationPanel<NODE_T> {
     
-    private AbstractGroupSummaryPanel<GROUP_T> groupSummaryPanel;
+    private AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel;
 
-    private AbstractGroupOptionsPanel<GROUP_T> optionsMenuPanel;
+    private AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel;
 
-    private AbstractEntityList<CONCEPT_T> groupConceptList;
+    private AbstractEntityList<CONCEPT_T> nodeConceptList;
 
     private final JSplitPane splitPane;
 
-    public AbstractGroupDetailsPanel() {
+    public AbstractNodeDetailsPanel() {
         this.setLayout(new BorderLayout());
 
-        this.splitPane = AbstractGroupDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
 
         this.add(splitPane, BorderLayout.CENTER);
     }
     
     public void initUI() {
         
-        this.groupSummaryPanel = createGroupSummaryPanel();
-        this.optionsMenuPanel = createOptionsPanel();
-        this.groupConceptList = createGroupConceptList();
+        this.nodeSummaryPanel = createGroupSummaryPanel();
+        this.nodeOptionsMenuPanel = createOptionsPanel();
+        this.nodeConceptList = createGroupConceptList();
         
-        groupSummaryPanel.initUI();
-        optionsMenuPanel.initUI();
-        groupConceptList.initUI();
+        nodeSummaryPanel.initUI();
+        nodeOptionsMenuPanel.initUI();
+        nodeConceptList.initUI();
         
         JPanel upperPanel = new JPanel(new BorderLayout());
-        upperPanel.add(groupSummaryPanel, BorderLayout.NORTH);
-        upperPanel.add(optionsMenuPanel, BorderLayout.SOUTH);
+        upperPanel.add(nodeSummaryPanel, BorderLayout.NORTH);
+        upperPanel.add(nodeOptionsMenuPanel, BorderLayout.SOUTH);
         
         splitPane.setTopComponent(upperPanel);
-        splitPane.setBottomComponent(groupConceptList);
+        splitPane.setBottomComponent(nodeConceptList);
     }
     
-    public void setContents(GROUP_T conceptGroup) {
-        groupSummaryPanel.setContents(conceptGroup);
-        optionsMenuPanel.setContents(conceptGroup);
-        groupConceptList.setContents(getSortedConceptList(conceptGroup));
+    public void setContents(NODE_T conceptGroup) {
+        nodeSummaryPanel.setContents(conceptGroup);
+        nodeOptionsMenuPanel.setContents(conceptGroup);
+        nodeConceptList.setContents(getSortedConceptList(conceptGroup));
     }
     
     public void clearContents() {
-        groupSummaryPanel.clearContents();
-        optionsMenuPanel.clearContents();
-        groupConceptList.clearContents();
+        nodeSummaryPanel.clearContents();
+        nodeOptionsMenuPanel.clearContents();
+        nodeConceptList.clearContents();
     }
     
     public static JSplitPane createStyledSplitPane(int alignment) {
@@ -84,11 +83,11 @@ public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGr
         return splitPane;
     }
         
-    protected abstract AbstractGroupSummaryPanel<GROUP_T> createGroupSummaryPanel();
+    protected abstract AbstractNodeSummaryPanel<NODE_T> createGroupSummaryPanel();
     
-    protected abstract AbstractGroupOptionsPanel<GROUP_T> createOptionsPanel();
+    protected abstract AbstractNodeOptionsPanel<NODE_T> createOptionsPanel();
     
-    protected abstract ArrayList<CONCEPT_T> getSortedConceptList(GROUP_T conceptGroup);
+    protected abstract ArrayList<CONCEPT_T> getSortedConceptList(NODE_T conceptGroup);
     
     protected abstract AbstractEntityList<CONCEPT_T> createGroupConceptList();
 }

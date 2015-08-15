@@ -14,22 +14,22 @@ import javax.swing.JPanel;
  *
  * @author Den
  */
-public abstract class AbstractGroupSummaryPanel<T extends GenericConceptGroup> extends GroupInformationPanel<T> {
+public abstract class AbstractNodeSummaryPanel<NODE_T> extends AbNNodeInformationPanel<NODE_T> {
 
-    private final JEditorPane groupDetailsPane;
+    private final JEditorPane nodeDetailsPane;
     
-    public AbstractGroupSummaryPanel() {
+    public AbstractNodeSummaryPanel() {
         
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
-        groupDetailsPane = new JEditorPane();
-        groupDetailsPane.setContentType("text/html");
-        groupDetailsPane.setEnabled(true);
-        groupDetailsPane.setEditable(false);
-        groupDetailsPane.setFont(groupDetailsPane.getFont().deriveFont(Font.BOLD, 14));
+        nodeDetailsPane = new JEditorPane();
+        nodeDetailsPane.setContentType("text/html");
+        nodeDetailsPane.setEnabled(true);
+        nodeDetailsPane.setEditable(false);
+        nodeDetailsPane.setFont(nodeDetailsPane.getFont().deriveFont(Font.BOLD, 14));
 
         JPanel detailsPanel = new JPanel(new BorderLayout());
-        detailsPanel.add(groupDetailsPane, BorderLayout.CENTER);
+        detailsPanel.add(nodeDetailsPane, BorderLayout.CENTER);
         detailsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Details"));
         detailsPanel.setMinimumSize(new Dimension(-1, 100));
         detailsPanel.setPreferredSize(new Dimension(-1, 100));
@@ -37,13 +37,13 @@ public abstract class AbstractGroupSummaryPanel<T extends GenericConceptGroup> e
         this.add(detailsPanel);
     }
     
-    protected abstract String createDescriptionStr(T group);
+    protected abstract String createDescriptionStr(NODE_T group);
     
-    public void setContents(T group) {
-        groupDetailsPane.setText(createDescriptionStr(group));
+    public void setContents(NODE_T group) {
+        nodeDetailsPane.setText(createDescriptionStr(group));
     }
     
     public void clearContents() {
-        groupDetailsPane.setText("");
+        nodeDetailsPane.setText("");
     }
 }

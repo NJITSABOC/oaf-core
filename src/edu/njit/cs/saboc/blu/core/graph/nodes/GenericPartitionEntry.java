@@ -6,14 +6,11 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
-import javax.swing.Popup;
 import javax.swing.SwingConstants;
 
 /**

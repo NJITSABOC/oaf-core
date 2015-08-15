@@ -19,7 +19,7 @@ import javax.swing.JTable;
  *
  * @author Chris O
  */
-public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends GenericConceptGroup> extends GroupInformationPanel<GROUP_T> {
+public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends GenericConceptGroup> extends AbNNodeInformationPanel<GROUP_T> {
 
     private final JSplitPane splitPane;
     
@@ -51,7 +51,7 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
         bottomPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Children"));
         bottomPanel.add(new JScrollPane(childGroupTable), BorderLayout.CENTER);
         
-        splitPane = AbstractGroupDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         splitPane.setTopComponent(topPanel);
         splitPane.setBottomComponent(bottomPanel);

@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
 
 /**
  *
@@ -13,5 +13,8 @@ public abstract class BLUGraphConfiguration {
     }
     
     public abstract boolean hasGroupDetailsPanel();
-    public abstract AbstractGroupPanel createGroupDetailsPanel();
+    public abstract AbstractNodePanel createGroupDetailsPanel();
+    
+    public abstract boolean hasContainerDetailsPanel();
+    public abstract AbstractNodePanel createContainerDetailsPanel();
 }

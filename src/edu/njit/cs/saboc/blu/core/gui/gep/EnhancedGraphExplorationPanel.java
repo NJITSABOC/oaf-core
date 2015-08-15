@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
 import SnomedShared.generic.GenericConceptGroup;
+import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
@@ -12,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
@@ -46,7 +47,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
@@ -119,7 +119,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private GenericSlideoutPanel slideoutPanel;
     
-    private Optional<AbstractGroupPanel> groupDetailsPanel;
+    private Optional<AbstractNodePanel> groupDetailsPanel;
+    
+    private Optional<AbstractNodePanel> containerDetailsPanel;
 
     private Point targetEntryPoint = null;
 
@@ -206,16 +208,19 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         if(uiConfiguration.hasGroupDetailsPanel()) {
             groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
-            
-            slideoutPanel.setContent(groupDetailsPanel.get());
-
             groupDetailsPanel.get().initUI();
         } else {
             this.groupDetailsPanel = Optional.empty();
         }
         
-        this.add(slideoutPanel);
+        if(uiConfiguration.hasContainerDetailsPanel()) {
+            containerDetailsPanel = Optional.of(uiConfiguration.createContainerDetailsPanel());
+            containerDetailsPanel.get().initUI();
+        } else {
+            this.containerDetailsPanel = Optional.empty();
+        }
         
+        this.add(slideoutPanel);
 
         this.add(moveUpBtn);
         this.add(moveLeftBtn);
@@ -811,8 +816,14 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
-        if (groupDetailsPanel.isPresent()) {
+        if (groupDetailsPanel.isPresent()) {           
             groupDetailsPanel.get().setContents(entry.getGroup());
+            
+            slideoutPanel.setContent(groupDetailsPanel.get());
+
+            if (slideoutPanel.isHidden()) {
+                slideoutPanel.doOpen();
+            }
         }
     }
 
@@ -820,7 +831,19 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
-        
+
+        if (containerDetailsPanel.isPresent()) {
+            GenericContainerEntry parentEntry = entry.getParentContainer();
+            GenericGroupContainer container = parentEntry.getGroupContainer();
+
+            containerDetailsPanel.get().setContents(container);
+
+            slideoutPanel.setContent(containerDetailsPanel.get());
+
+            if (slideoutPanel.isHidden()) {
+                slideoutPanel.doOpen();
+            }
+        }
     }
 
     private void handleClickOutsideAnyGroupEntry() {
@@ -829,6 +852,18 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             groupDetailsPanel.get().clearContents();
         }
         
+        if(containerDetailsPanel.isPresent()) {
+            containerDetailsPanel.get().clearContents();
+        }
+        
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setOpaque(false);
+        
+        slideoutPanel.setContent(emptyPanel);
+
+        if (!slideoutPanel.isHidden()) {
+            slideoutPanel.doClose();
+        }
         
         targetEntryPoint = null;
     }

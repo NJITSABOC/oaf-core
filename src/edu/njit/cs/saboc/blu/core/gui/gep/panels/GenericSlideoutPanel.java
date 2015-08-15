@@ -63,15 +63,19 @@ public class GenericSlideoutPanel extends JPanel  {
     }
 
     public void setContent(JComponent content) {
+        contentPane.removeAll();
+        
         contentPane.add(content, BorderLayout.CENTER);
+
+        contentPane.validate();
     }
     
-    private void doOpen() {
+    public void doOpen() {
         this.hidden = false;
         this.setBounds(this.getX() - this.getWidth() + COLLAPSED_SIZE, this.getY(), this.getWidth(), this.getHeight());
     }
     
-    private void doClose() {
+    public void doClose() {
         this.hidden = true;
         this.setBounds(this.getX() + this.getWidth() - COLLAPSED_SIZE, this.getY(), this.getWidth(), this.getHeight());
     }

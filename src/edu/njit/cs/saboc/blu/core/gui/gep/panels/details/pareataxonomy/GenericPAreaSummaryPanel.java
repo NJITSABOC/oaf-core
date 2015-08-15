@@ -1,8 +1,8 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.parea;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,11 +15,11 @@ public abstract class GenericPAreaSummaryPanel<
         CONCEPT_T,
         REL_T,
         TAXONOMY_T extends GenericPAreaTaxonomy,
-        PAREA_T extends GenericPArea> extends AbstractGroupSummaryPanel<PAREA_T> {
+        PAREA_T extends GenericPArea> extends AbstractNodeSummaryPanel<PAREA_T> {
     
     protected TAXONOMY_T taxonomy;
     
-    protected GenericPAreaPropertyPanel<REL_T> relationshipPanel;
+    protected GenericTaxonomyPropertyPanel<REL_T> relationshipPanel;
     
     public GenericPAreaSummaryPanel(TAXONOMY_T taxonomy) {
         this.taxonomy = taxonomy;
@@ -79,5 +79,5 @@ public abstract class GenericPAreaSummaryPanel<
     
     protected abstract String getPAreaRootName(PAREA_T parea);
     
-    protected abstract GenericPAreaPropertyPanel<REL_T> createPropertyDetailsPanel();
+    protected abstract GenericTaxonomyPropertyPanel<REL_T> createPropertyDetailsPanel();
 }

@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.parea;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
@@ -35,7 +35,7 @@ public abstract class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea,
         conceptHierarchyPanel.setContents(parea);
     }
     
-    public String getGroupType() {
+    public String getNodeType() {
         return "Partial-area";
     }
     

@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanelConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -44,6 +44,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -61,14 +62,11 @@ import javax.swing.event.ChangeListener;
 public class EnhancedGraphExplorationPanel extends JPanel {
 
     private boolean drawingInitialized = false;
-    
     private boolean gepAlive = true;
     
     private BluGraph graph;
     private Viewport viewport;
-    
-    private AbstractGroupPanel groupDetailsPanel;
-     
+         
     private Timer updateTimer = new Timer(50, new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
             updateNavButtonPressed();
@@ -120,6 +118,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private final Point slideoutOffset = new Point(0, 20);
     
     private GenericSlideoutPanel slideoutPanel;
+    
+    private Optional<AbstractGroupPanel> groupDetailsPanel;
 
     private Point targetEntryPoint = null;
 
@@ -137,7 +137,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private AbNPainter painter;
     
     public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, 
-            GEPActionListener gepActionListener, GroupOptionsPanelConfiguration configuration) {
+            GEPActionListener gepActionListener, BLUGraphConfiguration configuration) {
         
         this.graph = graph;
         this.painter = painter;
@@ -160,7 +160,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.gepAlive = false;
     }
 
-    private void intitializeUIComponents(GroupOptionsPanelConfiguration groupOptionsConfiguration) {
+    private void intitializeUIComponents(BLUGraphConfiguration uiConfiguration) {
 
         zoomSlider = new JSlider(JSlider.VERTICAL, 10, 200, 100);
         zoomSlider.setBounds(10, 10, 40, 150);
@@ -204,16 +204,14 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + slideoutOffset.y), new Dimension(600, 700));
         
-        if(groupOptionsConfiguration != null && groupOptionsConfiguration.getNavigatePanel().isPresent()) {
-            JComponent comp = groupOptionsConfiguration.getNavigatePanel().get();
+        if(uiConfiguration.hasGroupDetailsPanel()) {
+            groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
             
-            slideoutPanel.setContent(comp);
-            
-            if(comp instanceof AbstractGroupPanel) {
-                groupDetailsPanel = (AbstractGroupPanel)comp;
-                groupDetailsPanel.initUI();
-            }
-            
+            slideoutPanel.setContent(groupDetailsPanel.get());
+
+            groupDetailsPanel.get().initUI();
+        } else {
+            this.groupDetailsPanel = Optional.empty();
         }
         
         this.add(slideoutPanel);
@@ -813,8 +811,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
-        if (groupDetailsPanel != null) {
-            groupDetailsPanel.setContents(entry.getGroup());
+        if (groupDetailsPanel.isPresent()) {
+            groupDetailsPanel.get().setContents(entry.getGroup());
         }
     }
 
@@ -827,8 +825,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private void handleClickOutsideAnyGroupEntry() {
         
-        if(groupDetailsPanel != null) {
-            groupDetailsPanel.clearContents();
+        if(groupDetailsPanel.isPresent()) {
+            groupDetailsPanel.get().clearContents();
         }
         
         

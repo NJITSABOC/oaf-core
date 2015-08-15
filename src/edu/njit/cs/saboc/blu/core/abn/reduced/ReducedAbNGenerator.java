@@ -56,16 +56,18 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup> {
 
             if (remainingGroups.contains(group)) {
                 groupSet.get(group).add(group);
-                
+
                 for (int parentGroupId : parentGroupIds) {
                     GROUP_T parentGroup = groups.get(parentGroupId);
-                    
-                    HashSet<GROUP_T> parentReducedGroups = groupSet.get(parentGroup);
-                    
-                    for(GROUP_T reducedGroup : parentReducedGroups) {
-                        reducedParents.get(group).add(reducedGroup.getId());
-                        
-                        reducedGroupHierarchy.addIsA(group, parentGroup);
+
+                    if (parentGroup != null) { // May be mull when creating a Root subtaxonomy. Eventually this needs to be fixed.
+                        HashSet<GROUP_T> parentReducedGroups = groupSet.get(parentGroup);
+
+                        for (GROUP_T reducedGroup : parentReducedGroups) {
+                            reducedParents.get(group).add(reducedGroup.getId());
+
+                            reducedGroupHierarchy.addIsA(group, parentGroup);
+                        }
                     }
                 }
                 

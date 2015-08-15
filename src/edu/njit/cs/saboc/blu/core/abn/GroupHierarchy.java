@@ -4,6 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -17,11 +18,19 @@ public class GroupHierarchy<GROUP_T extends GenericConceptGroup> extends MultiRo
     }
     
     public GroupHierarchy(GROUP_T root) {
-        super(new HashSet<>(Arrays.asList(root)));
+        this(new HashSet<>(Arrays.asList(root)));
+    }
+    
+    public GroupHierarchy(HashSet<GROUP_T> roots, HashMap<GROUP_T, HashSet<GROUP_T>> hierarchy) {
+        super(roots, hierarchy);
+    }
+    
+    public GroupHierarchy(GROUP_T root, HashMap<GROUP_T, HashSet<GROUP_T>> hierarchy) {
+        this(new HashSet<>(Arrays.asList(root)), hierarchy);
     }
     
     @Override
     public SingleRootedHierarchy<GROUP_T, ? extends SingleRootedHierarchy> getSubhierarchyRootedAt(GROUP_T root) {
-        return new SingleRootedGroupHierarchy<GROUP_T>(root);
+        return new SingleRootedGroupHierarchy<GROUP_T>(root, this.children);
     }
 }

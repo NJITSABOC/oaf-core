@@ -18,10 +18,8 @@ public abstract class PAreaTaxonomyGenerator<
         AREA_T extends GenericArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T, // Concept type
-        REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> // Relationship type
-
-{
+        REL_T,// Relationship type
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> {
     
     public TAXONOMY_T derivePAreaTaxonomy() {
         

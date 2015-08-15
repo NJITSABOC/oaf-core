@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn;
 
-import SnomedShared.Concept;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
@@ -21,6 +20,10 @@ public class SingleRootedGroupHierarchy<T extends GenericConceptGroup> extends S
     
     public SingleRootedGroupHierarchy<T> getSubhierarchyRootedAt(T root) {
         return new SingleRootedGroupHierarchy<T>(root, this.children);
+    }
+        
+    public GroupHierarchy<T> asGroupHierarchy() {
+        return new GroupHierarchy<T>(this.getRoot(), this.children);
     }
     
     protected SingleRootedGroupHierarchy<T> createHierarchy(T root) {

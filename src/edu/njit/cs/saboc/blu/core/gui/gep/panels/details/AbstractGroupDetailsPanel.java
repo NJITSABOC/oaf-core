@@ -53,7 +53,7 @@ public abstract class AbstractGroupDetailsPanel<GROUP_T extends GenericConceptGr
     
     public void setContents(GROUP_T conceptGroup) {
         groupSummaryPanel.setContents(conceptGroup);
-        optionsMenuPanel.enableOptionsForGroup(conceptGroup);
+        optionsMenuPanel.setContents(conceptGroup);
         groupConceptList.setContents(getSortedConceptList(conceptGroup));
     }
     

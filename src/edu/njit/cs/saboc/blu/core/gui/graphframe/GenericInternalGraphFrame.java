@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.GroupOptionsPanelConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
@@ -324,7 +324,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     }
     
     protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, GEPActionListener gepActionListener, 
-            GroupOptionsPanelConfiguration groupOptionsConfiguration) {
+            BLUGraphConfiguration groupOptionsConfiguration) {
         
         this.graph = graph;
         

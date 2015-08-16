@@ -15,12 +15,10 @@ public abstract class BLUAbstractTableModel<T> extends AbstractTableModel {
     
     private Object[][] data = new Object[0][0];
             
-    public BLUAbstractTableModel() {
-        this.columnNames = getColumnNames();
+    public BLUAbstractTableModel(String [] columnNames) {
+        this.columnNames = columnNames;
     }
-    
-    protected abstract String[] getColumnNames();
-    
+
     protected abstract Object[] createRow(T item);
     
     public void setContents(ArrayList<T> items) {

@@ -208,14 +208,12 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         if(uiConfiguration.hasGroupDetailsPanel()) {
             groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
-            groupDetailsPanel.get().initUI();
         } else {
             this.groupDetailsPanel = Optional.empty();
         }
         
         if(uiConfiguration.hasContainerDetailsPanel()) {
             containerDetailsPanel = Optional.of(uiConfiguration.createContainerDetailsPanel());
-            containerDetailsPanel.get().initUI();
         } else {
             this.containerDetailsPanel = Optional.empty();
         }

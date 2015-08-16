@@ -8,8 +8,8 @@ import SnomedShared.generic.GenericConceptGroup;
  */
 public abstract class BLUAbstractChildGroupTableModel<GROUP_T extends GenericConceptGroup> extends BLUAbstractTableModel<GROUP_T> {
 
-    public BLUAbstractChildGroupTableModel() {
-        
+    public BLUAbstractChildGroupTableModel(String [] columnNames) {
+        super(columnNames);
     }
     
     public GROUP_T getChildGroup(int row) {

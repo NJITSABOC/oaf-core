@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbNConfiguration;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,9 +26,14 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
     
     private final JTabbedPane tabbedPane;
     
-    private AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> groupDetailsPanel;
+    private final AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel;
+    
+    protected final BLUAbNConfiguration configuration;
 
-    protected AbstractNodePanel() {
+    protected AbstractNodePanel(AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel, BLUAbNConfiguration configuration) {
+        this.configuration = configuration;
+        this.nodeDetailsPanel = nodeDetailsPanel;
+        
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         
@@ -66,6 +72,8 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
         groupNameLabel.setPreferredSize(new Dimension(100, 40));
         
         tabbedPane = new JTabbedPane();
+        
+        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", getNodeType()));
 
         this.add(groupNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);
@@ -86,23 +94,13 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
             gdp.clearContents();
         });
     }
-    
-    public void initUI() {
-        this.groupDetailsPanel = createNodeDetailsPanel();
 
-        addGroupDetailsTab(groupDetailsPanel, String.format("%s Details", getNodeType()));
-        
-        groupDetailsPanel.initUI();
-    }
     
-    public void addGroupDetailsTab(AbNNodeInformationPanel<NODE_T> panel, String tabName) {
+    public final void addGroupDetailsTab(AbNNodeInformationPanel<NODE_T> panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
         groupDetailsPanels.add(panel);
     }
     
     protected abstract String getNodeTitle(NODE_T node);
-    
     protected abstract String getNodeType();
-    
-    protected abstract AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> createNodeDetailsPanel();
 }

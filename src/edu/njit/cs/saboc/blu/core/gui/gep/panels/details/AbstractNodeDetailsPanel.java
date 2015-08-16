@@ -16,31 +16,25 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
  */
 public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNodeInformationPanel<NODE_T> {
     
-    private AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel;
+    private final AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel;
 
-    private AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel;
+    private final AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel;
 
-    private AbstractEntityList<CONCEPT_T> nodeConceptList;
+    private final AbstractEntityList<CONCEPT_T> nodeConceptList;
 
     private final JSplitPane splitPane;
 
-    public AbstractNodeDetailsPanel() {
+    public AbstractNodeDetailsPanel(AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel, 
+            AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel, 
+            AbstractEntityList<CONCEPT_T> nodeConceptList) {
+        
+        this.nodeSummaryPanel = nodeSummaryPanel;
+        this.nodeOptionsMenuPanel = nodeOptionsMenuPanel;
+        this.nodeConceptList = nodeConceptList;
+
         this.setLayout(new BorderLayout());
 
         this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
-
-        this.add(splitPane, BorderLayout.CENTER);
-    }
-    
-    public void initUI() {
-        
-        this.nodeSummaryPanel = createGroupSummaryPanel();
-        this.nodeOptionsMenuPanel = createOptionsPanel();
-        this.nodeConceptList = createGroupConceptList();
-        
-        nodeSummaryPanel.initUI();
-        nodeOptionsMenuPanel.initUI();
-        nodeConceptList.initUI();
         
         JPanel upperPanel = new JPanel(new BorderLayout());
         upperPanel.add(nodeSummaryPanel, BorderLayout.NORTH);
@@ -48,6 +42,8 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         
         splitPane.setTopComponent(upperPanel);
         splitPane.setBottomComponent(nodeConceptList);
+
+        this.add(splitPane, BorderLayout.CENTER);
     }
     
     public void setContents(NODE_T conceptGroup) {
@@ -82,12 +78,6 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         
         return splitPane;
     }
-        
-    protected abstract AbstractNodeSummaryPanel<NODE_T> createGroupSummaryPanel();
-    
-    protected abstract AbstractNodeOptionsPanel<NODE_T> createOptionsPanel();
-    
+            
     protected abstract ArrayList<CONCEPT_T> getSortedConceptList(NODE_T conceptGroup);
-    
-    protected abstract AbstractEntityList<CONCEPT_T> createGroupConceptList();
 }

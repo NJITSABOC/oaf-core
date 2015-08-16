@@ -1,28 +1,35 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbNConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public abstract class AbstractGroupPanel<GROUP_T extends GenericConceptGroup, CONCEPT_T> extends AbstractNodePanel<GROUP_T, CONCEPT_T> {
+public class AbstractGroupPanel<GROUP_T extends GenericConceptGroup, CONCEPT_T> extends AbstractNodePanel<GROUP_T, CONCEPT_T> {
 
-    private AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T> groupHierarchyPanel;
+    private final AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T> groupHierarchyPanel;
 
-    public AbstractGroupPanel() {
+    public AbstractGroupPanel(
+            AbstractNodeDetailsPanel<GROUP_T, CONCEPT_T> groupDetailsPanel, 
+            AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T> groupHierarchyPanel, 
+            BLUAbNConfiguration configuration) {
         
+        super(groupDetailsPanel, configuration);
+        
+        this.groupHierarchyPanel = groupHierarchyPanel;
+
+        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", configuration.getGroupTypeName(false)));
+    }
+    
+    @Override
+    protected String getNodeTitle(GROUP_T node) {
+        return configuration.getGroupName(node);
     }
 
-    public void initUI() {
-        super.initUI();
-        
-        this.groupHierarchyPanel = createGroupHierarchyPanel();
-        
-        groupHierarchyPanel.initUI();
-        
-        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", getNodeType()));
+    @Override
+    protected String getNodeType() {
+        return configuration.getGroupTypeName(false);
     }
-
-    protected abstract AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T> createGroupHierarchyPanel();
 }

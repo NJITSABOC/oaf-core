@@ -8,8 +8,6 @@ import javax.swing.JPanel;
  */
 public abstract class AbNNodeInformationPanel<NODE_T> extends JPanel {
     public abstract void setContents(NODE_T group);
-    
-    public abstract void initUI();
-    
+
     public abstract void clearContents();
 }

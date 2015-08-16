@@ -31,14 +31,17 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
     
     protected BLUAbstractChildGroupTableModel<GROUP_T> childModel;
 
-    public AbstractGroupHierarchyPanel() {
+    public AbstractGroupHierarchyPanel(
+           BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentTableModel,
+           BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
+
         this.setLayout(new BorderLayout());
         
-        parentGroupTable = new JTable();
+        parentGroupTable = new JTable(parentModel = parentTableModel);
         parentGroupTable.setFont(parentGroupTable.getFont().deriveFont(Font.PLAIN, 14));
         parentGroupTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
         
-        childGroupTable = new JTable();
+        childGroupTable = new JTable(childModel = childTableModel);
         childGroupTable.setFont(childGroupTable.getFont().deriveFont(Font.PLAIN, 14));
         childGroupTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
         
@@ -55,6 +58,8 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
         
         splitPane.setTopComponent(topPanel);
         splitPane.setBottomComponent(bottomPanel);
+        
+        splitPane.setDividerLocation(150);
 
         this.add(splitPane, BorderLayout.CENTER);
     }
@@ -66,23 +71,11 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
     }
 
     @Override
-    public void initUI() {
-        parentGroupTable.setModel(parentModel = createParentGroupTableModel());
-        childGroupTable.setModel(childModel = createChildGroupTableModel());
-        
-        splitPane.setDividerLocation(150);
-    }
-    
-    @Override
     public void clearContents() {
         parentModel.setContents(new ArrayList<>());
         childModel.setContents(new ArrayList<>());
-    }
+    }   
     
     protected abstract void loadParentGroupInfo(GROUP_T group);
     protected abstract void loadChildGroupInfo(GROUP_T group);
-    
-    protected abstract BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> createParentGroupTableModel();
-    
-    protected abstract BLUAbstractChildGroupTableModel<GROUP_T> createChildGroupTableModel();
 }

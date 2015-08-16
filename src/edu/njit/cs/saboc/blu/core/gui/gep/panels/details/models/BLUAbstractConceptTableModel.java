@@ -6,8 +6,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
  * @author Chris O
  */
 public abstract class BLUAbstractConceptTableModel<T> extends BLUAbstractTableModel<T> {
-    public BLUAbstractConceptTableModel() {
-        
+    public BLUAbstractConceptTableModel(String [] columnNames) {
+        super(columnNames);
     }
     
     public T getConceptAtRow(int row) {

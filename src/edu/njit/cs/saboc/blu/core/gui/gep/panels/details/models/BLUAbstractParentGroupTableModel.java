@@ -11,8 +11,8 @@ public abstract class BLUAbstractParentGroupTableModel<CONCEPT_T,
         GROUP_T extends GenericConceptGroup, 
         T extends GenericParentGroupInfo<CONCEPT_T, GROUP_T>> extends BLUAbstractTableModel<T>{
 
-    public BLUAbstractParentGroupTableModel() {
-        
+    public BLUAbstractParentGroupTableModel(String [] columnNames) {
+        super(columnNames);
     }
     
     public CONCEPT_T getParentConcept(int row) {

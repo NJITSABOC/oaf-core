@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -17,18 +16,28 @@ public abstract class GenericPAreaSummaryPanel<
         TAXONOMY_T extends GenericPAreaTaxonomy,
         PAREA_T extends GenericPArea> extends AbstractNodeSummaryPanel<PAREA_T> {
     
-    protected TAXONOMY_T taxonomy;
+    protected final TAXONOMY_T taxonomy;
     
-    protected GenericTaxonomyPropertyPanel<REL_T> relationshipPanel;
+    protected GenericRelationshipPanel<REL_T> relationshipPanel;
     
-    public GenericPAreaSummaryPanel(TAXONOMY_T taxonomy) {
+    protected final PAreaTaxonomyConfiguration configuration;
+    
+    public GenericPAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration configuration) {
         this.taxonomy = taxonomy;
+        this.configuration = configuration;
+        
+        this.relationshipPanel = relationshipPanel;
+        this.relationshipPanel.setMaximumSize(new Dimension(10000, 100));
+        this.relationshipPanel.setMinimumSize(new Dimension(-1, 100));
+        this.relationshipPanel.setPreferredSize(new Dimension(-1, 100));
+        
+         this.add(this.relationshipPanel);
     }
     
     public void setContents(PAREA_T parea) {
         super.setContents(parea);
         
-        relationshipPanel.setContents(getPAreaRelationships(parea));
+        relationshipPanel.setContents(configuration.getPAreaRelationships(parea));
     }
     
     public void clearContents() {
@@ -36,25 +45,11 @@ public abstract class GenericPAreaSummaryPanel<
         
         relationshipPanel.clearContents();
     }
-    
-    public void initUI() {
-
-        relationshipPanel = createPropertyDetailsPanel();
-
-        relationshipPanel.initUI();
-
-        relationshipPanel.setMaximumSize(new Dimension(10000, 100));
-        relationshipPanel.setMinimumSize(new Dimension(-1, 100));
-        relationshipPanel.setPreferredSize(new Dimension(-1, 100));
-        
-        this.add(relationshipPanel);
-
-    }
 
     protected String createDescriptionStr(PAREA_T group) {
-        String conceptType = getConceptType();
+        String conceptType = configuration.getConceptTypeName(true);
         
-        String rootName = getPAreaRootName(group);
+        String rootName = configuration.getGroupName(group);
         int classCount = group.getConceptCount();
 
         int parentCount = taxonomy.getParentGroups(group).size();
@@ -72,12 +67,4 @@ public abstract class GenericPAreaSummaryPanel<
                 + "There are a total of %d descendant partial-areas that summarizes %d %s",
                 rootName, classCount, conceptType, parentCount, childCount, descendantPAreas.size(), descendantClasses.size(), conceptType);
     }
-    
-    protected abstract ArrayList<REL_T> getPAreaRelationships(PAREA_T parea);
-    
-    protected abstract String getConceptType();
-    
-    protected abstract String getPAreaRootName(PAREA_T parea);
-    
-    protected abstract GenericTaxonomyPropertyPanel<REL_T> createPropertyDetailsPanel();
 }

@@ -19,8 +19,17 @@ public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends Gene
     
     private JScrollPane scrollPane;
     
-    public PAreaConceptHierarchyPanel() {
+    public PAreaConceptHierarchyPanel(ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel, 
+            PAreaTaxonomyConfiguration configuration) {
+        
         this.setLayout(new BorderLayout());
+        
+        this.conceptHierarchyPanel = conceptHierarchyPanel;
+        
+        scrollPane = new JScrollPane(conceptHierarchyPanel);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        this.add(scrollPane, BorderLayout.CENTER);
     }    
 
     @Override
@@ -29,19 +38,7 @@ public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends Gene
     }
 
     @Override
-    public void initUI() {
-        conceptHierarchyPanel = createConceptHierchyPanel();
-        
-        scrollPane = new JScrollPane(conceptHierarchyPanel);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        this.add(scrollPane, BorderLayout.CENTER);
-    }
-
-    @Override
     public void clearContents() {
         conceptHierarchyPanel.setGroup(null);
     }
-        
-    protected abstract ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> createConceptHierchyPanel();
 }

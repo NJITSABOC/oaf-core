@@ -2,43 +2,39 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 
 /**
  *
  * @author Chris O
  */
-public abstract class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
+public class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbstractGroupPanel<PAREA_T, CONCEPT_T> {
     
-    protected PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> conceptHierarchyPanel;
+    protected final PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> conceptHierarchyPanel;
     
-    protected final String conceptType;
-    
-    public GenericPAreaPanel(String conceptType) {
-        this.conceptType = conceptType;
+    public GenericPAreaPanel(
+            AbstractNodeDetailsPanel<PAREA_T, CONCEPT_T> pareaDetailsPanel, 
+            AbstractGroupHierarchyPanel<CONCEPT_T, PAREA_T> pareaHierarchyPanel,
+            PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> conceptHierarchyPanel,
+            PAreaTaxonomyConfiguration configuration) {
+        
+        super(pareaDetailsPanel, pareaHierarchyPanel, configuration);
+        
+        this.conceptHierarchyPanel = conceptHierarchyPanel;
+          
+        this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy in Partial-area", configuration.getConceptTypeName(false)));
     }
-    
-    public void initUI() {
-        super.initUI();
         
-        conceptHierarchyPanel = createPAreaConceptHierarchyPanel();
-        
-        conceptHierarchyPanel.initUI();
-        
-        this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy in Partial-area", conceptType));
-    }
-    
     public void setContents(PAREA_T parea) {
         super.setContents(parea);
         
         conceptHierarchyPanel.setContents(parea);
     }
     
-    public String getNodeType() {
-        return "Partial-area";
+    public void clearContents() {
+        conceptHierarchyPanel.clearContents();
     }
-    
-    protected abstract PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> createPAreaConceptHierarchyPanel();
-
 }

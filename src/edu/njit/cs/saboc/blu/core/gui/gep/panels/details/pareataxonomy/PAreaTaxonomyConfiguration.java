@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptGroupHierarchicalViewPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
 import java.util.ArrayList;
 import java.util.Comparator;
 

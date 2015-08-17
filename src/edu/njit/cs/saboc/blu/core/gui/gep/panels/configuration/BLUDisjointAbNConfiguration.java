@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;

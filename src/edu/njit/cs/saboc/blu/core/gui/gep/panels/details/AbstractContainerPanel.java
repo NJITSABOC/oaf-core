@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUPartitionedAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ContainerConceptEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
 
 /**
  *

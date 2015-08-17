@@ -26,7 +26,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
     
     protected ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
     
-    private JPanel optionsPanel;
+    private final JPanel optionsPanel;
     
     protected AbstractEntityList(BLUAbstractTableModel<T> tableModel) {
         super(new BorderLayout());

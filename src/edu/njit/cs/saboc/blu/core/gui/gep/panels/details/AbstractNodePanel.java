@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

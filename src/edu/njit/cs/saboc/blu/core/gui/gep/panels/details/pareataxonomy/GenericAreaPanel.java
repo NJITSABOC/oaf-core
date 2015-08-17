@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ContainerConceptEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
 
 /**
  *

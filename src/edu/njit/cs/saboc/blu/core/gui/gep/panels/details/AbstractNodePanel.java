@@ -96,9 +96,15 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
     }
 
     
-    public final void addGroupDetailsTab(AbNNodeInformationPanel<NODE_T> panel, String tabName) {
+    public final int addGroupDetailsTab(AbNNodeInformationPanel<NODE_T> panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
         groupDetailsPanels.add(panel);
+        
+        return tabbedPane.getTabCount() - 1;
+    }
+    
+    public final void enableGroupDetailsTabAt(int index, boolean enabled) {
+        tabbedPane.setEnabledAt(index, enabled);
     }
     
     protected abstract String getNodeTitle(NODE_T node);

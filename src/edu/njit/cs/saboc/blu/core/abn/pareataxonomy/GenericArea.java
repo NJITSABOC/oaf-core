@@ -95,6 +95,26 @@ public abstract class GenericArea<
         return pareas;
     }
     
+    public boolean hasOverlappingConcepts() {
+        HashSet<CONCEPT_T> concepts = new HashSet<>();
+        
+        ArrayList<PAREA_T> pareas = this.getAllPAreas();
+        
+        for(PAREA_T parea : pareas) {
+            ArrayList<CONCEPT_T> pareaConcepts = parea.getConceptsInPArea();
+            
+            for(CONCEPT_T concept : pareaConcepts) {
+                if(concepts.contains(concept)) {
+                    return true;
+                } else {
+                    concepts.add(concept);
+                }
+            }
+        }
+        
+        return false;
+    }
+    
     protected abstract REGION_T createRegion(PAREA_T parea);
    
     

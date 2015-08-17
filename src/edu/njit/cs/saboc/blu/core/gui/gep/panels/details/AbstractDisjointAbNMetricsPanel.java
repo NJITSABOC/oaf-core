@@ -4,7 +4,13 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingDetailsTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingGroupTableModel;
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,93 +18,32 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Chris O
  */
-public abstract class AbstractDisjointAbNMetricsPanel<CONTAINER_T extends GenericGroupContainer,
+public class AbstractDisjointAbNMetricsPanel<
+        CONTAINER_T extends GenericGroupContainer,
         DISJOINTABN_T extends DisjointAbstractionNetwork,
         GROUP_T extends GenericConceptGroup,
         DISJOINTGROUP_T extends DisjointGenericConceptGroup,
         CONCEPT_T> extends AbNNodeInformationPanel<CONTAINER_T> {
     
-
-    //private final IndividualOverlapDetailsTableModel overlappingDetailsModel;
-    
-    protected AbstractDisjointAbNMetricsPanel(DISJOINTABN_T disjointAbN) {
-        /*
-        super(new GridLayout(2, 1));
-        
-        ArrayList<GROUP_T> overlappingGroups = new ArrayList<>(disjointAbN.getOverlappingGroups());
-         
-        /*
-        Collections.sort(overlappingGroups, new Comparator<GROUP_T>() {
-            public int compare(GROUP_T a, GROUP_T b) {
-                int aOverlapCount = metrics.getGroupMetrics().get(a).getOverlappingConceptCount();
-                int bOverlapCount = metrics.getGroupMetrics().get(b).getOverlappingConceptCount();
-                
-                if(aOverlapCount == bOverlapCount) {
-                    return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
-                }
-                
-                return bOverlapCount - aOverlapCount;
-            }
-        });
- 
-        final JTable overlappingGroupTable = new JTable(overlappingGroupModel);
-        
-        overlappingGroupTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int selectedRow = overlappingGroupTable.getSelectedRow();
-                
-                overlappingDetailsModel.update(overlappingGroupModel.getSelectedGroupMetrics(selectedRow));
-            }
-        });
-                
-
-        JPanel overlappingGroupsPanel = new JPanel(new BorderLayout());
-        overlappingGroupsPanel.setBorder(BorderFactory.createTitledBorder("Overlapping Groups"));
-        //overlappingGroupsPanel.add(new JScrollPane(overlappingGroupTable), BorderLayout.CENTER);
-        
-        this.add(overlappingGroupsPanel);
-        
-        this.overlappingDetailsModel = new IndividualOverlapDetailsTableModel();
-        
-        final JTable overlapDetailsTable = new JTable(overlappingDetailsModel);
-        
-        JPanel overlappingDetailsPanel = new JPanel(new BorderLayout());
-        overlappingDetailsPanel.setBorder(BorderFactory.createTitledBorder("Overlap Details"));
-        
-        JTabbedPane overlapDetailsTabs = new JTabbedPane();
-        overlapDetailsTabs.addTab("Individual", new JScrollPane(overlapDetailsTable));
-        overlapDetailsTabs.addTab("Combinations", new JPanel());
-        
-        overlappingDetailsPanel.add(overlapDetailsTabs);
-        
-        this.add(overlappingDetailsPanel);
-        */
-    }
-    
-    protected abstract String getDisjointGroupRootName(DisjointGenericConceptGroup group);
-    
-    protected abstract String [] getOverlapGroupColumnNames();
-
     private class GroupOverlapMetrics {
         
-        private HashMap<HashSet<GROUP_T>, HashSet<DISJOINTGROUP_T>> intersectionGroups;
+        private final HashMap<HashSet<GROUP_T>, HashSet<DISJOINTGROUP_T>> intersectionGroups;
         
-        private GROUP_T overlappingGroup;
+        private final HashSet<CONCEPT_T> overlappingConcepts = new HashSet<>();
         
-        private DISJOINTGROUP_T disjointBasis;
+        private final GROUP_T overlappingGroup;
         
-        private int overlappingConceptCount;
+        private final DISJOINTGROUP_T disjointBasis;
         
         public GroupOverlapMetrics(GROUP_T overlappingGroup, DISJOINTGROUP_T disjointBasis,
                 HashMap<HashSet<GROUP_T>, HashSet<DISJOINTGROUP_T>> intersectionGroups) {
@@ -109,17 +54,13 @@ public abstract class AbstractDisjointAbNMetricsPanel<CONTAINER_T extends Generi
             
             HashSet<DISJOINTGROUP_T> disjointGroups = getAllIntersectionGroups();
             
-            int overlappingConceptCount = 0;
-            
-            for(DisjointGenericConceptGroup group : disjointGroups) {
-                overlappingConceptCount += group.getConceptCount();
+            for(DISJOINTGROUP_T group : disjointGroups) {
+                overlappingConcepts.addAll(group.getConceptsAsList());
             }
-            
-            this.overlappingConceptCount = overlappingConceptCount;
         }
         
-        public int getOverlappingConceptCount() {
-            return overlappingConceptCount;
+        public HashSet<CONCEPT_T> getOverlappingConcepts() {
+            return overlappingConcepts;
         }
         
         public Set<HashSet<GROUP_T>> getIntersections() {
@@ -160,131 +101,132 @@ public abstract class AbstractDisjointAbNMetricsPanel<CONTAINER_T extends Generi
             
             return groups;
         }
-
     }
     
     private class DisjointAbNOverlapMetrics {
-        
-        private HashMap<GROUP_T, GroupOverlapMetrics> groupMetrics = new HashMap<>();
-        
+
+        private final HashMap<GROUP_T, GroupOverlapMetrics> groupMetrics = new HashMap<>();
+
         public DisjointAbNOverlapMetrics(DISJOINTABN_T disjointAbN) {
             HashSet<GROUP_T> overlappingGroups = disjointAbN.getOverlappingGroups();
-            
+
             HashSet<DISJOINTGROUP_T> disjointGroups = disjointAbN.getDisjointGroups();
-            
-            for(GROUP_T group : overlappingGroups) {
-                
+
+            for (GROUP_T group : overlappingGroups) {
+
                 DISJOINTGROUP_T disjointBasis = null;
-                
+
                 HashMap<HashSet<GROUP_T>, HashSet<DISJOINTGROUP_T>> intersectionGroups = new HashMap<>();
-                
-                for(DISJOINTGROUP_T disjointGroup : disjointGroups) {
-                    if(disjointGroup.getOverlaps().contains(group)) {
-                        if(disjointGroup.getOverlaps().size() == 1) {
+
+                for (DISJOINTGROUP_T disjointGroup : disjointGroups) {
+                    if (disjointGroup.getOverlaps().contains(group)) {
+                        if (disjointGroup.getOverlaps().size() == 1) {
                             disjointBasis = disjointGroup;
                         } else {
                             HashSet<GROUP_T> overlaps = disjointGroup.getOverlaps();
-                            
-                            if(!intersectionGroups.containsKey(overlaps)) {
+
+                            if (!intersectionGroups.containsKey(overlaps)) {
                                 intersectionGroups.put(overlaps, new HashSet<>());
                             }
-                            
+
                             intersectionGroups.get(overlaps).add(disjointGroup);
                         }
                     }
                 }
-                
-                
-                groupMetrics.put(group, new GroupOverlapMetrics(group, disjointBasis, intersectionGroups));                
+
+                groupMetrics.put(group, new GroupOverlapMetrics(group, disjointBasis, intersectionGroups));
             }
         }
-        
+
         public HashMap<GROUP_T, GroupOverlapMetrics> getGroupMetrics() {
             return groupMetrics;
         }
     }
+
+    private final JTable overlappingGroupTable;
+    protected final BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel;
     
-    private class IndividualOverlapDetailsTableModel extends AbstractTableModel {
+    
+    private final JTable overlappingDetailsTable;
+    protected final BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
+    
+    protected final BLUDisjointAbNConfiguration configuration;
+    
+    private final JSplitPane splitPane;
 
-        private String[] columnNames;
-
-        private Object[][] data = new Object[0][0];
-
-        public IndividualOverlapDetailsTableModel() {
-            this.columnNames = new String[]{"Overlapping Partial-area", "# Overlapping Concepts", "# Common Disjoint Groups"};
-        }
-
-        public final void update(GroupOverlapMetrics metrics) {
-            
-            HashSet<DISJOINTGROUP_T> intersectionGroups = metrics.getAllIntersectionGroups();
-            
-            final HashMap<GROUP_T, Integer> overlappingConceptCount = new HashMap<>();
-            final HashMap<GROUP_T, Integer> commonDisjointGroupCount = new HashMap<>();
-
-            for (DisjointGenericConceptGroup group : intersectionGroups) {
-                HashSet<GROUP_T> overlappingGroups = group.getOverlaps();
-
-                for (GROUP_T overlappingGroup : overlappingGroups) {
-                    if (!overlappingGroup.equals(metrics.getOverlappingGroup())) {
-                        if (!overlappingConceptCount.containsKey(overlappingGroup)) {
-                            overlappingConceptCount.put(overlappingGroup, 0);
-                            commonDisjointGroupCount.put(overlappingGroup, 1);
-                        }
-                        
-                        overlappingConceptCount.put(overlappingGroup, overlappingConceptCount.get(overlappingGroup) + group.getConceptCount());
-                        
-                        commonDisjointGroupCount.put(overlappingGroup, commonDisjointGroupCount.get(overlappingGroup) + 1);
-                    }
-                }
-            }
-            
-            ArrayList<GROUP_T> overlappingGroups = new ArrayList<>(overlappingConceptCount.keySet());
-            
-            Collections.sort(overlappingGroups, new Comparator<GROUP_T>() {
-                public int compare(GROUP_T a, GROUP_T b) {
-                    int aCount = overlappingConceptCount.get(a);
-                    int bCount = overlappingConceptCount.get(b);
-                    
-                    if(aCount == bCount) {
-                        return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
-                    } else {
-                        return bCount - aCount;
-                    }
-                }
-            });
-            
-            this.data = new Object[overlappingGroups.size()][3];
-            
-            for(int r = 0; r < overlappingGroups.size(); r++) {
-                GROUP_T overlappingGroup = overlappingGroups.get(r);
+    protected AbstractDisjointAbNMetricsPanel(
+            BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel,
+            BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel,
+            BLUDisjointAbNConfiguration configuration) {
+        
+        this.overlappingGroupTableModel = overlappingGroupTableModel;
+        this.overlappingDetailsTableModel = overlappingDetailsTableModel;
+        this.configuration = configuration;
+        
+        this.setLayout(new BorderLayout());
+        
+        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        
+        overlappingGroupTable = new JTable(this.overlappingGroupTableModel);
+        
+        overlappingGroupTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = overlappingGroupTable.getSelectedRow();
                 
-                data[r][0] = overlappingGroup.getRoot().getName();
-                data[r][1] = overlappingConceptCount.get(overlappingGroup);
-                data[r][2] = commonDisjointGroupCount.get(overlappingGroup);
+                if(selectedRow >= 0) {
+                    
+                }
             }
-            
-            this.fireTableDataChanged();
-        }
+        });
 
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-
-        public int getRowCount() {
-            return data.length;
-        }
-
-        public String getColumnName(int col) {
-            return columnNames[col];
-        }
-
-        public Object getValueAt(int row, int col) {
-            return data[row][col];
-        }
-
-        public Class getColumnClass(int c) {
-            return getValueAt(0, c).getClass();
-        }
+        overlappingDetailsTable = new JTable(this.overlappingDetailsTableModel);
+        
+        JTabbedPane overlapDetailsTabs = new JTabbedPane();
+        overlapDetailsTabs.addTab("Individual", new JScrollPane(overlappingDetailsTable));
+        overlapDetailsTabs.addTab("Combinations", new JPanel());
+        
+        splitPane.setTopComponent(new JScrollPane(overlappingGroupTable));
+        splitPane.setBottomComponent(overlapDetailsTabs);
+        
+        this.add(splitPane);
     }
     
+    @Override
+    public void setContents(CONTAINER_T container) {
+        splitPane.setDividerLocation(0.5);
+        
+        /*
+        
+        ArrayList<GROUP_T> overlappingGroups = new ArrayList<>(disjointAbN.getOverlappingGroups());
+        
+        DisjointAbNOverlapMetrics metrics = new DisjointAbNOverlapMetrics(disjointAbN);
+
+        Collections.sort(overlappingGroups, new Comparator<GROUP_T>() {
+            public int compare(GROUP_T a, GROUP_T b) {
+                int aOverlapCount = metrics.getGroupMetrics().get(a).getOverlappingConcepts().size();
+                int bOverlapCount = metrics.getGroupMetrics().get(b).getOverlappingConcepts().size();
+
+                if (aOverlapCount == bOverlapCount) {
+                    return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
+                }
+
+                return bOverlapCount - aOverlapCount;
+            }
+        });
+        
+        ArrayList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> entries = new ArrayList<>();
+        
+        overlappingGroups.forEach((GROUP_T overlappingGroup) -> {
+            entries.add(new OverlappingGroupEntry<>(overlappingGroup, metrics.getGroupMetrics().get(overlappingGroup).getOverlappingConcepts()));
+        });
+        
+        overlappingGroupTableModel.setContents(entries);
+        */
+    }
+
+    @Override
+    public void clearContents() {
+        overlappingGroupTableModel.setContents(new ArrayList<>());
+        overlappingDetailsTableModel.setContents(new ArrayList<>());
+    }
 }

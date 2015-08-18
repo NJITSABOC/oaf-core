@@ -21,7 +21,7 @@ public class NATOptions {
     /**
      * If URIs are displayed in after entries in result lists
      */
-    private boolean urisVisible = false;
+    private boolean urisVisible = true;
     
     /**
      * Current font size of the NAT

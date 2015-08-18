@@ -43,11 +43,22 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
                 entry.getName(),
                 entry.getConceptId());
     }
+    
+    public String getInitialText(boolean showURIs) {
+        if (showURIs) return getInitialText();
+        else return String.format("<html>%s &nbsp;", entry.getName());
+    }
 
     public String getFilterText(String filter) {
         return String.format("<html>%s &nbsp; <font color='purple'>--%s</font>", 
                 filter(entry.getName(), filter),
                 filter(entry.getConceptId(), filter));
+    }
+    
+    public String getFilterText(String filter, boolean showURIs) {
+        if (showURIs) return getFilterText(filter);
+        else return String.format("<html>%s &nbsp;", 
+                filter(entry.getName(), filter));
     }
     
     /**

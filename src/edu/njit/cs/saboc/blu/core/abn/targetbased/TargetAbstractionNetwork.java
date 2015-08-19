@@ -43,22 +43,4 @@ public abstract class TargetAbstractionNetwork<
     protected void setReduced(boolean reduced) {
         this.isReduced = reduced;
     }
-    
-    protected TARGETABN_T createReducedTargetAbN (
-            TargetAbstractionNetworkGenerator generator, 
-            ReducedAbNGenerator<GROUP_T> reducedGroupGenerator, 
-            int minGroupSize, int maxGroupSize) {
-        
-        ReducedAbNHierarchy<GROUP_T> reducedGroupHierarchy = reducedGroupGenerator.createReducedAbN(rootGroup,
-                (HashMap<Integer, GROUP_T>)this.groups, groupHierarchy, minGroupSize, maxGroupSize);
-        
-        TARGETABN_T reducedTargetAbN = (TARGETABN_T)generator.createTargetAbstractionNetwork(
-                reducedGroupHierarchy.reducedGroups.get(rootGroup.getId()), 
-                reducedGroupHierarchy.reducedGroups, 
-                reducedGroupHierarchy.reducedGroupHierarchy);
-
-        reducedTargetAbN.setReduced(true);
-        
-        return reducedTargetAbN;
-    }
 }

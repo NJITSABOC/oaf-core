@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericParentPAreaInfo;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
@@ -34,7 +33,7 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea>
     }
 
     protected void loadParentGroupInfo(PAREA_T parea) {
-        HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> parents = parea.getParentPAreaInfo();
+        HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parents = parea.getParentPAreaInfo();
 
         parentModel.setContents(new ArrayList<>(parents));
     }

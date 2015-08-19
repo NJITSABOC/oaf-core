@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -183,7 +185,7 @@ public abstract class PAreaTaxonomyGenerator<
             
             HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(root);
             
-            HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>> parentPAreaInfo = new HashSet<GenericParentPAreaInfo<CONCEPT_T, PAREA_T>>();
+            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentPAreaInfo = new HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>>();
             
             for(CONCEPT_T parent : parents) {
                 HashSet<CONCEPT_T> parentPAreaRoots = conceptPAreas.get(parent);
@@ -193,7 +195,7 @@ public abstract class PAreaTaxonomyGenerator<
                     
                     pareaHierarchy.addIsA(parea, pareas.get(parentPAreaId));
                     
-                    parentPAreaInfo.add(new GenericParentPAreaInfo<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
+                    parentPAreaInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
                 }
             }
             
@@ -220,4 +222,72 @@ public abstract class PAreaTaxonomyGenerator<
             HIERARCHY_T conceptHierarchy, PAREA_T rootPArea, 
             ArrayList<AREA_T> areas, HashMap<Integer, PAREA_T> pareas, 
             GroupHierarchy<PAREA_T> pareaHierarchy);
+    
+    public TAXONOMY_T createTaxonomyFromPAreas(
+            HashMap<Integer, PAREA_T> pareas, 
+            GroupHierarchy<PAREA_T> pareaHierarchy) {
+        
+        ArrayList<AREA_T> reducedAreas = new ArrayList<AREA_T>();
+             
+        int areaId = 0;
+        
+        HashMap<HashSet<REL_T>, AREA_T> areaMap = new HashMap<HashSet<REL_T>, AREA_T>();
+        
+        for(PAREA_T parea : pareas.values()) {
+            AREA_T area;
+            
+            if(!areaMap.containsKey(parea.getRelsWithoutInheritanceInfo())) {
+                area = (AREA_T)createArea(areaId++, parea.getRelsWithoutInheritanceInfo());
+                
+                areaMap.put(area.getRelationships(), area);
+                
+                reducedAreas.add(area);
+            } else {
+                area = areaMap.get(parea.getRelsWithoutInheritanceInfo());
+            }
+            
+            area.addPArea(parea);
+            
+            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>>();
+            
+            PAREA_T originalRoot;
+            
+            if(parea instanceof ReducingGroup) {
+                originalRoot = (PAREA_T)((ReducingGroup)parea).getReducedGroupHierarchy().getRoots().iterator().next();
+            } else {
+                originalRoot = parea;
+            }
+
+            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
+                        
+            for(GenericParentGroupInfo<CONCEPT_T, PAREA_T> originalParent : originalParents) {
+                if(pareas.containsKey(originalParent.getParentGroup().getId())) {
+                    reducedParentInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), 
+                            pareas.get(originalParent.getParentGroup().getId())));
+                } else {
+                    for(PAREA_T otherPArea : pareas.values()) {
+                        if (otherPArea instanceof ReducingGroup) {
+                            ReducingGroup reducedGroup = (ReducingGroup) otherPArea;
+
+                            if (reducedGroup.getAllGroupsConcepts().contains(originalParent.getParentConcept())) {
+                                reducedParentInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), otherPArea));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            parea.setParentPAreaInfo(reducedParentInfo);
+        }
+        
+        TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)createPAreaTaxonomy(
+                null, 
+                pareaHierarchy.getRoots().iterator().next(), 
+                reducedAreas, 
+                pareas, 
+                pareaHierarchy);
+        
+        return reducedTaxonomy;
+    }
 }

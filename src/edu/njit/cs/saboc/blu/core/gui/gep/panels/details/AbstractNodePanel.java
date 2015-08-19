@@ -105,6 +105,10 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
     
     public final void enableGroupDetailsTabAt(int index, boolean enabled) {
         tabbedPane.setEnabledAt(index, enabled);
+        
+        if(!enabled && tabbedPane.getSelectedIndex() == index) {
+            tabbedPane.setSelectedIndex(0);
+        }
     }
     
     protected abstract String getNodeTitle(NODE_T node);

@@ -81,4 +81,8 @@ public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
     public HashSet<GROUP_T> getDescendantGroups(GROUP_T group) {
         return groupHierarchy.getSubhierarchyRootedAt(group).getDescendants(group);
     }
+    
+    public GroupHierarchy<GROUP_T> getGroupHierarchy() {
+        return groupHierarchy;
+    }
 }

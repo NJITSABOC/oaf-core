@@ -226,7 +226,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.add(moveRightBtn);
         this.add(toggle);
 
-
         this.setLayout(null);
     }
     

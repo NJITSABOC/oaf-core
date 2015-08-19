@@ -51,7 +51,7 @@ public class ReducedAbNPainter extends AbNPainter {
         
         g2d.setPaint(bgColor);
         
-        if (reducedGroup.getReducedGroups().size() == 1) {
+        if (reducedGroup.getReducedGroups().isEmpty()) {
             g2d.fillRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
         } else {
             g2d.fillRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
@@ -76,7 +76,7 @@ public class ReducedAbNPainter extends AbNPainter {
 
         g2d.setPaint(outlineColor);
         
-        if (reducedGroup.getReducedGroups().size() == 1) {
+        if (reducedGroup.getReducedGroups().isEmpty()) {
             g2d.drawRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
         } else {
             g2d.drawRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);

@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
  */
 public abstract class BLUAbstractParentGroupTableModel<CONCEPT_T, 
         GROUP_T extends GenericConceptGroup, 
-        T extends GenericParentGroupInfo<CONCEPT_T, GROUP_T>> extends BLUAbstractTableModel<T>{
+        T extends GenericParentGroupInfo<CONCEPT_T, GROUP_T>> extends BLUAbstractTableModel<T> {
 
     public BLUAbstractParentGroupTableModel(String [] columnNames) {
         super(columnNames);

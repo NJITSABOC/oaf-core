@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
@@ -22,7 +22,7 @@ public abstract class GenericPAreaTaxonomy<
         REL_T,
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> 
 
-            extends PartitionedAbstractionNetwork<AREA_T, PAREA_T> implements ReducibleAbstractionNetwork<TAXONOMY_T> {
+            extends PartitionedAbstractionNetwork<AREA_T, PAREA_T> implements AggregateableAbstractionNetwork<TAXONOMY_T> {
 
 
     protected PAREA_T rootPArea;

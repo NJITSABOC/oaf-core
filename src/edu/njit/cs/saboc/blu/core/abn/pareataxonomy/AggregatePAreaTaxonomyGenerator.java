@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
 
@@ -19,16 +19,16 @@ public class AggregatePAreaTaxonomyGenerator<
         CONCEPT_T, // Concept type
         REL_T,// Relationship type
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
-        AGGREGATEPAREA_T extends GenericPArea & ReducingGroup<CONCEPT_T, PAREA_T>> {
+        AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> {
         
     public TAXONOMY_T createAggregatePAreaTaxonomy(
             TAXONOMY_T sourceTaxonomy,
             PAreaTaxonomyGenerator<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T> generator,
-            ReducedAbNGenerator<PAREA_T, AGGREGATEPAREA_T> reducedGenerator, 
+            AggregateAbNGenerator<PAREA_T, AGGREGATEPAREA_T> reducedGenerator, 
             int min,
             int max) {
         
-        ReducedAbNHierarchy<PAREA_T, AGGREGATEPAREA_T> reducedPAreaHierarchy = reducedGenerator.createReducedAbN((PAREA_T)sourceTaxonomy.getRootPArea(), 
+        AggregateAbNResult<PAREA_T, AGGREGATEPAREA_T> reducedPAreaHierarchy = reducedGenerator.createReducedAbN((PAREA_T)sourceTaxonomy.getRootPArea(), 
                 sourceTaxonomy.getPAreas(), sourceTaxonomy.getGroupHierarchy(), min, max);
 
         HashMap<Integer, PAREA_T> reducedPAreas = (HashMap<Integer, PAREA_T>)reducedPAreaHierarchy.reducedGroups;

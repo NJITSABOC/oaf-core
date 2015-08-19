@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -252,8 +252,8 @@ public abstract class PAreaTaxonomyGenerator<
             
             PAREA_T originalRoot;
             
-            if(parea instanceof ReducingGroup) {
-                originalRoot = (PAREA_T)((ReducingGroup)parea).getReducedGroupHierarchy().getRoots().iterator().next();
+            if(parea instanceof AggregateableConceptGroup) {
+                originalRoot = (PAREA_T)((AggregateableConceptGroup)parea).getAggregatedGroupHierarchy().getRoots().iterator().next();
             } else {
                 originalRoot = parea;
             }
@@ -266,8 +266,8 @@ public abstract class PAreaTaxonomyGenerator<
                             pareas.get(originalParent.getParentGroup().getId())));
                 } else {
                     for(PAREA_T otherPArea : pareas.values()) {
-                        if (otherPArea instanceof ReducingGroup) {
-                            ReducingGroup reducedGroup = (ReducingGroup) otherPArea;
+                        if (otherPArea instanceof AggregateableConceptGroup) {
+                            AggregateableConceptGroup reducedGroup = (AggregateableConceptGroup) otherPArea;
 
                             if (reducedGroup.getAllGroupsConcepts().contains(originalParent.getParentConcept())) {
                                 reducedParentInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), otherPArea));
@@ -280,9 +280,9 @@ public abstract class PAreaTaxonomyGenerator<
 
             parea.setParentPAreaInfo(reducedParentInfo);
         }
-        
+
         TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)createPAreaTaxonomy(
-                null, 
+                getConceptHierarchy(), 
                 pareaHierarchy.getRoots().iterator().next(), 
                 reducedAreas, 
                 pareas, 

@@ -2,9 +2,9 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducedAbNHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducibleAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import java.util.HashMap;
 
@@ -16,7 +16,7 @@ public abstract class TargetAbstractionNetwork<
         GROUP_T extends TargetGroup, 
         TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> extends AbstractionNetwork<GROUP_T> 
 
-    implements ReducibleAbstractionNetwork<TARGETABN_T> {
+    implements AggregateableAbstractionNetwork<TARGETABN_T> {
     
     private GROUP_T rootGroup;
     

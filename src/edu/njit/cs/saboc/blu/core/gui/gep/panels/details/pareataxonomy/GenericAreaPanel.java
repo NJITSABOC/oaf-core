@@ -38,6 +38,8 @@ public class GenericAreaPanel<AREA_T extends GenericArea,
         super.setContents(area);
         
         if(area.hasOverlappingConcepts()) {
+            disjointMetricsPanel.setContents(area);
+            
             this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);
         }
     }

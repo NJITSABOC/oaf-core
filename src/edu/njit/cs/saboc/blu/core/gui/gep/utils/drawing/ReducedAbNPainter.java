@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import java.awt.BasicStroke;
@@ -19,7 +19,7 @@ public class ReducedAbNPainter extends AbNPainter {
     
     public void paintGroupAtPoint(Graphics2D g2d, GenericGroupEntry group, Point p, double scale) {
         
-        ReducingGroup reducedGroup = (ReducingGroup)(group.getGroup());
+        AggregateableConceptGroup reducedGroup = (AggregateableConceptGroup)(group.getGroup());
         
         Color bgColor;
         
@@ -51,7 +51,7 @@ public class ReducedAbNPainter extends AbNPainter {
         
         g2d.setPaint(bgColor);
         
-        if (reducedGroup.getReducedGroups().isEmpty()) {
+        if (reducedGroup.getAggregatedGroups().isEmpty()) {
             g2d.fillRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
         } else {
             g2d.fillRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
@@ -76,7 +76,7 @@ public class ReducedAbNPainter extends AbNPainter {
 
         g2d.setPaint(outlineColor);
         
-        if (reducedGroup.getReducedGroups().isEmpty()) {
+        if (reducedGroup.getAggregatedGroups().isEmpty()) {
             g2d.drawRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
         } else {
             g2d.drawRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);

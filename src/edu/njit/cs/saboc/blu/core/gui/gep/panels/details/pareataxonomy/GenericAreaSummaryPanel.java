@@ -46,7 +46,7 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
         String areaName = configuration.getContainerName(group);
         int classCount = group.getConcepts().size();
         
-        String conceptType = configuration.getConceptTypeName(classCount > 1 && classCount < 0);
+        String conceptType = configuration.getConceptTypeName(classCount > 1 || classCount == 0);
 
         return String.format("<html><b>%s</b> is an area that summarizes %d %s.",
                 areaName, classCount, conceptType);

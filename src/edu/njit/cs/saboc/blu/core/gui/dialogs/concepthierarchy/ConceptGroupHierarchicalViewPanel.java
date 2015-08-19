@@ -49,7 +49,6 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
             final HierarchyPanelClickListener clickListener) {
                 
         this.abstractionNetwork = abstractionNetwork;
-        this.group = group;
         
         this.hierarchyGroupType = hierarchyGroupType;
         this.conceptType = conceptType;

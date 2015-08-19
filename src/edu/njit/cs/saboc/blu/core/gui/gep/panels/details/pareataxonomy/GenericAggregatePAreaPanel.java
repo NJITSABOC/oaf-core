@@ -1,18 +1,19 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
-import edu.njit.cs.saboc.blu.core.abn.reduced.ReducingGroup;
+import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractAggregatedGroupsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 
 /**
  *
  * @author Chris O
  */
-public class GenericAggregatePAreaPanel <CONCEPT_T, AGGREGATEPAREA_T extends GenericPArea & ReducingGroup<CONCEPT_T, PAREA_T>, PAREA_T extends GenericPArea> 
-    extends AbstractGroupPanel<AGGREGATEPAREA_T, CONCEPT_T> { 
+public class GenericAggregatePAreaPanel <CONCEPT_T, AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>, 
+        PAREA_T extends GenericPArea, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends GenericPAreaPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T> { 
     
     protected AbstractAggregatedGroupsPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel;
     
@@ -21,24 +22,25 @@ public class GenericAggregatePAreaPanel <CONCEPT_T, AGGREGATEPAREA_T extends Gen
     public GenericAggregatePAreaPanel(
             AbstractNodeDetailsPanel<AGGREGATEPAREA_T, CONCEPT_T> pareaDetailsPanel,
             AbstractGroupHierarchyPanel<CONCEPT_T, AGGREGATEPAREA_T> pareaHierarchyPanel,
+            PAreaConceptHierarchyPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T> conceptHierarchyPanel,
             AbstractAggregatedGroupsPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel,
             PAreaTaxonomyConfiguration configuration) {
 
-        super(pareaDetailsPanel, pareaHierarchyPanel, configuration);
+        super(pareaDetailsPanel, pareaHierarchyPanel, conceptHierarchyPanel, configuration);
         
         this.aggregateDetailsPanel = aggregateDetailsPanel;
         
         this.aggregateDetailsTabIndex = super.addGroupDetailsTab(aggregateDetailsPanel, String.format(
-            "Aggregate %s", configuration.getGroupTypeName(false)));
+            "Aggregated %s", configuration.getGroupTypeName(true)));
     }
     
     @Override
     public void setContents(AGGREGATEPAREA_T parea) {
         super.setContents(parea);
 
-        ReducingGroup<CONCEPT_T, PAREA_T> reducedPArea = (ReducingGroup<CONCEPT_T, PAREA_T>)parea;
+        AggregateableConceptGroup<CONCEPT_T, PAREA_T> reducedPArea = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)parea;
         
-        if(reducedPArea.getReducedGroups().isEmpty()) {
+        if(reducedPArea.getAggregatedGroups().isEmpty()) {
             this.enableGroupDetailsTabAt(aggregateDetailsTabIndex, false);
             return;
         }

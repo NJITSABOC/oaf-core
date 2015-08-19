@@ -11,9 +11,9 @@ import java.util.Queue;
  *
  * @author Chris O
  */
-public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup, AGGREGATEGROUP_T extends GenericConceptGroup & ReducingGroup> {
+public abstract class AggregateAbNGenerator<GROUP_T extends GenericConceptGroup, AGGREGATEGROUP_T extends GenericConceptGroup & AggregateableConceptGroup> {
     
-    public ReducedAbNHierarchy<GROUP_T, AGGREGATEGROUP_T> createReducedAbN(
+    public AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T> createReducedAbN(
             GROUP_T rootGroup, 
             HashMap<Integer, GROUP_T> groups, 
             GroupHierarchy<GROUP_T> groupHierarchy, 
@@ -122,7 +122,7 @@ public abstract class ReducedAbNGenerator<GROUP_T extends GenericConceptGroup, A
             });
         });
         
-        return new ReducedAbNHierarchy<GROUP_T, AGGREGATEGROUP_T>(reducedGroups, reducedGroupHierarchy);
+        return new AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T>(reducedGroups, reducedGroupHierarchy);
     }
     
     protected abstract AGGREGATEGROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, GroupHierarchy<GROUP_T> reducedGroupHierarchy);

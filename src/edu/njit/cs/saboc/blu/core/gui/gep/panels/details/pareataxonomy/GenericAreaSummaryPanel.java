@@ -30,10 +30,10 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
         this.add(relationshipPanel);
     }
     
-    public void setContents(AREA_T parea) {
-        super.setContents(parea);
+    public void setContents(AREA_T area) {
+        super.setContents(area);
         
-        relationshipPanel.setContents(configuration.getAreaRelationships(parea));
+        relationshipPanel.setContents(configuration.getAreaRelationships(area));
     }
     
     public void clearContents() {
@@ -42,9 +42,9 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
         relationshipPanel.clearContents();
     }
     
-    protected String createDescriptionStr(AREA_T group) {
-        String areaName = configuration.getContainerName(group);
-        int classCount = group.getConcepts().size();
+    protected String createDescriptionStr(AREA_T area) {
+        String areaName = configuration.getContainerName(area);
+        int classCount = area.getConcepts().size();
         
         String conceptType = configuration.getConceptTypeName(classCount > 1 || classCount == 0);
 

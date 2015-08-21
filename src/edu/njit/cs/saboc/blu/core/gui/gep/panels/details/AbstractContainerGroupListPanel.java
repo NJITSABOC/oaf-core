@@ -39,7 +39,7 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
         
         this.groupList.addEntitySelectionListener(new EntitySelectionListener<GROUP_T>() {
             public void entitySelected(GROUP_T group) {
-                conceptList.setContents(configuration.getSortedConceptList(group));
+                conceptList.setContents(getSortedConceptList(group));
             }
             
             public void noEntitySelected() {
@@ -54,6 +54,8 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
 
         this.add(splitPane, BorderLayout.CENTER);
     }
+    
+    public abstract ArrayList<CONCEPT_T> getSortedConceptList(GROUP_T group); 
 
     @Override
     public void setContents(CONTAINER_T container) {

@@ -3,14 +3,14 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
 
 /**
  *
  * @author Chris O
  */
 public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer, 
-        GROUP_T extends GenericConceptGroup, CONCEPT_T, ENTRY_T extends ContainerConceptEntry<CONCEPT_T, GROUP_T>> extends AbstractNodePanel<CONTAINER_T, ENTRY_T> {
+        GROUP_T extends GenericConceptGroup, CONCEPT_T, 
+        ENTRY_T> extends AbstractNodePanel<CONTAINER_T, ENTRY_T> {
 
     protected final AbstractContainerGroupListPanel<CONTAINER_T, GROUP_T, CONCEPT_T> groupListPanel;
 
@@ -23,7 +23,7 @@ public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer,
         
         this.groupListPanel = groupListPanel;
         
-        String tabTitle = String.format("%s's %ss", configuration.getContainerTypeName(false), configuration.getGroupTypeName(true));
+        String tabTitle = String.format("%s's %s", configuration.getContainerTypeName(false), configuration.getGroupTypeName(true));
         
         super.addGroupDetailsTab(groupListPanel, tabTitle);
     }

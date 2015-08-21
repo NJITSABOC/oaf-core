@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -33,6 +34,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
         this.entityTable = new JTable(this.tableModel = tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
+        this.entityTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
         
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

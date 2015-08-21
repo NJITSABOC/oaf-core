@@ -13,7 +13,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptE
  * @author Chris O
  */
 public class GenericAreaPanel<AREA_T extends GenericArea, 
-        PAREA_T extends GenericPArea, CONCEPT_T> extends AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>> {
+        PAREA_T extends GenericPArea, 
+        CONCEPT_T> extends AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>> {
 
     private final AbstractDisjointAbNMetricsPanel disjointMetricsPanel;
     

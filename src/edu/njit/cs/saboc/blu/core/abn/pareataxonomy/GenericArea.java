@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;

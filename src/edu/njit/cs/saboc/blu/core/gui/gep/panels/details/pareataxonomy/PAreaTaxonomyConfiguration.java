@@ -5,10 +5,12 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 
 /**
  *
@@ -23,6 +25,7 @@ public abstract class PAreaTaxonomyConfiguration<CONCEPT_T,
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
         DISJOINTTAXONOMY_T extends DisjointAbstractionNetwork<TAXONOMY_T, PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>>
             implements BLUDisjointAbNConfiguration<CONCEPT_T, PAREA_T, AREA_T, TAXONOMY_T, HIERARCHY_T, DISJOINTPAREA_T, DISJOINTTAXONOMY_T> {
+
 
     private final String CONTAINER_NAME = "Area";
     private final String GROUP_NAME = "Partial-area";
@@ -54,9 +57,41 @@ public abstract class PAreaTaxonomyConfiguration<CONCEPT_T,
             return GROUP_NAME;
         }
     }
+    
+    @Override
+    public HashSet<PAREA_T> getContainerGroupSet(AREA_T area) {
+        return new HashSet<>(area.getAllPAreas());
+    }
+
+    @Override
+    public HashSet<CONCEPT_T> getGroupConceptSet(PAREA_T parea) {
+        return new HashSet<>(parea.getConceptsInPArea());
+    }
+
+    @Override
+    public HashSet<CONCEPT_T> getContainerOverlappingConcepts(AREA_T area) {
+        HashSet<CONCEPT_T> areaOverlappingConcepts = new HashSet<>();
+        
+        HashSet<OverlappingConceptResult<CONCEPT_T, PAREA_T>> overlappingConceptResults = area.getOverlappingConcepts();
+        
+        overlappingConceptResults.forEach((OverlappingConceptResult<CONCEPT_T, PAREA_T> overlappingCls) -> {
+            areaOverlappingConcepts.add(overlappingCls.getConcept());
+        });
+        
+        return areaOverlappingConcepts;
+    }
+
+    @Override
+    public int getContainerLevel(AREA_T area) {
+        return area.getRelationships().size();
+    }
+    
+    @Override
+    public HashSet<OverlappingConceptResult<CONCEPT_T, PAREA_T>> getContainerOverlappingResults(AREA_T container) {
+        return container.getOverlappingConcepts();
+    }
 
     public abstract ArrayList<REL_T> getAreaRelationships(AREA_T area);
     public abstract ArrayList<REL_T> getPAreaRelationships(PAREA_T parea);
-    
     public abstract Comparator<PAREA_T> getChildPAreaComparator();
 }

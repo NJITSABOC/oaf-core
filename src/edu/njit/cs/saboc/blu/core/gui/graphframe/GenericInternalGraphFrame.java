@@ -323,8 +323,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, GEPActionListener gepActionListener, 
-            BLUGraphConfiguration groupOptionsConfiguration) {
+    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUGraphConfiguration groupOptionsConfiguration) {
         
         this.graph = graph;
         
@@ -336,8 +335,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
 
         tabbedPane.addTab("Edit Abstraction Network", scroller);
         
-        tabbedPane.addTab("Explore Abstraction Network", gep = new EnhancedGraphExplorationPanel(graph, painter, 
-                gepActionListener, groupOptionsConfiguration));
+        tabbedPane.addTab("Explore Abstraction Network", gep = new EnhancedGraphExplorationPanel(graph, painter, groupOptionsConfiguration));
         
         tabbedPane.setToolTipTextAt(0,
                 "<html><b>Edit Hierarchy Graph</b> allows you to edit the selected graph <br>"

@@ -34,14 +34,17 @@ public abstract class GenericDisjointAbNLayout<
         DISJOINTGROUP_T extends DisjointGenericConceptGroup,
         GROUPENTRY_T extends BluDisjointGroupEntry<DISJOINTGROUP_T>> extends BluGraphLayout<EmptyAbNContainer, EmptyContainerEntry, GROUPENTRY_T> {
     
-    
-    
+
     protected DISJOINTABN_T disjointAbN;
 
     protected GenericDisjointAbNLayout(BluGraph graph, DISJOINTABN_T disjointAbN) {
         super(graph);
 
         this.disjointAbN = disjointAbN;
+    }
+    
+    protected DISJOINTABN_T getDisjointAbN() {
+        return disjointAbN;
     }
 
     public void doLayout() {

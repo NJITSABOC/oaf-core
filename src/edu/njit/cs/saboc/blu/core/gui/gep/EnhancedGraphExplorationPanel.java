@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.GenericSlideoutPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
@@ -129,8 +128,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             new HashMap<GenericGroupEntry, GroupPopout>());
 
     private boolean magnifyGroupMode = false;
-    
-    private GEPActionListener gepActionListener;
        
     private GraphMouseStateMonitor mouseStateMonitor = new GraphMouseStateMonitor();
     
@@ -138,8 +135,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private AbNPainter painter;
     
-    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, 
-            GEPActionListener gepActionListener, BLUGraphConfiguration configuration) {
+    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, BLUGraphConfiguration configuration) {
         
         this.graph = graph;
         this.painter = painter;
@@ -147,8 +143,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
                 
         viewport = new Viewport(graph);
-        
-        this.gepActionListener = gepActionListener;
 
         setFocusable(true);
         intitializeUIComponents(configuration);
@@ -218,6 +212,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             this.containerDetailsPanel = Optional.empty();
         }
         
+        this.slideoutPanel.doClose();
+        
         this.add(slideoutPanel);
 
         this.add(moveUpBtn);
@@ -271,7 +267,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         if (clickCount == 1) {
                             handleSingleClickOnGroupEntry(groupEntry);
                         } else if (clickCount == 2) {
-                            displayGroupDetailsDialog(groupEntry);
+                            
                         }
 
                         GroupPopout popout = groupPopouts.get(groupEntry);
@@ -291,7 +287,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             if (clickCount == 1) {
                                 handleSingleClickOnPartitionEntry(partition);
                             } else if (clickCount == 2) {
-                                displayPartitionDetailsDialog(partition);
+                                
                             }
                         } else {
                             selectionStateMonitor.resetAll();
@@ -709,17 +705,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         g2d.setStroke(savedStroke);
     }
-    
-    
-    private void displayGroupDetailsDialog(GenericGroupEntry entry) {
-        gepActionListener.groupSelected(entry.getGroup(), graph.getAbstractionNetwork());
-    }
-    
-    private void displayPartitionDetailsDialog(GenericPartitionEntry entry) {
-        gepActionListener.containerPartitionSelected(entry.getPartition(), 
-                entry.getPartitionTreatedAsContainer(), graph.getAbstractionNetwork());
-    }
-    
+        
     private void updateNavButtonPressed() {
         boolean buttonPressed = false;
         

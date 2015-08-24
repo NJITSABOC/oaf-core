@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
@@ -189,6 +190,8 @@ public abstract class DisjointAbNGenerator<
         HashMap<CONCEPT_T, Set<CONCEPT_T>> disjointGroupParents = new HashMap<>();
         HashMap<CONCEPT_T, Set<CONCEPT_T>> disjointGroupChildren = new HashMap<>();
         
+        HashMap<CONCEPT_T, CONCEPT_T> conceptDisjointGroup = new HashMap<>();
+        
         int groupId = 0;
         
         for (GROUP_T group : identifiedOverlappingGroups) {
@@ -219,8 +222,12 @@ public abstract class DisjointAbNGenerator<
 
             Set<CONCEPT_T> processedConcepts = new HashSet<>();
 
-            while (!stack.isEmpty()) {
+            while (!stack.isEmpty()) {                
                 CONCEPT_T concept = stack.pop();
+                
+                assert(!conceptDisjointGroup.containsKey(concept));
+                
+                conceptDisjointGroup.put(concept, root);
 
                 processedConcepts.add(concept);
 
@@ -266,6 +273,20 @@ public abstract class DisjointAbNGenerator<
         GroupHierarchy<DISJOINTGROUP_T> groupHierarchy = new GroupHierarchy<>(rootGroups);
         
         disjointGroups.values().forEach((DISJOINTGROUP_T group) -> {
+            
+            CONCEPT_T disjointGroupRoot = group.getConceptHierarchy().getRoot();
+            HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(disjointGroupRoot);
+
+            HashSet<GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> parentInfo = new HashSet<>();
+            
+            parents.forEach( (CONCEPT_T rootParent) -> {
+                CONCEPT_T parentGroupRoot = conceptDisjointGroup.get(rootParent);
+                
+                parentInfo.add(new GenericParentGroupInfo<>(rootParent, disjointGroups.get(disjointGroupIds.get(parentGroupRoot))));
+            });
+            
+            group.setParentGroups(parentInfo);
+            
             HashSet<Integer> parentGroupIds = group.getParentIds();
             
             parentGroupIds.forEach((Integer parentId) -> {

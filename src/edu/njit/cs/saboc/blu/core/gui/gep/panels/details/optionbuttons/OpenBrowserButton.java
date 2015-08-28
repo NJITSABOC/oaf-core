@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
 import java.awt.event.ActionEvent;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -12,14 +11,9 @@ public abstract class OpenBrowserButton extends BaseOptionButton {
         super("BluInvestigateRoot.png", toolTip);
         
         this.addActionListener((ActionEvent ae) -> {
-
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    displayBrowserWindow();
-                }
-            });
+            displayBrowserWindowAction();
         });
     }
     
-    public abstract void displayBrowserWindow();
+    public abstract void displayBrowserWindowAction();
 }

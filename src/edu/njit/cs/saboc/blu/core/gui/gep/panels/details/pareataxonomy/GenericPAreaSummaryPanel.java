@@ -27,11 +27,10 @@ public abstract class GenericPAreaSummaryPanel<
         this.configuration = configuration;
         
         this.relationshipPanel = relationshipPanel;
-        this.relationshipPanel.setMaximumSize(new Dimension(10000, 100));
         this.relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         this.relationshipPanel.setPreferredSize(new Dimension(-1, 100));
         
-         this.add(this.relationshipPanel);
+        this.add(this.relationshipPanel);
     }
     
     public void setContents(PAREA_T parea) {

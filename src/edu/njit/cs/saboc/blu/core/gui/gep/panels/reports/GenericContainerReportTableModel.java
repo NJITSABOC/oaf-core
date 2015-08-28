@@ -33,7 +33,7 @@ public class GenericContainerReportTableModel<CONCEPT_T, CONTAINER_T extends Gen
             config.getContainerName(item.getContainer()).replaceAll(", ", "\n"),
             item.getGroups().size(),
             item.getConcepts().size(),
-            item.getOverlappingConcepts()
+            item.getOverlappingConcepts().size()
         };
     }
 }

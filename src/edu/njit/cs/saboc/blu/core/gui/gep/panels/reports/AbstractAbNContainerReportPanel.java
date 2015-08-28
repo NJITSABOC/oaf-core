@@ -54,9 +54,17 @@ public class AbstractAbNContainerReportPanel<
         ArrayList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> entries = new ArrayList<>();
         
         containers.forEach((CONTAINER_T container) -> {
+            HashSet<GROUP_T> groups = currentConfig.getContainerGroupSet(container);
+            
+            HashSet<CONCEPT_T> concepts = new HashSet<>();
+            
+            groups.forEach((GROUP_T group) -> {
+                concepts.addAll(currentConfig.getGroupConceptSet(group));
+            });
+            
             entries.add(new ContainerReport<>(container, 
-                    currentConfig.getContainerGroupSet(container), 
-                    new HashSet<>(),
+                    groups, 
+                    concepts,
                     currentConfig.getContainerOverlappingConcepts(container)));
         });
         

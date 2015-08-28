@@ -23,7 +23,6 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
         
         relationshipPanel = relTable;
 
-        relationshipPanel.setMaximumSize(new Dimension(10000, 100));
         relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         relationshipPanel.setPreferredSize(new Dimension(-1, 100));
         

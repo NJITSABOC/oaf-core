@@ -19,6 +19,7 @@ public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T exten
     public GenericOverlappingConceptReportTableModel(BLUPartitionedAbNConfiguration config) {
         super(new String [] {
             String.format("Overlapping %s", config.getConceptTypeName(false)),
+            "Degree of Overlap",
             String.format("Overlapping %s", config.getGroupTypeName(true)), 
             String.format("%s", config.getContainerTypeName(false))
         });
@@ -48,10 +49,11 @@ public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T exten
             overlappingGroups += "\n" + overlappingGroupNames.get(c);
         }
         
-        String areaName = config.getGroupsContainerName(item.getOverlappingGroups().iterator().next());
+        String areaName = config.getGroupsContainerName(item.getOverlappingGroups().iterator().next()).replaceAll(", ", "\n");
         
         return new Object[] {
             overlappingConceptName,
+            item.getOverlappingGroups().size(),
             overlappingGroups,
             areaName
         };

@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.AbNLevelReport;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -84,6 +86,12 @@ public class GenericAbNLevelReportPanel <
             });
             
             levelReports.add(new AbNLevelReport(level, conceptsAtLevel, overlappingConceptsAtLevel, groupsAtLevel, levelContainers));
+        });
+        
+        Collections.sort(levelReports, new Comparator<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>>() {
+            public int compare(AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T> a, AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T> b) {
+                return a.getLevel() - b.getLevel();
+            }
         });
         
         levelReportList.setContents(levelReports);

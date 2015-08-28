@@ -36,7 +36,6 @@ public abstract class GenericDisjointGroupSummaryPanel<
         this.configuration = configuration;
         
         this.overlapsPanel = overlapsPanel;
-        this.overlapsPanel.setMaximumSize(new Dimension(10000, 100));
         this.overlapsPanel.setMinimumSize(new Dimension(-1, 100));
         this.overlapsPanel.setPreferredSize(new Dimension(-1, 100));
         

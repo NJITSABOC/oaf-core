@@ -37,7 +37,7 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         JPanel upperPanel = new JPanel(new BorderLayout());
-        upperPanel.add(nodeSummaryPanel, BorderLayout.NORTH);
+        upperPanel.add(nodeSummaryPanel, BorderLayout.CENTER);
         upperPanel.add(nodeOptionsMenuPanel, BorderLayout.SOUTH);
         
         splitPane.setTopComponent(upperPanel);

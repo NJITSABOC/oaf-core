@@ -129,9 +129,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private boolean magnifyGroupMode = false;
        
-    private GraphMouseStateMonitor mouseStateMonitor = new GraphMouseStateMonitor();
+    private final GraphMouseStateMonitor mouseStateMonitor = new GraphMouseStateMonitor();
     
-    private GraphSelectionStateMonitor selectionStateMonitor;
+    private final GraphSelectionStateMonitor selectionStateMonitor;
     
     private AbNPainter painter;
     
@@ -198,7 +198,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
-        this.slideoutPanel = new GenericSlideoutPanel(new Point(this.getWidth() - 500, this.getHeight() + slideoutOffset.y), new Dimension(600, 700));
+        this.slideoutPanel = new GenericSlideoutPanel(selectionStateMonitor, 
+                this.getBounds().getSize(),
+                new Point(this.getWidth() - 600, this.getHeight() + slideoutOffset.y), 
+                new Dimension(600, 700));
         
         if(uiConfiguration.hasGroupDetailsPanel()) {
             groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
@@ -353,6 +356,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 viewport.setZoom(zoomSlider.getValue(), 
                             EnhancedGraphExplorationPanel.this.getWidth(), 
                             EnhancedGraphExplorationPanel.this.getHeight());
+                
+                slideoutPanel.setGEPSet(getBounds().getSize());
                 
                 if(slideoutPanel.isHidden()) {
                     slideoutPanel.setLocation(getWidth() - slideoutPanel.getCollapsedSize(), slideoutOffset.y);

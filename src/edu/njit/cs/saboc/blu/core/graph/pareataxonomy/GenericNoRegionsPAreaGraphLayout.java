@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
-import edu.njit.cs.saboc.blu.core.graph.options.GraphOptions;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyConfiguration;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,12 +35,16 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
 
         extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, 
             AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T, HIERARCHY_T> {
+    
+    private final PAreaTaxonomyConfiguration config;
 
-    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy) {
+    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration config) {
         super(graph, taxonomy);
+        
+        this.config = config;
     }
 
-    public void doLayout(GraphOptions options, boolean showConceptCounts) {
+    public void doLayout(boolean showConceptCounts) {
         super.doLayout();
 
         AREA_T lastArea = null;   // Used for generating the graph - this is the data version of an area
@@ -106,7 +110,6 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
 
             pareaCount = areaPAreas.size();
             
-            
             // Take the number of cells and find the square root of it (rounded up) to
             // find the minimum width required for a square that could hold all the pAreas.
 
@@ -129,25 +132,32 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
             }
             
             String countStr = "UNSET COUNT STR";
+            
+            ArrayList<PAREA_T> pareas = a.getAllPAreas();
+            
+            String pareaStr;
+            
+            if (pareas.size() == 1) {
+                pareaStr = "1 Partial-area";
+            } else {
+                pareaStr = String.format("%d Partial-areas", pareas.size());
+            }
 
             if(showConceptCounts) {
-                
                 HashSet<CONCEPT_T> concepts = a.getConcepts();
                 
+                String conceptStr;
+                
                 if(concepts.size() == 1) {
-                    countStr = "(1 Concept)";
+                    conceptStr = String.format("1 %s", config.getConceptTypeName(false));
                 } else {
-                    countStr = "(" + concepts.size() + " Concepts)";
+                    conceptStr = String.format("%d %s", concepts.size(), config.getConceptTypeName(true));
                 }
+                
+                countStr = String.format("(%s, %s)", conceptStr, pareaStr);
                 
             } else {
-                ArrayList<PAREA_T> pareas = a.getAllPAreas();
-                
-                if(pareas.size() == 1) {
-                    countStr = "(1 Partial-area)";
-                } else {
-                    countStr = "(" + pareas.size() + " Partial-areas)";
-                }
+                countStr = String.format("(%s)", pareaStr);
             }
             
             areaName += (" " + countStr);

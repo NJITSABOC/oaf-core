@@ -63,8 +63,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private boolean drawingInitialized = false;
     private boolean gepAlive = true;
     
-    private BluGraph graph;
-    private Viewport viewport;
+    private final BluGraph graph;
+    private final Viewport viewport;
          
     private Timer updateTimer = new Timer(50, new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
@@ -145,7 +145,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         viewport = new Viewport(graph);
 
         setFocusable(true);
+        
         intitializeUIComponents(configuration);
+        
         initializeListeners();
 
         updateTimer.start();
@@ -229,6 +231,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     private void initializeListeners() {
+
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
@@ -241,9 +244,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     
-                    if(mouseStateMonitor.getClickedLocation().distance(e.getPoint()) < 16) {
-                        mouseClicked(e);
-                    }
+//                    if(mouseStateMonitor.getClickedLocation().distance(e.getPoint()) < 16) {
+//                        mouseClicked(e);
+//                    }
                     
                     mouseStateMonitor.setClickedLocation(null);
                     mouseStateMonitor.setCurrentDraggedLocation(null);
@@ -271,12 +274,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             handleSingleClickOnGroupEntry(groupEntry);
                         } else if (clickCount == 2) {
                             
-                        }
-
-                        GroupPopout popout = groupPopouts.get(groupEntry);
-
-                        if (popout != null) {
-                            popout.setBackgroundColor(groupEntry.getBackground());
                         }
 
                     } else {
@@ -409,7 +406,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
-
     }
     
     public BluGraph getGraph() {

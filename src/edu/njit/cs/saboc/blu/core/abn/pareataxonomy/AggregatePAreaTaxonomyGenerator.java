@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
 import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  *
@@ -38,6 +39,25 @@ public class AggregatePAreaTaxonomyGenerator<
         reducedTaxonomy.setReduced(true);
 
         return reducedTaxonomy;
-
+    }
+    
+    public TAXONOMY_T createExpandedSubtaxonomy(AGGREGATEPAREA_T aggregatePArea, 
+            PAreaTaxonomyGenerator<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T> generator) {
+        
+        AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregateInfo = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)aggregatePArea;
+        
+        GroupHierarchy<PAREA_T> groupHierarchy = aggregateInfo.getAggregatedGroupHierarchy();
+        
+        HashMap<Integer, PAREA_T> pareas = new HashMap<>();
+        
+        HashSet<PAREA_T> pareasInHierarchy = groupHierarchy.getNodesInHierarchy();
+        
+        pareasInHierarchy.forEach((PAREA_T parea) -> {
+            pareas.put(parea.getId(), parea);
+        });
+        
+        TAXONOMY_T expandedSubhierarchy = generator.createTaxonomyFromPAreas(pareas, groupHierarchy);
+        
+        return expandedSubhierarchy;
     }
 }

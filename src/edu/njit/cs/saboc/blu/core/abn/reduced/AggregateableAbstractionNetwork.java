@@ -10,4 +10,5 @@ public interface AggregateableAbstractionNetwork<ABN_T extends AbstractionNetwor
     public boolean isReduced();
     
     public ABN_T getReduced(int smallest, int largest);
+    
 }

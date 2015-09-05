@@ -6,11 +6,14 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
 /**
@@ -49,8 +52,15 @@ public class GenericPartitionEntry extends AbNNodeEntry {
     
     protected boolean treatAsContainer = false; // When regions are disabled, Region objects are used as areas
   
-    public GenericPartitionEntry(GenericContainerPartition partition, String regionName,
-            int width, int height, BluGraph g, GenericContainerEntry p, Color c, boolean treatAsContainer) {
+    public GenericPartitionEntry(
+            GenericContainerPartition partition, 
+            String regionName,
+            int width, 
+            int height, 
+            BluGraph g, 
+            GenericContainerEntry p, 
+            Color c, 
+            boolean treatAsContainer) {
 
         this.setFocusable(true);
 
@@ -66,6 +76,28 @@ public class GenericPartitionEntry extends AbNNodeEntry {
         this.graph = g;
 
         this.treatAsContainer = treatAsContainer;
+        
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (graph.getSelectedEdge() != null) {
+                    graph.deactivateSelectedEdge();
+                }
+                
+                graph.setCurrentPartitionEntry(GenericPartitionEntry.this);
+
+                //Show/Hide Partial-Areas within the region dialogue
+                JPopupMenu partitionMenu = graph.getPartitionMenu();
+
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    requestFocusInWindow();
+                    partitionMenu.setLocation(e.getLocationOnScreen());
+
+                    partitionMenu.setVisible(true);
+                } else {
+                    graph.requestFocusInWindow();
+                }
+            }
+        });
 
         //Setup the panel's dimensions, etc.
         setLayout(null);
@@ -240,4 +272,6 @@ public class GenericPartitionEntry extends AbNNodeEntry {
             }
         }
     }
+
+
 }

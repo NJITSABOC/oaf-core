@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.GenericGroupEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
@@ -24,7 +25,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JLabel;
@@ -32,7 +32,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.event.MouseInputListener;
 
 
 /**
@@ -42,7 +41,7 @@ import javax.swing.event.MouseInputListener;
  *
  * @author David Daudelin and Chris Ochs
  */
-public class BluGraph extends JLayeredPane implements MouseInputListener, FocusListener {
+public class BluGraph extends JLayeredPane {
     
     /**
      * Defines the thickness of the edges.
@@ -162,6 +161,33 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
         this.groupMenu = new GenericGroupEditMenu(this);
         this.labelManager = new AbNLabelManager(hierarchyData, labelCreator);
         
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent me) {
+                partitionMenu.setVisible(false);
+                groupMenu.setVisible(false);
+                
+                deactivateSelectedEdge();
+                
+                currentPartition = null;
+                currentGroup = null;
+            }
+        });
+        
+        partitionMenu = new JPopupMenu();
+        partitionMenu.setFocusable(true);
+
+        JMenuItem resizeMenuItem = new JMenuItem("Resize Container");
+
+        resizeMenuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                new ContainerResize(currentPartition, BluGraph.this);
+                partitionMenu.setVisible(false);
+            }
+        });
+
+        partitionMenu.add(resizeMenuItem);
+        
         setOpaque(true);
         setBackground(Color.white);
         setLayout(null);
@@ -171,8 +197,6 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
         setFocusable(true);
 
         initializeEdgeMenu();
-        
-        this.addMouseListener(this);
     }
     
     /**
@@ -768,33 +792,6 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
         return ((GenericInternalGraphFrame) c);
     }
 
-    public void mouseClicked(MouseEvent e) {
-        requestFocusInWindow();
-        deactivateSelectedEdge();
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-        if (selectedEdge != null) {
-            deactivateSelectedEdge();
-        }
-
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    public void mouseMoved(MouseEvent e) {
-    }
 
     /**
      * Returns true if a line has already been drawn between the given source and target.
@@ -833,6 +830,11 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
     }
 
     public JPopupMenu getGroupEntryMenuFor(GenericConceptGroup group) {
+        deactivateSelectedEdge();
+        partitionMenu.setVisible(false);
+        currentPartition = null;
+        
+        
         groupMenu.setCurrentGroup(group);
         
         return groupMenu;
@@ -851,6 +853,13 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
     }
 
     public JPopupMenu getPartitionMenu() {
+        deactivateSelectedEdge();
+        
+        groupMenu.setVisible(false);
+        groupMenu.setCurrentGroup(null);
+        
+        currentGroup = null;
+        
         return partitionMenu;
     }
 
@@ -892,12 +901,6 @@ public class BluGraph extends JLayeredPane implements MouseInputListener, FocusL
 
     public boolean showingConceptCountLabels() {
         return showConceptCountLabels;
-    }
-
-    public void focusGained(FocusEvent e) {
-    }
-
-    public void focusLost(FocusEvent e) {
     }
 
     /**

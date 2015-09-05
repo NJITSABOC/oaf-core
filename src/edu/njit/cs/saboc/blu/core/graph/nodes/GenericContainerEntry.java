@@ -53,6 +53,8 @@ public class GenericContainerEntry extends AbNNodeEntry {
      * Keeps track of the rows (horizontal lanes) running between pAreas.
      */
     private ArrayList<GraphLane>[] rows = new ArrayList[50];
+    
+    private boolean isCollapsed = false;
 
     public GenericContainerEntry(GenericGroupContainer container, BluGraph g,
             int aX, GraphLevel parent, Rectangle prefBounds) {
@@ -73,37 +75,44 @@ public class GenericContainerEntry extends AbNNodeEntry {
         collapseExpand.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         collapseExpand.setFont(new Font("Tahoma", Font.BOLD, 12));
         collapseExpand.setText("-");
+        
+        collapseExpand.addActionListener((ActionEvent ae) -> {
+            if (isCollapsed) {
+
+                this.expandContainer();
+                
+                isCollapsed = false;
+
+                try {
+                    graph.getParentInternalFrame().setAllGroupsHidden(false);
+                } catch (Exception exc) {
+                    System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
+                }
+                
+            } else {
+                this.collapseContainer();
+                
+                isCollapsed = true;
+
+                Collection<? extends GenericContainerEntry> areas = graph.getContainerEntries().values();
+
+                for (GenericContainerEntry containerEntry : areas) {
+                    if (!containerEntry.isCollapsed()) {
+                        return;
+                    }
+                }
+
+                try {
+                    graph.getParentInternalFrame().setAllGroupsHidden(true);
+                } catch (Exception exc) {
+                    System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
+                }
+                
+                
+            }
+        });
 
         add(collapseExpand);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (collapseExpand.getText().equals("+")) {
-
-            this.expandContainer();
-
-            try {
-                graph.getParentInternalFrame().setAllGroupsHidden(false);
-            } catch (Exception exc) {
-                System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
-            }
-        } else {
-            this.collapseContainer();
-
-            Collection<? extends GenericContainerEntry> areas = graph.getContainerEntries().values();
-
-            for (GenericContainerEntry containerEntry : areas) {
-                if (!containerEntry.isCollapsed()) {
-                    return;
-                }
-            }
-
-            try {
-                graph.getParentInternalFrame().setAllGroupsHidden(true);
-            } catch (Exception exc) {
-                System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
-            }
-        }
     }
 
     public void expandContainer() {

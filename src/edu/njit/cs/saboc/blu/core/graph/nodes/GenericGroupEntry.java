@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
@@ -32,8 +33,6 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
     private final String labelText;
 
     private final JLabel panelLabel;
-
-    private boolean selectable = false;
         
     protected final BluGraph graph;
     
@@ -48,9 +47,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
     private GraphGroupLevel parentGroupLevel;
 
     private ArrayList<GraphEdge> incidentEdges;
-    
-    private boolean menuOn;
-    
+
     private Point labelOffset;
         
     public GenericGroupEntry(GROUP_T group, 
@@ -67,7 +64,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         this.incidentEdges = ie;
         
         this.labelOffset = new Point(0, 0);
-        
+
         setFocusable(true);
 
         String rootName = group.getRoot().getName();
@@ -90,6 +87,29 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         setBackground(Color.WHITE);
 
         add(panelLabel);
+        
+        panelLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    
+                    JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
+
+                    if (pAreaMenu.isVisible()) {
+                        pAreaMenu.setVisible(false);
+                    }
+
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    requestFocusInWindow();
+                    final JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
+
+                    if (!pAreaMenu.isVisible()) {
+                        pAreaMenu.setVisible(true);
+                    }
+
+                    pAreaMenu.setLocation(e.getLocationOnScreen());
+                }
+            }
+        });
     }
     
     public GenericGroupEntry labelOffset(Point offset) {
@@ -112,36 +132,6 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
     public String getLabelText() {
         return labelText;
-    }
-    
-    public void mouseClicked(MouseEvent e) {
-
-        if (graph.getSelectedEdge() != null) {
-            graph.deactivateSelectedEdge();
-        }
-
-        if (e.getButton() == MouseEvent.BUTTON1) {
-
-            JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
-            
-            menuOn = false;
-
-            if (pAreaMenu.isVisible()) {
-                pAreaMenu.setVisible(false);
-            }
-
-        } else if (e.getButton() == MouseEvent.BUTTON3) {
-            requestFocusInWindow();
-            final JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
-
-            menuOn = true;
-            
-            if (!pAreaMenu.isVisible()) {
-                pAreaMenu.setVisible(true);
-            }
-
-            pAreaMenu.setLocation(e.getLocationOnScreen());
-        }
     }
 
     public int getGroupX() {
@@ -244,24 +234,5 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
     public ArrayList<GraphEdge> getIncidentEdges() {
         return incidentEdges;
-    }
-    
-    public void focusGained(FocusEvent e) {
-        if (!selectable) {
-            graph.setCurrentGroup(this);
-            graph.setCurrentPartitionEntry(this.getGroupLevelParent().getParentPartition());
-
-            JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
-
-            if (menuOn) {
-                pAreaMenu.setVisible(true);
-            }
-        }
-    }
-
-    public void focusLost(FocusEvent e) {
-        JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
-        pAreaMenu.setVisible(false);
-        menuOn = false;
     }
 }

@@ -28,7 +28,6 @@ public class GenericGroupEditMenu extends JPopupMenu {
         this.setFocusable(true);
         this.addMouseListener(new MenuItemListener());
         
-        
         createEdgeMenu();
     }
     
@@ -133,8 +132,6 @@ public class GenericGroupEditMenu extends JPopupMenu {
 
         deleteIncomingEdges.addMouseListener(new MenuItemListener());
         this.add(deleteIncomingEdges);
-
-        this.add(new JPopupMenu.Separator());
     }
     
     

@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -26,16 +25,17 @@ public class ContainerResize extends JDialog {
     private GenericPartitionEntry partition;
     private BluGraph graph;
 
-    public ContainerResize(JFrame parentFrame, GenericPartitionEntry r, BluGraph g) {
-        super(parentFrame, true);
+    public ContainerResize(GenericPartitionEntry r, BluGraph g) {
+     
+        setModal(true);
         
-        setTitle("Resize Area");
+        setTitle("Resize Container");
 
         partition = r;
         graph = g;
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setBorder(BorderFactory.createTitledBorder("Resize Area"));
+        mainPanel.setBorder(BorderFactory.createTitledBorder("Resize Container"));
         mainPanel.add(new JLabel("Rows: "));
 
         final JTextField txtRows = new JTextField(6);
@@ -134,7 +134,6 @@ public class ContainerResize extends JDialog {
         pack();
         
         setMinimumSize(getPreferredSize());
-        setLocationRelativeTo(parentFrame);
         setResizable(false);
         setVisible(true);
     }

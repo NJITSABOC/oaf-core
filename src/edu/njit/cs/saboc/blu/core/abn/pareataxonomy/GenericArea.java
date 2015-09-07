@@ -123,6 +123,7 @@ public abstract class GenericArea<
         ArrayList<PAREA_T> pareas = this.getAllPAreas();
 
         for (PAREA_T parea : pareas) {
+
             ArrayList<CONCEPT_T> pareaConcepts = parea.getConceptsInPArea();
 
             for (CONCEPT_T concept : pareaConcepts) {

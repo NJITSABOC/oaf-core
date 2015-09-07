@@ -23,14 +23,17 @@ public class AggregatePAreaTaxonomyGenerator<
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> {
         
     public TAXONOMY_T createAggregatePAreaTaxonomy(
-            TAXONOMY_T sourceTaxonomy,
-            PAreaTaxonomyGenerator<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T> generator,
-            AggregateAbNGenerator<PAREA_T, AGGREGATEPAREA_T> reducedGenerator, 
-            int min,
-            int max) {
+            final TAXONOMY_T sourceTaxonomy,
+            final PAreaTaxonomyGenerator<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T> generator,
+            final AggregateAbNGenerator<PAREA_T, AGGREGATEPAREA_T> reducedGenerator, 
+            final int min) {
+        
+        if(min == 1) {
+            return sourceTaxonomy;
+        }
         
         AggregateAbNResult<PAREA_T, AGGREGATEPAREA_T> reducedPAreaHierarchy = reducedGenerator.createReducedAbN((PAREA_T)sourceTaxonomy.getRootPArea(), 
-                sourceTaxonomy.getPAreas(), sourceTaxonomy.getGroupHierarchy(), min, max);
+                sourceTaxonomy.getPAreas(), sourceTaxonomy.getGroupHierarchy(), min);
 
         HashMap<Integer, PAREA_T> reducedPAreas = (HashMap<Integer, PAREA_T>)reducedPAreaHierarchy.reducedGroups;
         

@@ -16,10 +16,10 @@ public class AggregateTargetAbNGenerator<GROUP_T extends TargetGroup,
             TargetAbstractionNetwork sourceTargetAbN,
             TargetAbstractionNetworkGenerator generator, 
             AggregateAbNGenerator<GROUP_T, AGGREGATEGROUP_T> reducedGroupGenerator, 
-            int minGroupSize, int maxGroupSize) {
+            int minGroupSize) {
         
         AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T> reducedGroupHierarchy = reducedGroupGenerator.createReducedAbN((GROUP_T)sourceTargetAbN.getRootGroup(),
-                sourceTargetAbN.getGroups(), sourceTargetAbN.getGroupHierarchy(), minGroupSize, maxGroupSize);
+                sourceTargetAbN.getGroups(), sourceTargetAbN.getGroupHierarchy(), minGroupSize);
         
         TARGETABN_T reducedTargetAbN = (TARGETABN_T)generator.createTargetAbstractionNetwork(
                 reducedGroupHierarchy.reducedGroups.get(sourceTargetAbN.getRootGroup().getId()), 

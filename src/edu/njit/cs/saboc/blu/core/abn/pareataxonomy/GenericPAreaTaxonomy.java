@@ -24,7 +24,6 @@ public abstract class GenericPAreaTaxonomy<
 
             extends PartitionedAbstractionNetwork<AREA_T, PAREA_T> implements AggregateableAbstractionNetwork<TAXONOMY_T> {
 
-
     protected PAREA_T rootPArea;
 
     protected HIERARCHY_T conceptHierarchy;
@@ -86,6 +85,12 @@ public abstract class GenericPAreaTaxonomy<
             pareaIds.put(parea.getId(), parea);
         });
         
-        return (TAXONOMY_T)generator.createTaxonomyFromPAreas(pareaIds, pareaSubhierarchy);
+        TAXONOMY_T subtaxonomy = (TAXONOMY_T)generator.createTaxonomyFromPAreas(pareaIds, pareaSubhierarchy);
+        
+        if(this.isReduced()) {
+            subtaxonomy.setReduced(isReduced);
+        }
+        
+        return subtaxonomy;
     }
 }

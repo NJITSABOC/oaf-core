@@ -17,72 +17,67 @@ public abstract class AggregateAbNGenerator<GROUP_T extends GenericConceptGroup,
             GROUP_T rootGroup, 
             HashMap<Integer, GROUP_T> groups, 
             GroupHierarchy<GROUP_T> groupHierarchy, 
-            int minGroupSize, 
-            int maxGroupSize) {
+            int minGroupSize) {
         
-        HashMap<GROUP_T, HashSet<Integer>> reducedParents = new HashMap<GROUP_T, HashSet<Integer>>();
+        HashMap<GROUP_T, HashSet<Integer>> reducedParents = new HashMap<>();
         
-        HashMap<GROUP_T, GroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<GROUP_T, GroupHierarchy<GROUP_T>>();
+        HashMap<GROUP_T, GroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<>();
 
-        HashMap<Integer, Integer> groupParentCounts = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> groupParentCounts = new HashMap<>();
         
-        HashSet<GROUP_T> remainingGroups = new HashSet<GROUP_T>();
+        HashSet<GROUP_T> remainingGroups = new HashSet<>();
         remainingGroups.add(rootGroup); // The root parea is always included
         
         HashMap<GROUP_T, HashSet<GROUP_T>> groupSet = new HashMap<>();
         
         for(GROUP_T group : groups.values()) {
-            groupParentCounts.put(group.getId(), group.getParentIds().size());
+            groupParentCounts.put(group.getId(), groupHierarchy.getParents(group).size());
             
-            if (group.getConceptCount() >= minGroupSize && group.getConceptCount() <= maxGroupSize) {
+            if (group.getConceptCount() >= minGroupSize) {
                 remainingGroups.add(group);
             }
 
-            groupSet.put(group, new HashSet<GROUP_T>());
+            groupSet.put(group, new HashSet<>());
         }
         
         for (GROUP_T group : remainingGroups) {
-            reducedGroupMembers.put(group, new GroupHierarchy<GROUP_T>(group));
+            reducedGroupMembers.put(group, new GroupHierarchy<>(group));
 
-            reducedParents.put(group, new HashSet<Integer>());
+            reducedParents.put(group, new HashSet<>());
         }
         
         Queue<GROUP_T> queue = new LinkedList<GROUP_T>();
         queue.add(rootGroup);
         
         while(!queue.isEmpty()) {
+            
             GROUP_T group = queue.remove();
             
-            HashSet<Integer> parentGroupIds = group.getParentIds();
+            HashSet<GROUP_T> parentGroups = groupHierarchy.getParents(group);
 
             if (remainingGroups.contains(group)) {
+                
                 groupSet.get(group).add(group);
 
-                for (int parentGroupId : parentGroupIds) {
-                    GROUP_T parentGroup = groups.get(parentGroupId);
+                for (GROUP_T parentGroup : parentGroups) {
 
-                    if (parentGroup != null) { // May be mull when creating a Root subtaxonomy. Eventually this needs to be fixed.
-                        HashSet<GROUP_T> parentReducedGroups = groupSet.get(parentGroup);
+                    HashSet<GROUP_T> parentReducedGroups = groupSet.get(parentGroup);
 
-                        for (GROUP_T reducedGroup : parentReducedGroups) {
-                            reducedParents.get(group).add(reducedGroup.getId());
-                        }
+                    for (GROUP_T reducedGroup : parentReducedGroups) {
+                        reducedParents.get(group).add(reducedGroup.getId());
                     }
                 }
-                
+
             } else {
-                if (parentGroupIds != null) {
-                    for (int parentGroupId : parentGroupIds) {
-                        // Get the parent group
-                        GROUP_T parentGroup = groups.get(parentGroupId); 
-                        
-                        // Mark that this group belongs to the same reduced group as its parents
-                        groupSet.get(group).addAll(groupSet.get(parentGroup)); 
-                        
-                        // Add this group to that reducing group too
-                        for (GROUP_T reducedGroup : groupSet.get(parentGroup)) {
-                            reducedGroupMembers.get(reducedGroup).addIsA(group, parentGroup);
-                        }
+
+                for (GROUP_T parentGroup : parentGroups) {
+
+                    // Mark that this group belongs to the same reduced group as its parents
+                    groupSet.get(group).addAll(groupSet.get(parentGroup));
+
+                    // Add this group to that reducing group too
+                    for (GROUP_T reducedGroup : groupSet.get(parentGroup)) {
+                        reducedGroupMembers.get(reducedGroup).addIsA(group, parentGroup);
                     }
                 }
             }

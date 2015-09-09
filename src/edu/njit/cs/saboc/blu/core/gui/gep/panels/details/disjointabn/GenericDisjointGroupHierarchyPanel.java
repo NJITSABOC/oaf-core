@@ -28,7 +28,7 @@ public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T exten
             DisjointAbstractionNetwork disjointAbN, 
             BLUDisjointAbNConfiguration configuration) {
         
-        super(parentTableModel, childTableModel);
+        super(configuration, parentTableModel, childTableModel);
 
         this.disjointAbN = disjointAbN;
         this.configuration = configuration;

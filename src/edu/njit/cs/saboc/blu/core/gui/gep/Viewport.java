@@ -15,6 +15,7 @@ public class Viewport {
     
     private final BluGraph graph;
     
+    // TODO: This should be variable and passed in.
     private final int SLIDEOUT_MENU_DEFAULT_WIDTH = 500;
 
     public Viewport(BluGraph graph) {
@@ -67,7 +68,7 @@ public class Viewport {
 
         if(region.x < 0) {
             region.x = 0;
-        } else if(region.x + region.width > graph.getAbNWidth() + SLIDEOUT_MENU_DEFAULT_WIDTH / scale) {
+        } else if(region.x + region.width > graph.getAbNWidth() + (SLIDEOUT_MENU_DEFAULT_WIDTH / scale) ) {
             region.x = Math.max(graph.getAbNWidth() + (int)(SLIDEOUT_MENU_DEFAULT_WIDTH / scale) - region.width, 0);
         }
     }

@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,8 +29,8 @@ public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends Gen
         
         this.aggregateGroupList = groupList;
         
-        this.aggregateGroupList.addEntitySelectionListener(new EntitySelectionListener<GROUP_T>() {
-            public void entitySelected(GROUP_T group) {
+        this.aggregateGroupList.addEntitySelectionListener(new EntitySelectionAdapter<GROUP_T>() {
+            public void entityClicked(GROUP_T group) {
                 conceptList.setContents(configuration.getSortedConceptList(group));
             }
             

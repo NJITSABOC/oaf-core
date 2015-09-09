@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedGroupEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,8 +44,8 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         this.conceptList = conceptList;
         this.config = config;
         
-        this.aggregatedGroupList.addEntitySelectionListener(new EntitySelectionListener<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
-            public void entitySelected(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> group) {
+        this.aggregatedGroupList.addEntitySelectionListener(new EntitySelectionAdapter<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
+            public void entityClicked(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> group) {
                 conceptList.setContents(config.getSortedConceptList(group.getAggregatedGroup()));
             }
             

@@ -4,6 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
+import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
@@ -159,6 +160,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
 
     private void intitializeUIComponents(BLUGraphConfiguration uiConfiguration) {
+        
+        uiConfiguration.setGEP(this);
 
         zoomSlider = new JSlider(JSlider.VERTICAL, 10, 200, 100);
         zoomSlider.setBounds(10, 10, 40, 150);
@@ -779,14 +782,16 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         int dx = targetEntryPoint.x - viewport.region.x;
         int dy = targetEntryPoint.y - viewport.region.y;
         
+        final int MOVE_SPEED = 64;
+        
         int distSquared = dx * dx + dy * dy;
 
-        if (distSquared <= 400) {
+        if (Math.sqrt(distSquared) <= 64) {
             viewport.setLocation(targetEntryPoint);
             targetEntryPoint = null;
         } else {
             double angle = Math.atan2(dy, dx);
-            viewport.moveScaled(new Point((int) (40 * Math.cos(angle)), (int) (40 * Math.sin(angle))));
+            viewport.moveScaled(new Point((int) (MOVE_SPEED * Math.cos(angle)), (int) (MOVE_SPEED * Math.sin(angle))));
         }
         
         this.requestRedraw();

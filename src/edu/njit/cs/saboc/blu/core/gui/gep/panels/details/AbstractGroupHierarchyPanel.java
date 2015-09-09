@@ -2,18 +2,14 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
-import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import java.util.Optional;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
 
 /**
  *
@@ -23,41 +19,59 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
 
     private final JSplitPane splitPane;
     
-    private final JTable parentGroupTable;
+    private final AbstractEntityList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentGroupList;
     
-    private final JTable childGroupTable;
+    private final AbstractGroupList<GROUP_T> childGroupList;
     
     protected BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentModel;
     
     protected BLUAbstractChildGroupTableModel<GROUP_T> childModel;
 
     public AbstractGroupHierarchyPanel(
-           BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentTableModel,
-           BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
+           final BLUAbNConfiguration<CONCEPT_T, GROUP_T> config,
+           final BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentTableModel,
+           final BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
 
         this.setLayout(new BorderLayout());
         
-        parentGroupTable = new JTable(parentModel = parentTableModel);
-        parentGroupTable.setFont(parentGroupTable.getFont().deriveFont(Font.PLAIN, 14));
-        parentGroupTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
+        this.parentModel = parentTableModel;
+        this.childModel = childTableModel;
         
-        childGroupTable = new JTable(childModel = childTableModel);
-        childGroupTable.setFont(childGroupTable.getFont().deriveFont(Font.PLAIN, 14));
-        childGroupTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
+        parentGroupList = new AbstractEntityList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>>(parentTableModel) {
+            public String getBorderText(Optional<ArrayList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>>> entries) {
+                String baseStr = String.format("Root's Parent %s %s", 
+                        config.getConceptTypeName(true), 
+                        config.getGroupTypeName(true));
+                
+                if(entries.isPresent()) {
+                    return String.format("%s (%d)", baseStr, entries.get().size());
+                } else {
+                    return baseStr;
+                }
+            }
+        };
         
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Parents"));
+        childGroupList = new AbstractGroupList<GROUP_T>(childTableModel) {
+            public String getBorderText(Optional<ArrayList<GROUP_T>> entries) {
+                String baseStr = String.format("Child %s",
+                        config.getGroupTypeName(true));
+                
+                if(entries.isPresent()) {
+                    return String.format("%s (%d)", baseStr, entries.get().size());
+                } else {
+                    return baseStr;
+                }
+            }
+        };
         
-        topPanel.add(new JScrollPane(parentGroupTable), BorderLayout.CENTER);
-        
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Children"));
-        bottomPanel.add(new JScrollPane(childGroupTable), BorderLayout.CENTER);
+        config.getGroupSelectedListeners().forEach( (EntitySelectionListener<GROUP_T> listener) -> {
+            childGroupList.addEntitySelectionListener(listener);
+        });
         
         splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
-        splitPane.setTopComponent(topPanel);
-        splitPane.setBottomComponent(bottomPanel);
+        splitPane.setTopComponent(parentGroupList);
+        splitPane.setBottomComponent(childGroupList);
         
         splitPane.setDividerLocation(150);
 

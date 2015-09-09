@@ -26,7 +26,7 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea>
             GenericPAreaTaxonomy taxonomy, 
             PAreaTaxonomyConfiguration configuration) {
         
-        super(parentTableModel, childTableModel);
+        super(configuration, parentTableModel, childTableModel);
 
         this.taxonomy = taxonomy;
         this.configuration = configuration;

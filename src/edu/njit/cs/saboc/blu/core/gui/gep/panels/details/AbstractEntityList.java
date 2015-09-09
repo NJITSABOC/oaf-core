@@ -41,9 +41,16 @@ public abstract class AbstractEntityList<T> extends JPanel {
                 if(entityTable.getSelectedRow() >= 0) {
                     T entity = tableModel.getItemAtRow(entityTable.getSelectedRow());
                     
-                    selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
-                        listener.entitySelected(entity);
-                    });
+                    if (e.getClickCount() == 1) {
+                        selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
+                            listener.entityClicked(entity);
+                        });
+                    } else if (e.getClickCount() == 2) {
+                        selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
+                            listener.entityDoubleClicked(entity);
+                        });
+                    }
+
                 } else {
                     selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
                         listener.noEntitySelected();

@@ -40,4 +40,5 @@ public abstract class AbNNodeEntry extends JPanel {
     public void setHighlightState(HighlightState state) {
         this.highlightState = state;
     }
+    
 }

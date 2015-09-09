@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.GEPActionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
@@ -323,26 +322,31 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUGraphConfiguration groupOptionsConfiguration) {
+    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUGraphConfiguration gepConfiguration) {
         
         this.graph = graph;
-        
+
         tabbedPane.removeAll();
 
-        gep = null;
+        gep = new EnhancedGraphExplorationPanel(graph, painter, gepConfiguration);
 
         scroller = new JScrollPane(graph);
+        
+        String abnTypeName = gepConfiguration.getAbNTypeName();
 
-        tabbedPane.addTab("Edit Abstraction Network", scroller);
+        tabbedPane.addTab(String.format("Edit %s Graph", abnTypeName), scroller);
         
-        tabbedPane.addTab("Explore Abstraction Network", gep = new EnhancedGraphExplorationPanel(graph, painter, groupOptionsConfiguration));
-        
+        tabbedPane.addTab(String.format("Explore %s", abnTypeName), gep);
+               
         tabbedPane.setToolTipTextAt(0,
-                "<html><b>Edit Hierarchy Graph</b> allows you to edit the selected graph <br>"
-                + " as well as generate sub-hierarchies.");
+                String.format("<html><b>Edit %s Graph</b> allows you to edit some of the %s's layout and draw edges.", abnTypeName, abnTypeName.toLowerCase()));
 
-        tabbedPane.setToolTipTextAt(1, "<html><b>Explore Hierarchy Graph</b> allows you to quickly<br>"
-                + "explore the graph, as well as zoom out and<br>display partial-area information by double clicking.");
+        tabbedPane.setToolTipTextAt(1, 
+                String.format("<html><b>Explore %s</b> allows you to quickly<br>"
+                + "explore the %s. Additional information is displayed by selecting the different %s elements.", 
+                        abnTypeName,
+                        abnTypeName.toLowerCase(),
+                        abnTypeName.toLowerCase()));
         
         tabbedPane.validate();
         

@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JSplitPane;
@@ -37,8 +37,8 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
         
         this.groupList = groupList;
         
-        this.groupList.addEntitySelectionListener(new EntitySelectionListener<GROUP_T>() {
-            public void entitySelected(GROUP_T group) {
+        this.groupList.addEntitySelectionListener(new EntitySelectionAdapter<GROUP_T>() {
+            public void entityClicked(GROUP_T group) {
                 conceptList.setContents(getSortedConceptList(group));
             }
             

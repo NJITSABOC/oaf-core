@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
 import java.awt.BorderLayout;
@@ -64,16 +63,15 @@ public abstract class AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T extends Gen
             }
         };
         
-        config.getGroupSelectedListeners().forEach( (EntitySelectionListener<GROUP_T> listener) -> {
-            childGroupList.addEntitySelectionListener(listener);
-        });
+        parentGroupList.addEntitySelectionListener(config.getParentGroupListener());
+        childGroupList.addEntitySelectionListener(config.getChildGroupListener());
         
         splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         splitPane.setTopComponent(parentGroupList);
         splitPane.setBottomComponent(childGroupList);
         
-        splitPane.setDividerLocation(150);
+        splitPane.setDividerLocation(250);
 
         this.add(splitPane, BorderLayout.CENTER);
     }

@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
@@ -64,9 +64,9 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
     
     @Override
     public void setContents(AREA_T area) {
-        splitPane.setDividerLocation(0.5);
         
-                
+        splitPane.setDividerLocation(300);
+                        
         ArrayList<AGGREGATEPAREA_T> aggregatePAreas = area.getAllPAreas();
         
         HashMap<PAREA_T, HashSet<AGGREGATEPAREA_T>> aggregatedInto = new HashMap<>();

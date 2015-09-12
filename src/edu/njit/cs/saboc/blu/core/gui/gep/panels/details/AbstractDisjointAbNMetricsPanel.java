@@ -4,7 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingDetailsTableModel;
@@ -151,7 +151,7 @@ public class AbstractDisjointAbNMetricsPanel<
     private final JTable overlappingDetailsTable;
     protected final BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
     
-    protected final BLUDisjointAbNConfiguration configuration;
+    protected final BLUDisjointableAbNConfiguration configuration;
     
     private final JSplitPane splitPane;
     
@@ -160,7 +160,7 @@ public class AbstractDisjointAbNMetricsPanel<
     protected AbstractDisjointAbNMetricsPanel(
             BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel,
             BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel,
-            BLUDisjointAbNConfiguration configuration) {
+            BLUDisjointableAbNConfiguration configuration) {
         
         this.overlappingGroupTableModel = overlappingGroupTableModel;
         this.overlappingDetailsTableModel = overlappingDetailsTableModel;
@@ -247,7 +247,7 @@ public class AbstractDisjointAbNMetricsPanel<
     
     @Override
     public void setContents(CONTAINER_T container) {
-        splitPane.setDividerLocation(0.5);
+        splitPane.setDividerLocation(300);
         
         DISJOINTABN_T disjointAbN = (DISJOINTABN_T)configuration.createDisjointAbN(container);
         

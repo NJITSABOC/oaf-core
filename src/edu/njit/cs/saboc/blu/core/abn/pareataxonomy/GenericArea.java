@@ -70,7 +70,7 @@ public abstract class GenericArea<
         ArrayList<PAREA_T> pareas = this.getAllPAreas();
         
         for(PAREA_T parea : pareas) {
-            concepts.addAll(parea.getHierarchy().getNodesInHierarchy());
+            concepts.addAll(parea.getConceptsInPArea());
         }
         
         return concepts;

@@ -4,6 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
@@ -31,7 +32,7 @@ public class GenericDisjointGroupPanel<CONCEPT_T,
           
         this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy in %s", 
                 configuration.getConceptTypeName(false),
-                configuration.getDisjointGroupTypeName(false)));
+                configuration.getGroupTypeName(false)));
     }
         
     public void setContents(DISJOINTGROUP_T parea) {
@@ -48,13 +49,13 @@ public class GenericDisjointGroupPanel<CONCEPT_T,
     protected String getNodeTitle(DISJOINTGROUP_T node) {
         BLUDisjointAbNConfiguration currentConfig = (BLUDisjointAbNConfiguration)configuration;
         
-        return currentConfig.getDisjointGroupName(node);
+        return currentConfig.getGroupName(node);
     }
 
     @Override
     protected String getNodeType() {
         BLUDisjointAbNConfiguration currentConfig = (BLUDisjointAbNConfiguration)configuration;
         
-        return currentConfig.getDisjointGroupTypeName(false);
+        return currentConfig.getGroupTypeName(false);
     }
 }

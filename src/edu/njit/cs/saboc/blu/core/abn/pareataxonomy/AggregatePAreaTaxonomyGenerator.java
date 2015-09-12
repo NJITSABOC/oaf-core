@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNResult;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;

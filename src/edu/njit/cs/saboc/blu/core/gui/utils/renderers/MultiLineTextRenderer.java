@@ -14,9 +14,12 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
     }
 
     public Component getTableCellRendererComponent(
-            JTable table, Object value,
-            boolean isSelected, boolean hasFocus,
-            int row, int column) {
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
 
         if (isSelected) {
             setForeground(table.getSelectionForeground());
@@ -25,12 +28,12 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
             setForeground(table.getForeground());
             setBackground(table.getBackground());
         }
-        
+
         setFont(table.getFont());
-        
+
         if (hasFocus) {
             setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
-            
+
             if (table.isCellEditable(row, column)) {
                 setForeground(UIManager.getColor("Table.focusCellForeground"));
                 setBackground(UIManager.getColor("Table.focusCellBackground"));
@@ -38,19 +41,21 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
         } else {
             setBorder(new EmptyBorder(1, 2, 1, 2));
         }
-        
+
         if (value != null) {
             setText(value.toString());
-            
-            String [] lines = value.toString().split("\n");
-            
-            int height = 0 ;
-            
-            for(String line : lines) {
+
+            String[] lines = value.toString().split("\n");
+
+            int height = 0;
+
+            for (String line : lines) {
                 height += this.getFontMetrics(this.getFont()).getLineMetrics(line, null).getHeight();
             }
-           
-            table.setRowHeight(row, height + 10);
+            
+            int currentHeight = table.getRowHeight(row);
+
+            table.setRowHeight(row, Math.max(height + 10, currentHeight));
 
         } else {
             setText("");

@@ -19,7 +19,7 @@ public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends Disjoin
     
     public GenericChildDisjointGroupTableModel(BLUDisjointAbNConfiguration configuration) {
         super(new String [] {
-            configuration.getDisjointGroupTypeName(false), 
+            configuration.getGroupTypeName(false), 
             String.format("Overlapping %s", configuration.getGroupTypeName(true)),
             String.format("# %s", configuration.getConceptTypeName(true))
         });
@@ -35,7 +35,7 @@ public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends Disjoin
         
         overlaps.forEach( (GROUP_T group) -> {
             overlappingPAreaNames.add(String.format("%s (%d)", 
-                    configuration.getGroupName(group),
+                    configuration.getOverlappingGroupName(group),
                     group.getConceptCount()));
         });
         
@@ -48,7 +48,7 @@ public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends Disjoin
         }
         
         return new Object [] {
-            configuration.getDisjointGroupName(item),
+            configuration.getGroupName(item),
             overlapsStr,
             item.getConceptCount()
         };

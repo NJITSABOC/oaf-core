@@ -782,7 +782,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         int dx = targetEntryPoint.x - viewport.region.x;
         int dy = targetEntryPoint.y - viewport.region.y;
         
-        final int MOVE_SPEED = 64;
+        final int MOVE_SPEED = 128;
         
         int distSquared = dx * dx + dy * dy;
 

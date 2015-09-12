@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.abn.reduced;
+package edu.njit.cs.saboc.blu.core.abn.aggregate;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;

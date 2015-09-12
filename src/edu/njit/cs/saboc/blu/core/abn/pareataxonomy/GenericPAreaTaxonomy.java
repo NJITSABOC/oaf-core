@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;

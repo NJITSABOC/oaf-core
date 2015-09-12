@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
 
 /**
  *
@@ -151,34 +152,35 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
                 new Thread(getHierarchyLoader()).start();
             }
         } else {
+            
+            JViewport parent = (JViewport)this.getParent();
+            
             final int startX = 20;
 
             int xPos = startX;
             int yPos = 16;
-            
+                  
             bufferedGraphics.setColor(Color.BLACK);
             bufferedGraphics.setFont(new Font("Ariel", Font.BOLD, 14));
 
             for(int l = 0; l < conceptEntries.size(); l++) {
                 xPos = startX;
-                String title = "";
+                
+                if (parent.getViewRect().contains(xPos, yPos)) {
+                    String title = "";
 
-                if(l == 0) {
-                    title = String.format("%s Root %s (NOTE: Longest path is shown)",
-                            this.hierarchyGroupType, this.conceptType);
+                    if (l == 0) {
+                        title = String.format("%s Root %s (NOTE: Longest path is shown)",
+                                this.hierarchyGroupType, this.conceptType);
 
-                } else if (l == 1) {
-                    title = String.format("Children of Root %s", conceptType);
-                }
-                else {
-                    for(int i = 2; i < l; i++) {
-                        title += "Great-";
+                    } else if (l == 1) {
+                        title = String.format("Children of Root %s, # Concepts: %d", conceptType, conceptEntries.get(l).size());
+                    } else {
+                        title = String.format("Depth: %d, # Concepts: %d", l, conceptEntries.get(l).size());
                     }
-                    
-                    title += String.format("Grandchildren of Root %s (Depth: %d, # Concepts: %d)", conceptType, l, conceptEntries.get(l).size());
-                }
 
-                bufferedGraphics.drawString(title, xPos, yPos);
+                    bufferedGraphics.drawString(title, xPos, yPos);
+                }
 
                 yPos += 16;
 
@@ -186,7 +188,11 @@ public abstract class ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T extends S
                 int current = 0;
 
                 for(ConceptEntry<T> ce : conceptEntries.get(l)) {
-                    ce.drawConceptAt(conceptPainter, (Graphics2D)bufferedGraphics, xPos, yPos);
+                    
+                    if(parent.getViewRect().contains(xPos, yPos)) {
+                         ce.drawConceptAt(conceptPainter, (Graphics2D)bufferedGraphics, xPos, yPos);
+                    }
+
                     xPos += (ConceptEntry.CONCEPT_WIDTH + 8);
 
                     current++;

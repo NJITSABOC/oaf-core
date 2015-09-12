@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import java.util.HashSet;
 
 /**

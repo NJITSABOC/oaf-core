@@ -2,9 +2,9 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNResult;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import java.util.HashMap;
 

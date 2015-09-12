@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
@@ -14,9 +14,9 @@ public class BLUAbstractOverlappingDetailsTableModel<GROUP_T extends GenericConc
         DISJOINTGROUP_T extends DisjointGenericConceptGroup,
         CONCEPT_T> extends BLUAbstractTableModel<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> {
     
-    protected final BLUDisjointAbNConfiguration configuration;
+    protected final BLUDisjointableAbNConfiguration configuration;
     
-    public BLUAbstractOverlappingDetailsTableModel(BLUDisjointAbNConfiguration configuration) {
+    public BLUAbstractOverlappingDetailsTableModel(BLUDisjointableAbNConfiguration configuration) {
         super(new String[] {
             String.format("Other %s", configuration.getGroupTypeName(false)),
             String.format("# Common %s", configuration.getDisjointGroupTypeName(true)),

@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateAbNResult;
-import edu.njit.cs.saboc.blu.core.abn.reduced.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNResult;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 
 /**
  *

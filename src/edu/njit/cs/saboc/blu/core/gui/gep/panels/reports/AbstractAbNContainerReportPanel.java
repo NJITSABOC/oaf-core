@@ -5,6 +5,7 @@ import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ContainerReport;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -25,13 +26,14 @@ public class AbstractAbNContainerReportPanel<
     
     private final AbstractEntityList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> containerReportPanel; 
     
-    public AbstractAbNContainerReportPanel(BLUPartitionedAbNConfiguration config) {
+    protected AbstractAbNContainerReportPanel(BLUPartitionedAbNConfiguration config, 
+            BLUAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> model) {
+        
         super(config);
         
         this.setLayout(new BorderLayout());
         
-        this.containerReportPanel = new AbstractEntityList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> (
-                new GenericContainerReportTableModel<>(config)) {
+        this.containerReportPanel = new AbstractEntityList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> (model) {
                     
             public String getBorderText(Optional<ArrayList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>>> reports) {
                 if(reports.isPresent()) {
@@ -43,6 +45,10 @@ public class AbstractAbNContainerReportPanel<
         };
         
         this.add(containerReportPanel, BorderLayout.CENTER);
+    }
+    
+    public AbstractAbNContainerReportPanel(BLUPartitionedAbNConfiguration config) {
+        this(config, new GenericContainerReportTableModel<>(config));
     }
     
     @Override

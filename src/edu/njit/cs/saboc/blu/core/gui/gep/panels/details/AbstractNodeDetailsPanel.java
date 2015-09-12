@@ -46,6 +46,10 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         this.add(splitPane, BorderLayout.CENTER);
     }
     
+    protected AbstractEntityList<CONCEPT_T> getConceptList() {
+        return nodeConceptList;
+    }
+    
     public void setContents(NODE_T conceptGroup) {
         nodeSummaryPanel.setContents(conceptGroup);
         nodeOptionsMenuPanel.setContents(conceptGroup);

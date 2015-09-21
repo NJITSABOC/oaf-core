@@ -14,9 +14,6 @@ public class Viewport {
     public double scale = 1.0;
     
     private final BluGraph graph;
-    
-    // TODO: This should be variable and passed in.
-    private final int SLIDEOUT_MENU_DEFAULT_WIDTH = 500;
 
     public Viewport(BluGraph graph) {
         this.graph = graph;
@@ -60,7 +57,7 @@ public class Viewport {
     public void moveHorizontal(int distance) {
         
         // Max size locks horizontal movement
-        if(region.width >= graph.getAbNWidth() + SLIDEOUT_MENU_DEFAULT_WIDTH) {
+        if(region.width >= graph.getAbNWidth()) {
             return;
         }
         
@@ -68,8 +65,8 @@ public class Viewport {
 
         if(region.x < 0) {
             region.x = 0;
-        } else if(region.x + region.width > graph.getAbNWidth() + (SLIDEOUT_MENU_DEFAULT_WIDTH / scale) ) {
-            region.x = Math.max(graph.getAbNWidth() + (int)(SLIDEOUT_MENU_DEFAULT_WIDTH / scale) - region.width, 0);
+        } else if(region.x + region.width > graph.getAbNWidth()) {
+            region.x = Math.max(graph.getAbNWidth() - region.width, 0);
         }
     }
 
@@ -133,8 +130,8 @@ public class Viewport {
 
             if (region.x < 0) {
                 region.x = 0;
-            } else if (region.x + region.getWidth() > graph.getAbNWidth() + SLIDEOUT_MENU_DEFAULT_WIDTH / scale) {
-                region.x = graph.getAbNWidth() + (int)(SLIDEOUT_MENU_DEFAULT_WIDTH / scale) - (int) region.getWidth();
+            } else if (region.x + region.getWidth() > graph.getAbNWidth()) {
+                region.x = graph.getAbNWidth() - (int) region.getWidth();
             }
         }
         
@@ -162,8 +159,8 @@ public class Viewport {
 
         if (xView < 0) {
             xView = 0;
-        } else if (xView > (graph.getAbNWidth() + SLIDEOUT_MENU_DEFAULT_WIDTH - region.width)) {
-            xView = graph.getAbNWidth() + SLIDEOUT_MENU_DEFAULT_WIDTH - region.width;
+        } else if (xView > (graph.getAbNWidth() - region.width)) {
+            xView = graph.getAbNWidth() - region.width;
         }
 
         if (yView < 0) {

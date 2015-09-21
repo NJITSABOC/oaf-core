@@ -60,7 +60,7 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
     @Override
     public void setContents(CONTAINER_T container) {
         
-        splitPane.setDividerLocation(0.5);
+        splitPane.setDividerLocation(300);
         
         ArrayList<GROUP_T> sortedGroups = configuration.getSortedGroupList(container);
         

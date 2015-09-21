@@ -23,7 +23,9 @@ public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer,
         
         this.groupListPanel = groupListPanel;
         
-        String tabTitle = String.format("%s's %s", configuration.getContainerTypeName(false), configuration.getGroupTypeName(true));
+        String tabTitle = String.format("%s's %s", 
+                configuration.getContainerTypeName(false), 
+                configuration.getGroupTypeName(true));
         
         super.addGroupDetailsTab(groupListPanel, tabTitle);
     }

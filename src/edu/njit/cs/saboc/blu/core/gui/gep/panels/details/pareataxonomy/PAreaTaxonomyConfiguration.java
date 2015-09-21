@@ -9,9 +9,7 @@ import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 
@@ -76,7 +74,7 @@ public abstract class PAreaTaxonomyConfiguration<CONCEPT_T,
     public HashSet<CONCEPT_T> getContainerOverlappingConcepts(AREA_T area) {
         HashSet<CONCEPT_T> areaOverlappingConcepts = new HashSet<>();
         
-        HashSet<OverlappingConceptResult<CONCEPT_T, PAREA_T>> overlappingConceptResults = area.getOverlappingConcepts();
+        HashSet<OverlappingConceptResult<CONCEPT_T, PAREA_T>> overlappingConceptResults = getContainerOverlappingResults(area);
         
         overlappingConceptResults.forEach((OverlappingConceptResult<CONCEPT_T, PAREA_T> overlappingCls) -> {
             areaOverlappingConcepts.add(overlappingCls.getConcept());

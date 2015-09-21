@@ -7,11 +7,10 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingDetailsTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingGroupTableModel;
 import java.awt.BorderLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,11 +19,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 /**
  *
@@ -145,10 +142,10 @@ public class AbstractDisjointAbNMetricsPanel<
         }
     }
 
-    private final JTable overlappingGroupTable;
+    private final AbstractEntityList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> overlappingGroupTable;
     protected final BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel;
     
-    private final JTable overlappingDetailsTable;
+    private final AbstractEntityList<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> overlappingDetailsTable;
     protected final BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
     
     protected final BLUDisjointableAbNConfiguration configuration;
@@ -170,29 +167,46 @@ public class AbstractDisjointAbNMetricsPanel<
         
         this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
-        overlappingGroupTable = new JTable(this.overlappingGroupTableModel);
-        
-        overlappingGroupTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int selectedRow = overlappingGroupTable.getSelectedRow();
-                
-                if(selectedRow >= 0) {
-                    OverlappingGroupEntry<GROUP_T, CONCEPT_T> entry = overlappingGroupTableModel.getItemAtRow(selectedRow);
-                    
-                    if(currentMetrics.isPresent()) {
-                        displayOverlappingDetailsFor(entry.getOverlappingGroup());
-                    }
+        overlappingGroupTable = new AbstractEntityList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>>(this.overlappingGroupTableModel) {
+            @Override
+            protected String getBorderText(Optional<ArrayList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>>> entities) {
+                if(entities.isPresent()) {
+                    return String.format("Overlapping %s (%d)", configuration.getGroupTypeName(true), entities.get().size());
                 } else {
-                    overlappingDetailsTableModel.setContents(new ArrayList<>());
+                    return String.format("Overlapping %s", configuration.getGroupTypeName(true));
                 }
             }
-        });
+        };
+        
+        overlappingGroupTable.addEntitySelectionListener(new EntitySelectionAdapter<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> () {
 
-        overlappingDetailsTable = new JTable(this.overlappingDetailsTableModel);
+            @Override
+            public void entityClicked(OverlappingGroupEntry<GROUP_T, CONCEPT_T> entity) {
+                if (currentMetrics.isPresent()) {
+                    displayOverlappingDetailsFor(entity.getOverlappingGroup());
+                }
+            }
+
+            @Override
+            public void noEntitySelected() {
+                overlappingDetailsTable.clearContents();
+            }
+        });
+        
+        overlappingDetailsTable = new AbstractEntityList<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>>(this.overlappingDetailsTableModel) {
+            @Override
+            protected String getBorderText(Optional<ArrayList<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>>> entities) {
+                if(entities.isPresent()) {
+                    return String.format("Overlaps With (%d)", entities.get().size());
+                } else {
+                    return "Overlaps With";
+                }
+            }
+        };
         
         JTabbedPane overlapDetailsTabs = new JTabbedPane();
-        overlapDetailsTabs.addTab("Individual", new JScrollPane(overlappingDetailsTable));
-        overlapDetailsTabs.addTab("Combinations", new JPanel());
+        overlapDetailsTabs.addTab("Individual Overlaps", new JScrollPane(overlappingDetailsTable));
+        //overlapDetailsTabs.addTab("Combinations", new JPanel());
         
         splitPane.setTopComponent(new JScrollPane(overlappingGroupTable));
         splitPane.setBottomComponent(overlapDetailsTabs);
@@ -283,7 +297,6 @@ public class AbstractDisjointAbNMetricsPanel<
     public void clearContents() {
         currentMetrics = Optional.empty();
         
-        overlappingGroupTableModel.setContents(new ArrayList<>());
-        overlappingDetailsTableModel.setContents(new ArrayList<>());
+        overlappingGroupTable.clearContents();
     }
 }

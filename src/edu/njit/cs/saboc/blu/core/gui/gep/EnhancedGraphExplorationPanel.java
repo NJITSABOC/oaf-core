@@ -4,24 +4,23 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
-import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.GenericSlideoutPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -40,6 +39,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,7 +49,9 @@ import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -97,7 +99,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     currentDraw = System.currentTimeMillis();
                 }
 
-                repaint();
+                graphPanel.repaint();
                 lastDraw = currentDraw;
 
                 doDraw = false;
@@ -109,18 +111,18 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.doDraw = true;
     }
     
+    private JPanel graphPanel;
+    
     private JSlider zoomSlider;
     private JButton moveUpBtn;
     private JButton moveDownBtn;
     private JButton moveLeftBtn;
     private JButton moveRightBtn;
 
-    private final Point slideoutOffset = new Point(0, 20);
-    
-    private GenericSlideoutPanel slideoutPanel;
+    private JSplitPane splitPane;
+    private JPanel detailsPanel;
     
     private Optional<AbstractNodePanel> groupDetailsPanel;
-    
     private Optional<AbstractNodePanel> containerDetailsPanel;
 
     private Point targetEntryPoint = null;
@@ -134,7 +136,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private final GraphSelectionStateMonitor selectionStateMonitor;
     
-    private AbNPainter painter;
+    private final AbNPainter painter;
     
     public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, BLUGraphConfiguration configuration) {
         
@@ -162,6 +164,36 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private void intitializeUIComponents(BLUGraphConfiguration uiConfiguration) {
         
         uiConfiguration.setGEP(this);
+        
+        graphPanel = new JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                if (!drawingInitialized) {
+                    // Any work that has to be done before the first draw but after the GEP component has been added.
+
+                    jumpToRoot();
+
+                    drawingInitialized = true;
+                }
+
+                Graphics2D g2d = (Graphics2D) g;
+
+                viewport.setSizeScaled(graphPanel.getWidth(), graphPanel.getHeight());
+
+                drawAbstractionNetwork(g2d, viewport);
+
+                drawPopups(g);
+
+                drawLocationIndicators(g2d, Color.RED);
+
+                if (mouseStateMonitor.mouseDragging()) { // Draw circle. TODO: Move to method.
+                    drawNavigationPipper(g2d);
+                }
+            }
+        };
+        
+        graphPanel.setLayout(null);
 
         zoomSlider = new JSlider(JSlider.VERTICAL, 10, 200, 100);
         zoomSlider.setBounds(10, 10, 40, 150);
@@ -172,15 +204,15 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             public void stateChanged(ChangeEvent ce) {
                 if(!zoomSlider.getValueIsAdjusting()) {
                     viewport.setZoom(zoomSlider.getValue(), 
-                            EnhancedGraphExplorationPanel.this.getWidth(), 
-                            EnhancedGraphExplorationPanel.this.getHeight());
+                            graphPanel.getWidth(), 
+                            graphPanel.getHeight());
                     
                     EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
         
-        this.add(zoomSlider);
+        graphPanel.add(zoomSlider);
 
         moveUpBtn = new JButton("\u2191");
         moveUpBtn.setBounds(100, 25, 50, 25);
@@ -203,11 +235,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
-        this.slideoutPanel = new GenericSlideoutPanel(selectionStateMonitor, 
-                this.getBounds().getSize(),
-                new Point(this.getWidth() - 600, this.getHeight() + slideoutOffset.y), 
-                new Dimension(600, 700));
-        
         if(uiConfiguration.hasGroupDetailsPanel()) {
             groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
         } else {
@@ -220,22 +247,27 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             this.containerDetailsPanel = Optional.empty();
         }
         
-        this.slideoutPanel.doClose();
+        graphPanel.add(moveUpBtn);
+        graphPanel.add(moveLeftBtn);
+        graphPanel.add(moveDownBtn);
+        graphPanel.add(moveRightBtn);
+        graphPanel.add(toggle);
+
+        this.setLayout(new BorderLayout());
         
-        this.add(slideoutPanel);
+        splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-        this.add(moveUpBtn);
-        this.add(moveLeftBtn);
-        this.add(moveDownBtn);
-        this.add(moveRightBtn);
-        this.add(toggle);
+        detailsPanel = new JPanel(new BorderLayout());
 
-        this.setLayout(null);
+        splitPane.setLeftComponent(graphPanel);
+        splitPane.setRightComponent(detailsPanel);
+
+        this.add(splitPane, BorderLayout.CENTER);
     }
     
     private void initializeListeners() {
 
-        this.addMouseListener(new MouseAdapter() {
+        graphPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     mouseStateMonitor.setClickedLocation(e.getPoint());
@@ -298,7 +330,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
 
-        this.addMouseMotionListener(new MouseMotionAdapter() {
+        graphPanel.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
                 if (mouseStateMonitor.mouseDragging()) {
                     mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
@@ -346,26 +378,24 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
 
-        this.addComponentListener(new ComponentAdapter() {
+        graphPanel.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 
                 viewport.setZoom(zoomSlider.getValue(), 
-                            EnhancedGraphExplorationPanel.this.getWidth(), 
-                            EnhancedGraphExplorationPanel.this.getHeight());
-                
-                slideoutPanel.setGEPSet(getBounds().getSize());
-                
-                if(slideoutPanel.isHidden()) {
-                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getCollapsedSize(), slideoutOffset.y);
-                } else {
-                    slideoutPanel.setLocation(getWidth() - slideoutPanel.getWidth(), slideoutOffset.y);
-                }
+                            graphPanel.getWidth(), 
+                            graphPanel.getHeight());
                 
                 EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
+        
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                splitPane.setDividerLocation(getWidth() - 500);
+            }
+        });
 
-        this.addMouseWheelListener(new MouseWheelListener() {
+        graphPanel.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
                     int zoomLevelChange = -e.getUnitsToScroll() / 3;
@@ -376,15 +406,15 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     zoomSlider.setValue(newZoomLevel);
 
                     viewport.setZoom(newZoomLevel,
-                            EnhancedGraphExplorationPanel.this.getWidth(),
-                            EnhancedGraphExplorationPanel.this.getHeight());
+                            graphPanel.getWidth(),
+                            graphPanel.getHeight());
                     
                     EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
 
-        this.addKeyListener(new KeyAdapter() {
+        graphPanel.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
                 switch (e.getKeyCode()) {
@@ -452,7 +482,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     public void focusOnPoint(int x, int y) {
-        viewport.focusOnPoint(x, y, this.getWidth(), this.getHeight());
+        viewport.focusOnPoint(x, y, graphPanel.getWidth(), graphPanel.getHeight());
         
         this.doDraw = true;
     }
@@ -468,7 +498,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             return;
         }
         
-        viewport.focusOnPoint(root.getAbsoluteX(), 0, this.getWidth(), this.getHeight());
+        viewport.focusOnPoint(root.getAbsoluteX(), 0, graphPanel.getWidth(), graphPanel.getHeight());
         
         this.requestRedraw();
     }
@@ -495,6 +525,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         if (entryXPos + entry.getWidth() <= viewport.region.x + xBufferArea
                 || entryXPos >= viewport.region.x + viewport.region.width - xBufferArea) {
+            
             destX = entry.getAbsoluteX() + GenericGroupEntry.ENTRY_WIDTH / 2 - viewport.region.width / 2;
             
             if (destX < 0) {
@@ -530,37 +561,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         selectionStateMonitor.setSearchResults(entryIds);
     }
-    
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        
-        if(!drawingInitialized) {
-            // Any work that has to be done before the first draw but after the GEP component has been added.
-            
-            this.jumpToRoot();
-                        
-            drawingInitialized = true;
-        }
-        
-        Graphics2D g2d = (Graphics2D)g;
 
-        viewport.setSizeScaled(this.getWidth(), this.getHeight());
-        
-        drawAbstractionNetwork(g2d, viewport);
-        
-        drawPopups(g);
-
-        drawLocationIndicators(g2d, Color.RED);
-
-        if (mouseStateMonitor.mouseDragging()) { // Draw circle. TODO: Move to method.
-            drawNavigationPipper(g2d);
-        }
-    }
-    
     private void drawAbstractionNetwork(Graphics2D g2d, Viewport viewport) {
                
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.fillRect(0, 0, graphPanel.getWidth(), graphPanel.getHeight());
         
         Collection<? extends GenericContainerEntry> containerEntries = graph.getContainerEntries().values();
         
@@ -627,17 +632,17 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private void drawLocationIndicators(Graphics2D g2d, Color color) {
         g2d.setColor(color);
 
-        int xStartPoint = (int)(((float)viewport.region.x / graph.getWidth()) * this.getWidth());
-        int xEndPoint = xStartPoint + (int)(((float)viewport.region.width / graph.getWidth()) * this.getWidth());
+        int xStartPoint = (int)(((float)viewport.region.x / graph.getWidth()) * graphPanel.getWidth());
+        int xEndPoint = xStartPoint + (int)(((float)viewport.region.width / graph.getWidth()) * graphPanel.getWidth());
 
-        g2d.fill3DRect(xStartPoint, this.getHeight() - 20, 2, 20, true);
-        g2d.fill3DRect(xEndPoint - 2, this.getHeight() - 20, 2, 20, true);
+        g2d.fill3DRect(xStartPoint, graphPanel.getHeight() - 20, 2, 20, true);
+        g2d.fill3DRect(xEndPoint - 2, graphPanel.getHeight() - 20, 2, 20, true);
 
-        int yStartPoint = (int)(((float)viewport.region.y / graph.getHeight()) * this.getHeight());
-        int yEndPoint = yStartPoint + (int)(((float)viewport.region.height / graph.getHeight()) * this.getHeight());
+        int yStartPoint = (int)(((float)viewport.region.y / graph.getHeight()) * graphPanel.getHeight());
+        int yEndPoint = yStartPoint + (int)(((float)viewport.region.height / graph.getHeight()) * graphPanel.getHeight());
 
-        g2d.fill3DRect(this.getWidth() - 20, yStartPoint, 20, 2, true);
-        g2d.fill3DRect(this.getWidth() - 20, yEndPoint - 2, 20, 2, true);
+        g2d.fill3DRect(graphPanel.getWidth() - 20, yStartPoint, 20, 2, true);
+        g2d.fill3DRect(graphPanel.getWidth() - 20, yEndPoint - 2, 20, 2, true);
     }
 
     private void drawNavigationPipper(Graphics2D g2d) {
@@ -782,7 +787,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         int dx = targetEntryPoint.x - viewport.region.x;
         int dy = targetEntryPoint.y - viewport.region.y;
         
-        final int MOVE_SPEED = 128;
+        final int MOVE_SPEED = 196;
         
         int distSquared = dx * dx + dy * dy;
 
@@ -802,13 +807,16 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
         if (groupDetailsPanel.isPresent()) {           
-            groupDetailsPanel.get().setContents(entry.getGroup());
-            
-            slideoutPanel.setContent(groupDetailsPanel.get());
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    detailsPanel.removeAll();
+                    detailsPanel.add(groupDetailsPanel.get(), BorderLayout.CENTER);
+                    detailsPanel.revalidate();
+                    detailsPanel.repaint();
 
-            if (slideoutPanel.isHidden()) {
-                slideoutPanel.doOpen();
-            }
+                    groupDetailsPanel.get().setContents(entry.getGroup());
+                }
+            });
         }
     }
 
@@ -821,34 +829,37 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             GenericContainerEntry parentEntry = entry.getParentContainer();
             GenericGroupContainer container = parentEntry.getGroupContainer();
 
-            containerDetailsPanel.get().setContents(container);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    detailsPanel.removeAll();
+                    detailsPanel.add(containerDetailsPanel.get(), BorderLayout.CENTER);
+                    detailsPanel.revalidate();
+                    detailsPanel.repaint();
 
-            slideoutPanel.setContent(containerDetailsPanel.get());
-
-            if (slideoutPanel.isHidden()) {
-                slideoutPanel.doOpen();
-            }
+                    containerDetailsPanel.get().setContents(container);
+                }
+            });
         }
     }
 
     private void handleClickOutsideAnyGroupEntry() {
-        
-        if(groupDetailsPanel.isPresent()) {
-            groupDetailsPanel.get().clearContents();
-        }
-        
-        if(containerDetailsPanel.isPresent()) {
-            containerDetailsPanel.get().clearContents();
-        }
-        
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setOpaque(false);
-        
-        slideoutPanel.setContent(emptyPanel);
 
-        if (!slideoutPanel.isHidden()) {
-            slideoutPanel.doClose();
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (groupDetailsPanel.isPresent()) {
+                    groupDetailsPanel.get().clearContents();
+                }
+
+                if (containerDetailsPanel.isPresent()) {
+                    containerDetailsPanel.get().clearContents();
+                }
+
+                detailsPanel.removeAll();
+                detailsPanel.revalidate();
+                detailsPanel.repaint();
+            }
+        });
+        
         
         targetEntryPoint = null;
     }

@@ -4,7 +4,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
  *
  * @author Chris O
  */
-public abstract class GenericRelationship<V, T> {
+public class GenericRelationship<V, T> {
     private V type;
     private T target;
     

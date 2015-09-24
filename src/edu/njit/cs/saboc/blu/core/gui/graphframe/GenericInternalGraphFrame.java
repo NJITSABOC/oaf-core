@@ -213,7 +213,14 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     protected void addReportButtonToMenu(final JButton button) {
         reportsPanel.add(button);
-        reportsPanel.validate();
+        reportsPanel.revalidate();
+        reportsPanel.repaint();
+    }
+    
+    protected void removeReportButtonFromMenu(final JButton button) {
+        reportsPanel.remove(button);
+        reportsPanel.revalidate();
+        reportsPanel.repaint();
     }
     
     protected void addToggleableButtonToMenu(final PopupToggleButton button) {

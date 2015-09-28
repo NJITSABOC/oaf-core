@@ -42,6 +42,7 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         
         splitPane.setTopComponent(upperPanel);
         splitPane.setBottomComponent(nodeConceptList);
+        splitPane.setDividerLocation(400);
 
         this.add(splitPane, BorderLayout.CENTER);
     }

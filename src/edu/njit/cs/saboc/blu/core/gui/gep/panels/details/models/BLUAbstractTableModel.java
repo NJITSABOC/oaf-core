@@ -54,7 +54,12 @@ public abstract class BLUAbstractTableModel<T> extends AbstractTableModel {
     }
 
     public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
+        
+        if(data.length == 0) {
+            return Object.class;
+        } else {
+            return getValueAt(0, c).getClass();
+        }
     }
     
     public T getItemAtRow(int row) {

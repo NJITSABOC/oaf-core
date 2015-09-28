@@ -33,7 +33,8 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
             int conceptCount = parea.getConceptCount();
             
             typeDesc = String.format("<b>%s</b> is a regular partial-area that summarizes %d %s.",
-                    rootName, parea.getConceptCount(), configuration.getConceptTypeName(conceptCount > 1 || conceptCount == 0));
+                    rootName, parea.getConceptCount(), 
+                    configuration.getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
             
         } else {
             int aggregatedGroupCount = aggregateGroup.getAggregatedGroups().size();
@@ -42,9 +43,9 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
             typeDesc = String.format("<b>%s</b> is an aggregate partial-area that summarizes %d %s and %d %s.",
                     rootName, 
                     totalConceptCount, 
-                    configuration.getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0),
+                    configuration.getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
                     aggregatedGroupCount,
-                    configuration.getGroupTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0));
+                    configuration.getGroupTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
         }
 
         int parentCount = taxonomy.getParentGroups(group).size();
@@ -52,10 +53,11 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
 
         HashSet<PAREA_T> descendantPAreas = taxonomy.getDescendantGroups(group);
 
-
-        return String.format("<html>%s It has %d parent partial-areas and %d child partial-areas. "
-                + "There are a total of %d descendant partial-areas.",
-                typeDesc,  parentCount, childCount, descendantPAreas.size());
+        return String.format("<html>%s It has %d parent partial-area(s) and %d child partial-area(s). "
+                + "There are a total of %d descendant partial-area(s)."
+                + "<p>"
+                + "<b>Help / Description:</b><br>%s",
+                typeDesc,  parentCount, childCount, descendantPAreas.size(), configuration.getGroupHelpDescriptions(group));
     }
     
 }

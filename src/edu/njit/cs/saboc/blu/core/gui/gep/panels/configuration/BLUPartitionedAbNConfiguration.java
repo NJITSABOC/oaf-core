@@ -15,6 +15,8 @@ public interface BLUPartitionedAbNConfiguration<CONCEPT_T, GROUP_T extends Gener
     
     public String getContainerTypeName(boolean plural);
     
+    public String getContainerHelpDescription(CONTAINER_T container);
+    
     public String getContainerName(CONTAINER_T container);
     
     public String getGroupsContainerName(GROUP_T group);

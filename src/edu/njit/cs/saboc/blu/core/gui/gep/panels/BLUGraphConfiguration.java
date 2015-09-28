@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
 
 /**
@@ -28,6 +29,8 @@ public abstract class BLUGraphConfiguration {
     public EnhancedGraphExplorationPanel getGEP() {
         return gep;
     }
+    
+    public abstract AbstractAbNDetailsPanel createAbNDetailsPanel();
     
     public abstract boolean hasGroupDetailsPanel();
     public abstract AbstractNodePanel createGroupDetailsPanel();

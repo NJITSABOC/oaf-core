@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
@@ -39,7 +40,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import static java.awt.image.ImageObserver.WIDTH;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -122,6 +122,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private JSplitPane splitPane;
     private JPanel detailsPanel;
     
+    private AbstractAbNDetailsPanel abnDetailsPanel;
     private Optional<AbstractNodePanel> groupDetailsPanel;
     private Optional<AbstractNodePanel> containerDetailsPanel;
 
@@ -235,6 +236,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
+        this.abnDetailsPanel = uiConfiguration.createAbNDetailsPanel();
+        
         if(uiConfiguration.hasGroupDetailsPanel()) {
             groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
         } else {
@@ -258,6 +261,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
         detailsPanel = new JPanel(new BorderLayout());
+        
+        if (abnDetailsPanel != null) {
+            detailsPanel.add(abnDetailsPanel, BorderLayout.CENTER);
+        }
 
         splitPane.setLeftComponent(graphPanel);
         splitPane.setRightComponent(detailsPanel);
@@ -855,6 +862,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 }
 
                 detailsPanel.removeAll();
+
+                if (abnDetailsPanel != null) {
+                    detailsPanel.add(abnDetailsPanel, BorderLayout.CENTER);
+                }
+                
                 detailsPanel.revalidate();
                 detailsPanel.repaint();
             }

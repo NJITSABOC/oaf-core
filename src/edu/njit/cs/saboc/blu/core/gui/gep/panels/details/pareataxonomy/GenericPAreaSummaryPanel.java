@@ -46,8 +46,6 @@ public abstract class GenericPAreaSummaryPanel<
     }
 
     protected String createDescriptionStr(PAREA_T group) {
-        String conceptType = configuration.getConceptTypeName(true);
-        
         String rootName = configuration.getGroupName(group);
         int classCount = group.getConceptCount();
 
@@ -61,9 +59,46 @@ public abstract class GenericPAreaSummaryPanel<
         descendantPAreas.forEach((PAREA_T parea) -> {
             descendantClasses.addAll(parea.getConceptsInPArea());
         });
+        
+        StringBuilder result = new StringBuilder();
+        
+        result.append(String.format("<html><b>%s</b> is a partial-area that summarizes %d %s. ", 
+                rootName, 
+                classCount,  
+                configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase()));
+        
+        if(parentCount > 0) {
+            result.append(String.format("It has %d parent %s and ", 
+                    parentCount, 
+                    configuration.getGroupTypeName(parentCount > 1 || parentCount == 0).toLowerCase()));
+        } else {
+            result.append("It has no parent partial-areas and ");
+        }
+        
+        if(childCount > 0) {
+            result.append(String.format("%d child %s.", childCount,
+                    configuration.getGroupTypeName(childCount > 1 || childCount == 0).toLowerCase()));
+            
+            if(descendantPAreas.size() > childCount) {
+                int descPAreaCount = descendantPAreas.size();
+                int descClassCount = descendantClasses.size();
+                
+                result.append(String.format("It has a total of %d descendant %s which summarize a total of %d %s.", 
+                        descPAreaCount, 
+                        configuration.getGroupTypeName(descPAreaCount > 1).toLowerCase(),
+                        descClassCount,
+                        configuration.getConceptTypeName(descClassCount > 1).toLowerCase())
+                );
+            }
+            
+        } else {
+            result.append("no child partial-areas.");
+        }
+        
+        result.append("<p>");
+        result.append("<b>Help / Description</b><p>");
+        result.append(configuration.getGroupHelpDescriptions(group));
 
-        return String.format("<html><b>%s</b> is a partial-area that summarizes %d %s. It has %d parent partial-areas and %d child partial-areas. "
-                + "There are a total of %d descendant partial-areas that summarizes %d %s",
-                rootName, classCount, conceptType, parentCount, childCount, descendantPAreas.size(), descendantClasses.size(), conceptType);
+        return result.toString();
     }
 }

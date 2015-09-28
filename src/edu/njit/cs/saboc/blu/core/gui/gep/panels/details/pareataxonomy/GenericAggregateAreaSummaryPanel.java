@@ -37,27 +37,43 @@ public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
             } else {
                 aggregatePAreas.add(parea);
             }
-            
-            
+
             totalConcepts.addAll(group.getAllGroupsConcepts());
         });
         
         String pareaStr;
                
         if(aggregatePAreas.isEmpty()) {
-            pareaStr = String.format("%d %s in %d regular partial-areas.",
-                    totalConcepts.size(), configuration.getConceptTypeName(true),
-                    regularPAreas.size());
-        } else {
-            pareaStr = String.format("%d %s in %d regular partial-area and %d aggregate partial-areas.",
-                    totalConcepts.size(), configuration.getConceptTypeName(true),
+            pareaStr = String.format("%d %s in %d regular %s.",
+                    totalConcepts.size(), 
+                    configuration.getConceptTypeName(true).toLowerCase(),
                     regularPAreas.size(),
-                    aggregatePAreas.size());
+                    configuration.getGroupTypeName(regularPAreas.size() != 1).toLowerCase());
+        } else {
+            
+            if(regularPAreas.isEmpty()) {
+                pareaStr = String.format("%d %s in %d aggregate %s.",
+                        totalConcepts.size(), 
+                        configuration.getConceptTypeName(true).toLowerCase(),
+                        aggregatePAreas.size(),
+                        configuration.getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
+            } else {
+                pareaStr = String.format("%d %s in %d regular %s and %d aggregate %s.",
+                        totalConcepts.size(),
+                        configuration.getConceptTypeName(true).toLowerCase(),
+                        regularPAreas.size(),
+                        configuration.getGroupTypeName(regularPAreas.size() != 1).toLowerCase(),
+                        aggregatePAreas.size(),
+                        configuration.getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
+            }
         }
-        
+
         String areaName = configuration.getContainerName(area);
         
-        return String.format("<html><b>%s</b> is an area that summarizes %s.",
-                areaName, pareaStr, configuration.getConceptTypeName(true));
+        return String.format("<html><b>%s</b> is an area that summarizes %s"
+                + "<p><b>Help / Description:</b><br>%s",
+                areaName, 
+                pareaStr, 
+                configuration.getContainerHelpDescription(area));
     }
 }

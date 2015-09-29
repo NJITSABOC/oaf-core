@@ -205,10 +205,10 @@ public class AbstractDisjointAbNMetricsPanel<
         };
         
         JTabbedPane overlapDetailsTabs = new JTabbedPane();
-        overlapDetailsTabs.addTab("Individual Overlaps", new JScrollPane(overlappingDetailsTable));
+        overlapDetailsTabs.addTab("Individual Overlaps", overlappingDetailsTable);
         //overlapDetailsTabs.addTab("Combinations", new JPanel());
         
-        splitPane.setTopComponent(new JScrollPane(overlappingGroupTable));
+        splitPane.setTopComponent(overlappingGroupTable);
         splitPane.setBottomComponent(overlapDetailsTabs);
         
         this.add(splitPane);

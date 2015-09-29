@@ -82,16 +82,18 @@ public abstract class GenericDisjointGroupSummaryPanel<
         
         HashSet<GROUP_T> overlaps = group.getOverlaps();
         
+        String result;
+        
         if(overlaps.size() == 1) {
-            return String.format("<b>%s</b> is a basis %s that summarizes %d non-overlapping %s. It has %d descendant overlapping %s which summarize %d overlapping %s.",
+            result = String.format("<b>%s</b> is a basis (non-overlapping) %s that summarizes %d non-overlapping %s. It has %d descendant overlapping %s which summarizes %d overlapping %s.",
                     rootName, 
-                    configuration.getGroupTypeName(false), 
+                    configuration.getGroupTypeName(false).toLowerCase(), 
                     classCount, 
-                    configuration.getConceptTypeName(classCount > 1 || classCount == 0),
+                    configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
                     descendantGroupCount, 
-                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0),
+                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0));
+                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         } else {
             
             ArrayList<String> overlappingGroupNames = new ArrayList<>();
@@ -105,21 +107,27 @@ public abstract class GenericDisjointGroupSummaryPanel<
             String overlapsStr = overlappingGroupNames.get(0);
             
             for(int c = 1; c < overlappingGroupNames.size(); c++) {
-                overlapsStr += "," + overlappingGroupNames.get(c);
+                overlapsStr += ", " + overlappingGroupNames.get(c);
             }
             
-            return String.format("<b>%s</b> is an overlapping %s that summarizes %d overlapping %s. It overlaps between the following %s: <b>%s</b>."
-                    + " It has %d descendant overlapping %s which summarize %d overlapping %s.",
+            result = String.format("<b>%s</b> is an overlapping %s that summarizes %d overlapping %s. It overlaps between the following %s: <b>%s</b>."
+                    + " It has %d descendant overlapping %s which summarizes %d overlapping %s.",
                     rootName, 
-                    configuration.getGroupTypeName(false), 
+                    configuration.getGroupTypeName(false).toLowerCase(), 
                     classCount, 
-                    configuration.getConceptTypeName(classCount > 1 || classCount == 0),
-                    configuration.getGroupTypeName(true),
+                    configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
+                    configuration.getOverlappingGroupTypeName(true).toLowerCase(),
                     overlapsStr,
                     descendantGroupCount, 
-                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0),
+                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0));
+                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         }
+        
+        result += "<p><b>Help / Description:</b><br>";
+        
+        result += configuration.getGroupHelpDescriptions(group);
+        
+        return result;
     }
 }

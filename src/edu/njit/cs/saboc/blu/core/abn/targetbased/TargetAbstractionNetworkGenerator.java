@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,12 +22,18 @@ public abstract class TargetAbstractionNetworkGenerator<
         TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> {
     
     public TARGETABN_T deriveTargetAbstractionNetwork(HashSet<CONCEPT_T> sourceConcepts, REL_T relationshipType, CONCEPT_T targetHierarchyRoot) {
+        HashSet<REL_T> relTypes = new HashSet<>();
+        relTypes.add(relationshipType);
+        
+        return this.deriveTargetAbstractionNetwork(sourceConcepts, relTypes, targetHierarchyRoot);
+    }
+    
+    public TARGETABN_T deriveTargetAbstractionNetwork(HashSet<CONCEPT_T> sourceConcepts, HashSet<REL_T> relationshipTypes, CONCEPT_T targetHierarchyRoot) {
         
         HashMap<CONCEPT_T, HashSet<CONCEPT_T>> relationshipTargets = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
            
         for(CONCEPT_T concept : sourceConcepts) {
-            relationshipTargets.put(concept, getTargetsOfRelationships(
-                    getConceptRelationships(concept), relationshipType)
+            relationshipTargets.put(concept, getTargetsOfRelationships(getConceptRelationships(concept), relationshipTypes)
             );
         }
         
@@ -201,11 +208,11 @@ public abstract class TargetAbstractionNetworkGenerator<
         return createTargetAbstractionNetwork(rootGroup, targetGroups, groupHierarchy);
     }
     
-    private HashSet<CONCEPT_T> getTargetsOfRelationships(HashSet<GenericRelationship<REL_T, CONCEPT_T>> relationships, REL_T type) {
+    private HashSet<CONCEPT_T> getTargetsOfRelationships(HashSet<GenericRelationship<REL_T, CONCEPT_T>> relationships, HashSet<REL_T> types) {
         HashSet<CONCEPT_T> targetConcepts = new HashSet<CONCEPT_T>();
         
         for(GenericRelationship<REL_T,CONCEPT_T> relationship : relationships) {
-            if(relationship.getType().equals(type)) {
+            if(types.contains(relationship.getType())) {
                 targetConcepts.add(relationship.getTarget());
             }
         }

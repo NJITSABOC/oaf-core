@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -70,6 +71,6 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
         this.setLayout(new BorderLayout());
         
         this.add(abnNameLabel, BorderLayout.NORTH);
-        this.add(abnDetailsPane, BorderLayout.CENTER);
+        this.add(new JScrollPane(abnDetailsPane), BorderLayout.CENTER);
     }
 }

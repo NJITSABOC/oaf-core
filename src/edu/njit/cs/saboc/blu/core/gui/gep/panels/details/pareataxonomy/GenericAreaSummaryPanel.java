@@ -16,9 +16,9 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
     
     protected GenericRelationshipPanel<REL_T> relationshipPanel;
     
-    protected final PAreaTaxonomyConfiguration configuration;
+    protected final BLUGenericPAreaTaxonomyConfiguration configuration;
     
-    public GenericAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, PAreaTaxonomyConfiguration configuration) {        
+    public GenericAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, BLUGenericPAreaTaxonomyConfiguration configuration) {        
         this.configuration = configuration;
         
         relationshipPanel = relTable;
@@ -32,7 +32,7 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
     public void setContents(AREA_T area) {
         super.setContents(area);
         
-        relationshipPanel.setContents(configuration.getAreaRelationships(area));
+        relationshipPanel.setContents(configuration.getDataConfiguration().getAreaRelationships(area));
     }
     
     public void clearContents() {
@@ -42,10 +42,10 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
     }
     
     protected String createDescriptionStr(AREA_T area) {
-        String areaName = configuration.getContainerName(area);
+        String areaName = configuration.getTextConfiguration().getContainerName(area);
         int classCount = area.getConcepts().size();
         
-        String conceptType = configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
+        String conceptType = configuration.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
         
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("<html><b>%s</b> is an area that summarizes %d %s.",
@@ -53,7 +53,7 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
         
         builder.append("<p>");
         builder.append("<b>Help / Description</b><p>");
-        builder.append(configuration.getContainerHelpDescription(area));
+        builder.append(configuration.getTextConfiguration().getContainerHelpDescription(area));
 
         return builder.toString();
     }

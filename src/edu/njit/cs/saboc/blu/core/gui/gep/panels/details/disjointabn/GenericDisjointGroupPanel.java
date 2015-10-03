@@ -3,8 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
@@ -16,23 +15,24 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPane
 public class GenericDisjointGroupPanel<CONCEPT_T, 
         DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>, 
         GROUP_T extends GenericConceptGroup,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbstractGroupPanel<DISJOINTGROUP_T, CONCEPT_T> {
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupPanel<DISJOINTGROUP_T, CONCEPT_T, CONFIG_T> {
     
     protected final GenericDisjointGroupConceptHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, HIERARCHY_T> conceptHierarchyPanel;
     
     public GenericDisjointGroupPanel(
             AbstractNodeDetailsPanel<DISJOINTGROUP_T, CONCEPT_T> disjointGroupDetailsPanel, 
-            AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T> disjointGroupHierarchyPanel,
+            AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, CONFIG_T> disjointGroupHierarchyPanel,
             GenericDisjointGroupConceptHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, HIERARCHY_T> conceptHierarchyPanel,
-            BLUDisjointAbNConfiguration configuration) {
+            CONFIG_T configuration) {
         
         super(disjointGroupDetailsPanel, disjointGroupHierarchyPanel, configuration);
         
         this.conceptHierarchyPanel = conceptHierarchyPanel;
           
         this.addGroupDetailsTab(conceptHierarchyPanel, String.format("%s Hierarchy in %s", 
-                configuration.getConceptTypeName(false),
-                configuration.getGroupTypeName(false)));
+                configuration.getTextConfiguration().getConceptTypeName(false),
+                configuration.getTextConfiguration().getGroupTypeName(false)));
     }
         
     public void setContents(DISJOINTGROUP_T parea) {
@@ -47,15 +47,11 @@ public class GenericDisjointGroupPanel<CONCEPT_T,
     
     @Override
     protected String getNodeTitle(DISJOINTGROUP_T node) {
-        BLUDisjointAbNConfiguration currentConfig = (BLUDisjointAbNConfiguration)configuration;
-        
-        return currentConfig.getGroupName(node);
+        return getConfiguration().getTextConfiguration().getGroupName(node);
     }
 
     @Override
-    protected String getNodeType() {
-        BLUDisjointAbNConfiguration currentConfig = (BLUDisjointAbNConfiguration)configuration;
-        
-        return currentConfig.getGroupTypeName(false);
+    protected String getNodeType() {       
+        return getConfiguration().getTextConfiguration().getGroupTypeName(false);
     }
 }

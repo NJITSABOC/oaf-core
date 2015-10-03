@@ -20,7 +20,7 @@ public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends Gene
     private JScrollPane scrollPane;
     
     public PAreaConceptHierarchyPanel(ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel, 
-            PAreaTaxonomyConfiguration configuration) {
+            BLUGenericPAreaTaxonomyConfiguration configuration) {
         
         this.setLayout(new BorderLayout());
         

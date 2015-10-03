@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends Gen
 
     public AbstractAggregatedGroupsPanel(AbstractGroupList<GROUP_T> groupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
-            BLUAbNConfiguration configuration) {
+            BLUConfiguration configuration) {
         
         this.setLayout(new BorderLayout());
         
@@ -31,7 +31,7 @@ public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends Gen
         
         this.aggregateGroupList.addEntitySelectionListener(new EntitySelectionAdapter<GROUP_T>() {
             public void entityClicked(GROUP_T group) {
-                conceptList.setContents(configuration.getSortedConceptList(group));
+                conceptList.setContents(configuration.getDataConfiguration().getSortedConceptList(group));
             }
             
             public void noEntitySelected() {

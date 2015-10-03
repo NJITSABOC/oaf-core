@@ -16,15 +16,15 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> 
             extends GenericPAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AGGREGATEPAREA_T> {
     
-    public GenericAggregatePAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration configuration) {
+    public GenericAggregatePAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration configuration) {
         super(relationshipPanel, taxonomy, configuration);
     }
     
     protected String createDescriptionStr(AGGREGATEPAREA_T group) {
 
-        String rootName = configuration.getGroupName(group);
+        String rootName = configuration.getTextConfiguration().getGroupName(group);
         
-        AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregateGroup = ( AggregateableConceptGroup<CONCEPT_T, PAREA_T>)group;
+        AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregateGroup = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)group;
          
         String typeDesc;
         
@@ -34,7 +34,7 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
             
             typeDesc = String.format("<b>%s</b> is a regular partial-area that summarizes %d %s.",
                     rootName, parea.getConceptCount(), 
-                    configuration.getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
+                    configuration.getTextConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
             
         } else {
             int aggregatedGroupCount = aggregateGroup.getAggregatedGroups().size();
@@ -43,9 +43,9 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
             typeDesc = String.format("<b>%s</b> is an aggregate partial-area that summarizes %d %s and %d %s.",
                     rootName, 
                     totalConceptCount, 
-                    configuration.getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
+                    configuration.getTextConfiguration().getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
                     aggregatedGroupCount,
-                    configuration.getGroupTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
+                    configuration.getTextConfiguration().getGroupTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
         }
 
         int parentCount = taxonomy.getParentGroups(group).size();
@@ -57,7 +57,7 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
                 + "There are a total of %d descendant partial-area(s)."
                 + "<p>"
                 + "<b>Help / Description:</b><br>%s",
-                typeDesc,  parentCount, childCount, descendantPAreas.size(), configuration.getGroupHelpDescriptions(group));
+                typeDesc,  parentCount, childCount, descendantPAreas.size(), configuration.getTextConfiguration().getGroupHelpDescriptions(group));
     }
     
 }

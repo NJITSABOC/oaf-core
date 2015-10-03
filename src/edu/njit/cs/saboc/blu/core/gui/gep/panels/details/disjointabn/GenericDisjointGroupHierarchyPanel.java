@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
@@ -16,17 +16,19 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T extends DisjointGenericConceptGroup> extends AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T> {
+public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, 
+        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
+        CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, CONFIG_T> {
     
     private final DisjointAbstractionNetwork disjointAbN;
     
-    private final BLUDisjointAbNConfiguration configuration;
+    private final CONFIG_T configuration;
 
     public GenericDisjointGroupHierarchyPanel(
             BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> parentTableModel,
             BLUAbstractChildGroupTableModel<DISJOINTGROUP_T> childTableModel,
             DisjointAbstractionNetwork disjointAbN, 
-            BLUDisjointAbNConfiguration configuration) {
+            CONFIG_T configuration) {
         
         super(configuration, parentTableModel, childTableModel);
 
@@ -39,8 +41,8 @@ public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T exten
         
         Collections.sort(entries, new Comparator<GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>>() {
             public int compare(GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T> a, GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T> b) {
-                String aName = configuration.getConceptName(a.getParentConcept());
-                String bName = configuration.getConceptName(b.getParentConcept());
+                String aName = configuration.getTextConfiguration().getConceptName(a.getParentConcept());
+                String bName = configuration.getTextConfiguration().getConceptName(b.getParentConcept());
                 
                 return aName.compareToIgnoreCase(bName);
             }

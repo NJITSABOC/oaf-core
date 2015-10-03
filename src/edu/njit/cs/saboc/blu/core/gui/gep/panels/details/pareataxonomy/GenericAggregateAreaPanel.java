@@ -17,8 +17,9 @@ public class GenericAggregateAreaPanel<AREA_T extends GenericArea,
         PAREA_T extends GenericPArea,
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>, 
         CONCEPT_T,
-        ENTRY_T>
-            extends AbstractContainerPanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T, ENTRY_T> {
+        ENTRY_T,
+        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration>
+            extends AbstractContainerPanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T, ENTRY_T, CONFIG_T> {
     
     private final GenericAreaAggregatedPAreaPanel<CONCEPT_T, AREA_T, PAREA_T, AGGREGATEPAREA_T> aggregatedPAreaPanel;
     
@@ -28,7 +29,7 @@ public class GenericAggregateAreaPanel<AREA_T extends GenericArea,
            AbstractNodeDetailsPanel<AREA_T, ENTRY_T> containerDetailsPanel, 
            AbstractContainerGroupListPanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T> groupListPanel, 
            GenericAreaAggregatedPAreaPanel<CONCEPT_T, AREA_T, PAREA_T, AGGREGATEPAREA_T> aggregatedPAreaPanel,
-           PAreaTaxonomyConfiguration configuration) {
+           CONFIG_T configuration) {
         
         super(containerDetailsPanel, groupListPanel, configuration);
         

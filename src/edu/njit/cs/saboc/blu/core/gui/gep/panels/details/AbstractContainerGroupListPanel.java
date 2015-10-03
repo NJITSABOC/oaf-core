@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -12,7 +12,10 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends GenericGroupContainer, GROUP_T extends GenericConceptGroup, CONCEPT_T>
+public abstract class AbstractContainerGroupListPanel<
+        CONTAINER_T extends GenericGroupContainer, 
+        GROUP_T extends GenericConceptGroup, 
+        CONCEPT_T>
 
         extends AbNNodeInformationPanel<CONTAINER_T> {
     
@@ -22,12 +25,12 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
     
     private final AbstractEntityList<CONCEPT_T> conceptList;
     
-    protected final BLUPartitionedAbNConfiguration configuration;
+    protected final BLUPartitionedConfiguration configuration;
     
     public AbstractContainerGroupListPanel(
             AbstractGroupList<GROUP_T> groupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
-            BLUPartitionedAbNConfiguration configuration) {
+            BLUPartitionedConfiguration configuration) {
         
         this.configuration = configuration;
         
@@ -62,7 +65,7 @@ public abstract class AbstractContainerGroupListPanel<CONTAINER_T extends Generi
         
         splitPane.setDividerLocation(300);
         
-        ArrayList<GROUP_T> sortedGroups = configuration.getSortedGroupList(container);
+        ArrayList<GROUP_T> sortedGroups = configuration.getDataConfiguration().getSortedGroupList(container);
         
         groupList.setContents(sortedGroups);
         

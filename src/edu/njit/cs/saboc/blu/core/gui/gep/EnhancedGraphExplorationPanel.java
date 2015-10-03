@@ -7,10 +7,11 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.BLUPartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
@@ -139,7 +140,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private final AbNPainter painter;
     
-    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, BLUGraphConfiguration configuration) {
+    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
+        
+        configuration.getUIConfiguration().setGEP(this);
         
         this.graph = graph;
         this.painter = painter;
@@ -162,10 +165,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.gepAlive = false;
     }
 
-    private void intitializeUIComponents(BLUGraphConfiguration uiConfiguration) {
-        
-        uiConfiguration.setGEP(this);
-        
+    private void intitializeUIComponents(BLUConfiguration configuration) {
+
         graphPanel = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -236,20 +237,26 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             }
         });
         
-        this.abnDetailsPanel = uiConfiguration.createAbNDetailsPanel();
+        this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
         
-        if(uiConfiguration.hasGroupDetailsPanel()) {
-            groupDetailsPanel = Optional.of(uiConfiguration.createGroupDetailsPanel());
+        if(configuration.getUIConfiguration().hasGroupDetailsPanel()) {
+            groupDetailsPanel = Optional.of(configuration.getUIConfiguration().createGroupDetailsPanel());
         } else {
             this.groupDetailsPanel = Optional.empty();
         }
         
-        if(uiConfiguration.hasContainerDetailsPanel()) {
-            containerDetailsPanel = Optional.of(uiConfiguration.createContainerDetailsPanel());
+        if (configuration.getUIConfiguration() instanceof BLUPartitionedAbNUIConfiguration) {
+            BLUPartitionedAbNUIConfiguration config = (BLUPartitionedAbNUIConfiguration) configuration.getUIConfiguration();
+
+            if (config.hasContainerDetailsPanel()) {
+                containerDetailsPanel = Optional.of(config.createContainerDetailsPanel());
+            } else {
+                this.containerDetailsPanel = Optional.empty();
+            }
         } else {
             this.containerDetailsPanel = Optional.empty();
         }
-        
+
         graphPanel.add(moveUpBtn);
         graphPanel.add(moveLeftBtn);
         graphPanel.add(moveDownBtn);

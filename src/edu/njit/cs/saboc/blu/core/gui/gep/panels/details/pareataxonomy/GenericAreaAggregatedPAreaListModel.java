@@ -15,13 +15,13 @@ public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T,
         PAREA_T extends GenericPArea, 
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends BLUAbstractTableModel<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
 
-    protected final PAreaTaxonomyConfiguration configuration;
+    protected final BLUGenericPAreaTaxonomyConfiguration configuration;
     
-    public GenericAreaAggregatedPAreaListModel(PAreaTaxonomyConfiguration config) {
+    public GenericAreaAggregatedPAreaListModel(BLUGenericPAreaTaxonomyConfiguration config) {
         super(new String[] {
            "Aggregated Partial-area",
             "From Area",
-           String.format("# %s", config.getConceptTypeName(true)),
+           String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
            "Aggregated Into"
         });
         
@@ -30,14 +30,14 @@ public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T,
     
     @Override
     protected Object[] createRow(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> item) {
-        String aggregatedGroupName = configuration.getGroupName(item.getAggregatedGroup());
+        String aggregatedGroupName = configuration.getTextConfiguration().getGroupName(item.getAggregatedGroup());
         
         ArrayList<String> aggregatePAreas = new ArrayList<>();
         
         item.getAggregatedIntoGroups().forEach((AGGREGATEPAREA_T parea) -> {
             AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)parea;
             
-            aggregatePAreas.add(String.format("%s (%d) [%d]", configuration.getGroupName(parea), aggregatePArea.getAllGroupsConcepts().size(),
+            aggregatePAreas.add(String.format("%s (%d) [%d]", configuration.getTextConfiguration().getGroupName(parea), aggregatePArea.getAllGroupsConcepts().size(),
                     aggregatePArea.getAggregatedGroups().size()));
         });
         

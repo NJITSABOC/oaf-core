@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptGroupHierarchicalViewPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -24,7 +24,7 @@ public abstract class GenericDisjointGroupConceptHierarchyPanel<
     
     public GenericDisjointGroupConceptHierarchyPanel(
             ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel, 
-            BLUDisjointAbNConfiguration configuration) {
+            BLUDisjointConfiguration configuration) {
         
         this.setLayout(new BorderLayout());
         

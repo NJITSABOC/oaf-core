@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,14 +14,14 @@ import java.util.Collections;
 public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T extends GenericConceptGroup> 
     extends BLUAbstractTableModel<OverlappingConceptResult<CONCEPT_T, GROUP_T>>  {
     
-    private final BLUPartitionedAbNConfiguration config;
+    private final BLUPartitionedConfiguration config;
     
-    public GenericOverlappingConceptReportTableModel(BLUPartitionedAbNConfiguration config) {
+    public GenericOverlappingConceptReportTableModel(BLUPartitionedConfiguration config) {
         super(new String [] {
-            String.format("Overlapping %s", config.getConceptTypeName(false)),
+            String.format("Overlapping %s", config.getTextConfiguration().getConceptTypeName(false)),
             "Degree of Overlap",
-            String.format("Overlapping %s", config.getGroupTypeName(true)), 
-            String.format("%s", config.getContainerTypeName(false))
+            String.format("Overlapping %s", config.getTextConfiguration().getGroupTypeName(true)), 
+            String.format("%s", config.getTextConfiguration().getContainerTypeName(false))
         });
         
         this.config = config;
@@ -30,12 +30,12 @@ public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T exten
     @Override
     protected Object[] createRow(OverlappingConceptResult<CONCEPT_T, GROUP_T> item) {
         
-        String overlappingConceptName = config.getConceptName(item.getConcept());
+        String overlappingConceptName = config.getTextConfiguration().getConceptName(item.getConcept());
         
         ArrayList<String> overlappingGroupNames = new ArrayList<>();
         
         item.getOverlappingGroups().forEach((GROUP_T group) -> {
-            String groupName = config.getGroupName(group);
+            String groupName = config.getTextConfiguration().getGroupName(group);
             int groupConceptCount = group.getConceptCount();
             
             overlappingGroupNames.add(String.format("%s (%d)", groupName, groupConceptCount));
@@ -49,7 +49,7 @@ public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T exten
             overlappingGroups += "\n" + overlappingGroupNames.get(c);
         }
         
-        String areaName = config.getGroupsContainerName(item.getOverlappingGroups().iterator().next()).replaceAll(", ", "\n");
+        String areaName = config.getTextConfiguration().getGroupsContainerName(item.getOverlappingGroups().iterator().next()).replaceAll(", ", "\n");
         
         return new Object[] {
             overlappingConceptName,

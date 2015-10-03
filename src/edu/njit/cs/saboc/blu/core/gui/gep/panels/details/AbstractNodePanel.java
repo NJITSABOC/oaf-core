@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ import javax.swing.JTabbedPane;
  *
  * @author Chris O
  */
-public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInformationPanel<NODE_T> {
+public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUConfiguration> extends AbNNodeInformationPanel<NODE_T> {
     
     private final JLabel groupNameLabel;
     
@@ -28,9 +28,9 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
     
     private final AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel;
     
-    protected final BLUAbNConfiguration configuration;
+    private final CONFIG_T configuration;
 
-    protected AbstractNodePanel(AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel, BLUAbNConfiguration configuration) {
+    protected AbstractNodePanel(AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel, CONFIG_T configuration) {
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
         
@@ -77,6 +77,10 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T> extends AbNNodeInform
 
         this.add(groupNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);
+    }
+    
+    public CONFIG_T getConfiguration() {
+        return configuration;
     }
     
     public void setContents(NODE_T node) {

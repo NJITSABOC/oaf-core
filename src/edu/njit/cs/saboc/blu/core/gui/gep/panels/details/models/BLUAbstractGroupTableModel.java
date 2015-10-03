@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 
 /**
  *
@@ -9,13 +9,13 @@ import SnomedShared.generic.GenericConceptGroup;
  */
 public class BLUAbstractGroupTableModel<GROUP_T extends GenericConceptGroup> extends BLUAbstractTableModel<GROUP_T> {
     
-    protected final BLUAbNConfiguration configuration;
+    protected final BLUConfiguration configuration;
     
-    public BLUAbstractGroupTableModel(BLUAbNConfiguration configuration) {
+    public BLUAbstractGroupTableModel(BLUConfiguration configuration) {
         super(
                 new String[] {
-                    configuration.getGroupTypeName(false),
-                    String.format("# %s", configuration.getConceptTypeName(true))
+                    configuration.getTextConfiguration().getGroupTypeName(false),
+                    String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
             });
         
         this.configuration = configuration;
@@ -24,7 +24,7 @@ public class BLUAbstractGroupTableModel<GROUP_T extends GenericConceptGroup> ext
     @Override
     protected Object[] createRow(GROUP_T group) {
         return new Object [] {
-            configuration.getGroupName(group),
+            configuration.getTextConfiguration().getGroupName(group),
             group.getConceptCount()
         };
     }

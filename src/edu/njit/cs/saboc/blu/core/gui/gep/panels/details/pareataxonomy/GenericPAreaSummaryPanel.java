@@ -20,9 +20,9 @@ public abstract class GenericPAreaSummaryPanel<
     
     protected GenericRelationshipPanel<REL_T> relationshipPanel;
     
-    protected final PAreaTaxonomyConfiguration configuration;
+    protected final BLUGenericPAreaTaxonomyConfiguration configuration;
     
-    public GenericPAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration configuration) {
+    public GenericPAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration configuration) {
         this.taxonomy = taxonomy;
         this.configuration = configuration;
         
@@ -36,7 +36,7 @@ public abstract class GenericPAreaSummaryPanel<
     public void setContents(PAREA_T parea) {
         super.setContents(parea);
         
-        relationshipPanel.setContents(configuration.getPAreaRelationships(parea));
+        relationshipPanel.setContents(configuration.getDataConfiguration().getPAreaRelationships(parea));
     }
     
     public void clearContents() {
@@ -46,7 +46,7 @@ public abstract class GenericPAreaSummaryPanel<
     }
 
     protected String createDescriptionStr(PAREA_T group) {
-        String rootName = configuration.getGroupName(group);
+        String rootName = configuration.getTextConfiguration().getGroupName(group);
         int classCount = group.getConceptCount();
 
         int parentCount = taxonomy.getParentGroups(group).size();
@@ -65,19 +65,19 @@ public abstract class GenericPAreaSummaryPanel<
         result.append(String.format("<html><b>%s</b> is a partial-area that summarizes %d %s. ", 
                 rootName, 
                 classCount,  
-                configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase()));
+                configuration.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase()));
         
         if(parentCount > 0) {
             result.append(String.format("It has %d parent %s and ", 
                     parentCount, 
-                    configuration.getGroupTypeName(parentCount > 1 || parentCount == 0).toLowerCase()));
+                    configuration.getTextConfiguration().getGroupTypeName(parentCount > 1 || parentCount == 0).toLowerCase()));
         } else {
             result.append("It has no parent partial-areas and ");
         }
         
         if(childCount > 0) {
             result.append(String.format("%d child %s.", childCount,
-                    configuration.getGroupTypeName(childCount > 1 || childCount == 0).toLowerCase()));
+                    configuration.getTextConfiguration().getGroupTypeName(childCount > 1 || childCount == 0).toLowerCase()));
             
             if(descendantPAreas.size() > childCount) {
                 int descPAreaCount = descendantPAreas.size();
@@ -85,9 +85,9 @@ public abstract class GenericPAreaSummaryPanel<
                 
                 result.append(String.format("It has a total of %d descendant %s which summarize a total of %d %s.", 
                         descPAreaCount, 
-                        configuration.getGroupTypeName(descPAreaCount > 1).toLowerCase(),
+                        configuration.getTextConfiguration().getGroupTypeName(descPAreaCount > 1).toLowerCase(),
                         descClassCount,
-                        configuration.getConceptTypeName(descClassCount > 1).toLowerCase())
+                        configuration.getTextConfiguration().getConceptTypeName(descClassCount > 1).toLowerCase())
                 );
             }
             
@@ -97,7 +97,7 @@ public abstract class GenericPAreaSummaryPanel<
         
         result.append("<p>");
         result.append("<b>Help / Description</b><p>");
-        result.append(configuration.getGroupHelpDescriptions(group));
+        result.append(configuration.getTextConfiguration().getGroupHelpDescriptions(group));
 
         return result.toString();
     }

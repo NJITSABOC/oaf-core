@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.aggregate;
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ContainerReport;
 import java.util.HashSet;
@@ -18,16 +18,16 @@ public class GenericAggregateContainerReportTableModel<CONCEPT_T,
 
     extends BLUAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> {
     
-    private final BLUPartitionedAbNConfiguration config;
+    private final BLUPartitionedConfiguration config;
     
-    public GenericAggregateContainerReportTableModel(BLUPartitionedAbNConfiguration config) {
+    public GenericAggregateContainerReportTableModel(BLUPartitionedConfiguration config) {
         
         super(new String[] {
-            config.getContainerTypeName(false),
-            String.format("# Regular %s", config.getGroupTypeName(true)),
-            String.format("# Aggregate %s", config.getGroupTypeName(true)),
-            String.format("# Removed %s", config.getGroupTypeName(true)),
-            String.format("# %s", config.getConceptTypeName(true)),
+            config.getTextConfiguration().getContainerTypeName(false),
+            String.format("# Regular %s", config.getTextConfiguration().getGroupTypeName(true)),
+            String.format("# Aggregate %s", config.getTextConfiguration().getGroupTypeName(true)),
+            String.format("# Removed %s", config.getTextConfiguration().getGroupTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
         });
         
         this.config = config;
@@ -54,7 +54,7 @@ public class GenericAggregateContainerReportTableModel<CONCEPT_T,
         });
         
         return new Object[] {
-            config.getContainerName(item.getContainer()).replaceAll(", ", "\n"),
+            config.getTextConfiguration().getContainerName(item.getContainer()).replaceAll(", ", "\n"),
             regularGroups.size(),
             aggregateGroups.size(),
             removedGroups.size(),

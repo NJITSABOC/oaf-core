@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.AbNLevelReport;
 
@@ -14,13 +14,13 @@ public class GenericAbNLevelReportTableModel<CONCEPT_T,
         GROUP_T extends GenericConceptGroup, 
         CONTAINER_T extends GenericGroupContainer> extends BLUAbstractTableModel<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> {
 
-    public GenericAbNLevelReportTableModel(BLUPartitionedAbNConfiguration config) {
+    public GenericAbNLevelReportTableModel(BLUPartitionedConfiguration config) {
         super(new String [] { 
            "Level",
-            String.format("# %s", config.getContainerTypeName(true)),
-            String.format("# %s", config.getGroupTypeName(true)),
-            String.format("# %s", config.getConceptTypeName(true)),
-            String.format("# Overlapping %s", config.getConceptTypeName(true))
+            String.format("# %s", config.getTextConfiguration().getContainerTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getGroupTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# Overlapping %s", config.getTextConfiguration().getConceptTypeName(true))
         });
     }
     

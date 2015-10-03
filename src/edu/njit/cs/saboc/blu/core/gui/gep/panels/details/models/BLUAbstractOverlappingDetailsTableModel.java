@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
 import java.util.HashSet;
 
 /**
@@ -14,18 +14,17 @@ public class BLUAbstractOverlappingDetailsTableModel<GROUP_T extends GenericConc
         DISJOINTGROUP_T extends DisjointGenericConceptGroup,
         CONCEPT_T> extends BLUAbstractTableModel<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> {
     
-    protected final BLUDisjointableAbNConfiguration configuration;
+    protected final BLUDisjointableConfiguration configuration;
     
-    public BLUAbstractOverlappingDetailsTableModel(BLUDisjointableAbNConfiguration configuration) {
+    public BLUAbstractOverlappingDetailsTableModel(BLUDisjointableConfiguration configuration) {
         super(new String[] {
-            String.format("Other %s", configuration.getGroupTypeName(false)),
-            String.format("# Common %s", configuration.getDisjointGroupTypeName(true)),
-            String.format("# Overlapping %s", configuration.getConceptTypeName(true))
+            String.format("Other %s", configuration.getTextConfiguration().getGroupTypeName(false)),
+            String.format("# Common %s", configuration.getTextConfiguration().getDisjointGroupTypeName(true)),
+            String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true))
         });
 
         this.configuration = configuration;
     }
-    
 
     @Override
     protected Object[] createRow(OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T> item) {
@@ -38,7 +37,7 @@ public class BLUAbstractOverlappingDetailsTableModel<GROUP_T extends GenericConc
         });
         
         return new Object[] {
-            configuration.getGroupName(item.getOverlappingGroup()),
+            configuration.getTextConfiguration().getGroupName(item.getOverlappingGroup()),
             disjointGroups.size(),
             overlappingConcepts.size()
         };

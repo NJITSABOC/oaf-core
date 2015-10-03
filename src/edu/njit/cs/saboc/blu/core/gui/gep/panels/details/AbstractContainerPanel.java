@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 
 /**
  *
@@ -10,22 +10,23 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbN
  */
 public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer, 
         GROUP_T extends GenericConceptGroup, CONCEPT_T, 
-        ENTRY_T> extends AbstractNodePanel<CONTAINER_T, ENTRY_T> {
+        ENTRY_T,
+        CONFIG_T extends BLUPartitionedConfiguration> extends AbstractNodePanel<CONTAINER_T, ENTRY_T, CONFIG_T> {
 
     protected final AbstractContainerGroupListPanel<CONTAINER_T, GROUP_T, CONCEPT_T> groupListPanel;
 
     public AbstractContainerPanel(
             AbstractNodeDetailsPanel<CONTAINER_T, ENTRY_T> containerDetailsPanel, 
             AbstractContainerGroupListPanel<CONTAINER_T, GROUP_T, CONCEPT_T> groupListPanel, 
-            BLUPartitionedAbNConfiguration configuration) {
+            CONFIG_T configuration) {
         
         super(containerDetailsPanel, configuration);
         
         this.groupListPanel = groupListPanel;
         
         String tabTitle = String.format("%s's %s", 
-                configuration.getContainerTypeName(false), 
-                configuration.getGroupTypeName(true));
+                configuration.getTextConfiguration().getContainerTypeName(false), 
+                configuration.getTextConfiguration().getGroupTypeName(true));
         
         super.addGroupDetailsTab(groupListPanel, tabTitle);
     }
@@ -47,15 +48,15 @@ public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer,
     
     @Override
     protected String getNodeTitle(CONTAINER_T node) {
-        BLUPartitionedAbNConfiguration config = (BLUPartitionedAbNConfiguration)configuration;
+        CONFIG_T config = getConfiguration();
         
-        return config.getContainerName(node);
+        return config.getTextConfiguration().getContainerName(node);
     }
 
     @Override
     protected String getNodeType() {
-        BLUPartitionedAbNConfiguration config = (BLUPartitionedAbNConfiguration)configuration;
+        CONFIG_T config = getConfiguration();
         
-        return config.getContainerTypeName(false);
+        return config.getTextConfiguration().getContainerTypeName(false);
     }
 }

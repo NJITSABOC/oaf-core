@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 
 /**
@@ -10,11 +10,11 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTable
  */
 public class GenericOverlappingGroupTableModel<GROUP_T extends GenericConceptGroup> extends BLUAbstractTableModel<GROUP_T>  {
     
-    private final BLUDisjointAbNConfiguration config;
+    private final BLUDisjointConfiguration config;
     
-    public GenericOverlappingGroupTableModel(BLUDisjointAbNConfiguration config) {
+    public GenericOverlappingGroupTableModel(BLUDisjointConfiguration config) {
         super(new String[] { 
-            String.format("Overlapping %s", config.getOverlappingGroupTypeName(true)) 
+            String.format("Overlapping %s", config.getTextConfiguration().getOverlappingGroupTypeName(true)) 
         });
         
         this.config = config;
@@ -23,7 +23,7 @@ public class GenericOverlappingGroupTableModel<GROUP_T extends GenericConceptGro
     @Override
     protected Object[] createRow(GROUP_T group) {
         return new Object[] {
-            config.getOverlappingGroupName(group)
+            config.getTextConfiguration().getOverlappingGroupName(group)
         };
     }
 }

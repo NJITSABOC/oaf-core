@@ -14,17 +14,18 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea> extends AbstractGroupHierarchyPanel<CONCEPT_T, PAREA_T> {
+public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea,
+        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, PAREA_T, CONFIG_T> {
     
     private final GenericPAreaTaxonomy taxonomy;
     
-    private final PAreaTaxonomyConfiguration configuration;
+    private final CONFIG_T configuration;
 
     public GenericPAreaHierarchyPanel(
             BLUAbstractParentGroupTableModel<CONCEPT_T, PAREA_T, GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentTableModel,
             BLUAbstractChildGroupTableModel<PAREA_T> childTableModel,
             GenericPAreaTaxonomy taxonomy, 
-            PAreaTaxonomyConfiguration configuration) {
+            CONFIG_T configuration) {
         
         super(configuration, parentTableModel, childTableModel);
 
@@ -43,9 +44,9 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea>
         
         ArrayList<PAREA_T> childPAreas = new ArrayList<>(children);
         
-        PAreaTaxonomyConfiguration config = (PAreaTaxonomyConfiguration)configuration;
+        BLUGenericPAreaTaxonomyConfiguration config = (BLUGenericPAreaTaxonomyConfiguration)configuration;
 
-        Collections.sort(childPAreas, config.getChildPAreaComparator());
+        Collections.sort(childPAreas, config.getDataConfiguration().getChildPAreaComparator());
         
         childModel.setContents(childPAreas);
     }

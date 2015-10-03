@@ -14,7 +14,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptE
  */
 public class GenericAreaPanel<AREA_T extends GenericArea, 
         PAREA_T extends GenericPArea, 
-        CONCEPT_T> extends AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>> {
+        CONCEPT_T,
+        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends
+                AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>, CONFIG_T> {
 
     private final AbstractDisjointAbNMetricsPanel disjointMetricsPanel;
     
@@ -24,23 +26,23 @@ public class GenericAreaPanel<AREA_T extends GenericArea,
            AbstractNodeDetailsPanel<AREA_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>> containerDetailsPanel, 
            AbstractContainerGroupListPanel<AREA_T, PAREA_T, CONCEPT_T> groupListPanel, 
            AbstractDisjointAbNMetricsPanel disjointMetricsPanel,
-           PAreaTaxonomyConfiguration configuration) {
+           CONFIG_T configuration) {
         
         super(containerDetailsPanel, groupListPanel, configuration);
         
         this.disjointMetricsPanel = disjointMetricsPanel;
         
         this.disjointMetricsTabIndex = super.addGroupDetailsTab(disjointMetricsPanel, String.format(
-            "Overlapping %s Metrics", configuration.getGroupTypeName(false)));
+            "Overlapping %s Metrics", configuration.getTextConfiguration().getGroupTypeName(false)));
     }
     
     @Override
     public void setContents(AREA_T area) {
         super.setContents(area);
         
-        PAreaTaxonomyConfiguration config = (PAreaTaxonomyConfiguration)configuration;
+        BLUGenericPAreaTaxonomyConfiguration config = getConfiguration();
         
-        if(!config.getContainerOverlappingResults(area).isEmpty()) {
+        if(!config.getDataConfiguration().getContainerOverlappingResults(area).isEmpty()) {
             disjointMetricsPanel.setContents(area);
             
             this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);

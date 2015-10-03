@@ -4,7 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
@@ -148,7 +147,7 @@ public class AbstractDisjointAbNMetricsPanel<
     private final AbstractEntityList<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> overlappingDetailsTable;
     protected final BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
     
-    protected final BLUDisjointableAbNConfiguration configuration;
+    protected final BLUDisjointableConfiguration configuration;
     
     private final JSplitPane splitPane;
     
@@ -157,7 +156,7 @@ public class AbstractDisjointAbNMetricsPanel<
     protected AbstractDisjointAbNMetricsPanel(
             BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel,
             BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel,
-            BLUDisjointableAbNConfiguration configuration) {
+            BLUDisjointableConfiguration configuration) {
         
         this.overlappingGroupTableModel = overlappingGroupTableModel;
         this.overlappingDetailsTableModel = overlappingDetailsTableModel;
@@ -171,9 +170,9 @@ public class AbstractDisjointAbNMetricsPanel<
             @Override
             protected String getBorderText(Optional<ArrayList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>>> entities) {
                 if(entities.isPresent()) {
-                    return String.format("Overlapping %s (%d)", configuration.getGroupTypeName(true), entities.get().size());
+                    return String.format("Overlapping %s (%d)", configuration.getTextConfiguration().getGroupTypeName(true), entities.get().size());
                 } else {
-                    return String.format("Overlapping %s", configuration.getGroupTypeName(true));
+                    return String.format("Overlapping %s", configuration.getTextConfiguration().getGroupTypeName(true));
                 }
             }
         };
@@ -263,7 +262,7 @@ public class AbstractDisjointAbNMetricsPanel<
     public void setContents(CONTAINER_T container) {
         splitPane.setDividerLocation(300);
         
-        DISJOINTABN_T disjointAbN = (DISJOINTABN_T)configuration.createDisjointAbN(container);
+        DISJOINTABN_T disjointAbN = (DISJOINTABN_T)configuration.getDataConfiguration().createDisjointAbN(container);
         
         ArrayList<GROUP_T> overlappingGroups = new ArrayList<>(disjointAbN.getOverlappingGroups());
         

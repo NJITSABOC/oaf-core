@@ -1,7 +1,8 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.data;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,16 +11,10 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public interface BLUPartitionedAbNConfiguration<CONCEPT_T, GROUP_T extends GenericConceptGroup,
-        CONTAINER_T extends GenericGroupContainer> extends BLUAbNConfiguration<CONCEPT_T, GROUP_T> {
-    
-    public String getContainerTypeName(boolean plural);
-    
-    public String getContainerHelpDescription(CONTAINER_T container);
-    
-    public String getContainerName(CONTAINER_T container);
-    
-    public String getGroupsContainerName(GROUP_T group);
+public interface BLUPartitionedAbNDataConfiguration<ABN_T extends AbstractionNetwork, 
+        CONTAINER_T extends GenericGroupContainer,
+        GROUP_T extends GenericConceptGroup, 
+        CONCEPT_T> extends BLUAbNDataConfiguration<ABN_T, GROUP_T, CONCEPT_T> {
     
     public ArrayList<GROUP_T> getSortedGroupList(CONTAINER_T container);
     

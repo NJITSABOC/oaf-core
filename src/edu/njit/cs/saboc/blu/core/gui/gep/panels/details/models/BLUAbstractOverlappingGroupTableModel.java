@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 
 /**
  *
@@ -11,13 +11,13 @@ import SnomedShared.generic.GenericConceptGroup;
 public class BLUAbstractOverlappingGroupTableModel<GROUP_T extends GenericConceptGroup, CONCEPT_T> 
             extends BLUAbstractTableModel<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> {
     
-    protected final BLUAbNConfiguration configuration;
+    protected final BLUConfiguration configuration;
     
-    public BLUAbstractOverlappingGroupTableModel(BLUAbNConfiguration configuration) {
+    public BLUAbstractOverlappingGroupTableModel(BLUConfiguration configuration) {
         super(new String [] {
-            configuration.getGroupTypeName(false),
-            String.format("# %s", configuration.getConceptTypeName(true)),
-            String.format("# Overlapping %s", configuration.getConceptTypeName(true)),
+            configuration.getTextConfiguration().getGroupTypeName(false),
+            String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true)),
         });
         
         this.configuration = configuration;
@@ -26,7 +26,7 @@ public class BLUAbstractOverlappingGroupTableModel<GROUP_T extends GenericConcep
     @Override
     protected Object[] createRow(OverlappingGroupEntry<GROUP_T, CONCEPT_T> item) {
         return new Object [] {
-            configuration.getGroupName(item.getOverlappingGroup()),
+            configuration.getTextConfiguration().getGroupName(item.getOverlappingGroup()),
             item.getOverlappingGroup().getConceptCount(),
             item.getOverlappingConcepts().size()
         };

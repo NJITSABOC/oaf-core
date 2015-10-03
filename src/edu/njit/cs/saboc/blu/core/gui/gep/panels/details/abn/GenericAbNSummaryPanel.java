@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +25,7 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
     
     private final JEditorPane abnDetailsPane;
     
-    public GenericAbNSummaryPanel(BLUAbNConfiguration config) {
+    public GenericAbNSummaryPanel(BLUConfiguration config) {
         
         abnNameLabel = new JLabel(" ") {
             public void paintComponent(Graphics g) {
@@ -57,7 +57,7 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
             }
         };
         
-        abnNameLabel.setText(config.getAbNName());
+        abnNameLabel.setText(config.getTextConfiguration().getAbNName());
         abnNameLabel.setFont(abnNameLabel.getFont().deriveFont(Font.BOLD, 20));
         abnNameLabel.setPreferredSize(new Dimension(100, 40));
         
@@ -66,7 +66,7 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
         abnDetailsPane.setEnabled(true);
         abnDetailsPane.setEditable(false);
         abnDetailsPane.setFont(abnDetailsPane.getFont().deriveFont(Font.BOLD, 14));
-        abnDetailsPane.setText(config.getAbNSummary());
+        abnDetailsPane.setText(config.getTextConfiguration().getAbNSummary());
                
         this.setLayout(new BorderLayout());
         

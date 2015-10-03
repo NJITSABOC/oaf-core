@@ -3,7 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedAbNConfiguration;
+
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.AbNLevelReport;
@@ -27,7 +28,7 @@ public class GenericAbNLevelReportPanel <
 
     private final AbstractEntityList<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> levelReportList; 
     
-    protected GenericAbNLevelReportPanel(BLUPartitionedAbNConfiguration config, 
+    protected GenericAbNLevelReportPanel(BLUPartitionedConfiguration config, 
             BLUAbstractTableModel<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> model) {
         
         super(config);
@@ -48,20 +49,20 @@ public class GenericAbNLevelReportPanel <
         this.add(levelReportList, BorderLayout.CENTER);
     }
     
-    public GenericAbNLevelReportPanel(BLUPartitionedAbNConfiguration config) {
+    public GenericAbNLevelReportPanel(BLUPartitionedConfiguration config) {
         this(config, new GenericAbNLevelReportTableModel<CONCEPT_T, GROUP_T, CONTAINER_T>(config));
     }
     
     @Override
     public void displayAbNReport(ABN_T abn) {
-        BLUPartitionedAbNConfiguration currentConfig = (BLUPartitionedAbNConfiguration)config;
+        BLUPartitionedConfiguration currentConfig = (BLUPartitionedConfiguration)config;
         
         ArrayList<CONTAINER_T> containers = abn.getContainers();
         
         HashMap<Integer, HashSet<CONTAINER_T>> containerLevels = new HashMap<>();
         
         containers.forEach((CONTAINER_T container) -> {
-            int containerLevel = currentConfig.getContainerLevel(container);
+            int containerLevel = currentConfig.getDataConfiguration().getContainerLevel(container);
             
             if(!containerLevels.containsKey(containerLevel)) {
                 containerLevels.put(containerLevel, new HashSet<>());
@@ -76,19 +77,19 @@ public class GenericAbNLevelReportPanel <
             HashSet<GROUP_T> groupsAtLevel = new HashSet<>();
             
             levelContainers.forEach((CONTAINER_T container) -> {
-                groupsAtLevel.addAll(currentConfig.getContainerGroupSet(container));
+                groupsAtLevel.addAll(currentConfig.getDataConfiguration().getContainerGroupSet(container));
             });
             
             HashSet<CONCEPT_T> conceptsAtLevel = new HashSet<>();
             
             groupsAtLevel.forEach((GROUP_T group) -> {
-                conceptsAtLevel.addAll(currentConfig.getGroupConceptSet(group));
+                conceptsAtLevel.addAll(currentConfig.getDataConfiguration().getGroupConceptSet(group));
             });
             
             HashSet<CONCEPT_T> overlappingConceptsAtLevel = new HashSet<>();
             
             levelContainers.forEach((CONTAINER_T container) -> {
-                overlappingConceptsAtLevel.addAll(currentConfig.getContainerOverlappingConcepts(container));
+                overlappingConceptsAtLevel.addAll(currentConfig.getDataConfiguration().getContainerOverlappingConcepts(container));
             });
             
             levelReports.add(new AbNLevelReport(level, conceptsAtLevel, overlappingConceptsAtLevel, groupsAtLevel, levelContainers));

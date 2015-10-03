@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.BLUGenericPAreaTaxonomyConfiguration;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,9 +36,9 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
         extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, 
             AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T, HIERARCHY_T> {
     
-    private final PAreaTaxonomyConfiguration config;
+    private final BLUGenericPAreaTaxonomyConfiguration config;
 
-    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration config) {
+    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration config) {
         super(graph, taxonomy);
         
         this.config = config;
@@ -149,9 +149,9 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
                 String conceptStr;
                 
                 if(concepts.size() == 1) {
-                    conceptStr = String.format("1 %s", config.getConceptTypeName(false));
+                    conceptStr = String.format("1 %s", config.getTextConfiguration().getConceptTypeName(false));
                 } else {
-                    conceptStr = String.format("%d %s", concepts.size(), config.getConceptTypeName(true));
+                    conceptStr = String.format("%d %s", concepts.size(), config.getTextConfiguration().getConceptTypeName(true));
                 }
                 
                 countStr = String.format("(%s, %s)", conceptStr, pareaStr);

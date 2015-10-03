@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.BLUGraphConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
@@ -329,7 +329,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUGraphConfiguration gepConfiguration) {
+    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUConfiguration gepConfiguration) {
         
         this.graph = graph;
 
@@ -339,7 +339,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
 
         scroller = new JScrollPane(graph);
         
-        String abnTypeName = gepConfiguration.getAbNTypeName();
+        String abnTypeName = gepConfiguration.getTextConfiguration().getAbNTypeName(false);
 
         tabbedPane.addTab(String.format("Edit %s Graph", abnTypeName), scroller);
         

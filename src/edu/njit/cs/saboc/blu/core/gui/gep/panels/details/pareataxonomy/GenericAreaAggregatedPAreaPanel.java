@@ -25,7 +25,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         PAREA_T extends GenericPArea, 
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
     
-    private final PAreaTaxonomyConfiguration config;
+    private final BLUGenericPAreaTaxonomyConfiguration config;
     
     private final JSplitPane splitPane;
 
@@ -36,7 +36,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
     public GenericAreaAggregatedPAreaPanel(
             AbstractEntityList<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
-            PAreaTaxonomyConfiguration config) {
+            BLUGenericPAreaTaxonomyConfiguration config) {
         
         this.setLayout(new BorderLayout());
         
@@ -46,7 +46,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         
         this.aggregatedGroupList.addEntitySelectionListener(new EntitySelectionAdapter<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
             public void entityClicked(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> group) {
-                conceptList.setContents(config.getSortedConceptList(group.getAggregatedGroup()));
+                conceptList.setContents(config.getDataConfiguration().getSortedConceptList(group.getAggregatedGroup()));
             }
             
             public void noEntitySelected() {

@@ -3,8 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -26,12 +25,12 @@ public abstract class GenericDisjointGroupSummaryPanel<
     
     protected GenericOverlappingGroupList<GROUP_T> overlapsPanel;
     
-    protected final BLUDisjointAbNConfiguration configuration;
+    protected final BLUDisjointConfiguration configuration;
     
     public GenericDisjointGroupSummaryPanel(
             GenericOverlappingGroupList<GROUP_T> overlapsPanel, 
             DISJOINTABN_T disjointAbN, 
-            BLUDisjointAbNConfiguration configuration) {
+            BLUDisjointConfiguration configuration) {
         
         this.disjointAbN = disjointAbN;
         this.configuration = configuration;
@@ -65,7 +64,7 @@ public abstract class GenericDisjointGroupSummaryPanel<
 
     protected String createDescriptionStr(DISJOINTGROUP_T group) {
         
-        String rootName = configuration.getGroupName(group);
+        String rootName = configuration.getTextConfiguration().getGroupName(group);
         int classCount = group.getConceptCount();
 
         HashSet<DISJOINTGROUP_T> descendantDisjointGroups = disjointAbN.getDescendantGroups(group);
@@ -87,19 +86,19 @@ public abstract class GenericDisjointGroupSummaryPanel<
         if(overlaps.size() == 1) {
             result = String.format("<b>%s</b> is a basis (non-overlapping) %s that summarizes %d non-overlapping %s. It has %d descendant overlapping %s which summarizes %d overlapping %s.",
                     rootName, 
-                    configuration.getGroupTypeName(false).toLowerCase(), 
+                    configuration.getTextConfiguration().getGroupTypeName(false).toLowerCase(), 
                     classCount, 
-                    configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
+                    configuration.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
                     descendantGroupCount, 
-                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
+                    configuration.getTextConfiguration().getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
+                    configuration.getTextConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         } else {
             
             ArrayList<String> overlappingGroupNames = new ArrayList<>();
             
             overlaps.forEach((GROUP_T overlappingGroup) -> {
-                overlappingGroupNames.add(configuration.getOverlappingGroupName(overlappingGroup));
+                overlappingGroupNames.add(configuration.getTextConfiguration().getOverlappingGroupName(overlappingGroup));
             });
             
             Collections.sort(overlappingGroupNames);
@@ -113,20 +112,20 @@ public abstract class GenericDisjointGroupSummaryPanel<
             result = String.format("<b>%s</b> is an overlapping %s that summarizes %d overlapping %s. It overlaps between the following %s: <b>%s</b>."
                     + " It has %d descendant overlapping %s which summarizes %d overlapping %s.",
                     rootName, 
-                    configuration.getGroupTypeName(false).toLowerCase(), 
+                    configuration.getTextConfiguration().getGroupTypeName(false).toLowerCase(), 
                     classCount, 
-                    configuration.getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
-                    configuration.getOverlappingGroupTypeName(true).toLowerCase(),
+                    configuration.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
+                    configuration.getTextConfiguration().getOverlappingGroupTypeName(true).toLowerCase(),
                     overlapsStr,
                     descendantGroupCount, 
-                    configuration.getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
+                    configuration.getTextConfiguration().getGroupTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    configuration.getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
+                    configuration.getTextConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         }
         
         result += "<p><b>Help / Description:</b><br>";
         
-        result += configuration.getGroupHelpDescriptions(group);
+        result += configuration.getTextConfiguration().getGroupHelpDescriptions(group);
         
         return result;
     }

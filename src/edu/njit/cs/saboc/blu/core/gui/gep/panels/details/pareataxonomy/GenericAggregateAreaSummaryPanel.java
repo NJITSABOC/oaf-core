@@ -16,7 +16,7 @@ public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
         TAXONOMY_T extends GenericPAreaTaxonomy,
         AREA_T extends GenericArea> extends GenericAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AREA_T> {
     
-    public GenericAggregateAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, PAreaTaxonomyConfiguration configuration) {  
+    public GenericAggregateAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, BLUGenericPAreaTaxonomyConfiguration configuration) {  
         super(relTable, configuration);
     }
 
@@ -46,34 +46,34 @@ public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
         if(aggregatePAreas.isEmpty()) {
             pareaStr = String.format("%d %s in %d regular %s.",
                     totalConcepts.size(), 
-                    configuration.getConceptTypeName(true).toLowerCase(),
+                    configuration.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
                     regularPAreas.size(),
-                    configuration.getGroupTypeName(regularPAreas.size() != 1).toLowerCase());
+                    configuration.getTextConfiguration().getGroupTypeName(regularPAreas.size() != 1).toLowerCase());
         } else {
             
             if(regularPAreas.isEmpty()) {
                 pareaStr = String.format("%d %s in %d aggregate %s.",
                         totalConcepts.size(), 
-                        configuration.getConceptTypeName(true).toLowerCase(),
+                        configuration.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
                         aggregatePAreas.size(),
-                        configuration.getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
+                        configuration.getTextConfiguration().getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
             } else {
                 pareaStr = String.format("%d %s in %d regular %s and %d aggregate %s.",
                         totalConcepts.size(),
-                        configuration.getConceptTypeName(true).toLowerCase(),
+                        configuration.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
                         regularPAreas.size(),
-                        configuration.getGroupTypeName(regularPAreas.size() != 1).toLowerCase(),
+                        configuration.getTextConfiguration().getGroupTypeName(regularPAreas.size() != 1).toLowerCase(),
                         aggregatePAreas.size(),
-                        configuration.getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
+                        configuration.getTextConfiguration().getGroupTypeName(aggregatePAreas.size() != 1).toLowerCase());
             }
         }
 
-        String areaName = configuration.getContainerName(area);
+        String areaName = configuration.getTextConfiguration().getContainerName(area);
         
         return String.format("<html><b>%s</b> is an area that summarizes %s"
                 + "<p><b>Help / Description:</b><br>%s",
                 areaName, 
                 pareaStr, 
-                configuration.getContainerHelpDescription(area));
+                configuration.getTextConfiguration().getContainerHelpDescription(area));
     }
 }

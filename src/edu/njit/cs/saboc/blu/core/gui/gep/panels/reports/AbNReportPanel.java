@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import javax.swing.JPanel;
 
 /**
@@ -12,9 +12,9 @@ import javax.swing.JPanel;
  */
 public abstract class AbNReportPanel<CONCEPT_T, GROUP_T extends GenericConceptGroup, ABN_T extends AbstractionNetwork> extends JPanel {
     
-    protected final BLUAbNConfiguration config;
+    protected final BLUConfiguration config;
     
-    public AbNReportPanel(BLUAbNConfiguration config) {
+    public AbNReportPanel(BLUConfiguration config) {
         this.config = config;
     }
     

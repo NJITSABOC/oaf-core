@@ -48,7 +48,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
        
     protected EnhancedGraphExplorationPanel gep;
        
-    protected JTabbedPane tabbedPane = new JTabbedPane();
+    protected final JTabbedPane tabbedPane = new JTabbedPane();
     protected JScrollPane scroller;
     
     protected JCheckBox chkHideGroups;
@@ -71,6 +71,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                 true);//iconifiable
         
         this.parentFrame = parentFrame;
+        
+        this.gep = new EnhancedGraphExplorationPanel();
         
         this.setSize(1024, 512);
 
@@ -333,33 +335,42 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         this.graph = graph;
 
-        tabbedPane.removeAll();
-
-        gep = new EnhancedGraphExplorationPanel(graph, painter, gepConfiguration);
-
-        scroller = new JScrollPane(graph);
         
-        String abnTypeName = gepConfiguration.getTextConfiguration().getAbNTypeName(false);
 
-        tabbedPane.addTab(String.format("Edit %s Graph", abnTypeName), scroller);
+        this.gep.showLoading();
         
-        tabbedPane.addTab(String.format("Explore %s", abnTypeName), gep);
-               
-        tabbedPane.setToolTipTextAt(0,
-                String.format("<html><b>Edit %s Graph</b> allows you to edit some of the %s's layout and draw edges.", abnTypeName, abnTypeName.toLowerCase()));
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                tabbedPane.removeAll();
 
-        tabbedPane.setToolTipTextAt(1, 
-                String.format("<html><b>Explore %s</b> allows you to quickly<br>"
-                + "explore the %s. Additional information is displayed by selecting the different %s elements.", 
-                        abnTypeName,
-                        abnTypeName.toLowerCase(),
-                        abnTypeName.toLowerCase()));
-        
-        tabbedPane.validate();
-        
-        tabbedPane.setSelectedIndex(1);
+                gep.setContents(graph, painter, gepConfiguration);
 
-        tabbedPane.repaint();
+                scroller = new JScrollPane(graph);
+
+                String abnTypeName = gepConfiguration.getTextConfiguration().getAbNTypeName(false);
+
+                tabbedPane.addTab(String.format("Edit %s Graph", abnTypeName), scroller);
+
+                tabbedPane.addTab(String.format("Explore %s", abnTypeName), gep);
+
+                tabbedPane.setToolTipTextAt(0,
+                        String.format("<html><b>Edit %s Graph</b> allows you to edit some of the %s's layout and draw edges.", abnTypeName, abnTypeName.toLowerCase()));
+
+                tabbedPane.setToolTipTextAt(1,
+                        String.format("<html><b>Explore %s</b> allows you to quickly<br>"
+                                + "explore the %s. Additional information is displayed by selecting the different %s elements.",
+                                abnTypeName,
+                                abnTypeName.toLowerCase(),
+                                abnTypeName.toLowerCase()));
+
+                tabbedPane.validate();
+
+                tabbedPane.setSelectedIndex(1);
+
+                tabbedPane.repaint();
+            }
+        });
+
     }
 
     private void saveCurrentView() {

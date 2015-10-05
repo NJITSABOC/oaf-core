@@ -55,18 +55,7 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
         REGIONENTRY_T currentRegion;
 
         // These are a set of styles such that each new row is given a different color.
-        Color[] background = {
-            new Color(178, 178, 178),
-            new Color(55, 213, 102),
-            new Color(121, 212, 250),
-            new Color(242, 103, 103),
-            new Color(232, 255, 114),
-            Color.cyan,
-            Color.orange,
-            Color.pink,
-            Color.green,
-            Color.yellow
-        };
+       ArrayList<Color> taxonomyLevelColors = getTaxonomyLevelColors();
 
         int areaX = 0;  // The first area on each line is given an areaX value of 0.
         int areaY = 0;  // The first row of areas is given an areaY value of 0.
@@ -185,7 +174,7 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
 
             currentLevel = levels.get(areaY);
 
-            Color color = background[style % background.length];
+            Color color = taxonomyLevelColors.get(style % taxonomyLevelColors.size());
 
             area = createAreaPanel(a, x, y, width, height, color, areaX, currentLevel); // Create the area
 

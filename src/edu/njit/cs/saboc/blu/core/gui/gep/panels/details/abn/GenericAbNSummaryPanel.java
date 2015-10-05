@@ -2,16 +2,11 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -21,41 +16,13 @@ import javax.swing.JScrollPane;
  */
 public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JPanel {
     
-    private final JLabel abnNameLabel;
+    private final DetailsPanelLabel abnNameLabel;
     
     private final JEditorPane abnDetailsPane;
     
     public GenericAbNSummaryPanel(BLUConfiguration config) {
         
-        abnNameLabel = new JLabel(" ") {
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-
-                BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-                Graphics2D g2d = bi.createGraphics();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                g2d.setColor(Color.BLACK);
-                
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 16, 16);
-                g2d.fillRect(getWidth() / 2, 0, getWidth() / 2, getHeight());
-                
-                g2d.setColor(Color.WHITE);
-                
-                final int BORDER_SIZE = 2;
-                
-                g2d.fillRoundRect(BORDER_SIZE, BORDER_SIZE, getWidth() - (2 * BORDER_SIZE), getHeight() - (2 * BORDER_SIZE), 16, 16);
-                g2d.fillRect(getWidth() / 2 , BORDER_SIZE, getWidth() / 2, getHeight() - (2 * BORDER_SIZE));
-                
-                g2d.setFont(getFont());
-                g2d.setColor(Color.BLACK);
-                
-                g2d.drawString(getText(), 8, 28);
-                
-                g.drawImage(bi, 0, 0, null);
-            }
-        };
+        abnNameLabel = new DetailsPanelLabel(" ");
         
         abnNameLabel.setText(config.getTextConfiguration().getAbNName());
         abnNameLabel.setFont(abnNameLabel.getFont().deriveFont(Font.BOLD, 20));

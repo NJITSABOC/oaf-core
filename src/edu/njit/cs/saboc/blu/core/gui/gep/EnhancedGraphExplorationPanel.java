@@ -15,6 +15,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading.LoadingPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
@@ -23,6 +24,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -63,19 +65,31 @@ import javax.swing.event.ChangeListener;
  * @author Chris
  */
 public class EnhancedGraphExplorationPanel extends JPanel {
-
-    private boolean drawingInitialized = false;
-    private boolean gepAlive = true;
     
-    private final BluGraph graph;
-    private final Viewport viewport;
+    private enum GEPState {
+        Uninitialized,
+        Initializing,
+        Alive,
+        Paused,
+        Loading,
+        Dead
+    }
+
+    private GEPState gepState = GEPState.Uninitialized;
+    
+    private BluGraph graph;
+    private Viewport viewport;
          
     private Timer updateTimer = new Timer(50, new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-            updateNavButtonPressed();
-            updateViewportMovementByMouse();
-            updatePopups();
-            updateViewportMovement();
+            
+            if (gepState == GEPState.Alive) {
+                updateNavButtonPressed();
+                updateViewportMovementByMouse();
+                updatePopups();
+                updateViewportMovement();
+            }
+            
         }
     });
     
@@ -86,7 +100,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             
             long lastDraw = System.currentTimeMillis();
             
-            while(gepAlive) {
+            while(gepState != GEPState.Dead) {
                 
                 long currentDraw = System.currentTimeMillis();
                 
@@ -123,6 +137,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private JSplitPane splitPane;
     private JPanel detailsPanel;
     
+    private final LoadingPanel loadingPanel;
     private AbstractAbNDetailsPanel abnDetailsPanel;
     private Optional<AbstractNodePanel> groupDetailsPanel;
     private Optional<AbstractNodePanel> containerDetailsPanel;
@@ -136,61 +151,110 @@ public class EnhancedGraphExplorationPanel extends JPanel {
        
     private final GraphMouseStateMonitor mouseStateMonitor = new GraphMouseStateMonitor();
     
-    private final GraphSelectionStateMonitor selectionStateMonitor;
+    private GraphSelectionStateMonitor selectionStateMonitor;
     
-    private final AbNPainter painter;
+    private AbNPainter painter;
     
-    public EnhancedGraphExplorationPanel(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
-        
-        configuration.getUIConfiguration().setGEP(this);
-        
-        this.graph = graph;
-        this.painter = painter;
-        
-        this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
-                
-        viewport = new Viewport(graph);
+    private BLUConfiguration configuration;
+    
+    public EnhancedGraphExplorationPanel() {
+        intitializeFixedUIComponents();
+        initializeFixedListeners();
 
+        loadingPanel = new LoadingPanel();
+        
         setFocusable(true);
-        
-        intitializeUIComponents(configuration);
-        
-        initializeListeners();
 
-        updateTimer.start();
         drawThread.start();
     }
     
+    public void setContents(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
+        updateTimer.stop();
+        
+        this.gepState = GEPState.Initializing;
+        
+        this.configuration = configuration;
+        this.graph = graph;
+        this.painter = painter;
+        
+        this.configuration.getUIConfiguration().setGEP(this);
+        
+        this.viewport = new Viewport(graph);
+        this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
+        
+        this.initializeContentComponents(graph, painter, configuration);
+        
+        jumpToRoot();
+        
+        updateTimer.start();
+        
+        this.gepState = GEPState.Alive;
+    }
+    
     public void killGEP() {
-        this.gepAlive = false;
+        this.gepState = GEPState.Dead;
+    }
+    
+    public void showLoading() {
+        this.gepState = GEPState.Loading;
+    }
+    
+    private void initializeContentComponents(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
+        this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
+        
+        if (abnDetailsPanel != null) {
+            this.setDetailsPanelContents(abnDetailsPanel);
+        }
+
+        if (configuration.getUIConfiguration().hasGroupDetailsPanel()) {
+            groupDetailsPanel = Optional.of(configuration.getUIConfiguration().createGroupDetailsPanel());
+        } else {
+            this.groupDetailsPanel = Optional.empty();
+        }
+
+        if (configuration.getUIConfiguration() instanceof BLUPartitionedAbNUIConfiguration) {
+            BLUPartitionedAbNUIConfiguration config = (BLUPartitionedAbNUIConfiguration) configuration.getUIConfiguration();
+
+            if (config.hasContainerDetailsPanel()) {
+                containerDetailsPanel = Optional.of(config.createContainerDetailsPanel());
+            } else {
+                this.containerDetailsPanel = Optional.empty();
+            }
+        } else {
+            this.containerDetailsPanel = Optional.empty();
+        }
     }
 
-    private void intitializeUIComponents(BLUConfiguration configuration) {
+    private void intitializeFixedUIComponents() {
 
         graphPanel = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-
-                if (!drawingInitialized) {
-                    // Any work that has to be done before the first draw but after the GEP component has been added.
-
-                    jumpToRoot();
-
-                    drawingInitialized = true;
-                }
-
+                
                 Graphics2D g2d = (Graphics2D) g;
-
+                
                 viewport.setSizeScaled(graphPanel.getWidth(), graphPanel.getHeight());
+                
+                if (gepState == GEPState.Alive) {
+                    
+                    drawAbstractionNetwork(g2d, viewport);
 
-                drawAbstractionNetwork(g2d, viewport);
+                    drawPopups(g);
 
-                drawPopups(g);
+                    drawLocationIndicators(g2d, Color.RED);
 
-                drawLocationIndicators(g2d, Color.RED);
-
-                if (mouseStateMonitor.mouseDragging()) { // Draw circle. TODO: Move to method.
-                    drawNavigationPipper(g2d);
+                    if (mouseStateMonitor.mouseDragging()) {
+                        drawNavigationPipper(g2d);
+                    }
+                } else if (gepState == GEPState.Initializing || gepState == GEPState.Loading) {
+                    drawAbstractionNetwork(g2d, viewport);
+                    
+                    Color fadeOutColor = new Color(0, 0, 0, 200);
+                    
+                    g2d.setColor(fadeOutColor);
+                    g2d.fillRect(0, 0, graphPanel.getWidth(), graphPanel.getHeight());
+                    
+                    drawShortMessage(g2d, "Loading, please wait...");
                 }
             }
         };
@@ -236,26 +300,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 magnifyGroupMode = toggle.isSelected();
             }
         });
-        
-        this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
-        
-        if(configuration.getUIConfiguration().hasGroupDetailsPanel()) {
-            groupDetailsPanel = Optional.of(configuration.getUIConfiguration().createGroupDetailsPanel());
-        } else {
-            this.groupDetailsPanel = Optional.empty();
-        }
-        
-        if (configuration.getUIConfiguration() instanceof BLUPartitionedAbNUIConfiguration) {
-            BLUPartitionedAbNUIConfiguration config = (BLUPartitionedAbNUIConfiguration) configuration.getUIConfiguration();
-
-            if (config.hasContainerDetailsPanel()) {
-                containerDetailsPanel = Optional.of(config.createContainerDetailsPanel());
-            } else {
-                this.containerDetailsPanel = Optional.empty();
-            }
-        } else {
-            this.containerDetailsPanel = Optional.empty();
-        }
 
         graphPanel.add(moveUpBtn);
         graphPanel.add(moveLeftBtn);
@@ -269,17 +313,13 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         detailsPanel = new JPanel(new BorderLayout());
         
-        if (abnDetailsPanel != null) {
-            detailsPanel.add(abnDetailsPanel, BorderLayout.CENTER);
-        }
-
         splitPane.setLeftComponent(graphPanel);
         splitPane.setRightComponent(detailsPanel);
 
         this.add(splitPane, BorderLayout.CENTER);
     }
     
-    private void initializeListeners() {
+    private void initializeFixedListeners() {
 
         graphPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -322,7 +362,6 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         }
 
                     } else {
-                        handleClickOutsideAnyGroupEntry();
 
                         final GenericPartitionEntry partition = getContainerPartitionAtPoint(pointOnGraph);
 
@@ -334,8 +373,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                             } else if (clickCount == 2) {
                                 
                             }
+                            
                         } else {
                             selectionStateMonitor.resetAll();
+                            
+                            handleClickOutsideAnyEntry();
                         }
                     }
                     
@@ -370,7 +412,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     selectionStateMonitor.setMousedOverGroup(group);
 
                     if (group.isVisible() && magnifyGroupMode && !groupPopouts.containsKey(group)) {
-                        groupPopouts.put(group, new GroupPopout(graph, group));
+                        groupPopouts.put(group, new GroupPopout(graph, group, configuration));
                     }
                 } else {
 
@@ -725,6 +767,37 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         g2d.setStroke(savedStroke);
     }
         
+    private void drawShortMessage(Graphics2D g2d, String message) {
+        int panelWidth = graphPanel.getWidth();
+        int panelHeight = graphPanel.getHeight();
+        
+        final int BUBBLE_WIDTH = 600;
+        final int BUBBLE_HEIGHT = 340;
+        
+        final int BORDER_OFFSET = 4;
+        
+        g2d.setColor(Color.WHITE);
+        
+        int drawX = (panelWidth / 2) - BUBBLE_WIDTH / 2;
+        int drawY = (panelHeight / 2) - BUBBLE_HEIGHT / 2;
+        
+        g2d.fillOval(drawX, drawY, BUBBLE_WIDTH, BUBBLE_HEIGHT);
+        
+        g2d.setColor(new Color(100, 100, 255));
+
+        g2d.fillOval(drawX + BORDER_OFFSET, drawY + BORDER_OFFSET, BUBBLE_WIDTH - 2 * BORDER_OFFSET, BUBBLE_HEIGHT - 2 * BORDER_OFFSET);
+
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(g2d.getFont().deriveFont(Font.BOLD, 50));
+        
+        int strSize = g2d.getFontMetrics().stringWidth(message);
+        
+        int strX = (panelWidth / 2) - (strSize / 2);
+
+        g2d.drawString(message, strX, drawY + BUBBLE_HEIGHT / 2);
+        
+    }
+    
     private void updateNavButtonPressed() {
         boolean buttonPressed = false;
         
@@ -781,12 +854,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
             if (group == mousedOverPArea) {
                 groupPopouts.get(group).doExpand();
-                
-                System.out.println("EXPANDING...");
             } else {
                 groupPopouts.get(group).doContract();
-                
-                System.out.println("CONTRACTING...");
             }
             
             EnhancedGraphExplorationPanel.this.requestRedraw();
@@ -816,21 +885,36 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.requestRedraw();
     }
     
+    private void setDetailsPanelContents(JPanel panel) {
+        detailsPanel.removeAll();
+        detailsPanel.add(panel, BorderLayout.CENTER);
+        detailsPanel.revalidate();
+        detailsPanel.repaint();
+    }
+     
     /**
      * Section for handling mouse clicks
      */
     private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
-        if (groupDetailsPanel.isPresent()) {           
-            SwingUtilities.invokeLater(new Runnable() {
+        if (groupDetailsPanel.isPresent()) {
+            
+            Thread loadThread = new Thread(new Runnable() {
                 public void run() {
-                    detailsPanel.removeAll();
-                    detailsPanel.add(groupDetailsPanel.get(), BorderLayout.CENTER);
-                    detailsPanel.revalidate();
-                    detailsPanel.repaint();
-
+                    setDetailsPanelContents(loadingPanel);
+                    
                     groupDetailsPanel.get().setContents(entry.getGroup());
+                    
+                    if (entry == selectionStateMonitor.getSelectedGroupEntry()) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                setDetailsPanelContents(groupDetailsPanel.get());
+                            }
+                        });
+                    }
                 }
             });
+            
+            loadThread.start();
         }
     }
 
@@ -843,20 +927,27 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             GenericContainerEntry parentEntry = entry.getParentContainer();
             GenericGroupContainer container = parentEntry.getGroupContainer();
 
-            SwingUtilities.invokeLater(new Runnable() {
+            Thread loadThread = new Thread(new Runnable() {
                 public void run() {
-                    detailsPanel.removeAll();
-                    detailsPanel.add(containerDetailsPanel.get(), BorderLayout.CENTER);
-                    detailsPanel.revalidate();
-                    detailsPanel.repaint();
-
+                    setDetailsPanelContents(loadingPanel);
+                    
                     containerDetailsPanel.get().setContents(container);
+                    
+                    if (entry == selectionStateMonitor.getSelectedPartitionEntry()) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                setDetailsPanelContents(containerDetailsPanel.get());
+                            }
+                        });
+                    }
                 }
             });
+            
+            loadThread.start();
         }
     }
 
-    private void handleClickOutsideAnyGroupEntry() {
+    private void handleClickOutsideAnyEntry() {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -868,14 +959,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     containerDetailsPanel.get().clearContents();
                 }
 
-                detailsPanel.removeAll();
-
-                if (abnDetailsPanel != null) {
-                    detailsPanel.add(abnDetailsPanel, BorderLayout.CENTER);
-                }
-                
-                detailsPanel.revalidate();
-                detailsPanel.repaint();
+                setDetailsPanelContents(abnDetailsPanel);
             }
         });
         

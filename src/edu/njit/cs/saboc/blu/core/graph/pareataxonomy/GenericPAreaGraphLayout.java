@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -38,6 +39,35 @@ public abstract class GenericPAreaGraphLayout<
         super(graph);
 
         this.taxonomy = taxonomy;
+    }
+    
+    protected ArrayList<Color> getTaxonomyLevelColors() {
+        Color[] baseColors = new Color[]{
+            new Color(178, 178, 178),
+            new Color(55, 213, 102),
+            new Color(121, 212, 250),
+            new Color(242, 103, 103),
+            new Color(232, 255, 114),
+            Color.cyan,
+            Color.orange,
+            Color.pink,
+            Color.green,
+            Color.yellow,
+            Color.BLUE,
+            Color.MAGENTA
+        };
+        
+        ArrayList<Color> colors = new ArrayList<>(Arrays.asList(baseColors));
+        
+        for(int c = 0 ; c < baseColors.length; c++) {
+            colors.add(baseColors[c].brighter());
+        }
+        
+        for(int c = 0 ; c < baseColors.length; c++) {
+            colors.add(baseColors[c].darker());
+        }
+        
+        return colors;
     }
 
     public void doLayout() {

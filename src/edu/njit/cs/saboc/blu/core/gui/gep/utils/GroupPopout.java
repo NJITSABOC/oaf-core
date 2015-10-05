@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,7 +32,7 @@ public class GroupPopout {
     
     private BluGraph graph;
 
-    public GroupPopout(BluGraph graph, GenericGroupEntry groupEntry) {
+    public GroupPopout(BluGraph graph, GenericGroupEntry groupEntry, BLUConfiguration config) {
         this.graph = graph;
         
         this.groupEntry = groupEntry;
@@ -57,8 +58,9 @@ public class GroupPopout {
 
         TextDrawingUtilities.drawTextWithNewlines(textGraphics, group.getRoot().getName(), originalBounds, 10, 10);
 
-        String conceptTxt = String.format("%d %s", group.getConceptCount(), 
-                (group.getConceptCount() == 1 ? "Concept" : "Concepts"));
+        int conceptCount = group.getConceptCount();
+        
+        String conceptTxt = String.format("%d %s", conceptCount, config.getTextConfiguration().getConceptTypeName(conceptCount != 1));
 
         textGraphics.drawString(conceptTxt,
                 bounds.width - (conceptTxt.length() * 5) / 2,

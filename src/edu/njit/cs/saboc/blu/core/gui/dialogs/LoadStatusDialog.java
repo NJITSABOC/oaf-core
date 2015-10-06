@@ -16,13 +16,17 @@ import javax.swing.JProgressBar;
  */
 public class LoadStatusDialog extends JDialog {
     
-    public static LoadStatusDialog display(final JFrame parentFrame, String message) {
-        return new LoadStatusDialog(parentFrame, message);
+    public interface LoadingDialogClosedListener {
+        public void dialogClosed();
+    }
+    
+    public static LoadStatusDialog display(final JFrame parentFrame, String message, LoadingDialogClosedListener closeAction) {
+        return new LoadStatusDialog(parentFrame, message, closeAction);
     }
     
     private JProgressBar loadProgressBar;
     
-    private LoadStatusDialog(JFrame parentFrame, String message) {
+    private LoadStatusDialog(JFrame parentFrame, String message, LoadingDialogClosedListener closeAction) {
         super(parentFrame, false);
         
         this.setAlwaysOnTop(true);
@@ -51,7 +55,7 @@ public class LoadStatusDialog extends JDialog {
          
         this.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
-                
+                closeAction.dialogClosed();
             }
         });
 

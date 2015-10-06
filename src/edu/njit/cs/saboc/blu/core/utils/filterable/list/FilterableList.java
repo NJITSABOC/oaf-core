@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -15,15 +16,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ToolTipManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -38,7 +44,10 @@ public class FilterableList extends JPanel {
     private JButton closeButton = new JButton();
     
     private DefaultListModel pleaseWaitModel = new DefaultListModel();
+    
     private DefaultListModel dataEmptyModel = new DefaultListModel();
+    
+    private DefaultListModel noResultModel = new DefaultListModel();
     
     protected FilterableListModel entryModel;
     
@@ -85,9 +94,27 @@ public class FilterableList extends JPanel {
         };
         
         list.setModel(entryModel);
+        
+        Action copyAction = new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        };
+        
+
+        ActionMap listMap = list.getActionMap();
+        listMap.put("Copy", copyAction);
+        
+        InputMap inputMap = list.getInputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), "Copy");
+
+        
 
         pleaseWaitModel.addElement("Please wait...");
         dataEmptyModel.addElement(" ");
+        noResultModel.addElement("No results found...");
         
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
@@ -170,12 +197,21 @@ public class FilterableList extends JPanel {
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
+    
+    public void showNoResults() {
+        list.setModel(noResultModel);
+        entryModel.changeFilter("");
+        filterPanel.setVisible(false);
+    }
 
     public void setContents(Collection<? extends Filterable> content) {
         entryModel.changeFilter("");
+        
         filterPanel.setVisible(false);
+        
         entryModel.clear();
         entryModel.addAll(content);
+        
         list.setModel(entryModel);
     }
 

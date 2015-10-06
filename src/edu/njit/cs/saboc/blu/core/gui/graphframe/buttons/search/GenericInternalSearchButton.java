@@ -82,6 +82,8 @@ public class GenericInternalSearchButton extends PopupToggleButton {
         popupPanel.setBorder(BorderFactory.createEtchedBorder());
         
         final JButton searchButton = new JButton(IconManager.getIconManager().getIcon("search.png"));
+        
+        final JButton filterButton = new JButton(IconManager.getIconManager().getIcon("filter.png"));
 
         final JPanel resultsPanel = new JPanel(new BorderLayout());
         resultsPanel.setBorder(new TitledBorder("Search Results"));
@@ -116,23 +118,38 @@ public class GenericInternalSearchButton extends PopupToggleButton {
 
                         searchResultsList = results;
                         
-                        results.forEach((SearchButtonResult result) -> {
-                            filterableResults.add(new FilterableStringEntry(result.toString()));
-                        });
-                        
-                        resultList.setContents(filterableResults);
+                        if(results.isEmpty()) {
+                            resultList.showNoResults();
+                        } else {
+                            results.forEach((SearchButtonResult result) -> {
+                                filterableResults.add(new FilterableStringEntry(result.toString()));
+                            });
+
+                            resultList.setContents(filterableResults);
+                        }
                     }
                 });
             }
      
         });
         
+        filterButton.addActionListener( (ActionEvent ae) -> {
+            resultList.toggleFilterPanel();
+        });
+        
         JPanel searchEntryPanel = new JPanel(new BorderLayout());
 
         searchEntryPanel.setBorder(BorderFactory.createTitledBorder("Search Anywhere"));
         searchEntryPanel.add(searchText, BorderLayout.CENTER);
-        searchEntryPanel.add(searchButton, BorderLayout.EAST);
-        searchText.setPreferredSize(new Dimension(450, 50));
+        
+        JPanel btnPanel = new JPanel();
+        
+        btnPanel.add(searchButton);
+        btnPanel.add(filterButton);
+        
+        searchEntryPanel.add(btnPanel, BorderLayout.EAST);
+        
+        searchText.setPreferredSize(new Dimension(450, 55));
 
         popupPanel.add(searchTypePanel, BorderLayout.NORTH);
         popupPanel.add(searchEntryPanel, BorderLayout.CENTER);

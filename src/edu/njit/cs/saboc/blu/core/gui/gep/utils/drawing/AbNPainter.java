@@ -68,11 +68,11 @@ public class AbNPainter {
         switch(group.getHighlightState()) {
                 
             case Parent:
-                bgColor = new Color(150, 150, 255);
+                bgColor = new Color(200, 200, 255);
                 break;
                 
             case Child:
-                bgColor = new Color(255, 150, 255);
+                bgColor = new Color(255, 200, 255);
                 break;
                 
             case Selected:

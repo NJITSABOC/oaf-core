@@ -79,25 +79,29 @@ public abstract class PAreaTaxonomyGenerator<
             partialAreaIds.put(root, pareaId++);
             
             partialAreas.put(root, initPAreaConceptHierarchy(root));
-            parentPartialAreas.put(root, new HashSet<CONCEPT_T>());
-            childPartialAreas.put(root, new HashSet<CONCEPT_T>());
+            parentPartialAreas.put(root, new HashSet<>());
+            childPartialAreas.put(root, new HashSet<>());
         }
 
-        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> conceptPAreas = new HashMap<CONCEPT_T, HashSet<CONCEPT_T>>();
+        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> conceptPAreas = new HashMap<>();
 
-        Stack<CONCEPT_T> stack = new Stack<CONCEPT_T>();
-
+        Stack<CONCEPT_T> stack = new Stack<>();
+        
         // For all of the roots, find the concepts in the associated partial area. Establish CHILD OF links.
         for (CONCEPT_T root : partialAreaRoots) {
             stack.add(root);
-
+            
+            HashSet<CONCEPT_T> processedConcepts = new HashSet<>();
+            processedConcepts.add(root);
+            
             while (!stack.isEmpty()) {
                 CONCEPT_T concept = stack.pop();
+                processedConcepts.add(concept);
 
                 HIERARCHY_T pareaHierarchy = partialAreas.get(root);
 
                 if (!conceptPAreas.containsKey(concept)) {
-                    conceptPAreas.put(concept, new HashSet<CONCEPT_T>());
+                    conceptPAreas.put(concept, new HashSet<>());
                 }
 
                 conceptPAreas.get(concept).add(root);
@@ -106,16 +110,15 @@ public abstract class PAreaTaxonomyGenerator<
 
                 for (CONCEPT_T child : children) {
                     if (partialAreaRoots.contains(child)) {
-                        
                         parentPartialAreas.get(child).add(root);
                         childPartialAreas.get(root).add(child);
-                        
                     } else {
-                        if (!stack.contains(child) && relEquality.equalsNoInheritance(conceptRelationships.get(root), conceptRelationships.get(child))) {
+                        if(relEquality.equalsNoInheritance(conceptRelationships.get(root), conceptRelationships.get(child))) {
+                            if(!processedConcepts.contains(child) && !stack.contains(child)) {
+                                stack.add(child);
+                            }
                             
                             pareaHierarchy.addIsA(child, concept);
-                            
-                            stack.add(child);
                         }
                     }
                     
@@ -124,7 +127,7 @@ public abstract class PAreaTaxonomyGenerator<
             } // end while
             
         } // For each root
-
+        
         HashMap<Integer, PAREA_T> pareas = new HashMap<Integer, PAREA_T>();
 
         ArrayList<AREA_T> areas = new ArrayList<AREA_T>();

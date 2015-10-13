@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,8 +30,8 @@ public class LoadingPanel extends JPanel {
         loadingDetailsPane.setEnabled(true);
         loadingDetailsPane.setEditable(false);
         loadingDetailsPane.setFont(loadingDetailsPane.getFont().deriveFont(Font.BOLD, 14));
-        loadingDetailsPane.setText("One moment please. Information about the selected abstraction network component is currently "
-                + "being retreived. This screen may appear for a moment if a large amount of information is being processed.");
+        loadingDetailsPane.setText("One moment please. Information about the abstraction network is currently "
+                + "being processed. This message may appear for a few moments.");
                
         this.setLayout(new BorderLayout());
         

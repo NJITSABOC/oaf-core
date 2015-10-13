@@ -44,13 +44,17 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     protected JFrame parentFrame;
     
-    protected BluGraph graph;
        
-    protected EnhancedGraphExplorationPanel gep;
-       
+    protected final EnhancedGraphExplorationPanel gep;
+
     protected final JTabbedPane tabbedPane = new JTabbedPane();
-    protected JScrollPane scroller;
     
+    
+    protected final JScrollPane scroller;
+    protected final JPanel scrollerContentPanel;
+    
+    protected BluGraph graph;
+        
     protected JCheckBox chkHideGroups;
     
     protected JLabel hierarchyInfoLabel = new JLabel();
@@ -72,8 +76,15 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         this.parentFrame = parentFrame;
         
-        this.gep = new EnhancedGraphExplorationPanel();
+        this.scrollerContentPanel = new JPanel(new BorderLayout());
+        this.scroller = new JScrollPane(scrollerContentPanel);
         
+        this.gep = new EnhancedGraphExplorationPanel();
+        this.gep.showLoading();
+
+        tabbedPane.addTab("Explore", gep);
+        tabbedPane.addTab("Edit", scroller);
+
         this.setSize(1024, 512);
 
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -331,21 +342,25 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void initializeGraphTabs(BluGraph graph, AbNPainter painter, BLUConfiguration gepConfiguration) {
+    protected void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, BLUConfiguration gepConfiguration) {
         
         this.graph = graph;
+        
+        gep.showLoading();
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                tabbedPane.removeAll();
 
                 gep.setContents(graph, painter, gepConfiguration);
+                
+                scrollerContentPanel.add(graph, BorderLayout.CENTER);
+                
+                scroller.revalidate();
+                scroller.repaint();
 
                 initializeTabs(graph, gepConfiguration);
 
                 tabbedPane.validate();
-
-                tabbedPane.setSelectedIndex(1);
 
                 tabbedPane.repaint();
             }
@@ -353,22 +368,21 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     }
     
     protected void initializeTabs(BluGraph graph, BLUConfiguration gepConfiguration) {
-        scroller = new JScrollPane(graph);
 
         String abnTypeName = gepConfiguration.getTextConfiguration().getAbNTypeName(false);
 
-        tabbedPane.addTab(String.format("Edit %s Graph", abnTypeName), scroller);
-
-        tabbedPane.addTab(String.format("Explore %s", abnTypeName), gep);
-
+        tabbedPane.setTitleAt(0, String.format("Explore %s", abnTypeName));
+        tabbedPane.setTitleAt(1, String.format("Edit %s", abnTypeName));
+        
         tabbedPane.setToolTipTextAt(0,
-                String.format("<html><b>Edit %s Graph</b> allows you to edit some of the %s's layout and draw edges.", abnTypeName, abnTypeName.toLowerCase()));
-
-        tabbedPane.setToolTipTextAt(1,
                 String.format("<html><b>Explore %s</b> allows you to quickly<br>"
                         + "explore the %s. Additional information is displayed by selecting the different %s elements.",
                         abnTypeName,
                         abnTypeName.toLowerCase(),
+                        abnTypeName.toLowerCase()));
+
+        tabbedPane.setToolTipTextAt(1,
+                String.format("<html><b>Edit %s Graph</b> allows you to edit some of the %s's layout and draw edges.", abnTypeName, 
                         abnTypeName.toLowerCase()));
     }
 

@@ -197,6 +197,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     public void showLoading() {
         this.gepState = GEPState.Loading;
+        
+        this.setDetailsPanelContents(this.loadingPanel);
     }
     
     private void initializeContentComponents(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
@@ -232,10 +234,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 super.paintComponent(g);
                 
                 Graphics2D g2d = (Graphics2D) g;
-                
-                viewport.setSizeScaled(graphPanel.getWidth(), graphPanel.getHeight());
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 if (gepState == GEPState.Alive) {
+                    viewport.setSizeScaled(graphPanel.getWidth(), graphPanel.getHeight());
                     
                     drawAbstractionNetwork(g2d, viewport);
 
@@ -246,8 +248,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     if (mouseStateMonitor.mouseDragging()) {
                         drawNavigationPipper(g2d);
                     }
-                } else if (gepState == GEPState.Initializing || gepState == GEPState.Loading) {
-                    drawAbstractionNetwork(g2d, viewport);
+                } else if(gepState == GEPState.Loading || gepState == GEPState.Initializing || gepState == GEPState.Uninitialized) {
+                    
+                    if(graph != null) {
+                        drawAbstractionNetwork(g2d, viewport);
+                    }
                     
                     Color fadeOutColor = new Color(0, 0, 0, 200);
                     
@@ -323,125 +328,138 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         graphPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    mouseStateMonitor.setClickedLocation(e.getPoint());
-                    
-                    EnhancedGraphExplorationPanel.this.requestRedraw();
+                if (gepState == GEPState.Alive) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        mouseStateMonitor.setClickedLocation(e.getPoint());
+
+                        EnhancedGraphExplorationPanel.this.requestRedraw();
+                    }
                 }
             }
 
             public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                                        
-                    mouseStateMonitor.setClickedLocation(null);
-                    mouseStateMonitor.setCurrentDraggedLocation(null);
-                    
-                    EnhancedGraphExplorationPanel.this.requestRedraw();
+                if (gepState == GEPState.Alive) {
+
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        mouseStateMonitor.setClickedLocation(null);
+                        mouseStateMonitor.setCurrentDraggedLocation(null);
+
+                        EnhancedGraphExplorationPanel.this.requestRedraw();
+                    }
                 }
             }
 
             public void mouseClicked(MouseEvent e) {
+
                 EnhancedGraphExplorationPanel.this.requestFocus();
 
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    targetEntryPoint = null;
-                    
-                    int clickCount = e.getClickCount();
+                if (gepState == GEPState.Alive) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        targetEntryPoint = null;
 
-                    Point pointOnGraph = viewport.getPointOnGraph(e.getPoint());
+                        int clickCount = e.getClickCount();
 
-                    GenericGroupEntry groupEntry = getGroupEntryAtPoint(pointOnGraph);
+                        Point pointOnGraph = viewport.getPointOnGraph(e.getPoint());
 
-                    if (groupEntry != null) {
-                        selectionStateMonitor.setSelectedGroup(groupEntry);
-                        
-                        if (clickCount == 1) {
-                            handleSingleClickOnGroupEntry(groupEntry);
-                        } else if (clickCount == 2) {
-                            
-                        }
+                        GenericGroupEntry groupEntry = getGroupEntryAtPoint(pointOnGraph);
 
-                    } else {
+                        if (groupEntry != null) {
+                            selectionStateMonitor.setSelectedGroup(groupEntry);
 
-                        final GenericPartitionEntry partition = getContainerPartitionAtPoint(pointOnGraph);
-
-                        if (partition != null) {
-                            selectionStateMonitor.setSelectedPartition(partition);
-                            
                             if (clickCount == 1) {
-                                handleSingleClickOnPartitionEntry(partition);
+                                handleSingleClickOnGroupEntry(groupEntry);
                             } else if (clickCount == 2) {
-                                
+
                             }
-                            
+
                         } else {
-                            selectionStateMonitor.resetAll();
-                            
-                            handleClickOutsideAnyEntry();
+
+                            final GenericPartitionEntry partition = getContainerPartitionAtPoint(pointOnGraph);
+
+                            if (partition != null) {
+                                selectionStateMonitor.setSelectedPartition(partition);
+
+                                if (clickCount == 1) {
+                                    handleSingleClickOnPartitionEntry(partition);
+                                } else if (clickCount == 2) {
+
+                                }
+
+                            } else {
+                                selectionStateMonitor.resetAll();
+
+                                handleClickOutsideAnyEntry();
+                            }
                         }
+
+                        EnhancedGraphExplorationPanel.this.requestRedraw();
                     }
-                    
-                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
             }
         });
 
         graphPanel.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                if (mouseStateMonitor.mouseDragging()) {
-                    mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
-                    mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
-                } else {
-                    if (e.getPoint().distance(mouseStateMonitor.getClickedLocation()) > 16) {
+                if (gepState == GEPState.Alive) {
+                    if (mouseStateMonitor.mouseDragging()) {
                         mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
                         mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
+                    } else {
+                        if (e.getPoint().distance(mouseStateMonitor.getClickedLocation()) > 16) {
+                            mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
+                            mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
+                        }
                     }
+
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
-                
-                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
 
             public void mouseMoved(MouseEvent e) {
-                Point mouseLocation = viewport.getPointOnGraph(e.getPoint());
+                if (gepState == GEPState.Alive) {
+                    Point mouseLocation = viewport.getPointOnGraph(e.getPoint());
 
-                mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
+                    mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
 
-                GenericGroupEntry group = getGroupEntryAtPoint(mouseLocation);
+                    GenericGroupEntry group = getGroupEntryAtPoint(mouseLocation);
 
-                if (group != null) {
-                    selectionStateMonitor.setMousedOverGroup(group);
+                    if (group != null) {
+                        selectionStateMonitor.setMousedOverGroup(group);
 
-                    if (group.isVisible() && magnifyGroupMode && !groupPopouts.containsKey(group)) {
-                        groupPopouts.put(group, new GroupPopout(graph, group, configuration));
-                    }
-                } else {
-
-                    GenericPartitionEntry partition = getContainerPartitionAtPoint(mouseLocation);
-
-                    if (partition != null && partition.isVisible()) {
-                        int yLocation = partition.getAbsoluteY();
-
-                        // Only highlight if mouse at the top of the partition.
-                        if (mouseLocation.y < yLocation + 30) {
-                            selectionStateMonitor.setMousedOverPartition(partition);
+                        if (group.isVisible() && magnifyGroupMode && !groupPopouts.containsKey(group)) {
+                            groupPopouts.put(group, new GroupPopout(graph, group, configuration));
                         }
                     } else {
-                        selectionStateMonitor.resetMousedOver();
+
+                        GenericPartitionEntry partition = getContainerPartitionAtPoint(mouseLocation);
+
+                        if (partition != null && partition.isVisible()) {
+                            int yLocation = partition.getAbsoluteY();
+
+                            // Only highlight if mouse at the top of the partition.
+                            if (mouseLocation.y < yLocation + 30) {
+                                selectionStateMonitor.setMousedOverPartition(partition);
+                            }
+                        } else {
+                            selectionStateMonitor.resetMousedOver();
+                        }
                     }
+
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
-                
-                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
 
         graphPanel.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                
-                viewport.setZoom(zoomSlider.getValue(), 
-                            graphPanel.getWidth(), 
+
+                if (gepState == GEPState.Alive) {
+                    viewport.setZoom(zoomSlider.getValue(),
+                            graphPanel.getWidth(),
                             graphPanel.getHeight());
-                
-                EnhancedGraphExplorationPanel.this.requestRedraw();
+
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
+                }
             }
         });
         
@@ -453,19 +471,21 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
         graphPanel.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-                    int zoomLevelChange = -e.getUnitsToScroll() / 3;
-                    int currentZoomValue = zoomSlider.getValue();
+                if (gepState == GEPState.Alive) {
+                    if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                        int zoomLevelChange = -e.getUnitsToScroll() / 3;
+                        int currentZoomValue = zoomSlider.getValue();
 
-                    int newZoomLevel = currentZoomValue + zoomLevelChange * 10;
+                        int newZoomLevel = currentZoomValue + zoomLevelChange * 10;
 
-                    zoomSlider.setValue(newZoomLevel);
+                        zoomSlider.setValue(newZoomLevel);
 
-                    viewport.setZoom(newZoomLevel,
-                            graphPanel.getWidth(),
-                            graphPanel.getHeight());
-                    
-                    EnhancedGraphExplorationPanel.this.requestRedraw();
+                        viewport.setZoom(newZoomLevel,
+                                graphPanel.getWidth(),
+                                graphPanel.getHeight());
+
+                        EnhancedGraphExplorationPanel.this.requestRedraw();
+                    }
                 }
             }
         });
@@ -473,22 +493,24 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         graphPanel.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        viewport.moveVertical(-64);
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        viewport.moveVertical(64);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        viewport.moveHorizontal(-64);
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        viewport.moveHorizontal(64);
-                        break;
+                if (gepState == GEPState.Alive) {
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_UP:
+                            viewport.moveVertical(-64);
+                            break;
+                        case KeyEvent.VK_DOWN:
+                            viewport.moveVertical(64);
+                            break;
+                        case KeyEvent.VK_LEFT:
+                            viewport.moveHorizontal(-64);
+                            break;
+                        case KeyEvent.VK_RIGHT:
+                            viewport.moveHorizontal(64);
+                            break;
+                    }
+
+                    EnhancedGraphExplorationPanel.this.requestRedraw();
                 }
-                
-                EnhancedGraphExplorationPanel.this.requestRedraw();
             }
         });
     }

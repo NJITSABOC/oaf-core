@@ -41,10 +41,11 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
         Optional<File> exportFile = ExportAbNUtilities.displayFileSelectDialog();
 
         if (exportFile.isPresent()) {
-            String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s)", 
+            String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)", 
                     config.getTextConfiguration().getContainerTypeName(true), 
                     config.getTextConfiguration().getGroupTypeName(true), 
-                    config.getTextConfiguration().getConceptTypeName(true));
+                    config.getTextConfiguration().getConceptTypeName(true),
+                    config.getTextConfiguration().getConceptTypeName(false));
             
             String containerChoice = String.format("%s and %s Only", 
                     config.getTextConfiguration().getContainerTypeName(true), 
@@ -96,12 +97,13 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
                     concepts.forEach( (CONCEPT_T concept) -> {
                         String conceptName = config.getTextConfiguration().getConceptName(concept);
                         
-                        writer.println(String.format("%s\t%d\t%s\t%s\t%s",
+                        writer.println(String.format("%s\t%d\t%s\t%s\t%s\t%s",
                                 hierarchyName, 
                                 containerLevel, 
                                 containerName, 
                                 groupName, 
-                                conceptName));
+                                conceptName,
+                                config.getTextConfiguration().getConceptUniqueIdentifier(concept)));
                         
                     });
                 });
@@ -129,9 +131,10 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
 
                
                 concepts.forEach( (CONCEPT_T concept) -> {
-                    writer.println(String.format("%s\t%s",
+                    writer.println(String.format("%s\t%s\t%s",
                             containerName, 
-                            config.getTextConfiguration().getConceptName(concept))
+                            config.getTextConfiguration().getConceptName(concept),
+                            config.getTextConfiguration().getConceptUniqueIdentifier(concept))
                     );
                 });
             });
@@ -151,9 +154,10 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
                 
                 concepts.forEach( (CONCEPT_T concept) -> {
                     writer.println(String.format(
-                            "%s\t%s",
+                            "%s\t%s\t%s",
                             groupName,
-                            config.getTextConfiguration().getConceptName(concept)));
+                            config.getTextConfiguration().getConceptName(concept),
+                            config.getTextConfiguration().getConceptUniqueIdentifier(concept)));
                 });
             });
         } catch (IOException ie) {

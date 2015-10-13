@@ -23,5 +23,7 @@ public interface BLUAbNTextConfiguration<
     public String getGroupHelpDescriptions(GROUP_T group);
     
     public String getConceptName(CONCEPT_T concept);
+    public String getConceptUniqueIdentifier(CONCEPT_T concept);
+    
     public String getGroupName(GROUP_T group);
 }

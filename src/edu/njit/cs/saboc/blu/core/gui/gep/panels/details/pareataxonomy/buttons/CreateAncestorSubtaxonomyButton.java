@@ -7,15 +7,15 @@ import java.awt.event.ActionEvent;
  *
  * @author Chris O
  */
-public abstract class CreateSubtaxonomyButton extends BaseOptionButton {
-    
-    public CreateSubtaxonomyButton() {
-        super("BluSubtaxonomy.png", "Create a root subtaxonomy");
-        
-         this.addActionListener((ActionEvent ae) -> {
+public abstract class CreateAncestorSubtaxonomyButton extends BaseOptionButton {
+
+    public CreateAncestorSubtaxonomyButton() {
+        super("BluAncestorSubtaxonomy.png", "Create an ancestor subtaxonomy");
+
+        this.addActionListener((ActionEvent ae) -> {
             createSubtaxonomyAction();
         });
-        
+
     }
 
     public abstract void createSubtaxonomyAction();

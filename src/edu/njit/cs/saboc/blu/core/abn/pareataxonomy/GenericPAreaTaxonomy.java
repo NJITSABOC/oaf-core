@@ -93,4 +93,28 @@ public abstract class GenericPAreaTaxonomy<
         
         return subtaxonomy;
     }
+    
+    protected TAXONOMY_T createAncestorSubtaxonomy(PAREA_T source, PAreaTaxonomyGenerator generator) {
+        SingleRootedGroupHierarchy<PAREA_T> convertedHierarchy = (SingleRootedGroupHierarchy<PAREA_T>)this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
+        
+        SingleRootedGroupHierarchy<PAREA_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
+        
+        GroupHierarchy<PAREA_T> pareaSubhierarchy = ancestorSubhierarhcy.asGroupHierarchy();
+        
+        HashSet<PAREA_T> pareas = pareaSubhierarchy.getNodesInHierarchy();
+        
+        HashMap<Integer, PAREA_T> pareaIds = new HashMap<>();
+        
+        pareas.forEach((PAREA_T parea) -> {
+            pareaIds.put(parea.getId(), parea);
+        });
+        
+        TAXONOMY_T subtaxonomy = (TAXONOMY_T)generator.createTaxonomyFromPAreas(pareaIds, pareaSubhierarchy);
+        
+        if(this.isReduced()) {
+            subtaxonomy.setReduced(isReduced);
+        }
+        
+        return subtaxonomy;
+    }
 }

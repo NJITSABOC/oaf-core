@@ -84,8 +84,9 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
 
         tabbedPane.addTab("Explore", gep);
         tabbedPane.addTab("Edit", scroller);
+        tabbedPane.setEnabled(false);
 
-        this.setSize(1024, 512);
+        this.setSize(1200, 512);
 
         this.addInternalFrameListener(new InternalFrameAdapter() {
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -347,6 +348,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         this.graph = graph;
         
         gep.showLoading();
+        tabbedPane.setEnabled(false);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -360,8 +362,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
 
                 initializeTabs(graph, gepConfiguration);
 
+                tabbedPane.setEnabled(true);
                 tabbedPane.validate();
-
                 tabbedPane.repaint();
             }
         });

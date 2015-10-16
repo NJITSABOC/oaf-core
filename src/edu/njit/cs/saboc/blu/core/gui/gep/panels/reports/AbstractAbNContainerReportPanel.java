@@ -44,6 +44,8 @@ public class AbstractAbNContainerReportPanel<
             }
         };
         
+        containerReportPanel.addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getContainerReportSelectedListener());
+        
         this.add(containerReportPanel, BorderLayout.CENTER);
     }
     

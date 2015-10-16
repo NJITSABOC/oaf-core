@@ -25,6 +25,8 @@ public class GenericAreaSummaryPanel<CONCEPT_T,
 
         relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         relationshipPanel.setPreferredSize(new Dimension(-1, 100));
+                
+        relationshipPanel.addEntitySelectionListener(configuration.getUIConfiguration().getListenerConfiguration().getContainerRelationshipSelectedListener());
         
         this.add(relationshipPanel);
     }

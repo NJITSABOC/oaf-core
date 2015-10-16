@@ -34,6 +34,8 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
         abnDetailsPane.setEditable(false);
         abnDetailsPane.setFont(abnDetailsPane.getFont().deriveFont(Font.BOLD, 14));
         abnDetailsPane.setText(config.getTextConfiguration().getAbNSummary());
+        abnDetailsPane.setSelectionStart(0);
+        abnDetailsPane.setSelectionEnd(0);
                
         this.setLayout(new BorderLayout());
         

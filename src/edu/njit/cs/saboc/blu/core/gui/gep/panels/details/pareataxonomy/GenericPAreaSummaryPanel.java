@@ -30,6 +30,8 @@ public abstract class GenericPAreaSummaryPanel<
         this.relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         this.relationshipPanel.setPreferredSize(new Dimension(-1, 100));
         
+        this.relationshipPanel.addEntitySelectionListener(configuration.getUIConfiguration().getListenerConfiguration().getGroupRelationshipSelectedListener());
+        
         this.add(this.relationshipPanel);
     }
     

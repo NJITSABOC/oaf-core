@@ -188,6 +188,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         
         updateTimer.start();
         
+        viewport.setZoom(100, graphPanel.getWidth(), graphPanel.getHeight());
+        
         this.gepState = GEPState.Alive;
     }
     

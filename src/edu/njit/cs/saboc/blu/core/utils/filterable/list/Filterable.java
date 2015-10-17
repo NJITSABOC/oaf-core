@@ -6,6 +6,7 @@ package edu.njit.cs.saboc.blu.core.utils.filterable.list;
  */
 public abstract class Filterable<T> {
     
+    public abstract String getClipboardText();
     public abstract String getFilterText(String filter);
     public abstract String getInitialText();
     

@@ -99,7 +99,7 @@ public class FilterableList extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                System.err.println("COPYING..........");
             }
         };
         

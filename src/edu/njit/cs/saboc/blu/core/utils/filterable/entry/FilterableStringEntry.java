@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
  * @author harsh
  */
 public class FilterableStringEntry extends Filterable<String> {
+
     private String entry;
     
     public FilterableStringEntry(String entry) {
@@ -27,5 +28,10 @@ public class FilterableStringEntry extends Filterable<String> {
     
     public boolean containsFilter(String filter) {
         return entry.toLowerCase().contains(filter);
+    }
+        
+    @Override
+    public String getClipboardText() {
+        return entry;
     }
 }

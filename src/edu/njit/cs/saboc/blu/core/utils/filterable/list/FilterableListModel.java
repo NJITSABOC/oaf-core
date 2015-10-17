@@ -15,6 +15,7 @@ import javax.swing.event.ListDataListener;
  * the Vector methods.
  */
 public class FilterableListModel extends MonitoredVector<Filterable> implements ListModel {
+    
     protected Vector<Filterable> modelledVector = this;
 
     private class DelegateListModel extends AbstractListModel {

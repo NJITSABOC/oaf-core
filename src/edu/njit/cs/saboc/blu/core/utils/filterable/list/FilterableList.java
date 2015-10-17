@@ -4,6 +4,9 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -99,10 +102,21 @@ public class FilterableList extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.err.println("COPYING..........");
+
+                if (list.getModel() == entryModel) {
+                    StringBuilder selectionBuilder = new StringBuilder();
+                    
+                    entryModel.modelledVector.forEach( (Filterable filterable) -> {
+                        selectionBuilder.append( String.format("%s\n", filterable.getClipboardText()));
+                    });
+
+                    StringSelection selection = new StringSelection(selectionBuilder.toString());
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(selection, selection);
+                }
+
             }
         };
-        
 
         ActionMap listMap = list.getActionMap();
         listMap.put("Copy", copyAction);
@@ -110,7 +124,6 @@ public class FilterableList extends JPanel {
         InputMap inputMap = list.getInputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), "Copy");
 
-        
 
         pleaseWaitModel.addElement("Please wait...");
         dataEmptyModel.addElement(" ");

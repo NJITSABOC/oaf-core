@@ -10,7 +10,8 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class BLUAbstractOverlappingDetailsTableModel<GROUP_T extends GenericConceptGroup, 
+public class BLUAbstractOverlappingDetailsTableModel<
+        GROUP_T extends GenericConceptGroup, 
         DISJOINTGROUP_T extends DisjointGenericConceptGroup,
         CONCEPT_T> extends BLUAbstractTableModel<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> {
     

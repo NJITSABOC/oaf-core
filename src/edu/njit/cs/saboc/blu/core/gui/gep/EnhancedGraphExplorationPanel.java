@@ -926,7 +926,12 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                 public void run() {
                     setDetailsPanelContents(loadingPanel);
                     
+                    groupDetailsPanel.get().clearContents();
                     groupDetailsPanel.get().setContents(entry.getGroup());
+                    
+                    if(containerDetailsPanel.isPresent()) {
+                        containerDetailsPanel.get().clearContents();
+                    }
                     
                     if (entry == selectionStateMonitor.getSelectedGroupEntry()) {
                         SwingUtilities.invokeLater(new Runnable() {
@@ -954,6 +959,12 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             Thread loadThread = new Thread(new Runnable() {
                 public void run() {
                     setDetailsPanelContents(loadingPanel);
+                    
+                    if(groupDetailsPanel.isPresent()) {
+                        groupDetailsPanel.get().clearContents();
+                    }
+                    
+                    containerDetailsPanel.get().clearContents();
                     
                     containerDetailsPanel.get().setContents(container);
                     

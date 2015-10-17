@@ -15,8 +15,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptE
 public class GenericAreaPanel<AREA_T extends GenericArea, 
         PAREA_T extends GenericPArea, 
         CONCEPT_T,
-        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends
-                AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>, CONFIG_T> {
+        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends 
+        
+            AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>, CONFIG_T> {
 
     private final AbstractDisjointAbNMetricsPanel disjointMetricsPanel;
     

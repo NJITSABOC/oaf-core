@@ -59,4 +59,9 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
         return entry.getName().toLowerCase().contains(filter) || 
                 entry.getConceptId().contains(filter);
     }
+    
+    @Override
+    public String getClipboardText() {
+        return String.format("%s\t%s", entry.getConceptId(), entry.getName());
+    }
 }

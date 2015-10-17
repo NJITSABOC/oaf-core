@@ -85,4 +85,9 @@ public class FilterableConceptEntry<T> extends Filterable<T> implements Navigabl
     public boolean containsFilter(String filter) {
         return dataSource.getConceptName(concept).toLowerCase().contains(filter) || dataSource.getConceptId(concept).toLowerCase().contains(filter);
     }
+    
+    @Override
+    public String getClipboardText() {
+        return String.format("%s\t%s", dataSource.getConceptId(concept), dataSource.getConceptName(concept));
+    }
 }

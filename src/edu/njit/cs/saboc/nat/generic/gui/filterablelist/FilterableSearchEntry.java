@@ -45,8 +45,11 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
     }
     
     public String getInitialText(boolean showURIs) {
-        if (showURIs) return getInitialText();
-        else return String.format("<html>%s &nbsp;", entry.getName());
+        if (showURIs) {
+            return getInitialText();
+        } else {
+            return String.format("<html>%s", entry.getName());
+        }
     }
 
     public String getFilterText(String filter) {
@@ -56,11 +59,12 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
     }
     
     public String getFilterText(String filter, boolean showURIs) {
-        if (showURIs) return getFilterText(filter);
-        else return String.format("<html>%s &nbsp;", 
-                filter(entry.getName(), filter));
+        if (showURIs) {
+            return getFilterText(filter);
+        } else {
+            return String.format("<html>%s", filter(entry.getName(), filter));
+        }
     }
-    
     /**
      * 
      * @param filter The filter

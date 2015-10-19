@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;

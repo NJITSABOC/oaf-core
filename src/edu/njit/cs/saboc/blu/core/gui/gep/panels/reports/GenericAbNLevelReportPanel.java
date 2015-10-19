@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.GenericAbNLevelReportTableModel;
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;

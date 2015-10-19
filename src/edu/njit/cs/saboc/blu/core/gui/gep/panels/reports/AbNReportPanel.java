@@ -18,5 +18,9 @@ public abstract class AbNReportPanel<CONCEPT_T, GROUP_T extends GenericConceptGr
         this.config = config;
     }
     
+    public BLUConfiguration getConfiguration() {
+        return config;
+    }
+    
     public abstract void displayAbNReport(ABN_T abn);
 }

@@ -1,24 +1,38 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import javax.swing.Box;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Chris O
  */
-public class DetailsPanelLabel extends JLabel {
+public class DetailsPanelLabel extends JPanel {
+    
+    private final JLabel lblText;
     
     public DetailsPanelLabel(String label) {
-        super(label);
+        super(new BorderLayout());
+        
+        lblText = new JLabel("<html>" + label);
+        lblText.setFont(lblText.getFont().deriveFont(Font.BOLD, 20));
+        
+        this.add(Box.createVerticalStrut(2), BorderLayout.NORTH);
+        this.add(Box.createHorizontalStrut(8), BorderLayout.WEST);
+        this.add(lblText, BorderLayout.CENTER);
+        this.add(Box.createVerticalStrut(2), BorderLayout.SOUTH);
     }
     
     public void setText(String label) {
-        super.setText(label);
+        lblText.setText("<html>" + label);
     }
 
     public void paintComponent(Graphics g) {
@@ -43,8 +57,6 @@ public class DetailsPanelLabel extends JLabel {
 
         g2d.setFont(getFont());
         g2d.setColor(Color.BLACK);
-
-        g2d.drawString(getText(), 8, 28);
 
         g.drawImage(bi, 0, 0, null);
     }

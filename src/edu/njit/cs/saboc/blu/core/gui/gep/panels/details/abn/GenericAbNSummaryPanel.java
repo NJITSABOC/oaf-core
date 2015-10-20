@@ -22,11 +22,7 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
     
     public GenericAbNSummaryPanel(BLUConfiguration config) {
         
-        abnNameLabel = new DetailsPanelLabel(" ");
-        
-        abnNameLabel.setText(config.getTextConfiguration().getAbNName());
-        abnNameLabel.setFont(abnNameLabel.getFont().deriveFont(Font.BOLD, 20));
-        abnNameLabel.setPreferredSize(new Dimension(100, 40));
+        abnNameLabel = new DetailsPanelLabel(config.getTextConfiguration().getAbNName());
         
         abnDetailsPane = new JEditorPane();
         abnDetailsPane.setContentType("text/html");

@@ -4,8 +4,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.JTabbedPane;
 
@@ -33,9 +31,6 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUC
         this.setOpaque(false);
         
         groupNameLabel = new DetailsPanelLabel(" ");
-                
-        groupNameLabel.setFont(groupNameLabel.getFont().deriveFont(Font.BOLD, 20));
-        groupNameLabel.setPreferredSize(new Dimension(100, 40));
         
         tabbedPane = new JTabbedPane();
         
@@ -44,7 +39,7 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUC
         this.add(groupNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);
     }
-    
+
     public CONFIG_T getConfiguration() {
         return configuration;
     }

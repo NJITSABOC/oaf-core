@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -19,11 +18,7 @@ public class LoadingPanel extends JPanel {
     
     public LoadingPanel() {
         
-        loadingLabel = new DetailsPanelLabel(" ");
-        
-        loadingLabel.setText("Loading.... Please wait.");
-        loadingLabel.setFont(loadingLabel.getFont().deriveFont(Font.BOLD, 20));
-        loadingLabel.setPreferredSize(new Dimension(100, 40));
+        loadingLabel = new DetailsPanelLabel("Loading.... Please wait.");
         
         loadingDetailsPane = new JEditorPane();
         loadingDetailsPane.setContentType("text/html");

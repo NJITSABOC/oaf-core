@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,18 +39,14 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.filechooser.FileFilter;
 
-// Blugraph is the most generic, of which there are
-// OWLPAreaBluGraph, PAreaBluGraph, and ClusterBluGraph -Vlad
 public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     protected JFrame parentFrame;
-    
        
     protected final EnhancedGraphExplorationPanel gep;
 
     protected final JTabbedPane tabbedPane = new JTabbedPane();
-    
-    
+   
     protected final JScrollPane scroller;
     protected final JPanel scrollerContentPanel;
     
@@ -61,9 +58,9 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     protected JPanel menuPanel = new JPanel();
     
-    private JPanel reportsPanel = new JPanel();
+    private final JPanel reportsPanel = new JPanel();
     
-    private JPanel optionsPanel = new JPanel();
+    private final JPanel optionsPanel = new JPanel();
     
     private ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<PopupToggleButton>();
 
@@ -225,13 +222,13 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         return gep;
     }
     
-    protected void addReportButtonToMenu(final JButton button) {
+    public void addReportButtonToMenu(final AbstractButton button) {
         reportsPanel.add(button);
         reportsPanel.revalidate();
         reportsPanel.repaint();
     }
     
-    protected void removeReportButtonFromMenu(final JButton button) {
+    public void removeReportButtonFromMenu(final AbstractButton button) {
         reportsPanel.remove(button);
         reportsPanel.revalidate();
         reportsPanel.repaint();
@@ -344,7 +341,6 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     }
     
     protected void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, BLUConfiguration gepConfiguration) {
-        
         this.graph = graph;
         
         gep.showLoading();

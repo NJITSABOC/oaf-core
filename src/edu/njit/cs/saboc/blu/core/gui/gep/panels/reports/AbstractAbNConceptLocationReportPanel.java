@@ -51,17 +51,16 @@ public abstract class AbstractAbNConceptLocationReportPanel<ABN_T extends Abstra
             }
         };
         
-        JPanel loadPanel = new JPanel();
+        JPanel loadPanel = new JPanel(new BorderLayout());
         
         JLabel loadLabel = new JLabel(String.format("<html>Select a file that contains %s IDs to find where the %s are summarized in the %s.", 
                 config.getTextConfiguration().getConceptTypeName(false).toLowerCase(),
                 config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
                 config.getTextConfiguration().getAbNTypeName(false)));
         
-        loadPanel.add(loadLabel);
-        loadPanel.add(Box.createHorizontalStrut(4));
+        loadPanel.add(loadLabel, BorderLayout.CENTER);
         
-        JButton loadBtn = new JButton(String.format("Load %s IDs from File", config.getTextConfiguration().getConceptTypeName(true)));
+        JButton loadBtn = new JButton(String.format("Load %s IDs from File", config.getTextConfiguration().getConceptTypeName(false)));
         loadBtn.addActionListener( (ActionEvent ae) -> {
             ArrayList<String> loadedIds = loadConceptIdentifiers();
             
@@ -71,7 +70,7 @@ public abstract class AbstractAbNConceptLocationReportPanel<ABN_T extends Abstra
             }
         });
         
-        loadPanel.add(loadBtn);
+        loadPanel.add(loadBtn, BorderLayout.EAST);
         
         this.add(loadPanel, BorderLayout.NORTH);
         this.add(conceptReportList, BorderLayout.SOUTH);

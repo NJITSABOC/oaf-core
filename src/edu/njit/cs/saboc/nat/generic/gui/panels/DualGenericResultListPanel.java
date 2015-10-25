@@ -17,7 +17,9 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel<T> implements Toggleable {
+public abstract class DualGenericResultListPanel<T, V, U, 
+        V_FILTERABLE_T extends Filterable<V>, 
+        U_FILTERBALE_T extends Filterable<U>> extends NATLayoutPanel<T> implements Toggleable {
     
     private final GenericResultListPanel<T, V> primaryResultList;
     private final GenericResultListPanel<T, U> secondaryResultList;
@@ -103,7 +105,7 @@ public abstract class DualGenericResultListPanel<T, V, U> extends NATLayoutPanel
         
     }
 
-    protected abstract Filterable<V> createPrimaryFilterableEntry(V entry);
+    protected abstract V_FILTERABLE_T createPrimaryFilterableEntry(V entry);
     
-    protected abstract Filterable<U> createSecondaryFilterableEntry(U entry);
+    protected abstract U_FILTERBALE_T createSecondaryFilterableEntry(U entry);
 }

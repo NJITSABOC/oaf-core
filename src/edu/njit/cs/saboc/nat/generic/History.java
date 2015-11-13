@@ -32,21 +32,21 @@ public class History<T> {
         }
         
         conceptHistory.add(concept);
-        position++;
+        setPosition(conceptHistory.size() - 1);
     }
 
     /**
      * Moves the current position in history one backwards
      */
     public void minusPosition() {
-        position--;
+        setPosition(position - 1);
     }
 
     /**
      * Moves the current position in history one forwards
      */
     public void plusPosition() {
-        position++;
+        setPosition(position + 1);
     }
 
     /**

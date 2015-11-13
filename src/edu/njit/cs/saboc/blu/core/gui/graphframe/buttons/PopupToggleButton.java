@@ -10,6 +10,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -32,6 +34,18 @@ public class PopupToggleButton extends JToggleButton {
         popup.setFocusableWindowState(true);
         popup.setFocusable(true);
         
+        popup.addWindowFocusListener(new WindowFocusListener() {
+            public void windowGainedFocus(WindowEvent e) {
+                
+            }
+
+            public void windowLostFocus(WindowEvent e) {
+                setIcon(null);
+                setSelected(false);
+                hidePopup();
+            }
+        });
+
         this.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if(PopupToggleButton.this.isSelected()) {
@@ -65,7 +79,7 @@ public class PopupToggleButton extends JToggleButton {
         addFocusListener(new FocusListener() {
 
             public void focusLost(FocusEvent e) {
-
+                
             }
 
             public void focusGained(FocusEvent e) {

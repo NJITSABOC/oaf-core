@@ -90,7 +90,7 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
                 String containerName = config.getTextConfiguration().getContainerName(container);
                 
                 groups.forEach( (GROUP_T group) -> {
-                    String groupName = config.getTextConfiguration().getGroupName(group);
+                    String groupName = String.format("%s (%d)", config.getTextConfiguration().getGroupName(group), group.getConceptCount());
                     
                     HashSet<CONCEPT_T> concepts = config.getDataConfiguration().getGroupConceptSet(group);
                     
@@ -104,7 +104,6 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
                                 groupName, 
                                 conceptName,
                                 config.getTextConfiguration().getConceptUniqueIdentifier(concept)));
-                        
                     });
                 });
             });

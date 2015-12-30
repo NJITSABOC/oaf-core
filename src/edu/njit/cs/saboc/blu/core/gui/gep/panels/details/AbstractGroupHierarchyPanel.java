@@ -28,11 +28,15 @@ public abstract class AbstractGroupHierarchyPanel<
     protected BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentModel;
     
     protected BLUAbstractChildGroupTableModel<GROUP_T> childModel;
+    
+    private final CONFIG_T config;
 
     public AbstractGroupHierarchyPanel(
            final CONFIG_T config,
            final BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentTableModel,
            final BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
+        
+        this.config = config;
 
         this.setLayout(new BorderLayout());
         
@@ -77,6 +81,10 @@ public abstract class AbstractGroupHierarchyPanel<
         splitPane.setDividerLocation(250);
 
         this.add(splitPane, BorderLayout.CENTER);
+    }
+    
+    public CONFIG_T getConfiguration() {
+        return config;
     }
     
     @Override

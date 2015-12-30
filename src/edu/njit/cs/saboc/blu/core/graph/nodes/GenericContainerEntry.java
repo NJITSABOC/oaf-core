@@ -320,6 +320,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
 
     public GenericPartitionEntry addPartitionEntry(GenericPartitionEntry region) {
         partitions.add(region);
+        
         return region;
     }
 

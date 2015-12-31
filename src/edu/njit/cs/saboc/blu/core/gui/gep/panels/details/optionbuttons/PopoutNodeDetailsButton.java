@@ -9,9 +9,15 @@ import javax.swing.SwingUtilities;
  *
  * @author Chris O
  */
-public abstract class PopoutNodeDetailsButton extends BaseOptionButton {
+public class PopoutNodeDetailsButton extends BaseOptionButton {
     
-    public PopoutNodeDetailsButton(String nodeType) {
+    public interface NodeDetailsPanelGenerator {
+        public AbstractNodePanel generatePanel();
+    }
+    
+    private final NodeDetailsPanelGenerator generatorAction;
+    
+    public PopoutNodeDetailsButton(String nodeType, NodeDetailsPanelGenerator generatorAction) {
         super("BluExpandWindow.png", String.format("Display %s details in new window", nodeType));
         
         this.addActionListener((ActionEvent ae) -> {
@@ -21,16 +27,16 @@ public abstract class PopoutNodeDetailsButton extends BaseOptionButton {
                 }
             });
         });
+        
+        this.generatorAction = generatorAction;
     }
     
     private void displayDetailsWindow() {
         JDialog detailsDialog = new JDialog();
         detailsDialog.setSize(700, 600);
         
-        detailsDialog.add(getCurrentDetailsPanel());
+        detailsDialog.add(generatorAction.generatePanel());
         detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         detailsDialog.setVisible(true);
     }
-    
-    public abstract AbstractNodePanel getCurrentDetailsPanel();
 }

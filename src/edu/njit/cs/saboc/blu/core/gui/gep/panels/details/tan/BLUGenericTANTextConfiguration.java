@@ -25,6 +25,10 @@ public abstract class BLUGenericTANTextConfiguration<
         this.tan = tan;
     }
     
+    public TAN_T getTAN() {
+        return tan;
+    }
+    
     @Override
     public String getAbNTypeName(boolean plural) {
         if(plural) {

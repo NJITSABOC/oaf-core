@@ -229,6 +229,10 @@ public abstract class AbstractEntityList<T> extends JPanel {
         tableModel.setContents(new ArrayList<>());
     }
     
+    public void setDefaultTableRenderer(MultiLineTextRenderer renderer) {
+        this.entityTable.setDefaultRenderer(String.class, renderer);
+    }
+    
     protected void addOptionButton(JButton btn) {
         //optionsPanel.add(btn);
     }

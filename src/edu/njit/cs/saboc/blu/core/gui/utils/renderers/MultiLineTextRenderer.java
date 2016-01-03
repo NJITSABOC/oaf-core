@@ -13,6 +13,7 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
         super();
     }
 
+    @Override
     public Component getTableCellRendererComponent(
             JTable table,
             Object value,
@@ -21,6 +22,36 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
             int row,
             int column) {
 
+        doStyling(table, value, isSelected, hasFocus, row, column);
+        
+        if (value != null) {
+            setText(value.toString());
+
+            String[] lines = value.toString().split("\n");
+
+            int height = 0;
+
+            for (String line : lines) {
+                height += this.getFontMetrics(this.getFont()).getLineMetrics(line, null).getHeight();
+            }
+            
+            int currentHeight = table.getRowHeight(row);
+
+            table.setRowHeight(row, Math.max(height + 10, currentHeight));
+        } else {
+            setText("");
+        }
+
+        return this;
+    }
+    
+    protected void doStyling(JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
+        
         if (isSelected) {
             setForeground(table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
@@ -41,26 +72,5 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
         } else {
             setBorder(new EmptyBorder(1, 2, 1, 2));
         }
-
-        if (value != null) {
-            setText(value.toString());
-
-            String[] lines = value.toString().split("\n");
-
-            int height = 0;
-
-            for (String line : lines) {
-                height += this.getFontMetrics(this.getFont()).getLineMetrics(line, null).getHeight();
-            }
-            
-            int currentHeight = table.getRowHeight(row);
-
-            table.setRowHeight(row, Math.max(height + 10, currentHeight));
-
-        } else {
-            setText("");
-        }
-
-        return this;
     }
 }

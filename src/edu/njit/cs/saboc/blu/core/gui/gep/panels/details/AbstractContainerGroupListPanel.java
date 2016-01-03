@@ -58,6 +58,10 @@ public abstract class AbstractContainerGroupListPanel<
         this.add(splitPane, BorderLayout.CENTER);
     }
     
+    protected AbstractGroupList<GROUP_T> getGroupList() {
+        return groupList;
+    }
+    
     public abstract ArrayList<CONCEPT_T> getSortedConceptList(GROUP_T group); 
 
     @Override

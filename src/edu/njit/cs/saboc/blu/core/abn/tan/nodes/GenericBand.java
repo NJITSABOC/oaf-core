@@ -38,7 +38,7 @@ public class GenericBand<CONCEPT_T, CLUSTER_T extends GenericCluster> extends Ge
             this.getPartitions().add(new GenericBandPartition<>());
         }
         
-        this.getPartitions().get(0).addGroupToPartition(cluster);
+        this.getPartitions().get(0).getClusters().add(cluster);
     }
 
     public ArrayList<CLUSTER_T> getAllClusters() {

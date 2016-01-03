@@ -35,14 +35,28 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea,
 
     protected void loadParentGroupInfo(PAREA_T parea) {
         HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parents = parea.getParentPAreaInfo();
+        
+        ArrayList<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentsList;
+        
+        if(parents == null) { // Guards for current version of diff taxonomies
+            parentsList = new ArrayList<>();
+        } else {
+            parentsList = new ArrayList<>(parents);
+        }
 
-        parentModel.setContents(new ArrayList<>(parents));
+        parentModel.setContents(parentsList);
     }
     
     protected void loadChildGroupInfo(PAREA_T parea) {
         HashSet<PAREA_T> children = taxonomy.getChildGroups(parea);
         
-        ArrayList<PAREA_T> childPAreas = new ArrayList<>(children);
+        ArrayList<PAREA_T> childPAreas;
+        
+        if(children == null ){ // Guard for current version of diff taxonomies
+            childPAreas = new ArrayList<>();
+        } else {
+            childPAreas = new ArrayList<>(children);
+        }
         
         BLUGenericPAreaTaxonomyConfiguration config = (BLUGenericPAreaTaxonomyConfiguration)configuration;
 

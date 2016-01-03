@@ -125,4 +125,8 @@ public abstract class MultiRootedHierarchy<T> {
         
         return new HashSet<T>();
     }
+    
+    public boolean contains(T item) {
+        return children.containsKey(item);
+    }
 }

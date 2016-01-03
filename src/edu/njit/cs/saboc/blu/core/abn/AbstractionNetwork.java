@@ -70,7 +70,7 @@ public abstract class AbstractionNetwork<GROUP_T extends GenericConceptGroup> {
         return groups;
     }
     
-    public HashSet<GROUP_T> getChildGroups(GROUP_T group) {       
+    public HashSet<GROUP_T> getChildGroups(GROUP_T group) {
         return groupHierarchy.getChildren(group);
     }
     

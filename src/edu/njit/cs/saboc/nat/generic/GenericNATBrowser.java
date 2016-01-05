@@ -74,6 +74,10 @@ public class GenericNATBrowser<T> extends JPanel {
             }
         });
     }
+    
+    public ConceptBrowserDataSource<T> getDataSource() {
+        return dataSource;
+    }
 
     /**
      * Navigates the NAT to the 

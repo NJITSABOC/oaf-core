@@ -35,7 +35,6 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
     
     private JTabbedPane tpane = new JTabbedPane();
        
-    
     // History Panel
     private BaseNavPanel<T> pnlHistory;
     private JButton btnBack;
@@ -184,5 +183,9 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
     
     public void addOptionPanel(OptionPanel panel) {
         optionsPanel.addOptionsPanel(panel);
+    }
+    
+    public void addOptionTab(String tabName, JPanel tabContents) {
+        tpane.addTab(tabName, tabContents);
     }
 }

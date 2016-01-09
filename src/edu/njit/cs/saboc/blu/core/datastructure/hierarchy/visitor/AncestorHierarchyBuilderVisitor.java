@@ -11,7 +11,8 @@ public class AncestorHierarchyBuilderVisitor<T, HIERARCHY_T extends SingleRooted
     
     private HIERARCHY_T ancestorHierarchy;
     
-    public AncestorHierarchyBuilderVisitor(SingleRootedHierarchy<T, HIERARCHY_T> theHierarchy, 
+    public AncestorHierarchyBuilderVisitor(
+            SingleRootedHierarchy<T, HIERARCHY_T> theHierarchy, 
             HIERARCHY_T ancestorHierarchy) {
         
         super(theHierarchy);

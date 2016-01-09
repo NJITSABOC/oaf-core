@@ -38,19 +38,23 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
     }
     
     public void BFSDown(T startingPoint, SingleRootedHierarchyVisitor<T> visitor) {
+        BFSDown(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+    }
+    
+    public void BFSDown(HashSet<T> startingPoints, SingleRootedHierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<T>();
-        queue.add(startingPoint);
-        
+        queue.addAll(startingPoints);
+
         HashSet<T> visited = new HashSet<>();
-        visited.add(startingPoint);
-        
-        while(!queue.isEmpty() && !visitor.isFinished()) {
+        visited.addAll(startingPoints);
+
+        while (!queue.isEmpty() && !visitor.isFinished()) {
             T node = queue.remove();
-            
+
             visitor.visit(node);
-            
+
             HashSet<T> nodeChildren = this.getChildren(node);
-            
+
             nodeChildren.forEach((T child) -> {
                 if (!visited.contains(child)) {
                     queue.add(child);
@@ -59,13 +63,17 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
             });
         }
     }
-    
+
     public void BFSUp(T startingPoint, SingleRootedHierarchyVisitor<T> visitor) {
+        BFSUp(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+    }
+    
+    public void BFSUp(HashSet<T> startingPoints, SingleRootedHierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<T>();
-        queue.add(startingPoint);
+        queue.addAll(startingPoints);
 
         HashSet<T> visited = new HashSet<>();
-        visited.add(startingPoint);
+        visited.addAll(startingPoints);
 
         while (!queue.isEmpty() && !visitor.isFinished()) {
             T node = queue.remove();
@@ -173,10 +181,14 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
     }
     
     public V getAncestorHierarchy(T node) {
+        return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
         
+    }
+    
+    public V getAncestorHierarchy(HashSet<T> nodes) {
         AncestorHierarchyBuilderVisitor<T, V> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<T, V>(this, this.createHierarchy(this.getRoot()));
         
-        this.BFSUp(node, ancestorHierarchy);
+        this.BFSUp(nodes, ancestorHierarchy);
         
         return ancestorHierarchy.getAncestorHierarchy();
     }

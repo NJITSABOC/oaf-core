@@ -62,7 +62,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(entityTable.getSelectedRow() >= 0) {
-                    T entity = tableModel.getItemAtRow(entityTable.getSelectedRow());
+                                        
+                    T entity = tableModel.getItemAtRow(sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
+                    
                     
                     if (e.getClickCount() == 1) {
                         selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
@@ -169,6 +171,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
         
         setBorderText(getBorderText(Optional.empty()));
     }
+    
+    
     
     private void newFilter() {
 

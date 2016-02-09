@@ -129,6 +129,12 @@ public class GenericPartitionEntry extends AbNNodeEntry {
     public ArrayList<GenericGroupEntry> getHiddenGroups() {
         return hiddenGroups;
     }
+    
+    public boolean doHighlight(int absX, int absY) {
+        int absoluteY = this.getAbsoluteY();
+        
+        return absY < absoluteY + partitionLabel.getHeight();
+    }
 
     public JLabel getLabel() {
         return partitionLabel;

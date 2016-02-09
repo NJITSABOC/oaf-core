@@ -436,10 +436,9 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         GenericPartitionEntry partition = getContainerPartitionAtPoint(mouseLocation);
 
                         if (partition != null && partition.isVisible()) {
-                            int yLocation = partition.getAbsoluteY();
 
                             // Only highlight if mouse at the top of the partition.
-                            if (mouseLocation.y < yLocation + 30) {
+                            if (partition.doHighlight(-1, mouseLocation.y)) {
                                 selectionStateMonitor.setMousedOverPartition(partition);
                             }
                         } else {

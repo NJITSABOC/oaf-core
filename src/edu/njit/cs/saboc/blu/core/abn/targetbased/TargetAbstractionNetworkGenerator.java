@@ -129,8 +129,11 @@ public abstract class TargetAbstractionNetworkGenerator<
         }
         
         for (Entry<CONCEPT_T, HashSet<CONCEPT_T>> sourceConceptEntry : sourceConceptTargets.entrySet()) {
-            for(CONCEPT_T target : sourceConceptEntry.getValue()) {
-                incomingRelSourceConcepts.get(target).add(sourceConceptEntry.getKey());
+            for (CONCEPT_T target : sourceConceptEntry.getValue()) {
+
+                if (incomingRelSourceConcepts.containsKey(target)) {
+                    incomingRelSourceConcepts.get(target).add(sourceConceptEntry.getKey());
+                }
             }
         }
 

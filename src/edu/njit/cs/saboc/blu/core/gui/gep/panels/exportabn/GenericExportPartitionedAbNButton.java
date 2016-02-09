@@ -97,11 +97,12 @@ public class GenericExportPartitionedAbNButton<CONCEPT_T,
                     concepts.forEach( (CONCEPT_T concept) -> {
                         String conceptName = config.getTextConfiguration().getConceptName(concept);
                         
-                        writer.println(String.format("%s\t%d\t%s\t%s\t%s\t%s",
+                        writer.println(String.format("%s\t%d\t%s\t%s\t%s\t%s\t%s",
                                 hierarchyName, 
                                 containerLevel, 
                                 containerName, 
                                 groupName, 
+                                config.getTextConfiguration().getGroupRootUniqueIdentifier(group),
                                 conceptName,
                                 config.getTextConfiguration().getConceptUniqueIdentifier(concept)));
                     });

@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
@@ -13,7 +15,11 @@ import java.util.HashSet;
  *
  * @author Chris
  */
-public class TribalAbstractionNetwork<CONCEPT_T, BAND_T extends GenericBand<CONCEPT_T, CLUSTER_T>, CLUSTER_T extends GenericCluster>
+public class TribalAbstractionNetwork<CONCEPT_T, 
+        TAN_T extends TribalAbstractionNetwork<CONCEPT_T, TAN_T, BAND_T, CLUSTER_T>,
+        BAND_T extends GenericBand<CONCEPT_T, CLUSTER_T>, 
+        CLUSTER_T extends GenericCluster>
+
         extends PartitionedAbstractionNetwork<BAND_T, CLUSTER_T> {
     
     private final String tanName;
@@ -90,10 +96,12 @@ public class TribalAbstractionNetwork<CONCEPT_T, BAND_T extends GenericBand<CONC
             for(CLUSTER_T cluster : groups.values()) {
                 HashSet<CONCEPT_T> patriarchs = cluster.getPatriarchs();
                 
-                for(CONCEPT_T patriarch : patriarchs) {
-                    if(patriarch.equals(root)) {
-                        found = true;
-                        break;
+                if (patriarchs.size() > 1) {
+                    for (CONCEPT_T patriarch : patriarchs) {
+                        if (patriarch.equals(root)) {
+                            found = true;
+                            break;
+                        }
                     }
                 }
                 
@@ -108,6 +116,23 @@ public class TribalAbstractionNetwork<CONCEPT_T, BAND_T extends GenericBand<CONC
         });
         
         return nonoverlappingPatriarchClusters;
+    }
+    
+    protected TAN_T createRootSubTAB(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
+        SingleRootedGroupHierarchy<CLUSTER_T> subhierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(root);
         
+        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = subhierarchy.asGroupHierarchy();
+        
+        HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
+        
+        HashMap<Integer, CLUSTER_T> clusterIds = new HashMap<>();
+        
+        clusters.forEach((CLUSTER_T parea) -> {
+            clusterIds.put(parea.getId(), parea);
+        });
+        
+        TAN_T subtaxonomy = (TAN_T)generator.createTaxonomyFromPAreas(clusterIds, clusterSubhierarchy);
+                
+        return subtaxonomy;
     }
 }

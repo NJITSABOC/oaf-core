@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class GenericRegion<
         CONCEPT_T, 
         REL_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         PAREA_T extends GenericPArea<CONCEPT_T,REL_T, HIERARCHY_T, PAREA_T>> extends GenericContainerPartition<PAREA_T> {
     
     private HashSet<REL_T> relationships;

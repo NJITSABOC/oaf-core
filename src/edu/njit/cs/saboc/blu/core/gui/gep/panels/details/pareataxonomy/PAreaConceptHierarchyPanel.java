@@ -13,13 +13,13 @@ import javax.swing.ScrollPaneConstants;
  * @author Chris O
  */
 public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbNNodeInformationPanel<PAREA_T> {
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> extends AbNNodeInformationPanel<PAREA_T> {
 
-    protected ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel;
+    protected ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel;
     
     private JScrollPane scrollPane;
     
-    public PAreaConceptHierarchyPanel(ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel, 
+    public PAreaConceptHierarchyPanel(ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel, 
             BLUGenericPAreaTaxonomyConfiguration configuration) {
         
         this.setLayout(new BorderLayout());

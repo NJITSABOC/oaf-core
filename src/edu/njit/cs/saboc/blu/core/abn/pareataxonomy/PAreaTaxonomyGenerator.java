@@ -21,7 +21,7 @@ public abstract class PAreaTaxonomyGenerator<
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T, // Concept type
         REL_T,// Relationship type
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> {
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> {
     
     public TAXONOMY_T derivePAreaTaxonomy() {
         

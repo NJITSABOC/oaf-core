@@ -19,7 +19,7 @@ public class AggregatePAreaTaxonomyGenerator<
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T, // Concept type
         REL_T,// Relationship type
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         AGGREGATETAXONOMY_T extends GenericPAreaTaxonomy<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T>,
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> {
         

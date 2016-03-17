@@ -16,7 +16,7 @@ public abstract class DisjointAbstractionNetwork<
         PARENTABN_T extends AbstractionNetwork,
         GROUP_T extends GenericConceptGroup, 
         CONCEPT_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>> extends AbstractionNetwork<DISJOINTGROUP_T> {
     
     

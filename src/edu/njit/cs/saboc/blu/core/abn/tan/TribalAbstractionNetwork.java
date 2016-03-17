@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
@@ -139,9 +138,9 @@ public class TribalAbstractionNetwork<CONCEPT_T,
     protected TAN_T createAncestorTAN(CLUSTER_T source, TribalAbstractionNetworkGenerator generator) {
         SingleRootedGroupHierarchy<CLUSTER_T> convertedHierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
         
-        SingleRootedGroupHierarchy<CLUSTER_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
+        MultiRootedHierarchy<CLUSTER_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
         
-        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = ancestorSubhierarhcy.asGroupHierarchy();
+        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = new GroupHierarchy<>(ancestorSubhierarhcy);
         
         HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
         

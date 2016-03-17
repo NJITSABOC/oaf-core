@@ -1,8 +1,7 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -10,30 +9,32 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class AllPathsToNodeVisitor<T> extends SingleRootedHierarchyTopologicalVisitor<T> {
+public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
     private ArrayList<ArrayList<T>> allPaths = new ArrayList<>();
     
     private HashMap<T, ArrayList<ArrayList<T>>> pathMap = new HashMap<>();
     
     private T endPoint;
     
-    public AllPathsToNodeVisitor(SingleRootedHierarchy<T, ? extends SingleRootedHierarchy> theHierarchy, T endPoint) {
+    public AllPathsToNodeVisitor(MultiRootedHierarchy<T> theHierarchy, T endPoint) {
         super(theHierarchy);
         
         this.endPoint = endPoint;
         
-        ArrayList<T> startingList = new ArrayList<>();
-        startingList.add(theHierarchy.getRoot());
-        
-        ArrayList<ArrayList<T>> rootPath = new ArrayList<>();
-        rootPath.add(startingList);
-        
-        pathMap.put(theHierarchy.getRoot(), rootPath);
+        theHierarchy.getRoots().forEach((e) -> {
+            ArrayList<T> startingList = new ArrayList<>();
+            startingList.add(e);
+
+            ArrayList<ArrayList<T>> rootPath = new ArrayList<>();
+            rootPath.add(startingList);
+
+            pathMap.put(e, rootPath);
+        });
     }
     
     public void visit(T node) {
         
-        if(node.equals(theHierarchy.getRoot())) {
+        if(theHierarchy.getRoots().contains(node)) {
             return;
         }
         

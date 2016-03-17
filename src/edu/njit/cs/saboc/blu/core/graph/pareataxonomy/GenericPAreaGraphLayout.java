@@ -31,7 +31,7 @@ public abstract class GenericPAreaGraphLayout<
         REGIONENTRY_T extends GenericBluRegion<REGION_T, AREAENTRY_T>,
         CONCEPT_T,
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends BluGraphLayout<AREA_T, AREAENTRY_T, PAREAENTRY_T> {
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> extends BluGraphLayout<AREA_T, AREAENTRY_T, PAREAENTRY_T> {
 
     protected TAXONOMY_T taxonomy;
 

@@ -20,7 +20,7 @@ import java.util.Stack;
  */
 public abstract class TribalAbstractionNetworkGenerator<
         CONCEPT_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         TAN_T extends TribalAbstractionNetwork<CONCEPT_T, TAN_T, BAND_T, CLUSTER_T>,
         BAND_T extends GenericBand<CONCEPT_T, CLUSTER_T>,
         CLUSTER_T extends GenericCluster<CONCEPT_T, HIERARCHY_T, CLUSTER_T>> {
@@ -30,16 +30,7 @@ public abstract class TribalAbstractionNetworkGenerator<
 
         HashSet<CONCEPT_T> patriarchs = hierarchy.getChildren(hierarchy.getRoot());
 
-        MultiRootedHierarchy<CONCEPT_T> multiRootedHierarchy = new MultiRootedHierarchy<CONCEPT_T>(patriarchs) {
-
-            @Override
-            public SingleRootedHierarchy<CONCEPT_T, ? extends SingleRootedHierarchy> getSubhierarchyRootedAt(CONCEPT_T root) {
-                HIERARCHY_T hierarchy = createHierarchy(root);
-                hierarchy.addAllHierarchicalRelationships(hierarchy);
-                
-                return hierarchy.getSubhierarchyRootedAt(root);
-            }
-        };
+        MultiRootedHierarchy<CONCEPT_T> multiRootedHierarchy = new MultiRootedHierarchy<>(patriarchs);
         
         multiRootedHierarchy.addAllHierarchicalRelationships(hierarchy);
 

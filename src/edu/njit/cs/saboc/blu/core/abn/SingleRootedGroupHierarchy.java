@@ -9,7 +9,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class SingleRootedGroupHierarchy<T extends GenericConceptGroup> extends SingleRootedHierarchy<T, SingleRootedGroupHierarchy<T>> {
+public class SingleRootedGroupHierarchy<T extends GenericConceptGroup> extends SingleRootedHierarchy<T> {
     public SingleRootedGroupHierarchy(T root) {
         super(root);
     }

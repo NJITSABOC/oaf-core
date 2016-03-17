@@ -11,20 +11,21 @@ import java.util.Stack;
  * @author Chris
  */
 public abstract class MultiRootedHierarchy<T> {
+    
     protected HashSet<T> roots;
     
     protected HashMap<T, HashSet<T>> children = 
-            new HashMap<T, HashSet<T>>();
+            new HashMap<>();
     
     protected HashMap<T, HashSet<T>> parents =
-            new HashMap<T, HashSet<T>>();
+            new HashMap<>();
     
     public MultiRootedHierarchy(HashSet<T> roots) {
-        this.roots = new HashSet<T>(roots);
+        this.roots = new HashSet<>(roots);
         
         for(T root : roots) {
-            children.put(root, new HashSet<T>());
-            parents.put(root, new HashSet<T>());
+            children.put(root, new HashSet<>());
+            parents.put(root, new HashSet<>());
         }
     }
     

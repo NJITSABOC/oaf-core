@@ -42,7 +42,7 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
     }
     
     public void BFSDown(HashSet<T> startingPoints, SingleRootedHierarchyVisitor<T> visitor) {
-        Queue<T> queue = new ArrayDeque<T>();
+        Queue<T> queue = new ArrayDeque<>();
         queue.addAll(startingPoints);
 
         HashSet<T> visited = new HashSet<>();
@@ -182,7 +182,6 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
     
     public V getAncestorHierarchy(T node) {
         return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
-        
     }
     
     public V getAncestorHierarchy(HashSet<T> nodes) {
@@ -249,7 +248,6 @@ public abstract class SingleRootedHierarchy<T, V extends SingleRootedHierarchy<T
         
         return visitor.getResult();
     }
-    
         
     protected abstract V createHierarchy(T root);
 }

@@ -270,7 +270,7 @@ public abstract class TribalAbstractionNetworkGenerator<
         return createTribalAbstractionNetwork(new ArrayList<>(bands.values()), hierarchyClusters, convertedHierarchy, patriarchClusters, hierarchy);
     }
     
-    public TAN_T createTaxonomyFromPAreas(
+    public TAN_T createTANFromClusters(
             HashMap<Integer, CLUSTER_T> clusters, 
             GroupHierarchy<CLUSTER_T> clusterHierarchy) {
         

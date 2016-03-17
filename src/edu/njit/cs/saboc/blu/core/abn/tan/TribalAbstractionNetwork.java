@@ -118,7 +118,7 @@ public class TribalAbstractionNetwork<CONCEPT_T,
         return nonoverlappingPatriarchClusters;
     }
     
-    protected TAN_T createRootSubTAB(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
+    protected TAN_T createRootSubTAN(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
         SingleRootedGroupHierarchy<CLUSTER_T> subhierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(root);
         
         GroupHierarchy<CLUSTER_T> clusterSubhierarchy = subhierarchy.asGroupHierarchy();
@@ -131,8 +131,28 @@ public class TribalAbstractionNetwork<CONCEPT_T,
             clusterIds.put(parea.getId(), parea);
         });
         
-        TAN_T subtaxonomy = (TAN_T)generator.createTaxonomyFromPAreas(clusterIds, clusterSubhierarchy);
+        TAN_T subtaxonomy = (TAN_T)generator.createTANFromClusters(clusterIds, clusterSubhierarchy);
                 
         return subtaxonomy;
+    }
+    
+    protected TAN_T createAncestorTAN(CLUSTER_T source, TribalAbstractionNetworkGenerator generator) {
+        SingleRootedGroupHierarchy<CLUSTER_T> convertedHierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
+        
+        SingleRootedGroupHierarchy<CLUSTER_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
+        
+        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = ancestorSubhierarhcy.asGroupHierarchy();
+        
+        HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
+        
+        HashMap<Integer, CLUSTER_T> clusterIds = new HashMap<>();
+        
+        clusters.forEach((CLUSTER_T cluster) -> {
+            clusterIds.put(cluster.getId(), cluster);
+        });
+        
+        TAN_T tan = (TAN_T)generator.createTANFromClusters(clusterIds, clusterSubhierarchy);
+        
+        return tan;
     }
 }

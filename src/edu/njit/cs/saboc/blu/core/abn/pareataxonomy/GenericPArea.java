@@ -14,7 +14,7 @@ import java.util.HashSet;
 public abstract class GenericPArea<
         CONCEPT_T, 
         REL_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>, 
         PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>> extends GenericConceptGroup {
     
     protected HIERARCHY_T conceptHierarchy;

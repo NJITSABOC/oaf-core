@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.text.BLUPartitionedAbNTextConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -154,11 +155,23 @@ public abstract class BLUGenericTANTextConfiguration<
 
         HashSet<CONCEPT_T> intersectionConcepts = new HashSet<>();
         
+        HashMap<CONCEPT_T, HashSet<CLUSTER_T>> intersectingPatriarchClusters = new HashMap<>();
+        
         tan.getClusters().values().forEach((Object o) -> {
             CLUSTER_T cluster = (CLUSTER_T)o;
             
-            if (cluster.getPatriarchs().size() > 1) {
+            HashSet<CONCEPT_T> patriarchs = cluster.getPatriarchs();
+            
+            if (patriarchs.size() > 1) {
                 intersectionConcepts.addAll(cluster.getConcepts());
+                
+                patriarchs.forEach( (p) -> {
+                    if(!intersectingPatriarchClusters.containsKey(p)) {
+                        intersectingPatriarchClusters.put(p, new HashSet<>());
+                    }
+                    
+                    intersectingPatriarchClusters.get(p).add(cluster);
+                });
             }
         });
 
@@ -168,10 +181,9 @@ public abstract class BLUGenericTANTextConfiguration<
         
         String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
         
-
         String result = String.format("The <b>%s</b> Tribal Abstraction Network (TAN) summarizes %d %s in %d band(s) and %d cluster(s). "
                 + "There are a total of %d patriarch clusters that intersect. A total of %d %s are descendants "
-                + "of more than one patriarch and belong to multiple tribes.",
+                + "of more than one patriarch and belong to multiple tribes.<p>",
                 
                 tanName,
                 conceptCount,
@@ -182,7 +194,28 @@ public abstract class BLUGenericTANTextConfiguration<
                 intersectionConcepts.size(),
                 pluralConceptName
         );
-
+        
+        if(!intersectingPatriarchClusters.isEmpty()) {
+            ArrayList<String> intersectingClusterNames = new ArrayList<>();
+            
+            intersectingPatriarchClusters.keySet().forEach( (p) -> {
+                intersectingClusterNames.add(String.format("%s (%d clusters total)", 
+                        this.getConceptName(p), 
+                        intersectingPatriarchClusters.get(p).size()));
+            });
+            
+            Collections.sort(intersectingClusterNames);
+            
+            String intersectingSummaryStr = intersectingClusterNames.get(0);
+            
+            for(int c = 1; c < intersectingClusterNames.size(); c++) {
+                intersectingSummaryStr += String.format("<br>%s", intersectingClusterNames.get(c));
+            }
+            
+            result += String.format("<p>The following %d patriarchs intersect with other patriarchs: <p> %s",
+                    intersectingPatriarchClusters.keySet().size(), intersectingSummaryStr);
+        }
+        
         if (!nonintersectingPatriarchClusters.isEmpty()) {
             ArrayList<String> nonOverlappingClusterNames = new ArrayList<>();
 
@@ -195,11 +228,11 @@ public abstract class BLUGenericTANTextConfiguration<
 
             String nonOverlappingClustersStr = nonOverlappingClusterNames.get(0);
 
-            for (String s : nonOverlappingClusterNames) {
-                nonOverlappingClustersStr += String.format("<br>%s", s);
+            for (int c = 1; c < nonOverlappingClusterNames.size(); c++) {
+                nonOverlappingClustersStr += String.format("<br>%s", nonOverlappingClusterNames.get(c));
             }
 
-            result += String.format("<p>The following %d patriarch cluster(s) don't intersect with any other patriarch cluster: %s",
+            result += String.format("<p>The following %d patriarch cluster(s) don't intersect with any other patriarch cluster: <p> %s",
                     nonintersectingPatriarchClusters.size(), nonOverlappingClustersStr);
         }
 

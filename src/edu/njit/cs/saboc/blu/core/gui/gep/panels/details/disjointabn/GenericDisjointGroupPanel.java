@@ -15,7 +15,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPane
 public class GenericDisjointGroupPanel<CONCEPT_T, 
         DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>, 
         GROUP_T extends GenericConceptGroup,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupPanel<DISJOINTGROUP_T, CONCEPT_T, CONFIG_T> {
     
     protected final GenericDisjointGroupConceptHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, HIERARCHY_T> conceptHierarchyPanel;

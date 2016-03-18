@@ -16,14 +16,14 @@ import javax.swing.ScrollPaneConstants;
 public abstract class GenericDisjointGroupConceptHierarchyPanel<
         CONCEPT_T, 
         DISJOINTGROUP_T extends DisjointGenericConceptGroup, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> extends AbNNodeInformationPanel<DISJOINTGROUP_T> {
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> extends AbNNodeInformationPanel<DISJOINTGROUP_T> {
 
-    protected ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel;
+    protected ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel;
     
     private JScrollPane scrollPane;
     
     public GenericDisjointGroupConceptHierarchyPanel(
-            ConceptGroupHierarchicalViewPanel<CONCEPT_T, HIERARCHY_T> conceptHierarchyPanel, 
+            ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel, 
             BLUDisjointConfiguration configuration) {
         
         this.setLayout(new BorderLayout());

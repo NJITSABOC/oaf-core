@@ -17,7 +17,7 @@ import java.util.Stack;
 public abstract class TargetAbstractionNetworkGenerator<
         CONCEPT_T, 
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         GROUP_T extends TargetGroup, 
         TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> {
     

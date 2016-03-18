@@ -15,7 +15,7 @@ import java.util.Queue;
  * @author Chris
  */
 public abstract class ConceptGroupHierarchyLoader<T, 
-        HIERARCHY_T extends SingleRootedHierarchy<T, HIERARCHY_T>, 
+        HIERARCHY_T extends SingleRootedHierarchy<T>, 
         V extends GenericConceptGroup> implements Runnable {
 
     private V group;
@@ -24,7 +24,7 @@ public abstract class ConceptGroupHierarchyLoader<T,
     
     private HashMap<T, ConceptEntry<T>> conceptEntryMap = new HashMap<T, ConceptEntry<T>>();
 
-    public ConceptGroupHierarchyLoader(V group, ConceptGroupHierarchicalViewPanel<T, HIERARCHY_T> hierarchyViewPanel) {
+    public ConceptGroupHierarchyLoader(V group, ConceptGroupHierarchicalViewPanel<T> hierarchyViewPanel) {
         this.group = group;
         this.hierarchyViewPanel = hierarchyViewPanel;
     }

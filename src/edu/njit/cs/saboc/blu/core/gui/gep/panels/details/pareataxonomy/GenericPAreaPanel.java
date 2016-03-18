@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPane
  * @author Chris O
  */
 public class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends AbstractGroupPanel<PAREA_T, CONCEPT_T, CONFIG_T> {
     
     protected final PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T, HIERARCHY_T> conceptHierarchyPanel;

@@ -31,7 +31,7 @@ public abstract class GenericNoRegionsPAreaGraphLayout<
         REGIONENTRY_T extends GenericBluRegion<REGION_T, AREAENTRY_T>,
         CONCEPT_T,
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> 
 
         extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, 
             AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T, HIERARCHY_T> {

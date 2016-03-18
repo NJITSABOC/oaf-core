@@ -1,30 +1,43 @@
 
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AllPathsToNodeVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorDepthVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
  *
  * @author Chris
  */
-public abstract class MultiRootedHierarchy<T> {
+public class MultiRootedHierarchy<T> {
+    
     protected HashSet<T> roots;
     
     protected HashMap<T, HashSet<T>> children = 
-            new HashMap<T, HashSet<T>>();
+            new HashMap<>();
     
     protected HashMap<T, HashSet<T>> parents =
-            new HashMap<T, HashSet<T>>();
-    
+            new HashMap<>();
+        
     public MultiRootedHierarchy(HashSet<T> roots) {
-        this.roots = new HashSet<T>(roots);
+        this.roots = new HashSet<>(roots);
         
         for(T root : roots) {
-            children.put(root, new HashSet<T>());
-            parents.put(root, new HashSet<T>());
+            children.put(root, new HashSet<>());
+            parents.put(root, new HashSet<>());
         }
     }
     
@@ -101,7 +114,9 @@ public abstract class MultiRootedHierarchy<T> {
         }
     }
     
-    public abstract SingleRootedHierarchy<T, ? extends SingleRootedHierarchy> getSubhierarchyRootedAt(T root);
+    public SingleRootedHierarchy<T> getSubhierarchyRootedAt(T root) {
+        return new SingleRootedHierarchy<T>(root, this.children);
+    }
     
     public HashSet<T> getNodesInHierarchy() {
         HashSet<T> allNodes = new HashSet<T>(children.keySet());
@@ -126,7 +141,228 @@ public abstract class MultiRootedHierarchy<T> {
         return new HashSet<T>();
     }
     
+    public HashMap<T, HashSet<T>> getAllChildRelationships() {
+        return children;
+    }
+    
+    public HashMap<T, HashSet<T>> getAllParentRelationships() {
+        return parents;
+    }
+    
     public boolean contains(T item) {
         return children.containsKey(item);
+    }
+    
+    public void BFSDown(T startingPoint, HierarchyVisitor<T> visitor) {
+        BFSDown(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+    }
+    
+    public void BFSDown(HashSet<T> startingPoints, HierarchyVisitor<T> visitor) {
+        Queue<T> queue = new ArrayDeque<>();
+        queue.addAll(startingPoints);
+
+        HashSet<T> visited = new HashSet<>();
+        visited.addAll(startingPoints);
+
+        while (!queue.isEmpty() && !visitor.isFinished()) {
+            T node = queue.remove();
+
+            visitor.visit(node);
+
+            HashSet<T> nodeChildren = this.getChildren(node);
+
+            nodeChildren.forEach((T child) -> {
+                if (!visited.contains(child)) {
+                    queue.add(child);
+                    visited.add(child);
+                }
+            });
+        }
+    }
+
+    public void BFSUp(T startingPoint, HierarchyVisitor<T> visitor) {
+        BFSUp(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+    }
+    
+    public void BFSUp(HashSet<T> startingPoints, HierarchyVisitor<T> visitor) {
+        Queue<T> queue = new ArrayDeque<T>();
+        queue.addAll(startingPoints);
+
+        HashSet<T> visited = new HashSet<>();
+        visited.addAll(startingPoints);
+
+        while (!queue.isEmpty() && !visitor.isFinished()) {
+            T node = queue.remove();
+
+            visitor.visit(node);
+
+            HashSet<T> nodeParents = this.getParents(node);
+
+            nodeParents.forEach((T parent) -> {
+                if (!visited.contains(parent)) {
+                    queue.add(parent);
+                    visited.add(parent);
+                }
+            });
+        }
+    }
+    
+    public void topologicalDown(HierarchyVisitor<T> visitor) {
+        HashMap<T, Integer> parentCounts = new HashMap<>();
+        
+        HashSet<T> nodesInHierarchy = this.getNodesInHierarchy();
+        
+        nodesInHierarchy.forEach((T node) -> {
+            parentCounts.put(node, this.getParents(node).size());
+        });
+        
+        Queue<T> queue = new ArrayDeque<>();
+        queue.addAll(this.getRoots());
+        
+        while(!queue.isEmpty() && !visitor.isFinished()) {
+            T node = queue.remove();
+            
+            visitor.visit(node);
+            
+            HashSet<T> nodeChildren = this.getChildren(node);
+            
+            nodeChildren.forEach((T child) -> {
+                if(parentCounts.get(child) == 1) {
+                    queue.add(child);
+                } else {
+                    parentCounts.put(child, parentCounts.get(child) - 1);
+                }
+            });
+        }
+    }
+    
+    public void topologicalDownInSubhierarchy(T startingPoint, TopologicalVisitor<T> visitor) {
+        HashSet<T> subhierarchy = this.getDescendants(startingPoint);
+        subhierarchy.add(startingPoint);
+        
+        HashMap<T, Integer> parentCountInSubhierarchy = new HashMap<>();
+        
+        subhierarchy.forEach((T node) -> {
+            int parentCount = 0;
+
+            HashSet<T> nodeParents = this.getParents(node);
+
+            for (T parent : nodeParents) {
+                if (subhierarchy.contains(parent)) {
+                    parentCount++;
+                }
+            }
+
+            parentCountInSubhierarchy.put(node, parentCount);
+        });
+
+        Queue<T> queue = new ArrayDeque<>();
+        queue.add(startingPoint);
+
+        while (!queue.isEmpty() && !visitor.isFinished()) {
+            T node = queue.remove();
+
+            visitor.visit(node);
+
+            HashSet<T> nodeChildren = this.getChildren(node);
+
+            nodeChildren.forEach((T child) -> {
+                if (parentCountInSubhierarchy.get(child) == 1) {
+                    queue.add(child);
+                } else {
+                    parentCountInSubhierarchy.put(child, parentCountInSubhierarchy.get(child) - 1);
+                }
+            });
+        }
+
+    }
+    
+    public int countDescendants(T node) {
+        SubhierarchySizeVisitor<T> visitor = new SubhierarchySizeVisitor<T>(this);
+        
+        this.BFSDown(node, visitor);
+        
+        return visitor.getDescandantCount() - 1;
+    }
+    
+    public HashSet<T> getDescendants(T node) {
+        SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<T>(this);
+        
+        this.BFSDown(node, visitor);
+        
+        HashSet<T> members = visitor.getSubhierarchyMembers();
+        members.remove(node);
+        
+        return members;
+    }
+    
+    public MultiRootedHierarchy<T> getAncestorHierarchy(T node) {
+        return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
+    }
+    
+    public MultiRootedHierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
+        AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<>(this, 
+                new MultiRootedHierarchy<>(this.getRoots()));
+        
+        this.BFSUp(nodes, ancestorHierarchy);
+        
+        return ancestorHierarchy.getAncestorHierarchy();
+    }
+    
+    public ArrayList<ArrayList<T>> getAllPathsTo(T node) {
+        MultiRootedHierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(node);
+        
+        AllPathsToNodeVisitor<T> visitor = new AllPathsToNodeVisitor<>(this, node);
+        
+        ancestorHierarchy.topologicalDown(visitor);
+        
+        return visitor.getAllPaths();
+    }
+        
+    public SingleRootedHierarchy<T> getDescendantHierarchyWithinDistance(T node, int maxDistance) {
+        SingleRootedHierarchy<T> hierarchy = new SingleRootedHierarchy<>(node);
+        
+        int levelProcessed = 0;
+                
+        Queue<T> levelQueue = new ArrayDeque<>();
+        levelQueue.add(node);
+        
+        HashSet<T> processed = new HashSet<>();
+
+        while(!levelQueue.isEmpty() && levelProcessed < maxDistance) {
+            levelProcessed++;
+            
+            processed.addAll(levelQueue);
+            
+            Queue<T> nextLevelQueue = new ArrayDeque<>();
+            
+            while(!levelQueue.isEmpty()) {
+                T levelNode = levelQueue.remove();
+                
+                HashSet<T> nodeChildren = this.getChildren(levelNode);
+                
+                nodeChildren.forEach((T child) -> {
+                    if(!processed.contains(child)) {
+                        nextLevelQueue.add(child);
+                    }
+                    
+                    hierarchy.addIsA(child, levelNode);
+                });
+            }
+            
+            levelQueue = nextLevelQueue;
+        }
+        
+        return hierarchy;
+    }
+    
+    public ArrayList<AncestorDepthResult<T>> getTopologicalDescendantListWithinDistance(T node, int distance) {
+        MultiRootedHierarchy<T> hierarchyWithinDistance = this.getDescendantHierarchyWithinDistance(node, distance);
+        
+        AncestorDepthVisitor<T> visitor = new AncestorDepthVisitor<>(hierarchyWithinDistance);
+        
+        hierarchyWithinDistance.topologicalDown(visitor);
+        
+        return visitor.getResult();
     }
 }

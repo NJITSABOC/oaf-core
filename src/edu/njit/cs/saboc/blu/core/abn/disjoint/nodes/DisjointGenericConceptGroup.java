@@ -17,7 +17,7 @@ import java.util.HashSet;
 public abstract class DisjointGenericConceptGroup<
         U extends GenericConceptGroup, 
         CONCEPT_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         T extends DisjointGenericConceptGroup> extends GenericConceptGroup {
     
     private final HashSet<U> overlapsIn;

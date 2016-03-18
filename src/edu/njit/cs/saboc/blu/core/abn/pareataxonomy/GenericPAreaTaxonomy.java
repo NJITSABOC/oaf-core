@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public abstract class GenericPAreaTaxonomy<
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T,
         REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>> 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> 
 
             extends PartitionedAbstractionNetwork<AREA_T, PAREA_T> implements AggregateableAbstractionNetwork<TAXONOMY_T> {
 
@@ -95,11 +96,11 @@ public abstract class GenericPAreaTaxonomy<
     }
     
     protected TAXONOMY_T createAncestorSubtaxonomy(PAREA_T source, PAreaTaxonomyGenerator generator) {
-        SingleRootedGroupHierarchy<PAREA_T> convertedHierarchy = (SingleRootedGroupHierarchy<PAREA_T>)this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
+        SingleRootedHierarchy<PAREA_T> convertedHierarchy = this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
         
-        SingleRootedGroupHierarchy<PAREA_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
+        MultiRootedHierarchy<PAREA_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
         
-        GroupHierarchy<PAREA_T> pareaSubhierarchy = ancestorSubhierarhcy.asGroupHierarchy();
+        GroupHierarchy<PAREA_T> pareaSubhierarchy = new GroupHierarchy<>(ancestorSubhierarhcy);
         
         HashSet<PAREA_T> pareas = pareaSubhierarchy.getNodesInHierarchy();
         

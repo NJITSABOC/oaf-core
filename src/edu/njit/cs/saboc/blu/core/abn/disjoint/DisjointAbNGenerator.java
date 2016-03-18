@@ -23,7 +23,7 @@ public abstract class DisjointAbNGenerator<
         PARENTABN_T extends AbstractionNetwork,
         GROUP_T extends GenericConceptGroup, 
         CONCEPT_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>,
         DISJOINTABN_T extends DisjointAbstractionNetwork<PARENTABN_T, GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>> {
     

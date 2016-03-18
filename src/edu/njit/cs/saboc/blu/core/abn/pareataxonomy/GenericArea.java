@@ -16,7 +16,7 @@ import java.util.HashSet;
 public abstract class GenericArea<
         CONCEPT_T, 
         REL_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>> extends GenericGroupContainer<REGION_T> {
     

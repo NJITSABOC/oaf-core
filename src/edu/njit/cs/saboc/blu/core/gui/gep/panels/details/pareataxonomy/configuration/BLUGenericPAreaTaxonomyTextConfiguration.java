@@ -20,7 +20,7 @@ public abstract class BLUGenericPAreaTaxonomyTextConfiguration<
         PAREA_T extends GenericPArea,
         AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>,
         DISJOINTPAREA_T extends DisjointGenericConceptGroup<PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>,
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         REL_T, 
         CONCEPT_T> implements BLUDisjointableAbNTextConfiguration<TAXONOMY_T, DISJOINTTAXONOMY_T, AREA_T, PAREA_T, DISJOINTPAREA_T, CONCEPT_T> {
 

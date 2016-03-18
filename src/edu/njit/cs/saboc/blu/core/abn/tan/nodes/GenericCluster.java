@@ -11,7 +11,7 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class GenericCluster<CONCEPT_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T, HIERARCHY_T>, 
+        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>, 
         CLUSTER_T extends GenericCluster<CONCEPT_T, HIERARCHY_T, CLUSTER_T>> extends GenericConceptGroup {
 
     private final HashSet<CONCEPT_T> patriarchs;

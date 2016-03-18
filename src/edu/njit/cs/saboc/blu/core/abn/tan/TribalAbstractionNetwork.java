@@ -2,10 +2,10 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.SingleRootedGroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,9 +118,9 @@ public class TribalAbstractionNetwork<CONCEPT_T,
     }
     
     protected TAN_T createRootSubTAN(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
-        SingleRootedGroupHierarchy<CLUSTER_T> subhierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(root);
+        SingleRootedHierarchy<CLUSTER_T> subhierarchy = this.groupHierarchy.getSubhierarchyRootedAt(root);
         
-        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = subhierarchy.asGroupHierarchy();
+        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = new GroupHierarchy<>(subhierarchy);
         
         HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
         
@@ -136,9 +136,8 @@ public class TribalAbstractionNetwork<CONCEPT_T,
     }
     
     protected TAN_T createAncestorTAN(CLUSTER_T source, TribalAbstractionNetworkGenerator generator) {
-        SingleRootedGroupHierarchy<CLUSTER_T> convertedHierarchy = (SingleRootedGroupHierarchy<CLUSTER_T>)this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());
         
-        MultiRootedHierarchy<CLUSTER_T> ancestorSubhierarhcy = convertedHierarchy.getAncestorHierarchy(source);
+        MultiRootedHierarchy<CLUSTER_T> ancestorSubhierarhcy = groupHierarchy.getAncestorHierarchy(source);
         
         GroupHierarchy<CLUSTER_T> clusterSubhierarchy = new GroupHierarchy<>(ancestorSubhierarhcy);
         

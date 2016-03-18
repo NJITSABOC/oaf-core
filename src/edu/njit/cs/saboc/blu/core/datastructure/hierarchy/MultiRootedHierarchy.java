@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierar
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayDeque;
@@ -185,11 +186,9 @@ public class MultiRootedHierarchy<T> {
     }
     
     public void BFSUp(HashSet<T> startingPoints, HierarchyVisitor<T> visitor) {
-        Queue<T> queue = new ArrayDeque<T>();
-        queue.addAll(startingPoints);
+        Queue<T> queue = new ArrayDeque<>(startingPoints);
 
-        HashSet<T> visited = new HashSet<>();
-        visited.addAll(startingPoints);
+        HashSet<T> visited = new HashSet<>(startingPoints);
 
         while (!queue.isEmpty() && !visitor.isFinished()) {
             T node = queue.remove();
@@ -274,11 +273,10 @@ public class MultiRootedHierarchy<T> {
                 }
             });
         }
-
     }
     
     public int countDescendants(T node) {
-        SubhierarchySizeVisitor<T> visitor = new SubhierarchySizeVisitor<T>(this);
+        SubhierarchySizeVisitor<T> visitor = new SubhierarchySizeVisitor<>(this);
         
         this.BFSDown(node, visitor);
         
@@ -286,7 +284,7 @@ public class MultiRootedHierarchy<T> {
     }
     
     public HashSet<T> getDescendants(T node) {
-        SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<T>(this);
+        SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<>(this);
         
         this.BFSDown(node, visitor);
         
@@ -296,13 +294,27 @@ public class MultiRootedHierarchy<T> {
         return members;
     }
     
+    public HashSet<T> getMemberSubhierarchyRoots(T node) {
+        TopRootVisitor<T> visitor = new TopRootVisitor<>(this);
+        
+        this.BFSUp(node, visitor);
+        
+        return visitor.getRoots();
+    }
+    
     public MultiRootedHierarchy<T> getAncestorHierarchy(T node) {
         return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
     }
     
     public MultiRootedHierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
+        HashSet<T> roots = new HashSet<>();
+        
+        nodes.forEach( (node) -> {
+            roots.addAll(getMemberSubhierarchyRoots(node));
+        });
+
         AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<>(this, 
-                new MultiRootedHierarchy<>(this.getRoots()));
+                new MultiRootedHierarchy<>(roots));
         
         this.BFSUp(nodes, ancestorHierarchy);
         

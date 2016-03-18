@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.awt.Canvas;
@@ -253,13 +254,11 @@ public abstract class GenericTANLayout<
 
         HashSet conceptsInPartition = new HashSet();
 
-        tan.getClusters().values().forEach((Object o) -> {
-            CLUSTER_T cluster = (CLUSTER_T) o;
-
-            conceptsInPartition.addAll(config.getDataConfiguration().getGroupConceptSet(cluster));
+        bandPartition.getClusters().forEach( (cluster) -> {
+            conceptsInPartition.addAll(cluster.getConcepts());
         });
 
-        int clusterCount = tan.getClusterCount();
+        int clusterCount = bandPartition.getClusters().size();
 
         int conceptCount = conceptsInPartition.size();
 
@@ -276,4 +275,47 @@ public abstract class GenericTANLayout<
     protected abstract BANDNODE_T makeBandNode(BAND_T band, BluGraph g, int aX, GraphLevel parent, Rectangle prefBounds);
 
     protected abstract CLUSTERNODE_T makeClusterNode(CLUSTER_T cluster, BluGraph graph, GenericBluBandPartition r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie);
+
+    public void resetLayout() {
+         ArrayList<BAND_T> bands = this.getBands();
+         
+         ArrayList<ArrayList<BAND_T>> bandsByLevel = new ArrayList<>();
+         
+         ArrayList<BAND_T> level = new ArrayList<>();
+         
+         BAND_T lastBand = null;
+   
+         for(BAND_T area : bands) {
+             if (lastBand != null && lastBand.getPatriarchs().size() != area.getPatriarchs().size()) {
+                 bandsByLevel.add(level);
+                 
+                 level = new ArrayList<>();
+             }
+             
+             lastBand = area;
+             level.add(area);
+         }
+         
+         bandsByLevel.add(level);
+         
+         int y = 40;
+         
+         for(ArrayList<BAND_T> levelBands : bandsByLevel) {
+             int maxHeight = 0;
+             
+             for(BAND_T band : levelBands) {
+                 BANDNODE_T entry = this.getContainerEntries().get(band.getId());
+                 
+                 entry.setLocation(entry.getX(), y);
+                 
+                 if(entry.getHeight() > maxHeight) {
+                     maxHeight = entry.getHeight();
+                 }
+             }
+             
+             y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
+         }
+ 
+    }
+
 }

@@ -37,7 +37,7 @@ public class MultiLineTextRenderer extends JTextArea implements TableCellRendere
             
             int currentHeight = table.getRowHeight(row);
 
-            if(row >= 0) {
+            if(row >= 0 && row < table.getRowCount()) {
                 table.setRowHeight(row, Math.max(height + 10, currentHeight));
             }
         } else {

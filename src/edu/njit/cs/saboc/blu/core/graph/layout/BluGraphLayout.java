@@ -617,4 +617,8 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
     protected JLabel createFittedPartitionLabel(String[] entries, int boundingWidth, FontMetrics fontMetrics) {
        return GraphLayoutUtilities.createFittedPartitionLabel(entries, boundingWidth, fontMetrics);
     }
+    
+    public void resetLayout() {
+        
+    }
 }

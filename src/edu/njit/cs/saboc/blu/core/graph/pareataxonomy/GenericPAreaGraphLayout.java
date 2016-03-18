@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -165,6 +166,48 @@ public abstract class GenericPAreaGraphLayout<
 
         lastArea = null;
         layoutGroupContainers = sortedAreas;
+    }
+    
+    public void resetLayout() {
+         ArrayList<AREA_T> areas = this.getLayoutAreas();
+         
+         ArrayList<ArrayList<AREA_T>> areasByLevel = new ArrayList<>();
+         
+         ArrayList<AREA_T> level = new ArrayList<>();
+         
+         AREA_T lastArea = null;
+   
+         for(AREA_T area : areas) {
+             if (lastArea != null && lastArea.getRelationships().size() != area.getRelationships().size()) {
+                 areasByLevel.add(level);
+                 
+                 level = new ArrayList<>();
+             }
+             
+             lastArea = area;
+             level.add(area);
+         }
+         
+         areasByLevel.add(level);
+         
+         int y = 40;
+         
+         for(ArrayList<AREA_T> levelAreas : areasByLevel) {
+             int maxHeight = 0;
+             
+             for(AREA_T area : levelAreas) {
+                 AREAENTRY_T entry = this.getContainerEntries().get(area.getId());
+                 
+                 entry.setLocation(entry.getX(), y);
+                 
+                 if(entry.getHeight() > maxHeight) {
+                     maxHeight = entry.getHeight();
+                 }
+             }
+             
+             y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
+         }
+ 
     }
 
     public ArrayList<AREA_T> getLayoutAreas() {

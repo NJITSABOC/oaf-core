@@ -264,7 +264,7 @@ public abstract class GenericTANNoPartitionLayout<
             String regionName,
             BANDNODE_T set, int x, int y, int width, int height, Color c, boolean treatPartitonAsOverlapSet, JLabel partitionLabel) {
 
-        GenericBluBandPartition<BANDNODE_T> overlapPanel = new GenericBluBandPartition<BANDNODE_T>(partition, regionName,
+        GenericBluBandPartition<BANDNODE_T> overlapPanel = new GenericBluBandPartition<>(partition, regionName,
                 width, height, graph, set, c, treatPartitonAsOverlapSet, partitionLabel);
 
         graph.stretchGraphToFitPanel(x, y, width, height);

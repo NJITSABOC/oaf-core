@@ -136,7 +136,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
             }
         });
         
-        chkHideGroups = new JCheckBox("Collapse All"); // TODO: Hide all what?
+        chkHideGroups = new JCheckBox("TEXT NOT SET"); // TODO: Hide all what?
 
         chkHideGroups.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -214,6 +214,10 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         add(tabbedPane);
         
         setVisible(true);
+    }
+    
+    public void setContainerAbNCheckboxText(String text) {
+        chkHideGroups.setText(text);
     }
       
     public BluGraph getGraph() {
@@ -335,6 +339,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                 }
             }
         }
+        
+        graph.getGraphLayout().resetLayout();
     }
     
     protected void setHierarchyInfoText(String text) {

@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -22,6 +23,68 @@ import javax.swing.JToggleButton;
  * @author Chris
  */
 public class PopupToggleButton extends JToggleButton {
+    
+    private class PopupStateManager {
+
+        private boolean popupHasFocus = false;
+        
+        private boolean buttonHasFocus = false;
+        
+        
+        private boolean popupLostFocus = false;
+                
+        private boolean clickedToClose = false;
+        
+        private boolean clickedToOpen = false;
+        
+        
+        public void popupHasFocus(boolean value) {
+            popupHasFocus = value;
+
+            if(value) {
+                popupLostFocus = false;
+            } else {
+                popupLostFocus = true;
+                
+                if(clickedToOpen) {
+                    clickedToOpen = false;
+                } else {
+                    doUnselected();
+                }
+            }
+        }
+        
+        public void buttonHasFocus(boolean value) {
+            buttonHasFocus = value;
+            
+            if(value) {               
+                if (popupLostFocus) {
+                    popupLostFocus = false;
+                    clickedToClose = true;
+                }
+            } else {
+                popupLostFocus = false;
+                clickedToClose = false;
+            }
+        }
+        
+        public void buttonClicked() {
+
+            if(clickedToClose) {
+                clickedToClose = false;
+                
+                doUnselected();
+            } else {
+                clickedToOpen = true;
+                
+                doSelected();
+            }
+        }
+
+    }
+    
+    private final PopupStateManager popupState = new PopupStateManager();
+            
     private JDialog popup;
     
     protected BluGraph graph;
@@ -36,24 +99,17 @@ public class PopupToggleButton extends JToggleButton {
         
         popup.addWindowFocusListener(new WindowFocusListener() {
             public void windowGainedFocus(WindowEvent e) {
-                
+                popupState.popupHasFocus(false);
             }
 
             public void windowLostFocus(WindowEvent e) {
-                setIcon(null);
-                setSelected(false);
-                hidePopup();
+                popupState.popupHasFocus(false);
             }
         });
 
         this.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                if(PopupToggleButton.this.isSelected()) {
-                    popup.setVisible(true);
-                    updatePopupLocation();
-                } else {
-                    popup.setVisible(false);
-                }
+                popupState.buttonClicked();
             }
         });
         
@@ -76,25 +132,43 @@ public class PopupToggleButton extends JToggleButton {
             }
         });
 
-        addFocusListener(new FocusListener() {
+        this.addFocusListener(new FocusListener() {
 
             public void focusLost(FocusEvent e) {
-                
+                popupState.buttonHasFocus(false);
             }
 
             public void focusGained(FocusEvent e) {
-                
+                popupState.buttonHasFocus(true);
             }
         });
+    }
+        
+    public void doSelected() {
+        setIcon(IconManager.getIconManager().getIcon("cancel.png"));
+        
+        setSelected(true);
+        
+        popup.setVisible(true);
+        
+        updatePopupLocation();
+    }
+    
+    public void doUnselected() {
+        setIcon(null);
+        
+        setSelected(false);
+
+        popup.setVisible(false);
+    }
+    
+    public void closePopup() {
+        doUnselected();
     }
     
     protected void setPopupContent(JComponent component) {
         popup.add(component);
         popup.pack();
-    }
-    
-    public void hidePopup() {
-        popup.setVisible(false);
     }
 
     public void setGraph(BluGraph graph) {

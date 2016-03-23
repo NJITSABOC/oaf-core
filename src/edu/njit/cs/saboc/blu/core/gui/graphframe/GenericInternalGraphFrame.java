@@ -7,7 +7,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Point;
@@ -15,8 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -98,18 +95,14 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
             public void internalFrameDeactivated(InternalFrameEvent e) {
                 for(PopupToggleButton button : toggleMenuButtons) {
                     if(button.isSelected()) {
-                        button.setSelected(false);
-                        button.setIcon(null);
-                        button.hidePopup();
+                        button.closePopup();
                     }
                 }
             }
             public void internalFrameIconified(InternalFrameEvent e) {
                 for(PopupToggleButton button : toggleMenuButtons) {
                     if(button.isSelected()) {
-                        button.setSelected(false);
-                        button.setIcon(null);
-                        button.hidePopup();
+                        button.closePopup();
                     }
                 }
             }
@@ -243,30 +236,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     protected void addToggleableButtonToMenu(final PopupToggleButton button) {
         toggleMenuButtons.add(button);
         
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-               handleTogglableButtonPressed(button);
-            }
-        });
-        
         optionsPanel.add(button);
-    }
-    
-    private void handleTogglableButtonPressed(PopupToggleButton pressedButton) {
-        
-        for(PopupToggleButton button : toggleMenuButtons) {
-            if(button != pressedButton) {
-                button.setSelected(false);
-                button.setIcon(null);
-                button.hidePopup();
-            } else {
-                if (button.isSelected()) {
-                    button.setIcon(IconManager.getIconManager().getIcon("cancel.png"));
-                } else {
-                    button.setIcon(null);
-                }
-            }
-        }
     }
     
     public void setAllGroupsHidden(boolean allGroupsHidden) {

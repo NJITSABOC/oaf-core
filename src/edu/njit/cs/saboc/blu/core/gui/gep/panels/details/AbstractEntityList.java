@@ -37,10 +37,10 @@ import javax.swing.table.TableRowSorter;
  */
 public abstract class AbstractEntityList<T> extends JPanel {
 
-    protected final JTable entityTable;
-    protected final BLUAbstractTableModel<T> tableModel;
+    private final JTable entityTable;
+    private final BLUAbstractTableModel<T> tableModel;
     
-    protected final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
+    private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
     
     private final JTextField filterField = new JTextField();
     private final JButton closeButton = new JButton();
@@ -48,7 +48,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
     private final TableRowSorter<TableModel> sorter;
     
     private final JPanel filterPanel;
-    
+       
     //private final JPanel optionsPanel;
     
     protected AbstractEntityList(BLUAbstractTableModel<T> tableModel) {
@@ -172,7 +172,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
         setBorderText(getBorderText(Optional.empty()));
     }
     
-    
+    public BLUAbstractTableModel<T> getTableModel() {
+        return tableModel;
+    }
     
     private void newFilter() {
 

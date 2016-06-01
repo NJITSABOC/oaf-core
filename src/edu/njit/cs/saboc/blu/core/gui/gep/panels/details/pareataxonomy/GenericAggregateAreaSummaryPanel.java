@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
         REL_T,
         TAXONOMY_T extends GenericPAreaTaxonomy,
-        AREA_T extends GenericArea> extends GenericAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AREA_T> {
+        AREA_T extends Area> extends GenericAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AREA_T> {
     
     public GenericAggregateAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, BLUGenericPAreaTaxonomyConfiguration configuration) {  
         super(relTable, configuration);
@@ -22,14 +22,14 @@ public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
 
     protected String createDescriptionStr(AREA_T area) {
         
-        HashSet<GenericPArea> aggregatePAreas = new HashSet<>();
-        HashSet<GenericPArea> regularPAreas = new HashSet<>();
+        HashSet<PArea> aggregatePAreas = new HashSet<>();
+        HashSet<PArea> regularPAreas = new HashSet<>();
         
-        ArrayList<GenericPArea> areaPAreas = area.getAllPAreas();
+        ArrayList<PArea> areaPAreas = area.getAllPAreas();
         
         HashSet<CONCEPT_T> totalConcepts = new HashSet<>();
         
-        areaPAreas.forEach( (GenericPArea parea) -> {
+        areaPAreas.forEach( (PArea parea) -> {
             AggregateableConceptGroup group = (AggregateableConceptGroup)parea;
             
             if(group.getAggregatedGroups().isEmpty()) {

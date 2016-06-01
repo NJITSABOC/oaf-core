@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
@@ -21,9 +21,9 @@ import javax.swing.JSplitPane;
  * @author Chris O
  */
 public class GenericAreaAggregatedPAreaPanel<CONCEPT_T, 
-        AREA_T extends GenericArea,
-        PAREA_T extends GenericPArea, 
-        AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
+        AREA_T extends Area,
+        PAREA_T extends PArea, 
+        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
     
     private final BLUGenericPAreaTaxonomyConfiguration config;
     

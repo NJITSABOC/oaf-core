@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import java.awt.Dimension;
@@ -12,7 +12,7 @@ import java.awt.Dimension;
 public class GenericAreaSummaryPanel<CONCEPT_T,
         REL_T,
         TAXONOMY_T extends GenericPAreaTaxonomy,
-        AREA_T extends GenericArea> extends AbstractNodeSummaryPanel<AREA_T> {
+        AREA_T extends Area> extends AbstractNodeSummaryPanel<AREA_T> {
     
     protected GenericRelationshipPanel<REL_T> relationshipPanel;
     

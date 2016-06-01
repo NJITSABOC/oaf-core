@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
@@ -14,7 +14,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea,
+public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends PArea,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, PAREA_T, CONFIG_T> {
     
     private final GenericPAreaTaxonomy taxonomy;

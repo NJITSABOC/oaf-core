@@ -1,8 +1,8 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerPanel;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
  *
  * @author Den
  */
-public class GenericAggregateAreaPanel<AREA_T extends GenericArea, 
-        PAREA_T extends GenericPArea,
-        AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>, 
+public class GenericAggregateAreaPanel<AREA_T extends Area, 
+        PAREA_T extends PArea,
+        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>, 
         CONCEPT_T,
         ENTRY_T,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration>

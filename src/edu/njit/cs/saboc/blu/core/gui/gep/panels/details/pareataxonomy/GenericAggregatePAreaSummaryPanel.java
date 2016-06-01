@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import java.util.HashSet;
@@ -12,8 +12,8 @@ import java.util.HashSet;
 public class GenericAggregatePAreaSummaryPanel<CONCEPT_T, 
         REL_T, 
         TAXONOMY_T extends GenericPAreaTaxonomy, 
-        PAREA_T extends GenericPArea, 
-        AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> 
+        PAREA_T extends PArea, 
+        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> 
             extends GenericPAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AGGREGATEPAREA_T> {
     
     public GenericAggregatePAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration configuration) {

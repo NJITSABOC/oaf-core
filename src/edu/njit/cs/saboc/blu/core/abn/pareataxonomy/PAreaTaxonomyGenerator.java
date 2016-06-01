@@ -16,9 +16,9 @@ import java.util.Stack;
  */
 public abstract class PAreaTaxonomyGenerator<
         TAXONOMY_T extends GenericPAreaTaxonomy<TAXONOMY_T, PAREA_T, AREA_T, REGION_T, CONCEPT_T, REL_T, HIERARCHY_T>,
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
-        AREA_T extends GenericArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
-        REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        PAREA_T extends PArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        AREA_T extends Area<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
+        REGION_T extends Region<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         CONCEPT_T, // Concept type
         REL_T,// Relationship type
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> {

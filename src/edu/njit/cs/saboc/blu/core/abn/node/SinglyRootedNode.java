@@ -2,7 +2,9 @@ package edu.njit.cs.saboc.blu.core.abn.node;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents an abstraction network node that consists of a singly rooted hierarchy of concepts.
@@ -15,13 +17,13 @@ public abstract class SinglyRootedNode extends Node {
     
     private final SingleRootedConceptHierarchy hierarchy;
     
-    private ArrayList<ParentConceptNode> rootParentConceptNodes = new ArrayList<>();
+    private Set<ParentConceptNode> rootParentConceptNodes = Collections.emptySet();
     
-    protected SinglyRootedNode(int id, 
-            ArrayList<Node> parentNodes, 
+    protected SinglyRootedNode(
+            Set<? extends SinglyRootedNode> parentNodes, 
             SingleRootedConceptHierarchy hierarchy) {
         
-        super(id, parentNodes);
+        super(parentNodes);
         
         this.hierarchy = hierarchy;
     }
@@ -34,12 +36,30 @@ public abstract class SinglyRootedNode extends Node {
         return hierarchy.getRoot();
     }
     
-    public void setRootParentConceptNodes(ArrayList<ParentConceptNode> rootParentConceptNodes) {
+    public HashSet<Concept> getConcepts() {
+        return hierarchy.getConceptsInHierarchy();
+    }
+    
+    public void setRootParentConceptNodes(Set<ParentConceptNode> rootParentConceptNodes) {
         this.rootParentConceptNodes = rootParentConceptNodes;
     }
     
-    public ArrayList<ParentConceptNode> getRootParentConceptNodes() {
+    public Set<ParentConceptNode> getRootParentConceptNodes() {
         return rootParentConceptNodes;
+    }
+    
+    public boolean equals(Object o) {
+        if(o instanceof SinglyRootedNode) {
+            SinglyRootedNode other = (SinglyRootedNode)o;
+            
+            return this.getRoot().equals(other.getRoot());
+        }
+        
+        return false;
+    }
+    
+    public int hashCode() {
+        return this.getRoot().hashCode();
     }
     
     public int getConceptCount() {

@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupPanel;
@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPane
  *
  * @author Chris O
  */
-public class GenericPAreaPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
+public class GenericPAreaPanel<CONCEPT_T, PAREA_T extends PArea, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends AbstractGroupPanel<PAREA_T, CONCEPT_T, CONFIG_T> {
     

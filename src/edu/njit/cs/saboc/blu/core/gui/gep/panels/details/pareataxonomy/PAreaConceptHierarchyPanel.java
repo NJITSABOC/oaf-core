@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptGroupHierarchicalViewPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
@@ -12,7 +12,7 @@ import javax.swing.ScrollPaneConstants;
  *
  * @author Chris O
  */
-public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea, 
+public abstract class PAreaConceptHierarchyPanel<CONCEPT_T, PAREA_T extends PArea, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> extends AbNNodeInformationPanel<PAREA_T> {
 
     protected ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel;

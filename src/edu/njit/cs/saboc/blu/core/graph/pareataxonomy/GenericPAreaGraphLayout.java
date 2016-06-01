@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericRegion;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
@@ -24,9 +24,9 @@ import javax.swing.JLabel;
  */
 public abstract class GenericPAreaGraphLayout<
         TAXONOMY_T extends GenericPAreaTaxonomy,
-        AREA_T extends GenericArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
-        PAREA_T extends GenericPArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
-        REGION_T extends GenericRegion<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        AREA_T extends Area<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
+        PAREA_T extends PArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
+        REGION_T extends Region<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         AREAENTRY_T extends GenericBluArea<AREA_T>,
         PAREAENTRY_T extends GenericBluPArea<PAREA_T, REGIONENTRY_T>,
         REGIONENTRY_T extends GenericBluRegion<REGION_T, AREAENTRY_T>,

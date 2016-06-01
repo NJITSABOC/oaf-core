@@ -4,8 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.data.BLUDisjointableAbNDataConfiguration;
@@ -19,9 +19,9 @@ import java.util.HashSet;
  */
 public abstract class BLUGenericPAreaTaxonomyDataConfiguration<TAXONOMY_T extends GenericPAreaTaxonomy,
         DISJOINTTAXONOMY_T extends DisjointAbstractionNetwork<TAXONOMY_T, PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>,
-        AREA_T extends GenericArea,
-        PAREA_T extends GenericPArea,
-        AGGREGATEPAREA_T extends GenericPArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>,
+        AREA_T extends Area,
+        PAREA_T extends PArea,
+        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>,
         DISJOINTPAREA_T extends DisjointGenericConceptGroup<PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         REL_T, 

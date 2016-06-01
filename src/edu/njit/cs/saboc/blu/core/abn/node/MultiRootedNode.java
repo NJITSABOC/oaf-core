@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.abn.node;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -9,10 +9,7 @@ import java.util.ArrayList;
  */
 public abstract class MultiRootedNode extends Node {
     
-    public MultiRootedNode(
-            int id, 
-            ArrayList<Node> parentNodes) {
-        
-        super(id, parentNodes);
+    public MultiRootedNode(Set<Node> parentNodes) {
+        super(parentNodes);
     }
 }

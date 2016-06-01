@@ -2,12 +2,11 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.nodes;
 
 import SnomedShared.Concept;
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -24,7 +23,7 @@ public abstract class DisjointGenericConceptGroup<
     
     private final HIERARCHY_T conceptHierarchy;
 
-    private HashSet<GenericParentGroupInfo<CONCEPT_T, T>> parentGroups;
+    private HashSet<ParentNodeInformation<CONCEPT_T, T>> parentGroups;
     
     public DisjointGenericConceptGroup(
             int id, 
@@ -62,7 +61,7 @@ public abstract class DisjointGenericConceptGroup<
      * Adds disjoint partial-area information about a parent of the root concept
 
      */
-    public void setParentGroups(HashSet<GenericParentGroupInfo<CONCEPT_T, T>> parentGroups) {
+    public void setParentGroups(HashSet<ParentNodeInformation<CONCEPT_T, T>> parentGroups) {
         this.parentGroups = parentGroups;
     }
 
@@ -70,7 +69,7 @@ public abstract class DisjointGenericConceptGroup<
      * Returns this disjoint partial-area's parents and the disjoint partial-areas they belong to.
      * @return 
      */
-    public HashSet<GenericParentGroupInfo<CONCEPT_T, T>> getParentGroups() {
+    public HashSet<ParentNodeInformation<CONCEPT_T, T>> getParentGroups() {
         return parentGroups;
     }
 

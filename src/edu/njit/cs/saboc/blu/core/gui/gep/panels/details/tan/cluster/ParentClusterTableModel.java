@@ -1,8 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import SnomedShared.Concept;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
@@ -14,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfig
  */
 public class ParentClusterTableModel<
         CONCEPT_T,
-        CLUSTER_T extends GenericCluster> extends BLUAbstractParentGroupTableModel<CONCEPT_T, CLUSTER_T, GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> {
+        CLUSTER_T extends GenericCluster> extends BLUAbstractParentGroupTableModel<CONCEPT_T, CLUSTER_T, ParentNodeInformation<CONCEPT_T, CLUSTER_T>> {
 
     private final BLUGenericTANConfiguration config;
     
@@ -31,7 +30,7 @@ public class ParentClusterTableModel<
     }
 
     @Override
-    protected Object[] createRow(GenericParentGroupInfo<CONCEPT_T, CLUSTER_T> item) {
+    protected Object[] createRow(ParentNodeInformation<CONCEPT_T, CLUSTER_T> item) {
        
         return new Object[] {
             config.getTextConfiguration().getConceptName(item.getParentConcept()),

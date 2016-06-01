@@ -6,13 +6,13 @@ import SnomedShared.generic.GenericConceptGroup;
  *
  * @author Chris O
  */
-public class GenericParentGroupInfo<CONCEPT_T, GROUP_T extends GenericConceptGroup> {
+public class ParentNodeInformation<CONCEPT_T, GROUP_T extends GenericConceptGroup> {
 
     private CONCEPT_T parentConcept;
 
     private GROUP_T parentGroup;
     
-    public GenericParentGroupInfo(CONCEPT_T parentConcept, GROUP_T parentGroup) {
+    public ParentNodeInformation(CONCEPT_T parentConcept, GROUP_T parentGroup) {
         this.parentConcept = parentConcept;
         this.parentGroup = parentGroup;
     }

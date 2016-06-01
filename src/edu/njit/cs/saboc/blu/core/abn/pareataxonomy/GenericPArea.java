@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import SnomedShared.Concept;
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ public abstract class GenericPArea<
     
     protected HIERARCHY_T conceptHierarchy;
     
-    protected HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentPAreas;
+    protected HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> parentPAreas;
     
     protected HashSet<REL_T> relationships;
     
@@ -44,11 +44,11 @@ public abstract class GenericPArea<
         return relationships;
     }
     
-    public void setParentPAreaInfo(HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentPAreaInfo) {
+    public void setParentPAreaInfo(HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> parentPAreaInfo) {
         this.parentPAreas = parentPAreaInfo;
     }
     
-    public HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> getParentPAreaInfo() {
+    public HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> getParentPAreaInfo() {
         return parentPAreas;
     }
     

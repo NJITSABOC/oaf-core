@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
@@ -14,7 +14,7 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class GenericParentDisjointGroupTableModel<CONCEPT_T, DISJOINTGROUP_T extends DisjointGenericConceptGroup, GROUP_T extends GenericConceptGroup> 
-        extends BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> {
+        extends BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> {
     
     private final BLUDisjointConfiguration config;
     
@@ -30,7 +30,7 @@ public class GenericParentDisjointGroupTableModel<CONCEPT_T, DISJOINTGROUP_T ext
     }
     
     @Override
-    protected Object[] createRow(GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T> item) {
+    protected Object[] createRow(ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T> item) {
         ArrayList<String> overlappingPAreaNames = new ArrayList<>();
         
         HashSet<GROUP_T> overlaps = item.getParentGroup().getOverlaps();

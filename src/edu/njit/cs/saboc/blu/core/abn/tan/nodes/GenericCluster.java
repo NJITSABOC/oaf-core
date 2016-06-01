@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.tan.nodes;
 
 import SnomedShared.Concept;
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.HashSet;
 
@@ -18,7 +18,7 @@ public class GenericCluster<CONCEPT_T,
     
     private final HIERARCHY_T hierarchy;
     
-    private HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> parentClusters;
+    private HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> parentClusters;
     
     public GenericCluster(
             int id, 
@@ -46,11 +46,11 @@ public class GenericCluster<CONCEPT_T,
         return hierarchy;
     }
     
-    public void setParentClusterInfo(HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> parentClusters) {
+    public void setParentClusterInfo(HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> parentClusters) {
         this.parentClusters = parentClusters;
     }
     
-    public HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> getParentClusterInfo() {
+    public HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> getParentClusterInfo() {
         return parentClusters;
     }
     

@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
@@ -277,12 +277,12 @@ public abstract class DisjointAbNGenerator<
             CONCEPT_T disjointGroupRoot = group.getConceptHierarchy().getRoot();
             HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(disjointGroupRoot);
 
-            HashSet<GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> parentInfo = new HashSet<>();
+            HashSet<ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> parentInfo = new HashSet<>();
             
             parents.forEach( (CONCEPT_T rootParent) -> {
                 CONCEPT_T parentGroupRoot = conceptDisjointGroup.get(rootParent);
                 
-                parentInfo.add(new GenericParentGroupInfo<>(rootParent, disjointGroups.get(disjointGroupIds.get(parentGroupRoot))));
+                parentInfo.add(new ParentNodeInformation<>(rootParent, disjointGroups.get(disjointGroupIds.get(parentGroupRoot))));
             });
             
             group.setParentGroups(parentInfo);

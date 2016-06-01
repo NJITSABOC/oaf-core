@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
@@ -25,7 +25,7 @@ public class GenericDisjointGroupHierarchyPanel<CONCEPT_T,
     private final CONFIG_T configuration;
 
     public GenericDisjointGroupHierarchyPanel(
-            BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> parentTableModel,
+            BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> parentTableModel,
             BLUAbstractChildGroupTableModel<DISJOINTGROUP_T> childTableModel,
             DisjointAbstractionNetwork disjointAbN, 
             CONFIG_T configuration) {
@@ -37,10 +37,10 @@ public class GenericDisjointGroupHierarchyPanel<CONCEPT_T,
     }
 
     protected void loadParentGroupInfo(DISJOINTGROUP_T parea) {
-        ArrayList<GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>> entries = new ArrayList<>(parea.getParentGroups());
+        ArrayList<ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> entries = new ArrayList<>(parea.getParentGroups());
         
-        Collections.sort(entries, new Comparator<GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T>>() {
-            public int compare(GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T> a, GenericParentGroupInfo<CONCEPT_T, DISJOINTGROUP_T> b) {
+        Collections.sort(entries, new Comparator<ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>>() {
+            public int compare(ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T> a, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T> b) {
                 String aName = configuration.getTextConfiguration().getConceptName(a.getParentConcept());
                 String bName = configuration.getTextConfiguration().getConceptName(b.getParentConcept());
                 

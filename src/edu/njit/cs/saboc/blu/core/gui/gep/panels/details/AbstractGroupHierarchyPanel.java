@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
@@ -21,11 +21,11 @@ public abstract class AbstractGroupHierarchyPanel<
 
     private final JSplitPane splitPane;
     
-    private final AbstractEntityList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentGroupList;
+    private final AbstractEntityList<ParentNodeInformation<CONCEPT_T, GROUP_T>> parentGroupList;
     
     private final AbstractGroupList<GROUP_T> childGroupList;
     
-    protected BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentModel;
+    protected BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, ParentNodeInformation<CONCEPT_T, GROUP_T>> parentModel;
     
     protected BLUAbstractChildGroupTableModel<GROUP_T> childModel;
     
@@ -33,7 +33,7 @@ public abstract class AbstractGroupHierarchyPanel<
 
     public AbstractGroupHierarchyPanel(
            final CONFIG_T config,
-           final BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, GenericParentGroupInfo<CONCEPT_T, GROUP_T>> parentTableModel,
+           final BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, ParentNodeInformation<CONCEPT_T, GROUP_T>> parentTableModel,
            final BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
         
         this.config = config;
@@ -43,8 +43,8 @@ public abstract class AbstractGroupHierarchyPanel<
         this.parentModel = parentTableModel;
         this.childModel = childTableModel;
         
-        parentGroupList = new AbstractEntityList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>>(parentTableModel) {
-            public String getBorderText(Optional<ArrayList<GenericParentGroupInfo<CONCEPT_T, GROUP_T>>> entries) {
+        parentGroupList = new AbstractEntityList<ParentNodeInformation<CONCEPT_T, GROUP_T>>(parentTableModel) {
+            public String getBorderText(Optional<ArrayList<ParentNodeInformation<CONCEPT_T, GROUP_T>>> entries) {
                 String baseStr = String.format("Root's Parent %s %s", 
                         config.getTextConfiguration().getConceptTypeName(true), 
                         config.getTextConfiguration().getGroupTypeName(true));

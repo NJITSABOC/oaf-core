@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import java.util.ArrayList;
@@ -188,7 +188,7 @@ public abstract class PAreaTaxonomyGenerator<
             
             HashSet<CONCEPT_T> parents = conceptHierarchy.getParents(root);
             
-            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentPAreaInfo = new HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>>();
+            HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> parentPAreaInfo = new HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>>();
             
             for(CONCEPT_T parent : parents) {
                 HashSet<CONCEPT_T> parentPAreaRoots = conceptPAreas.get(parent);
@@ -198,7 +198,7 @@ public abstract class PAreaTaxonomyGenerator<
                     
                     pareaHierarchy.addIsA(parea, pareas.get(parentPAreaId));
                     
-                    parentPAreaInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
+                    parentPAreaInfo.add(new ParentNodeInformation<CONCEPT_T, PAREA_T>(parent, pareas.get(parentPAreaId)));
                 }
             }
             
@@ -251,7 +251,7 @@ public abstract class PAreaTaxonomyGenerator<
             
             area.addPArea(parea);
             
-            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>>();
+            HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>>();
             
             PAREA_T originalRoot;
             
@@ -261,11 +261,11 @@ public abstract class PAreaTaxonomyGenerator<
                 originalRoot = parea;
             }
 
-            HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
+            HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
                         
-            for(GenericParentGroupInfo<CONCEPT_T, PAREA_T> originalParent : originalParents) {
+            for(ParentNodeInformation<CONCEPT_T, PAREA_T> originalParent : originalParents) {
                 if(pareas.containsKey(originalParent.getParentGroup().getId())) {
-                    reducedParentInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), 
+                    reducedParentInfo.add(new ParentNodeInformation<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), 
                             pareas.get(originalParent.getParentGroup().getId())));
                 } else {
                     for(PAREA_T otherPArea : pareas.values()) {
@@ -274,7 +274,7 @@ public abstract class PAreaTaxonomyGenerator<
                             AggregateableConceptGroup aggregateGroup = (AggregateableConceptGroup) otherPArea;
 
                             if (aggregateGroup.getAllGroupsConcepts().contains(originalParent.getParentConcept())) {
-                                reducedParentInfo.add(new GenericParentGroupInfo<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), otherPArea));
+                                reducedParentInfo.add(new ParentNodeInformation<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), otherPArea));
                                 break;
                             }
                         }

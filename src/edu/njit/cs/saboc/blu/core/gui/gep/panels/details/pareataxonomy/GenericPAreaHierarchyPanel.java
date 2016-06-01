@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
@@ -22,7 +22,7 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea,
     private final CONFIG_T configuration;
 
     public GenericPAreaHierarchyPanel(
-            BLUAbstractParentGroupTableModel<CONCEPT_T, PAREA_T, GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentTableModel,
+            BLUAbstractParentGroupTableModel<CONCEPT_T, PAREA_T, ParentNodeInformation<CONCEPT_T, PAREA_T>> parentTableModel,
             BLUAbstractChildGroupTableModel<PAREA_T> childTableModel,
             GenericPAreaTaxonomy taxonomy, 
             CONFIG_T configuration) {
@@ -34,9 +34,9 @@ public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends GenericPArea,
     }
 
     protected void loadParentGroupInfo(PAREA_T parea) {
-        HashSet<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parents = parea.getParentPAreaInfo();
+        HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> parents = parea.getParentPAreaInfo();
         
-        ArrayList<GenericParentGroupInfo<CONCEPT_T, PAREA_T>> parentsList;
+        ArrayList<ParentNodeInformation<CONCEPT_T, PAREA_T>> parentsList;
         
         if(parents == null) { // Guards for current version of diff taxonomies
             parentsList = new ArrayList<>();

@@ -1,8 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.GenericParentGroupInfo;
 import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
@@ -234,7 +233,7 @@ public abstract class TribalAbstractionNetworkGenerator<
         hierarchyClusters.values().forEach((CLUSTER_T cluster) -> {
             HashSet<CONCEPT_T> parents = hierarchy.getParents(cluster.getHierarchy().getRoot());
 
-            HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> parentInformation = new HashSet<>();
+            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> parentInformation = new HashSet<>();
 
             parents.forEach((CONCEPT_T parent) -> {
 
@@ -244,7 +243,7 @@ public abstract class TribalAbstractionNetworkGenerator<
                     parentClusterRoots.forEach((CONCEPT_T parentClusterRoot) -> {
                         CLUSTER_T parentCluster = hierarchyClusters.get(clusterIds.get(parentClusterRoot));
 
-                        parentInformation.add(new GenericParentGroupInfo<>(parent, parentCluster));
+                        parentInformation.add(new ParentNodeInformation<>(parent, parentCluster));
                     });
                 }
             });
@@ -289,13 +288,13 @@ public abstract class TribalAbstractionNetworkGenerator<
             
             band.addCluster(cluster);
             
-            HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> reducedParentInfo = new HashSet<>();
+            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> reducedParentInfo = new HashSet<>();
             
-            HashSet<GenericParentGroupInfo<CONCEPT_T, CLUSTER_T>> originalParents = cluster.getParentClusterInfo();
+            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> originalParents = cluster.getParentClusterInfo();
                         
-            for(GenericParentGroupInfo<CONCEPT_T, CLUSTER_T> originalParent : originalParents) {
+            for(ParentNodeInformation<CONCEPT_T, CLUSTER_T> originalParent : originalParents) {
                 if(clusters.containsKey(originalParent.getParentGroup().getId())) {
-                    reducedParentInfo.add(new GenericParentGroupInfo<>(originalParent.getParentConcept(), 
+                    reducedParentInfo.add(new ParentNodeInformation<>(originalParent.getParentConcept(), 
                             clusters.get(originalParent.getParentGroup().getId())));
                 } else {
 

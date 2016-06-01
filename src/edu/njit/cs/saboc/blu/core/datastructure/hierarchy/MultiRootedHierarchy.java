@@ -75,6 +75,10 @@ public class MultiRootedHierarchy<T> {
         return roots;
     }
     
+    public int size() {
+        return children.keySet().size();
+    }
+    
     /**
      * Adds an IS A relationship between from and to. e.g., from IS A to.
      * @param from The child concept

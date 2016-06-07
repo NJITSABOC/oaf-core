@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
@@ -22,7 +22,7 @@ import javax.swing.JLabel;
  * @author Chris O
  */
 public abstract class GenericNoRegionsPAreaGraphLayout<
-        TAXONOMY_T extends GenericPAreaTaxonomy,
+        TAXONOMY_T extends PAreaTaxonomy,
         AREA_T extends Area<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
         PAREA_T extends PArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
         REGION_T extends Region<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,

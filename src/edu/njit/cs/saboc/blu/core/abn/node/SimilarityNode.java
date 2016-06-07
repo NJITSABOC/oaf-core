@@ -10,11 +10,9 @@ import java.util.Set;
  */
 public abstract class SimilarityNode extends PartitionedNode {
     
-    public SimilarityNode(
-            Set<? extends SimilarityNode> parentNodes, 
-            Set<? extends SinglyRootedNode> internalNodes) {
+    public SimilarityNode(Set<? extends SinglyRootedNode> internalNodes) {
         
-        super(parentNodes, internalNodes);
+        super(internalNodes);
     }
     
     public abstract String getName(String separator);

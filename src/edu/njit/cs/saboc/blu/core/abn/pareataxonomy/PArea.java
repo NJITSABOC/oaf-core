@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
 import java.util.Set;
 
@@ -14,11 +13,10 @@ public class PArea extends SinglyRootedNode {
     protected final Set<InheritableProperty> relationships;
     
     public PArea(
-            Set<PArea> parentPAreas,
             SingleRootedConceptHierarchy conceptHierarchy, 
             Set<InheritableProperty> relationships) {
         
-        super(parentPAreas, conceptHierarchy);
+        super(conceptHierarchy);
         
         this.relationships = relationships;
     }

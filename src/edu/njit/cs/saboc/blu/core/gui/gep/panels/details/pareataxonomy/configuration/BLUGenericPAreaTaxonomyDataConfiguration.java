@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.GenericPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.data.BLUDisjointableAbNDataConfiguration;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public abstract class BLUGenericPAreaTaxonomyDataConfiguration<TAXONOMY_T extends GenericPAreaTaxonomy,
+public abstract class BLUGenericPAreaTaxonomyDataConfiguration<TAXONOMY_T extends PAreaTaxonomy,
         DISJOINTTAXONOMY_T extends DisjointAbstractionNetwork<TAXONOMY_T, PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>,
         AREA_T extends Area,
         PAREA_T extends PArea,

@@ -1,33 +1,35 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
+ * 
+ * @param <NODE_T>
  */
-public class NodeHierarchy extends MultiRootedHierarchy<Node> {
+public class NodeHierarchy<NODE_T extends Node> extends MultiRootedHierarchy<NODE_T> {
     
-    public NodeHierarchy(HashSet<Node> roots) {
+    public NodeHierarchy(Set<NODE_T> roots) {
         super(roots);
     }
     
-    public NodeHierarchy(Node root) {
-        this(new HashSet<>(Arrays.asList(root)));
+    public NodeHierarchy(NODE_T root) {
+        this(Collections.singleton(root));
     }
     
-    public NodeHierarchy(HashSet<Node> roots, HashMap<Node, HashSet<Node>> hierarchy) {
+    public NodeHierarchy(Set<NODE_T> roots, HashMap<NODE_T, Set<NODE_T>> hierarchy) {
         super(roots, hierarchy);
     }
     
-    public NodeHierarchy(Node root, HashMap<Node, HashSet<Node>> hierarchy) {
-        this(new HashSet<>(Arrays.asList(root)), hierarchy);
+    public NodeHierarchy(NODE_T root, HashMap<NODE_T, Set<NODE_T>> hierarchy) {
+        this(Collections.singleton(root), hierarchy);
     }
     
-    public NodeHierarchy(MultiRootedHierarchy<Node> hierarchy) {
+    public NodeHierarchy(MultiRootedHierarchy<NODE_T> hierarchy) {
         super(hierarchy.getRoots(), hierarchy.getAllChildRelationships());
     }
 }

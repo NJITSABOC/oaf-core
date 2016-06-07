@@ -1,34 +1,29 @@
 package edu.njit.cs.saboc.blu.core.abn;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
-import java.util.ArrayList;
-import java.util.HashMap;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 
 /**
- *
+ * Represents an abstraction network that partitions another abstraction network.
+ * For example, a partial-area taxonomy partitions an area taxonomy.
+ * 
  * @author Chris O
  */
-public abstract class PartitionedAbstractionNetwork<
-        CONTAINER_T extends GenericGroupContainer, 
-        GROUP_T extends GenericConceptGroup> extends AbstractionNetwork<GROUP_T> {
+public abstract class PartitionedAbstractionNetwork<NODE_T extends Node, BASENODE_T extends PartitionedNode> extends AbstractionNetwork<NODE_T> {
     
-    protected ArrayList<CONTAINER_T> containers;
+    private final AbstractionNetwork baseAbstractionNetwork;
     
-    public PartitionedAbstractionNetwork(ArrayList<CONTAINER_T> containers,
-            HashMap<Integer, GROUP_T> groups,
-            GroupHierarchy<GROUP_T> groupHierarchy) {
+    public PartitionedAbstractionNetwork(
+        AbstractionNetwork<BASENODE_T> baseAbstractionNetwork,
+        NodeHierarchy<NODE_T> partitionNodeHierarchy) {
         
-        super(groups, groupHierarchy);
+        super(partitionNodeHierarchy);
         
-        this.containers = containers;
+        this.baseAbstractionNetwork = baseAbstractionNetwork;
     }
-
-    protected int getContainerCount() {
-        return containers.size();
-    }
-
-    public ArrayList<CONTAINER_T> getContainers() {
-        return containers;
+    
+    public AbstractionNetwork<BASENODE_T> getBaseAbstractionNetwork() {
+        return baseAbstractionNetwork;
     }
 }

@@ -1,9 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
-import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,12 +15,7 @@ public abstract class PartitionedNode extends Node {
     private final Set<? extends SinglyRootedNode> internalNodes;
     private final Set<Concept> concepts;
     
-    public PartitionedNode(
-            Set<? extends PartitionedNode> parentNodes, 
-            Set<? extends SinglyRootedNode> internalNodes) {
-        
-        super(parentNodes);
-        
+    public PartitionedNode(Set<? extends SinglyRootedNode> internalNodes) {
         this.internalNodes = internalNodes;
         
         this.concepts = new HashSet<>();
@@ -41,29 +33,28 @@ public abstract class PartitionedNode extends Node {
         return concepts.size();
     }
         
-    public HashSet<OverlappingConcept> getOverlappingConcepts() {
+    public Set<OverlappingConcept> getOverlappingConcepts() {
 
-        HashMap<Concept, HashSet<PArea>> conceptsPAreas = new HashMap<>();
-        ArrayList<PAREA_T> pareas = this.getAllPAreas();
+        HashMap<Concept, Set<SinglyRootedNode>> conceptNodes = new HashMap<>();
 
-        for (PArea parea : pareas) {
+        for (SinglyRootedNode node : internalNodes) {
 
-            ArrayList<Concept> pareaConcepts = parea.getConceptsInPArea();
+            Set<Concept> nodeConcepts = node.getConcepts();
 
-            for (Concept concept : pareaConcepts) {
-                if (!conceptsPAreas.containsKey(concept)) {
-                    conceptsPAreas.put(concept, new HashSet<>());
+            for (Concept concept : nodeConcepts) {
+                if (!conceptNodes.containsKey(concept)) {
+                    conceptNodes.put(concept, new HashSet<>());
                 }
                 
-                conceptsPAreas.get(concept).add(parea);
+                conceptNodes.get(concept).add(node);
             }
         }
 
-        HashSet<OverlappingConceptResult<Concept, PArea>> overlappingResults = new HashSet<>();
+        HashSet<OverlappingConcept> overlappingResults = new HashSet<>();
         
-        conceptsPAreas.forEach( (Concept c, HashSet<PArea> overlappingPAreas) -> {
-            if(overlappingPAreas.size() > 1) {
-                overlappingResults.add(new OverlappingConceptResult<>(c, overlappingPAreas));
+        conceptNodes.forEach( (Concept c, Set<SinglyRootedNode> overlappingNodes) -> {
+            if(overlappingNodes.size() > 1) {
+                overlappingResults.add(new OverlappingConcept(c, overlappingNodes));
             }
         });
         

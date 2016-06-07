@@ -92,7 +92,7 @@ public class TribalAbstractionNetwork<CONCEPT_T,
             
             CONCEPT_T root = (CONCEPT_T)patriarchCluster.getHierarchy().getRoot();
             
-            for(CLUSTER_T cluster : groups.values()) {
+            for(CLUSTER_T cluster : nodes.values()) {
                 HashSet<CONCEPT_T> patriarchs = cluster.getPatriarchs();
                 
                 if (patriarchs.size() > 1) {

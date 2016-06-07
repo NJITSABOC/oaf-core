@@ -13,10 +13,11 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.Ancesto
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -25,27 +26,24 @@ import java.util.Stack;
  */
 public class MultiRootedHierarchy<T> {
     
-    protected HashSet<T> roots;
+    private final Set<T> roots;
     
-    protected HashMap<T, HashSet<T>> children = 
-            new HashMap<>();
-    
-    protected HashMap<T, HashSet<T>> parents =
-            new HashMap<>();
+    private final HashMap<T, Set<T>> children = new HashMap<>();
+    private final HashMap<T, Set<T>> parents = new HashMap<>();
         
-    public MultiRootedHierarchy(HashSet<T> roots) {
+    public MultiRootedHierarchy(Set<T> roots) {
         this.roots = new HashSet<>(roots);
         
-        for(T root : roots) {
+        roots.forEach((root) -> {
             children.put(root, new HashSet<>());
             parents.put(root, new HashSet<>());
-        }
+        });
     }
     
-    public MultiRootedHierarchy(HashSet<T> roots, HashMap<T, HashSet<T>> hierarchy) {
-        this.roots = new HashSet<T>(roots);
+    public MultiRootedHierarchy(Set<T> roots, HashMap<T, Set<T>> hierarchy) {
+        this.roots = new HashSet<>(roots);
         
-        Stack<T> convertStack = new Stack<T>();
+        Stack<T> convertStack = new Stack<>();
 
         for (T root : roots) {
             convertStack.add(root);
@@ -54,7 +52,7 @@ public class MultiRootedHierarchy<T> {
             while (!convertStack.isEmpty()) {
                 T concept = convertStack.pop();
 
-                HashSet<T> conceptChildren = hierarchy.get(concept);
+                Set<T> conceptChildren = hierarchy.get(concept);
 
                 if (conceptChildren == null) {
                     continue;
@@ -71,16 +69,34 @@ public class MultiRootedHierarchy<T> {
         }
     }
 
-    public HashSet<T> getRoots() {
+    /** 
+     * Returns the set of roots of the hierarchy
+     * @return 
+     */
+    public Set<T> getRoots() {
         return roots;
     }
     
+    /**
+     * Convenience method for getting the root of a hierarchy that has only one root.
+     * Otherwise returns the first root in the set of roots.
+     * @return 
+     */
+    public T getRoot() {
+        return roots.iterator().next();
+    }
+    
+    /**
+     * Returns the number of nodes in the hierarchy
+     * @return 
+     */
     public int size() {
         return children.keySet().size();
     }
     
     /**
      * Adds an IS A relationship between from and to. e.g., from IS A to.
+     * 
      * @param from The child concept
      * @param to The parent concept
      */
@@ -105,6 +121,11 @@ public class MultiRootedHierarchy<T> {
         children.get(to).add(from);       
     }
     
+    /**
+     * Copies the given hierarchy into this hierarchy
+     * 
+     * @param hierarchy 
+     */
     public void addHierarchy(MultiRootedHierarchy<T> hierarchy) {
         roots.addAll(hierarchy.roots);
         
@@ -112,45 +133,45 @@ public class MultiRootedHierarchy<T> {
     }
     
     public void addAllHierarchicalRelationships(MultiRootedHierarchy<T> hierarchy) {
-        for (Entry<T, HashSet<T>> childEntry : hierarchy.children.entrySet()) {
-            for (T child : childEntry.getValue()) {
-                this.addIsA(child, childEntry.getKey());
-            }
-        }
+        hierarchy.children.forEach( (node, nodeChildren) -> {
+            nodeChildren.forEach( (child) -> {
+                addIsA(child, node);
+            });
+        });
     }
     
     public SingleRootedHierarchy<T> getSubhierarchyRootedAt(T root) {
-        return new SingleRootedHierarchy<T>(root, this.children);
+        return new SingleRootedHierarchy<>(root, this.children);
     }
     
-    public HashSet<T> getNodesInHierarchy() {
-        HashSet<T> allNodes = new HashSet<T>(children.keySet());
+    public Set<T> getNodesInHierarchy() {
+        Set<T> allNodes = new HashSet<>(children.keySet());
         allNodes.addAll(roots);
         
         return allNodes;
     }
     
-    public HashSet<T> getChildren(T c) {
+    public Set<T> getChildren(T c) {
         if(children.containsKey(c)) {
             return children.get(c);
         }
         
-        return new HashSet<T>();
+        return Collections.emptySet();
     }
     
-    public HashSet<T> getParents(T c) {
+    public Set<T> getParents(T c) {
         if(parents.containsKey(c)) {
             return parents.get(c);
         }
         
-        return new HashSet<T>();
+        return Collections.emptySet();
     }
     
-    public HashMap<T, HashSet<T>> getAllChildRelationships() {
+    public HashMap<T, Set<T>> getAllChildRelationships() {
         return children;
     }
     
-    public HashMap<T, HashSet<T>> getAllParentRelationships() {
+    public HashMap<T, Set<T>> getAllParentRelationships() {
         return parents;
     }
     
@@ -162,11 +183,11 @@ public class MultiRootedHierarchy<T> {
         BFSDown(new HashSet<>(Arrays.asList(startingPoint)), visitor);
     }
     
-    public void BFSDown(HashSet<T> startingPoints, HierarchyVisitor<T> visitor) {
+    public void BFSDown(Set<T> startingPoints, HierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<>();
         queue.addAll(startingPoints);
 
-        HashSet<T> visited = new HashSet<>();
+        Set<T> visited = new HashSet<>();
         visited.addAll(startingPoints);
 
         while (!queue.isEmpty() && !visitor.isFinished()) {
@@ -174,7 +195,7 @@ public class MultiRootedHierarchy<T> {
 
             visitor.visit(node);
 
-            HashSet<T> nodeChildren = this.getChildren(node);
+            Set<T> nodeChildren = this.getChildren(node);
 
             nodeChildren.forEach((T child) -> {
                 if (!visited.contains(child)) {
@@ -199,7 +220,7 @@ public class MultiRootedHierarchy<T> {
 
             visitor.visit(node);
 
-            HashSet<T> nodeParents = this.getParents(node);
+            Set<T> nodeParents = this.getParents(node);
 
             nodeParents.forEach((T parent) -> {
                 if (!visited.contains(parent)) {
@@ -213,7 +234,7 @@ public class MultiRootedHierarchy<T> {
     public void topologicalDown(HierarchyVisitor<T> visitor) {
         HashMap<T, Integer> parentCounts = new HashMap<>();
         
-        HashSet<T> nodesInHierarchy = this.getNodesInHierarchy();
+        Set<T> nodesInHierarchy = this.getNodesInHierarchy();
         
         nodesInHierarchy.forEach((T node) -> {
             parentCounts.put(node, this.getParents(node).size());
@@ -227,7 +248,7 @@ public class MultiRootedHierarchy<T> {
             
             visitor.visit(node);
             
-            HashSet<T> nodeChildren = this.getChildren(node);
+            Set<T> nodeChildren = this.getChildren(node);
             
             nodeChildren.forEach((T child) -> {
                 if(parentCounts.get(child) == 1) {
@@ -240,7 +261,8 @@ public class MultiRootedHierarchy<T> {
     }
     
     public void topologicalDownInSubhierarchy(T startingPoint, TopologicalVisitor<T> visitor) {
-        HashSet<T> subhierarchy = this.getDescendants(startingPoint);
+        Set<T> subhierarchy = this.getDescendants(startingPoint);
+        
         subhierarchy.add(startingPoint);
         
         HashMap<T, Integer> parentCountInSubhierarchy = new HashMap<>();
@@ -248,7 +270,7 @@ public class MultiRootedHierarchy<T> {
         subhierarchy.forEach((T node) -> {
             int parentCount = 0;
 
-            HashSet<T> nodeParents = this.getParents(node);
+            Set<T> nodeParents = this.getParents(node);
 
             for (T parent : nodeParents) {
                 if (subhierarchy.contains(parent)) {
@@ -267,7 +289,7 @@ public class MultiRootedHierarchy<T> {
 
             visitor.visit(node);
 
-            HashSet<T> nodeChildren = this.getChildren(node);
+            Set<T> nodeChildren = this.getChildren(node);
 
             nodeChildren.forEach((T child) -> {
                 if (parentCountInSubhierarchy.get(child) == 1) {
@@ -287,18 +309,18 @@ public class MultiRootedHierarchy<T> {
         return visitor.getDescandantCount() - 1;
     }
     
-    public HashSet<T> getDescendants(T node) {
+    public Set<T> getDescendants(T node) {
         SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<>(this);
         
         this.BFSDown(node, visitor);
         
-        HashSet<T> members = visitor.getSubhierarchyMembers();
+        Set<T> members = visitor.getSubhierarchyMembers();
         members.remove(node);
         
         return members;
     }
     
-    public HashSet<T> getMemberSubhierarchyRoots(T node) {
+    public Set<T> getMemberSubhierarchyRoots(T node) {
         TopRootVisitor<T> visitor = new TopRootVisitor<>(this);
         
         this.BFSUp(node, visitor);
@@ -311,14 +333,14 @@ public class MultiRootedHierarchy<T> {
     }
     
     public MultiRootedHierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
-        HashSet<T> roots = new HashSet<>();
+        Set<T> ancestorRoots = new HashSet<>();
         
         nodes.forEach( (node) -> {
-            roots.addAll(getMemberSubhierarchyRoots(node));
+            ancestorRoots.addAll(getMemberSubhierarchyRoots(node));
         });
 
         AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<>(this, 
-                new MultiRootedHierarchy<>(roots));
+                new MultiRootedHierarchy<T>(ancestorRoots));
         
         this.BFSUp(nodes, ancestorHierarchy);
         
@@ -355,7 +377,7 @@ public class MultiRootedHierarchy<T> {
             while(!levelQueue.isEmpty()) {
                 T levelNode = levelQueue.remove();
                 
-                HashSet<T> nodeChildren = this.getChildren(levelNode);
+                Set<T> nodeChildren = this.getChildren(levelNode);
                 
                 nodeChildren.forEach((T child) -> {
                     if(!processed.contains(child)) {

@@ -16,15 +16,8 @@ import java.util.Set;
 public abstract class SinglyRootedNode extends Node {
     
     private final SingleRootedConceptHierarchy hierarchy;
-    
-    private Set<ParentConceptNode> rootParentConceptNodes = Collections.emptySet();
-    
-    protected SinglyRootedNode(
-            Set<? extends SinglyRootedNode> parentNodes, 
-            SingleRootedConceptHierarchy hierarchy) {
-        
-        super(parentNodes);
-        
+
+    protected SinglyRootedNode(SingleRootedConceptHierarchy hierarchy) {
         this.hierarchy = hierarchy;
     }
     
@@ -36,18 +29,10 @@ public abstract class SinglyRootedNode extends Node {
         return hierarchy.getRoot();
     }
     
-    public HashSet<Concept> getConcepts() {
+    public Set<Concept> getConcepts() {
         return hierarchy.getConceptsInHierarchy();
     }
-    
-    public void setRootParentConceptNodes(Set<ParentConceptNode> rootParentConceptNodes) {
-        this.rootParentConceptNodes = rootParentConceptNodes;
-    }
-    
-    public Set<ParentConceptNode> getRootParentConceptNodes() {
-        return rootParentConceptNodes;
-    }
-    
+        
     public boolean equals(Object o) {
         if(o instanceof SinglyRootedNode) {
             SinglyRootedNode other = (SinglyRootedNode)o;

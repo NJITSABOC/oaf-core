@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SimilarityNode;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,15 +9,41 @@ import java.util.Set;
  */
 public abstract class Region extends SimilarityNode {
     
-    public Region(Set<PArea> pareas) {
-        super(Collections.emptySet(), pareas);
+    private final Set<InheritableProperty> relationships;
+    
+    public Region(Set<PArea> pareas, Set<InheritableProperty> relationships) {
+        super(pareas);
+        
+        this.relationships = relationships;
+    }
+    
+    public Set<InheritableProperty> getRelationships() {
+        return relationships;
     }
 
-    public HashSet<PArea> getPAreas() { 
-        return (HashSet<PArea>)super.getInternalNodes();
+    public Set<PArea> getPAreas() { 
+        return (Set<PArea>)super.getInternalNodes();
     }
     
     public boolean isPAreaInRegion(PArea parea) {        
         return getPAreas().contains(parea);
+    }
+    
+    public int hashCode() {
+        return relationships.hashCode();
+    }
+    
+    public boolean equals(Object o) {
+        if(o instanceof Region) {
+            Region other = (Region)o;
+            
+            return relationships.stream().allMatch( (rel) -> {
+                return other.relationships.stream().anyMatch( (otherRel) -> {
+                    return rel.equalsIncludingInheritance(otherRel);
+                });
+            });
+        }
+        
+        return false;
     }
 }

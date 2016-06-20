@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeInformationPanel;
 import java.awt.event.ActionEvent;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -12,7 +12,7 @@ import javax.swing.SwingUtilities;
 public class PopoutNodeDetailsButton extends BaseOptionButton {
     
     public interface NodeDetailsPanelGenerator {
-        public AbstractNodePanel generatePanel();
+        public NodeInformationPanel generatePanel();
     }
     
     private final NodeDetailsPanelGenerator generatorAction;

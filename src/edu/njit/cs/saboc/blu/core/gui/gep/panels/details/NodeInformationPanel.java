@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
@@ -11,19 +12,19 @@ import javax.swing.JTabbedPane;
  *
  * @author Chris O
  */
-public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUConfiguration> extends AbNNodeInformationPanel<NODE_T> {
+public class NodeInformationPanel extends AbNNodeInformationPanel {
     
     private final DetailsPanelLabel groupNameLabel;
     
-    private final ArrayList<AbNNodeInformationPanel<NODE_T>> groupDetailsPanels = new ArrayList<>();
+    private final ArrayList<AbNNodeInformationPanel> groupDetailsPanels = new ArrayList<>();
     
     private final JTabbedPane tabbedPane;
     
-    private final AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel;
+    private final AbstractNodeDetailsPanel nodeDetailsPanel;
     
-    private final CONFIG_T configuration;
+    private final BLUConfiguration configuration;
 
-    protected AbstractNodePanel(AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> nodeDetailsPanel, CONFIG_T configuration) {
+    protected NodeInformationPanel(AbstractNodeDetailsPanel nodeDetailsPanel, BLUConfiguration configuration) {
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
         
@@ -40,14 +41,14 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUC
         this.add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public CONFIG_T getConfiguration() {
+    public BLUConfiguration getConfiguration() {
         return configuration;
     }
     
-    public void setContents(NODE_T node) {
-        groupNameLabel.setText(getNodeTitle(node));
+    public void setContents(Node node) {
+        groupNameLabel.setText(node.getName());
         
-        groupDetailsPanels.forEach((AbNNodeInformationPanel<NODE_T> gdp) -> {
+        groupDetailsPanels.forEach((gdp) -> {
             gdp.setContents(node);
         });
     }
@@ -55,13 +56,13 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUC
     public void clearContents() {
         groupNameLabel.setText("");
         
-        groupDetailsPanels.forEach((AbNNodeInformationPanel<NODE_T> gdp) -> {
+        groupDetailsPanels.forEach((AbNNodeInformationPanel gdp) -> {
             gdp.clearContents();
         });
     }
 
     
-    public final int addGroupDetailsTab(AbNNodeInformationPanel<NODE_T> panel, String tabName) {
+    public final int addGroupDetailsTab(AbNNodeInformationPanel panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
         groupDetailsPanels.add(panel);
         
@@ -75,7 +76,4 @@ public abstract class AbstractNodePanel<NODE_T, CONCEPT_T, CONFIG_T extends BLUC
             tabbedPane.setSelectedIndex(0);
         }
     }
-    
-    protected abstract String getNodeTitle(NODE_T node);
-    protected abstract String getNodeType();
 }

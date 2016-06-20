@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractAbNNodeEntityList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
@@ -17,7 +17,7 @@ public class ClusterDetailsPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends A
     
     public ClusterDetailsPanel(
             AbstractNodeOptionsPanel<CLUSTER_T> optionsPanel, 
-            AbstractAbNNodeEntityList<CLUSTER_T, CONCEPT_T> conceptList,
+            NodeEntityList<CLUSTER_T, CONCEPT_T> conceptList,
             BLUGenericTANConfiguration config) {
         
         super(new ClusterSummaryPanel<>(config), 

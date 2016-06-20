@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.BaseOptionButton;
 import java.awt.Color;
 import javax.swing.BorderFactory;
@@ -10,7 +11,7 @@ import javax.swing.BoxLayout;
  *
  * @author Chris O
  */
-public abstract class AbstractNodeOptionsPanel<NODE_T> extends AbNNodeInformationPanel<NODE_T> {
+public abstract class AbstractNodeOptionsPanel extends AbNNodeInformationPanel {
     
     public AbstractNodeOptionsPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -25,5 +26,5 @@ public abstract class AbstractNodeOptionsPanel<NODE_T> extends AbNNodeInformatio
         this.add(Box.createHorizontalStrut(4));
     }
     
-    public abstract void enableOptionsForGroup(NODE_T group);
+    public abstract void enableOptionsForGroup(Node group);
 }

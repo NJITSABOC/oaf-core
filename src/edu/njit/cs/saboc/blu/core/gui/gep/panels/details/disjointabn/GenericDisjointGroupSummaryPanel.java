@@ -4,7 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +19,7 @@ public abstract class GenericDisjointGroupSummaryPanel<
         CONCEPT_T,
         GROUP_T extends GenericConceptGroup,
         DISJOINTABN_T extends DisjointAbstractionNetwork,
-        DISJOINTGROUP_T extends DisjointNode> extends AbstractNodeSummaryPanel<DISJOINTGROUP_T> {
+        DISJOINTGROUP_T extends DisjointNode> extends NodeSummaryPanel<DISJOINTGROUP_T> {
     
     protected final DISJOINTABN_T disjointAbN;
     

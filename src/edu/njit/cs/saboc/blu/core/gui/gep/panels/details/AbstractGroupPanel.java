@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 public class AbstractGroupPanel<
         GROUP_T extends GenericConceptGroup, 
         CONCEPT_T,
-        CONFIG_T extends BLUConfiguration> extends AbstractNodePanel<GROUP_T, CONCEPT_T, CONFIG_T> {
+        CONFIG_T extends BLUConfiguration> extends NodeInformationPanel<GROUP_T, CONCEPT_T, CONFIG_T> {
 
     private final AbstractGroupHierarchyPanel<CONCEPT_T, GROUP_T, CONFIG_T> groupHierarchyPanel;
 

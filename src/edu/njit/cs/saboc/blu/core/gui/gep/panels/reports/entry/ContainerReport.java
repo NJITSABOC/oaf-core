@@ -1,25 +1,23 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
 
 /**
  *
  * @author Den
  */
-public class ContainerReport<
-        CONTAINER_T extends GenericGroupContainer, 
-        GROUP_T extends GenericConceptGroup,
-        CONCEPT_T> {
+public class ContainerReport {
     
-    private final CONTAINER_T container;
+    private final PartitionedNode container;
     
-    private final HashSet<GROUP_T> groups;
-    private final HashSet<CONCEPT_T> concepts;
-    private final HashSet<CONCEPT_T> overlappingConcepts;
+    private final Set<SinglyRootedNode> groups;
+    private final Set<Concept> concepts;
+    private final Set<Concept> overlappingConcepts;
 
-    public ContainerReport(CONTAINER_T container, HashSet<GROUP_T> groups, HashSet<CONCEPT_T> concepts, HashSet<CONCEPT_T> overlappingConcepts) {
+    public ContainerReport(PartitionedNode container, Set<SinglyRootedNode> groups, Set<Concept> concepts, Set<Concept> overlappingConcepts) {
         this.container = container;
         
         this.groups = groups;
@@ -27,19 +25,19 @@ public class ContainerReport<
         this.overlappingConcepts = overlappingConcepts;
     }
     
-    public CONTAINER_T getContainer() {
+    public PartitionedNode getContainer() {
         return container;
     }
 
-    public HashSet<GROUP_T> getGroups() {
+    public Set<SinglyRootedNode> getGroups() {
         return groups;
     }
 
-    public HashSet<CONCEPT_T> getConcepts() {
+    public Set<Concept> getConcepts() {
         return concepts;
     }
 
-    public HashSet<CONCEPT_T> getOverlappingConcepts() {
+    public Set<Concept> getOverlappingConcepts() {
         return overlappingConcepts;
     }
 }

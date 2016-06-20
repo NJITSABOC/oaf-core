@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,11 +16,15 @@ import javax.swing.JScrollPane;
  *
  * @author Den
  */
-public abstract class AbstractNodeSummaryPanel<NODE_T> extends AbNNodeInformationPanel<NODE_T> {
+public abstract class NodeSummaryPanel extends AbNNodeInformationPanel {
 
     private final JEditorPane nodeDetailsPane;
     
-    public AbstractNodeSummaryPanel() {
+    private final NodeSummaryTextFactory textFactory;
+    
+    public NodeSummaryPanel(NodeSummaryTextFactory textFactory) {
+        
+        this.textFactory = textFactory;
         
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
@@ -37,14 +43,13 @@ public abstract class AbstractNodeSummaryPanel<NODE_T> extends AbNNodeInformatio
         this.add(detailsPanel);
     }
     
-    protected abstract String createDescriptionStr(NODE_T group);
+    protected abstract String createDescriptionStr(Node node);
     
-    public void setContents(NODE_T group) {
-        nodeDetailsPane.setText(createDescriptionStr(group));
+    public void setContents(Node node) {
+        nodeDetailsPane.setText(textFactory.createNodeSummaryText(node));
         
         nodeDetailsPane.setSelectionStart(0);
         nodeDetailsPane.setSelectionEnd(0);
-        
     }
     
     public void clearContents() {

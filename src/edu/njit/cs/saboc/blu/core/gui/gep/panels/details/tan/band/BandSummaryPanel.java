@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
 import SnomedShared.Concept;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.util.ArrayList;

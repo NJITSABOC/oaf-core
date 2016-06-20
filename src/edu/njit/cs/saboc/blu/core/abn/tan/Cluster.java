@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.abn.tan.nodes;
+package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;

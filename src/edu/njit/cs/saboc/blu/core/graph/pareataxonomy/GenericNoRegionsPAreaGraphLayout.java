@@ -21,24 +21,11 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public abstract class GenericNoRegionsPAreaGraphLayout<
-        TAXONOMY_T extends PAreaTaxonomy,
-        AREA_T extends Area<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T, REGION_T>,
-        PAREA_T extends PArea<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
-        REGION_T extends Region<CONCEPT_T, REL_T, HIERARCHY_T, PAREA_T>,
-        AREAENTRY_T extends GenericBluArea<AREA_T>,
-        PAREAENTRY_T extends GenericBluPArea<PAREA_T, REGIONENTRY_T>,
-        REGIONENTRY_T extends GenericBluRegion<REGION_T, AREAENTRY_T>,
-        CONCEPT_T,
-        REL_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> 
-
-        extends GenericPAreaGraphLayout <TAXONOMY_T, AREA_T, PAREA_T, REGION_T, 
-            AREAENTRY_T, PAREAENTRY_T, REGIONENTRY_T, CONCEPT_T, REL_T, HIERARCHY_T> {
+public class GenericNoRegionsPAreaGraphLayout extends BasePAreaTaxonomyLayout {
     
     private final BLUGenericPAreaTaxonomyConfiguration config;
 
-    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration config) {
+    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, PAreaTaxonomy taxonomy, BLUGenericPAreaTaxonomyConfiguration config) {
         super(graph, taxonomy);
         
         this.config = config;

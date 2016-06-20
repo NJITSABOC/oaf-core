@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.MultiRootedConceptHierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;

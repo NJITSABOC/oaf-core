@@ -10,7 +10,7 @@ import java.awt.Stroke;
  * @author Chris
  */
 public class ConceptPainter<T> {
-    public void paintConceptEntry(ConceptEntry<T> entry, Graphics2D g2d) {
+    public void paintConceptEntry(ConceptEntry entry, Graphics2D g2d) {
         
         g2d.setPaint(getEntryColor(entry));
       
@@ -29,7 +29,7 @@ public class ConceptPainter<T> {
         g2d.setStroke(savedStroke);
     }
     
-    public Color getEntryColor(ConceptEntry<T> entry) {
+    public Color getEntryColor(ConceptEntry entry) {
         if (entry.isHighlighted()) {
             return Color.CYAN;
         } else if (entry.isFilledAsParent()) {

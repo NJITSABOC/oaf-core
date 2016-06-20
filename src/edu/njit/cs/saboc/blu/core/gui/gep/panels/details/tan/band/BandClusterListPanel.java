@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupList;

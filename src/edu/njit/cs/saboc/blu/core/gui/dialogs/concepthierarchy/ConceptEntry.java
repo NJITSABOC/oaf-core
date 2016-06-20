@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.TextDrawingUtilities;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -9,12 +10,12 @@ import java.awt.Rectangle;
  *
  * @author Chris
  */
-public abstract class ConceptEntry<T> {
+public abstract class ConceptEntry {
 
     public static final int CONCEPT_WIDTH = 100;
     public static final int CONCEPT_HEIGHT = 30;
 
-    private T concept;
+    private final Concept concept;
 
     private Rectangle currentBounds = new Rectangle();
 
@@ -26,11 +27,11 @@ public abstract class ConceptEntry<T> {
     private boolean highlighted = false;
     private boolean selected = false;
 
-    public ConceptEntry(T concept) {
+    public ConceptEntry(Concept concept) {
         this.concept = concept;
     }
 
-    public T getConcept() {
+    public Concept getConcept() {
         return concept;
     }
 
@@ -41,7 +42,7 @@ public abstract class ConceptEntry<T> {
         
         painter.paintConceptEntry(this, g2d);
         
-        String text = getConceptName(concept);
+        String text = concept.getName();
 
         if (text.length() > 25) {
             text = text.substring(0, 25) + "...";
@@ -99,6 +100,4 @@ public abstract class ConceptEntry<T> {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
-    
-    public abstract String getConceptName(T concept);
 }

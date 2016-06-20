@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBandPartition;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
@@ -23,8 +23,8 @@ public abstract class GenericTANNoPartitionLayout<
         CONCEPT_T,
         BAND_T extends Band, 
         CLUSTER_T extends Cluster,
-        BANDNODE_T extends GenericBluBand, 
-        CLUSTERNODE_T extends GenericBluCluster> extends GenericTANLayout<BAND_T, CLUSTER_T, BANDNODE_T, CLUSTERNODE_T> {
+        BANDNODE_T extends BandEntry, 
+        CLUSTERNODE_T extends ClusterEntry> extends TribalAbstractionNetworkLayout<BAND_T, CLUSTER_T, BANDNODE_T, CLUSTERNODE_T> {
     
     public GenericTANNoPartitionLayout(BluGraph graph, TribalAbstractionNetwork tan, BLUGenericTANConfiguration config) {
         super(graph, tan, config);

@@ -1,12 +1,9 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
-import SnomedShared.generic.GenericContainerPartition;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBandPartition;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
-import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
@@ -28,15 +25,13 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public abstract class GenericTANLayout<
-        BAND_T extends Band, CLUSTER_T extends Cluster, BANDNODE_T extends GenericBluBand, CLUSTERNODE_T extends GenericBluCluster>
-        extends BluGraphLayout<BAND_T, BANDNODE_T, CLUSTERNODE_T> {
+public abstract class TribalAbstractionNetworkLayout extends BluGraphLayout {
 
     private final TribalAbstractionNetwork tan;
 
     private final BLUGenericTANConfiguration config;
 
-    public GenericTANLayout(BluGraph graph, TribalAbstractionNetwork tan, BLUGenericTANConfiguration config) {
+    public TribalAbstractionNetworkLayout(BluGraph graph, TribalAbstractionNetwork tan, BLUGenericTANConfiguration config) {
         super(graph);
 
         this.tan = tan;
@@ -53,29 +48,29 @@ public abstract class GenericTANLayout<
     }
 
     public void doLayout() {
-        ArrayList<BAND_T> sortedSets = new ArrayList<>();    // Used for generating the graph
-        ArrayList<BAND_T> levelSets = new ArrayList<>();     // Used for generating the graph
+        ArrayList<Band> sortedSets = new ArrayList<>();    // Used for generating the graph
+        ArrayList<Band> levelSets = new ArrayList<>();     // Used for generating the graph
 
-        ArrayList<BAND_T> tempSets = tan.getBands();
+        ArrayList<Band> tempSets = new ArrayList<>(tan.getBands());
 
-        BAND_T lastSet = null;
+        Band lastSet = null;
 
-        Collections.sort(tempSets, new Comparator<BAND_T>() {    // Sort the areas based on the number of their relationships.
+        Collections.sort(tempSets, new Comparator<Band>() {    // Sort the areas based on the number of their relationships.
 
-            public int compare(BAND_T a, BAND_T b) {
+            public int compare(Band a, Band b) {
                 return a.getPatriarchs().size() - b.getPatriarchs().size();
             }
         });
 
-        for (BAND_T set : tempSets) {
+        for (Band set : tempSets) {
 
             if (lastSet != null && lastSet.getPatriarchs().size() != set.getPatriarchs().size()) {
-                Collections.sort(levelSets, new Comparator<BAND_T>() {    // Sort the areas based on the number of their relationships.
+                Collections.sort(levelSets, new Comparator<Band>() {    // Sort the areas based on the number of their relationships.
 
-                    public int compare(BAND_T a, BAND_T b) {
+                    public int compare(Band a, Band b) {
 
-                        int aClusterSize = a.getAllClusters().size();
-                        int bClusterSize = b.getAllClusters().size();
+                        int aClusterSize = a.getClusters().size();
+                        int bClusterSize = b.getClusters().size();
 
                         if (aClusterSize == bClusterSize) {
                             return a.getConceptCount() - b.getConceptCount();
@@ -109,10 +104,10 @@ public abstract class GenericTANLayout<
             lastSet = set;
         }
 
-        Collections.sort(levelSets, new Comparator<BAND_T>() {
-            public int compare(BAND_T a, BAND_T b) {
-                int aClusterSize = a.getAllClusters().size();
-                int bClusterSize = b.getAllClusters().size();
+        Collections.sort(levelSets, new Comparator<Band>() {
+            public int compare(Band a, Band b) {
+                int aClusterSize = a.getClusters().size();
+                int bClusterSize = b.getClusters().size();
 
                 if (aClusterSize == bClusterSize) {
                     return a.getConceptCount() - b.getConceptCount();
@@ -145,15 +140,16 @@ public abstract class GenericTANLayout<
         layoutGroupContainers = sortedSets;
     }
 
-    public ArrayList<BAND_T> getBands() {
+    public ArrayList<Band> getBands() {
         return layoutGroupContainers;
     }
 
-    protected CLUSTERNODE_T createClusterPanel(CLUSTER_T p, GenericBluBandPartition parent, int x, int y, int pAreaX, GraphGroupLevel clusterLevel) {
-        CLUSTERNODE_T clusterPanel = makeClusterNode(p, graph, parent, pAreaX, clusterLevel, new ArrayList<>());
+    private ClusterEntry createClusterPanel(Cluster p, GenericBluBandPartition parent, int x, int y, int pAreaX, GraphGroupLevel clusterLevel) {
+        
+        ClusterEntry clusterPanel = makeClusterNode(p, getGraph(), parent, pAreaX, clusterLevel, new ArrayList<>());
 
         //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
-        graph.stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
+        getGraph().stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         //Setup the panel's dimensions, etc.
         clusterPanel.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
@@ -163,26 +159,26 @@ public abstract class GenericTANLayout<
         return clusterPanel;
     }
 
-    protected BANDNODE_T createBandPanel(BAND_T set, int x, int y, int width, int height, Color c, int areaX, GraphLevel parentLevel) {
-        BANDNODE_T setPanel = makeBandNode(set, graph, areaX, parentLevel, new Rectangle(x, y, width, height));
+    private BandEntry createBandPanel(Band set, int x, int y, int width, int height, Color c, int areaX, GraphLevel parentLevel) {
+        BandEntry setPanel = makeBandNode(set, getGraph(), areaX, parentLevel, new Rectangle(x, y, width, height));
 
-        graph.stretchGraphToFitPanel(x, y, width, height);
+        getGraph().stretchGraphToFitPanel(x, y, width, height);
 
         setPanel.setBounds(x, y, width, height);
         setPanel.setBackground(c);
 
-        graph.add(setPanel, 0);
+        getGraph().add(setPanel, 0);
 
         return setPanel;
     }
 
-    protected GenericBluBandPartition<BANDNODE_T> createBandPartitionPanel(GenericBandPartition partition, String regionName,
+    protected GenericBluBandPartition<BandEntry> createBandPartitionPanel(GenericBandPartition partition, String regionName,
             BANDNODE_T set, int x, int y, int width, int height, Color c, boolean treatPartitonAsOverlapSet, JLabel partitionLabel) {
 
-        GenericBluBandPartition<BANDNODE_T> overlapPanel = new GenericBluBandPartition<BANDNODE_T>(partition, regionName,
-                width, height, graph, set, c, treatPartitonAsOverlapSet, partitionLabel);
+        GenericBluBandPartition<BandEntry> overlapPanel = new GenericBluBandPartition<>(partition, regionName,
+                width, height, getGraph(), set, c, treatPartitonAsOverlapSet, partitionLabel);
 
-        graph.stretchGraphToFitPanel(x, y, width, height);
+        getGraph().stretchGraphToFitPanel(x, y, width, height);
 
         overlapPanel.setBounds(x, y, width, height);
 
@@ -191,16 +187,16 @@ public abstract class GenericTANLayout<
         return overlapPanel;
     }
 
-    public BANDNODE_T getBand(int level, int setX) {
-        return (BANDNODE_T) getConainterAt(level, setX);
+    public BandEntry getBand(int level, int setX) {
+        return (BandEntry) getConainterAt(level, setX);
     }
 
-    public GenericBluBandPartition<BANDNODE_T> getBandPartition(int level, int setX, int partitionX) {
-        return (GenericBluBandPartition<BANDNODE_T>) getContainerPartitionAt(level, setX, partitionX);
+    public GenericBluBandPartition<BandEntry> getBandPartition(int level, int setX, int partitionX) {
+        return (GenericBluBandPartition<BandEntry>) getContainerPartitionAt(level, setX, partitionX);
     }
 
-    public CLUSTERNODE_T getCluster(int level, int setX, int partitionX, int clusterY, int clusterX) {
-        return (CLUSTERNODE_T) getGroupEntry(level, setX, partitionX, clusterY, clusterX);
+    public ClusterEntry getCluster(int level, int setX, int partitionX, int clusterY, int clusterX) {
+        return (ClusterEntry) getGroupEntry(level, setX, partitionX, clusterY, clusterX);
     }
 
     protected JLabel createBandPartitionLabel(TribalAbstractionNetwork tan, HashSet patriarchs, String countString, int width, boolean treatAsBand) {
@@ -250,7 +246,7 @@ public abstract class GenericTANLayout<
 
     public JLabel createPartitionLabel(GenericContainerPartition partition, int width) {
 
-        GenericBandPartition<CLUSTER_T> bandPartition = (GenericBandPartition<CLUSTER_T>) partition;
+        GenericBandPartition<Cluster> bandPartition = (GenericBandPartition<Cluster>) partition;
 
         HashSet conceptsInPartition = new HashSet();
 
@@ -272,39 +268,35 @@ public abstract class GenericTANLayout<
         return this.createBandPartitionLabel(tan, bandPartition.getClusters().get(0).getPatriarchs(), countStr, width, true);
     }
 
-    protected abstract BANDNODE_T makeBandNode(BAND_T band, BluGraph g, int aX, GraphLevel parent, Rectangle prefBounds);
-
-    protected abstract CLUSTERNODE_T makeClusterNode(CLUSTER_T cluster, BluGraph graph, GenericBluBandPartition r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie);
-
     public void resetLayout() {
-         ArrayList<BAND_T> bands = this.getBands();
+         ArrayList<Band> bands = this.getBands();
          
-         ArrayList<ArrayList<BAND_T>> bandsByLevel = new ArrayList<>();
+         ArrayList<ArrayList<Band>> bandsByLevel = new ArrayList<>();
          
-         ArrayList<BAND_T> level = new ArrayList<>();
+         ArrayList<Band> level = new ArrayList<>();
          
-         BAND_T lastBand = null;
+         Band lastBand = null;
    
-         for(BAND_T area : bands) {
-             if (lastBand != null && lastBand.getPatriarchs().size() != area.getPatriarchs().size()) {
+         for(Band band : bands) {
+             if (lastBand != null && lastBand.getPatriarchs().size() != band.getPatriarchs().size()) {
                  bandsByLevel.add(level);
                  
                  level = new ArrayList<>();
              }
              
-             lastBand = area;
-             level.add(area);
+             lastBand = band;
+             level.add(band);
          }
          
          bandsByLevel.add(level);
          
          int y = 40;
          
-         for(ArrayList<BAND_T> levelBands : bandsByLevel) {
+         for(ArrayList<Band> levelBands : bandsByLevel) {
              int maxHeight = 0;
              
-             for(BAND_T band : levelBands) {
-                 BANDNODE_T entry = this.getContainerEntries().get(band.getId());
+             for(Band band : levelBands) {
+                 BandEntry entry = this.getContainerEntries().get(band.getId());
                  
                  entry.setLocation(entry.getX(), y);
                  
@@ -315,7 +307,5 @@ public abstract class GenericTANLayout<
              
              y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
          }
- 
     }
-
 }

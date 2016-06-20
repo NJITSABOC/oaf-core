@@ -1,5 +1,5 @@
 
-package edu.njit.cs.saboc.blu.core.abn.tan.nodes;
+package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SimilarityNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;

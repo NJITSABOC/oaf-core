@@ -11,10 +11,13 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class GenericBluPArea<PAREA_T extends PArea, 
-        REGIONENTRY_T extends GenericBluRegion> extends SinglyRootedNodeEntry<PAREA_T> {
+public class PAreaEntry extends SinglyRootedNodeEntry {
     
-    public GenericBluPArea(PAREA_T parea, BluGraph g, REGIONENTRY_T r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
-        super(parea, g, r, pX, parent, ie);
+    public PAreaEntry(PArea parea, BluGraph g, RegionEntry regionEntry, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
+        super(parea, g, regionEntry, pX, parent, ie);
+    }
+    
+    public PArea getPArea() {
+        return (PArea)super.getNode();
     }
 }

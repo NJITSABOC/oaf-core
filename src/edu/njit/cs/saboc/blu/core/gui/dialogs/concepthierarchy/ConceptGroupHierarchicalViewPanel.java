@@ -1,8 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,7 +15,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 
@@ -22,19 +23,19 @@ import javax.swing.JViewport;
  *
  * @author Chris
  */
-public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
+public abstract class ConceptGroupHierarchicalViewPanel extends JPanel {
 
-    private SingleRootedHierarchy<T> hierarchy;
+    private SingleRootedConceptHierarchy hierarchy;
     
     protected AbstractionNetwork abstractionNetwork;
-    protected GenericConceptGroup group;
+    protected SinglyRootedNode group;
 
     private boolean initialized = false;
     private boolean loading = false;
     
-    private HashMap<T, ConceptEntry<T>> conceptEntryMap;
+    private HashMap<Concept, ConceptEntry> conceptEntryMap;
 
-    private ArrayList<ArrayList<ConceptEntry<T>>> conceptEntries;
+    private ArrayList<ArrayList<ConceptEntry>> conceptEntries;
     
     private String hierarchyGroupType;
     
@@ -66,11 +67,11 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
                     return;
                 }
 
-                ConceptEntry<T> clickedEntry = getConceptEntryAt(e.getX(), e.getY());
+                ConceptEntry clickedEntry = getConceptEntryAt(e.getX(), e.getY());
 
                 if(e.getClickCount() >= 1 && e.getButton() == MouseEvent.BUTTON1) {
 
-                    for (ArrayList<ConceptEntry<T>> level : conceptEntries) {
+                    for (ArrayList<ConceptEntry> level : conceptEntries) {
                         for (ConceptEntry entry : level) {
                             entry.resetState();
                         }
@@ -83,19 +84,19 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
 
                         clickedEntry.setSelected(true);
 
-                        T concept = clickedEntry.getConcept();
+                        Concept concept = clickedEntry.getConcept();
 
-                        HashSet<T> parents = hierarchy.getParents(concept);
-                        HashSet<T> children = hierarchy.getChildren(concept);
+                        Set<Concept> parents = hierarchy.getParents(concept);
+                        Set<Concept> children = hierarchy.getChildren(concept);
 
                         if(parents != null) {
-                            for(T parent : parents) {
+                            for(Concept parent : parents) {
                                 conceptEntryMap.get(parent).setFilledAsParent(true);
                             }
                         }
 
                         if(children != null) {
-                            for(T child : children) {
+                            for(Concept child : children) {
                                 conceptEntryMap.get(child).setFilledAsChild(true);
                             }
                         }
@@ -113,9 +114,9 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
                     return;
                 }
 
-                ConceptEntry<T> mousedOverEntry = getConceptEntryAt(e.getX(), e.getY());
+                ConceptEntry mousedOverEntry = getConceptEntryAt(e.getX(), e.getY());
                 
-                for (ArrayList<ConceptEntry<T>> level : conceptEntries) {
+                for (ArrayList<ConceptEntry> level : conceptEntries) {
                     for (ConceptEntry entry : level) {
                         entry.setHighlighted(false);
                     }
@@ -187,7 +188,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
                 int fit = this.getWidth() / (ConceptEntry.CONCEPT_WIDTH + 8);
                 int current = 0;
 
-                for(ConceptEntry<T> ce : conceptEntries.get(l)) {
+                for(ConceptEntry ce : conceptEntries.get(l)) {
                     
                     if(parent.getViewRect().contains(xPos, yPos)) {
                          ce.drawConceptAt(conceptPainter, (Graphics2D)bufferedGraphics, xPos, yPos);
@@ -216,7 +217,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
     }
     
     private ConceptEntry getConceptEntryAt(int x, int y) {
-        for(ArrayList<ConceptEntry<T>> level : conceptEntries) {
+        for(ArrayList<ConceptEntry> level : conceptEntries) {
             for(ConceptEntry entry : level) {
                 if(entry.getBounds().contains(x, y)) {
                     return entry;
@@ -227,11 +228,11 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
         return null;
     }
     
-    public abstract ConceptGroupHierarchyLoader<T, SingleRootedHierarchy<T>, ? extends GenericConceptGroup> getHierarchyLoader();
+    public abstract ConceptGroupHierarchyLoader<Concept, SingleRootedConceptHierarchy, ? extends GenericConceptGroup> getHierarchyLoader();
     
-    public void initialize(SingleRootedHierarchy<T> hierarchy, 
-            ArrayList<ArrayList<ConceptEntry<T>>> conceptEntries, 
-            HashMap<T, ConceptEntry<T>> conceptEntryMap) {
+    public void initialize(SingleRootedConceptHierarchy hierarchy, 
+            ArrayList<ArrayList<ConceptEntry>> conceptEntries, 
+            HashMap<Concept, ConceptEntry> conceptEntryMap) {
         
         this.hierarchy = hierarchy;
         this.conceptEntries = conceptEntries;
@@ -242,7 +243,7 @@ public abstract class ConceptGroupHierarchicalViewPanel<T> extends JPanel {
         this.repaint();
     }
     
-    public void setGroup(GenericConceptGroup group) {
+    public void setGroup(SinglyRootedNode group) {
         this.initialized = false;
         this.loading = false;
         

@@ -167,5 +167,4 @@ public class GenericGroupEditMenu extends JPopupMenu {
             GenericGroupEditMenu.this.setVisible(false);
         }
     }
-
 }

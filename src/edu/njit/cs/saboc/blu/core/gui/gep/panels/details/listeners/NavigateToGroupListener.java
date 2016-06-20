@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class NavigateToGroupListener<GROUP_T extends GenericConceptGroup> extend
     
     @Override
     public void entityDoubleClicked(GROUP_T group) {
-        GenericGroupEntry entry = gep.getGraph().getGroupEntries().get(group.getId());
+        SinglyRootedNodeEntry entry = gep.getGraph().getGroupEntries().get(group.getId());
         
         gep.centerOnEntry(entry);
         

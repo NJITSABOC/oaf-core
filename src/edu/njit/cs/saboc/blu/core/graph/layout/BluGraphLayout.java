@@ -1,19 +1,20 @@
 package edu.njit.cs.saboc.blu.core.graph.layout;
 
-import SnomedShared.generic.GenericContainerPartition;
-import SnomedShared.generic.GenericGroupContainer;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -21,24 +22,19 @@ import javax.swing.JPanel;
  *
  * @author Chris
  */
-public abstract class BluGraphLayout<T extends GenericGroupContainer,
-        V extends GenericContainerEntry, U extends GenericGroupEntry>   {
+public abstract class BluGraphLayout {
 
-    protected BluGraph graph;
+    private final BluGraph graph;
 
-    protected ArrayList<T> layoutGroupContainers = new ArrayList<T>();
+    private final ArrayList<PartitionedNodeEntry> layoutGroupContainers = new ArrayList<>();
 
-    protected ArrayList<GraphLevel> levels = new ArrayList<GraphLevel>();
+    private final ArrayList<GraphLevel> levels = new ArrayList<>();
 
-    protected ArrayList<GraphLane>[][] columns = new ArrayList[500][50];
+    private ArrayList<GraphLane>[][] columns = new ArrayList[500][50];
 
-    protected HashMap<Integer, V> containerEntries = new HashMap<Integer, V>();
+    private final Map<Integer, PartitionedNodeEntry> containerEntries = new HashMap<>();
 
-    /**
-     * This maps the concept identifiers for pArea parents to objects
-     * representing the graphical display of those areas.
-     */
-    protected HashMap<Integer, U> groupEntries = new HashMap<Integer, U>();
+    private final Map<SinglyRootedNode, SinglyRootedNodeEntry> groupEntries = new HashMap<>();
 
     protected BluGraphLayout(BluGraph graph) {
         this.graph = graph;
@@ -46,30 +42,42 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
 
     protected abstract void doLayout();
     
-    public abstract JLabel createPartitionLabel(GenericContainerPartition partition, int width);
+    public abstract JLabel createPartitionLabel(PartitionedNode partition, int width);
     
     public ArrayList<GraphLevel> getGraphLevels() {
         return levels;
     }
+    
+    protected BluGraph getGraph() {
+        return graph;
+    }
+    
+    protected ArrayList<GraphLevel> getLevels() {
+        return levels;
+    }
+    
+    public Map<Integer, PartitionedNodeEntry> getContainerEntries() {
+        return containerEntries;
+    }
+    
+    public Map<SinglyRootedNode, SinglyRootedNodeEntry> getGroupEntries() {
+        return groupEntries;
+    }
 
-    protected GenericContainerEntry getConainterAt(int level, int areaX) {
+    protected PartitionedNodeEntry getConainterAt(int level, int areaX) {
         return levels.get(level).getContainerEntries().get(areaX);
     }
 
     protected GenericPartitionEntry getContainerPartitionAt(int level, int areaX, int regionX) {
-        return levels.get(level).getContainerEntries().get(areaX).getContainerPartitions().get(regionX);
+        PartitionedNodeEntry partitionEntry = levels.get(level).getContainerEntries().get(areaX);
+        
+        return partitionEntry.getContainerPartitions().get(regionX);
     }
 
-    protected GenericGroupEntry getGroupEntry(int level, int areaX, int regionX, int pAreaY, int pAreaX) {
-        return levels.get(level).getContainerEntries().get(areaX).getContainerPartitions().get(regionX).getGroupLevels().get(pAreaY).getGroupEntries().get(pAreaX);
-    }
-
-    public HashMap<Integer, U> getGroupEntries() {
-        return groupEntries;
-    }
-
-    public HashMap<Integer, V> getContainerEntries() {
-        return containerEntries;
+    protected SinglyRootedNodeEntry getGroupEntry(int level, int areaX, int regionX, int pAreaY, int pAreaX) {
+        PartitionedNodeEntry partitionEntry = levels.get(level).getContainerEntries().get(areaX);
+        
+        return partitionEntry.getContainerPartitions().get(regionX).getGroupLevels().get(pAreaY).getGroupEntries().get(pAreaX);
     }
 
     /**
@@ -87,7 +95,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @param laneHeight The height of each lane in pixels
      * @return The array list holding all the available lanes.
      */
-    protected ArrayList<GraphLane> generateUpperRowLanes(int y, int height, int laneHeight, GenericContainerEntry parent) {
+    protected ArrayList<GraphLane> generateUpperRowLanes(int y, int height, int laneHeight, PartitionedNodeEntry parent) {
         int spaceUsed = 0;
 
         ArrayList<GraphLane> result = new ArrayList<GraphLane>();
@@ -108,7 +116,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @param laneWidth The width of each lane in pixels
      * @return The array list holding all the available lanes.
      */
-    protected ArrayList<GraphLane> generateColumnLanes(int x, int width, int laneWidth, GenericContainerEntry parent) {
+    protected ArrayList<GraphLane> generateColumnLanes(int x, int width, int laneWidth, PartitionedNodeEntry parent) {
         int spaceUsed = 0;
 
         ArrayList<GraphLane> result = new ArrayList<GraphLane>();
@@ -185,7 +193,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @param pArea A pArea below the row being resized.
      * @return The resized road.
      */
-    public ArrayList<GraphLane> resizeGroupRow(ArrayList<GraphLane> road, int level, int newLanes, GenericGroupEntry group) {
+    public ArrayList<GraphLane> resizeGroupRow(ArrayList<GraphLane> road, int level, int newLanes, SinglyRootedNodeEntry group) {
         int laneHeight = road.get(0).getSize();
         int bump = laneHeight * newLanes;
         int lowerBound = road.get(road.size() - 1).getPosY() - laneHeight;
@@ -197,9 +205,9 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
         int s = 0;
         int pAreaLevel = group.getGroupLevelParent().getGroupLevelY();
         GraphGroupLevel l;
-        GenericGroupEntry p;
+        SinglyRootedNodeEntry p;
 
-        GenericContainerEntry parentContainer = group.getParentContainer();
+        PartitionedNodeEntry parentContainer = group.getParentContainer();
 
         // If the area is now the tallest area in the level, bump down the areas below it.
         if (parentContainer.getHeight() + bump > parentContainer.getParentLevel().getHeight()) {
@@ -247,13 +255,13 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @return The resized road.
      */
     public ArrayList<GraphLane> resizeGroupColumn(ArrayList<GraphLane> road,
-            int newLanes, GenericGroupEntry groupEntry) {
+            int newLanes, SinglyRootedNodeEntry groupEntry) {
         
         int laneWidth = road.get(0).getSize();
         int bump = laneWidth * newLanes;
         int rightBound = road.get(road.size() - 1).getPosX() - laneWidth;
 
-        GenericContainerEntry parentContainer = groupEntry.getParentContainer();
+        PartitionedNodeEntry parentContainer = groupEntry.getParentContainer();
         GenericPartitionEntry parentPartition = groupEntry.getParentPartition();
 
         road.addAll(road.size(), generateColumnLanes(rightBound, bump, laneWidth, parentContainer));
@@ -265,10 +273,11 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
 
         for (int i = tempIndex + 1; i < parentContainer.getContainerPartitions().size(); i++) {
             GenericPartitionEntry r = parentContainer.getContainerPartitions().get(i);
+            
             moveBox(r, bump, 0);
         }
 
-        ArrayList<JPanel> groupsTemp = new ArrayList<JPanel>();
+        ArrayList<JPanel> groupsTemp = new ArrayList<>();
 
         for (GraphGroupLevel pL : parentPartition.getGroupLevels()) {
             for (int i = groupEntry.getGroupX(); i < pL.getGroupEntries().size(); i++) {
@@ -278,10 +287,10 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
 
         moveBoxes(groupsTemp, bump / 2, 0);
 
-        GenericContainerEntry tempContainer;
-        ArrayList<JPanel> containersTemp = new ArrayList<JPanel>();
+        PartitionedNodeEntry tempContainer;
+        ArrayList<JPanel> containersTemp = new ArrayList<>();
 
-        for (int i = parentContainer.getContainerX() + 1; i < parentContainer.getLevelParent().getContainerEntries().size(); i++) {
+        for (int i = parentContainer.getNodeX() + 1; i < parentContainer.getLevelParent().getContainerEntries().size(); i++) {
             tempContainer = parentContainer.getLevelParent().getContainerEntries().get(i);
             containersTemp.add(tempContainer);
         }
@@ -300,22 +309,22 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @param area The area to the right of the column being resized.
      * @return The resized road.
      */
-    public ArrayList<GraphLane> resizeColumn(ArrayList<GraphLane> road, int newLanes, GenericContainerEntry containerEntry) {
+    public ArrayList<GraphLane> resizeColumn(ArrayList<GraphLane> road, int newLanes, PartitionedNodeEntry containerEntry) {
         int laneWidth = road.get(0).getSize();
         int bump = laneWidth * newLanes;
         int rightBound = road.get(road.size() - 1).getPosX() - laneWidth;
 
         road.addAll(road.size(), generateColumnLanes(rightBound, bump, laneWidth, containerEntry));
 
-        addColumn(containerEntry.getContainerX(), containerEntry.getLevelParent().getLevelY(), road);
+        addColumn(containerEntry.getNodeX(), containerEntry.getLevelParent().getLevelY(), road);
 
         GraphLevel parentLevel = containerEntry.getLevelParent();
 
-        JPanel[] containerEntries = new JPanel[parentLevel.getContainerEntries().size() - containerEntry.getContainerX()];
+        JPanel[] containerEntries = new JPanel[parentLevel.getContainerEntries().size() - containerEntry.getNodeX()];
 
-        for (int i = containerEntry.getContainerX(); i < parentLevel.getContainerEntries().size(); i++) {
-            GenericContainerEntry temp = parentLevel.getContainerEntries().get(i);
-            containerEntries[i - containerEntry.getContainerX()] = temp;
+        for (int i = containerEntry.getNodeX(); i < parentLevel.getContainerEntries().size(); i++) {
+            PartitionedNodeEntry temp = parentLevel.getContainerEntries().get(i);
+            containerEntries[i - containerEntry.getNodeX()] = temp;
         }
 
         moveBoxes(containerEntries, bump, 0);
@@ -334,7 +343,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
      * @return The resized road.
      */
     public ArrayList<GraphLane> resizeRow(ArrayList<GraphLane> road, int level,
-            int newLanes, GenericContainerEntry containerEntry) {
+            int newLanes, PartitionedNodeEntry containerEntry) {
 
         int laneHeight = road.get(0).getSize();
         int bump = laneHeight * newLanes;
@@ -361,7 +370,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
         for (int n = level; n < levels.size(); n++) {
             GraphLevel l = levels.get(n);
 
-            GenericContainerEntry a;
+            PartitionedNodeEntry a;
 
             for (int i = 0; i < l.getContainerEntries().size(); i++) {
                 a = l.getContainerEntries().get(i);
@@ -374,17 +383,17 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
     }
 
     public void resizePartitionEntry(GenericPartitionEntry partition, int rows, int cols,
-            ArrayList<GenericGroupEntry> groups) {
+            ArrayList<SinglyRootedNodeEntry> groups) {
 
         int oldWidth = partition.getWidth();
         
-        int newWidth = cols * (GenericGroupEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH) + GraphLayoutConstants.GROUP_CHANNEL_WIDTH;
+        int newWidth = cols * (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH) + GraphLayoutConstants.GROUP_CHANNEL_WIDTH;
         
         JLabel oldPartitionLabel = partition.getLabel();
 
         graph.getLabelManager().removeLabel(oldPartitionLabel);
         
-        JLabel partitionLabel = this.createPartitionLabel(partition.getPartition(), partition.getWidth());
+        JLabel partitionLabel = this.createPartitionLabel(partition.getNode(), partition.getWidth());
         
         partition.setLabel(partitionLabel);
         
@@ -398,7 +407,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
         
         int newHeight = 
                 partitionLabel.getHeight() + 
-                rows * (GenericGroupEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT) + 
+                rows * (SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT) + 
                 GraphLayoutConstants.GROUP_ROW_HEIGHT + 8;
         
         partition.setBounds(partition.getX(),
@@ -426,14 +435,14 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
                                 partition.getParentContainer()));
                     }
 
-                    GenericGroupEntry p = groups.get(pIndex);
+                    SinglyRootedNodeEntry p = groups.get(pIndex);
 
-                    p.setBounds(x * (GenericGroupEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH) +
+                    p.setBounds(x * (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH) +
                             GraphLayoutConstants.GROUP_CHANNEL_WIDTH,
-                            y * (GenericGroupEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT) +
+                            y * (SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT) +
                             GraphLayoutConstants.GROUP_ROW_HEIGHT + 30,
-                            GenericGroupEntry.ENTRY_WIDTH,
-                            GenericGroupEntry.ENTRY_HEIGHT);
+                            SinglyRootedNodeEntry.ENTRY_WIDTH,
+                            SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
                     currentLevel.addGroupEntry(p);
 
@@ -447,7 +456,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
             }
         }
 
-        GenericContainerEntry parent = partition.getParentContainer();
+        PartitionedNodeEntry parent = partition.getParentContainer();
 
         int height = 0;
 
@@ -476,7 +485,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
         for (int i = levels.indexOf((parent.getParentLevel())) + 1; i < levels.size(); i++) {
             GraphLevel l = levels.get(i);
 
-            for (GenericContainerEntry a : l.getContainerEntries()) {
+            for (PartitionedNodeEntry a : l.getContainerEntries()) {
                 a.setBounds(a.getX(), a.getY() + heightChange, a.getWidth(), a.getHeight());
             }
         }
@@ -573,7 +582,7 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
             
             int levelOffset = (maxWidth - level.getWidth()) / 2;
             
-            for(GenericContainerEntry entry : level.getContainerEntries()) {
+            for(PartitionedNodeEntry entry : level.getContainerEntries()) {
                 Point location = entry.getLocation();
                 location.x += levelOffset;
                 
@@ -585,9 +594,9 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
     public int getAbNWidth() {
         int maxX = 0;
         
-        Collection<V> containers = containerEntries.values();
+        Collection<PartitionedNodeEntry> containers = containerEntries.values();
         
-        for(V container : containers) {
+        for(PartitionedNodeEntry container : containers) {
             int containerX = container.getX() + container.getWidth();
             
             if(containerX > maxX) {
@@ -601,9 +610,9 @@ public abstract class BluGraphLayout<T extends GenericGroupContainer,
     public int getAbNHeight() {
         int maxY = 0;
         
-        Collection<V> containers = containerEntries.values();
+        Collection<PartitionedNodeEntry> containers = containerEntries.values();
         
-        for(V container : containers) {
+        for(PartitionedNodeEntry container : containers) {
             int containerY = container.getY() + container.getHeight();
             
             if(containerY > maxY) {

@@ -1,124 +1,122 @@
 package edu.njit.cs.saboc.blu.core.abn.aggregate;
 
-import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public abstract class AggregateAbNGenerator<GROUP_T extends GenericConceptGroup, AGGREGATEGROUP_T extends GenericConceptGroup & AggregateableConceptGroup> {
+public class AggregateAbNGenerator <
+        NODE_T extends Node, 
+        AGGREGATENODE_T extends Node & AggregateNode<NODE_T>> {
     
-    public AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T> createReducedAbN(
-            GROUP_T rootGroup, 
-            HashMap<Integer, GROUP_T> groups, 
-            GroupHierarchy<GROUP_T> groupHierarchy, 
-            int minGroupSize) {
+    public NodeHierarchy<AGGREGATENODE_T> createReducedAbN(
+            AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
+            NodeHierarchy<NODE_T> sourceHierarchy, 
+            int minNodeSize) {
         
-        HashMap<GROUP_T, HashSet<Integer>> reducedParents = new HashMap<>();
-        
-        HashMap<GROUP_T, GroupHierarchy<GROUP_T>> reducedGroupMembers = new HashMap<>();
+        HashMap<NODE_T, NodeHierarchy<NODE_T>> reducedGroupMembers = new HashMap<>();
 
-        HashMap<Integer, Integer> groupParentCounts = new HashMap<>();
+        HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
         
-        HashSet<GROUP_T> remainingGroups = new HashSet<>();
-        remainingGroups.add(rootGroup); // The root parea is always included
+        Set<NODE_T> remainingNodes = new HashSet<>();
+        remainingNodes.addAll(sourceHierarchy.getRoots()); // The root parea is always included
         
-        HashMap<GROUP_T, HashSet<GROUP_T>> groupSet = new HashMap<>();
+        HashMap<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
-        for(GROUP_T group : groups.values()) {
-            groupParentCounts.put(group.getId(), groupHierarchy.getParents(group).size());
+        for(NODE_T group : sourceHierarchy.getNodesInHierarchy()) {
+            groupParentCounts.put(group, sourceHierarchy.getParents(group).size());
             
-            if (group.getConceptCount() >= minGroupSize) {
-                remainingGroups.add(group);
+            if (group.getConceptCount() >= minNodeSize) {
+                remainingNodes.add(group);
             }
 
             groupSet.put(group, new HashSet<>());
         }
         
-        for (GROUP_T group : remainingGroups) {
-            reducedGroupMembers.put(group, new GroupHierarchy<>(group));
-
-            reducedParents.put(group, new HashSet<>());
-        }
+        remainingNodes.forEach((group) -> {
+            reducedGroupMembers.put(group, new NodeHierarchy<>(group));
+        });
         
-        Queue<GROUP_T> queue = new LinkedList<GROUP_T>();
-        queue.add(rootGroup);
+        Queue<NODE_T> queue = new LinkedList<>();
+        queue.add(sourceHierarchy.getRoot());
         
         while(!queue.isEmpty()) {
             
-            GROUP_T group = queue.remove();
+            NODE_T group = queue.remove();
             
-            HashSet<GROUP_T> parentGroups = groupHierarchy.getParents(group);
+            Set<NODE_T> parentGroups = sourceHierarchy.getParents(group);
 
-            if (remainingGroups.contains(group)) {
-                
+            if (remainingNodes.contains(group)) {
                 groupSet.get(group).add(group);
-
-                for (GROUP_T parentGroup : parentGroups) {
-
-                    HashSet<GROUP_T> parentReducedGroups = groupSet.get(parentGroup);
-
-                    for (GROUP_T reducedGroup : parentReducedGroups) {
-                        reducedParents.get(group).add(reducedGroup.getId());
-                    }
-                }
-
             } else {
 
-                for (GROUP_T parentGroup : parentGroups) {
+                for (NODE_T parentGroup : parentGroups) {
 
                     // Mark that this group belongs to the same reduced group as its parents
                     groupSet.get(group).addAll(groupSet.get(parentGroup));
 
                     // Add this group to that reducing group too
-                    for (GROUP_T reducedGroup : groupSet.get(parentGroup)) {
+                    groupSet.get(parentGroup).forEach((reducedGroup) -> {
                         reducedGroupMembers.get(reducedGroup).addIsA(group, parentGroup);
-                    }
+                    });
                 }
             }
 
-            HashSet<GROUP_T> childGroups = groupHierarchy.getChildren(group);
+            Set<NODE_T> childGroups = sourceHierarchy.getChildren(group);
 
             if (!childGroups.isEmpty()) {
-                for (GROUP_T childGroup : childGroups) {
-                    int childParentCount = groupParentCounts.get(childGroup.getId());
+                childGroups.forEach((childGroup) -> {
+                    int childParentCount = groupParentCounts.get(childGroup);
                     
                     if(childParentCount - 1 == 0) {
                         queue.add(childGroup);
                     } else {
-                        groupParentCounts.put(childGroup.getId(), childParentCount - 1);
+                        groupParentCounts.put(childGroup, childParentCount - 1);
                     }
-                }
+                });
             }
         }
         
+        HashMap<NODE_T, AGGREGATENODE_T> aggregateGroups = new HashMap<>();
         
-        HashMap<Integer, AGGREGATEGROUP_T> reducedGroups = new HashMap<>();
-        
-        for(GROUP_T reducedGroup : remainingGroups) {
-            reducedGroups.put(reducedGroup.getId(), createReducedGroup(reducedGroup, 
-                    reducedParents.get(reducedGroup), reducedGroupMembers.get(reducedGroup)));
-        }
-        
-        GroupHierarchy<AGGREGATEGROUP_T> reducedGroupHierarchy = new GroupHierarchy(reducedGroups.get(rootGroup.getId()));
-        
-        reducedGroups.values().forEach((AGGREGATEGROUP_T aggregateGroup) -> {
-            GROUP_T group = (GROUP_T)aggregateGroup;
-            
-            HashSet<Integer> parentIds = group.getParentIds();
-            
-            parentIds.forEach((Integer parentId) -> {
-                reducedGroupHierarchy.addIsA(aggregateGroup, reducedGroups.get(parentId));
-            });
+        remainingNodes.forEach((aggregateGroup) -> {
+            aggregateGroups.put(aggregateGroup, factory.createAggregateNode(reducedGroupMembers.get(aggregateGroup)));
         });
         
-        return new AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T>(reducedGroups, reducedGroupHierarchy);
+        Set<AGGREGATENODE_T> rootAggregateNodes = new HashSet<>();
+       
+        sourceHierarchy.getRoots().forEach((root) -> {
+            rootAggregateNodes.add(aggregateGroups.get(root));
+        });
+        
+        NodeHierarchy<AGGREGATENODE_T> aggregateNodeHierarchy = new NodeHierarchy<>(rootAggregateNodes);
+        
+        aggregateGroups.values().forEach((aggregateNode) -> {
+            
+            if (!aggregateNodeHierarchy.getRoots().contains(aggregateNode)) {
+                AggregateNode<NODE_T> theNode = (AggregateNode<NODE_T>) aggregateNode;
+
+                NODE_T rootNode = theNode.getAggregatedHierarchy().getRoot();
+                
+                Set<NODE_T> parentNodes = sourceHierarchy.getParents(rootNode);
+                
+                parentNodes.forEach( (parentNode) -> {
+                     Set<NODE_T> parentAggregateNodes = groupSet.get(parentNode);
+                   
+                     parentAggregateNodes.forEach( (parentAggregateNode) -> {
+                         aggregateNodeHierarchy.addIsA(aggregateNode, aggregateGroups.get(parentAggregateNode));
+                     });
+                });
+            }
+        });
+        
+        return aggregateNodeHierarchy;
     }
-    
-    protected abstract AGGREGATEGROUP_T createReducedGroup(GROUP_T group, HashSet<Integer> parentIds, GroupHierarchy<GROUP_T> reducedGroupHierarchy);
 }

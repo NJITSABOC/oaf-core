@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
@@ -14,7 +14,7 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class ClusterHierarchyPanel<CONCEPT_T, 
-        CLUSTER_T extends GenericCluster,
+        CLUSTER_T extends Cluster,
         CONFIG_T extends BLUGenericTANConfiguration> 
 
         extends AbstractGroupHierarchyPanel<CONCEPT_T, CLUSTER_T, CONFIG_T> {

@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import java.util.HashSet;
 
 /**
@@ -11,7 +11,7 @@ import java.util.HashSet;
  */
 public class AggregateContainerReport<CONTAINER_T extends GenericGroupContainer, 
         GROUP_T extends GenericConceptGroup,
-        AGGREGATEGROUP_T extends GenericConceptGroup & AggregateableConceptGroup<CONCEPT_T, GROUP_T>,
+        AGGREGATEGROUP_T extends GenericConceptGroup & AggregateNode<CONCEPT_T, GROUP_T>,
         CONCEPT_T> extends ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T> {
     
     public AggregateContainerReport(

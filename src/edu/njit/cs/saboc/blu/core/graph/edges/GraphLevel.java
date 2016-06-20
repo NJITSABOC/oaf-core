@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.edges;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import java.util.ArrayList;
 
 /**
@@ -14,8 +14,8 @@ public class GraphLevel {
     /**
      * List of the areas in a given level
      */
-    private ArrayList<GenericContainerEntry> containerEntries =
-            new ArrayList<GenericContainerEntry>();
+    private ArrayList<PartitionedNodeEntry> containerEntries =
+            new ArrayList<PartitionedNodeEntry>();
 
     /**
      * List of the lanes above this Level.
@@ -41,7 +41,7 @@ public class GraphLevel {
     public int getWidth() {
         int width = 0;
         
-        for(GenericContainerEntry entry : containerEntries) {
+        for(PartitionedNodeEntry entry : containerEntries) {
             width += entry.getWidth();
         }
         
@@ -76,7 +76,7 @@ public class GraphLevel {
         int dh = getHeight() - h;
 
         for (int currentGraphLevel = this.getLevelY() + 1; currentGraphLevel < parentGraph.getLevels().size(); ++currentGraphLevel) {
-            for (GenericContainerEntry containerEntry : parentGraph.getLevels().get(currentGraphLevel).getContainerEntries()) {
+            for (PartitionedNodeEntry containerEntry : parentGraph.getLevels().get(currentGraphLevel).getContainerEntries()) {
                 containerEntry.setBounds(containerEntry.getX(), containerEntry.getY() - dh, containerEntry.getWidth(), containerEntry.getHeight());
             }
         }
@@ -92,9 +92,9 @@ public class GraphLevel {
     public int getY() {
         int y = Integer.MAX_VALUE;
 
-        for (GenericContainerEntry a : containerEntries) {
-            if (a.getPosY() < y) {
-                y = a.getPosY();
+        for (PartitionedNodeEntry a : containerEntries) {
+            if (a.getAbsoluteY() < y) {
+                y = a.getAbsoluteY();
             }
         }
 
@@ -105,7 +105,7 @@ public class GraphLevel {
         return parentGraph;
     }
 
-    public ArrayList<GenericContainerEntry> getContainerEntries() {
+    public ArrayList<PartitionedNodeEntry> getContainerEntries() {
         return containerEntries;
     }
 
@@ -121,14 +121,14 @@ public class GraphLevel {
      * Adds the given area to the list of areas contained in this Level object.
      * @param a
      */
-    public void addContainerEntry(GenericContainerEntry entry) {
+    public void addContainerEntry(PartitionedNodeEntry entry) {
         containerEntries.add(entry);
     }
 
-    public GenericContainerEntry getTallestContainerEntry() {
-        GenericContainerEntry tallestArea = null;
+    public PartitionedNodeEntry getTallestContainerEntry() {
+        PartitionedNodeEntry tallestArea = null;
 
-        for (GenericContainerEntry containerEntry : containerEntries) {
+        for (PartitionedNodeEntry containerEntry : containerEntries) {
             if (tallestArea == null) {
                 tallestArea = containerEntry;
             } else if (containerEntry.getHeight() > tallestArea.getHeight()) {

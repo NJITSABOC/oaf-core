@@ -102,19 +102,19 @@ public class MultiRootedHierarchy<T> {
      */
     final public void addIsA(T from, T to) {
         if(!parents.containsKey(from)) {
-            parents.put(from, new HashSet<T>());
+            parents.put(from, new HashSet<>());
         }
         
         if(!parents.containsKey(to)) {
-            parents.put(to, new HashSet<T>());
+            parents.put(to, new HashSet<>());
         }
         
         if(!children.containsKey(to)) {
-            children.put(to, new HashSet<T>());
+            children.put(to, new HashSet<>());
         }
         
         if(!children.containsKey(from)) {
-            children.put(from, new HashSet<T>());
+            children.put(from, new HashSet<>());
         }
         
         parents.get(from).add(to);

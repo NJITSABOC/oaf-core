@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class GenericAggregateAreaPanel<AREA_T extends Area, 
         PAREA_T extends PArea,
-        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>, 
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>, 
         CONCEPT_T,
         ENTRY_T,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration>
@@ -48,7 +48,7 @@ public class GenericAggregateAreaPanel<AREA_T extends Area,
         ArrayList<AGGREGATEPAREA_T> pareas = area.getAllPAreas();
         
         for(AGGREGATEPAREA_T parea : pareas) {
-            AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)parea;
+            AggregateNode<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateNode<CONCEPT_T, PAREA_T>)parea;
             
             if(!aggregatePArea.getAggregatedGroups().isEmpty()) {
                 aggregatePAreaCount++;

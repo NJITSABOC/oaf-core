@@ -2,16 +2,16 @@ package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import SnomedShared.generic.GenericContainerPartition;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBandPartition;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -29,7 +29,7 @@ import javax.swing.JLabel;
  * @author Chris O
  */
 public abstract class GenericTANLayout<
-        BAND_T extends GenericBand, CLUSTER_T extends GenericCluster, BANDNODE_T extends GenericBluBand, CLUSTERNODE_T extends GenericBluCluster>
+        BAND_T extends Band, CLUSTER_T extends Cluster, BANDNODE_T extends GenericBluBand, CLUSTERNODE_T extends GenericBluCluster>
         extends BluGraphLayout<BAND_T, BANDNODE_T, CLUSTERNODE_T> {
 
     private final TribalAbstractionNetwork tan;
@@ -153,10 +153,10 @@ public abstract class GenericTANLayout<
         CLUSTERNODE_T clusterPanel = makeClusterNode(p, graph, parent, pAreaX, clusterLevel, new ArrayList<>());
 
         //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
-        graph.stretchGraphToFitPanel(x, y, GenericGroupEntry.ENTRY_WIDTH, GenericGroupEntry.ENTRY_HEIGHT);
+        graph.stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         //Setup the panel's dimensions, etc.
-        clusterPanel.setBounds(x, y, GenericGroupEntry.ENTRY_WIDTH, GenericGroupEntry.ENTRY_HEIGHT);
+        clusterPanel.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         parent.add(clusterPanel, 0);
 

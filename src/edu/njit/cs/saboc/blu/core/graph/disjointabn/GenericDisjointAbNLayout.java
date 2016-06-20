@@ -1,19 +1,16 @@
 package edu.njit.cs.saboc.blu.core.graph.disjointabn;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericContainerPartition;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
-import edu.njit.cs.saboc.blu.core.graph.EmptyAbNContainer;
-import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerPartitionEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,38 +19,35 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JLabel;
 
 /**
  *
  * @author Chris O
  */
-public abstract class GenericDisjointAbNLayout<
-        GROUP_T extends GenericConceptGroup,
-        DISJOINTABN_T extends DisjointAbstractionNetwork,
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
-        GROUPENTRY_T extends BluDisjointGroupEntry<DISJOINTGROUP_T>> extends BluGraphLayout<EmptyAbNContainer, EmptyContainerEntry, GROUPENTRY_T> {
-    
+public class GenericDisjointAbNLayout extends BluGraphLayout {
 
-    protected DISJOINTABN_T disjointAbN;
 
-    protected GenericDisjointAbNLayout(BluGraph graph, DISJOINTABN_T disjointAbN) {
+    private final DisjointAbstractionNetwork disjointAbN;
+
+    public GenericDisjointAbNLayout(BluGraph graph, DisjointAbstractionNetwork disjointAbN) {
         super(graph);
 
         this.disjointAbN = disjointAbN;
     }
     
-    protected DISJOINTABN_T getDisjointAbN() {
+    public DisjointAbstractionNetwork getDisjointAbN() {
         return disjointAbN;
     }
 
     public void doLayout() {
         
-        HashSet<DISJOINTGROUP_T> disjointGroups = disjointAbN.getDisjointGroups();
+        Set<DisjointNode> disjointGroups = disjointAbN.getAllDisjointNodes();
                 
-        ArrayList<DISJOINTGROUP_T> nonoverlappingGroups = new ArrayList<>();
+        ArrayList<DisjointNode> nonoverlappingGroups = new ArrayList<>();
         
-        disjointGroups.forEach( (DISJOINTGROUP_T group) -> {
+        disjointGroups.forEach( (group) -> {
             if(group.getOverlaps().size() == 1) {
                 nonoverlappingGroups.add(group);
             }
@@ -61,12 +55,12 @@ public abstract class GenericDisjointAbNLayout<
         
         Color[] colors = this.createOverlapColors();
 
-        HashMap<GROUP_T, Color> colorMap = new HashMap<>();
+        HashMap<SinglyRootedNode, Color> colorMap = new HashMap<>();
         
         int colorId = 0;
 
-        for (DISJOINTGROUP_T dpa : nonoverlappingGroups) {
-            GROUP_T overlapGroup = (GROUP_T) dpa.getOverlaps().iterator().next();
+        for (DisjointNode dpa : nonoverlappingGroups) {
+            SinglyRootedNode overlapGroup = (SinglyRootedNode)dpa.getOverlaps().iterator().next();
 
             if (colorId >= colors.length) {
                 colorMap.put(overlapGroup, Color.gray);
@@ -76,19 +70,19 @@ public abstract class GenericDisjointAbNLayout<
             }
         }
         
-        ArrayList<ArrayList<DISJOINTGROUP_T>> groupLevels = new ArrayList<ArrayList<DISJOINTGROUP_T>>();
+        ArrayList<ArrayList<DisjointNode>> groupLevels = new ArrayList<>();
         
          for (int overlapSize = 1; overlapSize <= disjointAbN.getLevelCount(); overlapSize++) {
-            ArrayList<DISJOINTGROUP_T> levelGroups = new ArrayList<>();
+            ArrayList<DisjointNode> levelGroups = new ArrayList<>();
 
-            for (DISJOINTGROUP_T disjointGroup : disjointGroups) {
+            for (DisjointNode disjointGroup : disjointGroups) {
                 if (disjointGroup.getOverlaps().size() == overlapSize) {
                     levelGroups.add(disjointGroup);
                 }
             }
 
-            Collections.sort(levelGroups, new Comparator<DISJOINTGROUP_T>() {
-                public int compare(DISJOINTGROUP_T a, DISJOINTGROUP_T b) {
+            Collections.sort(levelGroups, new Comparator<DisjointNode>() {
+                public int compare(DisjointNode a, DisjointNode b) {
                     return b.getConceptCount() - a.getConceptCount();
                 }
             });
@@ -107,30 +101,30 @@ public abstract class GenericDisjointAbNLayout<
         
         int areaId = 0;
 
-        addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
+        addGraphLevel(new GraphLevel(0, getGraph(), new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
 
-        for (ArrayList<DISJOINTGROUP_T> groupLevel : groupLevels) {  // Loop through the areas and generate the diagram for each of them
+        for (ArrayList<DisjointNode> groupLevel : groupLevels) {  // Loop through the areas and generate the diagram for each of them
             int width = 0;
 
             int groupCount = groupLevel.size();
 
             int groupEntriesWide = Math.min(14, groupCount);
 
-            int levelWidth = groupEntriesWide * (BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
+            int levelWidth = groupEntriesWide * (DisjointNodeEntry.DISJOINT_GROUP_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
 
             width += levelWidth + 20;
 
             int height = (int) (Math.ceil((double) groupCount / groupEntriesWide))
-                    * (BluDisjointGroupEntry.DISJOINT_GROUP_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);
+                    * (DisjointNodeEntry.DISJOINT_GROUP_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);
 
             width += 20;
             height += 60 + GraphLayoutConstants.GROUP_ROW_HEIGHT;
 
-            GraphLevel currentLevel = levels.get(containerY);
+            GraphLevel currentLevel = getLevels().get(containerY);
 
             EmptyContainerEntry containerEntry = createContainerPanel(x, y, width, height, containerX, currentLevel);
 
-            containerEntries.put(areaId++, containerEntry);
+            getContainerEntries().put(areaId++, containerEntry);
 
             // Add a data representation for this new area to the current area Level obj.
             currentLevel.addContainerEntry(containerEntry);
@@ -158,23 +152,23 @@ public abstract class GenericDisjointAbNLayout<
 
             int i = 0;
 
-            for (DISJOINTGROUP_T group : groupLevel) {
+            for (DisjointNode group : groupLevel) {
                 
                 GraphGroupLevel currentClusterLevel = currentPartition.getGroupLevels().get(disjointGroupY);
                 
-                GROUPENTRY_T targetGroupEntry = createGroupPanel(group, currentPartition, x2, y2, disjointGroupX, currentClusterLevel, colorMap);
+                DisjointNodeEntry targetGroupEntry = createGroupPanel(group, currentPartition, x2, y2, disjointGroupX, currentClusterLevel, colorMap);
 
                 currentPartition.getVisibleGroups().add(targetGroupEntry);
 
                 currentPartition.addColumn(groupX[disjointGroupY], generateColumnLanes(-3,
                         GraphLayoutConstants.GROUP_CHANNEL_WIDTH - 2, 3, containerEntry));
 
-                groupEntries.put(group.getId(), targetGroupEntry);    // Store it in a map keyed by its ID...
+                getGroupEntries().put(group, targetGroupEntry);    // Store it in a map keyed by its ID...
 
                 currentClusterLevel.addGroupEntry(targetGroupEntry);
 
                 if ((i + 1) % groupEntriesWide == 0 && i < groupLevel.size() - 1) {
-                    y2 += BluDisjointGroupEntry.DISJOINT_GROUP_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
+                    y2 += DisjointNodeEntry.DISJOINT_GROUP_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
                     x2 = (int) (1.5 * GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
                     disjointGroupX = 0;
                     
@@ -189,7 +183,7 @@ public abstract class GenericDisjointAbNLayout<
                                 GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, containerEntry));
                     }
                 } else {
-                    x2 += (BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
+                    x2 += (DisjointNodeEntry.DISJOINT_GROUP_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
                     disjointGroupX++;
                     groupX[disjointGroupY]++;
                 }
@@ -203,7 +197,9 @@ public abstract class GenericDisjointAbNLayout<
             containerY++;    // Update the areaY variable to reflect the new row.
             containerX = 0;  // Reset the areaX variable.
 
-            addGraphLevel(new GraphLevel(containerY, graph,
+            addGraphLevel(new GraphLevel(
+                    containerY, 
+                    getGraph(),
                     generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null))); // Add a level object to 
         }
         
@@ -243,23 +239,22 @@ public abstract class GenericDisjointAbNLayout<
         return colors;
     }
         
-    private ArrayList<DISJOINTGROUP_T> disjointPAreaSort(ArrayList<DISJOINTGROUP_T> entries, ArrayList<DISJOINTGROUP_T> topLevel, int currentLevel, int maxLevel) {
+    private ArrayList<DisjointNode> disjointPAreaSort(ArrayList<DisjointNode> entries, ArrayList<DisjointNode> topLevel, int currentLevel, int maxLevel) {
         
-
         if(currentLevel >= maxLevel) {
             return entries;
         }
 
-        ArrayList<ArrayList<DISJOINTGROUP_T>> sortedEntries = new ArrayList<ArrayList<DISJOINTGROUP_T>>();
+        ArrayList<ArrayList<DisjointNode>> sortedEntries = new ArrayList<>();
 
-        HashSet<DISJOINTGROUP_T> processed = new HashSet<>();
+        HashSet<DisjointNode> processed = new HashSet<>();
 
         for (int c = currentLevel; c < topLevel.size(); c++) {
-            GROUP_T overlap = (GROUP_T)topLevel.get(c).getOverlaps().iterator().next();
+            SinglyRootedNode overlap = (SinglyRootedNode)topLevel.get(c).getOverlaps().iterator().next();
 
-            ArrayList<DISJOINTGROUP_T> sorted = new ArrayList<>();
+            ArrayList<DisjointNode> sorted = new ArrayList<>();
 
-            for (DISJOINTGROUP_T entry : entries) {
+            for (DisjointNode entry : entries) {
                 if (!processed.contains(entry)) {
                     if (entry.getOverlaps().contains(overlap)) {
                         sorted.add(entry);
@@ -273,27 +268,27 @@ public abstract class GenericDisjointAbNLayout<
             sortedEntries.add(sorted);
         }
 
-        ArrayList<DISJOINTGROUP_T> finalSortedEntries = new ArrayList<>();
+        ArrayList<DisjointNode> finalSortedEntries = new ArrayList<>();
 
-        for (ArrayList<DISJOINTGROUP_T> entry : sortedEntries) {
+        for (ArrayList<DisjointNode> entry : sortedEntries) {
             finalSortedEntries.addAll(entry);
         }
 
         return finalSortedEntries;
     }
-    
-    protected abstract GROUPENTRY_T createGroupEntry(DISJOINTGROUP_T p, BluGraph graph, int groupX, EmptyContainerPartitionEntry partition, GraphGroupLevel groupLevel, ArrayList<GraphEdge> edges, Color [] colors);
-    
-    protected GROUPENTRY_T createGroupPanel(DISJOINTGROUP_T p, 
-             EmptyContainerPartitionEntry parent, 
-             int x, int y, int groupX, 
-             GraphGroupLevel groupLevel, 
-             HashMap<GROUP_T, Color> colorMap) {
-         
-        ArrayList<GROUP_T> groups = new ArrayList<>(p.getOverlaps());
 
-        Collections.sort(groups, new Comparator<GROUP_T>() {
-            public int compare(GROUP_T a, GROUP_T b) {
+    private DisjointNodeEntry createGroupPanel(DisjointNode node, 
+             EmptyContainerPartitionEntry parent, 
+             int x, 
+             int y,
+             int groupX, 
+             GraphGroupLevel groupLevel, 
+             HashMap<SinglyRootedNode, Color> colorMap) {
+         
+        ArrayList<SinglyRootedNode> groups = new ArrayList<>(node.getOverlaps());
+
+        Collections.sort(groups, new Comparator<SinglyRootedNode>() {
+            public int compare(SinglyRootedNode a, SinglyRootedNode b) {
                 return b.getConceptCount() - a.getConceptCount();
             }
         });
@@ -304,14 +299,15 @@ public abstract class GenericDisjointAbNLayout<
             dpaColors[c] = colorMap.get(groups.get(c));
         }
 
-        GROUPENTRY_T targetGroupEntry = (GROUPENTRY_T)createGroupEntry(p, graph, groupX, parent, groupLevel, new ArrayList<GraphEdge>(), dpaColors).labelOffset(
-                new Point(BluDisjointGroupEntry.DISJOINT_LABEL_OFFSET, BluDisjointGroupEntry.DISJOINT_LABEL_OFFSET));
+        DisjointNodeEntry targetGroupEntry = new DisjointNodeEntry(node, getGraph(), parent, groupX, groupLevel, new ArrayList<>(), dpaColors);
+        
+        targetGroupEntry = (DisjointNodeEntry)targetGroupEntry.labelOffset(new Point(DisjointNodeEntry.DISJOINT_LABEL_OFFSET, DisjointNodeEntry.DISJOINT_LABEL_OFFSET));
 
         //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
-        graph.stretchGraphToFitPanel(x, y, BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH, BluDisjointGroupEntry.DISJOINT_GROUP_HEIGHT);
+        getGraph().stretchGraphToFitPanel(x, y, DisjointNodeEntry.DISJOINT_GROUP_WIDTH, DisjointNodeEntry.DISJOINT_GROUP_HEIGHT);
 
         //Setup the panel's dimensions, etc.
-        targetGroupEntry.setBounds(x, y,BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH, BluDisjointGroupEntry.DISJOINT_GROUP_HEIGHT);
+        targetGroupEntry.setBounds(x, y,DisjointNodeEntry.DISJOINT_GROUP_WIDTH, DisjointNodeEntry.DISJOINT_GROUP_HEIGHT);
 
         parent.add(targetGroupEntry, 0);
 
@@ -319,21 +315,21 @@ public abstract class GenericDisjointAbNLayout<
     }
 
     protected EmptyContainerEntry createContainerPanel(int x, int y, int width, int height, int areaX, GraphLevel parentLevel) {
-        EmptyContainerEntry targetPanel = new EmptyContainerEntry(graph, areaX, parentLevel, new Rectangle(x, y, width, height));
+        EmptyContainerEntry targetPanel = new EmptyContainerEntry(getGraph(), areaX, parentLevel, new Rectangle(x, y, width, height));
 
-        graph.stretchGraphToFitPanel(x, y, width, height);
+        getGraph().stretchGraphToFitPanel(x, y, width, height);
 
         targetPanel.setBounds(x, y, width, height);
 
-        graph.add(targetPanel, 0);
+        getGraph().add(targetPanel, 0);
 
         return targetPanel;
     }
 
     protected EmptyContainerPartitionEntry createPartitionPanel(EmptyContainerEntry container, int x, int y, int width, int height) {
-        EmptyContainerPartitionEntry partitionPanel = new EmptyContainerPartitionEntry(width, height, container, graph);
+        EmptyContainerPartitionEntry partitionPanel = new EmptyContainerPartitionEntry(width, height, container, getGraph());
 
-        graph.stretchGraphToFitPanel(x, y, width, height);
+        getGraph().stretchGraphToFitPanel(x, y, width, height);
 
         partitionPanel.setBounds(x, y, width, height);
 
@@ -341,9 +337,10 @@ public abstract class GenericDisjointAbNLayout<
 
         return partitionPanel;
     }
-
+    
     @Override
-    public JLabel createPartitionLabel(GenericContainerPartition partition, int width) {
+    public JLabel createPartitionLabel(PartitionedNode partition, int width) {
         return new JLabel();
     }
+    
 }

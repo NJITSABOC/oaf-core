@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration;
 
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
@@ -18,8 +18,8 @@ public abstract class BLUGenericPAreaTaxonomyTextConfiguration<
         DISJOINTTAXONOMY_T extends DisjointAbstractionNetwork<TAXONOMY_T, PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>,
         AREA_T extends Area,
         PAREA_T extends PArea,
-        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>,
-        DISJOINTPAREA_T extends DisjointGenericConceptGroup<PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>, 
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>,
+        DISJOINTPAREA_T extends DisjointNode<PAREA_T, CONCEPT_T, HIERARCHY_T, DISJOINTPAREA_T>, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         REL_T, 
         CONCEPT_T> implements BLUDisjointableAbNTextConfiguration<TAXONOMY_T, DISJOINTTAXONOMY_T, AREA_T, PAREA_T, DISJOINTPAREA_T, CONCEPT_T> {

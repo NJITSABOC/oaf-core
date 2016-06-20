@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -12,9 +12,9 @@ import java.util.HashSet;
  */
 public class AncestorDepthVisitor<T> extends TopologicalVisitor<T> {
     
-    private HashMap<T, Integer> depth = new HashMap<>();
+    private final HashMap<T, Integer> depth = new HashMap<>();
     
-    private ArrayList<AncestorDepthResult<T>> result = new ArrayList<>();
+    private final ArrayList<AncestorDepthResult<T>> result = new ArrayList<>();
        
     public AncestorDepthVisitor(MultiRootedHierarchy<T> theHierarchy) {
         super(theHierarchy);
@@ -22,7 +22,7 @@ public class AncestorDepthVisitor<T> extends TopologicalVisitor<T> {
     
     public void visit(T node) {
         
-        HashSet<T> parents = theHierarchy.getParents(node);
+        Set<T> parents = theHierarchy.getParents(node);
 
         int maxParentDepth = -1;
 

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
@@ -13,7 +13,7 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends GenericConceptGroup & AggregateableConceptGroup<CONCEPT_T, GROUP_T>, 
+public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends GenericConceptGroup & AggregateNode<CONCEPT_T, GROUP_T>, 
         GROUP_T extends GenericConceptGroup, CONCEPT_T> extends AbNNodeInformationPanel<AGGREGATEGROUP_T> {
 
     private final AbstractGroupList<GROUP_T> aggregateGroupList;
@@ -53,7 +53,7 @@ public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends Gen
     public void setContents(AGGREGATEGROUP_T group) {
         splitPane.setDividerLocation(300);
         
-        AggregateableConceptGroup<CONCEPT_T, GROUP_T> reducedGroup = (AggregateableConceptGroup<CONCEPT_T, GROUP_T>)group;
+        AggregateNode<CONCEPT_T, GROUP_T> reducedGroup = (AggregateNode<CONCEPT_T, GROUP_T>)group;
         
         clearContents();
         

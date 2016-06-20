@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

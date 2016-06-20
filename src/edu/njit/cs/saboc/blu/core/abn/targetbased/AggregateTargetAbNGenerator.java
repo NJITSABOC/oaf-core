@@ -1,34 +1,29 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNResult;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 
 /**
  *
  * @author Chris 
  */
-public class AggregateTargetAbNGenerator<GROUP_T extends TargetGroup, 
-        AGGREGATEGROUP_T extends TargetGroup & AggregateableConceptGroup,
-        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> {
+public class AggregateTargetAbNGenerator {
     
-    public TARGETABN_T createReducedTargetAbN (
+    public TargetAbstractionNetwork createAggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
-            TargetAbstractionNetworkGenerator generator, 
-            AggregateAbNGenerator<GROUP_T, AGGREGATEGROUP_T> reducedGroupGenerator, 
+            TargetAbstractionNetworkGenerator generator,
+            AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
             int minGroupSize) {
-        
-        AggregateAbNResult<GROUP_T, AGGREGATEGROUP_T> reducedGroupHierarchy = reducedGroupGenerator.createReducedAbN((GROUP_T)sourceTargetAbN.getRootGroup(),
-                sourceTargetAbN.getGroups(), sourceTargetAbN.getGroupHierarchy(), minGroupSize);
-        
-        TARGETABN_T reducedTargetAbN = (TARGETABN_T)generator.createTargetAbstractionNetwork(
-                reducedGroupHierarchy.reducedGroups.get(sourceTargetAbN.getRootGroup().getId()), 
-                reducedGroupHierarchy.reducedGroups, 
-                reducedGroupHierarchy.reducedGroupHierarchy);
 
-        reducedTargetAbN.setReduced(true);
-        
-        return reducedTargetAbN;
+        if (minGroupSize == 1) {
+            return sourceTargetAbN;
+        }
+
+        NodeHierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
+                        new AggregateTargetAbNFactory(),
+                        sourceTargetAbN.getNodeHierarchy(),
+                        minGroupSize);
+
+        return new TargetAbstractionNetwork((NodeHierarchy<TargetGroup>)(NodeHierarchy<?>)reducedTargetHierarchy);
     }
-    
 }

@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -17,9 +17,9 @@ public class ReducedAbNPainter extends AbNPainter {
     
     private final int EDGE_RADIUS = 24;
     
-    public void paintGroupAtPoint(Graphics2D g2d, GenericGroupEntry group, Point p, double scale) {
+    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
         
-        AggregateableConceptGroup reducedGroup = (AggregateableConceptGroup)(group.getGroup());
+        AggregateNode reducedGroup = (AggregateNode)(group.getGroup());
         
         Color bgColor;
         

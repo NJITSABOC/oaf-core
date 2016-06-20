@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.Component;
 import java.awt.Font;
@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  * @author Chris
  */
 public class AbNDrawingUtilities {
-    public static void paintContainer(AbNPainter painter, Graphics2D g2d, GenericContainerEntry container, Viewport viewport, AbNLabelManager labelManager) {
+    public static void paintContainer(AbNPainter painter, Graphics2D g2d, PartitionedNodeEntry container, Viewport viewport, AbNLabelManager labelManager) {
 
         Point p = viewport.getDrawingPoint(new Point(container.getLocation()));
 
@@ -50,8 +50,8 @@ public class AbNDrawingUtilities {
         Component [] components = partition.getComponents();
 
         for(Component component : components) {
-            if(component instanceof GenericGroupEntry) {
-                paintGroupEntry(painter, g2d, (GenericGroupEntry)component, viewport, labelManager);
+            if(component instanceof SinglyRootedNodeEntry) {
+                paintGroupEntry(painter, g2d, (SinglyRootedNodeEntry)component, viewport, labelManager);
             } else if(component instanceof JLabel) {
                 JLabel label = ((JLabel) component);
                 
@@ -67,7 +67,7 @@ public class AbNDrawingUtilities {
         }
     }
     
-    public static void paintGroupEntry(AbNPainter painter, Graphics2D g2d, GenericGroupEntry group, Viewport viewport, AbNLabelManager labelManager) {
+    public static void paintGroupEntry(AbNPainter painter, Graphics2D g2d, SinglyRootedNodeEntry group, Viewport viewport, AbNLabelManager labelManager) {
         
         Point p = viewport.getDrawingPoint(new Point(group.getAbsoluteX(), group.getAbsoluteY()));
 

@@ -1,121 +1,69 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
-import java.util.ArrayList;
-import java.util.HashMap;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris
  */
-public class TribalAbstractionNetwork<CONCEPT_T, 
-        TAN_T extends TribalAbstractionNetwork<CONCEPT_T, TAN_T, BAND_T, CLUSTER_T>,
-        BAND_T extends GenericBand<CONCEPT_T, CLUSTER_T>, 
-        CLUSTER_T extends GenericCluster>
-
-        extends PartitionedAbstractionNetwork<BAND_T, CLUSTER_T> {
+public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Cluster, Band> {
     
-    private final String tanName;
-
-    private final ArrayList<CLUSTER_T> patriarchClusters;
-    
-    private final MultiRootedHierarchy<CONCEPT_T> sourceHierarchy;
+    private final MultiRootedHierarchy<Concept> sourceHierarchy;
 
     public TribalAbstractionNetwork(
-            String tanName,
-            ArrayList<BAND_T> bands,
-            HashMap<Integer, CLUSTER_T> clusters,
-            GroupHierarchy<CLUSTER_T> clusterHierarchy,
-            ArrayList<CLUSTER_T> patriarchs,
-            MultiRootedHierarchy<CONCEPT_T> sourceHierarchy) {
+            BandTribalAbstractionNetwork bandTan,
+            MultiRootedHierarchy<Concept> sourceHierarchy,
+            NodeHierarchy<Cluster> clusterHierarchy) {
 
-        super(bands, clusters, clusterHierarchy);
-        
-        this.tanName = tanName;
-
-        this.patriarchClusters = patriarchs;
-        
+        super(bandTan, clusterHierarchy);
+                
         this.sourceHierarchy = sourceHierarchy;
     }
-    
-    public String getTANName() {
-        return tanName;
+
+    public Set<Cluster> getPatriarchClusters() {
+        return super.getNodeHierarchy().getRoots();
     }
     
-    public ArrayList<CLUSTER_T> getPatriarchClusters() {
-        return patriarchClusters;
-    }
-    
-    public MultiRootedHierarchy<CONCEPT_T> getSourceConceptHierarchy() {
+    public MultiRootedHierarchy<Concept> getSourceConceptHierarchy() {
         return sourceHierarchy;
     }
 
-    public ArrayList<BAND_T> getBands() {
-        return super.getContainers();
+    public Set<Band> getBands() {
+        return super.getBaseAbstractionNetwork().getNodes();
     }
 
-    public int getClusterCount() {
-        return getGroupCount();
-    }
-
-    public int getBandCount() {
-        return getContainerCount();
-    }
-
-    public HashMap<Integer, CLUSTER_T> getClusters() {
-        return super.getGroups();
-    }
-
-    public CLUSTER_T getRootCluster() {
-        return patriarchClusters.get(0);
+    public Set<Cluster> getClusters() {
+        return super.getNodes();
     }
     
-    public CLUSTER_T getRootGroup(){
-        return getRootCluster();
+    public NodeHierarchy<Cluster> getClusterHierarchy() {
+        return super.getNodeHierarchy();
     }
     
-    public CLUSTER_T getClusterFromRootConceptId(long rootConceptId) {
-        return getGroupFromRootConceptId(rootConceptId);
-    }
-    
-    public HashSet<CLUSTER_T> getNonOverlappingPatriarchClusters() {
-        HashSet<CLUSTER_T> nonoverlappingPatriarchClusters = new HashSet<>();
+    public Set<Cluster> getNonOverlappingPatriarchClusters() {
+        Set<Cluster> nonoverlappingPatriarchClusters = new HashSet<>();
                 
-        patriarchClusters.forEach( (CLUSTER_T patriarchCluster) -> {
-            boolean found = false;
+        getPatriarchClusters().forEach( (Cluster patriarchCluster) -> {           
+            Concept root = patriarchCluster.getRoot();
             
-            CONCEPT_T root = (CONCEPT_T)patriarchCluster.getHierarchy().getRoot();
-            
-            for(CLUSTER_T cluster : nodes.values()) {
-                HashSet<CONCEPT_T> patriarchs = cluster.getPatriarchs();
-                
-                if (patriarchs.size() > 1) {
-                    for (CONCEPT_T patriarch : patriarchs) {
-                        if (patriarch.equals(root)) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                
-                if(found) {
-                    break;
-                }
-            }
-            
-            if(!found) {
+            if(!getClusters().stream().anyMatch( (cluster) -> {
+                return cluster.getPatriarchs().size() != 1 && cluster.getPatriarchs().contains(root);
+            })) {
                 nonoverlappingPatriarchClusters.add(patriarchCluster);
             }
         });
         
         return nonoverlappingPatriarchClusters;
     }
+    
+    /*
     
     protected TAN_T createRootSubTAN(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
         SingleRootedHierarchy<CLUSTER_T> subhierarchy = this.groupHierarchy.getSubhierarchyRootedAt(root);
@@ -153,4 +101,6 @@ public class TribalAbstractionNetwork<CONCEPT_T,
         
         return tan;
     }
+    
+    */
 }

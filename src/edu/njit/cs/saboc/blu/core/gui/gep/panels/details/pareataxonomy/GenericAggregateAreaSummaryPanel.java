@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -29,8 +29,8 @@ public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
         
         HashSet<CONCEPT_T> totalConcepts = new HashSet<>();
         
-        areaPAreas.forEach( (PArea parea) -> {
-            AggregateableConceptGroup group = (AggregateableConceptGroup)parea;
+        areaPAreas.forEach((PArea parea) -> {
+            AggregateNode group = (AggregateNode)parea;
             
             if(group.getAggregatedGroups().isEmpty()) {
                 regularPAreas.add(parea);

@@ -1,10 +1,10 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import edu.njit.cs.saboc.blu.core.graph.disjointabn.BluDisjointGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.disjointabn.DisjointNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import java.awt.Stroke;
  * @author Chris O
  */
 public class DisjointAbNPainter extends AbNPainter {
-    public void paintContainerAtPoint(Graphics2D g2d, GenericContainerEntry entry, Point p, double scale) {
+    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
 
     }
     
@@ -25,13 +25,13 @@ public class DisjointAbNPainter extends AbNPainter {
 
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, GenericGroupEntry group, Point p, double scale) {
+    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
         
-        BluDisjointGroupEntry disjointGroup = (BluDisjointGroupEntry)group;
+        DisjointNodeEntry disjointGroup = (DisjointNodeEntry)group;
         
         Color [] colorSet = disjointGroup.getColorSet();
         
-        int colorWidth = (int)((BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH / colorSet.length) * scale);
+        int colorWidth = (int)((DisjointNodeEntry.DISJOINT_GROUP_WIDTH / colorSet.length) * scale);
 
         int totalDrawn = 0;
         
@@ -44,10 +44,10 @@ public class DisjointAbNPainter extends AbNPainter {
                 drawWidth = colorWidth;
                 totalDrawn += drawWidth;
             } else {
-                drawWidth = ((int)(BluDisjointGroupEntry.DISJOINT_GROUP_WIDTH * scale)) - totalDrawn;
+                drawWidth = ((int)(DisjointNodeEntry.DISJOINT_GROUP_WIDTH * scale)) - totalDrawn;
             }
             
-            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(BluDisjointGroupEntry.DISJOINT_GROUP_HEIGHT * scale));
+            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(DisjointNodeEntry.DISJOINT_GROUP_HEIGHT * scale));
 
         }
 
@@ -86,7 +86,7 @@ public class DisjointAbNPainter extends AbNPainter {
         
         g2d.setPaint(bgColor);
         
-        g2d.fillRect(textAreaX, textAreaY, (int)(GenericGroupEntry.ENTRY_WIDTH * scale), (int)(GenericGroupEntry.ENTRY_HEIGHT* scale));
+        g2d.fillRect(textAreaX, textAreaY, (int)(SinglyRootedNodeEntry.ENTRY_WIDTH * scale), (int)(SinglyRootedNodeEntry.ENTRY_HEIGHT* scale));
 
         Stroke savedStroke = g2d.getStroke();
         
@@ -108,7 +108,7 @@ public class DisjointAbNPainter extends AbNPainter {
         g2d.setPaint(outlineColor);
 
         g2d.drawRect(p.x, p.y, (int)(group.getWidth() * scale), (int)(group.getHeight() * scale));
-        g2d.drawRect(textAreaX, textAreaY, (int)(GenericGroupEntry.ENTRY_WIDTH * scale), (int)(GenericGroupEntry.ENTRY_HEIGHT* scale));
+        g2d.drawRect(textAreaX, textAreaY, (int)(SinglyRootedNodeEntry.ENTRY_WIDTH * scale), (int)(SinglyRootedNodeEntry.ENTRY_HEIGHT* scale));
 
         g2d.setStroke(savedStroke);
     }

@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
-import SnomedShared.Concept;
 import java.util.ListIterator;
 import java.util.Vector;
 import javax.swing.AbstractListModel;

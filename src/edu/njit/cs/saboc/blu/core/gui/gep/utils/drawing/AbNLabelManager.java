@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -67,15 +67,15 @@ public class AbNLabelManager {
             
             int size = MAX_GROUP_LABELSHEET_SIZE;
 
-            int rows = size / GenericGroupEntry.ENTRY_HEIGHT;
-            int cols = size / GenericGroupEntry.ENTRY_WIDTH;
+            int rows = size / SinglyRootedNodeEntry.ENTRY_HEIGHT;
+            int cols = size / SinglyRootedNodeEntry.ENTRY_WIDTH;
 
             
             while (doSubdivide(size, pendingCount)) {
                 size /= 2;
 
-                rows = size / GenericGroupEntry.ENTRY_HEIGHT;
-                cols = size / GenericGroupEntry.ENTRY_WIDTH;
+                rows = size / SinglyRootedNodeEntry.ENTRY_HEIGHT;
+                cols = size / SinglyRootedNodeEntry.ENTRY_WIDTH;
             }
             
             BufferedImage labelSheet = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
@@ -98,7 +98,7 @@ public class AbNLabelManager {
 
                     groupLabelMap.put(group.getId(), new GroupLabelPositionEntry(x, y));
 
-                    drawGroupLabelAtPosition(x * GenericGroupEntry.ENTRY_WIDTH, y * GenericGroupEntry.ENTRY_HEIGHT, group, g);
+                    drawGroupLabelAtPosition(x * SinglyRootedNodeEntry.ENTRY_WIDTH, y * SinglyRootedNodeEntry.ENTRY_HEIGHT, group, g);
 
                     totalProcessed++;
                     processedGroups.add(group);
@@ -128,8 +128,8 @@ public class AbNLabelManager {
     private boolean doSubdivide(int size, final int remaining) {
         size /= 2;
 
-        int rows = size / GenericGroupEntry.ENTRY_HEIGHT;
-        int cols = size / GenericGroupEntry.ENTRY_WIDTH;
+        int rows = size / SinglyRootedNodeEntry.ENTRY_HEIGHT;
+        int cols = size / SinglyRootedNodeEntry.ENTRY_WIDTH;
 
         return remaining < (4 * rows * cols);
     }
@@ -175,8 +175,8 @@ public class AbNLabelManager {
             return;
         }
                 
-        int labelWidth = GenericGroupEntry.ENTRY_WIDTH;
-        int labelHeight = GenericGroupEntry.ENTRY_HEIGHT;
+        int labelWidth = SinglyRootedNodeEntry.ENTRY_WIDTH;
+        int labelHeight = SinglyRootedNodeEntry.ENTRY_HEIGHT;
         
         int srcWidth = labelWidth;
         int srcHeight = labelHeight;
@@ -231,7 +231,7 @@ public class AbNLabelManager {
 
             y += fontHeight;
 
-            if ((y + fontHeight) > GenericGroupEntry.ENTRY_HEIGHT) {
+            if ((y + fontHeight) > SinglyRootedNodeEntry.ENTRY_HEIGHT) {
                 finished = true;
             }
 
@@ -246,8 +246,8 @@ public class AbNLabelManager {
                 String appendStr = conceptCountLabel;
 
                 if (strIndex < rootName.length() - 1) { // Didn't use whole string...
-                    if (g.getFontMetrics().stringWidth(line + "...") <= GenericGroupEntry.ENTRY_WIDTH) { // Within bounds with dots...
-                        if (g.getFontMetrics().stringWidth(line + "... " + conceptCountLabel) <= GenericGroupEntry.ENTRY_WIDTH) {
+                    if (g.getFontMetrics().stringWidth(line + "...") <= SinglyRootedNodeEntry.ENTRY_WIDTH) { // Within bounds with dots...
+                        if (g.getFontMetrics().stringWidth(line + "... " + conceptCountLabel) <= SinglyRootedNodeEntry.ENTRY_WIDTH) {
                             line += ("... " + conceptCountLabel);
                             fit = true;
                         } else {
@@ -256,7 +256,7 @@ public class AbNLabelManager {
                     }
 
                 } else { // Used the whole string...
-                    if (g.getFontMetrics().stringWidth(line + " " + conceptCountLabel) <= GenericGroupEntry.ENTRY_WIDTH) { // Can fit concept count
+                    if (g.getFontMetrics().stringWidth(line + " " + conceptCountLabel) <= SinglyRootedNodeEntry.ENTRY_WIDTH) { // Can fit concept count
                         line += (" " + conceptCountLabel);
                         fit = true;
                     } else {
@@ -265,7 +265,7 @@ public class AbNLabelManager {
                 }
 
                 if (!fit) {
-                    int boundDifference = g.getFontMetrics().stringWidth(line + appendStr) - GenericGroupEntry.ENTRY_WIDTH;
+                    int boundDifference = g.getFontMetrics().stringWidth(line + appendStr) - SinglyRootedNodeEntry.ENTRY_WIDTH;
 
                     int cutPoint = 1;
 
@@ -281,7 +281,7 @@ public class AbNLabelManager {
                 }
             }
 
-            int x = (GenericGroupEntry.ENTRY_WIDTH - g.getFontMetrics().stringWidth(line)) / 2;
+            int x = (SinglyRootedNodeEntry.ENTRY_WIDTH - g.getFontMetrics().stringWidth(line)) / 2;
                         
             g.drawString(line, xPos + x, yPos + y - 4);
         }

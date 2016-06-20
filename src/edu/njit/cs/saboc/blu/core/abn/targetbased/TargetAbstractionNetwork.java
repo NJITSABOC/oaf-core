@@ -2,45 +2,19 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNResult;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import java.util.HashMap;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 
 /**
  *
  * @author Chris O
  */
-public abstract class TargetAbstractionNetwork<
-        GROUP_T extends TargetGroup, 
-        TARGETABN_T extends TargetAbstractionNetwork<GROUP_T, TARGETABN_T>> extends AbstractionNetwork<GROUP_T> 
-
-    implements AggregateableAbstractionNetwork<TARGETABN_T> {
+public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup> {
     
-    private GROUP_T rootGroup;
-    
-    protected boolean isReduced = false;
-    
-    public TargetAbstractionNetwork(
-            GROUP_T rootGroup,
-            HashMap<Integer, GROUP_T> groups,
-            GroupHierarchy<GROUP_T> groupHierarchy) {
-        
-        super(groups, groupHierarchy);
-        
-        this.rootGroup = rootGroup;
+    public TargetAbstractionNetwork(NodeHierarchy<TargetGroup> groupHierarchy) {
+        super(groupHierarchy);
     }
     
-    public GROUP_T getRootGroup() {
-        return rootGroup;
-    }
-    
-    public boolean isReduced() {
-        return isReduced;
-    }
-    
-    protected void setReduced(boolean reduced) {
-        this.isReduced = reduced;
+    public NodeHierarchy<TargetGroup> getTargetGroupHierarchy() {
+        return super.getNodeHierarchy();
     }
 }

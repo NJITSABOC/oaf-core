@@ -1,14 +1,15 @@
 package edu.njit.cs.saboc.blu.core.graph;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdgeHandle;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.GenericGroupEditMenu;
@@ -26,6 +27,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
@@ -65,19 +67,23 @@ public class BluGraph extends JLayeredPane {
     /**
      * This is a list of all edges currently drawn.
      */
-    private ArrayList<GraphEdge> edges = new ArrayList<GraphEdge>();
+    private final ArrayList<GraphEdge> edges = new ArrayList<>();
+    
     /**
      * This is a list of all edges which have been manually adjusted.
      */
-    private ArrayList<GraphEdge> manualEdges = new ArrayList<GraphEdge>();
+    private final ArrayList<GraphEdge> manualEdges = new ArrayList<>();
+    
     /**
      * This keeps track of which edge "lanes" are currently filled with an edge.
      */
-    private ArrayList<GraphLane> occupiedLanes = new ArrayList<GraphLane>();
+    private final ArrayList<GraphLane> occupiedLanes = new ArrayList<>();
+    
     /**
      * This stores the currently selected edge, if any.
      */
     private GraphEdge selectedEdge;
+    
     /**
      * This stores the edge currently being hovered over, if any.
      */
@@ -101,11 +107,11 @@ public class BluGraph extends JLayeredPane {
     /*
      * Used to map each JPanel segment of a line to the data structure for it's entire line.
      */
-    private HashMap<JPanel, GraphEdge> segmentToEdge = new HashMap<JPanel, GraphEdge>();
+    private HashMap<JPanel, GraphEdge> segmentToEdge = new HashMap<>();
     /**
      * Used to keep track of the currently visible handles
      */
-    private ArrayList<GraphEdgeHandle> activeHandles = new ArrayList<GraphEdgeHandle>();
+    private ArrayList<GraphEdgeHandle> activeHandles = new ArrayList<>();
 
     /**
      * Popup menu displayed when a pArea is right-clicked
@@ -135,30 +141,24 @@ public class BluGraph extends JLayeredPane {
     /**
      * Keeps track of the currently selected pArea
      */
-    protected GenericGroupEntry currentGroup;
+    protected SinglyRootedNodeEntry currentGroup;
 
-    
     protected BluGraphLayout layout;
-
-    /**
-     * Indicates if this graph just contains Areas, not regions
-     */
-    private boolean isAreaGraph;
-    
-    protected boolean showConceptCountLabels;
     
     private final AbNLabelManager labelManager;
 
     /**
      * Sets up the graph based on the hierarchy information passed in.
+     * @param abstractionNetwork
+     * @param labelCreator
+     * 
      */
-    public BluGraph(final AbstractionNetwork hierarchyData, boolean areaGraph, boolean conceptLabels, GroupEntryLabelCreator labelCreator) {
-        this.abstractionNetwork = hierarchyData;
-        this.isAreaGraph = areaGraph;
-        this.showConceptCountLabels = conceptLabels;
+    public BluGraph(AbstractionNetwork abstractionNetwork, GroupEntryLabelCreator labelCreator) {
+        this.abstractionNetwork = abstractionNetwork;
         
         this.groupMenu = new GenericGroupEditMenu(this);
-        this.labelManager = new AbNLabelManager(hierarchyData, labelCreator);
+        
+        this.labelManager = new AbNLabelManager(abstractionNetwork, labelCreator);
         
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
@@ -180,7 +180,9 @@ public class BluGraph extends JLayeredPane {
         resizeMenuItem.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
+                
                 new ContainerResize(currentPartition, BluGraph.this);
+                
                 partitionMenu.setVisible(false);
             }
         });
@@ -203,87 +205,91 @@ public class BluGraph extends JLayeredPane {
      * @param e The edge to adjust.
      */
     public void updateManualEdge(GraphEdge e) {
-        GenericGroupEntry a1 = (GenericGroupEntry) getGroupEntries().get(e.getSourceID());
-        GenericGroupEntry a2 = (GenericGroupEntry) getGroupEntries().get(e.getTargetID());
+        SinglyRootedNodeEntry source = e.getSource();
+        SinglyRootedNodeEntry target = e.getTarget();
 
-        e.setPoint(0, new Point(a1.getAbsoluteX() + a1.getWidth() / 2, a1.getAbsoluteY()));
-        e.setPoint(1, new Point(a1.getAbsoluteX() + a1.getWidth() / 2, (int) e.getPoints().get(1).getY()));
+        e.setPoint(0, new Point(source.getAbsoluteX() + source.getWidth() / 2, source.getAbsoluteY()));
+        e.setPoint(1, new Point(source.getAbsoluteX() + source.getWidth() / 2, (int) e.getPoints().get(1).getY()));
 
-        e.setPoint(e.getPoints().size() - 2, new Point(a2.getAbsoluteX() + a2.getWidth() / 2, (int) e.getPoints().get(e.getPoints().size() - 2).getY()));
-        e.setPoint(e.getPoints().size() - 1, new Point(a2.getAbsoluteX() + a2.getWidth() / 2, a2.getAbsoluteY() + a2.getHeight()));
+        e.setPoint(e.getPoints().size() - 2, new Point(target.getAbsoluteX() + target.getWidth() / 2, (int) e.getPoints().get(e.getPoints().size() - 2).getY()));
+        e.setPoint(e.getPoints().size() - 1, new Point(target.getAbsoluteX() + target.getWidth() / 2, target.getAbsoluteY() + target.getHeight()));
 
         e.updateEdge();
     }
 
     /**
      * Draws an orthogonally routed edge between two pAreas - avoiding overlap with other objects.
-     * @param conceptID1 The concept ID for the source pArea
-     * @param conceptID2 The concept ID for the target pArea
+     * 
+     * @param from
+     * @param to
      */
-    public void drawRoutedEdge(int conceptID1, int conceptID2) {
-        GenericGroupEntry a1 = (GenericGroupEntry) getGroupEntries().get(conceptID1);
-        GenericGroupEntry a2 = (GenericGroupEntry) getGroupEntries().get(conceptID2);
+    public void drawRoutedEdge(SinglyRootedNodeEntry from, SinglyRootedNodeEntry to) {
 
         GraphLane l;
         int tempX;
         int tempY;
 
-        int currentLevel = a1.getParentLevel().getLevelY();
-        int targetLevel = a2.getParentLevel().getLevelY();
+        int currentLevel = from.getParentLevel().getLevelY();
+        int targetLevel = to.getParentLevel().getLevelY();
 
-        ArrayList<GenericContainerEntry> tempAreas;
-        GenericContainerEntry tempArea;
+        ArrayList<PartitionedNodeEntry> tempAreas;
+        PartitionedNodeEntry tempArea;
 
-        ArrayList<Point> pList = new ArrayList<Point>();
+        ArrayList<Point> pList = new ArrayList<>();
 
-        l = nextLane(a1.getGroupLevelParent().getRowAbove());     // Get the next available lane above the pArea if there is one
+        l = nextLane(from.getGroupLevelParent().getRowAbove());     // Get the next available lane above the pArea if there is one
 
         if (l == null) {    // If there isn't an available lane...
-            GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);    // Create an object for this edge,
+            GraphEdge newEdge = new GraphEdge(from, to, null);    // Create an object for this edge
+            
             edges.add(newEdge); // Add it to the list of current edges,
-            layout.resizeGroupRow(a1.getGroupLevelParent().getRowAbove(), a1.getParentLevel().getLevelY(), 5, a1); // Add lanes to the row you want to enter
+            layout.resizeGroupRow(from.getGroupLevelParent().getRowAbove(), from.getParentLevel().getLevelY(), 5, from); // Add lanes to the row you want to enter
+            
             return; // Abort this method because resizePAreaRow takes care of drawing the edge from here.
         }
 
         l.setEmpty(false);  // Mark the lane we're going to occupy as full.
+        
         occupiedLanes.add(l);
-        tempY = a1.getAbsoluteY() + l.getPosY();
-        tempX = a1.getAbsoluteX() + a1.getWidth() / 2;
-        pList.add(new Point(tempX, a1.getAbsoluteY()));  // This is the point in the middle of the upper edge of the pArea.
+        
+        tempY = from.getAbsoluteY() + l.getPosY();
+        tempX = from.getAbsoluteX() + from.getWidth() / 2;
+        pList.add(new Point(tempX, from.getAbsoluteY()));  // This is the point in the middle of the upper edge of the pArea.
         pList.add(new Point(tempX, tempY));    // This is the point directly above the center of the upper edge of the pArea.
 
         // If the edge is on the right half of an area and is not in the rightmost area of the level, 
         // it should be routed to the right side of this Area.
-        if (a1.getAbsoluteX() - a1.getParentContainer().getPosX()
-                > a1.getParentContainer().getWidth() / 2
-                && getLevels().get(a1.getParentLevel().getLevelY()).getContainerEntries().size()
-                > a1.getGroupLevelParent().getParentPartition().getParentContainer().getContainerX() + 1) {
+        if (from.getAbsoluteX() - from.getParentContainer().getAbsoluteX()
+                > from.getParentContainer().getWidth() / 2
+                && getLevels().get(from.getParentLevel().getLevelY()).getContainerEntries().size()
+                > from.getGroupLevelParent().getParentPartition().getParentContainer().getNodeX() + 1) {
 
-            GenericContainerEntry nextOver = getLevels().get(a1.getParentLevel().getLevelY()).getContainerEntries().get(a1.getParentContainer().getContainerX() + 1);
+            PartitionedNodeEntry nextOver = getLevels().get(from.getParentLevel().getLevelY()).getContainerEntries().get(from.getParentContainer().getNodeX() + 1);
 
             l = nextLane(nextOver.getColumnLeft());
 
             if (l == null) {
-                GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+                GraphEdge newEdge = new GraphEdge(from, to, null);
                 edges.add(newEdge);
                 layout.resizeColumn(nextOver.getColumnLeft(), 5, nextOver);
+                
                 return;
             }
 
-            tempX = nextOver.getPosX() + l.getPosX();
+            tempX = nextOver.getAbsoluteX() + l.getPosX();
 
         } //Otherwise, the edge should be routed to the left side of this area.
         else {
-            l = nextLane(a1.getParentContainer().getColumnLeft()); // Get the next available lane to the left of this pArea's parent Area if there is one.
+            l = nextLane(from.getParentContainer().getColumnLeft()); // Get the next available lane to the left of this pArea's parent Area if there is one.
 
             if (l == null) {
-                GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+                GraphEdge newEdge = new GraphEdge(from, to, null);
                 edges.add(newEdge);
-                layout.resizeColumn(a1.getParentContainer().getColumnLeft(), 5, a1.getParentContainer());
+                layout.resizeColumn(from.getParentContainer().getColumnLeft(), 5, from.getParentContainer());
                 return;
             }
 
-            tempX = a1.getParentContainer().getPosX() + l.getPosX();
+            tempX = from.getParentContainer().getAbsoluteX() + l.getPosX();
         }
 
 
@@ -293,17 +299,18 @@ public class BluGraph extends JLayeredPane {
 
         currentLevel--; // Now we're moving up one level...
 
-        l = nextLane(a1.getParentLevel().getRowAbove());   // Get the next available lane above this pArea's parent Area if there is one.
+        l = nextLane(from.getParentLevel().getRowAbove());   // Get the next available lane above this pArea's parent Area if there is one.
         if (l == null) {
-            GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+            GraphEdge newEdge = new GraphEdge(from, to, null);
             edges.add(newEdge);
-            layout.resizeRow(a1.getParentLevel().getRowAbove(), a1.getParentLevel().getLevelY(), 5, a1.getParentContainer());
+            layout.resizeRow(from.getParentLevel().getRowAbove(), from.getParentLevel().getLevelY(), 5, from.getParentContainer());
             return;
         }
         
         l.setEmpty(false);
         occupiedLanes.add(l);
-        tempY = l.getPosY() + a1.getParentLevel().getY();
+        
+        tempY = l.getPosY() + from.getParentLevel().getY();
         pList.add(new Point(tempX, tempY));
 
         while (currentLevel > targetLevel) // While we're still not in the row directly below our target pArea's level...
@@ -315,7 +322,7 @@ public class BluGraph extends JLayeredPane {
             l = nextLane(tempArea.getColumnLeft());
 
             if (l == null) {
-                GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+                GraphEdge newEdge = new GraphEdge(from, to, null);
                 edges.add(newEdge);
                 layout.resizeColumn(tempArea.getColumnLeft(), 5, tempArea);
                 return;
@@ -323,7 +330,7 @@ public class BluGraph extends JLayeredPane {
 
             l.setEmpty(false);
             occupiedLanes.add(l);
-            tempX = tempArea.getPosX() + l.getPosX();
+            tempX = tempArea.getAbsoluteX() + l.getPosX();
             pList.add(new Point(tempX, tempY));
 
             currentLevel--; // Moving up one level...
@@ -331,7 +338,7 @@ public class BluGraph extends JLayeredPane {
             l = nextLane(tempAreas.get(0).getLevelParent().getRowAbove());   // Get the next available lane above this level.
 
             if (l == null) {
-                GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+                GraphEdge newEdge = new GraphEdge(from, to, null);
                 edges.add(newEdge);
                 layout.resizeRow(tempAreas.get(0).getLevelParent().getRowAbove(), tempAreas.get(0).getLevelParent().getLevelY(), 5, tempAreas.get(0));
                 return;
@@ -343,34 +350,34 @@ public class BluGraph extends JLayeredPane {
             pList.add(new Point(tempX, tempY));
         }
 
-        l = nextLane(a2.getColumnLeft());   // Get the next available lane to the left of the target pArea.
+        l = nextLane(to.getColumnLeft());   // Get the next available lane to the left of the target pArea.
 
         if (l == null) {
-            GraphEdge newEdge = new GraphEdge(conceptID1, conceptID2, null);
+            GraphEdge newEdge = new GraphEdge(from, to, null);
             edges.add(newEdge);
-            layout.resizeGroupColumn(a2.getColumnLeft(), 5, a2);
+            layout.resizeGroupColumn(to.getColumnLeft(), 5, to);
             return;
         }
 
         l.setEmpty(false);
         occupiedLanes.add(l);
-        tempX = a2.getAbsoluteX() + l.getPosX();
+        tempX = to.getAbsoluteX() + l.getPosX();
         pList.add(new Point(tempX, tempY));
 
-        tempY = a2.getAbsoluteY() + a2.getEntryHeight() + 3;   // The point to the left and below the target pArea.
+        tempY = to.getAbsoluteY() + to.getEntryHeight() + 3;   // The point to the left and below the target pArea.
         pList.add(new Point(tempX, tempY));
 
-        tempX = a2.getAbsoluteX() + a2.getEntryWidth() / 2;    // Now directly below the target pArea.
+        tempX = to.getAbsoluteX() + to.getEntryWidth() / 2;    // Now directly below the target pArea.
         pList.add(new Point(tempX, tempY));
 
-        tempY = a2.getAbsoluteY() + a2.getEntryHeight();       // Final destination, touching the center of the lower edge of the target pArea.
+        tempY = to.getAbsoluteY() + to.getEntryHeight();       // Final destination, touching the center of the lower edge of the target pArea.
 
         pList.add(new Point(tempX, tempY));
 
-        GraphEdge dataEdge = new GraphEdge(conceptID1, conceptID2, pList);
-        addEdge(pList, lineColors[a1.getGroupLevelParent().getGroupLevelY() % 2][a1.getGroupX() % 5], dataEdge, a1, a2);
+        GraphEdge dataEdge = new GraphEdge(from, to, pList);
+        addEdge(pList, lineColors[from.getGroupLevelParent().getGroupLevelY() % 2][from.getGroupX() % 5], dataEdge, from, to);
+        
         edges.add(dataEdge);
-
     }
 
     /**
@@ -416,7 +423,7 @@ public class BluGraph extends JLayeredPane {
             if (manualEdges.contains(e)) {
                 updateManualEdge(e);
             } else {
-                drawRoutedEdge(e.getSourceID(), e.getTargetID());
+                drawRoutedEdge(e.getSource(), e.getTarget());
             }
         }
 
@@ -429,13 +436,13 @@ public class BluGraph extends JLayeredPane {
      * @param x The x-coordinate.
      * @return The Area which has a left column closest to the given x-coordinate.
      */
-    private GenericContainerEntry nearestColumnContainerEntry(ArrayList<GenericContainerEntry> containers, int x) {
-        GenericContainerEntry result = null;
+    private PartitionedNodeEntry nearestColumnContainerEntry(ArrayList<PartitionedNodeEntry> containers, int x) {
+        PartitionedNodeEntry result = null;
         int closestDist = Integer.MAX_VALUE;
 
-        for (GenericContainerEntry a : containers) {
-            if (Math.abs(a.getPosX() - x) < closestDist) {
-                closestDist = Math.abs(a.getPosX() - x);
+        for (PartitionedNodeEntry a : containers) {
+            if (Math.abs(a.getAbsoluteX() - x) < closestDist) {
+                closestDist = Math.abs(a.getAbsoluteX() - x);
                 result = a;
             }
         }
@@ -452,7 +459,7 @@ public class BluGraph extends JLayeredPane {
      * @param destination The BluPArea object representing the target pArea for this edge.
      */
     public void addEdge(ArrayList<Point> points, Color c, GraphEdge e,
-            GenericGroupEntry source, GenericGroupEntry destination) {
+            SinglyRootedNodeEntry source, SinglyRootedNodeEntry destination) {
 
         for (int i = 0; i < points.size() - 1; i++) {
             JPanel s = new JPanel();
@@ -611,9 +618,9 @@ public class BluGraph extends JLayeredPane {
                                 GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
 
                                 if (e.isControlDown()) {
-                                    igf.focusOnComponent(getGroupEntries().get(edge.getSourceID()));
+                                    igf.focusOnComponent(getGroupEntries().get(edge.getSource()));
                                 } else {
-                                    igf.focusOnComponent(getGroupEntries().get(edge.getTargetID()));
+                                    igf.focusOnComponent(getGroupEntries().get(edge.getTarget()));
                                 }
 
                             } catch (Exception exception) {
@@ -669,8 +676,10 @@ public class BluGraph extends JLayeredPane {
     public void removeEdge(GraphEdge e) {
         if (e != null) {
             edges.remove(e);
-            getGroupEntries().get(e.getSourceID()).removeIncidentEdge(e);
-            getGroupEntries().get(e.getTargetID()).removeIncidentEdge(e);
+            
+            getGroupEntries().get(e.getSource()).removeIncidentEdge(e);
+            getGroupEntries().get(e.getTarget()).removeIncidentEdge(e);
+            
             for (JPanel s : e.getSegments()) {
                 remove(s);
             }
@@ -689,7 +698,7 @@ public class BluGraph extends JLayeredPane {
 
     public void clearAllEdges() {
 
-        ArrayList<GraphEdge> removeEdges = new ArrayList<GraphEdge>();
+        ArrayList<GraphEdge> removeEdges = new ArrayList<>();
 
         for (GraphEdge temp : edges) {
             removeEdges.add(temp);
@@ -798,9 +807,9 @@ public class BluGraph extends JLayeredPane {
      * @param target Concept id of the target pArea
      * @return A boolean variable that is true if a line has already been drawn between the given source and target and false otherwise.
      */
-    public boolean edgeAlreadyDrawn(int source, int target) {
+    public boolean edgeAlreadyDrawn(SinglyRootedNodeEntry source, SinglyRootedNodeEntry target) {
         for (GraphEdge e : edges) {
-            if (e.getSourceID() == source && e.getTargetID() == target) {
+            if (e.getSource().equals(source) && e.getTarget().equals(target)) {
                 return true;
             }
         }
@@ -828,7 +837,7 @@ public class BluGraph extends JLayeredPane {
         return segmentToEdge;
     }
 
-    public JPopupMenu getGroupEntryMenuFor(GenericConceptGroup group) {
+    public JPopupMenu getGroupEntryMenuFor(Node group) {
         deactivateSelectedEdge();
         partitionMenu.setVisible(false);
         currentPartition = null;
@@ -874,32 +883,24 @@ public class BluGraph extends JLayeredPane {
         return currentPartition;
     }
 
-    public void setCurrentGroup(GenericGroupEntry group) {
+    public void setCurrentGroup(SinglyRootedNodeEntry group) {
         currentGroup = group;
     }
 
-    public GenericGroupEntry getCurrentGroup() {
+    public SinglyRootedNodeEntry getSelectedGroup() {
         return currentGroup;
     }
 
-    public HashMap<Integer, ? extends GenericContainerEntry> getContainerEntries() {
+    public Map<Integer, PartitionedNodeEntry> getContainerEntries() {
         return layout.getContainerEntries();
     }
 
-    public HashMap<Integer, ? extends GenericGroupEntry> getGroupEntries() {
+    public Map<SinglyRootedNode, SinglyRootedNodeEntry> getGroupEntries() {
         return layout.getGroupEntries();
     }
 
     public int getEdgeWidth() {
         return EDGE_WIDTH;
-    }
-
-    public boolean getIsAreaGraph() {
-        return isAreaGraph;
-    }
-
-    public boolean showingConceptCountLabels() {
-        return showConceptCountLabels;
     }
 
     /**
@@ -913,7 +914,7 @@ public class BluGraph extends JLayeredPane {
             public void actionPerformed(ActionEvent e) {
                 try {
                     GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getTargetID()));
+                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getTarget()));
                 } catch (Exception exception) {
                     System.err.println(exception);
                 }
@@ -928,7 +929,7 @@ public class BluGraph extends JLayeredPane {
             public void actionPerformed(ActionEvent e) {
                 try {
                     GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getSourceID()));
+                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getSource()));
                 } catch (Exception exception) {
                     System.err.println(exception);
                 }

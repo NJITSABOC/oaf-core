@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -159,7 +159,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         goToRootBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if (tabbedPane.getSelectedIndex() == 0) {
-                    GenericGroupEntry entry = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
+                    SinglyRootedNodeEntry entry = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
 
                     scroller.getViewport().setViewPosition(
                             new Point(entry.getAbsoluteX() - GenericInternalGraphFrame.this.getWidth() / 2, 0));
@@ -250,8 +250,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                 int x = c.getX();
                 int y = c.getY();
 
-                if (c instanceof GenericGroupEntry) {
-                    GenericGroupEntry group = ((GenericGroupEntry) c);
+                if (c instanceof SinglyRootedNodeEntry) {
+                    SinglyRootedNodeEntry group = ((SinglyRootedNodeEntry) c);
 
                     x = group.getAbsoluteX();
                     y = group.getAbsoluteY();
@@ -292,9 +292,9 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
             Component[] components = graph.getComponents();
 
             for (Component c : components) {
-                if (c instanceof GenericContainerEntry) {
-                    if (!((GenericContainerEntry) c).isCollapsed()) {
-                        ((GenericContainerEntry) c).collapseContainer();
+                if (c instanceof PartitionedNodeEntry) {
+                    if (!((PartitionedNodeEntry) c).isCollapsed()) {
+                        ((PartitionedNodeEntry) c).collapseContainer();
                     }
                 }
             }
@@ -302,9 +302,9 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
             Component[] components = graph.getComponents();
 
             for (Component c : components) {
-                if (c instanceof GenericContainerEntry) {
-                    if (((GenericContainerEntry) c).isCollapsed()) {
-                        ((GenericContainerEntry) c).expandContainer();
+                if (c instanceof PartitionedNodeEntry) {
+                    if (((PartitionedNodeEntry) c).isCollapsed()) {
+                        ((PartitionedNodeEntry) c).expandContainer();
                     }
                 }
             }

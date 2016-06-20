@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -9,7 +9,7 @@ import java.util.HashSet;
  */
 public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
     
-    private MultiRootedHierarchy<T> ancestorHierarchy;
+    private final MultiRootedHierarchy<T> ancestorHierarchy;
     
     public AncestorHierarchyBuilderVisitor(
             MultiRootedHierarchy<T> theHierarchy, 
@@ -22,7 +22,7 @@ public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
     
     public void visit(T node) {
 
-        HashSet<T> nodeParents = theHierarchy.getParents(node);
+        Set<T> nodeParents = theHierarchy.getParents(node);
 
         nodeParents.forEach((T parent) -> {
             ancestorHierarchy.addIsA(node, parent);

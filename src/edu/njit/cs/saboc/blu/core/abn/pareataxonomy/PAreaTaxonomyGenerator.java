@@ -1,14 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
@@ -16,7 +13,7 @@ import java.util.Stack;
  *
  * @author Chris O
  */
-public abstract class PAreaTaxonomyGenerator {
+public class PAreaTaxonomyGenerator {
     
     /**
      * Builds a partial-area taxonomy from the given source hierarchy. 
@@ -124,6 +121,7 @@ public abstract class PAreaTaxonomyGenerator {
         Set<PArea> pareas = new HashSet<>();
         
         HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
+        HashMap<Concept, PArea> pareasByRoot = new HashMap<>();
 
         PArea rootPArea = null;
 
@@ -138,6 +136,7 @@ public abstract class PAreaTaxonomyGenerator {
                 pareasByRelationships.put(parea.getRelationships(), new HashSet<>());
             }
             
+            pareasByRoot.put(root, parea);
             pareasByRelationships.get(parea.getRelationships()).add(parea);
             
             pareas.add(parea);
@@ -145,125 +144,101 @@ public abstract class PAreaTaxonomyGenerator {
                 
         NodeHierarchy<PArea> pareaHierarchy = new NodeHierarchy<>(rootPArea);
         
-        for(PArea parea : pareas) {
+        pareas.forEach((parea) -> {
             Concept root = parea.getHierarchy().getRoot();
-            
+
             Set<Concept> parents = sourceHierarchy.getParents(root);
 
-            
-            for(Concept parent : parents) {
+            parents.forEach((parent) -> {
                 Set<Concept> parentPAreas = conceptPAreas.get(parent);
-                
-                for(Concept parentPArea : parentPAreas) {
-                    
-                    //pareaHierarchy.addIsA(parea, pareas.get(parentPAreaId));
-                }
-            }
-        }
-        
-        final PArea finalRootPArea = rootPArea;
+
+                parentPAreas.forEach((parentPAreaRoot) -> {
+                    pareaHierarchy.addIsA(parea, pareasByRoot.get(parentPAreaRoot));
+                });
+            });
+        });
         
         Set<Area> areas = new HashSet<>();
         
         Area rootArea = null;
         
-        pareasByRelationships.forEach( (rels, pareasWithRels) -> {
-            areas.add(new Area(pareasWithRels, rels));
+        HashMap<Set<InheritableProperty>, Area> areasByRelationships = new HashMap<>();
+        
+        for(Entry<Set<InheritableProperty>, Set<PArea>> entry : pareasByRelationships.entrySet()) {
+            Area area = new Area(entry.getValue(), entry.getKey());
             
-
+            areas.add(area);
+            
+            if(area.getPAreas().contains(rootPArea)) {
+                rootArea = area;
+            }
+            
+            areasByRelationships.put(area.getRelationships(), area);
+        }
+        
+        NodeHierarchy<Area> areaHierarchy = new NodeHierarchy<>(rootArea);
+        
+        areas.forEach((area) -> {
+            if (!area.equals(areaHierarchy.getRoot())) {
+                area.getPAreas().forEach((parea) -> {
+                    Area parentArea = areasByRelationships.get(parea.getRelationships());
+                    areaHierarchy.addIsA(area, parentArea);
+                });
+            }
         });
         
-        NodeHierarchy<Area> areaHierarchy;
-        
-        
+        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy);
+        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, sourceHierarchy, pareaHierarchy);
 
-        return createPAreaTaxonomy(conceptHierarchy, rootPArea, areas, pareas, pareaHierarchy);
+        return pareaTaxonomy;
     }
     
-    protected abstract HIERARCHY_T getConceptHierarchy();
-    
-    protected abstract RelationshipEquality<REL_T> getRelationshipEquality();
-    
-    protected abstract HashSet<REL_T> getDefiningConceptRelationships(CONCEPT_T concept);
-    
-    protected abstract HIERARCHY_T initPAreaConceptHierarchy(CONCEPT_T root);
-    
-    protected abstract PAREA_T createPArea(int id, HIERARCHY_T pareaHierarchy, HashSet<Integer> parentIds, 
-             HashSet<REL_T> relationships);
-    
-    protected abstract AREA_T createArea(int id, HashSet<REL_T> relationships);
-    
-    protected abstract TAXONOMY_T createPAreaTaxonomy(
-            HIERARCHY_T conceptHierarchy, PAREA_T rootPArea, 
-            ArrayList<AREA_T> areas, HashMap<Integer, PAREA_T> pareas, 
-            GroupHierarchy<PAREA_T> pareaHierarchy);
-    
-    public TAXONOMY_T createTaxonomyFromPAreas(
-            HashMap<Integer, PAREA_T> pareas, 
-            GroupHierarchy<PAREA_T> pareaHierarchy) {
+    public PAreaTaxonomy createTaxonomyFromPAreas(NodeHierarchy<PArea> pareaHierarchy) {
+                     
+        HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
         
-        ArrayList<AREA_T> subhierarchyAreas = new ArrayList<AREA_T>();
-             
-        int areaId = 0;
-        
-        HashMap<HashSet<REL_T>, AREA_T> areaMap = new HashMap<HashSet<REL_T>, AREA_T>();
-        
-        for(PAREA_T parea : pareas.values()) {
-            AREA_T area;
-            
-            if(!areaMap.containsKey(parea.getRelsWithoutInheritanceInfo())) {
-                area = (AREA_T)createArea(areaId++, parea.getRelsWithoutInheritanceInfo());
+        SingleRootedConceptHierarchy conceptHierarchy = new SingleRootedConceptHierarchy(pareaHierarchy.getRoot().getRoot());
                 
-                areaMap.put(area.getRelationships(), area);
-                
-                subhierarchyAreas.add(area);
-            } else {
-                area = areaMap.get(parea.getRelsWithoutInheritanceInfo());
+        pareaHierarchy.getNodesInHierarchy().forEach( (parea) -> {
+            Set<InheritableProperty> properties = parea.getRelationships();
+            
+            if(!pareasByRelationships.containsKey(properties)) {
+                pareasByRelationships.put(properties, new HashSet<>());
             }
             
-            area.addPArea(parea);
+            pareasByRelationships.get(properties).add(parea);
             
-            HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> reducedParentInfo = new HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>>();
-            
-            PAREA_T originalRoot;
-            
-            if(parea instanceof AggregateableConceptGroup) {
-                originalRoot = (PAREA_T)((AggregateableConceptGroup)parea).getAggregatedGroupHierarchy().getRoots().iterator().next();
-            } else {
-                originalRoot = parea;
+            conceptHierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
+        });
+        
+        HashMap<Set<InheritableProperty>, Area> areasByRelationships = new HashMap<>();
+        
+        Area rootArea = null;
+        
+        for (Entry<Set<InheritableProperty>, Set<PArea>> entry : pareasByRelationships.entrySet()) {
+            Area area = new Area(entry.getValue(), entry.getKey());
+
+            if (area.getPAreas().contains(pareaHierarchy.getRoot())) {
+                rootArea = area;
             }
 
-            HashSet<ParentNodeInformation<CONCEPT_T, PAREA_T>> originalParents = originalRoot.getParentPAreaInfo();
-                        
-            for(ParentNodeInformation<CONCEPT_T, PAREA_T> originalParent : originalParents) {
-                if(pareas.containsKey(originalParent.getParentGroup().getId())) {
-                    reducedParentInfo.add(new ParentNodeInformation<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), 
-                            pareas.get(originalParent.getParentGroup().getId())));
-                } else {
-                    for(PAREA_T otherPArea : pareas.values()) {
-                        
-                        if (otherPArea instanceof AggregateableConceptGroup) {
-                            AggregateableConceptGroup aggregateGroup = (AggregateableConceptGroup) otherPArea;
-
-                            if (aggregateGroup.getAllGroupsConcepts().contains(originalParent.getParentConcept())) {
-                                reducedParentInfo.add(new ParentNodeInformation<CONCEPT_T, PAREA_T>(originalParent.getParentConcept(), otherPArea));
-                                break;
-                            }
-                        }
-                        
-                    }
-                }
-            }
-
-            parea.setParentPAreaInfo(reducedParentInfo);
+            areasByRelationships.put(area.getRelationships(), area);
         }
-
-        TAXONOMY_T reducedTaxonomy = (TAXONOMY_T)createPAreaTaxonomy(getConceptHierarchy(), 
-                pareaHierarchy.getRoots().iterator().next(), 
-                subhierarchyAreas, 
-                pareas, 
-                pareaHierarchy);
         
-        return reducedTaxonomy;
+        NodeHierarchy<Area> areaHierarchy = new NodeHierarchy<>(rootArea);
+ 
+        areasByRelationships.values().forEach((area) -> {
+            if (!area.equals(areaHierarchy.getRoot())) {
+                area.getPAreas().forEach((parea) -> {
+                    Area parentArea = areasByRelationships.get(parea.getRelationships());
+                    areaHierarchy.addIsA(area, parentArea);
+                });
+            }
+        });
+        
+        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy);
+        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, conceptHierarchy, pareaHierarchy);
+   
+        return pareaTaxonomy;
     }
 }

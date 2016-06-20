@@ -7,14 +7,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import javax.imageio.ImageIO;
+import java.util.Set;
 import javax.swing.JPanel;
 
 /**
@@ -174,7 +171,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
             for(T concept : levelConcepts) {
                 Point childDrawPoint = conceptDrawLocation.get(concept);
                 
-                HashSet<T> parents = hierarchy.getParents(concept);
+                Set<T> parents = hierarchy.getParents(concept);
                 
                 for (T parent : parents) {
                     Point parentDrawPoint = conceptDrawLocation.get(parent);
@@ -221,11 +218,11 @@ public class HierarchyPainterPanel<T> extends JPanel {
         
         ArrayList<ArrayList<T>> conceptLevels = new ArrayList<ArrayList<T>>();
 
-        HashSet<T> roots = hierarchy.getRoots();
+        Set<T> roots = hierarchy.getRoots();
         
         HashMap<T, Integer> parentCount = new HashMap<T, Integer>();
         
-        HashSet<T> concepts = hierarchy.getNodesInHierarchy();
+        Set<T> concepts = hierarchy.getNodesInHierarchy();
         
         for(T concept : concepts) {
             parentCount.put(concept, hierarchy.getParents(concept).size());
@@ -239,7 +236,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
         while(!queue.isEmpty()) {
             T concept = queue.remove();
             
-            HashSet<T> parents = hierarchy.getParents(concept);
+            Set<T> parents = hierarchy.getParents(concept);
             
             int maxParentDepth = -1;
             
@@ -261,7 +258,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
             
             conceptLevels.get(depth).add(concept);
 
-            HashSet<T> children = hierarchy.getChildren(concept);
+            Set<T> children = hierarchy.getChildren(concept);
             
             for(T child : children) {
                 int childParentCount = parentCount.get(child) - 1;

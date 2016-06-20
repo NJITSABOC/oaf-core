@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractAbNNodeEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class ClusterDetailsPanel<CONCEPT_T, CLUSTER_T extends GenericCluster> extends AbstractNodeDetailsPanel<CLUSTER_T, CONCEPT_T> {
+public class ClusterDetailsPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends AbstractNodeDetailsPanel<CLUSTER_T, CONCEPT_T> {
     
     private final BLUGenericTANConfiguration config;
     

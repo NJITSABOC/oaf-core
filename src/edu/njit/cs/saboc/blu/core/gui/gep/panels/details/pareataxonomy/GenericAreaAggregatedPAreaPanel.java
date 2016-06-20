@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
@@ -23,7 +23,7 @@ import javax.swing.JSplitPane;
 public class GenericAreaAggregatedPAreaPanel<CONCEPT_T, 
         AREA_T extends Area,
         PAREA_T extends PArea, 
-        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
     
     private final BLUGenericPAreaTaxonomyConfiguration config;
     
@@ -72,7 +72,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         HashMap<PAREA_T, HashSet<AGGREGATEPAREA_T>> aggregatedInto = new HashMap<>();
         
         aggregatePAreas.forEach((AGGREGATEPAREA_T parea) -> {
-             AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)parea;
+             AggregateNode<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateNode<CONCEPT_T, PAREA_T>)parea;
              
              if(!aggregatePArea.getAggregatedGroups().isEmpty()) {
                  HashSet<PAREA_T> aggregatedPAreas = aggregatePArea.getAggregatedGroups();

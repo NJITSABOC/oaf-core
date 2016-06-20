@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedGroupEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Collections;
  */
 public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T, 
         PAREA_T extends PArea, 
-        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> extends BLUAbstractTableModel<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends BLUAbstractTableModel<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
 
     protected final BLUGenericPAreaTaxonomyConfiguration configuration;
     
@@ -35,7 +35,7 @@ public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T,
         ArrayList<String> aggregatePAreas = new ArrayList<>();
         
         item.getAggregatedIntoGroups().forEach((AGGREGATEPAREA_T parea) -> {
-            AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)parea;
+            AggregateNode<CONCEPT_T, PAREA_T> aggregatePArea = (AggregateNode<CONCEPT_T, PAREA_T>)parea;
             
             aggregatePAreas.add(String.format("%s (%d) [%d]", configuration.getTextConfiguration().getGroupName(parea), aggregatePArea.getAllGroupsConcepts().size(),
                     aggregatePArea.getAggregatedGroups().size()));

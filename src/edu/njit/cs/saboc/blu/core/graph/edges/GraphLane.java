@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.edges;
 
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import java.util.ArrayList;
 
 /**
@@ -31,9 +31,9 @@ public class GraphLane {
     /**
      * Area that this lane is inside, if any.
      */
-    GenericContainerEntry parent;
+    PartitionedNodeEntry parent;
 
-    public GraphLane(int x, int y, int s, GenericContainerEntry p) {
+    public GraphLane(int x, int y, int s, PartitionedNodeEntry p) {
         posX = x;
         posY = y;
         size = s;
@@ -58,7 +58,7 @@ public class GraphLane {
         return isEmpty;
     }
 
-    public GenericContainerEntry getContainerEntryParent() {
+    public PartitionedNodeEntry getContainerEntryParent() {
         return parent;
     }
 

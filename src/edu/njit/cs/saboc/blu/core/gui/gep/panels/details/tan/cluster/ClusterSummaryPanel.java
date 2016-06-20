@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import SnomedShared.Concept;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class ClusterSummaryPanel<CONCEPT_T, CLUSTER_T extends GenericCluster> extends AbstractNodeSummaryPanel<CLUSTER_T> {
+public class ClusterSummaryPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends AbstractNodeSummaryPanel<CLUSTER_T> {
 
     private final BLUGenericTANConfiguration config;
     

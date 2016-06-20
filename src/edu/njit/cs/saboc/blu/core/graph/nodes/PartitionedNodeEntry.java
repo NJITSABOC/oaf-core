@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
-import SnomedShared.generic.GenericGroupContainer;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
@@ -21,18 +21,16 @@ import javax.swing.JPanel;
  *
  * @author Chris
  */
-public class GenericContainerEntry extends AbNNodeEntry {
-
-    protected GenericGroupContainer container;
+public class PartitionedNodeEntry extends AbNNodeEntry {
 
     private JButton collapseExpand;
 
-    protected BluGraph graph;
+    private BluGraph graph;
     
     /**
      * Index of this area in the ArrayList <i>areas</i> in the GraphLevel class.
      */
-    private int containerX;
+    private int nodeX;
 
     /**
      * The level object this is part of.
@@ -42,7 +40,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     /**
      * The GraphRegion objects that represent the regions within this Area.
      */
-    protected ArrayList<GenericPartitionEntry> partitions = new ArrayList<GenericPartitionEntry>();
+    private ArrayList<GenericPartitionEntry> partitions = new ArrayList<>();
 
     /**
      * Initial bounds of the container entry (e.g. not collapsed)
@@ -56,13 +54,18 @@ public class GenericContainerEntry extends AbNNodeEntry {
     
     private boolean isCollapsed = false;
 
-    public GenericContainerEntry(GenericGroupContainer container, BluGraph g,
-            int aX, GraphLevel parent, Rectangle prefBounds) {
+    public PartitionedNodeEntry(
+            PartitionedNode node,
+            BluGraph g,
+            int aX, 
+            GraphLevel parent, 
+            Rectangle preferredBounds) {
+        
+        super(node);
 
-        this.containerX = aX;
+        this.nodeX = aX;
         this.parentLevel = parent;
-        this.preferredBounds = prefBounds;
-        this.container = container;
+        this.preferredBounds = preferredBounds;
         this.graph = g;
 
         //Setup the panel's dimensions, etc.
@@ -94,9 +97,9 @@ public class GenericContainerEntry extends AbNNodeEntry {
                 
                 isCollapsed = true;
 
-                Collection<? extends GenericContainerEntry> areas = graph.getContainerEntries().values();
+                Collection<? extends PartitionedNodeEntry> areas = graph.getContainerEntries().values();
 
-                for (GenericContainerEntry containerEntry : areas) {
+                for (PartitionedNodeEntry containerEntry : areas) {
                     if (!containerEntry.isCollapsed()) {
                         return;
                     }
@@ -113,6 +116,10 @@ public class GenericContainerEntry extends AbNNodeEntry {
         });
 
         add(collapseExpand);
+    }
+    
+    public PartitionedNode getNode() {
+        return (PartitionedNode)super.getNode();
     }
 
     public void expandContainer() {
@@ -143,10 +150,11 @@ public class GenericContainerEntry extends AbNNodeEntry {
 
         currentLevel.cascadeHeightChange(currentLevel.getTallestContainerEntry().getHeight());
 
-        for (GenericPartitionEntry region : partitions) {
-            for (GraphGroupLevel groupLevel : region.getGroupLevels()) {
+        for (GenericPartitionEntry partition : partitions) {
+           
+            for (GraphGroupLevel groupLevel : partition.getGroupLevels()) {
                 if (groupLevel.getIsVisible()) {
-                    for (GenericGroupEntry group : groupLevel.getGroupEntries()) {
+                    for (SinglyRootedNodeEntry group : groupLevel.getGroupEntries()) {
                         if (group.isVisible()) {
                             group.showIncidentEdges();
                         }
@@ -189,7 +197,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
                 
                 graph.getLabelManager().removeLabel(regionLabel);
                 
-                JLabel partitionLabel = graph.getGraphLayout().createPartitionLabel(partitionEntry.getPartition(), maxLabelWidth);
+                JLabel partitionLabel = graph.getGraphLayout().createPartitionLabel(partitionEntry.getNode(), maxLabelWidth);
                 maxLabelWidth = Math.max(maxLabelWidth, partitionLabel.getWidth() + 8);
                 
                 partitionLabel.setBounds(0, collapsedContainerHeight, partitionLabel.getWidth(), partitionLabel.getHeight());
@@ -219,10 +227,11 @@ public class GenericContainerEntry extends AbNNodeEntry {
 
         currentLevel.cascadeHeightChange(currentLevel.getTallestContainerEntry().getHeight());
 
-        for (GenericPartitionEntry region : partitions) {
-            for (GraphGroupLevel groupLevel : region.getGroupLevels()) {
+        for (GenericPartitionEntry partition : partitions) {
+             
+            for (GraphGroupLevel groupLevel : partition.getGroupLevels()) {
                 if (groupLevel.getIsVisible()) {
-                    for (GenericGroupEntry group : groupLevel.getGroupEntries()) {
+                    for (SinglyRootedNodeEntry group : groupLevel.getGroupEntries()) {
                         if (group.isVisible()) {
                             group.hideIncidentEdges();
                         }
@@ -235,7 +244,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     }
 
     public void rippleExpand(double dx) {
-        ArrayList<GenericContainerEntry> containerEntries = parentLevel.getContainerEntries();
+        ArrayList<PartitionedNodeEntry> containerEntries = parentLevel.getContainerEntries();
         int areaIndex = containerEntries.indexOf(this);
 
         //Shift areas to the right
@@ -252,7 +261,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     }
 
     public void rippleCollapse(double dx) {
-        ArrayList<GenericContainerEntry> containerEntries = parentLevel.getContainerEntries();
+        ArrayList<PartitionedNodeEntry> containerEntries = parentLevel.getContainerEntries();
         int areaIndex = containerEntries.indexOf(this);
 
         //Shift areas to the right
@@ -269,7 +278,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     }
 
     public void cascadeExpandToRight(int dx) {
-        GenericContainerEntry containerEntryToRight = this.getContainerEntryRightOf();
+        PartitionedNodeEntry containerEntryToRight = this.getContainerEntryRightOf();
 
         while (containerEntryToRight != null) {
             containerEntryToRight.setBounds(containerEntryToRight.getX() + dx, containerEntryToRight.getY(), containerEntryToRight.getWidth(), containerEntryToRight.getHeight());
@@ -278,7 +287,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     }
 
     public void cascadeCollapseToRight(int dx) {
-        GenericContainerEntry containerEntryToRight = this.getContainerEntryRightOf();
+        PartitionedNodeEntry containerEntryToRight = this.getContainerEntryRightOf();
 
         while (containerEntryToRight != null) {
             containerEntryToRight.setBounds(containerEntryToRight.getX() - dx, containerEntryToRight.getY(), containerEntryToRight.getWidth(), containerEntryToRight.getHeight());
@@ -290,27 +299,19 @@ public class GenericContainerEntry extends AbNNodeEntry {
         return partitions;
     }
 
-    public GenericGroupContainer getGroupContainer() {
-        return container;
+    public PartitionedNode getGroupContainer() {
+        return (PartitionedNode)super.getNode();
     }
 
-    public int getContainerX() {
-        return containerX;
+    public int getNodeX() {
+        return nodeX;
     }
 
-    public int getContainerEntryWidth() {
-        return this.getWidth();
-    }
-
-    public int getContainerEntryHeight() {
-        return this.getHeight();
-    }
-
-    public int getPosX() {
+    public int getAbsoluteX() {
         return this.getX();
     }
 
-    public int getPosY() {
+    public int getAbsoluteY() {
         return this.getY();
     }
 
@@ -325,7 +326,7 @@ public class GenericContainerEntry extends AbNNodeEntry {
     }
 
     public ArrayList<GraphLane> getColumnLeft() {
-        return parentLevel.getParentGraph().getGraphLayout().getColumn(containerX, parentLevel.getLevelY());
+        return parentLevel.getParentGraph().getGraphLayout().getColumn(nodeX, parentLevel.getLevelY());
     }
 
     public GraphLevel getParentLevel() {
@@ -370,14 +371,14 @@ public class GenericContainerEntry extends AbNNodeEntry {
 
     @Override
     public String toString() {
-        return "Container: ContainerX = " + containerX + ", ContainerY = " + getLevelParent().getLevelY() + ", x = " + getPosX() + ", y = " + getPosY() + ", width = " + getWidth() + ", height = " + getHeight() + "\n"
+        return "Container: ContainerX = " + nodeX + ", ContainerY = " + getLevelParent().getLevelY() + ", x = " + getAbsoluteX() + ", y = " + getAbsoluteY() + ", width = " + getWidth() + ", height = " + getHeight() + "\n"
                 + getGroupContainer().toString();
 
     }
 
-    public GenericContainerEntry getContainerEntryRightOf() {
-        if (containerX + 1 < parentLevel.getContainerEntries().size()) {
-            return parentLevel.getContainerEntries().get(containerX + 1);
+    public PartitionedNodeEntry getContainerEntryRightOf() {
+        if (nodeX + 1 < parentLevel.getContainerEntries().size()) {
+            return parentLevel.getContainerEntries().get(nodeX + 1);
         }
 
         return null;

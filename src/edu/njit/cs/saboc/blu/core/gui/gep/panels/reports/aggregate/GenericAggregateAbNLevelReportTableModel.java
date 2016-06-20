@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.aggregate;
 
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.AbNLevelReport;
@@ -36,7 +36,7 @@ public class GenericAggregateAbNLevelReportTableModel<CONCEPT_T, GROUP_T extends
         HashSet<GROUP_T> removedGroups = new HashSet<>();
         
         item.getGroupsAtLevel().forEach((GROUP_T group) -> {
-            AggregateableConceptGroup aggregateGroup = (AggregateableConceptGroup)group;
+            AggregateNode aggregateGroup = (AggregateNode)group;
             
             if(aggregateGroup.getAggregatedGroups().isEmpty()) {
                 regularGroups.add(group);

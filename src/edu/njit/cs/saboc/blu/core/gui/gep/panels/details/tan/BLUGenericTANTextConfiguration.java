@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.text.BLUPartitionedAbNTextConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +15,8 @@ import java.util.HashSet;
  */
 public abstract class BLUGenericTANTextConfiguration<
         TAN_T extends TribalAbstractionNetwork,
-        BAND_T extends GenericBand,
-        CLUSTER_T extends GenericCluster,
+        BAND_T extends Band,
+        CLUSTER_T extends Cluster,
         CONCEPT_T>
             implements BLUPartitionedAbNTextConfiguration<TAN_T, BAND_T, CLUSTER_T, CONCEPT_T> {
 

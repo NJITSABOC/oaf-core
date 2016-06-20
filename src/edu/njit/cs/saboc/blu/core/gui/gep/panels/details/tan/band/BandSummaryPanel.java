@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
 import SnomedShared.Concept;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class BandSummaryPanel<BAND_T extends GenericBand, CLUSTER_T extends GenericCluster> extends AbstractNodeSummaryPanel<BAND_T> {
+public class BandSummaryPanel<BAND_T extends Band, CLUSTER_T extends Cluster> extends AbstractNodeSummaryPanel<BAND_T> {
 
     private final BandTribesDetailsPanel bandTribesPanel;
     

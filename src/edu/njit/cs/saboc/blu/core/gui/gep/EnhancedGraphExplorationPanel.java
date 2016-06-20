@@ -1,11 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.BLUPartitionedAbNUIConfiguration;
@@ -144,8 +142,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
     private Point targetEntryPoint = null;
 
-    private final Map<GenericGroupEntry, GroupPopout> groupPopouts = Collections.synchronizedMap(
-            new HashMap<GenericGroupEntry, GroupPopout>());
+    private final Map<SinglyRootedNodeEntry, GroupPopout> groupPopouts = Collections.synchronizedMap(new HashMap<SinglyRootedNodeEntry, GroupPopout>());
 
     private boolean magnifyGroupMode = false;
        
@@ -363,7 +360,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
                         Point pointOnGraph = viewport.getPointOnGraph(e.getPoint());
 
-                        GenericGroupEntry groupEntry = getGroupEntryAtPoint(pointOnGraph);
+                        SinglyRootedNodeEntry groupEntry = getGroupEntryAtPoint(pointOnGraph);
 
                         if (groupEntry != null) {
                             selectionStateMonitor.setSelectedGroup(groupEntry);
@@ -423,7 +420,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
 
                     mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
 
-                    GenericGroupEntry group = getGroupEntryAtPoint(mouseLocation);
+                    SinglyRootedNodeEntry group = getGroupEntryAtPoint(mouseLocation);
 
                     if (group != null) {
                         selectionStateMonitor.setMousedOverGroup(group);
@@ -520,10 +517,10 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         return graph;
     }
     
-    private GenericGroupEntry getGroupEntryAtPoint(Point point) {
+    private SinglyRootedNodeEntry getGroupEntryAtPoint(Point point) {
         Component containerLevel = graph.getComponentAt(point);
 
-        if (containerLevel != null && containerLevel instanceof GenericContainerEntry) {
+        if (containerLevel != null && containerLevel instanceof PartitionedNodeEntry) {
             Component containerPartitionLevel = containerLevel.getComponentAt(
                     point.x - containerLevel.getX(),
                     point.y - containerLevel.getY());
@@ -533,8 +530,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                         point.x - containerLevel.getX() - containerPartitionLevel.getX(),
                         point.y - containerLevel.getY() - containerPartitionLevel.getY());
 
-                if (groupLevel != null && groupLevel instanceof GenericGroupEntry) {
-                    GenericGroupEntry group = (GenericGroupEntry) groupLevel;
+                if (groupLevel != null && groupLevel instanceof SinglyRootedNodeEntry) {
+                    SinglyRootedNodeEntry group = (SinglyRootedNodeEntry) groupLevel;
 
                     return group;
                 }
@@ -547,7 +544,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private GenericPartitionEntry getContainerPartitionAtPoint(Point point) {
         Component containerLevel = graph.getComponentAt(point);
 
-        if (containerLevel != null && containerLevel instanceof GenericContainerEntry) {
+        if (containerLevel != null && containerLevel instanceof PartitionedNodeEntry) {
             Component containerPartitionLevel = containerLevel.getComponentAt(
                     point.x - containerLevel.getX(),
                     point.y - containerLevel.getY());
@@ -571,7 +568,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             return;
         }
         
-        GenericGroupEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
+        SinglyRootedNodeEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
 
         if(root == null) {
             return;
@@ -583,12 +580,12 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     public void centerOnRoot() {
-    	GenericGroupEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
+    	SinglyRootedNodeEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
         
         centerOnEntry(root);
     }
 
-    public void centerOnEntry(GenericGroupEntry entry) {
+    public void centerOnEntry(SinglyRootedNodeEntry entry) {
         if (entry == null) {
             return;
         }
@@ -596,8 +593,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         int entryXPos = entry.getAbsoluteX();
         int entryYPos = entry.getAbsoluteY();
         
-        int xBufferArea = (int)(GenericGroupEntry.ENTRY_WIDTH * viewport.scale * 2);
-        int yBufferArea = (int)(GenericGroupEntry.ENTRY_HEIGHT * viewport.scale * 2);
+        int xBufferArea = (int)(SinglyRootedNodeEntry.ENTRY_WIDTH * viewport.scale * 2);
+        int yBufferArea = (int)(SinglyRootedNodeEntry.ENTRY_HEIGHT * viewport.scale * 2);
         
         int destX = viewport.region.x;
         int destY = viewport.region.y;
@@ -605,7 +602,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         if (entryXPos + entry.getWidth() <= viewport.region.x + xBufferArea
                 || entryXPos >= viewport.region.x + viewport.region.width - xBufferArea) {
             
-            destX = entry.getAbsoluteX() + GenericGroupEntry.ENTRY_WIDTH / 2 - viewport.region.width / 2;
+            destX = entry.getAbsoluteX() + SinglyRootedNodeEntry.ENTRY_WIDTH / 2 - viewport.region.width / 2;
             
             if (destX < 0) {
                 destX = 0;
@@ -617,7 +614,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         if (entryYPos + entry.getHeight() <= viewport.region.y + yBufferArea ||
                 entryYPos >= viewport.region.y + viewport.region.height - yBufferArea) {
             
-            destY = entry.getAbsoluteY() + GenericGroupEntry.ENTRY_HEIGHT / 2 - viewport.region.height / 2;
+            destY = entry.getAbsoluteY() + SinglyRootedNodeEntry.ENTRY_HEIGHT / 2 - viewport.region.height / 2;
             
             if (destY < 0) {
                 destY = 0;
@@ -646,7 +643,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, graphPanel.getWidth(), graphPanel.getHeight());
         
-        Collection<? extends GenericContainerEntry> containerEntries = graph.getContainerEntries().values();
+        Collection<? extends PartitionedNodeEntry> containerEntries = graph.getContainerEntries().values();
         
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         
@@ -656,7 +653,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-        for(GenericContainerEntry container : containerEntries) {
+        for(PartitionedNodeEntry container : containerEntries) {
             if(viewport.region.intersects(container.getBounds())) {
                 AbNDrawingUtilities.paintContainer(painter, g2d, container, viewport, graph.getLabelManager());
             }
@@ -860,15 +857,15 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
     
     private void updatePopups() {
-        GenericGroupEntry mousedOverPArea = null;
+        SinglyRootedNodeEntry mousedOverPArea = null;
 
         if (mouseStateMonitor.getCurrentMouseLocation() != null) {
             mousedOverPArea = selectionStateMonitor.getMouseOverGroupEntry();
         }
 
-        ArrayList<GenericGroupEntry> keys = new ArrayList<GenericGroupEntry>(groupPopouts.keySet());
+        ArrayList<SinglyRootedNodeEntry> keys = new ArrayList<SinglyRootedNodeEntry>(groupPopouts.keySet());
 
-        for (GenericGroupEntry group : keys) {
+        for (SinglyRootedNodeEntry group : keys) {
             if (groupPopouts.get(group).isDead()) {
                 groupPopouts.remove(group);
                 
@@ -918,7 +915,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     /**
      * Section for handling mouse clicks
      */
-    private void handleSingleClickOnGroupEntry(GenericGroupEntry entry) {
+    private void handleSingleClickOnGroupEntry(SinglyRootedNodeEntry entry) {
         if (groupDetailsPanel.isPresent()) {
             
             Thread loadThread = new Thread(new Runnable() {
@@ -952,7 +949,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
 
         if (containerDetailsPanel.isPresent()) {
-            GenericContainerEntry parentEntry = entry.getParentContainer();
+            PartitionedNodeEntry parentEntry = entry.getParentContainer();
             GenericGroupContainer container = parentEntry.getGroupContainer();
 
             Thread loadThread = new Thread(new Runnable() {

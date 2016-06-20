@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import javax.swing.JPanel;
 
 /**
@@ -8,7 +9,7 @@ import javax.swing.JPanel;
  */
 public abstract class AbNNodeEntry extends JPanel {
 
-    public enum HighlightState {
+    public static enum HighlightState {
         None,
         Selected,
         Parent,
@@ -20,9 +21,17 @@ public abstract class AbNNodeEntry extends JPanel {
     
     private HighlightState highlightState;
     
-    public AbNNodeEntry() {
+    private final Node node; 
+    
+    public AbNNodeEntry(Node node) {
+        this.node = node;
+        
         this.isMousedOver = false;
         this.highlightState = HighlightState.None;
+    }
+    
+    public Node getNode() {
+        return node;
     }
     
     public boolean isMousedOver() {
@@ -40,5 +49,4 @@ public abstract class AbNNodeEntry extends JPanel {
     public void setHighlightState(HighlightState state) {
         this.highlightState = state;
     }
-    
 }

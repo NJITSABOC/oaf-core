@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
@@ -17,8 +17,8 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class BandDetailsPanel<
-        BAND_T extends GenericBand, 
-        CLUSTER_T extends GenericCluster, 
+        BAND_T extends Band, 
+        CLUSTER_T extends Cluster, 
         CONCEPT_T> extends AbstractNodeDetailsPanel<BAND_T, ContainerConceptEntry<CONCEPT_T, CLUSTER_T>> {
     
     private final BLUGenericTANConfiguration config;

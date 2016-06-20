@@ -4,7 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 
 /**
  *
@@ -14,7 +14,7 @@ public interface BLUDisjointableAbNTextConfiguration<ABN_T extends AbstractionNe
         DISJOINTABN_T extends DisjointAbstractionNetwork,
         CONTAINER_T extends GenericGroupContainer,
         GROUP_T extends GenericConceptGroup, 
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
+        DISJOINTGROUP_T extends DisjointNode,
         CONCEPT_T> extends BLUPartitionedAbNTextConfiguration<ABN_T, CONTAINER_T, GROUP_T, CONCEPT_T> {
     
     public String getDisjointGroupTypeName(boolean plural);

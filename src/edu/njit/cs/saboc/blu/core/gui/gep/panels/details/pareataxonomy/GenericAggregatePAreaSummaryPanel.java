@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import java.util.HashSet;
 
 /**
@@ -13,7 +13,7 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
         REL_T, 
         TAXONOMY_T extends PAreaTaxonomy, 
         PAREA_T extends PArea, 
-        AGGREGATEPAREA_T extends PArea & AggregateableConceptGroup<CONCEPT_T, PAREA_T>> 
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> 
             extends GenericPAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AGGREGATEPAREA_T> {
     
     public GenericAggregatePAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration configuration) {
@@ -24,7 +24,7 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
 
         String rootName = configuration.getTextConfiguration().getGroupName(group);
         
-        AggregateableConceptGroup<CONCEPT_T, PAREA_T> aggregateGroup = (AggregateableConceptGroup<CONCEPT_T, PAREA_T>)group;
+        AggregateNode<CONCEPT_T, PAREA_T> aggregateGroup = (AggregateNode<CONCEPT_T, PAREA_T>)group;
          
         String typeDesc;
         

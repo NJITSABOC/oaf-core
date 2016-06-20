@@ -57,68 +57,10 @@ public class Area extends SimilarityNode {
         return regions;
     }
     
-    public HashSet<Concept> getRoots() {
-        HashSet<Concept> roots = new HashSet<>();
-        
-        Set<PArea> pareas = getPAreas();
-        
-        pareas.forEach( (parea) -> {
-            roots.add(parea.getHierarchy().getRoot());
-        });
-        
-        return roots;
+    public Set<PArea> getPAreas() {
+        return (Set<PArea>)super.getInternalNodes();
     }
-    
-    public HashSet<Concept> getConcepts() {
-        HashSet<Concept> concepts = new HashSet<>();
-        
-        HashSet<PArea> pareas = this.getPAreas();
-        
-        pareas.forEach((parea) -> {
-            concepts.addAll(parea.getConcepts());
-        });
-        
-        return concepts;
-    }
-    
-    public HashSet<PArea> getPAreas() {
-        return new HashSet<>((Set<PArea>)super.getInternalNodes());
-    }
-    
-    public ArrayList<PArea> getPAreasSorted() {
-        ArrayList<PArea> pareas = new ArrayList<>(getPAreas());
-        
-        pareas.sort( (a, b) -> {
-            if (a.getConceptCount() == b.getConceptCount()) {
-                    return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
-                }
 
-                return a.getConceptCount() - b.getConceptCount();
-        });
-
-        return pareas;
-    }
-    
-    public boolean hasOverlappingConcepts() {
-        HashSet<Concept> concepts = new HashSet<>();
-        
-        Set<PArea> pareas = this.getPAreas();
-        
-        for(PArea parea : pareas) {
-            Set<Concept> pareaConcepts = parea.getConcepts();
-            
-            for(Concept concept : pareaConcepts) {
-                if(concepts.contains(concept)) {
-                    return true;
-                } else {
-                    concepts.add(concept);
-                }
-            }
-        }
-        
-        return false;
-    }
-    
     public String getName() {
         return "";
     }

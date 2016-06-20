@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
@@ -13,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPane
  * @author Chris O
  */
 public class GenericDisjointGroupPanel<CONCEPT_T, 
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>, 
+        DISJOINTGROUP_T extends DisjointNode<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>, 
         GROUP_T extends GenericConceptGroup,
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupPanel<DISJOINTGROUP_T, CONCEPT_T, CONFIG_T> {

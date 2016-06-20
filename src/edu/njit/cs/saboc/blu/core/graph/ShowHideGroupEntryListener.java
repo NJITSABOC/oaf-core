@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph;
 
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -26,7 +26,7 @@ import javax.swing.JScrollPane;
  */
 public class ShowHideGroupEntryListener implements ActionListener {
 
-    BluGraph graph;
+    private final BluGraph graph;
 
     public ShowHideGroupEntryListener(BluGraph graph) {
         this.graph = graph;
@@ -68,20 +68,20 @@ public class ShowHideGroupEntryListener implements ActionListener {
 
         GenericPartitionEntry currentPartitionEntry = graph.getCurrentPartitionEntry();
 
-        final ArrayList<GenericGroupEntry> visibleGroups = (ArrayList<GenericGroupEntry>)currentPartitionEntry.getVisibleGroups().clone();
-        final ArrayList<GenericGroupEntry> hiddenGroups = (ArrayList<GenericGroupEntry>)currentPartitionEntry.getHiddenGroups().clone();
+        final ArrayList<SinglyRootedNodeEntry> visibleGroups = (ArrayList<SinglyRootedNodeEntry>)currentPartitionEntry.getVisibleGroups().clone();
+        final ArrayList<SinglyRootedNodeEntry> hiddenGroups = (ArrayList<SinglyRootedNodeEntry>)currentPartitionEntry.getHiddenGroups().clone();
         
-        for(GenericGroupEntry group : visibleGroups) {
+        for(SinglyRootedNodeEntry group : visibleGroups) {
             visibleListModel.addElement(String.format("%s (%d)", 
-                    group.getGroup().getRoot().getName(), group.getGroup().getConceptCount()));
+                    group.getNode().getRoot().getName(), group.getNode().getConceptCount()));
         }
 
-        for (GenericGroupEntry parea : hiddenGroups) {
+        for (SinglyRootedNodeEntry parea : hiddenGroups) {
             hiddenListModel.addElement(String.format("%s (%d)",
-                    parea.getGroup().getRoot().getName(), parea.getGroup().getConceptCount()));
+                    parea.getNode().getRoot().getName(), parea.getNode().getConceptCount()));
         }
 
-        //Setup the styling of the lists
+        // Setup the styling of the lists
         visibleGroupList.setModel(visibleListModel);
         hiddenGroupList.setModel(hiddenListModel);
 
@@ -133,8 +133,9 @@ public class ShowHideGroupEntryListener implements ActionListener {
                     String entry = (String)visibleListModel.getElementAt(c);
 
                     for(int p = hiddenGroups.size() - 1; p >= 0; p--) {
-                        GenericGroupEntry parea = hiddenGroups.get(p);
-                        if(entry.startsWith(parea.getGroup().getRoot().getName())) {
+                        SinglyRootedNodeEntry parea = hiddenGroups.get(p);
+                        
+                        if(entry.startsWith(parea.getNode().getRoot().getName())) {
                             visibleGroups.add(parea);
                             parea.setVisible(true);
                             hiddenGroups.remove(p);
@@ -146,8 +147,8 @@ public class ShowHideGroupEntryListener implements ActionListener {
                     String entry = (String) hiddenListModel.getElementAt(c);
 
                     for (int p = visibleGroups.size() - 1; p >= 0; p--) {
-                        GenericGroupEntry parea = visibleGroups.get(p);
-                        if (entry.startsWith(parea.getGroup().getRoot().getName())) {
+                        SinglyRootedNodeEntry parea = visibleGroups.get(p);
+                        if (entry.startsWith(parea.getNode().getRoot().getName())) {
                             hiddenGroups.add(parea);
                             visibleGroups.remove(p);
                             parea.hideIncidentEdges();
@@ -157,10 +158,10 @@ public class ShowHideGroupEntryListener implements ActionListener {
                     }
                 }
 
-                Collections.sort(visibleGroups, new Comparator<GenericGroupEntry>() {
-                    public int compare(GenericGroupEntry a, GenericGroupEntry b) {
-                        Integer aCount = a.getGroup().getConceptCount();
-                        Integer bCount = b.getGroup().getConceptCount();
+                Collections.sort(visibleGroups, new Comparator<SinglyRootedNodeEntry>() {
+                    public int compare(SinglyRootedNodeEntry a, SinglyRootedNodeEntry b) {
+                        Integer aCount = a.getNode().getConceptCount();
+                        Integer bCount = b.getNode().getConceptCount();
                         
                         return -aCount.compareTo(bCount);
                     }

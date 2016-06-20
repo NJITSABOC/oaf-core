@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupCombinationsEntry;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Collections;
  */
 public class BLUAbstractOverlappingCombinationsTableModel<
         GROUP_T extends GenericConceptGroup, 
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
+        DISJOINTGROUP_T extends DisjointNode,
         CONCEPT_T> extends BLUAbstractTableModel<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> {
     
     protected final BLUDisjointableConfiguration configuration;

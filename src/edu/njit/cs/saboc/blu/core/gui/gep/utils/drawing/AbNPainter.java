@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,7 +15,7 @@ import java.awt.Stroke;
  * @author Chris
  */
 public class AbNPainter {
-    public void paintContainerAtPoint(Graphics2D g2d, GenericContainerEntry entry, Point p, double scale) {
+    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
         Stroke savedStroke = g2d.getStroke();
         
         g2d.setPaint(entry.getBackground());
@@ -61,7 +61,7 @@ public class AbNPainter {
         g2d.setStroke(savedStroke);
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, GenericGroupEntry group, Point p, double scale) {
+    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
         
         Color bgColor;
         

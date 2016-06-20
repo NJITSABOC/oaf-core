@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs;
 
 import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import java.awt.Color;
@@ -20,7 +21,7 @@ import javax.swing.JPopupMenu;
 public class GenericGroupEditMenu extends JPopupMenu {
     private final BluGraph graph;
     
-    private GenericConceptGroup group;
+    private Node group;
 
     public GenericGroupEditMenu(BluGraph graph) {
         this.graph = graph;
@@ -31,7 +32,7 @@ public class GenericGroupEditMenu extends JPopupMenu {
         createEdgeMenu();
     }
     
-    public void setCurrentGroup(GenericConceptGroup group) {
+    public void setCurrentGroup(Node group) {
         this.group = group;
     }
     
@@ -92,7 +93,7 @@ public class GenericGroupEditMenu extends JPopupMenu {
                 ArrayList<GraphEdge> edges = graph.getEdges();
 
                 for (GraphEdge temp : edges) {
-                    if (temp.getSourceID() == group.getId()) {
+                    if (temp.getSource() == group.getId()) {
                         removeEdges.add(temp);
                     }
                 }
@@ -118,7 +119,7 @@ public class GenericGroupEditMenu extends JPopupMenu {
                 ArrayList<GraphEdge> edges = graph.getEdges();
 
                 for (GraphEdge temp : edges) {
-                    if (temp.getTargetID() == group.getId()) {
+                    if (temp.getTarget() == group.getId()) {
                         removeEdges.add(temp);
                     }
                 }

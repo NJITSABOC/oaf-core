@@ -1,14 +1,14 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBandPartition;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ import javax.swing.JLabel;
  */
 public abstract class GenericTANNoPartitionLayout<
         CONCEPT_T,
-        BAND_T extends GenericBand, 
-        CLUSTER_T extends GenericCluster,
+        BAND_T extends Band, 
+        CLUSTER_T extends Cluster,
         BANDNODE_T extends GenericBluBand, 
         CLUSTERNODE_T extends GenericBluCluster> extends GenericTANLayout<BAND_T, CLUSTER_T, BANDNODE_T, CLUSTERNODE_T> {
     
@@ -105,7 +105,7 @@ public abstract class GenericTANNoPartitionLayout<
                 clusterEntriesWide = (int) Math.ceil(Math.sqrt(clusterCount));
             }
 
-            int setWidth = clusterEntriesWide * (GenericGroupEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
+            int setWidth = clusterEntriesWide * (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
 
             String regionName = "";
 
@@ -149,7 +149,7 @@ public abstract class GenericTANNoPartitionLayout<
             width += setWidth + 20;
 
             int height = bandLabel.getHeight() + (int) (Math.ceil((double) clusterCount / clusterEntriesWide))
-                    * (GenericGroupEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);  // Set the height to the greater of (a) the current height or (b) the number of regions in a column times the height of each pArea and the space between them.
+                    * (SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);  // Set the height to the greater of (a) the current height or (b) the number of regions in a column times the height of each pArea and the space between them.
 
             maxRows = Math.max(maxRows, (int) Math.ceil(Math.sqrt(clusterCount))); // Update the maxRows variable.
 
@@ -231,7 +231,7 @@ public abstract class GenericTANNoPartitionLayout<
                 currentClusterLevel.addGroupEntry(clusterPanel);
 
                 if ((i + 1) % clusterEntriesWide == 0 && i < clusters.size() - 1) {
-                    y2 += GenericGroupEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
+                    y2 += SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
                     x2 = (int) (1.5 * GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
                     clusterX = 0;
                     bandClusterX[clusterY]++;
@@ -243,7 +243,7 @@ public abstract class GenericTANNoPartitionLayout<
                                 GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, currentSet));
                     }
                 } else {
-                    x2 += (GenericGroupEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
+                    x2 += (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
                     clusterX++;
                     bandClusterX[clusterY]++;
                 }

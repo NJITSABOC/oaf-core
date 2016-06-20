@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,13 +25,47 @@ public abstract class PartitionedNode extends Node {
             concepts.addAll(n.getHierarchy().getConceptsInHierarchy());
         });
     }
+    
+    public Set<Concept> getRoots() {
+        Set<Concept> roots = new HashSet<>();
+        
+        getInternalNodes().forEach( (node) -> {
+            roots.add(node.getRoot());
+        });
+        
+        return roots;
+    }
 
     protected Set<? extends SinglyRootedNode> getInternalNodes() {
         return internalNodes;
     }
     
+    public Set<Concept> getConcepts() {
+        return concepts;
+    }
+    
     public int getConceptCount() {
         return concepts.size();
+    }
+    
+    public boolean hasOverlappingConcepts() {
+        Set<Concept> processedConcepts = new HashSet<>();
+        
+        Set<? extends SinglyRootedNode> nodes = this.getInternalNodes();
+        
+        for(SinglyRootedNode node : nodes) {
+            Set<Concept> pareaConcepts = node.getConcepts();
+            
+            for(Concept concept : pareaConcepts) {
+                if(processedConcepts.contains(concept)) {
+                    return true;
+                } else {
+                    processedConcepts.add(concept);
+                }
+            }
+        }
+        
+        return false;
     }
         
     public Set<OverlappingConcept> getOverlappingConcepts() {

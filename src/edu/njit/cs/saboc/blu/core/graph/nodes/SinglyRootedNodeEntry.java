@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
-import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -23,18 +22,16 @@ import javax.swing.SwingConstants;
  *
  * @author
  */
-public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNNodeEntry {
+public class SinglyRootedNodeEntry extends AbNNodeEntry {
     
     public final static int ENTRY_WIDTH = 128;
     public final static int ENTRY_HEIGHT = 40;
-
-    protected GROUP_T group;
 
     private final String labelText;
 
     private final JLabel panelLabel;
         
-    protected final BluGraph graph;
+    private final BluGraph graph;
     
     /**
      * Index of this group in the <i>group</i> arrayList from GraphPAreaLevel
@@ -50,16 +47,17 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
     private Point labelOffset;
         
-    public GenericGroupEntry(GROUP_T group, 
+    public SinglyRootedNodeEntry(SinglyRootedNode node, 
             BluGraph g, 
             GenericPartitionEntry partitionEntry,
             int pX, 
             GraphGroupLevel parent, 
             ArrayList<GraphEdge> ie) {
         
+        super(node);
+        
         this.groupX = pX;
         this.parentGroupLevel = parent;
-        this.group = group;
         this.graph = g;
         this.incidentEdges = ie;
         
@@ -67,7 +65,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
         setFocusable(true);
 
-        String rootName = group.getRoot().getName();
+        String rootName = node.getRoot().getName();
         
         labelText = rootName;
 
@@ -82,7 +80,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         panelLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panelLabel.setBounds(3, 0, ENTRY_WIDTH - 6, ENTRY_HEIGHT);
 
-        panelLabel.setToolTipText(group.getRoot().getName() + " (" + group.getConceptCount() + " concepts)");
+        panelLabel.setToolTipText(node.getRoot().getName() + " (" + node.getConceptCount() + " concepts)");
 
         setBackground(Color.WHITE);
 
@@ -92,7 +90,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     
-                    JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
+                    JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(node);
 
                     if (pAreaMenu.isVisible()) {
                         pAreaMenu.setVisible(false);
@@ -100,7 +98,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
                     requestFocusInWindow();
-                    final JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(group);
+                    final JPopupMenu pAreaMenu = graph.getGroupEntryMenuFor(node);
 
                     if (!pAreaMenu.isVisible()) {
                         pAreaMenu.setVisible(true);
@@ -112,7 +110,11 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         });
     }
     
-    public GenericGroupEntry labelOffset(Point offset) {
+    public SinglyRootedNode getNode() {
+        return (SinglyRootedNode)super.getNode();
+    }
+    
+    public SinglyRootedNodeEntry labelOffset(Point offset) {
         this.labelOffset = offset;
         
         return this;
@@ -122,10 +124,6 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         return labelOffset;
     }
     
-    public GROUP_T getGroup() {
-        return group;
-    }
-
     public JLabel getLabel() {
         return panelLabel;
     }
@@ -139,7 +137,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
     }
 
     public void setGroupX(int x) {
-        groupX = x;
+        this.groupX = x;
     }
 
     public int getAbsoluteX() {
@@ -166,7 +164,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
         parentGroupLevel = l;
     }
 
-    public GenericContainerEntry getParentContainer() {
+    public PartitionedNodeEntry getParentContainer() {
         return parentGroupLevel.getParentPartition().getParentContainer();
     }
 
@@ -227,7 +225,7 @@ public class GenericGroupEntry<GROUP_T extends GenericConceptGroup> extends AbNN
 
         for (GraphEdge e : incidentCopy) {
             if (!graph.getEdges().contains(e)) {
-                graph.drawRoutedEdge(e.getSourceID(), e.getTargetID());
+                graph.drawRoutedEdge(e.getSource(), e.getTarget());
             }
         }
     }

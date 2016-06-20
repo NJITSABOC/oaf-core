@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.ontology;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -12,11 +12,7 @@ public class SingleRootedConceptHierarchy extends MultiRootedConceptHierarchy {
         super(root);
     }
     
-    public SingleRootedConceptHierarchy(Concept root, HashMap<Concept, HashSet<Concept>> groupHierarchy) {
+    public SingleRootedConceptHierarchy(Concept root, HashMap<Concept, Set<Concept>> groupHierarchy) {
         super(root, groupHierarchy);
-    }
-    
-    public Concept getRoot() {
-        return roots.iterator().next();
     }
 }

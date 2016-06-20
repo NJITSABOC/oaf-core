@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptGroupHierarchicalViewPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
@@ -15,7 +15,7 @@ import javax.swing.ScrollPaneConstants;
  */
 public abstract class GenericDisjointGroupConceptHierarchyPanel<
         CONCEPT_T, 
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup, 
+        DISJOINTGROUP_T extends DisjointNode, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>> extends AbNNodeInformationPanel<DISJOINTGROUP_T> {
 
     protected ConceptGroupHierarchicalViewPanel<CONCEPT_T> conceptHierarchyPanel;

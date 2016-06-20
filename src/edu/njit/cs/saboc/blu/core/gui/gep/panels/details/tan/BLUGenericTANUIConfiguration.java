@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.BLUPartitionedAbNUIConfiguration;
 
 /**
@@ -11,8 +11,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.BLUPartitioned
  */
 public abstract class BLUGenericTANUIConfiguration<
         TAN_T extends TribalAbstractionNetwork, 
-        BAND_T extends GenericBand,
-        CLUSTER_T extends GenericCluster,
+        BAND_T extends Band,
+        CLUSTER_T extends Cluster,
         CONCEPT_T,
         T extends BLUGenericTANListenerConfiguration<TAN_T, BAND_T, CLUSTER_T, CONCEPT_T>> extends 
             BLUPartitionedAbNUIConfiguration<TAN_T, BAND_T, CLUSTER_T, CONCEPT_T, BLUGenericTANConfiguration, T> {

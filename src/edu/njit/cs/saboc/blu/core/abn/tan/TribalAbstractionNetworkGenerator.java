@@ -1,83 +1,65 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericBand;
-import edu.njit.cs.saboc.blu.core.abn.tan.nodes.GenericCluster;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
-import java.util.ArrayList;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.nodes.Cluster;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.MultiRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 /**
  *
  * @author Chris O
  */
-public abstract class TribalAbstractionNetworkGenerator<
-        CONCEPT_T,
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
-        TAN_T extends TribalAbstractionNetwork<CONCEPT_T, TAN_T, BAND_T, CLUSTER_T>,
-        BAND_T extends GenericBand<CONCEPT_T, CLUSTER_T>,
-        CLUSTER_T extends GenericCluster<CONCEPT_T, HIERARCHY_T, CLUSTER_T>> {
+public abstract class TribalAbstractionNetworkGenerator {
 
-    public TAN_T createTANFromConceptHierarchy(
-            HIERARCHY_T hierarchy) {
+    public TribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(MultiRootedConceptHierarchy sourceHierarchy) {
 
-        HashSet<CONCEPT_T> patriarchs = hierarchy.getChildren(hierarchy.getRoot());
-
-        MultiRootedHierarchy<CONCEPT_T> multiRootedHierarchy = new MultiRootedHierarchy<>(patriarchs);
-        
-        multiRootedHierarchy.addAllHierarchicalRelationships(hierarchy);
-
-        return deriveTANFromMultiRootedHierarchy(multiRootedHierarchy);
-    }
-
-    public TAN_T deriveTANFromMultiRootedHierarchy(
-            MultiRootedHierarchy<CONCEPT_T> hierarchy) {
-
-        HashSet<CONCEPT_T> patriarchs = hierarchy.getRoots();
+        Set<Concept> patriarchs = sourceHierarchy.getRoots();
 
         // The set of tribes a given concept belongs to
-        HashMap<CONCEPT_T, HashSet<CONCEPT_T>> conceptTribes = new HashMap<>();
+        HashMap<Concept, Set<Concept>> conceptTribes = new HashMap<>();
 
-        HashMap<CONCEPT_T, Integer> remainingParentCount = new HashMap<>();
+        HashMap<Concept, Integer> remainingParentCount = new HashMap<>();
 
-        Stack<CONCEPT_T> pendingConcepts = new Stack<>();
+        Stack<Concept> pendingConcepts = new Stack<>();
 
         pendingConcepts.addAll(patriarchs);
 
-        for (CONCEPT_T c : hierarchy.getNodesInHierarchy()) {
+        sourceHierarchy.getNodesInHierarchy().forEach((c) -> {
             if (patriarchs.contains(c)) {
                 remainingParentCount.put(c, 0);
             } else {
-                remainingParentCount.put(c, hierarchy.getParents(c).size());
+                remainingParentCount.put(c, sourceHierarchy.getParents(c).size());
             }
-        }
+        });
 
         while (!pendingConcepts.isEmpty()) {
-            CONCEPT_T c = pendingConcepts.pop();
+            Concept c = pendingConcepts.pop();
 
             if (patriarchs.contains(c)) {
                 conceptTribes.put(c, new HashSet<>(Arrays.asList(c)));
             } else {
-                HashSet<CONCEPT_T> parents = hierarchy.getParents(c);
+                Set<Concept> parents = sourceHierarchy.getParents(c);
 
-                HashSet<CONCEPT_T> tribalSet = new HashSet<>();
+                Set<Concept> tribalSet = new HashSet<>();
 
-                for (CONCEPT_T parent : parents) {
+                parents.forEach((parent) -> {
                     tribalSet.addAll(conceptTribes.get(parent));
-                }
+                });
 
                 conceptTribes.put(c, tribalSet);
             }
 
-            HashSet<CONCEPT_T> children = hierarchy.getChildren(c);
+            Set<Concept> children = sourceHierarchy.getChildren(c);
 
-            for (CONCEPT_T child : children) {
+            children.forEach((child) -> {
                 int parentCount = remainingParentCount.get(child) - 1;
 
                 if (parentCount == 0) {
@@ -85,28 +67,28 @@ public abstract class TribalAbstractionNetworkGenerator<
                 } else {
                     remainingParentCount.put(child, parentCount);
                 }
-            }
+            });
         }
 
         // The set of cluster root concepts in the hierarchy
-        HashSet<CONCEPT_T> roots = new HashSet<>();
+        HashSet<Concept> roots = new HashSet<>();
         roots.addAll(patriarchs);
 
         // Based on the tribes a given concept's parent(s) belong to, 
         // determine if the concept is a root
-        for (Map.Entry<CONCEPT_T, HashSet<CONCEPT_T>> entry : conceptTribes.entrySet()) {
+        for (Map.Entry<Concept, Set<Concept>> entry : conceptTribes.entrySet()) {
             if (roots.contains(entry.getKey())) {
                 continue;
             }
 
-            HashSet<CONCEPT_T> myCluster = entry.getValue(); // The patriarchs that have this concept as a descendent
+            Set<Concept> myCluster = entry.getValue(); // The patriarchs that have this concept as a descendent
 
-            HashSet<CONCEPT_T> parents = hierarchy.getParents(entry.getKey()); // Get parents of this concept
+            Set<Concept> parents = sourceHierarchy.getParents(entry.getKey()); // Get parents of this concept
 
             boolean isRoot = true;
 
-            for (CONCEPT_T parent : parents) { // For each parent
-                HashSet<CONCEPT_T> parentTribes = conceptTribes.get(parent);
+            for (Concept parent : parents) { // For each parent
+                Set<Concept> parentTribes = conceptTribes.get(parent);
 
                 if (parentTribes.equals(myCluster)) { // If a parent has the same group of tribes
                     isRoot = false; // Then this is not a root concept
@@ -119,32 +101,26 @@ public abstract class TribalAbstractionNetworkGenerator<
             }
         }
 
-        int id = 1;
-
         // Stores the hierarchy of concepts summarized by each cluster
-        final HashMap<CONCEPT_T, HIERARCHY_T> clusters = new HashMap<>();
+        final HashMap<Concept, SingleRootedConceptHierarchy> clusterConceptHierarchy = new HashMap<>();
 
         // Stores the list of clusters each concept belongs to
-        final HashMap<CONCEPT_T, HashSet<CONCEPT_T>> conceptClusters = new HashMap<>();
+        final HashMap<Concept, Set<Concept>> conceptClusters = new HashMap<>();
 
-        // Integer ID for cluster (legacy support)
-        final HashMap<CONCEPT_T, Integer> clusterIds = new HashMap<>();
 
-        for (CONCEPT_T root : roots) { // For each root
-            clusters.put(root, createHierarchy(root)); // Create a new cluster
+        for (Concept root : roots) { // For each root
+            clusterConceptHierarchy.put(root, new SingleRootedConceptHierarchy(root)); // Create a new cluster
 
-            clusterIds.put(root, id++);
+            Set<Concept> rootTribalSet = conceptTribes.get(root);
 
-            HashSet<CONCEPT_T> rootTribalSet = conceptTribes.get(root);
-
-            Stack<CONCEPT_T> stack = new Stack<>();
+            Stack<Concept> stack = new Stack<>();
 
             stack.add(root);
 
             while (!stack.isEmpty()) { // Traverse down DAG and add concepts to cluster
-                CONCEPT_T concept = stack.pop();
+                Concept concept = stack.pop();
 
-                HashSet<CONCEPT_T> conceptTribalSet = conceptTribes.get(concept);
+                Set<Concept> conceptTribalSet = conceptTribes.get(concept);
 
                 if (rootTribalSet.equals(conceptTribalSet)) {
                     if (!conceptClusters.containsKey(concept)) {
@@ -153,14 +129,14 @@ public abstract class TribalAbstractionNetworkGenerator<
 
                     conceptClusters.get(concept).add(root); // Set concept as belonging to current header
 
-                    HashSet<CONCEPT_T> children = hierarchy.getChildren(concept);
+                    Set<Concept> children = sourceHierarchy.getChildren(concept);
 
-                    for (CONCEPT_T child : children) { // Process all children
+                    for (Concept child : children) { // Process all children
                         if (stack.contains(child) || roots.contains(child) || !conceptTribes.get(child).equals(rootTribalSet)) {
                             continue;
                         }
 
-                        clusters.get(root).addIsA(child, concept);
+                        clusterConceptHierarchy.get(root).addIsA(child, concept);
 
                         stack.add(child);
                     }
@@ -168,98 +144,89 @@ public abstract class TribalAbstractionNetworkGenerator<
             }
         }
 
-        HashMap<Integer, CLUSTER_T> hierarchyClusters = new HashMap<>();
-        HashMap<Integer, HashSet<Integer>> clusterHierarchy = new HashMap<>();
+        Set<Cluster> patriarchClusters = new HashSet<>();
+        
+        // Create Cluster objects
+        
+        Map<Set<Concept>, Set<Cluster>> clustersByPatriarchs = new HashMap<>();
+        Map<Concept, Cluster> clustersByRoot = new HashMap<>();
 
-        ArrayList<CLUSTER_T> patriarchClusters = new ArrayList<>();
+        roots.forEach((root) -> {
+            Set<Concept> rootTribes = conceptTribes.get(root);
 
-        for (CONCEPT_T root : roots) {
-            HashSet<CONCEPT_T> rootsTribes = conceptTribes.get(root);
-            HashSet<CONCEPT_T> parents = hierarchy.getParents(root);
-
-            HashSet<Integer> parentClusters = new HashSet<>();
-
-            for (CONCEPT_T parent : parents) {
-                // When a single rooted hierarchy is used the IS As to the root are still there. Skip them.
-                if (!conceptTribes.containsKey(parent)) {
-                    continue;
-                }
-
-                HashSet<CONCEPT_T> rootParentClusters = conceptClusters.get(parent);
-
-                for (CONCEPT_T parentCluster : rootParentClusters) {
-                    int parentClusterId = clusterIds.get(parentCluster);
-
-                    parentClusters.add(parentClusterId);
-
-                    if (!clusterHierarchy.containsKey(parentClusterId)) {
-                        clusterHierarchy.put(parentClusterId, new HashSet<Integer>());
-                    }
-
-                    clusterHierarchy.get(parentClusterId).add(clusterIds.get(root));
-                }
-            }
-
-            CLUSTER_T cluster = createCluster(
-                    clusterIds.get(root),
-                    clusters.get(root),
-                    parentClusters,
-                    rootsTribes);
-
-            hierarchyClusters.put(clusterIds.get(root), cluster);
-
-            if (rootsTribes.size() == 1) {
+            Cluster cluster = new Cluster(clusterConceptHierarchy.get(root), rootTribes);
+            
+            if(rootTribes.size() == 1) {
                 patriarchClusters.add(cluster);
             }
-        }
-
-        HashMap<HashSet<CONCEPT_T>, BAND_T> bands = new HashMap<>();
-
-        int bandId = 1;
-
-        for (CONCEPT_T root : roots) { // For every root
-            HashSet<CONCEPT_T> rootTribes = conceptTribes.get(root); // Get tribes of this root
-
-            if (!bands.containsKey(rootTribes)) { // Create a new band if one does not exist
-                bands.put(rootTribes, createBand(bandId++, rootTribes));
+            
+            if(!clustersByPatriarchs.containsKey(rootTribes)) {
+                clustersByPatriarchs.put(rootTribes, new HashSet<>());
             }
-
-            bands.get(rootTribes).addCluster(hierarchyClusters.get(clusterIds.get(root)));
-        }
-
-
-        GroupHierarchy<CLUSTER_T> convertedHierarchy = new GroupHierarchy<>(new HashSet<>(patriarchClusters));
-
-        hierarchyClusters.values().forEach((CLUSTER_T cluster) -> {
-            HashSet<CONCEPT_T> parents = hierarchy.getParents(cluster.getHierarchy().getRoot());
-
-            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> parentInformation = new HashSet<>();
-
-            parents.forEach((CONCEPT_T parent) -> {
-
-                if (conceptClusters.containsKey(parent)) {
-                    HashSet<CONCEPT_T> parentClusterRoots = conceptClusters.get(parent);
-
-                    parentClusterRoots.forEach((CONCEPT_T parentClusterRoot) -> {
-                        CLUSTER_T parentCluster = hierarchyClusters.get(clusterIds.get(parentClusterRoot));
-
-                        parentInformation.add(new ParentNodeInformation<>(parent, parentCluster));
-                    });
-                }
-            });
-
-            cluster.setParentClusterInfo(parentInformation);
-
-            HashSet<Integer> parentIds = cluster.getParentIds();
-
-            parentIds.forEach((Integer parentId) -> {
-                convertedHierarchy.addIsA(cluster, hierarchyClusters.get(parentId));
-            });
+            
+            clustersByPatriarchs.get(rootTribes).add(cluster);
+            clustersByRoot.put(root, cluster);
+        });
+        
+        // Build Cluster Hierarchy
+        
+        NodeHierarchy<Cluster> clusterHierarchy = new NodeHierarchy<>(patriarchClusters);
+        
+        clustersByRoot.values().forEach( (cluster) -> {
+            if (!clusterHierarchy.getRoots().contains(cluster)) {
+                Set<Concept> rootParents = sourceHierarchy.getParents(cluster.getRoot());
+                
+                rootParents.forEach( (parent) -> {
+                   Set<Cluster> parentClusters =  clustersByPatriarchs.get(conceptClusters.get(parent));
+                   
+                   parentClusters.forEach( (parentCluster) -> {
+                       clusterHierarchy.addIsA(cluster, parentCluster);
+                   });
+                });
+            }
         });
 
-        return createTribalAbstractionNetwork(new ArrayList<>(bands.values()), hierarchyClusters, convertedHierarchy, patriarchClusters, hierarchy);
+        // Build bands
+        
+        Map<Set<Concept>, Band> bandsByPatriarchs = new HashMap<>();
+        
+        Set<Band> patriarchBands = new HashSet<>();
+        
+        clustersByPatriarchs.forEach( (bandPatriarchs, clusters) -> {
+            Band band = new Band(clusters, bandPatriarchs);
+            
+            bandsByPatriarchs.put(patriarchs, band);
+            
+            if(patriarchs.size() == 1) {
+                patriarchBands.add(band);
+            }
+        });
+        
+        // Build Band hierarchy
+        
+        NodeHierarchy<Band> bandHierarchy = new NodeHierarchy<>(patriarchBands);
+        
+        bandsByPatriarchs.values().forEach( (band) -> {
+            if(!bandHierarchy.getRoots().contains(band)) {
+                band.getClusters().forEach( (cluster) -> {
+                   Set<Cluster> parentClusters = clusterHierarchy.getParents(cluster);
+                   
+                   parentClusters.forEach( (parentCluster) -> {
+                       Band parentBand = bandsByPatriarchs.get(parentCluster.getPatriarchs());
+                       
+                       bandHierarchy.addIsA(band, parentBand);
+                   });
+                });
+            }
+        });
+        
+        BandTribalAbstractionNetwork bandTAN = new BandTribalAbstractionNetwork(bandHierarchy);
+        TribalAbstractionNetwork tan = new TribalAbstractionNetwork(bandTAN, sourceHierarchy, clusterHierarchy);
+
+        return tan;
     }
     
+    /*
     public TAN_T createTANFromClusters(
             HashMap<Integer, CLUSTER_T> clusters, 
             GroupHierarchy<CLUSTER_T> clusterHierarchy) {
@@ -316,21 +283,6 @@ public abstract class TribalAbstractionNetworkGenerator<
         return reducedTAN;
     }
     
+    */
     
-    protected abstract HIERARCHY_T createHierarchy(CONCEPT_T root);
-    
-    protected abstract TAN_T createTribalAbstractionNetwork(
-            ArrayList<BAND_T> bands,
-            HashMap<Integer, CLUSTER_T> clusters,
-            GroupHierarchy<CLUSTER_T> clusterHierarchy,
-            ArrayList<CLUSTER_T> patriarchs,
-            MultiRootedHierarchy<CONCEPT_T> sourceHierarchy);
-    
-    protected abstract BAND_T createBand(int id, HashSet<CONCEPT_T> patriarchs);
-    
-    protected abstract CLUSTER_T createCluster(
-            int id, 
-            HIERARCHY_T conceptHierarchy,
-            HashSet<Integer> parentClusters, 
-            HashSet<CONCEPT_T> patriarchs);
 }

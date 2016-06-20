@@ -1,47 +1,46 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.GroupHierarchy;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
-import java.util.HashMap;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.MultiRootedConceptHierarchy;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Chris
  */
-public abstract class DisjointAbstractionNetwork<
-        PARENTABN_T extends AbstractionNetwork,
-        GROUP_T extends GenericConceptGroup, 
-        CONCEPT_T, 
-        HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup<GROUP_T, CONCEPT_T, HIERARCHY_T, DISJOINTGROUP_T>> extends AbstractionNetwork<DISJOINTGROUP_T> {
+public class DisjointAbstractionNetwork<
+        PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
+        PARENTNODE_T extends SinglyRootedNode> extends AbstractionNetwork<DisjointNode<PARENTNODE_T>> {
     
+    private final Set<PARENTNODE_T> allNodes;
     
-    protected HashSet<GROUP_T> allGroups;
+    private final Set<PARENTNODE_T> overlappingNodes;
     
-    protected HashSet<GROUP_T> overlappingGroups;
+    private final PARENTABN_T parentAbN;
     
-    protected PARENTABN_T parentAbN;
+    private final MultiRootedConceptHierarchy sourceHierarchy;
     
-    protected int levels;
+    private final int levels;
     
-    public DisjointAbstractionNetwork(PARENTABN_T abstractionNetwork, 
-            HashMap<Integer, DISJOINTGROUP_T> disjointGroups, 
-            GroupHierarchy<DISJOINTGROUP_T> groupHierarchy,
+    public DisjointAbstractionNetwork(PARENTABN_T parentAbN, 
+            NodeHierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy,
+            MultiRootedConceptHierarchy sourceHierarchy,
             int levels,
-            HashSet<GROUP_T> allGroups,
-            HashSet<GROUP_T> overlappingGroups) {
+            Set<PARENTNODE_T> allNodes,
+            Set<PARENTNODE_T> overlappingNodes) {
         
-        super(disjointGroups, groupHierarchy);
+        super(groupHierarchy);
         
-        this.parentAbN = abstractionNetwork;
+        this.parentAbN = parentAbN;
         
-        this.allGroups = allGroups;
+        this.sourceHierarchy = sourceHierarchy;
         
-        this.overlappingGroups = overlappingGroups;
+        this.allNodes = allNodes;
+        
+        this.overlappingNodes = overlappingNodes;
         
         this.levels = levels;
     }
@@ -50,19 +49,45 @@ public abstract class DisjointAbstractionNetwork<
         return parentAbN;
     }
     
-    public HashSet<GROUP_T> getOverlappingGroups() {
-        return overlappingGroups;
+    public Set<PARENTNODE_T> getOverlappingNodes() {
+        return overlappingNodes;
     }
     
-    public HashSet<DISJOINTGROUP_T> getDisjointGroups() {
-        return new HashSet<>(groups.values());
+    public MultiRootedConceptHierarchy getSourceHierarchy() {
+        return sourceHierarchy;
+    }
+    
+    public Set<DisjointNode<PARENTNODE_T>> getAllDisjointNodes() {
+        return (Set<DisjointNode<PARENTNODE_T>>)super.getNodeHierarchy();
+    }
+    
+    public Set<DisjointNode<PARENTNODE_T>> getOverlappingDisjointNodes() {
+        Set<DisjointNode<PARENTNODE_T>> allDisjointNodes = getAllDisjointNodes();
+        
+        Set<DisjointNode<PARENTNODE_T>> overlappingDisjointNodes = 
+                allDisjointNodes.stream().filter( (disjointNode) -> {
+                    return disjointNode.getOverlaps().size() > 1;
+                }).collect(Collectors.toSet());
+        
+        return overlappingDisjointNodes;
+    }
+    
+    public Set<DisjointNode<PARENTNODE_T>> getNonOverlappingDisjointNodes() {
+        Set<DisjointNode<PARENTNODE_T>> allDisjointNodes = getAllDisjointNodes();
+        
+        Set<DisjointNode<PARENTNODE_T>> nonOverlappingDisjointNodes = 
+                allDisjointNodes.stream().filter( (disjointNode) -> {
+                    return disjointNode.getOverlaps().size() == 1;
+                }).collect(Collectors.toSet());
+        
+        return nonOverlappingDisjointNodes;
     }
 
     public int getLevelCount() {
         return levels;
     }
     
-    public DISJOINTGROUP_T getRootGroup() {
-        return null;
+    public Set<DisjointNode<PARENTNODE_T>> getRoots() {
+        return super.getNodeHierarchy().getRoots();
     }
 }

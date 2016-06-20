@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.edges;
 
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JPanel;
@@ -10,37 +11,32 @@ import javax.swing.JPanel;
  */
 public class GraphEdge {
 
-    /**
-     * This is an integer value containing the Concept ID for the source pArea
-     */
-    private int sourceID;
-    /**
-     * This is an integer value containing the Concept ID for the target pArea
-     */
-    private int targetID;
+    private final SinglyRootedNodeEntry source;
+
+    private final SinglyRootedNodeEntry target;
+    
     /**
      * This contains the jPanel segments representing the edge's visual line
      */
-    private ArrayList<JPanel> segments;
+    private final ArrayList<JPanel> segments = new ArrayList<>();
     
     /**
      * A list of the points that correspond to each segment.
      */
-    private ArrayList<Point> points;
+    private final ArrayList<Point> points;
 
-    public GraphEdge(int s, int t, ArrayList<Point> p) {
-        sourceID = s;
-        targetID = t;
-        segments = new ArrayList<JPanel>();
-        points = p;
+    public GraphEdge(SinglyRootedNodeEntry source, SinglyRootedNodeEntry target, ArrayList<Point> points) {
+        this.source = source;
+        this.target = target;
+        this.points = points;
     }
 
-    public int getSourceID() {
-        return sourceID;
+    public SinglyRootedNodeEntry getSource() {
+        return source;
     }
 
-    public int getTargetID() {
-        return targetID;
+    public SinglyRootedNodeEntry getTarget() {
+        return target;
     }
 
     public void addSegment(JPanel p) {
@@ -94,6 +90,6 @@ public class GraphEdge {
     }
 
     public String toString() {
-        return "Source ID: " + sourceID + "\nTarget ID: " + targetID + "\n";
+        return "Source: " + source + "\nTarget: " + target + "\n";
     }
 }

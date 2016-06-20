@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupCombinationsEntry;
@@ -32,7 +32,7 @@ public class AbstractDisjointAbNMetricsPanel<
         CONTAINER_T extends GenericGroupContainer,
         DISJOINTABN_T extends DisjointAbstractionNetwork,
         GROUP_T extends GenericConceptGroup,
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
+        DISJOINTGROUP_T extends DisjointNode,
         CONCEPT_T> extends AbNNodeInformationPanel<CONTAINER_T> {
     
     private class GroupOverlapMetrics {
@@ -75,7 +75,7 @@ public class AbstractDisjointAbNMetricsPanel<
             return overlappingGroup;
         }
         
-        public DisjointGenericConceptGroup getBasisDisjointGroup() {
+        public DisjointNode getBasisDisjointGroup() {
             return disjointBasis;
         }
         

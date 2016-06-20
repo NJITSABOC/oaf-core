@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
@@ -17,7 +17,7 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, 
-        DISJOINTGROUP_T extends DisjointGenericConceptGroup,
+        DISJOINTGROUP_T extends DisjointNode,
         CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, CONFIG_T> {
     
     private final DisjointAbstractionNetwork disjointAbN;

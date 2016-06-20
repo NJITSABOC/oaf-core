@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 public class ContainerResize extends JDialog {
 
     private GenericPartitionEntry partition;
+    
     private BluGraph graph;
 
     public ContainerResize(GenericPartitionEntry r, BluGraph g) {

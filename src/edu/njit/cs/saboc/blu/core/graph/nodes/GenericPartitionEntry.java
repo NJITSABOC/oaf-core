@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
-import SnomedShared.generic.GenericContainerPartition;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
@@ -22,18 +22,14 @@ import javax.swing.SwingConstants;
  */
 public class GenericPartitionEntry extends AbNNodeEntry {
 
-    /**
-     * List of the levels of pAreas in this area
-     */
-    private ArrayList<GraphGroupLevel> groupLevels = new ArrayList<GraphGroupLevel>(0);
+
+    private ArrayList<GraphGroupLevel> groupLevels = new ArrayList<>();
+    
+
+    private final PartitionedNodeEntry parent;
 
     /**
-     * The GraphArea object representing the area this region is within.
-     */
-    private GenericContainerEntry parent;
-
-    /**
-     * Keeps track of the columns (vertical lanes) running between pAreas.
+     * Keeps track of the columns (vertical lanes) running between singly rooted node entries.
      */
     private ArrayList<GraphLane>[] columns = new ArrayList[100];
 
@@ -41,26 +37,26 @@ public class GenericPartitionEntry extends AbNNodeEntry {
 
     protected BluGraph graph;
 
-    private String partitionName;
+    private final String partitionName;
 
-    protected GenericContainerPartition partition;
+    private final ArrayList<SinglyRootedNodeEntry> visibleGroups = new ArrayList<>();
+    private final ArrayList<SinglyRootedNodeEntry> hiddenGroups = new ArrayList<>();
 
-    private ArrayList<GenericGroupEntry> visibleGroups = new ArrayList<>();
-    private ArrayList<GenericGroupEntry> hiddenGroups = new ArrayList<>();
+    private final Color originalColor;
 
-    private Color originalColor;
-    
-    protected boolean treatAsContainer = false; // When regions are disabled, Region objects are used as areas
-  
     public GenericPartitionEntry(
-            GenericContainerPartition partition, 
+            PartitionedNode partition, 
             String regionName,
+            
             int width, 
             int height, 
+            
             BluGraph g, 
-            GenericContainerEntry p, 
-            Color c, 
-            boolean treatAsContainer) {
+            
+            PartitionedNodeEntry parentEntry, 
+            Color c) {
+        
+        super(partition);
 
         this.setFocusable(true);
 
@@ -68,14 +64,11 @@ public class GenericPartitionEntry extends AbNNodeEntry {
 
         this.originalColor = c;
         this.partitionName = regionName;
-        this.partition = partition;
-        this.parent = p;
+        this.parent = parentEntry;
 
         this.partitionLabel = new JLabel("<HTML><center>" + regionName + "</center></HTML>");
 
         this.graph = g;
-
-        this.treatAsContainer = treatAsContainer;
         
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -118,15 +111,15 @@ public class GenericPartitionEntry extends AbNNodeEntry {
         this.partitionLabel = label;
     }
     
-    public GenericContainerPartition getPartition() {
-        return partition;
+    public PartitionedNode getNode() {
+        return (PartitionedNode)super.getNode();
     }
 
-    public ArrayList<GenericGroupEntry> getVisibleGroups() {
+    public ArrayList<SinglyRootedNodeEntry> getVisibleGroups() {
         return visibleGroups;
     }
 
-    public ArrayList<GenericGroupEntry> getHiddenGroups() {
+    public ArrayList<SinglyRootedNodeEntry> getHiddenGroups() {
         return hiddenGroups;
     }
     
@@ -144,19 +137,19 @@ public class GenericPartitionEntry extends AbNNodeEntry {
         return partitionName;
     }
 
-    public ArrayList<GenericGroupEntry> getPAreas() {
-        ArrayList<GenericGroupEntry> result = new ArrayList<GenericGroupEntry>();
+    public ArrayList<SinglyRootedNodeEntry> getSubNodeEntries() {
+        ArrayList<SinglyRootedNodeEntry> result = new ArrayList<>();
 
         for (GraphGroupLevel l : getGroupLevels()) {
-            for (GenericGroupEntry p : l.getGroupEntries()) {
+            for (SinglyRootedNodeEntry p : l.getGroupEntries()) {
                 result.add(p);
             }
         }
 
-        Collections.sort(result, new Comparator<GenericGroupEntry>() {
+        Collections.sort(result, new Comparator<SinglyRootedNodeEntry>() {
 
-            public int compare(GenericGroupEntry a, GenericGroupEntry b) {
-                return a.getGroup().getConceptCount() > b.getGroup().getConceptCount() ? -1 : 1;
+            public int compare(SinglyRootedNodeEntry a, SinglyRootedNodeEntry b) {
+                return a.getNode().getConceptCount() - b.getNode().getConceptCount();
             }
         });
 
@@ -172,14 +165,14 @@ public class GenericPartitionEntry extends AbNNodeEntry {
     }
 
     public int getAbsoluteX() {
-        return parent.getPosX() + this.getX();
+        return parent.getAbsoluteX() + this.getX();
     }
 
     public int getAbsoluteY() {
-        return parent.getPosY() + this.getY();
+        return parent.getAbsoluteY() + this.getY();
     }
 
-    public GenericContainerEntry getParentContainer() {
+    public PartitionedNodeEntry getParentContainer() {
         return parent;
     }
 
@@ -188,7 +181,7 @@ public class GenericPartitionEntry extends AbNNodeEntry {
     }
 
     public void clearGroupLevels() {
-        groupLevels = new ArrayList<GraphGroupLevel>();
+        groupLevels = new ArrayList<>();
     }
 
     public void clearColumns() {
@@ -230,7 +223,7 @@ public class GenericPartitionEntry extends AbNNodeEntry {
         int result = 0;
 
         for (GraphGroupLevel x : groupLevels) {
-            for (GenericGroupEntry y : x.getGroupEntries()) {
+            for (SinglyRootedNodeEntry y : x.getGroupEntries()) {
                 if (y.isVisible()) {
                     ++result;
                 }
@@ -252,10 +245,6 @@ public class GenericPartitionEntry extends AbNNodeEntry {
         return result;
     }
 
-    public boolean getPartitionTreatedAsContainer() {
-        return treatAsContainer;
-    }
-
     public void resizePartition() {
 
         int numVisibleGroups = getVisibleGroupCount();
@@ -266,7 +255,7 @@ public class GenericPartitionEntry extends AbNNodeEntry {
 
         } //Collapse the region to accomodate removed partial-areas
         else if (horizontalGroups < this.groupLevels.get(0).getGroupEntryCount()) {
-            ArrayList<GenericGroupEntry> toBeMoved = new ArrayList<GenericGroupEntry>();
+            ArrayList<SinglyRootedNodeEntry> toBeMoved = new ArrayList<SinglyRootedNodeEntry>();
 
             for (GraphGroupLevel x : groupLevels) {
                 for (int k = horizontalGroups; k < x.getVisibleGroupCount(); ++k) {
@@ -278,6 +267,4 @@ public class GenericPartitionEntry extends AbNNodeEntry {
             }
         }
     }
-
-
 }

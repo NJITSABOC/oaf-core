@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.nodes.DisjointGenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.HashSet;
  *
  * @author Chris O
  */
-public class GenericParentDisjointGroupTableModel<CONCEPT_T, DISJOINTGROUP_T extends DisjointGenericConceptGroup, GROUP_T extends GenericConceptGroup> 
+public class GenericParentDisjointGroupTableModel<CONCEPT_T, DISJOINTGROUP_T extends DisjointNode, GROUP_T extends GenericConceptGroup> 
         extends BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> {
     
     private final BLUDisjointConfiguration config;

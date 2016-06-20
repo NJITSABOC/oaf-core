@@ -3,8 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.utils;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericContainerEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.GenericGroupEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,13 +21,13 @@ import java.util.HashSet;
  * @author Chris
  */
 public class GraphSelectionStateMonitor {
-    private GenericGroupEntry selectedGroupEntry = null;
+    private SinglyRootedNodeEntry selectedGroupEntry = null;
     private GenericPartitionEntry selectedPartitionEntry = null;
     
-    private GenericGroupEntry mousedOverGroupEntry = null;
+    private SinglyRootedNodeEntry mousedOverGroupEntry = null;
     private GenericPartitionEntry mousedOverPartitionEntry = null;
     
-    private final Collection<? extends GenericGroupEntry> groupEntries;
+    private final Collection<? extends SinglyRootedNodeEntry> groupEntries;
     private final ArrayList<GenericPartitionEntry> partitionEntries = new ArrayList<>();
     
     private final BluGraph graph;
@@ -37,14 +37,14 @@ public class GraphSelectionStateMonitor {
         
         this.groupEntries = graph.getGroupEntries().values();
         
-        Collection<? extends GenericContainerEntry> containers = graph.getContainerEntries().values();
+        Collection<? extends PartitionedNodeEntry> containers = graph.getContainerEntries().values();
         
-        containers.forEach((GenericContainerEntry entry) -> {
+        containers.forEach((PartitionedNodeEntry entry) -> {
             partitionEntries.addAll(entry.getPartitionEntries());
         });
     }
     
-    public GenericGroupEntry getSelectedGroupEntry() {
+    public SinglyRootedNodeEntry getSelectedGroupEntry() {
         return selectedGroupEntry;
     }
     
@@ -52,7 +52,7 @@ public class GraphSelectionStateMonitor {
         return selectedPartitionEntry;
     }
     
-    public GenericGroupEntry getMouseOverGroupEntry() {
+    public SinglyRootedNodeEntry getMouseOverGroupEntry() {
         return mousedOverGroupEntry;
     }
     
@@ -67,7 +67,7 @@ public class GraphSelectionStateMonitor {
         this.mousedOverGroupEntry = null;
         this.mousedOverPartitionEntry = null;
         
-        groupEntries.forEach((GenericGroupEntry entry) -> {
+        groupEntries.forEach((SinglyRootedNodeEntry entry) -> {
             entry.setMousedOver(false);
             entry.setHighlightState(AbNNodeEntry.HighlightState.None);
         });
@@ -82,7 +82,7 @@ public class GraphSelectionStateMonitor {
         this.mousedOverGroupEntry = null;
         this.mousedOverPartitionEntry = null;
         
-         groupEntries.forEach((GenericGroupEntry entry) -> {
+         groupEntries.forEach((SinglyRootedNodeEntry entry) -> {
             entry.setMousedOver(false);
         });
         
@@ -91,7 +91,7 @@ public class GraphSelectionStateMonitor {
         });
     }
     
-    public void setSelectedGroup(GenericGroupEntry group) {
+    public void setSelectedGroup(SinglyRootedNodeEntry group) {
         if(group != selectedGroupEntry) {           
             resetAll();
             
@@ -116,7 +116,7 @@ public class GraphSelectionStateMonitor {
         }
     }
     
-    public void setMousedOverGroup(GenericGroupEntry group) {
+    public void setMousedOverGroup(SinglyRootedNodeEntry group) {
         if(group != mousedOverGroupEntry) {
             resetMousedOver();
             
@@ -140,29 +140,29 @@ public class GraphSelectionStateMonitor {
         resetAll();
         
         entryIds.forEach((Integer entryId) -> {
-            GenericGroupEntry group = graph.getGroupEntries().get(entryId);
+            SinglyRootedNodeEntry group = graph.getGroupEntries().get(entryId);
             group.setHighlightState(AbNNodeEntry.HighlightState.SearchResult);
         });
     }   
     
-    private void highlightGroupParents(GenericGroupEntry group) {
-        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
+    private void highlightGroupParents(SinglyRootedNodeEntry group) {
+        HashMap<Integer, ? extends SinglyRootedNodeEntry> graphGroupEntries = graph.getGroupEntries();
 
         for (int parentId : group.getGroup().getParentIds()) {
             if (graphGroupEntries.containsKey(parentId)) {
-                GenericGroupEntry entry = graphGroupEntries.get(parentId);
+                SinglyRootedNodeEntry entry = graphGroupEntries.get(parentId);
                 entry.setHighlightState(AbNNodeEntry.HighlightState.Parent);
             }
         }
     }
     
-    private void highlightGroupChildren(GenericGroupEntry group) {
-        HashMap<Integer, ? extends GenericGroupEntry> graphGroupEntries = graph.getGroupEntries();
+    private void highlightGroupChildren(SinglyRootedNodeEntry group) {
+        HashMap<Integer, ? extends SinglyRootedNodeEntry> graphGroupEntries = graph.getGroupEntries();
         HashSet<GenericConceptGroup> children = graph.getAbstractionNetwork().getChildGroups(group.getGroup());
 
         for (GenericConceptGroup child : children) {
             if (graphGroupEntries.containsKey(child.getId())) {
-                GenericGroupEntry entry = graphGroupEntries.get(child.getId());
+                SinglyRootedNodeEntry entry = graphGroupEntries.get(child.getId());
                 entry.setHighlightState(AbNNodeEntry.HighlightState.Child);
             }
         }

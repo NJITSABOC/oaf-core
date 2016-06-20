@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -14,7 +14,7 @@ public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
     
     private HashMap<T, ArrayList<ArrayList<T>>> pathMap = new HashMap<>();
     
-    private T endPoint;
+    private final T endPoint;
     
     public AllPathsToNodeVisitor(MultiRootedHierarchy<T> theHierarchy, T endPoint) {
         super(theHierarchy);
@@ -38,7 +38,7 @@ public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
             return;
         }
         
-        HashSet<T> parents = theHierarchy.getParents(node);
+        Set<T> parents = theHierarchy.getParents(node);
 
         ArrayList<ArrayList<T>> pathsToConcept = new ArrayList<>();
 

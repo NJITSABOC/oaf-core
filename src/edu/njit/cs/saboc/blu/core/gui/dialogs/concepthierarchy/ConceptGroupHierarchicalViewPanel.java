@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,7 +25,7 @@ import javax.swing.JViewport;
  */
 public abstract class ConceptGroupHierarchicalViewPanel extends JPanel {
 
-    private SingleRootedConceptHierarchy hierarchy;
+    private ConceptHierarchy hierarchy;
     
     protected AbstractionNetwork abstractionNetwork;
     protected SinglyRootedNode group;
@@ -228,9 +228,10 @@ public abstract class ConceptGroupHierarchicalViewPanel extends JPanel {
         return null;
     }
     
-    public abstract ConceptGroupHierarchyLoader<Concept, SingleRootedConceptHierarchy, ? extends GenericConceptGroup> getHierarchyLoader();
+    public abstract NodeConceptHierarchyLoader getHierarchyLoader();
     
-    public void initialize(SingleRootedConceptHierarchy hierarchy, 
+    public void initialize(
+            ConceptHierarchy hierarchy, 
             ArrayList<ArrayList<ConceptEntry>> conceptEntries, 
             HashMap<Concept, ConceptEntry> conceptEntryMap) {
         

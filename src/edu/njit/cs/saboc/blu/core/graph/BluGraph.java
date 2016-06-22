@@ -618,9 +618,9 @@ public class BluGraph extends JLayeredPane {
                                 GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
 
                                 if (e.isControlDown()) {
-                                    igf.focusOnComponent(getGroupEntries().get(edge.getSource()));
+                                    igf.focusOnComponent(getNodeEntries().get(edge.getSource()));
                                 } else {
-                                    igf.focusOnComponent(getGroupEntries().get(edge.getTarget()));
+                                    igf.focusOnComponent(getNodeEntries().get(edge.getTarget()));
                                 }
 
                             } catch (Exception exception) {
@@ -677,8 +677,8 @@ public class BluGraph extends JLayeredPane {
         if (e != null) {
             edges.remove(e);
             
-            getGroupEntries().get(e.getSource()).removeIncidentEdge(e);
-            getGroupEntries().get(e.getTarget()).removeIncidentEdge(e);
+            getNodeEntries().get(e.getSource()).removeIncidentEdge(e);
+            getNodeEntries().get(e.getTarget()).removeIncidentEdge(e);
             
             for (JPanel s : e.getSegments()) {
                 remove(s);
@@ -895,7 +895,7 @@ public class BluGraph extends JLayeredPane {
         return layout.getContainerEntries();
     }
 
-    public Map<SinglyRootedNode, SinglyRootedNodeEntry> getGroupEntries() {
+    public Map<SinglyRootedNode, SinglyRootedNodeEntry> getNodeEntries() {
         return layout.getGroupEntries();
     }
 
@@ -914,7 +914,7 @@ public class BluGraph extends JLayeredPane {
             public void actionPerformed(ActionEvent e) {
                 try {
                     GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getTarget()));
+                    igf.focusOnComponent(getNodeEntries().get(selectedEdge.getTarget()));
                 } catch (Exception exception) {
                     System.err.println(exception);
                 }
@@ -929,7 +929,7 @@ public class BluGraph extends JLayeredPane {
             public void actionPerformed(ActionEvent e) {
                 try {
                     GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getGroupEntries().get(selectedEdge.getSource()));
+                    igf.focusOnComponent(getNodeEntries().get(selectedEdge.getSource()));
                 } catch (Exception exception) {
                     System.err.println(exception);
                 }

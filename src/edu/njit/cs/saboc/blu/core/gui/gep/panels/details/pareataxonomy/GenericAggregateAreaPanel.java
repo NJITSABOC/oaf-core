@@ -4,8 +4,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.PartitionedNodeSubNodeList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.PartitionedNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class GenericAggregateAreaPanel<AREA_T extends Area,
         CONCEPT_T,
         ENTRY_T,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration>
-            extends AbstractContainerPanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T, ENTRY_T, CONFIG_T> {
+            extends PartitionedNodePanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T, ENTRY_T, CONFIG_T> {
     
     private final GenericAreaAggregatedPAreaPanel<CONCEPT_T, AREA_T, PAREA_T, AGGREGATEPAREA_T> aggregatedPAreaPanel;
     
@@ -27,7 +27,7 @@ public class GenericAggregateAreaPanel<AREA_T extends Area,
     
     public GenericAggregateAreaPanel(
            NodeDetailsPanel<AREA_T, ENTRY_T> containerDetailsPanel, 
-           AbstractContainerGroupListPanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T> groupListPanel, 
+           PartitionedNodeSubNodeList<AREA_T, AGGREGATEPAREA_T, CONCEPT_T> groupListPanel, 
            GenericAreaAggregatedPAreaPanel<CONCEPT_T, AREA_T, PAREA_T, AGGREGATEPAREA_T> aggregatedPAreaPanel,
            CONFIG_T configuration) {
         

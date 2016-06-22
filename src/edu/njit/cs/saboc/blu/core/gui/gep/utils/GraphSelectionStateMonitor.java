@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils;
 
-import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
@@ -8,8 +9,9 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Enforces the following rules:
@@ -35,7 +37,7 @@ public class GraphSelectionStateMonitor {
     public GraphSelectionStateMonitor(BluGraph graph) {
         this.graph =  graph;
         
-        this.groupEntries = graph.getGroupEntries().values();
+        this.groupEntries = graph.getNodeEntries().values();
         
         Collection<? extends PartitionedNodeEntry> containers = graph.getContainerEntries().values();
         
@@ -136,35 +138,45 @@ public class GraphSelectionStateMonitor {
         }
     }
     
-    public void setSearchResults(ArrayList<Integer> entryIds) {
+    public void setSearchResults(ArrayList<SinglyRootedNode> nodes) {
         resetAll();
         
-        entryIds.forEach((Integer entryId) -> {
-            SinglyRootedNodeEntry group = graph.getGroupEntries().get(entryId);
-            group.setHighlightState(AbNNodeEntry.HighlightState.SearchResult);
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        
+        nodes.forEach((node) -> {
+            SinglyRootedNodeEntry entry = nodeEntries.get(node);
+            entry.setHighlightState(AbNNodeEntry.HighlightState.SearchResult);
         });
     }   
     
-    private void highlightGroupParents(SinglyRootedNodeEntry group) {
-        HashMap<Integer, ? extends SinglyRootedNodeEntry> graphGroupEntries = graph.getGroupEntries();
-
-        for (int parentId : group.getGroup().getParentIds()) {
-            if (graphGroupEntries.containsKey(parentId)) {
-                SinglyRootedNodeEntry entry = graphGroupEntries.get(parentId);
+    private void highlightGroupParents(SinglyRootedNodeEntry nodeEntry) {
+        AbstractionNetwork<SinglyRootedNode> abn = graph.getAbstractionNetwork();
+        
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        
+        Set<SinglyRootedNode> parentNodes = abn.getNodeHierarchy().getParents(nodeEntry.getNode());
+        
+        parentNodes.forEach((parent) -> {
+            if (nodeEntries.containsKey(parent)) {
+                SinglyRootedNodeEntry entry = nodeEntries.get(parent);
                 entry.setHighlightState(AbNNodeEntry.HighlightState.Parent);
             }
-        }
+        });
     }
     
-    private void highlightGroupChildren(SinglyRootedNodeEntry group) {
-        HashMap<Integer, ? extends SinglyRootedNodeEntry> graphGroupEntries = graph.getGroupEntries();
-        HashSet<GenericConceptGroup> children = graph.getAbstractionNetwork().getChildGroups(group.getGroup());
-
-        for (GenericConceptGroup child : children) {
-            if (graphGroupEntries.containsKey(child.getId())) {
-                SinglyRootedNodeEntry entry = graphGroupEntries.get(child.getId());
+    private void highlightGroupChildren(SinglyRootedNodeEntry nodeEntry) {
+        
+        AbstractionNetwork<SinglyRootedNode> abn = graph.getAbstractionNetwork();
+        
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        
+        Set<SinglyRootedNode> parentNodes = abn.getNodeHierarchy().getChildren(nodeEntry.getNode());
+        
+        parentNodes.forEach((parent) -> {
+            if (nodeEntries.containsKey(parent)) {
+                SinglyRootedNodeEntry entry = nodeEntries.get(parent);
                 entry.setHighlightState(AbNNodeEntry.HighlightState.Child);
             }
-        }
+        });
     }
 }

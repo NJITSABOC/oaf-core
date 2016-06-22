@@ -179,6 +179,6 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
     }
 
     public ArrayList<Area> getLayoutAreas() {
-        return layoutGroupContainers;
+        return new ArrayList<>(); // TODO: Fix this....
     }
 }

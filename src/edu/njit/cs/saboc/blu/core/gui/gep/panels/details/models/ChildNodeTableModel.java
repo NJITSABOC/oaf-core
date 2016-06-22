@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
 
 /**
  *
@@ -10,9 +9,13 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFac
  */
 public class ChildNodeTableModel extends OAFAbstractTableModel<Node> {
 
-    public ChildNodeTableModel(BLUConfiguration config, NodeTypeNameFactory nodeTypeName) {
+    public ChildNodeTableModel(String [] columnNames) {
+        super(columnNames);
+    }
+    
+    public ChildNodeTableModel(BLUConfiguration config) {
         super(new String [] {
-            String.format("Child %s", nodeTypeName.getNodeTypeName(false),
+            String.format("Child %s", config.getTextConfiguration().getNodeTypeName(false),
             String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)))
         });
     }

@@ -15,13 +15,13 @@ public class SinglyRootedNodePanel extends NodeDashboardPanel {
     public SinglyRootedNodePanel(
             NodeDetailsPanel groupDetailsPanel, 
             NodeHierarchyPanel groupHierarchyPanel, 
-            BLUConfiguration configuration,
-            NodeTypeNameFactory nodeTypeName) {
+            BLUConfiguration configuration) {
         
-        super(groupDetailsPanel, configuration, nodeTypeName);
+        super(groupDetailsPanel, configuration);
         
         this.groupHierarchyPanel = groupHierarchyPanel;
 
-        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", nodeTypeName.getNodeTypeName(false)));
+        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", 
+                configuration.getTextConfiguration().getNodeTypeName(false)));
     }
 }

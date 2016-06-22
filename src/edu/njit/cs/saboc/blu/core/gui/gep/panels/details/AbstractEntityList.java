@@ -50,6 +50,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
     private final JPanel filterPanel;
     
     protected AbstractEntityList(OAFAbstractTableModel<T> tableModel) {
+        
         super(new BorderLayout());
 
         this.tableModel = tableModel;

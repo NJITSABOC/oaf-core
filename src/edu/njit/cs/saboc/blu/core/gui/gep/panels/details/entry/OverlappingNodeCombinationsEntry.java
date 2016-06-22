@@ -21,7 +21,7 @@ public class OverlappingNodeCombinationsEntry {
         this.disjointNodes = disjointNodes;
     }
     
-    public Set<Node> getOtherOverlappingGroups() {
+    public Set<Node> getOtherOverlappingNodes() {
         Set<Node> groups = new HashSet<>(disjointNodes.iterator().next().getOverlaps());
         groups.remove(overlappingSource);
         

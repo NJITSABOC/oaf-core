@@ -27,8 +27,7 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
 
     public NodeDashboardPanel(
             NodeDetailsPanel nodeDetailsPanel, 
-            BLUConfiguration configuration, 
-            NodeTypeNameFactory nodeTypeName) {
+            BLUConfiguration configuration) {
         
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
@@ -40,7 +39,7 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
         
         tabbedPane = new JTabbedPane();
         
-        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", nodeTypeName.getNodeTypeName(false)));
+        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", configuration.getTextConfiguration().getNodeTypeName(false)));
 
         this.add(groupNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);

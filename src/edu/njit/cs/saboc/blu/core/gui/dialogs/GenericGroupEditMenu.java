@@ -46,8 +46,8 @@ public class GenericGroupEditMenu extends JPopupMenu {
                 HashSet<Integer> pareaParents = group.getParentIds();
 
                 for (int pid : pareaParents) {
-                    if (graph.getGroupEntries().containsKey(pid) && !graph.edgeAlreadyDrawn(group.getId(), pid)
-                            && graph.getGroupEntries().get(pid).getGroupLevelParent().getParentPartition().isVisible()) {
+                    if (graph.getNodeEntries().containsKey(pid) && !graph.edgeAlreadyDrawn(group.getId(), pid)
+                            && graph.getNodeEntries().get(pid).getGroupLevelParent().getParentPartition().isVisible()) {
 
                         graph.drawRoutedEdge(group.getId(), pid);
                     }
@@ -70,8 +70,8 @@ public class GenericGroupEditMenu extends JPopupMenu {
 
                 if (pareaChildren != null) {
                     for (GenericConceptGroup child : pareaChildren) {
-                        if (graph.getGroupEntries().containsKey(child.getId()) && !graph.edgeAlreadyDrawn(child.getId(), currentSummaryId)
-                                && graph.getGroupEntries().get(child.getId()).getGroupLevelParent().getParentPartition().isVisible()) {
+                        if (graph.getNodeEntries().containsKey(child.getId()) && !graph.edgeAlreadyDrawn(child.getId(), currentSummaryId)
+                                && graph.getNodeEntries().get(child.getId()).getGroupLevelParent().getParentPartition().isVisible()) {
                             
                             graph.drawRoutedEdge(child.getId(), currentSummaryId);
                         }

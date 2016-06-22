@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.listener.BLUAbNListenerConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 
 /**
  *
@@ -14,5 +14,5 @@ public abstract class BLUPartitionedAbNUIConfiguration extends BLUAbNUIConfigura
     }
     
     public abstract boolean hasContainerDetailsPanel();
-    public abstract BaseNodeInformationPanel createContainerDetailsPanel();
+    public abstract NodeDashboardPanel createContainerDetailsPanel();
 }

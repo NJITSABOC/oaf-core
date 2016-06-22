@@ -1,26 +1,25 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends DisjointNode, 
-        GROUP_T extends GenericConceptGroup> extends ChildNodeTableModel<DISJOINTGROUP_T> {
+public class ChildDisjointNodeTableModel extends ChildNodeTableModel {
     
     private final BLUDisjointConfiguration configuration;
     
-    public GenericChildDisjointGroupTableModel(BLUDisjointConfiguration configuration) {
+    public ChildDisjointNodeTableModel(BLUDisjointConfiguration configuration) {
         super(new String [] {
-            configuration.getTextConfiguration().getGroupTypeName(false), 
-            String.format("Overlapping %s", configuration.getTextConfiguration().getGroupTypeName(true)),
+            configuration.getTextConfiguration().getNodeTypeName(false), 
+            String.format("Overlapping %s", configuration.getTextConfiguration().getOverlappingNodeTypeName(true)),
             String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
         });
         
@@ -28,15 +27,17 @@ public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends Disjoin
     }
     
     @Override
-    protected Object[] createRow(DISJOINTGROUP_T item) {
+    protected Object[] createRow(Node item) {
+        DisjointNode disjointNode = (DisjointNode)item;
+        
         ArrayList<String> overlappingPAreaNames = new ArrayList<>();
         
-        HashSet<GROUP_T> overlaps = item.getOverlaps();
+        Set<Node> overlaps = disjointNode.getOverlaps();
         
-        overlaps.forEach( (GROUP_T group) -> {
+        overlaps.forEach( (node) -> {
             overlappingPAreaNames.add(String.format("%s (%d)", 
-                    configuration.getTextConfiguration().getOverlappingGroupName(group),
-                    group.getConceptCount()));
+                    node.getName(),
+                    node.getConceptCount()));
         });
         
         Collections.sort(overlappingPAreaNames);
@@ -48,7 +49,7 @@ public class GenericChildDisjointGroupTableModel<DISJOINTGROUP_T extends Disjoin
         }
         
         return new Object [] {
-            configuration.getTextConfiguration().getGroupName(item),
+            item.getName(),
             overlapsStr,
             item.getConceptCount()
         };

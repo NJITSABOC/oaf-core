@@ -10,7 +10,7 @@ import java.awt.Rectangle;
  *
  * @author Chris
  */
-public abstract class ConceptEntry {
+public class ConceptEntry {
 
     public static final int CONCEPT_WIDTH = 100;
     public static final int CONCEPT_HEIGHT = 30;

@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
@@ -137,6 +139,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private final LoadingPanel loadingPanel;
     private AbstractAbNDetailsPanel abnDetailsPanel;
+    
     private Optional<NodeDashboardPanel> groupDetailsPanel;
     private Optional<NodeDashboardPanel> containerDetailsPanel;
 
@@ -200,7 +203,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         this.setDetailsPanelContents(this.loadingPanel);
     }
     
-    private void initializeContentComponents(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
+    private void initializeContentComponents(
+            BluGraph graph, 
+            AbNPainter painter, 
+            BLUConfiguration configuration) {
+        
         this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
         
         if (abnDetailsPanel != null) {
@@ -564,25 +571,23 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     }
 
     public void jumpToRoot() {
-        if(graph.getAbstractionNetwork().getRootGroup() == null) {
-            return;
-        }
-        
-        SinglyRootedNodeEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
+        SinglyRootedNode root = (SinglyRootedNode)graph.getAbstractionNetwork().getNodeHierarchy().getRoot();
+        SinglyRootedNodeEntry rootEntry = graph.getNodeEntries().get(root);
 
-        if(root == null) {
+        if(rootEntry == null) {
             return;
         }
         
-        viewport.focusOnPoint(root.getAbsoluteX(), 0, graphPanel.getWidth(), graphPanel.getHeight());
+        viewport.focusOnPoint(rootEntry.getAbsoluteX(), 0, graphPanel.getWidth(), graphPanel.getHeight());
         
         this.requestRedraw();
     }
     
     public void centerOnRoot() {
-    	SinglyRootedNodeEntry root = graph.getGroupEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
-        
-        centerOnEntry(root);
+        SinglyRootedNode root = (SinglyRootedNode)graph.getAbstractionNetwork().getNodeHierarchy().getRoot();
+        SinglyRootedNodeEntry rootEntry = graph.getNodeEntries().get(root);
+ 
+        centerOnEntry(rootEntry);
     }
 
     public void centerOnEntry(SinglyRootedNodeEntry entry) {
@@ -628,14 +633,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         }
     }
 
-    public void highlightEntriesForSearch(ArrayList<GenericConceptGroup> groups) {
-        ArrayList<Integer> entryIds = new ArrayList<Integer>();
-        
-        for(GenericConceptGroup group : groups) {
-            entryIds.add(group.getId());
-        }
-        
-        selectionStateMonitor.setSearchResults(entryIds);
+    public void highlightEntriesForSearch(ArrayList<SinglyRootedNode> nodes) {       
+        selectionStateMonitor.setSearchResults(nodes);
     }
 
     private void drawAbstractionNetwork(Graphics2D g2d, Viewport viewport) {
@@ -915,7 +914,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     /**
      * Section for handling mouse clicks
      */
-    private void handleSingleClickOnGroupEntry(SinglyRootedNodeEntry entry) {
+    private void handleSingleClickOnGroupEntry(SinglyRootedNodeEntry nodeEntry) {
         if (groupDetailsPanel.isPresent()) {
             
             Thread loadThread = new Thread(new Runnable() {
@@ -923,13 +922,13 @@ public class EnhancedGraphExplorationPanel extends JPanel {
                     setDetailsPanelContents(loadingPanel);
                     
                     groupDetailsPanel.get().clearContents();
-                    groupDetailsPanel.get().setContents(entry.getGroup());
+                    groupDetailsPanel.get().setContents(nodeEntry.getNode());
                     
                     if(containerDetailsPanel.isPresent()) {
                         containerDetailsPanel.get().clearContents();
                     }
                     
-                    if (entry == selectionStateMonitor.getSelectedGroupEntry()) {
+                    if (nodeEntry == selectionStateMonitor.getSelectedGroupEntry()) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
                                 setDetailsPanelContents(groupDetailsPanel.get());
@@ -946,11 +945,11 @@ public class EnhancedGraphExplorationPanel extends JPanel {
      /**
      * Section for handling mouse clicks
      */
-    private void handleSingleClickOnPartitionEntry(final GenericPartitionEntry entry) {
+    private void handleSingleClickOnPartitionEntry(GenericPartitionEntry entry) {
 
         if (containerDetailsPanel.isPresent()) {
             PartitionedNodeEntry parentEntry = entry.getParentContainer();
-            GenericGroupContainer container = parentEntry.getGroupContainer();
+            PartitionedNode container = parentEntry.getGroupContainer();
 
             Thread loadThread = new Thread(new Runnable() {
                 public void run() {

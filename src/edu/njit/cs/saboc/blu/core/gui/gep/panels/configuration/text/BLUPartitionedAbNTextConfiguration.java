@@ -9,4 +9,6 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 public interface BLUPartitionedAbNTextConfiguration extends BLUAbNTextConfiguration {
     public String getContainerTypeName(boolean plural);
     public String getContainerHelpDescription(PartitionedNode container);
+    
+    public String getDisjointGroupTypeName(boolean plural);
 }

@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeCombinationsEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,14 +9,12 @@ import java.util.Collections;
  *
  * @author Chris O
  */
-public class BLUAbstractOverlappingCombinationsTableModel<
-        GROUP_T extends GenericConceptGroup, 
-        DISJOINTGROUP_T extends DisjointNode,
-        CONCEPT_T> extends OAFAbstractTableModel<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> {
+public class OverlappingCombinationsTableModel extends OAFAbstractTableModel<OverlappingNodeCombinationsEntry> {
     
-    protected final BLUDisjointableConfiguration configuration;
+    private final BLUConfiguration configuration;
     
-    public BLUAbstractOverlappingCombinationsTableModel(BLUDisjointableConfiguration configuration) {
+    public OverlappingCombinationsTableModel(BLUConfiguration configuration) {
+        
         super(new String[] {
             String.format("Degree of Overlap"),
             String.format("Other %s", configuration.getTextConfiguration().getGroupTypeName(true)),
@@ -30,12 +26,12 @@ public class BLUAbstractOverlappingCombinationsTableModel<
     }
     
     @Override
-    protected Object[] createRow(OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> item) {
+    protected Object[] createRow(OverlappingNodeCombinationsEntry entry) {
         
         ArrayList<String> overlappingGroupNames = new ArrayList<>();
 
-        item.getOtherOverlappingGroups().forEach( (GROUP_T group) -> {
-            overlappingGroupNames.add(configuration.getTextConfiguration().getGroupName(group));
+        entry.getOtherOverlappingNodes().forEach( (node) -> {
+            overlappingGroupNames.add(node.getName());
         });
         
         Collections.sort(overlappingGroupNames);
@@ -47,10 +43,10 @@ public class BLUAbstractOverlappingCombinationsTableModel<
         }
         
         return new Object[] {
-            item.getDisjointGroups().iterator().next().getOverlaps().size(),
+            entry.getDisjointNodes().iterator().next().getOverlaps().size(),
             overlapName,
-            item.getDisjointGroups().size(),
-            item.getOverlappingConcepts().size()
+            entry.getDisjointNodes().size(),
+            entry.getOverlappingConcepts().size()
         };
     }
     

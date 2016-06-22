@@ -20,7 +20,7 @@ public class NavigateToGroupListener<GROUP_T extends GenericConceptGroup> extend
     
     @Override
     public void entityDoubleClicked(GROUP_T group) {
-        SinglyRootedNodeEntry entry = gep.getGraph().getGroupEntries().get(group.getId());
+        SinglyRootedNodeEntry entry = gep.getGraph().getNodeEntries().get(group.getId());
         
         gep.centerOnEntry(entry);
         

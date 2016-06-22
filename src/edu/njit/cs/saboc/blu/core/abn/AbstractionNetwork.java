@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -12,32 +14,31 @@ import java.util.Set;
 public abstract class AbstractionNetwork<NODE_T extends Node> {
 
     private final NodeHierarchy<NODE_T> nodeHierarchy;
+    private final ConceptHierarchy sourceHierarchy;
     
-    protected AbstractionNetwork(NodeHierarchy<NODE_T> nodeHierarchy) {
+    protected AbstractionNetwork(
+            NodeHierarchy<NODE_T> nodeHierarchy,
+            ConceptHierarchy sourceHierarchy) {
+        
         this.nodeHierarchy = nodeHierarchy;
+        this.sourceHierarchy = sourceHierarchy;
     }
 
-    protected int getGroupCount() {
+    public int getNodeCount() {
         return nodeHierarchy.size();
+    }
+    
+    public ConceptHierarchy getSourceHierarchy() {
+        return sourceHierarchy;
     }
     
     public Set<NODE_T> getNodes() {
         return nodeHierarchy.getNodesInHierarchy();
     }
     
-    public Set<NODE_T> getChildNodes(NODE_T node) {
-        return nodeHierarchy.getChildren(node);
-    }
-    
-    public Set<NODE_T> getParentGroups(NODE_T node) {
-        return nodeHierarchy.getParents(node);
-    }
-    
-    public Set<NODE_T> getDescendantGroups(NODE_T node) {
-        return nodeHierarchy.getSubhierarchyRootedAt(node).getDescendants(node);
-    }
-    
     public NodeHierarchy<NODE_T> getNodeHierarchy() {
         return nodeHierarchy;
     }
+    
+    public abstract Set<ParentNodeDetails> getParentNodeDetails(NODE_T node);
 }

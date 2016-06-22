@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -12,19 +13,23 @@ import javax.swing.JTabbedPane;
  *
  * @author Chris O
  */
-public class NodeInformationPanel extends AbNNodeInformationPanel {
+public class NodeDashboardPanel extends BaseNodeInformationPanel {
     
     private final DetailsPanelLabel groupNameLabel;
     
-    private final ArrayList<AbNNodeInformationPanel> groupDetailsPanels = new ArrayList<>();
+    private final ArrayList<BaseNodeInformationPanel> groupDetailsPanels = new ArrayList<>();
     
     private final JTabbedPane tabbedPane;
     
-    private final AbstractNodeDetailsPanel nodeDetailsPanel;
+    private final NodeDetailsPanel nodeDetailsPanel;
     
     private final BLUConfiguration configuration;
 
-    protected NodeInformationPanel(AbstractNodeDetailsPanel nodeDetailsPanel, BLUConfiguration configuration) {
+    public NodeDashboardPanel(
+            NodeDetailsPanel nodeDetailsPanel, 
+            BLUConfiguration configuration, 
+            NodeTypeNameFactory nodeTypeName) {
+        
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
         
@@ -35,7 +40,7 @@ public class NodeInformationPanel extends AbNNodeInformationPanel {
         
         tabbedPane = new JTabbedPane();
         
-        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", getNodeType()));
+        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", nodeTypeName.getNodeTypeName(false)));
 
         this.add(groupNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);
@@ -56,13 +61,13 @@ public class NodeInformationPanel extends AbNNodeInformationPanel {
     public void clearContents() {
         groupNameLabel.setText("");
         
-        groupDetailsPanels.forEach((AbNNodeInformationPanel gdp) -> {
+        groupDetailsPanels.forEach((BaseNodeInformationPanel gdp) -> {
             gdp.clearContents();
         });
     }
 
     
-    public final int addGroupDetailsTab(AbNNodeInformationPanel panel, String tabName) {
+    public final int addGroupDetailsTab(BaseNodeInformationPanel panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
         groupDetailsPanels.add(panel);
         

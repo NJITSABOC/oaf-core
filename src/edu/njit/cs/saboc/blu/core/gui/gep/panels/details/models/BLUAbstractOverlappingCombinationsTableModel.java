@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupCombinationsEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeCombinationsEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -14,7 +14,7 @@ import java.util.Collections;
 public class BLUAbstractOverlappingCombinationsTableModel<
         GROUP_T extends GenericConceptGroup, 
         DISJOINTGROUP_T extends DisjointNode,
-        CONCEPT_T> extends BLUAbstractTableModel<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> {
+        CONCEPT_T> extends OAFAbstractTableModel<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> {
     
     protected final BLUDisjointableConfiguration configuration;
     
@@ -30,7 +30,7 @@ public class BLUAbstractOverlappingCombinationsTableModel<
     }
     
     @Override
-    protected Object[] createRow(OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> item) {
+    protected Object[] createRow(OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> item) {
         
         ArrayList<String> overlappingGroupNames = new ArrayList<>();
 

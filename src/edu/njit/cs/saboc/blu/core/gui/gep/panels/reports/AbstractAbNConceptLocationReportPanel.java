@@ -39,7 +39,7 @@ public abstract class AbstractAbNConceptLocationReportPanel<ABN_T extends Abstra
             @Override
             protected String getBorderText(Optional<ArrayList<ImportedConceptGroupReport<GROUP_T, CONCEPT_T>>> entities) {
                 String base = String.format("Imported %s' %s", config.getTextConfiguration().getConceptTypeName(true), 
-                        config.getTextConfiguration().getGroupTypeName(true));
+                        config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entities.isPresent()) {
                     return String.format("%s (%d %s found)", base, 

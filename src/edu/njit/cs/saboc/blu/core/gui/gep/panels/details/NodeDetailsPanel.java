@@ -16,21 +16,21 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
  *
  * @author Chris O
  */
-public abstract class AbstractNodeDetailsPanel extends AbNNodeInformationPanel {
+public class NodeDetailsPanel extends BaseNodeInformationPanel {
     
     private final NodeSummaryPanel nodeSummaryPanel;
 
     private final AbstractNodeOptionsPanel nodeOptionsMenuPanel;
 
-    private final NodeEntityList<Concept> nodeConceptList;
+    private final ConceptList nodeConceptList;
 
     private final JSplitPane splitPane;
     
     private Optional<Node> currentNode = Optional.empty();
 
-    public AbstractNodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
+    public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
             AbstractNodeOptionsPanel nodeOptionsMenuPanel, 
-            NodeEntityList<Concept> nodeConceptList) {
+            ConceptList nodeConceptList) {
         
         this.nodeSummaryPanel = nodeSummaryPanel;
         this.nodeOptionsMenuPanel = nodeOptionsMenuPanel;
@@ -38,7 +38,7 @@ public abstract class AbstractNodeDetailsPanel extends AbNNodeInformationPanel {
 
         this.setLayout(new BorderLayout());
 
-        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         JPanel upperPanel = new JPanel(new BorderLayout());
         upperPanel.add(nodeSummaryPanel, BorderLayout.CENTER);
@@ -57,9 +57,7 @@ public abstract class AbstractNodeDetailsPanel extends AbNNodeInformationPanel {
     
     public void setContents(Node node) {
         this.currentNode = Optional.of(node);
-        
-        nodeConceptList.setCurrentNode(node);
-        
+
         nodeSummaryPanel.setContents(node);
         nodeOptionsMenuPanel.setContents(node);
         
@@ -74,9 +72,7 @@ public abstract class AbstractNodeDetailsPanel extends AbNNodeInformationPanel {
     
     public void clearContents() {
         this.currentNode = Optional.empty();
-        
-        nodeConceptList.clearCurrentNode();
-        
+
         nodeSummaryPanel.clearContents();
         nodeOptionsMenuPanel.clearContents();
         nodeConceptList.clearContents();

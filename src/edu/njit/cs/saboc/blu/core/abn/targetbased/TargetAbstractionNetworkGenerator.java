@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,9 +21,9 @@ public abstract class TargetAbstractionNetworkGenerator {
     
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,
-            SingleRootedConceptHierarchy sourceHierarchy, 
+            ConceptHierarchy sourceHierarchy, 
             InheritableProperty relationshipType, 
-            SingleRootedConceptHierarchy targetHierarchy) {
+            ConceptHierarchy targetHierarchy) {
         
         Set<InheritableProperty> relTypes = new HashSet<>();
         relTypes.add(relationshipType);
@@ -33,9 +33,9 @@ public abstract class TargetAbstractionNetworkGenerator {
     
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,
-            SingleRootedConceptHierarchy sourceHierarchy, 
+            ConceptHierarchy sourceHierarchy, 
             Set<InheritableProperty> relationshipTypes, 
-            SingleRootedConceptHierarchy targetHierarchy) {
+            ConceptHierarchy targetHierarchy) {
         
         Map<Concept, Set<RelationshipTriple>> relationshipsToTargetHierarchy = new HashMap<>();
         
@@ -71,7 +71,7 @@ public abstract class TargetAbstractionNetworkGenerator {
         HashMap<Concept, Set<Concept>> conceptsGroups = new HashMap<>();
 
         // The subhierarchy of (all!) concepts summarized by a target group, includes non-targets
-        HashMap<Concept, SingleRootedConceptHierarchy> conceptsInGroup = new HashMap<>();
+        HashMap<Concept, ConceptHierarchy> conceptsInGroup = new HashMap<>();
         
         HashMap<Concept, Integer> parentCounts = new HashMap<>();
 
@@ -87,7 +87,7 @@ public abstract class TargetAbstractionNetworkGenerator {
             if (targetGroupRoots.contains(concept)) {
                 conceptsGroups.get(concept).add(concept);
 
-                conceptsInGroup.put(concept, new SingleRootedConceptHierarchy(concept));
+                conceptsInGroup.put(concept, new ConceptHierarchy(concept));
             }
         }
 
@@ -156,10 +156,10 @@ public abstract class TargetAbstractionNetworkGenerator {
             });
         });
         
-        return new TargetAbstractionNetwork(nodeHierarchy);
+        return new TargetAbstractionNetwork(nodeHierarchy, targetHierarchy);
     }
     
-    private Map<Concept, Set<Concept>> getLowestNonTargetAncestor(Set<Concept> targets, SingleRootedConceptHierarchy hierarchy) {
+    private Map<Concept, Set<Concept>> getLowestNonTargetAncestor(Set<Concept> targets, ConceptHierarchy hierarchy) {
         
         Map<Concept, Set<Concept>> lowestNontargetConcepts = new HashMap<>();
         

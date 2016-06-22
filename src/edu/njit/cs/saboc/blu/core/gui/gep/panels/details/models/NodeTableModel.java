@@ -1,31 +1,27 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public class BLUAbstractGroupTableModel<GROUP_T extends GenericConceptGroup> extends BLUAbstractTableModel<GROUP_T> {
+public class NodeTableModel extends OAFAbstractTableModel<Node> {
     
-    protected final BLUConfiguration configuration;
-    
-    public BLUAbstractGroupTableModel(BLUConfiguration configuration) {
+    public NodeTableModel(BLUConfiguration configuration) {
         super(
                 new String[] {
-                    configuration.getTextConfiguration().getGroupTypeName(false),
+                    configuration.getTextConfiguration().getNodeTypeName(false),
                     String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
             });
-        
-        this.configuration = configuration;
     }
 
     @Override
-    protected Object[] createRow(GROUP_T group) {
+    protected Object[] createRow(Node node) {
         return new Object [] {
-            configuration.getTextConfiguration().getGroupName(group),
-            group.getConceptCount()
+            node.getName(),
+            node.getConceptCount()
         };
     }
 }

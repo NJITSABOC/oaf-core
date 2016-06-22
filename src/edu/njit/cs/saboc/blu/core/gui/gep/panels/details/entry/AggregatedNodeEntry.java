@@ -1,31 +1,29 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AggregatedGroupEntry<CONCEPT_T, 
-        GROUP_T extends GenericConceptGroup, 
-        AGGREGATEGROUP_T extends GenericConceptGroup & AggregateNode<CONCEPT_T, GROUP_T>>  {
+public class AggregatedNodeEntry {
     
-    private final GROUP_T aggregatedGroup;
+    private final SinglyRootedNode aggregatedNode;
     
-    private final HashSet<AGGREGATEGROUP_T> aggregatedInto;
+    private final Set<AggregateNode<SinglyRootedNode>> aggregatedInto;
     
-    public AggregatedGroupEntry(GROUP_T aggregatedGroup, HashSet<AGGREGATEGROUP_T> aggregatedInto) {
-        this.aggregatedGroup = aggregatedGroup;
+    public AggregatedNodeEntry(SinglyRootedNode aggregatedNode, Set<AggregateNode<SinglyRootedNode>> aggregatedInto) {
+        this.aggregatedNode = aggregatedNode;
         this.aggregatedInto = aggregatedInto;
     }
     
-    public GROUP_T getAggregatedGroup() {
-        return aggregatedGroup;
+    public SinglyRootedNode getAggregatedNode() {
+        return aggregatedNode;
     }
     
-    public HashSet<AGGREGATEGROUP_T> getAggregatedIntoGroups() {
+    public Set<AggregateNode<SinglyRootedNode>> getAggregatedIntoNodes() {
         return aggregatedInto;
     }
 }

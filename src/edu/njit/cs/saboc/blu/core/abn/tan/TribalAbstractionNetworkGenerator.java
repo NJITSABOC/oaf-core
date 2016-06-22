@@ -2,8 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.MultiRootedConceptHierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ import java.util.Stack;
  */
 public abstract class TribalAbstractionNetworkGenerator {
 
-    public TribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(MultiRootedConceptHierarchy sourceHierarchy) {
+    public TribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(ConceptHierarchy sourceHierarchy) {
 
         Set<Concept> patriarchs = sourceHierarchy.getRoots();
 
@@ -100,14 +99,14 @@ public abstract class TribalAbstractionNetworkGenerator {
         }
 
         // Stores the hierarchy of concepts summarized by each cluster
-        final HashMap<Concept, SingleRootedConceptHierarchy> clusterConceptHierarchy = new HashMap<>();
+        final HashMap<Concept, ConceptHierarchy> clusterConceptHierarchy = new HashMap<>();
 
         // Stores the list of clusters each concept belongs to
         final HashMap<Concept, Set<Concept>> conceptClusters = new HashMap<>();
 
 
         for (Concept root : roots) { // For each root
-            clusterConceptHierarchy.put(root, new SingleRootedConceptHierarchy(root)); // Create a new cluster
+            clusterConceptHierarchy.put(root, new ConceptHierarchy(root)); // Create a new cluster
 
             Set<Concept> rootTribalSet = conceptTribes.get(root);
 
@@ -218,8 +217,8 @@ public abstract class TribalAbstractionNetworkGenerator {
             }
         });
         
-        BandTribalAbstractionNetwork bandTAN = new BandTribalAbstractionNetwork(bandHierarchy);
-        TribalAbstractionNetwork tan = new TribalAbstractionNetwork(bandTAN, sourceHierarchy, clusterHierarchy);
+        BandTribalAbstractionNetwork bandTAN = new BandTribalAbstractionNetwork(bandHierarchy, sourceHierarchy);
+        TribalAbstractionNetwork tan = new TribalAbstractionNetwork(bandTAN, clusterHierarchy, sourceHierarchy);
 
         return tan;
     }

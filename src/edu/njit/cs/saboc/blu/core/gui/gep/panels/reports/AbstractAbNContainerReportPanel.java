@@ -6,7 +6,7 @@ import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ContainerReport;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class AbstractAbNContainerReportPanel<
     private final AbstractEntityList<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> containerReportPanel; 
     
     protected AbstractAbNContainerReportPanel(BLUPartitionedConfiguration config, 
-            BLUAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> model) {
+            OAFAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> model) {
         
         super(config);
         

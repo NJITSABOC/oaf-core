@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.AbNLevelReport;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class GenericAbNLevelReportPanel <
     private final AbstractEntityList<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> levelReportList; 
     
     protected GenericAbNLevelReportPanel(BLUPartitionedConfiguration config, 
-            BLUAbstractTableModel<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> model) {
+            OAFAbstractTableModel<AbNLevelReport<CONCEPT_T, GROUP_T, CONTAINER_T>> model) {
         
         super(config);
         

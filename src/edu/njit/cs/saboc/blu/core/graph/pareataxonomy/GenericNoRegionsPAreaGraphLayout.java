@@ -1,10 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;

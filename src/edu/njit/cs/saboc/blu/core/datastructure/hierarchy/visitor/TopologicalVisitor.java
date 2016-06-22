@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
@@ -8,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
  */
 public abstract class TopologicalVisitor<T> extends HierarchyVisitor<T> {
     
-    public TopologicalVisitor(MultiRootedHierarchy<T> theHierarchy) {
+    public TopologicalVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
     }
     

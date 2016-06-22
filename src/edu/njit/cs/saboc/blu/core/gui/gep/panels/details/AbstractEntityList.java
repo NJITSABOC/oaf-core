@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
@@ -38,7 +38,7 @@ import javax.swing.table.TableRowSorter;
 public abstract class AbstractEntityList<T> extends JPanel {
 
     private final JTable entityTable;
-    private final BLUAbstractTableModel<T> tableModel;
+    private final OAFAbstractTableModel<T> tableModel;
     
     private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
     
@@ -48,10 +48,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
     private final TableRowSorter<TableModel> sorter;
     
     private final JPanel filterPanel;
-       
-    //private final JPanel optionsPanel;
     
-    protected AbstractEntityList(BLUAbstractTableModel<T> tableModel) {
+    protected AbstractEntityList(OAFAbstractTableModel<T> tableModel) {
         super(new BorderLayout());
 
         this.tableModel = tableModel;
@@ -67,17 +65,17 @@ public abstract class AbstractEntityList<T> extends JPanel {
                     
                     
                     if (e.getClickCount() == 1) {
-                        selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
+                        selectionListeners.forEach( (listener) -> {
                             listener.entityClicked(entity);
                         });
                     } else if (e.getClickCount() == 2) {
-                        selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
+                        selectionListeners.forEach( (listener) -> {
                             listener.entityDoubleClicked(entity);
                         });
                     }
 
                 } else {
-                    selectionListeners.forEach((EntitySelectionListener<T> listener) -> {
+                    selectionListeners.forEach( (listener) -> {
                         listener.noEntitySelected();
                     });
                 }
@@ -106,7 +104,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         //End Filtering Container//
         //  Start Sorter Model   //
         ///////////////////////////
-        sorter = new TableRowSorter<TableModel>(tableModel);
+        sorter = new TableRowSorter<>(tableModel);
         
         entityTable.setRowSorter(sorter);
 
@@ -172,7 +170,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         setBorderText(getBorderText(Optional.empty()));
     }
     
-    public BLUAbstractTableModel<T> getTableModel() {
+    public OAFAbstractTableModel<T> getTableModel() {
         return tableModel;
     }
     

@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.HashSet;
 
 /**
@@ -11,7 +11,7 @@ public class SubhierarchyMembersVisitor<T> extends HierarchyVisitor<T> {
     
     private final HashSet<T> members = new HashSet<>();
 
-    public SubhierarchyMembersVisitor(MultiRootedHierarchy<T> theHierarchy) {
+    public SubhierarchyMembersVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
     }
     

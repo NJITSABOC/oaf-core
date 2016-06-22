@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class BandClusterListPanel<
         CONCEPT_T> extends AbstractContainerGroupListPanel<BAND_T, CLUSTER_T, CONCEPT_T> {
 
     public BandClusterListPanel(
-            AbstractGroupList<CLUSTER_T> clusterList, 
+            NodeList<CLUSTER_T> clusterList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
             BLUGenericTANConfiguration config) {
         

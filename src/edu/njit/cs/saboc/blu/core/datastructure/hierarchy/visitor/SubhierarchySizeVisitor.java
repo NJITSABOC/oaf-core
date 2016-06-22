@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
@@ -10,7 +10,7 @@ public class SubhierarchySizeVisitor<T> extends HierarchyVisitor<T> {
     
     private int count = 0;
     
-    public SubhierarchySizeVisitor(MultiRootedHierarchy<T> theHierarchy) {
+    public SubhierarchySizeVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
     }
     

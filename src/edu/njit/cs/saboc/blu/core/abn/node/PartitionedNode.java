@@ -36,7 +36,7 @@ public abstract class PartitionedNode extends Node {
         return roots;
     }
 
-    protected Set<? extends SinglyRootedNode> getInternalNodes() {
+    public Set<? extends SinglyRootedNode> getInternalNodes() {
         return internalNodes;
     }
     

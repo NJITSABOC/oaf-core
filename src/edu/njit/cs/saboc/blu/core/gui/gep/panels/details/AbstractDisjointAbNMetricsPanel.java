@@ -6,12 +6,12 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupCombinationsEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeCombinationsEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingCombinationsTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingDetailsTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractOverlappingGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingDetailsTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingNodeTableModel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class AbstractDisjointAbNMetricsPanel<
         DISJOINTABN_T extends DisjointAbstractionNetwork,
         GROUP_T extends GenericConceptGroup,
         DISJOINTGROUP_T extends DisjointNode,
-        CONCEPT_T> extends AbNNodeInformationPanel<CONTAINER_T> {
+        CONCEPT_T> extends BaseNodeInformationPanel<CONTAINER_T> {
     
     private class GroupOverlapMetrics {
         
@@ -143,13 +143,13 @@ public class AbstractDisjointAbNMetricsPanel<
         }
     }
 
-    private final AbstractEntityList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> overlappingGroupTable;
-    protected final BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel;
+    private final AbstractEntityList<OverlappingNodeEntry<GROUP_T, CONCEPT_T>> overlappingGroupTable;
+    protected final OverlappingNodeTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel;
     
     private final AbstractEntityList<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> overlappingDetailsTable;
-    protected final BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
+    protected final OverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel;
     
-    private final AbstractEntityList<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> overlappingCombinationsTable; 
+    private final AbstractEntityList<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> overlappingCombinationsTable; 
     protected final BLUAbstractOverlappingCombinationsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingCombinationsTableModel;
     
     protected final BLUDisjointableConfiguration configuration;
@@ -159,8 +159,8 @@ public class AbstractDisjointAbNMetricsPanel<
     private Optional<DisjointAbNOverlapMetrics> currentMetrics = Optional.empty();
 
     protected AbstractDisjointAbNMetricsPanel(
-            BLUAbstractOverlappingGroupTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel,
-            BLUAbstractOverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel,
+            OverlappingNodeTableModel<GROUP_T, CONCEPT_T> overlappingGroupTableModel,
+            OverlappingDetailsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingDetailsTableModel,
             BLUAbstractOverlappingCombinationsTableModel<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> overlappingCombinationsTableModel,
             BLUDisjointableConfiguration configuration) {
         
@@ -171,11 +171,11 @@ public class AbstractDisjointAbNMetricsPanel<
         
         this.setLayout(new BorderLayout());
         
-        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
-        overlappingGroupTable = new AbstractEntityList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>>(this.overlappingGroupTableModel) {
+        overlappingGroupTable = new AbstractEntityList<OverlappingNodeEntry<GROUP_T, CONCEPT_T>>(this.overlappingGroupTableModel) {
             @Override
-            protected String getBorderText(Optional<ArrayList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>>> entities) {
+            protected String getBorderText(Optional<ArrayList<OverlappingNodeEntry<GROUP_T, CONCEPT_T>>> entities) {
                 if(entities.isPresent()) {
                     return String.format("Overlapping %s (%d)", configuration.getTextConfiguration().getGroupTypeName(true), entities.get().size());
                 } else {
@@ -184,10 +184,10 @@ public class AbstractDisjointAbNMetricsPanel<
             }
         };
         
-        overlappingGroupTable.addEntitySelectionListener(new EntitySelectionAdapter<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> () {
+        overlappingGroupTable.addEntitySelectionListener(new EntitySelectionAdapter<OverlappingNodeEntry<GROUP_T, CONCEPT_T>> () {
 
             @Override
-            public void entityClicked(OverlappingGroupEntry<GROUP_T, CONCEPT_T> entity) {
+            public void entityClicked(OverlappingNodeEntry<GROUP_T, CONCEPT_T> entity) {
                 if (currentMetrics.isPresent()) {
                     displayOverlappingDetailsFor(entity.getOverlappingGroup());
                 }
@@ -210,9 +210,9 @@ public class AbstractDisjointAbNMetricsPanel<
             }
         };
         
-        overlappingCombinationsTable = new AbstractEntityList<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>(this.overlappingCombinationsTableModel) {
+        overlappingCombinationsTable = new AbstractEntityList<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>(this.overlappingCombinationsTableModel) {
             @Override
-            protected String getBorderText(Optional<ArrayList<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>> entities) {
+            protected String getBorderText(Optional<ArrayList<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>> entities) {
                 if(entities.isPresent()) {
                     return String.format("Overlapping Combinations (%d)", entities.get().size());
                 } else {
@@ -285,15 +285,15 @@ public class AbstractDisjointAbNMetricsPanel<
             disjointGroupsByOverlap.get(disjointGroup.getOverlaps()).add(disjointGroup);
         });
 
-        ArrayList<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> combinationEntries = new ArrayList<>();
+        ArrayList<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>> combinationEntries = new ArrayList<>();
         
-        disjointGroupsByOverlap.forEach( (HashSet<GROUP_T> overlappingGroups, HashSet<DISJOINTGROUP_T> disjointGroups) -> {
-            combinationEntries.add(new OverlappingGroupCombinationsEntry<>(selectedGroup, disjointGroups));
+        disjointGroupsByOverlap.forEach((HashSet<GROUP_T> overlappingGroups, HashSet<DISJOINTGROUP_T> disjointGroups) -> {
+            combinationEntries.add(new OverlappingNodeCombinationsEntry<>(selectedGroup, disjointGroups));
         });
         
-        Collections.sort(combinationEntries, new Comparator<OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>() {
-            public int compare(OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> a, 
-                    OverlappingGroupCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> b) {
+        Collections.sort(combinationEntries, new Comparator<OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T>>() {
+            public int compare(OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> a, 
+                    OverlappingNodeCombinationsEntry<GROUP_T, DISJOINTGROUP_T, CONCEPT_T> b) {
 
                 if (a.getOtherOverlappingGroups().size() == b.getOtherOverlappingGroups().size()) {
                     if (a.getOverlappingConcepts().size() == b.getOverlappingConcepts().size()) {
@@ -362,10 +362,10 @@ public class AbstractDisjointAbNMetricsPanel<
             }
         });
         
-        ArrayList<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> entries = new ArrayList<>();
+        ArrayList<OverlappingNodeEntry<GROUP_T, CONCEPT_T>> entries = new ArrayList<>();
         
         overlappingGroups.forEach((GROUP_T overlappingGroup) -> {
-            entries.add(new OverlappingGroupEntry<>(overlappingGroup, metrics.getGroupMetrics().get(overlappingGroup).getOverlappingConcepts()));
+            entries.add(new OverlappingNodeEntry<>(overlappingGroup, metrics.getGroupMetrics().get(overlappingGroup).getOverlappingConcepts()));
         });
         
         overlappingGroupTableModel.setContents(entries);

@@ -1,8 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -17,18 +14,18 @@ public abstract class AbstractContainerGroupListPanel<
         GROUP_T extends GenericConceptGroup, 
         CONCEPT_T>
 
-        extends AbNNodeInformationPanel<CONTAINER_T> {
+        extends BaseNodeInformationPanel<CONTAINER_T> {
     
     private final JSplitPane splitPane;
 
-    private final AbstractGroupList<GROUP_T> groupList;
+    private final NodeList<GROUP_T> groupList;
     
     private final AbstractEntityList<CONCEPT_T> conceptList;
     
-    protected final BLUPartitionedConfiguration configuration;
+    protected final BLUConfiguration configuration;
     
     public AbstractContainerGroupListPanel(
-            AbstractGroupList<GROUP_T> groupList, 
+            NodeList<GROUP_T> groupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
             BLUPartitionedConfiguration configuration) {
         
@@ -36,7 +33,7 @@ public abstract class AbstractContainerGroupListPanel<
         
         this.setLayout(new BorderLayout());
 
-        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         this.groupList = groupList;
         
@@ -58,7 +55,7 @@ public abstract class AbstractContainerGroupListPanel<
         this.add(splitPane, BorderLayout.CENTER);
     }
     
-    protected AbstractGroupList<GROUP_T> getGroupList() {
+    protected NodeList<GROUP_T> getGroupList() {
         return groupList;
     }
     

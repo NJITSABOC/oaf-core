@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractAbNNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.PartitionedNodeConceptEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.AbstractNodeEntityTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
 /**
@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfig
  * @author Chris O
  */
 public class BandConceptTableModel<CONCEPT_T, CLUSTER_T extends Cluster, BAND_T extends Band>
-            extends BLUAbstractAbNNodeTableModel<BAND_T, ContainerConceptEntry<CONCEPT_T, CLUSTER_T>> {
+            extends AbstractNodeEntityTableModel<BAND_T, PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T>> {
 
     private final BLUGenericTANConfiguration config;
     
@@ -26,7 +26,7 @@ public class BandConceptTableModel<CONCEPT_T, CLUSTER_T extends Cluster, BAND_T 
     }
 
     @Override
-    protected Object[] createRow(ContainerConceptEntry<CONCEPT_T, CLUSTER_T> item) {
+    protected Object[] createRow(PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T> item) {
         String overlappingStr;
         
         if(item.getGroups().size() == 1) {

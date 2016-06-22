@@ -5,13 +5,13 @@ package edu.njit.cs.saboc.blu.core.ontology;
  * @author Chris O
  */
 public class Ontology {
-    private final SingleRootedConceptHierarchy conceptHierarchy;
+    private final ConceptHierarchy conceptHierarchy;
     
-    public Ontology(SingleRootedConceptHierarchy conceptHierarchy) {
+    public Ontology(ConceptHierarchy conceptHierarchy) {
         this.conceptHierarchy = conceptHierarchy;
     }
     
-    public SingleRootedConceptHierarchy getConceptHierarchy() {
+    public ConceptHierarchy getConceptHierarchy() {
         return conceptHierarchy;
     }
 }

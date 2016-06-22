@@ -6,8 +6,10 @@ import javax.swing.table.AbstractTableModel;
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
-public abstract class BLUAbstractTableModel<T> extends AbstractTableModel {
+public abstract class OAFAbstractTableModel<T> extends AbstractTableModel {
     
     protected final ArrayList<T> items = new ArrayList<>();
     
@@ -15,7 +17,7 @@ public abstract class BLUAbstractTableModel<T> extends AbstractTableModel {
     
     private Object[][] data = new Object[0][0];
             
-    public BLUAbstractTableModel(String [] columnNames) {
+    public OAFAbstractTableModel(String [] columnNames) {
         this.columnNames = columnNames;
     }
 

@@ -1,45 +1,47 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class OverlappingGroupCombinationsEntry<GROUP_T extends GenericConceptGroup, DISJOINTGROUP_T extends DisjointNode, CONCEPT_T> {
+public class OverlappingNodeCombinationsEntry {
 
-    private final HashSet<DISJOINTGROUP_T> disjointGroups;
+    private final Set<DisjointNode> disjointNodes;
     
-    private final GROUP_T overlappingSource;
+    private final Node overlappingSource;
     
-    public OverlappingGroupCombinationsEntry(GROUP_T overlappingSource, HashSet<DISJOINTGROUP_T> disjointGroups) {
+    public OverlappingNodeCombinationsEntry(Node overlappingSource, Set<DisjointNode> disjointNodes) {
         this.overlappingSource = overlappingSource;
-        this.disjointGroups = disjointGroups;
+        this.disjointNodes = disjointNodes;
     }
     
-    public HashSet<GROUP_T> getOtherOverlappingGroups() {
-        HashSet<GROUP_T> groups = new HashSet<>(disjointGroups.iterator().next().getOverlaps());
+    public Set<Node> getOtherOverlappingGroups() {
+        Set<Node> groups = new HashSet<>(disjointNodes.iterator().next().getOverlaps());
         groups.remove(overlappingSource);
         
         return groups;
     }
     
-    public GROUP_T getOverlappingSource() {
+    public Node getOverlappingSource() {
         return overlappingSource;
     }
     
-    public HashSet<DISJOINTGROUP_T> getDisjointGroups() {
-        return disjointGroups;
+    public Set<DisjointNode> getDisjointNodes() {
+        return disjointNodes;
     }
     
-    public HashSet<CONCEPT_T> getOverlappingConcepts() {
+    public Set<Concept> getOverlappingConcepts() {
         
-        HashSet<CONCEPT_T> overlappingConcepts = new HashSet<>();
+        Set<Concept> overlappingConcepts = new HashSet<>();
         
-        disjointGroups.forEach( (DISJOINTGROUP_T group) -> {
-            overlappingConcepts.addAll(group.getConceptHierarchy().getNodesInHierarchy());
+        disjointNodes.forEach( (DisjointNode group) -> {
+            overlappingConcepts.addAll(group.getConcepts());
         });
 
         return overlappingConcepts;

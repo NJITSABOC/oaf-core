@@ -17,13 +17,13 @@ public class ReducedAbNPainter extends AbNPainter {
     
     private final int EDGE_RADIUS = 24;
     
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry nodeEntry, Point p, double scale) {
         
-        AggregateNode reducedGroup = (AggregateNode)(group.getGroup());
+        AggregateNode aggregateGroup = (AggregateNode)(nodeEntry.getNode());
         
         Color bgColor;
         
-        switch(group.getHighlightState()) {
+        switch(nodeEntry.getHighlightState()) {
                 
             case Parent:
                 bgColor = new Color(150, 150, 255);
@@ -45,27 +45,27 @@ public class ReducedAbNPainter extends AbNPainter {
                 bgColor = Color.WHITE;
         }
         
-        if(group.isMousedOver()) {
+        if(nodeEntry.isMousedOver()) {
             bgColor = bgColor.brighter();
         }
         
         g2d.setPaint(bgColor);
         
-        if (reducedGroup.getAggregatedGroups().isEmpty()) {
-            g2d.fillRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
+        if (aggregateGroup.getAggregatedNodes().isEmpty()) {
+            g2d.fillRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale));
         } else {
-            g2d.fillRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
+            g2d.fillRoundRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
         }
         
         Stroke savedStroke = g2d.getStroke();
         
         Color outlineColor;
         
-        if(group.isMousedOver()) {
+        if(nodeEntry.isMousedOver()) {
             g2d.setStroke(new BasicStroke(2));
             outlineColor = Color.CYAN;
         } else {
-            if(group.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
+            if(nodeEntry.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
                 g2d.setStroke(new BasicStroke(2));
             } else {
                 g2d.setStroke(new BasicStroke(1));
@@ -76,10 +76,10 @@ public class ReducedAbNPainter extends AbNPainter {
 
         g2d.setPaint(outlineColor);
         
-        if (reducedGroup.getAggregatedGroups().isEmpty()) {
-            g2d.drawRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
+        if (aggregateGroup.getAggregatedNodes().isEmpty()) {
+            g2d.drawRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale));
         } else {
-            g2d.drawRoundRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
+            g2d.drawRoundRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
         }
 
         g2d.setStroke(savedStroke);

@@ -1,13 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractConceptTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ConceptTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public class BandPatriarchTableModel<CONCEPT_T> extends BLUAbstractConceptTableModel<CONCEPT_T> {
+public class BandPatriarchTableModel<CONCEPT_T> extends ConceptTableModel<CONCEPT_T> {
 
     private final BLUGenericTANConfiguration config;
     

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
 
@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfig
  *
  * @author Chris O
  */
-public class ChildClusterTableModel<CLUSTER_T extends Cluster> extends BLUAbstractChildGroupTableModel<CLUSTER_T> {
+public class ChildClusterTableModel<CLUSTER_T extends Cluster> extends ChildNodeTableModel<CLUSTER_T> {
 
     private final BLUGenericTANConfiguration config;
     

@@ -11,7 +11,7 @@ import javax.swing.BoxLayout;
  *
  * @author Chris O
  */
-public abstract class AbstractNodeOptionsPanel extends AbNNodeInformationPanel {
+public abstract class AbstractNodeOptionsPanel extends BaseNodeInformationPanel {
     
     public AbstractNodeOptionsPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -26,5 +26,5 @@ public abstract class AbstractNodeOptionsPanel extends AbNNodeInformationPanel {
         this.add(Box.createHorizontalStrut(4));
     }
     
-    public abstract void enableOptionsForGroup(Node group);
+    public abstract void enableOptionsForNode(Node node);
 }

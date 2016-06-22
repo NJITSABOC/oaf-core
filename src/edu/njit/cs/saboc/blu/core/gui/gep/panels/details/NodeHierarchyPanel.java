@@ -1,10 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -14,40 +14,27 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class AbstractGroupHierarchyPanel<
-        CONCEPT_T, 
-        GROUP_T extends GenericConceptGroup,
-        CONFIG_T extends BLUConfiguration> extends AbNNodeInformationPanel<GROUP_T> {
+public abstract class NodeHierarchyPanel extends BaseNodeInformationPanel {
 
     private final JSplitPane splitPane;
     
-    private final AbstractEntityList<ParentNodeInformation<CONCEPT_T, GROUP_T>> parentGroupList;
+    private final AbstractEntityList<ParentNodeDetails> parentNodeList;
     
-    private final AbstractGroupList<GROUP_T> childGroupList;
-    
-    protected BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, ParentNodeInformation<CONCEPT_T, GROUP_T>> parentModel;
-    
-    protected BLUAbstractChildGroupTableModel<GROUP_T> childModel;
-    
-    private final CONFIG_T config;
+    private final NodeList childNodeList;
+        
+    private final BLUConfiguration config;
 
-    public AbstractGroupHierarchyPanel(
-           final CONFIG_T config,
-           final BLUAbstractParentGroupTableModel<CONCEPT_T, GROUP_T, ParentNodeInformation<CONCEPT_T, GROUP_T>> parentTableModel,
-           final BLUAbstractChildGroupTableModel<GROUP_T> childTableModel) {
+    public NodeHierarchyPanel(BLUConfiguration config) {
         
         this.config = config;
 
         this.setLayout(new BorderLayout());
         
-        this.parentModel = parentTableModel;
-        this.childModel = childTableModel;
-        
-        parentGroupList = new AbstractEntityList<ParentNodeInformation<CONCEPT_T, GROUP_T>>(parentTableModel) {
-            public String getBorderText(Optional<ArrayList<ParentNodeInformation<CONCEPT_T, GROUP_T>>> entries) {
+        parentNodeList = new AbstractEntityList<ParentNodeDetails>(new ParentNodeTableModel(config)) {
+            public String getBorderText(Optional<ArrayList<ParentNodeDetails>> entries) {
                 String baseStr = String.format("Root's Parent %s %s", 
                         config.getTextConfiguration().getConceptTypeName(true), 
-                        config.getTextConfiguration().getGroupTypeName(true));
+                        config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entries.isPresent()) {
                     return String.format("%s (%d)", baseStr, entries.get().size());
@@ -57,10 +44,10 @@ public abstract class AbstractGroupHierarchyPanel<
             }
         };
         
-        childGroupList = new AbstractGroupList<GROUP_T>(childTableModel) {
-            public String getBorderText(Optional<ArrayList<GROUP_T>> entries) {
+        childNodeList = new NodeList(config) {
+            public String getBorderText(Optional<ArrayList<Node>> entries) {
                 String baseStr = String.format("Child %s",
-                        config.getTextConfiguration().getGroupTypeName(true));
+                        config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entries.isPresent()) {
                     return String.format("%s (%d)", baseStr, entries.get().size());
@@ -70,35 +57,34 @@ public abstract class AbstractGroupHierarchyPanel<
             }
         };
         
-        parentGroupList.addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getParentGroupListener());
-        childGroupList.addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getChildGroupListener());
+        parentNodeList.addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getParentGroupListener());
+        childNodeList.addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getChildGroupListener());
         
-        splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
-        splitPane.setTopComponent(parentGroupList);
-        splitPane.setBottomComponent(childGroupList);
+        splitPane.setTopComponent(parentNodeList);
+        splitPane.setBottomComponent(childNodeList);
         
         splitPane.setDividerLocation(250);
 
         this.add(splitPane, BorderLayout.CENTER);
     }
     
-    public CONFIG_T getConfiguration() {
+    public BLUConfiguration getConfiguration() {
         return config;
     }
     
     @Override
-    public void setContents(GROUP_T group) {
-        loadParentGroupInfo(group);
-        loadChildGroupInfo(group);
+    public void setContents(Node node) {
+        
+        
+        
+
     }
 
     @Override
     public void clearContents() {
-        parentModel.setContents(new ArrayList<>());
-        childModel.setContents(new ArrayList<>());
+        parentNodeList.clearContents();
+        childNodeList.clearContents();
     }   
-    
-    protected abstract void loadParentGroupInfo(GROUP_T group);
-    protected abstract void loadChildGroupInfo(GROUP_T group);
 }

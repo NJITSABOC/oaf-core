@@ -5,8 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerGroupListPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractContainerPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractDisjointAbNMetricsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.PartitionedNodeConceptEntry;
 
 /**
  *
@@ -17,14 +17,14 @@ public class GenericAreaPanel<AREA_T extends Area,
         CONCEPT_T,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends 
         
-            AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>, CONFIG_T> {
+            AbstractContainerPanel<AREA_T, PAREA_T, CONCEPT_T, PartitionedNodeConceptEntry<CONCEPT_T, PAREA_T>, CONFIG_T> {
 
     private final AbstractDisjointAbNMetricsPanel disjointMetricsPanel;
     
     private final int disjointMetricsTabIndex;
     
     public GenericAreaPanel(
-           AbstractNodeDetailsPanel<AREA_T, ContainerConceptEntry<CONCEPT_T, PAREA_T>> containerDetailsPanel, 
+           NodeDetailsPanel<AREA_T, PartitionedNodeConceptEntry<CONCEPT_T, PAREA_T>> containerDetailsPanel, 
            AbstractContainerGroupListPanel<AREA_T, PAREA_T, CONCEPT_T> groupListPanel, 
            AbstractDisjointAbNMetricsPanel disjointMetricsPanel,
            CONFIG_T configuration) {

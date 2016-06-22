@@ -3,9 +3,9 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeHierarchyPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,15 +15,15 @@ import java.util.HashSet;
  * @author Chris O
  */
 public class GenericPAreaHierarchyPanel<CONCEPT_T, PAREA_T extends PArea,
-        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, PAREA_T, CONFIG_T> {
+        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends NodeHierarchyPanel<CONCEPT_T, PAREA_T, CONFIG_T> {
     
     private final PAreaTaxonomy taxonomy;
     
     private final CONFIG_T configuration;
 
     public GenericPAreaHierarchyPanel(
-            BLUAbstractParentGroupTableModel<CONCEPT_T, PAREA_T, ParentNodeInformation<CONCEPT_T, PAREA_T>> parentTableModel,
-            BLUAbstractChildGroupTableModel<PAREA_T> childTableModel,
+            ParentNodeTableModel<CONCEPT_T, PAREA_T, ParentNodeInformation<CONCEPT_T, PAREA_T>> parentTableModel,
+            ChildNodeTableModel<PAREA_T> childTableModel,
             PAreaTaxonomy taxonomy, 
             CONFIG_T configuration) {
         

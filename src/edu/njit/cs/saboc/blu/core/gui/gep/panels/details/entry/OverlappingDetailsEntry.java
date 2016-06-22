@@ -1,29 +1,28 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class OverlappingDetailsEntry<GROUP_T extends GenericConceptGroup, 
-        DISJOINTGROUP_T extends DisjointNode> {
+public class OverlappingDetailsEntry {
     
-    private final GROUP_T overlappingGroup;
-    private final HashSet<DISJOINTGROUP_T> disjointGroups;
+    private final Node overlappingNode;
+    private final Set<DisjointNode> disjointGroups;
     
-    public OverlappingDetailsEntry(GROUP_T overlappingGroup, HashSet<DISJOINTGROUP_T> commonDisjointGroups) {
-        this.overlappingGroup = overlappingGroup;
+    public OverlappingDetailsEntry(Node overlappingNode, Set<DisjointNode> commonDisjointGroups) {
+        this.overlappingNode = overlappingNode;
         this.disjointGroups = commonDisjointGroups;
     }
     
-    public GROUP_T getOverlappingGroup() {
-        return overlappingGroup;
+    public Node getOverlappingNode() {
+        return overlappingNode;
     }
     
-    public HashSet<DISJOINTGROUP_T> getDisjointGroups() {
+    public Set<DisjointNode> getDisjointGroups() {
         return disjointGroups;
     }
 }

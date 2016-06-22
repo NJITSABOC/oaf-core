@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
+import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 
 /**
  *
@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
  */
 public class ClusterBluGraph extends BluGraph {
     
-    public ClusterBluGraph(final TribalAbstractionNetwork tan, GroupEntryLabelCreator labelCreator) {
+    public ClusterBluGraph(final TribalAbstractionNetwork tan, SinglyRootedNodeLabelCreator labelCreator) {
         super(tan, labelCreator);
     }
 }

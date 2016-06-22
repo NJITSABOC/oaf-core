@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
  *
  * @author Den
  */
-public abstract class NodeSummaryPanel extends AbNNodeInformationPanel {
+public class NodeSummaryPanel extends BaseNodeInformationPanel {
 
     private final JEditorPane nodeDetailsPane;
     
@@ -42,8 +42,6 @@ public abstract class NodeSummaryPanel extends AbNNodeInformationPanel {
         
         this.add(detailsPanel);
     }
-    
-    protected abstract String createDescriptionStr(Node node);
     
     public void setContents(Node node) {
         nodeDetailsPane.setText(textFactory.createNodeSummaryText(node));

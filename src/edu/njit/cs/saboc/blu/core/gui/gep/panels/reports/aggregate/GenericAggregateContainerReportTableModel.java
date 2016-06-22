@@ -4,7 +4,7 @@ import SnomedShared.generic.GenericConceptGroup;
 import SnomedShared.generic.GenericGroupContainer;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ContainerReport;
 import java.util.HashSet;
 
@@ -16,7 +16,7 @@ public class GenericAggregateContainerReportTableModel<CONCEPT_T,
         CONTAINER_T extends GenericGroupContainer, 
         GROUP_T extends GenericConceptGroup> 
 
-    extends BLUAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> {
+    extends OAFAbstractTableModel<ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T>> {
     
     private final BLUPartitionedConfiguration config;
     

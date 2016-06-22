@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class ClusterHierarchyPanel<CONCEPT_T,
         CLUSTER_T extends Cluster,
         CONFIG_T extends BLUGenericTANConfiguration> 
 
-        extends AbstractGroupHierarchyPanel<CONCEPT_T, CLUSTER_T, CONFIG_T> {
+        extends NodeHierarchyPanel<CONCEPT_T, CLUSTER_T, CONFIG_T> {
     
     public ClusterHierarchyPanel(CONFIG_T config) {
         super(config,

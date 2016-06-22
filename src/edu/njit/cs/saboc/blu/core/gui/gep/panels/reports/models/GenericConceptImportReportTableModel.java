@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ImportedConceptGroupReport;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import java.util.Collections;
  * @author Chris O
  */
 public class GenericConceptImportReportTableModel<GROUP_T extends GenericConceptGroup, 
-        CONCEPT_T> extends BLUAbstractTableModel<ImportedConceptGroupReport<GROUP_T, CONCEPT_T>> {
+        CONCEPT_T> extends OAFAbstractTableModel<ImportedConceptGroupReport<GROUP_T, CONCEPT_T>> {
 
     private final BLUConfiguration config;
 
@@ -20,8 +20,8 @@ public class GenericConceptImportReportTableModel<GROUP_T extends GenericConcept
         super(new String [] {
             String.format("%s ID", config.getTextConfiguration().getConceptTypeName(false)),
             String.format("%s Name", config.getTextConfiguration().getConceptTypeName(false)),
-            String.format("# %s", config.getTextConfiguration().getGroupTypeName(true)), 
-            config.getTextConfiguration().getGroupTypeName(true)
+            String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)), 
+            config.getTextConfiguration().getNodeTypeName(true)
         });
         
         this.config = config;

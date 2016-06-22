@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
 
 /**
@@ -9,11 +9,11 @@ import java.util.Set;
  */
 public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
     
-    private final MultiRootedHierarchy<T> ancestorHierarchy;
+    private final Hierarchy<T> ancestorHierarchy;
     
     public AncestorHierarchyBuilderVisitor(
-            MultiRootedHierarchy<T> theHierarchy, 
-            MultiRootedHierarchy<T> ancestorHierarchy) {
+            Hierarchy<T> theHierarchy, 
+            Hierarchy<T> ancestorHierarchy) {
         
         super(theHierarchy);
         
@@ -29,7 +29,7 @@ public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
         });
     }
     
-    public MultiRootedHierarchy<T> getAncestorHierarchy() {
+    public Hierarchy<T> getAncestorHierarchy() {
         return ancestorHierarchy;
     }
 }

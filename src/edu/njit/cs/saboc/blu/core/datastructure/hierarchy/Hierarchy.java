@@ -24,14 +24,22 @@ import java.util.Stack;
  *
  * @author Chris
  */
-public class MultiRootedHierarchy<T> {
+public class Hierarchy<T> {
     
     private final Set<T> roots;
     
     private final HashMap<T, Set<T>> children = new HashMap<>();
     private final HashMap<T, Set<T>> parents = new HashMap<>();
+    
+    public Hierarchy(T root) {
+        this(Collections.singleton(root));
+    }
+    
+    public Hierarchy(T root, HashMap<T, Set<T>> hierarchy) {
+        this(Collections.singleton(root), hierarchy);
+    }
         
-    public MultiRootedHierarchy(Set<T> roots) {
+    public Hierarchy(Set<T> roots) {
         this.roots = new HashSet<>(roots);
         
         roots.forEach((root) -> {
@@ -40,7 +48,7 @@ public class MultiRootedHierarchy<T> {
         });
     }
     
-    public MultiRootedHierarchy(Set<T> roots, HashMap<T, Set<T>> hierarchy) {
+    public Hierarchy(Set<T> roots, HashMap<T, Set<T>> hierarchy) {
         this.roots = new HashSet<>(roots);
         
         Stack<T> convertStack = new Stack<>();
@@ -67,6 +75,10 @@ public class MultiRootedHierarchy<T> {
                 }
             }
         }
+    }
+    
+    public boolean isSinglyRooted() {
+        return roots.size() == 1;
     }
 
     /** 
@@ -126,13 +138,13 @@ public class MultiRootedHierarchy<T> {
      * 
      * @param hierarchy 
      */
-    public void addHierarchy(MultiRootedHierarchy<T> hierarchy) {
+    public void addHierarchy(Hierarchy<T> hierarchy) {
         roots.addAll(hierarchy.roots);
         
         addAllHierarchicalRelationships(hierarchy);
     }
     
-    public void addAllHierarchicalRelationships(MultiRootedHierarchy<T> hierarchy) {
+    public void addAllHierarchicalRelationships(Hierarchy<T> hierarchy) {
         hierarchy.children.forEach( (node, nodeChildren) -> {
             nodeChildren.forEach( (child) -> {
                 addIsA(child, node);
@@ -140,8 +152,8 @@ public class MultiRootedHierarchy<T> {
         });
     }
     
-    public SingleRootedHierarchy<T> getSubhierarchyRootedAt(T root) {
-        return new SingleRootedHierarchy<>(root, this.children);
+    public Hierarchy<T> getSubhierarchyRootedAt(T root) {
+        return new Hierarchy<T>(root, this.children);
     }
     
     public Set<T> getNodesInHierarchy() {
@@ -328,11 +340,11 @@ public class MultiRootedHierarchy<T> {
         return visitor.getRoots();
     }
     
-    public MultiRootedHierarchy<T> getAncestorHierarchy(T node) {
+    public Hierarchy<T> getAncestorHierarchy(T node) {
         return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
     }
     
-    public MultiRootedHierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
+    public Hierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
         Set<T> ancestorRoots = new HashSet<>();
         
         nodes.forEach( (node) -> {
@@ -340,7 +352,7 @@ public class MultiRootedHierarchy<T> {
         });
 
         AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<>(this, 
-                new MultiRootedHierarchy<T>(ancestorRoots));
+                new Hierarchy<T>(ancestorRoots));
         
         this.BFSUp(nodes, ancestorHierarchy);
         
@@ -348,7 +360,7 @@ public class MultiRootedHierarchy<T> {
     }
     
     public ArrayList<ArrayList<T>> getAllPathsTo(T node) {
-        MultiRootedHierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(node);
+        Hierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(node);
         
         AllPathsToNodeVisitor<T> visitor = new AllPathsToNodeVisitor<>(this, node);
         
@@ -357,8 +369,8 @@ public class MultiRootedHierarchy<T> {
         return visitor.getAllPaths();
     }
         
-    public SingleRootedHierarchy<T> getDescendantHierarchyWithinDistance(T node, int maxDistance) {
-        SingleRootedHierarchy<T> hierarchy = new SingleRootedHierarchy<>(node);
+    public Hierarchy<T> getDescendantHierarchyWithinDistance(T node, int maxDistance) {
+        Hierarchy<T> hierarchy = new Hierarchy<T>(node);
         
         int levelProcessed = 0;
                 
@@ -395,7 +407,7 @@ public class MultiRootedHierarchy<T> {
     }
     
     public ArrayList<AncestorDepthResult<T>> getTopologicalDescendantListWithinDistance(T node, int distance) {
-        MultiRootedHierarchy<T> hierarchyWithinDistance = this.getDescendantHierarchyWithinDistance(node, distance);
+        Hierarchy<T> hierarchyWithinDistance = this.getDescendantHierarchyWithinDistance(node, distance);
         
         AncestorDepthVisitor<T> visitor = new AncestorDepthVisitor<>(hierarchyWithinDistance);
         

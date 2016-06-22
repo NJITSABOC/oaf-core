@@ -1,25 +1,40 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+
 
 /**
  *
- * @author Den
+ * @author Chris O
  */
-public abstract class BLUAbstractParentGroupTableModel<CONCEPT_T, 
-        GROUP_T extends GenericConceptGroup, 
-        T extends ParentNodeInformation<CONCEPT_T, GROUP_T>> extends BLUAbstractTableModel<T> {
+public class ParentNodeTableModel extends OAFAbstractTableModel<ParentNodeDetails> {
 
-    public BLUAbstractParentGroupTableModel(String [] columnNames) {
-        super(columnNames);
+    public ParentNodeTableModel(BLUConfiguration config) {
+        super(new String [] {
+            config.getTextConfiguration().getParentConceptTypeName(false),
+            String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false),
+            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)))
+        });
     }
     
-    public CONCEPT_T getParentConcept(int row) {
+    public Concept getParentConcept(int row) {
         return this.getItemAtRow(row).getParentConcept();
     }
     
-    public GROUP_T getParentGroup(int row) {
-        return this.getItemAtRow(row).getParentGroup();
+    public Node getParentNode(int row) {
+        return this.getItemAtRow(row).getParentNode();
+    }
+
+    @Override
+    protected Object[] createRow(ParentNodeDetails parentInfo) {
+        return new Object [] {
+            parentInfo.getParentConcept(), 
+            parentInfo.getParentNode().getName(),
+            parentInfo.getParentNode().getConceptCount()
+        };
     }
 }

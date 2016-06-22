@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedGroupEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedNodeEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,7 +13,7 @@ import java.util.Collections;
  */
 public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T, 
         PAREA_T extends PArea, 
-        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends BLUAbstractTableModel<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends OAFAbstractTableModel<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
 
     protected final BLUGenericPAreaTaxonomyConfiguration configuration;
     
@@ -29,7 +29,7 @@ public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T,
     }
     
     @Override
-    protected Object[] createRow(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> item) {
+    protected Object[] createRow(AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> item) {
         String aggregatedGroupName = configuration.getTextConfiguration().getGroupName(item.getAggregatedGroup());
         
         ArrayList<String> aggregatePAreas = new ArrayList<>();

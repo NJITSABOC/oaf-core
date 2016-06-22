@@ -82,7 +82,7 @@ public class AbNDrawingUtilities {
         
         Point labelOffset = group.getLabelOffset();
         
-        labelManager.drawGroupLabel(group.getGroup(), viewport.scale, g2d, p.x + (int)(viewport.scale * labelOffset.x), p.y + (int)(viewport.scale * labelOffset.y));
+        labelManager.drawGroupLabel(group.getNode(), viewport.scale, g2d, p.x + (int)(viewport.scale * labelOffset.x), p.y + (int)(viewport.scale * labelOffset.y));
         
         g2d.setFont(savedFont);
     }

@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.AlphaComposite;
@@ -46,9 +45,9 @@ public class AbNLabelManager {
     private final ArrayList<BufferedImage> labelSheets = new ArrayList<BufferedImage>();
     
     
-    private final GroupEntryLabelCreator labelCreator;
+    private final SinglyRootedNodeLabelCreator labelCreator;
     
-    public AbNLabelManager(AbstractionNetwork abn, GroupEntryLabelCreator labelCreator) {
+    public AbNLabelManager(AbstractionNetwork abn, SinglyRootedNodeLabelCreator labelCreator) {
         this.labelCreator = labelCreator;
         
         HashMap<Integer, ? extends GenericConceptGroup> groups = abn.getGroups();

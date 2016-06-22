@@ -1,44 +1,46 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointableConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class BLUAbstractOverlappingDetailsTableModel<
-        GROUP_T extends GenericConceptGroup, 
-        DISJOINTGROUP_T extends DisjointNode,
-        CONCEPT_T> extends BLUAbstractTableModel<OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T>> {
+public class OverlappingDetailsTableModel extends OAFAbstractTableModel<OverlappingDetailsEntry> {
     
-    protected final BLUDisjointableConfiguration configuration;
+    private final BLUConfiguration configuration;
     
-    public BLUAbstractOverlappingDetailsTableModel(BLUDisjointableConfiguration configuration) {
+    public OverlappingDetailsTableModel(BLUConfiguration configuration,
+            NodeTypeNameFactory overlappingNodeType,
+            NodeTypeNameFactory disjointNodeType) {
+        
         super(new String[] {
-            String.format("Other %s", configuration.getTextConfiguration().getGroupTypeName(false)),
-            String.format("# Common %s", configuration.getTextConfiguration().getDisjointGroupTypeName(true)),
-            String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true))
+            String.format("Other %s", configuration.getTextConfiguration().getNodeTypeName(false)),
+            String.format("# Common %s", disjointNodeType.getNodeTypeName(true),
+            String.format("# Overlapping %s", overlappingNodeType.getNodeTypeName(true)))
         });
 
         this.configuration = configuration;
     }
 
     @Override
-    protected Object[] createRow(OverlappingDetailsEntry<GROUP_T, DISJOINTGROUP_T> item) {
-        HashSet<CONCEPT_T> overlappingConcepts = new HashSet<>();
+    protected Object[] createRow(OverlappingDetailsEntry item) {
+        Set<Concept> overlappingConcepts = new HashSet<>();
         
-        HashSet<DISJOINTGROUP_T> disjointGroups = item.getDisjointGroups();
+        Set<DisjointNode> disjointGroups = item.getDisjointGroups();
         
-        disjointGroups.forEach( (DISJOINTGROUP_T disjointGroup) -> {
-            overlappingConcepts.addAll(disjointGroup.getConceptsAsList());
+        disjointGroups.forEach( (disjointGroup) -> {
+            overlappingConcepts.addAll(disjointGroup.getConcepts());
         });
         
         return new Object[] {
-            configuration.getTextConfiguration().getGroupName(item.getOverlappingGroup()),
+            item.getOverlappingNode().getName(),
             disjointGroups.size(),
             overlappingConcepts.size()
         };

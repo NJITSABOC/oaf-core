@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractAbNNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.AbstractNodeEntityTableModel;
 import java.util.Optional;
 
 /**
@@ -15,19 +15,19 @@ public abstract class NodeEntityList<ENTITY_T> extends AbstractEntityList<ENTITY
     
     private Optional<Node> currentNode = Optional.empty();
     
-    public NodeEntityList(BLUAbstractAbNNodeTableModel<ENTITY_T> tableModel) {
+    public NodeEntityList(AbstractNodeEntityTableModel<ENTITY_T> tableModel) {
         super(tableModel);
     }
     
     public void setCurrentNode(Node node) {
         this.currentNode = Optional.of(node);
         
-        ((BLUAbstractAbNNodeTableModel<ENTITY_T>)super.getTableModel()).setCurrentNode(node);
+        ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).setCurrentNode(node);
     }
     
     public void clearCurrentNode() {
         this.currentNode = Optional.empty();
         
-        ((BLUAbstractAbNNodeTableModel<ENTITY_T>)super.getTableModel()).clearCurrentNode();
+        ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).clearCurrentNode();
     }
 }

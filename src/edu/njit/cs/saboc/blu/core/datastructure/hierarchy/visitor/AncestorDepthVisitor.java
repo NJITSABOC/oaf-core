@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class AncestorDepthVisitor<T> extends TopologicalVisitor<T> {
     
     private final ArrayList<AncestorDepthResult<T>> result = new ArrayList<>();
        
-    public AncestorDepthVisitor(MultiRootedHierarchy<T> theHierarchy) {
+    public AncestorDepthVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
     }
     

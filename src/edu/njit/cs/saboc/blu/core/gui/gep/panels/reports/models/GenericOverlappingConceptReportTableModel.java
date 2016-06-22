@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models;
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.OverlappingConceptResult;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,7 +12,7 @@ import java.util.Collections;
  * @author Chris O
  */
 public class GenericOverlappingConceptReportTableModel <CONCEPT_T, GROUP_T extends GenericConceptGroup> 
-    extends BLUAbstractTableModel<OverlappingConceptResult<CONCEPT_T, GROUP_T>>  {
+    extends OAFAbstractTableModel<OverlappingConceptResult<CONCEPT_T, GROUP_T>>  {
     
     private final BLUPartitionedConfiguration config;
     

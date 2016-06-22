@@ -1,27 +1,28 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class ContainerConceptEntry<CONCEPT_T, GROUP_T extends GenericConceptGroup> {
-    protected final CONCEPT_T concept;
+public class PartitionedNodeConceptEntry {
     
-    protected final HashSet<GROUP_T> groups;
+    private final Concept concept;
+    private final Set<SinglyRootedNode> subNodes;
     
-    public ContainerConceptEntry(CONCEPT_T concept, HashSet<GROUP_T> groups) {
+    public PartitionedNodeConceptEntry(Concept concept, Set<SinglyRootedNode> groups) {
         this.concept = concept;
-        this.groups = groups;
+        this.subNodes = groups;
     }
     
-    public CONCEPT_T getConcept() {
+    public Concept getConcept() {
         return concept;
     }
     
-    public HashSet<GROUP_T> getGroups() {
-        return groups;
+    public Set<SinglyRootedNode> getNodes() {
+        return subNodes;
     }
 }

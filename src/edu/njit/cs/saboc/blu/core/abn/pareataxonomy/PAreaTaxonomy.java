@@ -1,8 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -10,23 +13,15 @@ import java.util.Set;
  * @author Chris O
  */
 public class PAreaTaxonomy extends PartitionedAbstractionNetwork<PArea, Area> {
-
-    private final SingleRootedConceptHierarchy sourceConceptHierarchy;
     
     public PAreaTaxonomy(
             AreaTaxonomy areaTaxonomy,
-            SingleRootedConceptHierarchy conceptHierarchy,
-            NodeHierarchy<PArea> pareaHierarchy) {
+            NodeHierarchy<PArea> pareaHierarchy, 
+            ConceptHierarchy conceptHierarchy) {
 
-        super(areaTaxonomy, pareaHierarchy);
-
-        this.sourceConceptHierarchy = conceptHierarchy;
+        super(areaTaxonomy, pareaHierarchy, conceptHierarchy);
     }
-    
-    public SingleRootedConceptHierarchy getConceptHierarchy() {
-        return sourceConceptHierarchy;
-    }
-    
+        
     public AreaTaxonomy getAreaTaxonomy() {
         return (AreaTaxonomy)super.getBaseAbstractionNetwork();
     }
@@ -47,28 +42,25 @@ public class PAreaTaxonomy extends PartitionedAbstractionNetwork<PArea, Area> {
         return super.getNodes();
     }
     
-    /*
-    protected TAXONOMY_T createRootSubtaxonomy(PAREA_T root, PAreaTaxonomyGenerator generator) {
-        SingleRootedGroupHierarchy<PAREA_T> subhierarchy = (SingleRootedGroupHierarchy<PAREA_T>)this.groupHierarchy.getSubhierarchyRootedAt(root);
+    @Override
+    public Set<ParentNodeDetails> getParentNodeDetails(PArea parea) {
         
-        GroupHierarchy<PAREA_T> pareaSubhierarchy = subhierarchy.asGroupHierarchy();
-        
-        HashSet<PAREA_T> pareas = pareaSubhierarchy.getNodesInHierarchy();
-        
-        HashMap<Integer, PAREA_T> pareaIds = new HashMap<>();
-        
-        pareas.forEach((PAREA_T parea) -> {
-            pareaIds.put(parea.getId(), parea);
-        });
-        
-        TAXONOMY_T subtaxonomy = (TAXONOMY_T)generator.createTaxonomyFromPAreas(pareaIds, pareaSubhierarchy);
-        
-        if(this.isReduced()) {
-            subtaxonomy.setReduced(isReduced);
-        }
+        return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
+                parea, 
+                this.getSourceHierarchy(), 
+                (Set<SinglyRootedNode>)(Set<?>)this.getPAreas());
+    }
+    
+   
+    public PAreaTaxonomy createRootSubtaxonomy(PArea root, PAreaTaxonomyGenerator generator) {
+        NodeHierarchy<PArea> subhierarchy = this.getNodeHierarchy().getSubhierarchyRootedAt(root);
+
+        PAreaTaxonomy subtaxonomy = generator.createTaxonomyFromPAreas(subhierarchy);
         
         return subtaxonomy;
     }
+    
+    /*
     
     protected TAXONOMY_T createAncestorSubtaxonomy(PAREA_T source, PAreaTaxonomyGenerator generator) {
         SingleRootedHierarchy<PAREA_T> convertedHierarchy = this.groupHierarchy.getSubhierarchyRootedAt(getRootGroup());

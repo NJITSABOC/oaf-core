@@ -2,13 +2,13 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
  *
  * @author Chris O
  */
-public class GenericOverlappingGroupTableModel<GROUP_T extends GenericConceptGroup> extends BLUAbstractTableModel<GROUP_T>  {
+public class GenericOverlappingGroupTableModel<GROUP_T extends GenericConceptGroup> extends OAFAbstractTableModel<GROUP_T>  {
     
     private final BLUDisjointConfiguration config;
     

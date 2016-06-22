@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -13,7 +13,7 @@ public class TargetGroup extends SinglyRootedNode {
     
     private final IncomingRelationshipDetails relationships;
     
-    public TargetGroup(SingleRootedConceptHierarchy conceptHierarchy, IncomingRelationshipDetails relationships) {
+    public TargetGroup(ConceptHierarchy conceptHierarchy, IncomingRelationshipDetails relationships) {
         super(conceptHierarchy);
         
         this.relationships = relationships;

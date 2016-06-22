@@ -1,9 +1,12 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,26 +16,18 @@ import java.util.Set;
  */
 public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Cluster, Band> {
     
-    private final MultiRootedHierarchy<Concept> sourceHierarchy;
-
     public TribalAbstractionNetwork(
             BandTribalAbstractionNetwork bandTan,
-            MultiRootedHierarchy<Concept> sourceHierarchy,
-            NodeHierarchy<Cluster> clusterHierarchy) {
+            NodeHierarchy<Cluster> clusterHierarchy,
+            ConceptHierarchy sourceHierarchy) {
 
-        super(bandTan, clusterHierarchy);
-                
-        this.sourceHierarchy = sourceHierarchy;
+        super(bandTan, clusterHierarchy, sourceHierarchy);
     }
 
     public Set<Cluster> getPatriarchClusters() {
         return super.getNodeHierarchy().getRoots();
     }
     
-    public MultiRootedHierarchy<Concept> getSourceConceptHierarchy() {
-        return sourceHierarchy;
-    }
-
     public Set<Band> getBands() {
         return super.getBaseAbstractionNetwork().getNodes();
     }
@@ -59,6 +54,15 @@ public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Clus
         });
         
         return nonoverlappingPatriarchClusters;
+    }
+    
+    
+    @Override
+    public Set<ParentNodeDetails> getParentNodeDetails(Cluster cluster) {
+        return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
+                cluster, 
+                this.getSourceHierarchy(),
+                (Set<SinglyRootedNode>)(Set<?>)this.getClusters());
     }
     
     /*

@@ -1,21 +1,19 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingGroupEntry;
-import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public class BLUAbstractOverlappingGroupTableModel<GROUP_T extends GenericConceptGroup, CONCEPT_T> 
-            extends BLUAbstractTableModel<OverlappingGroupEntry<GROUP_T, CONCEPT_T>> {
+public class OverlappingNodeTableModel extends OAFAbstractTableModel<OverlappingNodeEntry> {
     
-    protected final BLUConfiguration configuration;
+    private final BLUConfiguration configuration;
     
-    public BLUAbstractOverlappingGroupTableModel(BLUConfiguration configuration) {
+    public OverlappingNodeTableModel(BLUConfiguration configuration) {
         super(new String [] {
-            configuration.getTextConfiguration().getGroupTypeName(false),
+            configuration.getTextConfiguration().getNodeTypeName(false),
             String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true)),
             String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true)),
         });
@@ -24,9 +22,9 @@ public class BLUAbstractOverlappingGroupTableModel<GROUP_T extends GenericConcep
     }
 
     @Override
-    protected Object[] createRow(OverlappingGroupEntry<GROUP_T, CONCEPT_T> item) {
+    protected Object[] createRow(OverlappingNodeEntry item) {
         return new Object [] {
-            configuration.getTextConfiguration().getGroupName(item.getOverlappingGroup()),
+            item.getOverlappingGroup().getName(),
             item.getOverlappingGroup().getConceptCount(),
             item.getOverlappingConcepts().size()
         };

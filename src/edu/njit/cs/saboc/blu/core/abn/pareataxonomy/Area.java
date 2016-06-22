@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SimilarityNode;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -58,7 +56,7 @@ public class Area extends SimilarityNode {
     }
     
     public Set<PArea> getPAreas() {
-        return (Set<PArea>)super.getInternalNodes();
+        return (Set<PArea>)(Set<?>)super.getInternalNodes();
     }
 
     public String getName() {

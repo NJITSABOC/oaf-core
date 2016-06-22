@@ -1,9 +1,13 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.MultiRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,23 +25,19 @@ public class DisjointAbstractionNetwork<
     
     private final PARENTABN_T parentAbN;
     
-    private final MultiRootedConceptHierarchy sourceHierarchy;
-    
     private final int levels;
     
     public DisjointAbstractionNetwork(PARENTABN_T parentAbN, 
             NodeHierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy,
-            MultiRootedConceptHierarchy sourceHierarchy,
+            ConceptHierarchy sourceHierarchy,
             int levels,
             Set<PARENTNODE_T> allNodes,
             Set<PARENTNODE_T> overlappingNodes) {
         
-        super(groupHierarchy);
+        super(groupHierarchy, sourceHierarchy);
         
         this.parentAbN = parentAbN;
-        
-        this.sourceHierarchy = sourceHierarchy;
-        
+                
         this.allNodes = allNodes;
         
         this.overlappingNodes = overlappingNodes;
@@ -51,10 +51,6 @@ public class DisjointAbstractionNetwork<
     
     public Set<PARENTNODE_T> getOverlappingNodes() {
         return overlappingNodes;
-    }
-    
-    public MultiRootedConceptHierarchy getSourceHierarchy() {
-        return sourceHierarchy;
     }
     
     public Set<DisjointNode<PARENTNODE_T>> getAllDisjointNodes() {
@@ -89,5 +85,14 @@ public class DisjointAbstractionNetwork<
     
     public Set<DisjointNode<PARENTNODE_T>> getRoots() {
         return super.getNodeHierarchy().getRoots();
+    }
+
+    @Override
+    public Set<ParentNodeDetails> getParentNodeDetails(DisjointNode<PARENTNODE_T> node) {
+        
+        return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
+                node, 
+                this.getSourceHierarchy(), 
+                (Set<SinglyRootedNode>)(Set<?>)this.getAllDisjointNodes());
     }
 }

@@ -1,9 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
-import java.util.Collections;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -15,13 +13,13 @@ import java.util.Set;
  */
 public abstract class SinglyRootedNode extends Node {
     
-    private final SingleRootedConceptHierarchy hierarchy;
+    private final ConceptHierarchy hierarchy;
 
-    protected SinglyRootedNode(SingleRootedConceptHierarchy hierarchy) {
+    protected SinglyRootedNode(ConceptHierarchy hierarchy) {
         this.hierarchy = hierarchy;
     }
     
-    public SingleRootedConceptHierarchy getHierarchy() {
+    public ConceptHierarchy getHierarchy() {
         return hierarchy;
     }
     

@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeList;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class GenericOverlappingGroupList<GROUP_T extends GenericConceptGroup> extends AbstractGroupList<GROUP_T> {
+public class GenericOverlappingGroupList<GROUP_T extends GenericConceptGroup> extends NodeList<GROUP_T> {
 
     private final BLUDisjointConfiguration config;
     

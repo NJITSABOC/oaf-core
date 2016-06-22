@@ -1,16 +1,27 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+
 /**
  *
  * @author Chris O
  */
-public abstract class BLUAbstractConceptTableModel<T> extends BLUAbstractTableModel<T> {
-    public BLUAbstractConceptTableModel(String [] columnNames) {
-        super(columnNames);
+public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
+    public ConceptTableModel(BLUConfiguration config) {
+        super(new String [] {
+            config.getTextConfiguration().getConceptTypeName(true),
+            "ID"
+        });
     }
     
-    public T getConceptAtRow(int row) {
+    public Concept getConceptAtRow(int row) {
         return super.getItemAtRow(row);
+    }
+
+    @Override
+    protected Object[] createRow(Concept concept) {
+        return new Object [] {concept.getName(), concept.getID()};
     }
 }

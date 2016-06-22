@@ -14,7 +14,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.GenericGroupEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
+import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 
 import java.awt.Color;
@@ -153,7 +153,7 @@ public class BluGraph extends JLayeredPane {
      * @param labelCreator
      * 
      */
-    public BluGraph(AbstractionNetwork abstractionNetwork, GroupEntryLabelCreator labelCreator) {
+    public BluGraph(AbstractionNetwork abstractionNetwork, SinglyRootedNodeLabelCreator labelCreator) {
         this.abstractionNetwork = abstractionNetwork;
         
         this.groupMenu = new GenericGroupEditMenu(this);

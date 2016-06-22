@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.listener.BLUAbNListenerConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 
 /**
@@ -34,5 +34,5 @@ public abstract class BLUAbNUIConfiguration {
     public abstract AbstractAbNDetailsPanel createAbNDetailsPanel();
     
     public abstract boolean hasGroupDetailsPanel();
-    public abstract AbNNodeInformationPanel createGroupDetailsPanel();
+    public abstract BaseNodeInformationPanel createGroupDetailsPanel();
 }

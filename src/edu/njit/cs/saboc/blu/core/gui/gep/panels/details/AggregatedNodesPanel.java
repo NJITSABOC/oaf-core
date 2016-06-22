@@ -1,37 +1,44 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JSplitPane;
 
 /**
  *
  * @author Chris O
  */
-public abstract class AbstractAggregatedGroupsPanel extends AbNNodeInformationPanel {
+public abstract class AggregatedNodesPanel extends BaseNodeInformationPanel {
 
-    private final AbstractGroupList aggregateGroupList;
-    private final AbstractEntityList<Concept> conceptList;
+    private final NodeList aggregateGroupList;
+    private final ConceptList conceptList;
     
     private final JSplitPane splitPane;
 
-    public AbstractAggregatedGroupsPanel(AbstractGroupList<SinglyRootedNode> groupList, 
-            AbstractEntityList<Concept> conceptList, 
+    public AggregatedNodesPanel(
+            NodeList groupList, 
+            ConceptList conceptList, 
             BLUConfiguration configuration) {
         
         this.setLayout(new BorderLayout());
         
         this.aggregateGroupList = groupList;
         
-        this.aggregateGroupList.addEntitySelectionListener(new EntitySelectionAdapter<GROUP_T>() {
-            public void entityClicked(GROUP_T group) {
-                conceptList.setContents(configuration.getDataConfiguration().getSortedConceptList(group));
+        this.aggregateGroupList.addEntitySelectionListener(new EntitySelectionAdapter<Node>() {
+            public void entityClicked(Node node) {
+                
+                ArrayList<Concept> sortedConcepts = new ArrayList<>(node.getConcepts());
+                sortedConcepts.sort( (a, b) -> {
+                    return a.getName().compareTo(b.getName());
+                });
+                
+                conceptList.setContents(sortedConcepts);
             }
             
             public void noEntitySelected() {
@@ -41,7 +48,7 @@ public abstract class AbstractAggregatedGroupsPanel extends AbNNodeInformationPa
         
         this.conceptList = conceptList;
         
-        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         splitPane.setTopComponent(this.aggregateGroupList);
         splitPane.setBottomComponent(this.conceptList);
@@ -50,23 +57,31 @@ public abstract class AbstractAggregatedGroupsPanel extends AbNNodeInformationPa
     }
     
     @Override
-    public void setContents(AGGREGATEGROUP_T group) {
+    public void setContents(Node node) {
         splitPane.setDividerLocation(300);
         
-        AggregateNode<CONCEPT_T, GROUP_T> reducedGroup = (AggregateNode<CONCEPT_T, GROUP_T>)group;
+        AggregateNode aggregateNode = (AggregateNode)node;
         
         clearContents();
         
-        if(reducedGroup.getAggregatedGroups().isEmpty()) {
+        if(aggregateNode.getAggregatedNodes().isEmpty()) {
             return;
         }
         
-        ArrayList<GROUP_T> reducedGroups = getSortedAggregatedGroupList(reducedGroup.getAggregatedGroups());
+        Set<Node> aggregatedNodes = aggregateNode.getAggregatedNodes();
         
-        aggregateGroupList.setContents(reducedGroups); 
+        ArrayList<Node> sortedAggregatedNodes = new ArrayList<>(aggregatedNodes);
+        sortedAggregatedNodes.sort( (a, b) -> {
+            
+            if(a.getConceptCount() == b.getConceptCount()) {
+                return a.getName().compareTo(b.getName());
+            } else {
+                return a.getConceptCount() - b.getConceptCount();
+            }
+        });
+        
+        aggregateGroupList.setContents(sortedAggregatedNodes); 
     }
-    
-    protected abstract ArrayList<GROUP_T> getSortedAggregatedGroupList(HashSet<GROUP_T> groups);
     
     @Override
     public void clearContents() {

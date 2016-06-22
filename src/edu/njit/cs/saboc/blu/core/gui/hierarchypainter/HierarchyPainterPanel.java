@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.hierarchypainter;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -60,7 +60,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
         }
     }
 
-    public void paintHierarchy(MultiRootedHierarchy<T> hierarchy) {
+    public void paintHierarchy(Hierarchy<T> hierarchy) {
         ArrayList<ArrayList<T>> conceptsByLevel = getConceptsByLevel(hierarchy);
 
         final int CONCEPT_WIDTH = 20;
@@ -214,7 +214,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
 //        }
     }
 
-    private ArrayList<ArrayList<T>> getConceptsByLevel(MultiRootedHierarchy<T> hierarchy) {
+    private ArrayList<ArrayList<T>> getConceptsByLevel(Hierarchy<T> hierarchy) {
         
         ArrayList<ArrayList<T>> conceptLevels = new ArrayList<ArrayList<T>>();
 

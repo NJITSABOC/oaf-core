@@ -4,9 +4,9 @@ import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractChildGroupTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractParentGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeHierarchyPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,15 +18,15 @@ import java.util.HashSet;
  */
 public class GenericDisjointGroupHierarchyPanel<CONCEPT_T, 
         DISJOINTGROUP_T extends DisjointNode,
-        CONFIG_T extends BLUDisjointConfiguration> extends AbstractGroupHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, CONFIG_T> {
+        CONFIG_T extends BLUDisjointConfiguration> extends NodeHierarchyPanel<CONCEPT_T, DISJOINTGROUP_T, CONFIG_T> {
     
     private final DisjointAbstractionNetwork disjointAbN;
     
     private final CONFIG_T configuration;
 
     public GenericDisjointGroupHierarchyPanel(
-            BLUAbstractParentGroupTableModel<CONCEPT_T, DISJOINTGROUP_T, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> parentTableModel,
-            BLUAbstractChildGroupTableModel<DISJOINTGROUP_T> childTableModel,
+            ParentNodeTableModel<CONCEPT_T, DISJOINTGROUP_T, ParentNodeInformation<CONCEPT_T, DISJOINTGROUP_T>> parentTableModel,
+            ChildNodeTableModel<DISJOINTGROUP_T> childTableModel,
             DisjointAbstractionNetwork disjointAbN, 
             CONFIG_T configuration) {
         

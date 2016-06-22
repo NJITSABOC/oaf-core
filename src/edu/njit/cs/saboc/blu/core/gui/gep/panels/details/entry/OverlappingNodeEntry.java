@@ -1,27 +1,28 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class OverlappingGroupEntry<GROUP_T extends GenericConceptGroup, CONCEPT_T> {
+public class OverlappingNodeEntry {
     
-    private final GROUP_T overlappingGroup;
-    private final HashSet<CONCEPT_T> overlappingConcepts;
+    private final Node overlappingGroup;
+    private final Set<Concept> overlappingConcepts;
     
-    public OverlappingGroupEntry(GROUP_T overlappingGroup, HashSet<CONCEPT_T> overlappingConcepts) {
+    public OverlappingNodeEntry(Node overlappingGroup, Set<Concept> overlappingConcepts) {
         this.overlappingGroup = overlappingGroup;
         this.overlappingConcepts = overlappingConcepts;
     }
     
-    public GROUP_T getOverlappingGroup() {
+    public Node getOverlappingGroup() {
         return overlappingGroup;
     }
     
-    public HashSet<CONCEPT_T> getOverlappingConcepts() {
+    public Set<Concept> getOverlappingConcepts() {
         return overlappingConcepts;
     }
 }

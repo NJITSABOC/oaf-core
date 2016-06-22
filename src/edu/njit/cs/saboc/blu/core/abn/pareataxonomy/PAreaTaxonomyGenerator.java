@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.SingleRootedConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -28,7 +28,7 @@ public class PAreaTaxonomyGenerator {
      */
     public PAreaTaxonomy derivePAreaTaxonomy(
             final PAreaTaxonomyFactory factory, 
-            final SingleRootedConceptHierarchy sourceHierarchy) {
+            final ConceptHierarchy sourceHierarchy) {
         
         HashMap<Concept, Set<InheritableProperty>> conceptRelationships = new HashMap<>();
 
@@ -61,14 +61,14 @@ public class PAreaTaxonomyGenerator {
             }
         }
 
-        HashMap<Concept, SingleRootedConceptHierarchy> pareaConceptHierarchy = new HashMap<>();
+        HashMap<Concept, ConceptHierarchy> pareaConceptHierarchy = new HashMap<>();
         
         HashMap<Concept, Set<Concept>> parentPAreaRoots = new HashMap<>();
         HashMap<Concept, Set<Concept>> childPAreaRoots = new HashMap<>();
 
         // Initialize the partial-area data structures
         pareaRoots.forEach( (root) -> {
-            pareaConceptHierarchy.put(root, new SingleRootedConceptHierarchy(root));
+            pareaConceptHierarchy.put(root, new ConceptHierarchy(root));
             
             parentPAreaRoots.put(root, new HashSet<>());
             childPAreaRoots.put(root, new HashSet<>());
@@ -89,7 +89,7 @@ public class PAreaTaxonomyGenerator {
                 Concept concept = stack.pop();
                 processedConcepts.add(concept);
 
-                SingleRootedConceptHierarchy pareaHierarchy = pareaConceptHierarchy.get(root);
+                ConceptHierarchy pareaHierarchy = pareaConceptHierarchy.get(root);
 
                 if (!conceptPAreas.containsKey(concept)) {
                     conceptPAreas.put(concept, new HashSet<>());
@@ -187,8 +187,8 @@ public class PAreaTaxonomyGenerator {
             }
         });
         
-        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy);
-        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, sourceHierarchy, pareaHierarchy);
+        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy, sourceHierarchy);
+        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, pareaHierarchy, sourceHierarchy);
 
         return pareaTaxonomy;
     }
@@ -197,7 +197,7 @@ public class PAreaTaxonomyGenerator {
                      
         HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
         
-        SingleRootedConceptHierarchy conceptHierarchy = new SingleRootedConceptHierarchy(pareaHierarchy.getRoot().getRoot());
+        ConceptHierarchy conceptHierarchy = new ConceptHierarchy(pareaHierarchy.getRoot().getRoot());
                 
         pareaHierarchy.getNodesInHierarchy().forEach( (parea) -> {
             Set<InheritableProperty> properties = parea.getRelationships();
@@ -236,8 +236,8 @@ public class PAreaTaxonomyGenerator {
             }
         });
         
-        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy);
-        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, conceptHierarchy, pareaHierarchy);
+        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy, conceptHierarchy);
+        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy);
    
         return pareaTaxonomy;
     }

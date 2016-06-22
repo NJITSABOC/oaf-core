@@ -3,10 +3,10 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNNodeInformationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedGroupEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -23,18 +23,18 @@ import javax.swing.JSplitPane;
 public class GenericAreaAggregatedPAreaPanel<CONCEPT_T, 
         AREA_T extends Area,
         PAREA_T extends PArea, 
-        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends AbNNodeInformationPanel<AREA_T> {
+        AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends BaseNodeInformationPanel<AREA_T> {
     
     private final BLUGenericPAreaTaxonomyConfiguration config;
     
     private final JSplitPane splitPane;
 
-    private final AbstractEntityList<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList;
+    private final AbstractEntityList<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList;
     
     private final AbstractEntityList<CONCEPT_T> conceptList;
     
     public GenericAreaAggregatedPAreaPanel(
-            AbstractEntityList<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList, 
+            AbstractEntityList<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
             BLUGenericPAreaTaxonomyConfiguration config) {
         
@@ -44,8 +44,8 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         this.conceptList = conceptList;
         this.config = config;
         
-        this.aggregatedGroupList.addEntitySelectionListener(new EntitySelectionAdapter<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
-            public void entityClicked(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> group) {
+        this.aggregatedGroupList.addEntitySelectionListener(new EntitySelectionAdapter<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
+            public void entityClicked(AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> group) {
                 conceptList.setContents(config.getDataConfiguration().getSortedConceptList(group.getAggregatedGroup()));
             }
             
@@ -54,7 +54,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
             }
         });
 
-        this.splitPane = AbstractNodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         splitPane.setTopComponent(this.aggregatedGroupList);
         splitPane.setBottomComponent(this.conceptList);
@@ -87,14 +87,14 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
              }
         });
         
-        ArrayList<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> entries = new ArrayList<>();
+        ArrayList<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> entries = new ArrayList<>();
         
         aggregatedInto.forEach((PAREA_T aggregatedPArea, HashSet<AGGREGATEPAREA_T> aggregatedIntoPAreas) -> {
-            entries.add(new AggregatedGroupEntry<>(aggregatedPArea, aggregatedIntoPAreas));
+            entries.add(new AggregatedNodeEntry<>(aggregatedPArea, aggregatedIntoPAreas));
         });
         
-        Collections.sort(entries, new Comparator<AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
-            public int compare(AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> a, AggregatedGroupEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> b) {
+        Collections.sort(entries, new Comparator<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>>() {
+            public int compare(AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> a, AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T> b) {
                 return a.getAggregatedGroup().getRoot().getName().compareToIgnoreCase(b.getAggregatedGroup().getRoot().getName());
             }
         });

@@ -2,9 +2,9 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.ContainerConceptEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.PartitionedNodeConceptEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import java.util.HashSet;
 public class BandDetailsPanel<
         BAND_T extends Band, 
         CLUSTER_T extends Cluster, 
-        CONCEPT_T> extends AbstractNodeDetailsPanel<BAND_T, ContainerConceptEntry<CONCEPT_T, CLUSTER_T>> {
+        CONCEPT_T> extends NodeDetailsPanel<BAND_T, PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T>> {
     
     private final BLUGenericTANConfiguration config;
 
@@ -33,7 +33,7 @@ public class BandDetailsPanel<
     }
 
     @Override
-    protected ArrayList<ContainerConceptEntry<CONCEPT_T, CLUSTER_T>> getSortedConceptList(BAND_T band) {
+    protected ArrayList<PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T>> getSortedConceptList(BAND_T band) {
         
         HashMap<CONCEPT_T, HashSet<CLUSTER_T>> conceptClusters = new HashMap<>();
         
@@ -51,14 +51,14 @@ public class BandDetailsPanel<
             });
         });
         
-        ArrayList<ContainerConceptEntry<CONCEPT_T, CLUSTER_T>> areaEntries = new ArrayList<>();
+        ArrayList<PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T>> areaEntries = new ArrayList<>();
         
         conceptClusters.forEach((CONCEPT_T c, HashSet<CLUSTER_T> conceptsClusters) -> {
-            areaEntries.add(new ContainerConceptEntry<>(c, conceptsClusters));
+            areaEntries.add(new PartitionedNodeConceptEntry<>(c, conceptsClusters));
         });
         
-        Collections.sort(areaEntries, new Comparator<ContainerConceptEntry<CONCEPT_T, CLUSTER_T>>() {
-            public int compare(ContainerConceptEntry<CONCEPT_T, CLUSTER_T> a, ContainerConceptEntry<CONCEPT_T, CLUSTER_T> b) {
+        Collections.sort(areaEntries, new Comparator<PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T>>() {
+            public int compare(PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T> a, PartitionedNodeConceptEntry<CONCEPT_T, CLUSTER_T> b) {
                 String aName = config.getTextConfiguration().getConceptName(a.getConcept());
                 String bName = config.getTextConfiguration().getConceptName(b.getConcept());
                 

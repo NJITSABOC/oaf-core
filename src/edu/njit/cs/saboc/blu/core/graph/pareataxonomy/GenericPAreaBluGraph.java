@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
+import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 
 /**
  *
@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.GroupEntryLabelCreator;
  */
 public class GenericPAreaBluGraph extends BluGraph {
     
-    public GenericPAreaBluGraph(final PAreaTaxonomy taxonomy, GroupEntryLabelCreator labelCreator) {
+    public GenericPAreaBluGraph(final PAreaTaxonomy taxonomy, SinglyRootedNodeLabelCreator labelCreator) {
         super(taxonomy, labelCreator);
     }
 }

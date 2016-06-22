@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
@@ -8,11 +8,11 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.MultiRootedHierarchy;
  */
 public abstract class HierarchyVisitor<T> {
     
-    protected MultiRootedHierarchy<T> theHierarchy;
+    protected Hierarchy<T> theHierarchy;
     
     private boolean finished = false;
     
-    public HierarchyVisitor(MultiRootedHierarchy<T> theHierarchy) {
+    public HierarchyVisitor(Hierarchy<T> theHierarchy) {
         this.theHierarchy = theHierarchy;
     }
     

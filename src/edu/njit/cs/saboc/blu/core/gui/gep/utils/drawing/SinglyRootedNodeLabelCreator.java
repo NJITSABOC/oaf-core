@@ -1,17 +1,19 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
-import SnomedShared.generic.GenericConceptGroup;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**
  *
  * @author Chris O
  */
-public class GroupEntryLabelCreator<T extends GenericConceptGroup> {
-    public String getRootNameStr(T group) {
-        return group.getRoot().getName();
+public class SinglyRootedNodeLabelCreator {
+    
+    public String getRootNameStr(SinglyRootedNode node) {
+        return node.getRoot().getName();
     }
     
-    public String getCountStr(T group) {
-        return String.format("(%d)", group.getConceptCount());
+    public String getCountStr(SinglyRootedNode node) {
+        return String.format("(%d)", node.getConceptCount());
     }
+    
 }

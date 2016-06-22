@@ -3,9 +3,9 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.SingleRootedHierarchy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractAggregatedGroupsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractGroupHierarchyPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AggregatedNodesPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeHierarchyPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 
 /**
  *
@@ -16,15 +16,15 @@ public class GenericAggregatePAreaPanel <CONCEPT_T, AGGREGATEPAREA_T extends PAr
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
         CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends GenericPAreaPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T, CONFIG_T> { 
     
-    protected AbstractAggregatedGroupsPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel;
+    protected AggregatedNodesPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel;
     
     private int aggregateDetailsTabIndex;
     
     public GenericAggregatePAreaPanel(
-            AbstractNodeDetailsPanel<AGGREGATEPAREA_T, CONCEPT_T> pareaDetailsPanel,
-            AbstractGroupHierarchyPanel<CONCEPT_T, AGGREGATEPAREA_T, CONFIG_T> pareaHierarchyPanel,
+            NodeDetailsPanel<AGGREGATEPAREA_T, CONCEPT_T> pareaDetailsPanel,
+            NodeHierarchyPanel<CONCEPT_T, AGGREGATEPAREA_T, CONFIG_T> pareaHierarchyPanel,
             PAreaConceptHierarchyPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T> conceptHierarchyPanel,
-            AbstractAggregatedGroupsPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel,
+            AggregatedNodesPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel,
             CONFIG_T configuration) {
 
         super(pareaDetailsPanel, pareaHierarchyPanel, conceptHierarchyPanel, configuration);

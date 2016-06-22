@@ -1,13 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.BLUAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public class ClusterPatriarchsTableModel<CONCEPT_T> extends BLUAbstractTableModel<CONCEPT_T> {
+public class ClusterPatriarchsTableModel<CONCEPT_T> extends OAFAbstractTableModel<CONCEPT_T> {
 
     private final BLUGenericTANConfiguration config;
     

@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedCon
 public class AbstractContainerPanel<CONTAINER_T extends GenericGroupContainer, 
         GROUP_T extends GenericConceptGroup, CONCEPT_T, 
         ENTRY_T,
-        CONFIG_T extends BLUPartitionedConfiguration> extends AbstractNodePanel<CONTAINER_T, ENTRY_T, CONFIG_T> {
+        CONFIG_T extends BLUPartitionedConfiguration> extends NodeInformationPanel<CONTAINER_T, ENTRY_T, CONFIG_T> {
 
     protected final AbstractContainerGroupListPanel<CONTAINER_T, GROUP_T, CONCEPT_T> groupListPanel;
 

@@ -4,7 +4,7 @@ import SnomedShared.Concept;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class ClusterSummaryPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends AbstractNodeSummaryPanel<CLUSTER_T> {
+public class ClusterSummaryPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends NodeSummaryPanel<CLUSTER_T> {
 
     private final BLUGenericTANConfiguration config;
     

@@ -1,22 +1,18 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.listener;
 
-import SnomedShared.generic.GenericConceptGroup;
-import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.ParentNodeInformation;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.ParentConceptNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
  *
  * @author Chris O
  */
-public interface BLUAbNListenerConfiguration<
-        ABN_T extends AbstractionNetwork, 
-        GROUP_T extends GenericConceptGroup, 
-        CONCEPT_T> {
+public interface BLUAbNListenerConfiguration {
+    public EntitySelectionListener<Concept> getGroupConceptListListener();
     
-    public EntitySelectionListener<CONCEPT_T> getGroupConceptListListener();
+    public EntitySelectionListener<Node> getChildGroupListener();
     
-    public EntitySelectionListener<GROUP_T> getChildGroupListener();
-    
-    public EntitySelectionListener<ParentNodeInformation<CONCEPT_T, GROUP_T>> getParentGroupListener();
+    public EntitySelectionListener<ParentConceptNode> getParentGroupListener();
 }

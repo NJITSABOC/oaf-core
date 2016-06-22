@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -14,21 +16,21 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
  *
  * @author Chris O
  */
-public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNodeInformationPanel<NODE_T> {
+public abstract class AbstractNodeDetailsPanel extends AbNNodeInformationPanel {
     
-    private final AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel;
+    private final NodeSummaryPanel nodeSummaryPanel;
 
-    private final AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel;
+    private final AbstractNodeOptionsPanel nodeOptionsMenuPanel;
 
-    private final AbstractAbNNodeEntityList<NODE_T, CONCEPT_T> nodeConceptList;
+    private final NodeEntityList<Concept> nodeConceptList;
 
     private final JSplitPane splitPane;
     
-    private Optional<NODE_T> currentNode = Optional.empty();
+    private Optional<Node> currentNode = Optional.empty();
 
-    public AbstractNodeDetailsPanel(AbstractNodeSummaryPanel<NODE_T> nodeSummaryPanel, 
-            AbstractNodeOptionsPanel<NODE_T> nodeOptionsMenuPanel, 
-            AbstractAbNNodeEntityList<NODE_T, CONCEPT_T> nodeConceptList) {
+    public AbstractNodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
+            AbstractNodeOptionsPanel nodeOptionsMenuPanel, 
+            NodeEntityList<Concept> nodeConceptList) {
         
         this.nodeSummaryPanel = nodeSummaryPanel;
         this.nodeOptionsMenuPanel = nodeOptionsMenuPanel;
@@ -49,18 +51,25 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         this.add(splitPane, BorderLayout.CENTER);
     }
     
-    protected AbstractEntityList<CONCEPT_T> getConceptList() {
+    protected AbstractEntityList<Concept> getConceptList() {
         return nodeConceptList;
     }
     
-    public void setContents(NODE_T conceptGroup) {
-        this.currentNode = Optional.of(conceptGroup);
+    public void setContents(Node node) {
+        this.currentNode = Optional.of(node);
         
-        nodeConceptList.setCurrentNode(conceptGroup);
+        nodeConceptList.setCurrentNode(node);
         
-        nodeSummaryPanel.setContents(conceptGroup);
-        nodeOptionsMenuPanel.setContents(conceptGroup);
-        nodeConceptList.setContents(getSortedConceptList(conceptGroup));
+        nodeSummaryPanel.setContents(node);
+        nodeOptionsMenuPanel.setContents(node);
+        
+        ArrayList<Concept> sortedConcepts = new ArrayList<>(node.getConcepts());
+        
+        sortedConcepts.sort( (a, b) -> {
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
+        
+        nodeConceptList.setContents(sortedConcepts);
     }
     
     public void clearContents() {
@@ -94,9 +103,7 @@ public abstract class AbstractNodeDetailsPanel<NODE_T, CONCEPT_T> extends AbNNod
         return splitPane;
     }
     
-    public Optional<NODE_T> getCurrentNode() {
+    public Optional<Node> getCurrentNode() {
         return currentNode;
     }
-            
-    protected abstract ArrayList<CONCEPT_T> getSortedConceptList(NODE_T conceptGroup);
 }

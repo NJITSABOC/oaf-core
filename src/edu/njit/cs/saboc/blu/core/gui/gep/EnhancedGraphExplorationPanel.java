@@ -12,7 +12,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodePanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading.LoadingPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GroupPopout;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -137,8 +137,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private final LoadingPanel loadingPanel;
     private AbstractAbNDetailsPanel abnDetailsPanel;
-    private Optional<AbstractNodePanel> groupDetailsPanel;
-    private Optional<AbstractNodePanel> containerDetailsPanel;
+    private Optional<NodeInformationPanel> groupDetailsPanel;
+    private Optional<NodeInformationPanel> containerDetailsPanel;
 
     private Point targetEntryPoint = null;
 

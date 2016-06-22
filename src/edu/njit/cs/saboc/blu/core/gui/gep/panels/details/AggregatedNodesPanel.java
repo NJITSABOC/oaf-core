@@ -1,9 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,16 +14,15 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class AbstractAggregatedGroupsPanel<AGGREGATEGROUP_T extends GenericConceptGroup & AggregateNode<CONCEPT_T, GROUP_T>, 
-        GROUP_T extends GenericConceptGroup, CONCEPT_T> extends AbNNodeInformationPanel<AGGREGATEGROUP_T> {
+public abstract class AbstractAggregatedGroupsPanel extends AbNNodeInformationPanel {
 
-    private final AbstractGroupList<GROUP_T> aggregateGroupList;
-    private final AbstractEntityList<CONCEPT_T> conceptList;
+    private final AbstractGroupList aggregateGroupList;
+    private final AbstractEntityList<Concept> conceptList;
     
     private final JSplitPane splitPane;
 
-    public AbstractAggregatedGroupsPanel(AbstractGroupList<GROUP_T> groupList, 
-            AbstractEntityList<CONCEPT_T> conceptList, 
+    public AbstractAggregatedGroupsPanel(AbstractGroupList<SinglyRootedNode> groupList, 
+            AbstractEntityList<Concept> conceptList, 
             BLUConfiguration configuration) {
         
         this.setLayout(new BorderLayout());

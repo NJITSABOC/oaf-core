@@ -17,7 +17,7 @@ public class ClusterDetailsPanel<CONCEPT_T, CLUSTER_T extends Cluster> extends A
     
     public ClusterDetailsPanel(
             AbstractNodeOptionsPanel<CLUSTER_T> optionsPanel, 
-            AbstractAbNNodeEntityList<CLUSTER_T, CONCEPT_T> conceptList,
+            NodeEntityList<CLUSTER_T, CONCEPT_T> conceptList,
             BLUGenericTANConfiguration config) {
         
         super(new ClusterSummaryPanel<>(config), 

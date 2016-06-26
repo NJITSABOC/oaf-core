@@ -19,6 +19,10 @@ public class PAreaSummaryTextFactory implements NodeSummaryTextFactory {
     public PAreaSummaryTextFactory(PAreaTaxonomyConfiguration config) {
         this.config = config;
     }
+    
+    public PAreaTaxonomyConfiguration getConfiguration() {
+        return config;
+    }
 
     @Override
     public String createNodeSummaryText(Node node) {

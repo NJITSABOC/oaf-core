@@ -14,7 +14,7 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class AggregatedNodesPanel extends BaseNodeInformationPanel {
+public class AggregatedNodesPanel extends BaseNodeInformationPanel {
 
     private final NodeList aggregateGroupList;
     private final ConceptList conceptList;

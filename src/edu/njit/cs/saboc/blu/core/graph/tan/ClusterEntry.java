@@ -12,8 +12,14 @@ import java.util.ArrayList;
  * @author Chris O
  */
 public class ClusterEntry extends SinglyRootedNodeEntry {
-    public ClusterEntry(Cluster cluster, BluGraph g, GenericBluBandPartition r, int pX, GraphGroupLevel parent, ArrayList<GraphEdge> ie) {
-        super(cluster, g, r, pX, parent, ie);
+    public ClusterEntry(Cluster cluster, 
+            BluGraph g, 
+            BandPartitionEntry emptyPartition, 
+            int pX, 
+            GraphGroupLevel parent, 
+            ArrayList<GraphEdge> ie) {
+        
+        super(cluster, g, emptyPartition, pX, parent, ie);
     }
 
     public Cluster getCluster() {

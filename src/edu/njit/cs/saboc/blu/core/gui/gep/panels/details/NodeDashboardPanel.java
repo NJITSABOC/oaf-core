@@ -15,9 +15,9 @@ import javax.swing.JTabbedPane;
  */
 public class NodeDashboardPanel extends BaseNodeInformationPanel {
     
-    private final DetailsPanelLabel groupNameLabel;
+    private final DetailsPanelLabel nodeNameLabel;
     
-    private final ArrayList<BaseNodeInformationPanel> groupDetailsPanels = new ArrayList<>();
+    private final ArrayList<BaseNodeInformationPanel> nodeInformationPanels = new ArrayList<>();
     
     private final JTabbedPane tabbedPane;
     
@@ -35,13 +35,13 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
         this.setLayout(new BorderLayout());
         this.setOpaque(false);
         
-        groupNameLabel = new DetailsPanelLabel(" ");
+        nodeNameLabel = new DetailsPanelLabel(" ");
         
         tabbedPane = new JTabbedPane();
         
-        addGroupDetailsTab(this.nodeDetailsPanel, String.format("%s Details", configuration.getTextConfiguration().getNodeTypeName(false)));
+        addInformationTab(this.nodeDetailsPanel, String.format("%s Details", configuration.getTextConfiguration().getNodeTypeName(false)));
 
-        this.add(groupNameLabel, BorderLayout.NORTH);
+        this.add(nodeNameLabel, BorderLayout.NORTH);
         this.add(tabbedPane, BorderLayout.CENTER);
     }
 
@@ -50,30 +50,30 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
     }
     
     public void setContents(Node node) {
-        groupNameLabel.setText(node.getName());
+        nodeNameLabel.setText(node.getName());
         
-        groupDetailsPanels.forEach((gdp) -> {
+        nodeInformationPanels.forEach((gdp) -> {
             gdp.setContents(node);
         });
     }
     
     public void clearContents() {
-        groupNameLabel.setText("");
+        nodeNameLabel.setText("");
         
-        groupDetailsPanels.forEach((BaseNodeInformationPanel gdp) -> {
+        nodeInformationPanels.forEach((BaseNodeInformationPanel gdp) -> {
             gdp.clearContents();
         });
     }
 
     
-    public final int addGroupDetailsTab(BaseNodeInformationPanel panel, String tabName) {
+    public final int addInformationTab(BaseNodeInformationPanel panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
-        groupDetailsPanels.add(panel);
+        nodeInformationPanels.add(panel);
         
         return tabbedPane.getTabCount() - 1;
     }
     
-    public final void enableGroupDetailsTabAt(int index, boolean enabled) {
+    public final void enableInformationTabAt(int index, boolean enabled) {
         tabbedPane.setEnabledAt(index, enabled);
         
         if(!enabled && tabbedPane.getSelectedIndex() == index) {

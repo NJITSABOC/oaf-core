@@ -1,13 +1,16 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SimilarityNode;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty.InheritanceType;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 /**
  * Represents a region of an area in a partial-area taxonomy
  * @author Chris O
  */
-public abstract class Region extends SimilarityNode {
+public class Region extends SimilarityNode {
     
     private final Set<InheritableProperty> relationships;
     
@@ -45,5 +48,41 @@ public abstract class Region extends SimilarityNode {
         }
         
         return false;
+    }
+    
+    public String getName() {
+        return getName(", ");
+    }
+    
+    public String getName(String separator) {
+        
+        if(relationships.isEmpty()) {
+            return "\u2205"; // Empty set symbol
+        } else {
+            ArrayList<String> relNamesAndInheritance = new ArrayList<>();
+            
+            getRelationships().forEach((rel) -> {
+                String inheritanceSymbol;
+                
+                if(rel.getInheritanceType() == InheritanceType.Introduced) {
+                    inheritanceSymbol = "+";
+                } else {
+                    inheritanceSymbol = "*";
+                }
+                
+                relNamesAndInheritance.add(rel.getName() + inheritanceSymbol);
+            });
+            
+            Collections.sort(relNamesAndInheritance);
+            
+            String name = relNamesAndInheritance.get(0);
+            
+            for(int c = 1; c < relNamesAndInheritance.size(); c++) {
+                name += separator;
+                name += relNamesAndInheritance.get(c);
+            }
+            
+            return name;
+        }
     }
 }

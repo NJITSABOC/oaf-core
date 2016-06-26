@@ -17,18 +17,22 @@ public class PAreaSummaryPanel extends NodeSummaryPanel {
     
     private final PAreaTaxonomyConfiguration configuration;
     
-    public PAreaSummaryPanel(PAreaTaxonomyConfiguration configuration) {
-        super(new PAreaSummaryTextFactory(configuration));
-        
+    public PAreaSummaryPanel(PAreaTaxonomyConfiguration configuration, PAreaSummaryTextFactory summaryTextFactory) {
+        super(summaryTextFactory);
+
         this.configuration = configuration;
-        
+
         this.relationshipPanel = new RelationshipPanel(null);
         this.relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         this.relationshipPanel.setPreferredSize(new Dimension(-1, 100));
-        
+
         this.relationshipPanel.addEntitySelectionListener(configuration.getUIConfiguration().getListenerConfiguration().getGroupRelationshipSelectedListener());
-        
+
         this.add(this.relationshipPanel);
+    }
+
+    public PAreaSummaryPanel(PAreaTaxonomyConfiguration configuration) {
+        this(configuration, new PAreaSummaryTextFactory(configuration));
     }
     
     public void setContents(Node node) {        

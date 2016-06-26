@@ -28,7 +28,6 @@ import javax.swing.JLabel;
  */
 public class GenericDisjointAbNLayout extends BluGraphLayout {
 
-
     private final DisjointAbstractionNetwork disjointAbN;
 
     public GenericDisjointAbNLayout(BluGraph graph, DisjointAbstractionNetwork disjointAbN) {
@@ -202,8 +201,6 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
                     getGraph(),
                     generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null))); // Add a level object to 
         }
-        
-        
         
         this.centerGraphLevels(this.getGraphLevels());
     }

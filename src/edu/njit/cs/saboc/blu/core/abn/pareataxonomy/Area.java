@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SimilarityNode;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -45,6 +47,8 @@ public class Area extends SimilarityNode {
         });
         
         this.regions = new HashSet<>();
+        
+        
     }
     
     public Set<InheritableProperty> getRelationships() {
@@ -60,11 +64,31 @@ public class Area extends SimilarityNode {
     }
 
     public String getName() {
-        return "";
+        return getName(", ");
     }
     
     public String getName(String separator) {
-        return "";
+        
+        if(relationships.isEmpty()) {
+            return "\u2205"; // Empty set symbol
+        } else {
+            ArrayList<String> relNames = new ArrayList<>();
+            
+            getRelationships().forEach((rel) -> {
+                relNames.add(rel.getName());
+            });
+            
+            Collections.sort(relNames);
+            
+            String name = relNames.get(0);
+            
+            for(int c = 1; c < relNames.size(); c++) {
+                name += separator;
+                name += relNames.get(c);
+            }
+            
+            return name;
+        }
     }
     
     public int hashCode() {

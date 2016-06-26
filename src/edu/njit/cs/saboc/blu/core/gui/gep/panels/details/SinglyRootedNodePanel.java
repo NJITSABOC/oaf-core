@@ -23,12 +23,12 @@ public class SinglyRootedNodePanel extends NodeDashboardPanel {
         
         this.groupHierarchyPanel = groupHierarchyPanel;
 
-        addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", 
+        addInformationTab(groupHierarchyPanel, String.format("%s Hierarchy", 
                 configuration.getTextConfiguration().getNodeTypeName(false)));
         
         this.conceptHierarchyPanel = conceptHierarchyPanel;
         
-        addGroupDetailsTab(groupHierarchyPanel, String.format("%s's %s Hierarchy", 
+        addInformationTab(groupHierarchyPanel, String.format("%s's %s Hierarchy", 
                 configuration.getTextConfiguration().getNodeTypeName(false),
                 configuration.getTextConfiguration().getConceptTypeName(false)));
     }

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -8,8 +9,10 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
+import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -20,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JLabel;
 
 /**
@@ -66,20 +70,17 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         for (Band set : tempSets) {
 
             if (lastSet != null && lastSet.getPatriarchs().size() != set.getPatriarchs().size()) {
-                Collections.sort(levelSets, new Comparator<Band>() {    // Sort the areas based on the number of their relationships.
-
-                    public int compare(Band a, Band b) {
-
-                        int aClusterSize = a.getClusters().size();
-                        int bClusterSize = b.getClusters().size();
-
-                        if (aClusterSize == bClusterSize) {
-                            return a.getConceptCount() - b.getConceptCount();
-                        } else {
-                            return aClusterSize - bClusterSize;
-                        }
+                Collections.sort(levelSets, (Band a, Band b) -> {
+                    int aClusterSize = a.getClusters().size();
+                    int bClusterSize = b.getClusters().size();
+                    
+                    if (aClusterSize == bClusterSize) {
+                        return a.getConceptCount() - b.getConceptCount();
+                    } else {
+                        return aClusterSize - bClusterSize;
                     }
-                });
+                } // Sort the areas based on the number of their relationships.
+                );
 
                 int c = 0;
 
@@ -105,16 +106,14 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
             lastSet = set;
         }
 
-        Collections.sort(levelSets, new Comparator<Band>() {
-            public int compare(Band a, Band b) {
-                int aClusterSize = a.getClusters().size();
-                int bClusterSize = b.getClusters().size();
-
-                if (aClusterSize == bClusterSize) {
-                    return a.getConceptCount() - b.getConceptCount();
-                } else {
-                    return aClusterSize - bClusterSize;
-                }
+        Collections.sort(levelSets, (Band a, Band b) -> {
+            int aClusterSize = a.getClusters().size();
+            int bClusterSize = b.getClusters().size();
+            
+            if (aClusterSize == bClusterSize) {
+                return a.getConceptCount() - b.getConceptCount();
+            } else {
+                return aClusterSize - bClusterSize;
             }
         });
 
@@ -137,78 +136,83 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
             sortedSets.add(levelSets.get(c));
         }
 
-        lastSet = null;
-        layoutGroupContainers = sortedSets;
+        setLayoutBands(sortedSets);
+    }
+    
+    private void setLayoutBands(ArrayList<Band> bands) {
+        super.setLayoutGroupContainers((ArrayList<PartitionedNode>)(ArrayList<?>)bands);
     }
 
     public ArrayList<Band> getBands() {
-        return layoutGroupContainers;
+        return (ArrayList<Band>)(ArrayList<?>)super.getLayoutContainers();
     }
 
-    private ClusterEntry createClusterPanel(Cluster p, GenericBluBandPartition parent, int x, int y, int pAreaX, GraphGroupLevel clusterLevel) {
+    protected ClusterEntry createClusterEntry(Cluster p, BandPartitionEntry parent, int x, int y, int pAreaX, GraphGroupLevel clusterLevel) {
         
-        ClusterEntry clusterPanel = makeClusterNode(p, getGraph(), parent, pAreaX, clusterLevel, new ArrayList<>());
+        ClusterEntry clusterEntry = new ClusterEntry(p, getGraph(), parent, pAreaX, clusterLevel, new ArrayList<>());
 
         //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
         getGraph().stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         //Setup the panel's dimensions, etc.
-        clusterPanel.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
+        clusterEntry.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
-        parent.add(clusterPanel, 0);
+        parent.add(clusterEntry, 0);
 
-        return clusterPanel;
+        return clusterEntry;
     }
 
-    private BandEntry createBandPanel(Band set, int x, int y, int width, int height, Color c, int areaX, GraphLevel parentLevel) {
-        BandEntry setPanel = makeBandNode(set, getGraph(), areaX, parentLevel, new Rectangle(x, y, width, height));
+    protected BandEntry createBandEntry(Band set, int x, int y, int width, int height, Color c, int areaX, GraphLevel parentLevel) {
+        BandEntry bandEntry = new BandEntry(set, getGraph(), areaX, parentLevel, new Rectangle(x, y, width, height));
 
         getGraph().stretchGraphToFitPanel(x, y, width, height);
 
-        setPanel.setBounds(x, y, width, height);
-        setPanel.setBackground(c);
+        bandEntry.setBounds(x, y, width, height);
+        bandEntry.setBackground(c);
 
-        getGraph().add(setPanel, 0);
+        getGraph().add(bandEntry, 0);
 
-        return setPanel;
+        return bandEntry;
     }
 
-    protected GenericBluBandPartition<BandEntry> createBandPartitionPanel(GenericBandPartition partition, String regionName,
-            BANDNODE_T set, int x, int y, int width, int height, Color c, boolean treatPartitonAsOverlapSet, JLabel partitionLabel) {
+    protected BandPartitionEntry createBandPartitionEntry(
+            Band band,
+            String bandName,
+            BandEntry bandEntry, int x, int y, int width, int height, Color c, JLabel partitionLabel) {
 
-        GenericBluBandPartition<BandEntry> overlapPanel = new GenericBluBandPartition<>(partition, regionName,
-                width, height, getGraph(), set, c, treatPartitonAsOverlapSet, partitionLabel);
+        BandPartitionEntry partitionEntry = new BandPartitionEntry(band, bandName,
+                width, height, getGraph(), bandEntry, c, partitionLabel);
 
         getGraph().stretchGraphToFitPanel(x, y, width, height);
 
-        overlapPanel.setBounds(x, y, width, height);
+        partitionEntry.setBounds(x, y, width, height);
 
-        set.add(overlapPanel, 0);
+        bandEntry.add(partitionEntry, 0);
 
-        return overlapPanel;
+        return partitionEntry;
     }
 
     public BandEntry getBand(int level, int setX) {
         return (BandEntry) getConainterAt(level, setX);
     }
 
-    public GenericBluBandPartition<BandEntry> getBandPartition(int level, int setX, int partitionX) {
-        return (GenericBluBandPartition<BandEntry>) getContainerPartitionAt(level, setX, partitionX);
+    public EmptyContainerPartitionEntry getBandPartition(int level, int setX, int partitionX) {
+        return (EmptyContainerPartitionEntry) getContainerPartitionAt(level, setX, partitionX);
     }
 
     public ClusterEntry getCluster(int level, int setX, int partitionX, int clusterY, int clusterX) {
         return (ClusterEntry) getGroupEntry(level, setX, partitionX, clusterY, clusterX);
     }
 
-    protected JLabel createBandPartitionLabel(TribalAbstractionNetwork tan, HashSet patriarchs, String countString, int width, boolean treatAsBand) {
+    protected JLabel createBandPartitionLabel(TribalAbstractionNetwork tan, Set<Concept> patriarchs, String countString, int width, boolean treatAsBand) {
 
         Canvas canvas = new Canvas();
         FontMetrics fontMetrics = canvas.getFontMetrics(new Font("SansSerif", Font.BOLD, 14));
 
         ArrayList<String> bandPatriarchLabels = new ArrayList<>();
 
-        for (Object patriarch : patriarchs) {
-            bandPatriarchLabels.add(config.getTextConfiguration().getConceptName(patriarch));
+        for (Concept patriarch : patriarchs) {
+            bandPatriarchLabels.add(patriarch.getName());
         }
 
         Collections.sort(bandPatriarchLabels);
@@ -245,28 +249,26 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         return this.createFittedPartitionLabel(bandPatriarchLabels.toArray(new String[0]), width, fontMetrics);
     }
 
-    public JLabel createPartitionLabel(GenericContainerPartition partition, int width) {
+    public JLabel createBandLabel(Band band, int width) {
 
-        GenericBandPartition<Cluster> bandPartition = (GenericBandPartition<Cluster>) partition;
+        Set<Concept> conceptsInPartition = new HashSet();
 
-        HashSet conceptsInPartition = new HashSet();
-
-        bandPartition.getClusters().forEach( (cluster) -> {
+        band.getClusters().forEach( (cluster) -> {
             conceptsInPartition.addAll(cluster.getConcepts());
         });
 
-        int clusterCount = bandPartition.getClusters().size();
+        int clusterCount = band.getClusters().size();
 
         int conceptCount = conceptsInPartition.size();
 
         String conceptName = config.getTextConfiguration().getConceptTypeName(conceptCount != 1);
 
-        String clusterName = config.getTextConfiguration().getGroupTypeName(clusterCount != 1);
+        String clusterName = config.getTextConfiguration().getNodeTypeName(clusterCount != 1);
 
-        String countStr = String.format("(%d %s, %d %s", conceptCount, conceptName, clusterCount, clusterName);
+        String countStr = String.format("(%d %s, %d %s)", conceptCount, conceptName, clusterCount, clusterName);
 
         // TODO: Currently we do not partition bands base on inheritance type, so last Arg is always true.
-        return this.createBandPartitionLabel(tan, bandPartition.getClusters().get(0).getPatriarchs(), countStr, width, true);
+        return this.createBandPartitionLabel(tan, band.getPatriarchs(), countStr, width, true);
     }
 
     public void resetLayout() {

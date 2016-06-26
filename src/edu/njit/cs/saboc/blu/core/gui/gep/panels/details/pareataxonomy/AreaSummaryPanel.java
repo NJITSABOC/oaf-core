@@ -17,20 +17,23 @@ public class AreaSummaryPanel extends NodeSummaryPanel {
     
     private final PAreaTaxonomyConfiguration configuration;
     
-    public AreaSummaryPanel(PAreaTaxonomyConfiguration configuration) {  
-        
-        super(new AreaSummaryTextFactory(configuration));
-        
+    public AreaSummaryPanel(PAreaTaxonomyConfiguration configuration, AreaSummaryTextFactory summaryTextFactory) {
+        super(summaryTextFactory);
+
         this.configuration = configuration;
-        
+
         relationshipPanel = new RelationshipPanel(null); // TODO: Need model...
 
         relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         relationshipPanel.setPreferredSize(new Dimension(-1, 100));
-                
+
         relationshipPanel.addEntitySelectionListener(configuration.getUIConfiguration().getListenerConfiguration().getContainerRelationshipSelectedListener());
-        
+
         this.add(relationshipPanel);
+    }
+    
+    public AreaSummaryPanel(PAreaTaxonomyConfiguration configuration) {  
+        this(configuration, new AreaSummaryTextFactory(configuration));
     }
     
     public void setContents(Node node) {

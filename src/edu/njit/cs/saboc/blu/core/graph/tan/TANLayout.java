@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
@@ -8,9 +10,11 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JLabel;
 
 /**
@@ -26,10 +30,12 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
     public void doLayout() {
 
         super.doLayout();
+        
+        BluGraph graph = this.getGraph();
 
         Band lastSet = null;   // Used for generating the graph - this is the data version of an area
-        BandEntry currentSet = null;    // Used for generating the graph - this is the graphical representation of an area
-        GenericBluBandPartition<BANDNODE_T> currentPartitionEntry = null;
+        BandEntry currentBandEntry = null;    // Used for generating the graph - this is the graphical representation of an area
+        BandPartitionEntry currentPartitionEntry = null;
         
         GraphLevel currentLevel = null; // This is used as a temporary variable in this method to hold the current level.
         GraphGroupLevel currentClusterLevel = null; // Used for generating the graph
@@ -53,35 +59,35 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
         }
 
         int areaX = 0;  // The first area on each line is given an areaX value of 0.
-        int areaY = 0;  // The first row of areas is given an areaY value of 0.
+        int bandY = 0;  // The first row of areas is given an areaY value of 0.
         int clusterX, clusterY;
         int x = 0, y = 20, width = 0, maxHeight = 0;
         int style = 0;
 
         addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
 
-        for (BAND_T a : layoutGroupContainers) {  // Loop through the areas and generate the diagram for each of them
-            BANDNODE_T setEntry;
+        for (Band band : super.getBandsInLayout()) {  // Loop through the areas and generate the diagram for each of them
+            BandEntry bandEntry;
             
-            ArrayList<CLUSTER_T> clusters = a.getAllClusters();
+            ArrayList<Cluster> clusters = new ArrayList<>(band.getClusters());
 
             int maxRows, x2, y2, regionX, partitionBump;
 
             int[] bandClusterX;
 
-            if (lastSet != null && lastSet.getPatriarchs().size() != a.getPatriarchs().size()) { // If a new row should be created...
+            if (lastSet != null && lastSet.getPatriarchs().size() != band.getPatriarchs().size()) { // If a new row should be created...
 
                 x = 0;  // Reset the x coordinate to the left
                 y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT; // Add the height of the tallest area to the y coordinate plus the areaRowHeight variable which defines how
                 // much space should be between rows of areas.
 
-                areaY++;    // Update the areaY variable to reflect the new row.
+                bandY++;    // Update the areaY variable to reflect the new row.
                 areaX = 0;  // Reset the areaX variable.
 
                 maxHeight = 0;  // Reset the maxHeight variable since this is a new row.
                 style++;    // Update the style variable which is used to display different colors for the different rows.
 
-                addGraphLevel(new GraphLevel(areaY, graph,
+                addGraphLevel(new GraphLevel(bandY, graph,
                         generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null))); // Add a level object to the arrayList in the dataGraph object
             }
 
@@ -90,51 +96,31 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
             int clusterCount = clusters.size();
             
-            int clusterEntriesWide;
-
-            if(a.getId() == -1) {
-                clusterEntriesWide = clusterCount;
-            } else {
-                clusterEntriesWide = (int) Math.ceil(Math.sqrt(clusterCount));
-            }
+            int clusterEntriesWide = (int) Math.ceil(Math.sqrt(clusterCount));
 
             int setWidth = clusterEntriesWide * (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
 
-            String regionName = "";
+            String bandName = band.getName();
 
-            if(a.getId() >= 0) {
-                HashSet<CONCEPT_T> patriarchs = a.getPatriarchs();
-
-                for(CONCEPT_T patriarch : patriarchs) {
-                    regionName += (super.getConfiguration().getTextConfiguration().getConceptName(patriarch) + ", ");
-                }
-
-                regionName = regionName.substring(0, regionName.length() - 1);
-            }
+            Set<Concept> concepts = band.getConcepts();
             
-            HashSet<CONCEPT_T> concepts = new HashSet<>();
-            
-            clusters.forEach( (CLUSTER_T cluster) -> {
-                concepts.addAll(cluster.getConcepts());
-            });
-
             int conceptCount = concepts.size();
             int clustersInBand = clusters.size();
             
             String conceptTypeName = super.getConfiguration().getTextConfiguration().getConceptTypeName(conceptCount != 1);
-            String clusterName = super.getConfiguration().getTextConfiguration().getGroupTypeName(clustersInBand != 1);
+            String clusterName = super.getConfiguration().getTextConfiguration().getNodeTypeName(clustersInBand != 1);
             
             String countString = String.format("(%d %s, %d %s)", conceptCount, conceptTypeName, clustersInBand, clusterName);
 
-            regionName += (" " + countString);
+            bandName += (" " + countString);
             
             JLabel bandLabel;
             
-            if(a.getPatriarchs().size() == 1) {
+            if(band.getPatriarchs().size() == 1) {
                 bandLabel = new JLabel();
                 bandLabel.setSize(1, 1);
             } else {
-                bandLabel = createBandPartitionLabel(super.getTAN(), a.getPatriarchs(), countString, setWidth, true);
+                bandLabel = createBandPartitionLabel(super.getTAN(), band.getPatriarchs(), countString, setWidth, true);
             }
 
             setWidth = Math.max(setWidth, bandLabel.getWidth() + 8);
@@ -154,22 +140,22 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
                 maxHeight = height;
             }
 
-            currentLevel = levels.get(areaY);
+            currentLevel = getLevels().get(bandY);
 
             Color color = background[style % background.length];
 
-            setEntry = createBandPanel(a, x, y, width, height, color, areaX, currentLevel); // Create the area
+            bandEntry = createBandEntry(band, x, y, width, height, color, areaX, currentLevel); // Create the area
 
-            containerEntries.put(a.getId(), setEntry);
+            getContainerEntries().put(band, bandEntry);
 
             // Add a data representation for this new area to the current area Level obj.
-            currentLevel.addContainerEntry(setEntry);    
+            currentLevel.addContainerEntry(bandEntry);    
             
             // Generates a column of lanes to the left of this area.
             addColumn(areaX, currentLevel.getLevelY(), generateColumnLanes(-3,
                     GraphLayoutConstants.CONTAINER_CHANNEL_WIDTH - 5, 3, null)); 
 
-            currentSet = (BANDNODE_T) currentLevel.getContainerEntries().get(areaX);
+            currentBandEntry = (BandEntry)currentLevel.getContainerEntries().get(areaX);
 
             regionX = GraphLayoutConstants.PARTITION_CHANNEL_WIDTH;
 
@@ -185,43 +171,41 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
             int labelXPos =  GraphLayoutConstants.PARTITION_CHANNEL_WIDTH + (setWidth - bandLabel.getWidth()) / 2;
             bandLabel.setLocation(labelXPos, 4);
 
-            GenericBluBandPartition<BANDNODE_T> overlapPartition = createOverlapPartitionPanel(
-                    (GenericBandPartition)a.getPartitions().get(0), 
-                    regionName, 
-                    setEntry,
+            BandPartitionEntry overlapPartition = createBandPartitionEntry(band, 
+                    bandName, 
+                    bandEntry,
                     regionX - partitionBump, 
                     10, 
                     setWidth + GraphLayoutConstants.GROUP_CHANNEL_WIDTH + 10,
                     height - 20, 
                     color, 
-                    true, 
                     bandLabel);
 
             partitionBump++;
-            currentPartitionEntry = (GenericBluBandPartition<BANDNODE_T>)currentSet.addPartitionEntry(overlapPartition);
+            currentPartitionEntry = (BandPartitionEntry)currentBandEntry.addPartitionEntry(overlapPartition);
             
             currentPartitionEntry.addGroupLevel(new GraphGroupLevel(0, currentPartitionEntry)); // Add a new pAreaLevel to the data representation of the current Area object.
 
-            currentSet.addRow(0, generateUpperRowLanes(-4,
-                    GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, currentSet));
+            currentBandEntry.addRow(0, generateUpperRowLanes(-4,
+                    GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, currentBandEntry));
 
             int i = 0;
 
-            for (CLUSTER_T p : clusters) { // Draw the pArease inside this region
-                CLUSTERNODE_T clusterPanel;
+            for (Cluster cluster : clusters) { // Draw the pArease inside this region
+                ClusterEntry clusterEntry;
 
                 currentClusterLevel = currentPartitionEntry.getGroupLevels().get(clusterY);
 
-                clusterPanel = createClusterPanel(p, overlapPartition, x2, y2, clusterX, currentClusterLevel);
+                clusterEntry = createClusterEntry(cluster, overlapPartition, x2, y2, clusterX, currentClusterLevel);
 
-                overlapPartition.getVisibleGroups().add(clusterPanel);
+                overlapPartition.getVisibleGroups().add(clusterEntry);
 
                 currentPartitionEntry.addColumn(bandClusterX[clusterY], generateColumnLanes(-3,
-                        GraphLayoutConstants.GROUP_CHANNEL_WIDTH - 2, 3, currentSet));
+                        GraphLayoutConstants.GROUP_CHANNEL_WIDTH - 2, 3, currentBandEntry));
 
-                groupEntries.put(p.getId(), clusterPanel);    // Store it in a map keyed by its ID...
+                getGroupEntries().put(cluster, clusterEntry);    // Store it in a map keyed by its ID...
 
-                currentClusterLevel.addGroupEntry(clusterPanel);
+                currentClusterLevel.addGroupEntry(clusterEntry);
 
                 if ((i + 1) % clusterEntriesWide == 0 && i < clusters.size() - 1) {
                     y2 += SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
@@ -232,8 +216,8 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
                     if (currentPartitionEntry.getGroupLevels().size() <= clusterY) {
                         currentPartitionEntry.addGroupLevel(new GraphGroupLevel(clusterY, currentPartitionEntry)); // Add a new pAreaLevel to the data representation of the current Area object.
-                        currentSet.addRow(clusterY, generateUpperRowLanes(-4,
-                                GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, currentSet));
+                        currentBandEntry.addRow(clusterY, generateUpperRowLanes(-4,
+                                GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, currentBandEntry));
                     }
                 } else {
                     x2 += (SinglyRootedNodeEntry.ENTRY_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
@@ -246,26 +230,9 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
             x += width + 40;  // Set x to a position after the newly created area and the appropriate space after that given the set channel width.
             areaX++;
-            lastSet = a;
+            lastSet = band;
         }
         
         this.centerGraphLevels(this.getGraphLevels());
-    }
-    
-    private GenericBluBandPartition<BANDNODE_T> createOverlapPartitionPanel(
-            GenericBandPartition<CLUSTER_T> partition, 
-            String regionName,
-            BANDNODE_T set, int x, int y, int width, int height, Color c, boolean treatPartitonAsOverlapSet, JLabel partitionLabel) {
-
-        GenericBluBandPartition<BANDNODE_T> overlapPanel = new GenericBluBandPartition<>(partition, regionName,
-                width, height, graph, set, c, treatPartitonAsOverlapSet, partitionLabel);
-
-        graph.stretchGraphToFitPanel(x, y, width, height);
-
-        overlapPanel.setBounds(x, y, width, height);
-
-        set.add(overlapPanel, 0);
-
-        return overlapPanel;
     }
 }

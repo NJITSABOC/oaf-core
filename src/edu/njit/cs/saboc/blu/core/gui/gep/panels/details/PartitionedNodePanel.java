@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.OverlappingConceptDetails;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import java.util.Set;
 
@@ -30,14 +30,14 @@ public class PartitionedNodePanel extends NodeDashboardPanel {
                 configuration.getTextConfiguration().getContainerTypeName(false), 
                 configuration.getTextConfiguration().getNodeTypeName(true));
         
-        super.addGroupDetailsTab(groupListPanel, subnodeListTabTitle);
+        super.addInformationTab(groupListPanel, subnodeListTabTitle);
         
         this.disjointMetricsPanel = new DisjointAbNMetricsPanel(configuration);
         
         String overlappingTabTitle = String.format("Overlapping %s Metrics", 
                 configuration.getTextConfiguration().getNodeTypeName(false));
                 
-        this.disjointMetricsTabIndex = super.addGroupDetailsTab(disjointMetricsPanel, overlappingTabTitle);
+        this.disjointMetricsTabIndex = super.addInformationTab(disjointMetricsPanel, overlappingTabTitle);
     }
 
     @Override
@@ -47,26 +47,26 @@ public class PartitionedNodePanel extends NodeDashboardPanel {
         groupListPanel.clearContents();
         disjointMetricsPanel.clearContents();
         
-        this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);
+        this.enableInformationTabAt(disjointMetricsTabIndex, true);
     }
 
     @Override
     public void setContents(Node node) {
         super.setContents(node);
         
-        Area area = (Area)node;
-        
+        PartitionedNode partitionedNode = (PartitionedNode)node;
+
         groupListPanel.setContents(node);
         disjointMetricsPanel.setContents(node);
         
-        Set<OverlappingConceptDetails> overlaps = area.getOverlappingConceptDetails();
+        Set<OverlappingConceptDetails> overlaps = partitionedNode.getOverlappingConceptDetails();
         
         if (!overlaps.isEmpty()) {
-            disjointMetricsPanel.setContents(area);
+            disjointMetricsPanel.setContents(node);
 
-            this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);
+            this.enableInformationTabAt(disjointMetricsTabIndex, true);
         } else {
-            this.enableGroupDetailsTabAt(disjointMetricsTabIndex, false);
+            this.enableInformationTabAt(disjointMetricsTabIndex, false);
         }
     }
 }

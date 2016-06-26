@@ -21,7 +21,7 @@ public class Band extends SimilarityNode {
     }
 
     public Set<Cluster> getClusters() {
-        return (Set<Cluster>)super.getInternalNodes();
+        return (Set<Cluster>)(Set<?>)super.getInternalNodes();
     }
     
     public Set<Concept> getPatriarchs() {

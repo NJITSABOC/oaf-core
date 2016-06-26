@@ -41,7 +41,7 @@ public class AbstractionNetworkUtils {
             ConceptHierarchy hierarchy, 
             Set<PartitionedNode> allNodes) {
         
-        Set<? extends SinglyRootedNode> internalNodes = node.getInternalNodes();
+        Set<SinglyRootedNode> internalNodes = node.getInternalNodes();
         
         Set<ParentNodeDetails> parentNodeDetails = new HashSet<>();
         

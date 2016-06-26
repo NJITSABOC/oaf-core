@@ -15,15 +15,15 @@ import java.util.Set;
  *
  * @author Chris
  */
-public abstract class NodeConceptHierarchyLoader implements Runnable {
+public class NodeConceptHierarchyLoader implements Runnable {
 
     private final SinglyRootedNode node;
     
-    private final ConceptGroupHierarchicalViewPanel hierarchyViewPanel;
+    private final NodeConceptHierarchicalViewPanel hierarchyViewPanel;
     
     private final HashMap<Concept, ConceptEntry> conceptEntryMap = new HashMap<>();
 
-    public NodeConceptHierarchyLoader(SinglyRootedNode node, ConceptGroupHierarchicalViewPanel hierarchyViewPanel) {
+    public NodeConceptHierarchyLoader(SinglyRootedNode node, NodeConceptHierarchicalViewPanel hierarchyViewPanel) {
         this.node = node;
         this.hierarchyViewPanel = hierarchyViewPanel;
     }

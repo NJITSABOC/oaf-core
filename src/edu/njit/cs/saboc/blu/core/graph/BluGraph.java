@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdgeHandle;
@@ -12,7 +12,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
-import edu.njit.cs.saboc.blu.core.gui.dialogs.GenericGroupEditMenu;
+import edu.njit.cs.saboc.blu.core.gui.dialogs.NodeEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
@@ -116,7 +116,7 @@ public class BluGraph extends JLayeredPane {
     /**
      * Popup menu displayed when a pArea is right-clicked
      */
-    protected GenericGroupEditMenu groupMenu;
+    protected NodeEditMenu groupMenu;
     
     /**
      * Popup menu displayed when an edge is right-clicked
@@ -156,7 +156,7 @@ public class BluGraph extends JLayeredPane {
     public BluGraph(AbstractionNetwork abstractionNetwork, SinglyRootedNodeLabelCreator labelCreator) {
         this.abstractionNetwork = abstractionNetwork;
         
-        this.groupMenu = new GenericGroupEditMenu(this);
+        this.groupMenu = new NodeEditMenu(this);
         
         this.labelManager = new AbNLabelManager(abstractionNetwork, labelCreator);
         
@@ -837,13 +837,12 @@ public class BluGraph extends JLayeredPane {
         return segmentToEdge;
     }
 
-    public JPopupMenu getGroupEntryMenuFor(Node group) {
+    public JPopupMenu getGroupEntryMenuFor(SinglyRootedNode node) {
         deactivateSelectedEdge();
         partitionMenu.setVisible(false);
         currentPartition = null;
         
-        
-        groupMenu.setCurrentGroup(group);
+        groupMenu.setCurrentGroup(node);
         
         return groupMenu;
     }
@@ -891,7 +890,7 @@ public class BluGraph extends JLayeredPane {
         return currentGroup;
     }
 
-    public Map<Integer, PartitionedNodeEntry> getContainerEntries() {
+    public Map<PartitionedNode, PartitionedNodeEntry> getContainerEntries() {
         return layout.getContainerEntries();
     }
 

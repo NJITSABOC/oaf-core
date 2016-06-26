@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 
 
 /**
@@ -11,11 +10,14 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFac
 public class SinglyRootedNodePanel extends NodeDashboardPanel {
 
     private final NodeHierarchyPanel groupHierarchyPanel;
+    
+    private final ConceptHierarchyPanel conceptHierarchyPanel;
 
     public SinglyRootedNodePanel(
             NodeDetailsPanel groupDetailsPanel, 
             NodeHierarchyPanel groupHierarchyPanel, 
-            BLUConfiguration configuration) {
+            ConceptHierarchyPanel conceptHierarchyPanel,
+            AbNConfiguration configuration) {
         
         super(groupDetailsPanel, configuration);
         
@@ -23,5 +25,11 @@ public class SinglyRootedNodePanel extends NodeDashboardPanel {
 
         addGroupDetailsTab(groupHierarchyPanel, String.format("%s Hierarchy", 
                 configuration.getTextConfiguration().getNodeTypeName(false)));
+        
+        this.conceptHierarchyPanel = conceptHierarchyPanel;
+        
+        addGroupDetailsTab(groupHierarchyPanel, String.format("%s's %s Hierarchy", 
+                configuration.getTextConfiguration().getNodeTypeName(false),
+                configuration.getTextConfiguration().getConceptTypeName(false)));
     }
 }

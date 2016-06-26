@@ -25,7 +25,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
         PAREA_T extends PArea, 
         AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends BaseNodeInformationPanel<AREA_T> {
     
-    private final BLUGenericPAreaTaxonomyConfiguration config;
+    private final PAreaTaxonomyConfiguration config;
     
     private final JSplitPane splitPane;
 
@@ -36,7 +36,7 @@ public class GenericAreaAggregatedPAreaPanel<CONCEPT_T,
     public GenericAreaAggregatedPAreaPanel(
             AbstractEntityList<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> aggregatedGroupList, 
             AbstractEntityList<CONCEPT_T> conceptList, 
-            BLUGenericPAreaTaxonomyConfiguration config) {
+            PAreaTaxonomyConfiguration config) {
         
         this.setLayout(new BorderLayout());
         

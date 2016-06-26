@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners;
 
-import SnomedShared.generic.GenericGroupContainer;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 
@@ -8,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
  *
  * @author Chris O
  */
-public class NavigateToContainerListener<CONTAINER_T extends GenericGroupContainer> extends EntitySelectionAdapter<CONTAINER_T> {
+public class NavigateToContainerListener extends EntitySelectionAdapter<PartitionedNode> {
 
     private final EnhancedGraphExplorationPanel gep;
 
@@ -17,10 +17,9 @@ public class NavigateToContainerListener<CONTAINER_T extends GenericGroupContain
     }
 
     @Override
-    public void entityDoubleClicked(CONTAINER_T container) {
-        PartitionedNodeEntry entry = (PartitionedNodeEntry)gep.getGraph().getContainerEntries().get(container.getId());
+    public void entityDoubleClicked(PartitionedNode container) {
+        PartitionedNodeEntry entry = gep.getGraph().getContainerEntries().get(container);
         
         gep.focusOnPoint(entry.getX(), entry.getY());
     }
-
 }

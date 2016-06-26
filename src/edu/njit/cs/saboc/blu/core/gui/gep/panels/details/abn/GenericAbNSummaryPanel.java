@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ public class GenericAbNSummaryPanel<ABN_T extends AbstractionNetwork> extends JP
     
     private final JEditorPane abnDetailsPane;
     
-    public GenericAbNSummaryPanel(BLUConfiguration config) {
+    public GenericAbNSummaryPanel(AbNConfiguration config) {
         
         abnNameLabel = new DetailsPanelLabel(config.getTextConfiguration().getAbNName());
         

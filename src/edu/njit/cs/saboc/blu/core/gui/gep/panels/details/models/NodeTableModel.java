@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 
 /**
  *
@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
  */
 public class NodeTableModel extends OAFAbstractTableModel<Node> {
     
-    public NodeTableModel(BLUConfiguration configuration) {
+    public NodeTableModel(AbNConfiguration configuration) {
         super(
                 new String[] {
                     configuration.getTextConfiguration().getNodeTypeName(false),

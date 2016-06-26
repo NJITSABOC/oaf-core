@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeCombinationsEntry;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,14 +11,14 @@ import java.util.Collections;
  */
 public class OverlappingCombinationsTableModel extends OAFAbstractTableModel<OverlappingNodeCombinationsEntry> {
     
-    private final BLUConfiguration configuration;
+    private final PartitionedAbNConfiguration configuration;
     
-    public OverlappingCombinationsTableModel(BLUConfiguration configuration) {
+    public OverlappingCombinationsTableModel(PartitionedAbNConfiguration configuration) {
         
         super(new String[] {
             String.format("Degree of Overlap"),
-            String.format("Other %s", configuration.getTextConfiguration().getGroupTypeName(true)),
-            String.format("# %s", configuration.getTextConfiguration().getDisjointGroupTypeName(true)),
+            String.format("Other %s", configuration.getTextConfiguration().getNodeTypeName(true)),
+            String.format("# %s", configuration.getTextConfiguration().getDisjointNodeTypeName(true)),
             String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true))
         });
 

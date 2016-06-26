@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
@@ -9,7 +9,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  * @author Chris O
  */
 public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
-    public ConceptTableModel(BLUConfiguration config) {
+    
+    public ConceptTableModel(AbNConfiguration config) {
         super(new String [] {
             config.getTextConfiguration().getConceptTypeName(true),
             "ID"
@@ -22,6 +23,6 @@ public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
 
     @Override
     protected Object[] createRow(Concept concept) {
-        return new Object [] {concept.getName(), concept.getID()};
+        return new Object [] {concept.getName(), concept.getIDAsString()};
     }
 }

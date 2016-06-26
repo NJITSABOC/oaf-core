@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,9 +14,9 @@ import java.util.Set;
  */
 public class ChildDisjointNodeTableModel extends ChildNodeTableModel {
     
-    private final BLUDisjointConfiguration configuration;
+    private final DisjointAbNConfiguration configuration;
     
-    public ChildDisjointNodeTableModel(BLUDisjointConfiguration configuration) {
+    public ChildDisjointNodeTableModel(DisjointAbNConfiguration configuration) {
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false), 
             String.format("Overlapping %s", configuration.getTextConfiguration().getOverlappingNodeTypeName(true)),

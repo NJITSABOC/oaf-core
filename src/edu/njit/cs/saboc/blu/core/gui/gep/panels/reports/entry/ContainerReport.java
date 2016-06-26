@@ -17,7 +17,12 @@ public class ContainerReport {
     private final Set<Concept> concepts;
     private final Set<Concept> overlappingConcepts;
 
-    public ContainerReport(PartitionedNode container, Set<SinglyRootedNode> groups, Set<Concept> concepts, Set<Concept> overlappingConcepts) {
+    public ContainerReport(
+            PartitionedNode container, 
+            Set<SinglyRootedNode> groups, 
+            Set<Concept> concepts, 
+            Set<Concept> overlappingConcepts) {
+        
         this.container = container;
         
         this.groups = groups;

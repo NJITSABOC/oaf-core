@@ -1,26 +1,25 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Chris O
  */
-public abstract class AbNReportPanel<CONCEPT_T, GROUP_T extends GenericConceptGroup, ABN_T extends AbstractionNetwork> extends JPanel {
+public abstract class AbNReportPanel extends JPanel {
     
-    protected final BLUConfiguration config;
+    protected final AbNConfiguration config;
     
-    public AbNReportPanel(BLUConfiguration config) {
+    public AbNReportPanel(AbNConfiguration config) {
         this.config = config;
     }
     
-    public BLUConfiguration getConfiguration() {
+    public AbNConfiguration getConfiguration() {
         return config;
     }
     
-    public abstract void displayAbNReport(ABN_T abn);
+    public abstract void displayAbNReport(AbstractionNetwork abn);
 }

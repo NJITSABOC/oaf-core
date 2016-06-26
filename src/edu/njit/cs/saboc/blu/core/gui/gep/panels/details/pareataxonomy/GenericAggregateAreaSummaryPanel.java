@@ -14,9 +14,9 @@ import java.util.HashSet;
 public class GenericAggregateAreaSummaryPanel<CONCEPT_T,
         REL_T,
         TAXONOMY_T extends PAreaTaxonomy,
-        AREA_T extends Area> extends GenericAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AREA_T> {
+        AREA_T extends Area> extends AreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AREA_T> {
     
-    public GenericAggregateAreaSummaryPanel(GenericRelationshipPanel<REL_T> relTable, BLUGenericPAreaTaxonomyConfiguration configuration) {  
+    public GenericAggregateAreaSummaryPanel(RelationshipPanel<REL_T> relTable, PAreaTaxonomyConfiguration configuration) {  
         super(relTable, configuration);
     }
 

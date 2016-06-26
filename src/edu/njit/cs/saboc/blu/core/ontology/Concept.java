@@ -14,6 +14,8 @@ public abstract class Concept<ID_T> {
     }
     
     public abstract String getName();
+   
+    public abstract String getIDAsString();
     
     public final ID_T getID() {
         return id;

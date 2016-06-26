@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.BLUGenericPAreaTaxonomyConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyConfiguration;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,9 +19,9 @@ import javax.swing.JLabel;
  */
 public class GenericNoRegionsPAreaGraphLayout extends BasePAreaTaxonomyLayout {
     
-    private final BLUGenericPAreaTaxonomyConfiguration config;
+    private final PAreaTaxonomyConfiguration config;
 
-    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, PAreaTaxonomy taxonomy, BLUGenericPAreaTaxonomyConfiguration config) {
+    public GenericNoRegionsPAreaGraphLayout(BluGraph graph, PAreaTaxonomy taxonomy, PAreaTaxonomyConfiguration config) {
         super(graph, taxonomy);
         
         this.config = config;

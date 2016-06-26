@@ -1,10 +1,11 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe;
 
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import java.awt.BorderLayout;
@@ -159,7 +160,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         goToRootBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if (tabbedPane.getSelectedIndex() == 0) {
-                    SinglyRootedNodeEntry entry = graph.getNodeEntries().get(graph.getAbstractionNetwork().getRootGroup().getId());
+                    SinglyRootedNodeEntry entry = graph.getNodeEntries().get((SinglyRootedNode)graph.getAbstractionNetwork().getNodeHierarchy().getRoot());
 
                     scroller.getViewport().setViewPosition(
                             new Point(entry.getAbsoluteX() - GenericInternalGraphFrame.this.getWidth() / 2, 0));
@@ -317,7 +318,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, BLUConfiguration gepConfiguration) {
+    protected void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, AbNConfiguration gepConfiguration) {
         this.graph = graph;
         
         gep.showLoading();
@@ -342,7 +343,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         });
     }
     
-    protected void initializeTabs(BluGraph graph, BLUConfiguration gepConfiguration) {
+    protected void initializeTabs(BluGraph graph, AbNConfiguration gepConfiguration) {
 
         String abnTypeName = gepConfiguration.getTextConfiguration().getAbNTypeName(false);
 

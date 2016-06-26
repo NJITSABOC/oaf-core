@@ -1,23 +1,21 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AggregateContainerReport<CONTAINER_T extends GenericGroupContainer, 
-        GROUP_T extends GenericConceptGroup,
-        AGGREGATEGROUP_T extends GenericConceptGroup & AggregateNode<CONCEPT_T, GROUP_T>,
-        CONCEPT_T> extends ContainerReport<CONTAINER_T, GROUP_T, CONCEPT_T> {
+public class AggregateContainerReport extends ContainerReport {
     
     public AggregateContainerReport(
-            CONTAINER_T container, 
-            HashSet<GROUP_T> groups, 
-            HashSet<CONCEPT_T> concepts) {
+            PartitionedNode container, 
+            Set<SinglyRootedNode> groups, 
+            Set<Concept> concepts) {
 
         super(container, groups, concepts, new HashSet<>());
     }

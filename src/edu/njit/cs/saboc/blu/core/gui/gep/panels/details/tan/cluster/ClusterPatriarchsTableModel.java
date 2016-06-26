@@ -1,26 +1,27 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.BLUGenericTANConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
  *
  * @author Chris O
  */
-public class ClusterPatriarchsTableModel<CONCEPT_T> extends OAFAbstractTableModel<CONCEPT_T> {
+public class ClusterPatriarchsTableModel extends OAFAbstractTableModel<Concept> {
 
-    private final BLUGenericTANConfiguration config;
+    private final TANConfiguration config;
     
-    public ClusterPatriarchsTableModel(BLUGenericTANConfiguration config) {
+    public ClusterPatriarchsTableModel(TANConfiguration config) {
         super(new String[]{"Tribe Patriarch Name"});
         
         this.config = config;
     }
     
     @Override
-    protected Object[] createRow(CONCEPT_T patriarch) {
+    protected Object[] createRow(Concept patriarch) {
         return new Object[] {
-            config.getTextConfiguration().getConceptName(patriarch)
+            patriarch.getName()
         };
     }
 }

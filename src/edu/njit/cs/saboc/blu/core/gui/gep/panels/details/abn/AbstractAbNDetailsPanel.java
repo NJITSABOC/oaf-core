@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -16,7 +16,7 @@ public class AbstractAbNDetailsPanel<ABN_T extends AbstractionNetwork> extends J
     
     private final JTabbedPane abnDetailsPane;
     
-    public AbstractAbNDetailsPanel(BLUConfiguration config) {
+    public AbstractAbNDetailsPanel(AbNConfiguration config) {
         
         this.abnSummaryPanel = new GenericAbNSummaryPanel<>(config);
         

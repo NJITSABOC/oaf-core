@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeCombinationsEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeEntry;
@@ -144,13 +144,13 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
     private final AbstractEntityList<OverlappingDetailsEntry> overlappingDetailsTable;
     private final AbstractEntityList<OverlappingNodeCombinationsEntry> overlappingCombinationsTable; 
     
-    private final BLUPartitionedConfiguration configuration;
+    private final PartitionedAbNConfiguration configuration;
     
     private final JSplitPane splitPane;
     
     private Optional<DisjointAbNOverlapMetrics> currentMetrics = Optional.empty();
 
-    public DisjointAbNMetricsPanel(BLUPartitionedConfiguration configuration) {
+    public DisjointAbNMetricsPanel(PartitionedAbNConfiguration configuration) {
 
         this.configuration = configuration;
         

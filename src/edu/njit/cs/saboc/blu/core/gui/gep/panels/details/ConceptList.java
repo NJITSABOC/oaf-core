@@ -1,7 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ConceptTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -12,10 +13,15 @@ import java.util.Optional;
  */
 public class ConceptList extends AbstractEntityList<Concept> {
     
-    private final BLUConfiguration config;
+    private final AbNConfiguration config;
     
-    public ConceptList(BLUConfiguration config) {
-        super(new ConceptTableModel(config));
+    public ConceptList(AbNConfiguration config) {
+        this(config, new ConceptTableModel(config));
+        
+    }
+    
+    public ConceptList(AbNConfiguration config, OAFAbstractTableModel<Concept> model) {
+        super(model);
         
         this.config = config;
     }

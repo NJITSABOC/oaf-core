@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 
 /**
  *
@@ -134,11 +137,11 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
             sortedAreas.add(levelAreas.get(c));
         }
         
-        layoutGroupContainers = sortedAreas;
+        this.setAreasInLayout(sortedAreas);
     }
     
     public void resetLayout() {
-         ArrayList<Area> areas = this.getLayoutAreas();
+         ArrayList<Area> areas = this.getAreasInLayout();
          
          ArrayList<ArrayList<Area>> areasByLevel = new ArrayList<>();
          
@@ -165,7 +168,7 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
              int maxHeight = 0;
              
              for(Area area : levelAreas) {
-                 AreaEntry entry = this.getContainerEntries().get(area.getId());
+                 AreaEntry entry = this.getAreaEntries().get(area);
                  
                  entry.setLocation(entry.getX(), y);
                  
@@ -177,8 +180,21 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
              y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
          }
     }
-
-    public ArrayList<Area> getLayoutAreas() {
-        return new ArrayList<>(); // TODO: Fix this....
+    
+    private void setAreasInLayout(ArrayList<Area> areas) {
+        super.setLayoutGroupContainers(new ArrayList<>(areas));
     }
+    
+    public ArrayList<Area> getAreasInLayout() {
+        return (ArrayList<Area>)(ArrayList<?>)super.getLayoutContainers();
+    }
+    
+    public Map<Area, AreaEntry> getAreaEntries() {
+        return (Map<Area, AreaEntry>)(Map<?,?>)super.getContainerEntries();
+    }
+    
+    public Map<PArea, PAreaEntry> getPAreaEntries() {
+        return (Map<PArea, PAreaEntry>)(Map<?,?>)super.getGroupEntries();
+    }
+
 }

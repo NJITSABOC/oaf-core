@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
 import java.awt.BorderLayout;
@@ -14,7 +14,7 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public abstract class NodeHierarchyPanel extends BaseNodeInformationPanel {
+public class NodeHierarchyPanel extends BaseNodeInformationPanel {
 
     private final JSplitPane splitPane;
     
@@ -22,15 +22,18 @@ public abstract class NodeHierarchyPanel extends BaseNodeInformationPanel {
     
     private final NodeList childNodeList;
         
-    private final BLUConfiguration config;
-
-    public NodeHierarchyPanel(BLUConfiguration config) {
-        
+    private final AbNConfiguration config;
+    
+    public NodeHierarchyPanel(AbNConfiguration config) {
+        this(config, new ParentNodeTableModel(config), new ChildNodeTableModel(config));
+    }
+    
+    public NodeHierarchyPanel(AbNConfiguration config, ParentNodeTableModel parentModel, ChildNodeTableModel childModel) {
         this.config = config;
 
         this.setLayout(new BorderLayout());
         
-        parentNodeList = new AbstractEntityList<ParentNodeDetails>(new ParentNodeTableModel(config)) {
+        parentNodeList = new AbstractEntityList<ParentNodeDetails>(parentModel) {
             public String getBorderText(Optional<ArrayList<ParentNodeDetails>> entries) {
                 String baseStr = String.format("Root's Parent %s %s", 
                         config.getTextConfiguration().getConceptTypeName(true), 
@@ -44,7 +47,7 @@ public abstract class NodeHierarchyPanel extends BaseNodeInformationPanel {
             }
         };
         
-        childNodeList = new NodeList(config) {
+        childNodeList = new NodeList(childModel, config) {
             public String getBorderText(Optional<ArrayList<Node>> entries) {
                 String baseStr = String.format("Child %s",
                         config.getTextConfiguration().getNodeTypeName(true));
@@ -69,17 +72,15 @@ public abstract class NodeHierarchyPanel extends BaseNodeInformationPanel {
 
         this.add(splitPane, BorderLayout.CENTER);
     }
-    
-    public BLUConfiguration getConfiguration() {
+
+
+    public AbNConfiguration getConfiguration() {
         return config;
     }
     
     @Override
     public void setContents(Node node) {
-        
-        
-        
-
+        // TODO: Set contents for parent and child lists...
     }
 
     @Override

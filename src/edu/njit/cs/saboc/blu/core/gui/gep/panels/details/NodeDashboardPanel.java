@@ -2,7 +2,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
@@ -23,11 +23,11 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
     
     private final NodeDetailsPanel nodeDetailsPanel;
     
-    private final BLUConfiguration configuration;
+    private final AbNConfiguration configuration;
 
     public NodeDashboardPanel(
             NodeDetailsPanel nodeDetailsPanel, 
-            BLUConfiguration configuration) {
+            AbNConfiguration configuration) {
         
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
@@ -45,7 +45,7 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
         this.add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public BLUConfiguration getConfiguration() {
+    public AbNConfiguration getConfiguration() {
         return configuration;
     }
     

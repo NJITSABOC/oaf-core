@@ -14,9 +14,9 @@ public class GenericAggregatePAreaSummaryPanel<CONCEPT_T,
         TAXONOMY_T extends PAreaTaxonomy, 
         PAREA_T extends PArea, 
         AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> 
-            extends GenericPAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AGGREGATEPAREA_T> {
+            extends PAreaSummaryPanel<CONCEPT_T, REL_T, TAXONOMY_T, AGGREGATEPAREA_T> {
     
-    public GenericAggregatePAreaSummaryPanel(GenericRelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, BLUGenericPAreaTaxonomyConfiguration configuration) {
+    public GenericAggregatePAreaSummaryPanel(RelationshipPanel<REL_T> relationshipPanel, TAXONOMY_T taxonomy, PAreaTaxonomyConfiguration configuration) {
         super(relationshipPanel, taxonomy, configuration);
     }
     

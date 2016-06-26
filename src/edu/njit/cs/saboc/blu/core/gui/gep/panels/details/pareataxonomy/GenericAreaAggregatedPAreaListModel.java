@@ -15,9 +15,9 @@ public abstract class GenericAreaAggregatedPAreaListModel<CONCEPT_T,
         PAREA_T extends PArea, 
         AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>> extends OAFAbstractTableModel<AggregatedNodeEntry<CONCEPT_T, PAREA_T, AGGREGATEPAREA_T>> {
 
-    protected final BLUGenericPAreaTaxonomyConfiguration configuration;
+    protected final PAreaTaxonomyConfiguration configuration;
     
-    public GenericAreaAggregatedPAreaListModel(BLUGenericPAreaTaxonomyConfiguration config) {
+    public GenericAreaAggregatedPAreaListModel(PAreaTaxonomyConfiguration config) {
         super(new String[] {
            "Aggregated Partial-area",
             "From Area",

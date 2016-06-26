@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -30,11 +31,14 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
 
     public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
             AbstractNodeOptionsPanel nodeOptionsMenuPanel, 
-            ConceptList nodeConceptList) {
+            ConceptList nodeConceptList,
+            AbNConfiguration config) {
         
         this.nodeSummaryPanel = nodeSummaryPanel;
         this.nodeOptionsMenuPanel = nodeOptionsMenuPanel;
         this.nodeConceptList = nodeConceptList;
+
+        getConceptList().addEntitySelectionListener(config.getUIConfiguration().getListenerConfiguration().getGroupConceptListListener());
 
         this.setLayout(new BorderLayout());
 
@@ -51,7 +55,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
         this.add(splitPane, BorderLayout.CENTER);
     }
     
-    protected AbstractEntityList<Concept> getConceptList() {
+    protected final AbstractEntityList<Concept> getConceptList() {
         return nodeConceptList;
     }
     

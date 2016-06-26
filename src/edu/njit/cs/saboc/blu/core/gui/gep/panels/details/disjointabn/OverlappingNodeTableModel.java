@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
@@ -10,9 +10,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
  */
 public class OverlappingNodeTableModel extends OAFAbstractTableModel<Node>  {
     
-    private final BLUDisjointConfiguration config;
+    private final DisjointAbNConfiguration config;
     
-    public OverlappingNodeTableModel(BLUDisjointConfiguration config) {
+    public OverlappingNodeTableModel(DisjointAbNConfiguration config) {
         super(new String[] { 
             String.format("Overlapping %s", config.getTextConfiguration().getOverlappingNodeTypeName(true)) 
         });

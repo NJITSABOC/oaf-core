@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,8 +35,8 @@ public abstract class PartitionedNode extends Node {
         return roots;
     }
 
-    public Set<? extends SinglyRootedNode> getInternalNodes() {
-        return internalNodes;
+    public Set<SinglyRootedNode> getInternalNodes() {
+        return (Set<SinglyRootedNode>)internalNodes;
     }
     
     public Set<Concept> getConcepts() {
@@ -51,7 +50,7 @@ public abstract class PartitionedNode extends Node {
     public boolean hasOverlappingConcepts() {
         Set<Concept> processedConcepts = new HashSet<>();
         
-        Set<? extends SinglyRootedNode> nodes = this.getInternalNodes();
+        Set<SinglyRootedNode> nodes = this.getInternalNodes();
         
         for(SinglyRootedNode node : nodes) {
             Set<Concept> pareaConcepts = node.getConcepts();
@@ -67,8 +66,20 @@ public abstract class PartitionedNode extends Node {
         
         return false;
     }
+    
+    public Set<Concept> getOverlappingConcepts() {
+        Set<OverlappingConceptDetails> details = this.getOverlappingConceptDetails();
         
-    public Set<OverlappingConcept> getOverlappingConcepts() {
+        Set<Concept> overlappingConcepts = new HashSet<>();
+        
+        details.forEach( (detail) -> {
+            overlappingConcepts.add(detail.getConcept());
+        });
+        
+        return overlappingConcepts;
+    }
+        
+    public Set<OverlappingConceptDetails> getOverlappingConceptDetails() {
 
         HashMap<Concept, Set<SinglyRootedNode>> conceptNodes = new HashMap<>();
 
@@ -85,11 +96,11 @@ public abstract class PartitionedNode extends Node {
             }
         }
 
-        HashSet<OverlappingConcept> overlappingResults = new HashSet<>();
+        HashSet<OverlappingConceptDetails> overlappingResults = new HashSet<>();
         
         conceptNodes.forEach( (Concept c, Set<SinglyRootedNode> overlappingNodes) -> {
             if(overlappingNodes.size() > 1) {
-                overlappingResults.add(new OverlappingConcept(c, overlappingNodes));
+                overlappingResults.add(new OverlappingConceptDetails(c, overlappingNodes));
             }
         });
         

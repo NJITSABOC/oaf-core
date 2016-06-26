@@ -2,7 +2,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUDisjointConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeList;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -13,9 +13,9 @@ import java.util.Optional;
  */
 public class OverlappingNodeList extends NodeList {
 
-    private final BLUDisjointConfiguration config;
+    private final DisjointAbNConfiguration config;
     
-    public OverlappingNodeList(BLUDisjointConfiguration config) {
+    public OverlappingNodeList(DisjointAbNConfiguration config) {
         super(new OverlappingNodeTableModel(config), config);
         
         this.config = config;

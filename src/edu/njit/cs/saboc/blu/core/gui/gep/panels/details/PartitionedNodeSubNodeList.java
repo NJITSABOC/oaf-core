@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionAdapter;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
@@ -21,9 +21,9 @@ public class PartitionedNodeSubNodeList extends BaseNodeInformationPanel {
     
     private final ConceptList conceptList;
     
-    private final BLUPartitionedConfiguration configuration;
+    private final PartitionedAbNConfiguration configuration;
     
-    public PartitionedNodeSubNodeList(BLUPartitionedConfiguration configuration) {
+    public PartitionedNodeSubNodeList(PartitionedAbNConfiguration configuration) {
         
         this.configuration = configuration;
         

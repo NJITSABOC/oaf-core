@@ -1,29 +1,31 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry;
 
-import SnomedShared.generic.GenericConceptGroup;
-import SnomedShared.generic.GenericGroupContainer;
-import java.util.HashSet;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AbNLevelReport<CONCEPT_T, GROUP_T extends GenericConceptGroup, CONTAINER_T extends GenericGroupContainer> {
+public class AbNLevelReport {
     
     private final int level;
     
-    private final HashSet<CONCEPT_T> conceptsAtLevel;
+    private final Set<Concept> conceptsAtLevel;
     
-    private final HashSet<CONCEPT_T> overlappingConceptsAtLevel;
+    private final Set<Concept> overlappingConceptsAtLevel;
     
-    private final HashSet<GROUP_T> groupsAtLevel;
+    private final Set<SinglyRootedNode> groupsAtLevel;
     
-    private final HashSet<CONTAINER_T> containersAtLevel;
+    private final Set<PartitionedNode> containersAtLevel;
 
-    public AbNLevelReport(int level, HashSet<CONCEPT_T> conceptsAtLevel, 
-            HashSet<CONCEPT_T> overlappingConceptsAtLevel, 
-            HashSet<GROUP_T> groupsAtLevel, 
-            HashSet<CONTAINER_T> containersAtLevel) {
+    public AbNLevelReport(int level, 
+            Set<Concept> conceptsAtLevel, 
+            Set<Concept> overlappingConceptsAtLevel, 
+            Set<SinglyRootedNode> groupsAtLevel, 
+            Set<PartitionedNode> containersAtLevel) {
         
         this.level = level;
         
@@ -40,19 +42,19 @@ public class AbNLevelReport<CONCEPT_T, GROUP_T extends GenericConceptGroup, CONT
         return level;
     }
 
-    public HashSet<CONCEPT_T> getConceptsAtLevel() {
+    public Set<Concept> getConceptsAtLevel() {
         return conceptsAtLevel;
     }
 
-    public HashSet<CONCEPT_T> getOverlappingConceptsAtLevel() {
+    public Set<Concept> getOverlappingConceptsAtLevel() {
         return overlappingConceptsAtLevel;
     }
 
-    public HashSet<GROUP_T> getGroupsAtLevel() {
+    public Set<SinglyRootedNode> getGroupsAtLevel() {
         return groupsAtLevel;
     }
 
-    public HashSet<CONTAINER_T> getContainersAtLevel() {
+    public Set<PartitionedNode> getContainersAtLevel() {
         return containersAtLevel;
     }
 }

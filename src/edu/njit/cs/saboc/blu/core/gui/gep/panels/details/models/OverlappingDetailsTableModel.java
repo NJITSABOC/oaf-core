@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingDetailsEntry;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -14,13 +14,13 @@ import java.util.Set;
  */
 public class OverlappingDetailsTableModel extends OAFAbstractTableModel<OverlappingDetailsEntry> {
     
-    private final BLUConfiguration configuration;
+    private final AbNConfiguration configuration;
     
-    public OverlappingDetailsTableModel(BLUPartitionedConfiguration configuration) {
+    public OverlappingDetailsTableModel(PartitionedAbNConfiguration configuration) {
         
         super(new String[] {
             String.format("Other %s", configuration.getTextConfiguration().getNodeTypeName(false)),
-            String.format("# Common %s", configuration.getTextConfiguration().getDisjointGroupTypeName(true),
+            String.format("# Common %s", configuration.getTextConfiguration().getDisjointNodeTypeName(true),
             String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true)))
         });
 

@@ -26,13 +26,13 @@ public abstract class BluGraphLayout {
 
     private final BluGraph graph;
 
-    private final ArrayList<PartitionedNodeEntry> layoutGroupContainers = new ArrayList<>();
+    private final ArrayList<PartitionedNode> layoutContainers = new ArrayList<>();
 
     private final ArrayList<GraphLevel> levels = new ArrayList<>();
 
     private ArrayList<GraphLane>[][] columns = new ArrayList[500][50];
 
-    private final Map<Integer, PartitionedNodeEntry> containerEntries = new HashMap<>();
+    private final Map<PartitionedNode, PartitionedNodeEntry> containerEntries = new HashMap<>();
 
     private final Map<SinglyRootedNode, SinglyRootedNodeEntry> groupEntries = new HashMap<>();
 
@@ -40,9 +40,6 @@ public abstract class BluGraphLayout {
         this.graph = graph;
     }
 
-    protected abstract void doLayout();
-    
-    public abstract JLabel createPartitionLabel(PartitionedNode partition, int width);
     
     public ArrayList<GraphLevel> getGraphLevels() {
         return levels;
@@ -56,7 +53,16 @@ public abstract class BluGraphLayout {
         return levels;
     }
     
-    public Map<Integer, PartitionedNodeEntry> getContainerEntries() {
+    protected void setLayoutGroupContainers(ArrayList<PartitionedNode> containers) {
+        layoutContainers.clear();
+        layoutContainers.addAll(containers);
+    }
+    
+    public ArrayList<PartitionedNode> getLayoutContainers() {
+        return layoutContainers;
+    }
+    
+    public Map<PartitionedNode, PartitionedNodeEntry> getContainerEntries() {
         return containerEntries;
     }
     
@@ -98,7 +104,7 @@ public abstract class BluGraphLayout {
     protected ArrayList<GraphLane> generateUpperRowLanes(int y, int height, int laneHeight, PartitionedNodeEntry parent) {
         int spaceUsed = 0;
 
-        ArrayList<GraphLane> result = new ArrayList<GraphLane>();
+        ArrayList<GraphLane> result = new ArrayList<>();
 
         while (spaceUsed + laneHeight <= height) {
             result.add(new GraphLane(-1, y, laneHeight, parent));
@@ -365,7 +371,7 @@ public abstract class BluGraphLayout {
      * @param bump The amount in pixels to move everything down
      */
     private void bumpDownContainersAt(int level, int bump) {
-        ArrayList<JPanel> aBelow = new ArrayList<JPanel>();
+        ArrayList<JPanel> aBelow = new ArrayList<>();
 
         for (int n = level; n < levels.size(); n++) {
             GraphLevel l = levels.get(n);
@@ -626,6 +632,10 @@ public abstract class BluGraphLayout {
     protected JLabel createFittedPartitionLabel(String[] entries, int boundingWidth, FontMetrics fontMetrics) {
        return GraphLayoutUtilities.createFittedPartitionLabel(entries, boundingWidth, fontMetrics);
     }
+    
+    protected abstract void doLayout();
+    
+    public abstract JLabel createPartitionLabel(PartitionedNode partition, int width);
     
     public void resetLayout() {
         

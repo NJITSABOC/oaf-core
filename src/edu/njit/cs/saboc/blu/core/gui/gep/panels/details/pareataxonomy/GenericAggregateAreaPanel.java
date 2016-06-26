@@ -18,7 +18,7 @@ public class GenericAggregateAreaPanel<AREA_T extends Area,
         AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>, 
         CONCEPT_T,
         ENTRY_T,
-        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration>
+        CONFIG_T extends PAreaTaxonomyConfiguration>
             extends PartitionedNodePanel<AREA_T, AGGREGATEPAREA_T, CONCEPT_T, ENTRY_T, CONFIG_T> {
     
     private final GenericAreaAggregatedPAreaPanel<CONCEPT_T, AREA_T, PAREA_T, AGGREGATEPAREA_T> aggregatedPAreaPanel;

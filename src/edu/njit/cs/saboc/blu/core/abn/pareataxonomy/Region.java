@@ -22,7 +22,7 @@ public abstract class Region extends SimilarityNode {
     }
 
     public Set<PArea> getPAreas() { 
-        return (Set<PArea>)super.getInternalNodes();
+        return (Set<PArea>)(Set<?>)super.getInternalNodes();
     }
     
     public boolean isPAreaInRegion(PArea parea) {        

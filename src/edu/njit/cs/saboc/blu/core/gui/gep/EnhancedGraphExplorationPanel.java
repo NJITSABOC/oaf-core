@@ -7,8 +7,8 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.ui.BLUPartitionedAbNUIConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
@@ -155,7 +155,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     
     private AbNPainter painter;
     
-    private BLUConfiguration configuration;
+    private AbNConfiguration configuration;
     
     public EnhancedGraphExplorationPanel() {
         intitializeFixedUIComponents();
@@ -168,7 +168,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
         drawThread.start();
     }
     
-    public void setContents(final BluGraph graph, AbNPainter painter, BLUConfiguration configuration) {
+    public void setContents(final BluGraph graph, AbNPainter painter, AbNConfiguration configuration) {
         updateTimer.stop();
         
         this.gepState = GEPState.Initializing;
@@ -206,7 +206,7 @@ public class EnhancedGraphExplorationPanel extends JPanel {
     private void initializeContentComponents(
             BluGraph graph, 
             AbNPainter painter, 
-            BLUConfiguration configuration) {
+            AbNConfiguration configuration) {
         
         this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
         
@@ -220,8 +220,8 @@ public class EnhancedGraphExplorationPanel extends JPanel {
             this.groupDetailsPanel = Optional.empty();
         }
 
-        if (configuration.getUIConfiguration() instanceof BLUPartitionedAbNUIConfiguration) {
-            BLUPartitionedAbNUIConfiguration config = (BLUPartitionedAbNUIConfiguration) configuration.getUIConfiguration();
+        if (configuration.getUIConfiguration() instanceof PartitionedAbNUIConfiguration) {
+            PartitionedAbNUIConfiguration config = (PartitionedAbNUIConfiguration) configuration.getUIConfiguration();
 
             if (config.hasContainerDetailsPanel()) {
                 containerDetailsPanel = Optional.of(config.createContainerDetailsPanel());

@@ -14,7 +14,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 public class GenericAggregatePAreaPanel <CONCEPT_T, AGGREGATEPAREA_T extends PArea & AggregateNode<CONCEPT_T, PAREA_T>, 
         PAREA_T extends PArea, 
         HIERARCHY_T extends SingleRootedHierarchy<CONCEPT_T>,
-        CONFIG_T extends BLUGenericPAreaTaxonomyConfiguration> extends GenericPAreaPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T, CONFIG_T> { 
+        CONFIG_T extends PAreaTaxonomyConfiguration> extends GenericPAreaPanel<CONCEPT_T, AGGREGATEPAREA_T, HIERARCHY_T, CONFIG_T> { 
     
     protected AggregatedNodesPanel<AGGREGATEPAREA_T, PAREA_T, CONCEPT_T> aggregateDetailsPanel;
     

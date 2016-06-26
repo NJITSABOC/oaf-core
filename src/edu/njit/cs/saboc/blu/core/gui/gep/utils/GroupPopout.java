@@ -1,11 +1,11 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils;
 
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.TextDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
-import SnomedShared.generic.GenericConceptGroup;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,16 +32,16 @@ public class GroupPopout {
     
     private BluGraph graph;
 
-    public GroupPopout(BluGraph graph, SinglyRootedNodeEntry groupEntry, BLUConfiguration config) {
+    public GroupPopout(BluGraph graph, SinglyRootedNodeEntry nodeEntry, AbNConfiguration config) {
         this.graph = graph;
         
-        this.groupEntry = groupEntry;
-        this.bgColor = groupEntry.getBackground();
+        this.groupEntry = nodeEntry;
+        this.bgColor = nodeEntry.getBackground();
         
-        GenericConceptGroup group = groupEntry.getGroup();
+        SinglyRootedNode group = nodeEntry.getNode();
 
-        originalBounds = new Rectangle(groupEntry.getAbsoluteX(), groupEntry.getAbsoluteY(),
-                groupEntry.getWidth(), groupEntry.getHeight());
+        originalBounds = new Rectangle(nodeEntry.getAbsoluteX(), nodeEntry.getAbsoluteY(),
+                nodeEntry.getWidth(), nodeEntry.getHeight());
 
         bounds = (Rectangle)originalBounds.clone();
 

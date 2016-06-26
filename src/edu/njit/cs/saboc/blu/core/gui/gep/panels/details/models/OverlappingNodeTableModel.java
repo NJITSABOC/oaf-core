@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 
 /**
  *
@@ -9,9 +9,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
  */
 public class OverlappingNodeTableModel extends OAFAbstractTableModel<OverlappingNodeEntry> {
     
-    private final BLUConfiguration configuration;
+    private final AbNConfiguration configuration;
     
-    public OverlappingNodeTableModel(BLUConfiguration configuration) {
+    public OverlappingNodeTableModel(AbNConfiguration configuration) {
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false),
             String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true)),

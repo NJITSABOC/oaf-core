@@ -1,7 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedConfiguration;
+import edu.njit.cs.saboc.blu.core.abn.node.OverlappingConceptDetails;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
+import java.util.Set;
 
 /**
  *
@@ -10,20 +13,31 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUPartitionedCon
 public class PartitionedNodePanel extends NodeDashboardPanel {
 
     private final PartitionedNodeSubNodeList groupListPanel;
+    
+    private final DisjointAbNMetricsPanel disjointMetricsPanel;
+    
+    private final int disjointMetricsTabIndex;
 
     public PartitionedNodePanel(
             NodeDetailsPanel containerDetailsPanel, 
-            BLUPartitionedConfiguration configuration) {
+            PartitionedAbNConfiguration configuration) {
         
         super(containerDetailsPanel, configuration);
         
         this.groupListPanel = new PartitionedNodeSubNodeList(configuration);
         
-        String tabTitle = String.format("%s's %s", 
+        String subnodeListTabTitle = String.format("%s's %s", 
                 configuration.getTextConfiguration().getContainerTypeName(false), 
                 configuration.getTextConfiguration().getNodeTypeName(true));
         
-        super.addGroupDetailsTab(groupListPanel, tabTitle);
+        super.addGroupDetailsTab(groupListPanel, subnodeListTabTitle);
+        
+        this.disjointMetricsPanel = new DisjointAbNMetricsPanel(configuration);
+        
+        String overlappingTabTitle = String.format("Overlapping %s Metrics", 
+                configuration.getTextConfiguration().getNodeTypeName(false));
+                
+        this.disjointMetricsTabIndex = super.addGroupDetailsTab(disjointMetricsPanel, overlappingTabTitle);
     }
 
     @Override
@@ -31,12 +45,28 @@ public class PartitionedNodePanel extends NodeDashboardPanel {
         super.clearContents();
         
         groupListPanel.clearContents();
+        disjointMetricsPanel.clearContents();
+        
+        this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);
     }
 
     @Override
     public void setContents(Node node) {
         super.setContents(node);
         
+        Area area = (Area)node;
+        
         groupListPanel.setContents(node);
+        disjointMetricsPanel.setContents(node);
+        
+        Set<OverlappingConceptDetails> overlaps = area.getOverlappingConceptDetails();
+        
+        if (!overlaps.isEmpty()) {
+            disjointMetricsPanel.setContents(area);
+
+            this.enableGroupDetailsTabAt(disjointMetricsTabIndex, true);
+        } else {
+            this.enableGroupDetailsTabAt(disjointMetricsTabIndex, false);
+        }
     }
 }

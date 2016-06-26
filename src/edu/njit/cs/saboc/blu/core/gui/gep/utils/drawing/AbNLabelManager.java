@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -10,6 +11,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.JLabel;
 
 /**
@@ -38,27 +40,24 @@ public class AbNLabelManager {
         }
     }
 
-    private final HashMap<JLabel, BufferedImage> labelImages = new HashMap<JLabel, BufferedImage>();
+    private final HashMap<JLabel, BufferedImage> labelImages = new HashMap<>();
     
-    private final HashMap<Integer, GroupLabelPositionEntry> groupLabelMap = new HashMap<Integer, GroupLabelPositionEntry>();
+    private final HashMap<SinglyRootedNode, GroupLabelPositionEntry> groupLabelMap = new HashMap<>();
         
-    private final ArrayList<BufferedImage> labelSheets = new ArrayList<BufferedImage>();
-    
-    
+    private final ArrayList<BufferedImage> labelSheets = new ArrayList<>();
+
     private final SinglyRootedNodeLabelCreator labelCreator;
     
     public AbNLabelManager(AbstractionNetwork abn, SinglyRootedNodeLabelCreator labelCreator) {
         this.labelCreator = labelCreator;
         
-        HashMap<Integer, ? extends GenericConceptGroup> groups = abn.getGroups();
-
-        ArrayList<GenericConceptGroup> groupList = new ArrayList<GenericConceptGroup>(groups.values());
+        ArrayList<SinglyRootedNode> groupList = new ArrayList<>(abn.getNodes());
                 
         createGroupLabelSheets(groupList);
     }
     
-    private final void createGroupLabelSheets(ArrayList<GenericConceptGroup> groups) {
-        int pendingCount = groups.size();
+    private final void createGroupLabelSheets(ArrayList<SinglyRootedNode> nodes) {
+        int pendingCount = nodes.size();
         
         int totalProcessed = 0;
         
@@ -89,25 +88,25 @@ public class AbNLabelManager {
 
             g.setFont(new Font("SansSerif", Font.PLAIN, 14));
             
-            ArrayList<GenericConceptGroup> processedGroups = new ArrayList<GenericConceptGroup>();
+            ArrayList<SinglyRootedNode> processedGroups = new ArrayList<>();
             
             for (int y = 0; y < rows; y++) {
                 for (int x = 0; x < cols; x++) {
-                    GenericConceptGroup group = groups.get(totalProcessed);
+                    SinglyRootedNode group = nodes.get(totalProcessed);
 
-                    groupLabelMap.put(group.getId(), new GroupLabelPositionEntry(x, y));
+                    groupLabelMap.put(group, new GroupLabelPositionEntry(x, y));
 
                     drawGroupLabelAtPosition(x * SinglyRootedNodeEntry.ENTRY_WIDTH, y * SinglyRootedNodeEntry.ENTRY_HEIGHT, group, g);
 
                     totalProcessed++;
                     processedGroups.add(group);
 
-                    if (totalProcessed >= groups.size()) {
+                    if (totalProcessed >= nodes.size()) {
                         break;
                     }
                 }
 
-                if (totalProcessed >= groups.size()) {
+                if (totalProcessed >= nodes.size()) {
                     break;
                 }
             }
@@ -118,8 +117,8 @@ public class AbNLabelManager {
             
             labelSheets.add(mipmap);
             
-            for(GenericConceptGroup group : processedGroups) {
-                groupLabelMap.get(group.getId()).setLabelSheet(mipmap);
+            for(SinglyRootedNode group : processedGroups) {
+                groupLabelMap.get(group).setLabelSheet(mipmap);
             }
         }
     }
@@ -167,8 +166,8 @@ public class AbNLabelManager {
         return mipmap;
     }
 
-    public void drawGroupLabel(GenericConceptGroup group, double scale, Graphics2D g, int x, int y) {
-        GroupLabelPositionEntry entry = groupLabelMap.get(group.getId());
+    public void drawGroupLabel(SinglyRootedNode group, double scale, Graphics2D g, int x, int y) {
+        GroupLabelPositionEntry entry = groupLabelMap.get(group);
         
         if(entry == null) {
             return;
@@ -202,7 +201,7 @@ public class AbNLabelManager {
         g.drawImage(entry.labelSheet, x, y, x + (int) (labelWidth * scale), y + (int) (labelHeight * scale), srcX, srcY, srcX + srcWidth, srcY + srcHeight, null);
     }
     
-    private void drawGroupLabelAtPosition(int xPos, int yPos, GenericConceptGroup group, Graphics2D g) {
+    private void drawGroupLabelAtPosition(int xPos, int yPos, SinglyRootedNode group, Graphics2D g) {
 
         String rootName = labelCreator.getRootNameStr(group);
         String conceptCountLabel = labelCreator.getCountStr(group);

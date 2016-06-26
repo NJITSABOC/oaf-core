@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.BLUConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.NodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import java.util.ArrayList;
@@ -13,13 +13,13 @@ import java.util.Optional;
  */
 public class NodeList extends AbstractEntityList<Node> {
     
-    private final BLUConfiguration config;
+    private final AbNConfiguration config;
     
-    public NodeList(BLUConfiguration config) {
+    public NodeList(AbNConfiguration config) {
         this(new NodeTableModel(config), config);
     }
     
-    public NodeList(OAFAbstractTableModel<Node> model, BLUConfiguration config) {
+    public NodeList(OAFAbstractTableModel<Node> model, AbNConfiguration config) {
         super(model);
         
         this.config = config;

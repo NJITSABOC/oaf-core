@@ -168,7 +168,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.add(optionsPanel, BorderLayout.SOUTH);
         */
         
-        setBorderText(getBorderText(Optional.empty()));
+        //setBorderText(getBorderText(Optional.empty()));
     }
     
     public OAFAbstractTableModel<T> getTableModel() {

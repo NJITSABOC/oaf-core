@@ -1,11 +1,9 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyTextConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyUIConfiguration;
 
 /**
  *
@@ -13,12 +11,20 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  */
 public abstract class PAreaTaxonomyConfiguration extends PartitionedAbNConfiguration {
     
-    public PAreaTaxonomyConfiguration(PAreaTaxonomy taxonomy, PAreaTaxonomyUIConfiguration uiConfig, PAreaTaxonomyTextConfiguration textConfig) {
-        super(taxonomy, uiConfig, textConfig);
+    public PAreaTaxonomyConfiguration(PAreaTaxonomy taxonomy) {
+        super(taxonomy);
     }
     
     public PAreaTaxonomy getPAreaTaxonomy() {
         return (PAreaTaxonomy)super.getAbstractionNetwork();
+    }
+    
+    public void setUIConfiguration(PAreaTaxonomyUIConfiguration uiConfig) {
+        super.setUIConfiguration(uiConfig);
+    }
+    
+    public void setTextConfiguration(PAreaTaxonomyTextConfiguration textConfig) {
+        super.setTextConfiguration(textConfig);
     }
     
     public PAreaTaxonomyUIConfiguration getUIConfiguration() {

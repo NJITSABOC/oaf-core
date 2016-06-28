@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -41,7 +41,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
         this.config = config;
     }
 
-    public void doLayout(boolean showConceptCounts) {
+    public void doLayout() {
         super.doLayout();
         
         BluGraph graph = super.getGraph();

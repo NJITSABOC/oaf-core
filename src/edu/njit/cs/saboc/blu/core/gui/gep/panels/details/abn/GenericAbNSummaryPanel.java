@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;

@@ -8,17 +8,18 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
  */
 public class AbNConfiguration {
     private final AbstractionNetwork abstractionNetwork;
-    private final AbNUIConfiguration uiConfiguration;
-    private final AbNTextConfiguration textConfiguration;
+    private AbNUIConfiguration uiConfiguration;
+    private AbNTextConfiguration textConfiguration;
     
-    public AbNConfiguration(
-            AbstractionNetwork abstractionNetwork,
-            AbNUIConfiguration uiConfiguration, 
-            AbNTextConfiguration textConfiguration) {
-        
+    public AbNConfiguration(AbstractionNetwork abstractionNetwork) {
         this.abstractionNetwork = abstractionNetwork;
-        
+    }
+    
+    public void setUIConfiguration(AbNUIConfiguration uiConfiguration) {
         this.uiConfiguration = uiConfiguration;
+    }
+
+    public void setTextConfiguration(AbNTextConfiguration textConfiguration) {
         this.textConfiguration = textConfiguration;
     }
     

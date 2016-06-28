@@ -50,11 +50,15 @@ public abstract class InheritableProperty<ID_T, TYPE_T> {
     public boolean equals(Object o) {
         if(o instanceof InheritableProperty) {
             InheritableProperty other = (InheritableProperty)o;
-            
+
             return this.id.equals(other.id);
         }
         
         return false;
+    }
+    
+    public int hashCode() {
+        return id.hashCode();
     }
     
     /**
@@ -68,4 +72,6 @@ public abstract class InheritableProperty<ID_T, TYPE_T> {
     }
     
     public abstract String getName();
+    
+    public abstract String getIDAsString();
 }

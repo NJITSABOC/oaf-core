@@ -17,7 +17,7 @@ import java.util.Stack;
  *
  * @author Chris O
  */
-public abstract class TargetAbstractionNetworkGenerator {
+public class TargetAbstractionNetworkGenerator {
     
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,

@@ -8,16 +8,24 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
  */
 public class DisjointAbNConfiguration extends AbNConfiguration {
 
-    public DisjointAbNConfiguration(
-            DisjointAbstractionNetwork abstractionNetwork,
-            AbNUIConfiguration uiConfiguration,
-            DisjointAbNTextConfiguration textConfiguration) {
-
-        super(abstractionNetwork, uiConfiguration, textConfiguration);
+    public DisjointAbNConfiguration(DisjointAbstractionNetwork disjointAbN) {
+        super(disjointAbN);
+    }
+    
+    public void setUIConfiguration(DisjointAbNUIConfiguration config) {
+        super.setUIConfiguration(config);
+    }
+    
+    public void setTextConfiguration(DisjointAbNTextConfiguration config) {
+        super.setTextConfiguration(config);
     }
     
     public DisjointAbstractionNetwork getAbstractionNetwork() {
         return (DisjointAbstractionNetwork)super.getAbstractionNetwork();
+    }
+    
+    public DisjointAbNUIConfiguration getUIConfiguration() {
+        return (DisjointAbNUIConfiguration) super.getUIConfiguration();
     }
 
     @Override

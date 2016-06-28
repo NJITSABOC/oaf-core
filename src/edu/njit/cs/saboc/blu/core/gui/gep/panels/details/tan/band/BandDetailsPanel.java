@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 
@@ -15,7 +16,8 @@ public class BandDetailsPanel extends NodeDetailsPanel {
 
         super(new BandSummaryPanel(config), 
                 config.getUIConfiguration().getPartitionedNodeOptionsPanel(), 
-                new ConceptList(config));
+                new ConceptList(config),
+                config);
         
         this.config = config;
     }

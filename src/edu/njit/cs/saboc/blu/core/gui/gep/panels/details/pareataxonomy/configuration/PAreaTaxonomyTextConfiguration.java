@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 
 /**
@@ -7,7 +8,29 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTex
  * @author Chris O
  */
 public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTextConfiguration {
+    
+    private final PAreaTaxonomy taxonomy;
+    
+    public PAreaTaxonomyTextConfiguration(PAreaTaxonomy taxonomy) {
+        this.taxonomy = taxonomy;
+    }
 
+    @Override
+    public String getAbNName() {
+        return "Partial-area Taxonomy";
+    }
+
+    @Override
+    public String getAbNSummary() {
+       return "*** PARTIAL-AREA TAXONOMY SUMMARY TEXT ***";
+    }
+    
+    @Override
+    public String getAbNHelpDescription() {
+        return "*** PARTIAL-AREA HELP DESCRIPTION ***";
+    }
+
+    
     @Override
     public String getAbNTypeName(boolean plural) {
         if(plural) {

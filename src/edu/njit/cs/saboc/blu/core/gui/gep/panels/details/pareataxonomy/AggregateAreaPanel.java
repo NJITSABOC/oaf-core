@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.PartitionedNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ContainerAggregatedNodePanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import java.util.Set;
 
 /**

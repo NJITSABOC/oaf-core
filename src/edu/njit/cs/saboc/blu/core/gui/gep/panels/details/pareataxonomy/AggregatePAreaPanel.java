@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.SinglyRootedNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ChildAggregateNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ParentAggregateNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 
 /**
  *

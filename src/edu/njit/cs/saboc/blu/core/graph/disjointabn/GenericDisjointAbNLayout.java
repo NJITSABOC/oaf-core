@@ -123,7 +123,8 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
 
             EmptyContainerEntry containerEntry = createContainerPanel(x, y, width, height, containerX, currentLevel);
 
-            getContainerEntries().put(areaId++, containerEntry);
+            // TODO: Do we still need this?
+            //getContainerEntries().put(areaId++, containerEntry);
 
             // Add a data representation for this new area to the current area Level obj.
             currentLevel.addContainerEntry(containerEntry);

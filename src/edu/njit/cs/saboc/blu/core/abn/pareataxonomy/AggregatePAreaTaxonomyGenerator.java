@@ -26,7 +26,7 @@ public class AggregatePAreaTaxonomyGenerator {
                         min);
 
         PAreaTaxonomy reducedTaxonomy = generator.createTaxonomyFromPAreas((NodeHierarchy<PArea>)(NodeHierarchy<?>)reducedPAreaHierarchy);
-
+       
         return reducedTaxonomy;
     }
     

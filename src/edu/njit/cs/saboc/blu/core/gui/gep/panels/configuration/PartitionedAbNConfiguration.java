@@ -9,15 +9,19 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
  */
 public abstract class PartitionedAbNConfiguration extends AbNConfiguration {
     
-    public PartitionedAbNConfiguration(
-            PartitionedAbstractionNetwork abstractionNetwork,
-            PartitionedAbNUIConfiguration uiConfiguration, 
-            PartitionedAbNTextConfiguration textConfiguration) {
-        
-        super(abstractionNetwork, uiConfiguration, textConfiguration);
+    public PartitionedAbNConfiguration(PartitionedAbstractionNetwork abstractionNetwork) {
+        super(abstractionNetwork);
     }
     
     public abstract int getPartitionedNodeLevel(PartitionedNode node);
+    
+    public void setUIConfiguration(PartitionedAbNUIConfiguration config) {
+        super.setUIConfiguration(config);
+    }
+    
+    public void setTextConfiguration(PartitionedAbNTextConfiguration config) {
+        super.setTextConfiguration(config);
+    }
 
     public PartitionedAbstractionNetwork getAbstractionNetwork() {
         return (PartitionedAbstractionNetwork)super.getAbstractionNetwork();

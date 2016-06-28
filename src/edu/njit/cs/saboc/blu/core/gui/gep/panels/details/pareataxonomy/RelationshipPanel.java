@@ -17,6 +17,8 @@ public class RelationshipPanel extends AbstractEntityList<InheritableProperty>  
 
     @Override
     protected String getBorderText(Optional<ArrayList<InheritableProperty>> entities) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO: Set the correct name (rels/roles/properties)
+        
+        return "Relationships";
     }
 }

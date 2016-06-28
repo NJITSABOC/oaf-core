@@ -12,8 +12,16 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNCon
  */
 public class TANConfiguration extends PartitionedAbNConfiguration {
     
-    public TANConfiguration(TribalAbstractionNetwork tan, TANUIConfiguration uiConfig, TANTextConfiguration textConfig) {
-        super(tan, uiConfig, textConfig);
+    public TANConfiguration(TribalAbstractionNetwork tan) {
+        super(tan);
+    }
+    
+    public void setUIConfiguration(TANUIConfiguration uiConfig) {
+        super.setUIConfiguration(uiConfig);
+    }
+    
+    public void setTextConfiguration(TANTextConfiguration textConfig) {
+        super.setTextConfiguration(textConfig);
     }
     
     public TribalAbstractionNetwork getAbstractionNetwork() {

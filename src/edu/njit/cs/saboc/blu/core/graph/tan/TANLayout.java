@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
@@ -13,7 +13,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JLabel;
 
@@ -21,9 +20,9 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
+public class TANLayout extends BaseTribalAbstractionNetworkLayout {
     
-    public TANLayout(BluGraph graph, TribalAbstractionNetwork tan, TANConfiguration config) {
+    public TANLayout(BluGraph graph, ClusterTribalAbstractionNetwork tan, TANConfiguration config) {
         super(graph, tan, config);
     }
     
@@ -58,18 +57,26 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
             background[c] = background[c].brighter();
         }
 
-        int areaX = 0;  // The first area on each line is given an areaX value of 0.
+        int bandX = 0;  // The first area on each line is given an areaX value of 0.
         int bandY = 0;  // The first row of areas is given an areaY value of 0.
         int clusterX, clusterY;
         int x = 0, y = 20, width = 0, maxHeight = 0;
         int style = 0;
 
-        addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
+        addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); 
 
-        for (Band band : super.getBandsInLayout()) {  // Loop through the areas and generate the diagram for each of them
+        for (Band band : super.getBandsInLayout()) { 
             BandEntry bandEntry;
             
             ArrayList<Cluster> clusters = new ArrayList<>(band.getClusters());
+            clusters.sort((a,b) -> {
+               
+                if(a.getConceptCount() == b.getConceptCount()) {
+                    return a.getRoot().getName().compareToIgnoreCase(b.getName());
+                } else {
+                    return b.getConceptCount() - a.getConceptCount();
+                }
+            });
 
             int maxRows, x2, y2, regionX, partitionBump;
 
@@ -77,12 +84,11 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
             if (lastSet != null && lastSet.getPatriarchs().size() != band.getPatriarchs().size()) { // If a new row should be created...
 
-                x = 0;  // Reset the x coordinate to the left
-                y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT; // Add the height of the tallest area to the y coordinate plus the areaRowHeight variable which defines how
-                // much space should be between rows of areas.
+                x = 0;  
+                y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT; 
 
                 bandY++;    // Update the areaY variable to reflect the new row.
-                areaX = 0;  // Reset the areaX variable.
+                bandX = 0;  // Reset the areaX variable.
 
                 maxHeight = 0;  // Reset the maxHeight variable since this is a new row.
                 style++;    // Update the style variable which is used to display different colors for the different rows.
@@ -144,18 +150,16 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
             Color color = background[style % background.length];
 
-            bandEntry = createBandEntry(band, x, y, width, height, color, areaX, currentLevel); // Create the area
+            bandEntry = createBandEntry(band, x, y, width, height, color, bandX, currentLevel); // Create the area
 
             getContainerEntries().put(band, bandEntry);
 
-            // Add a data representation for this new area to the current area Level obj.
             currentLevel.addContainerEntry(bandEntry);    
             
-            // Generates a column of lanes to the left of this area.
-            addColumn(areaX, currentLevel.getLevelY(), generateColumnLanes(-3,
+            addColumn(bandX, currentLevel.getLevelY(), generateColumnLanes(-3,
                     GraphLayoutConstants.CONTAINER_CHANNEL_WIDTH - 5, 3, null)); 
 
-            currentBandEntry = (BandEntry)currentLevel.getContainerEntries().get(areaX);
+            currentBandEntry = (BandEntry)currentLevel.getContainerEntries().get(bandX);
 
             regionX = GraphLayoutConstants.PARTITION_CHANNEL_WIDTH;
 
@@ -229,7 +233,7 @@ public abstract class TANLayout extends BaseTribalAbstractionNetworkLayout {
             }
 
             x += width + 40;  // Set x to a position after the newly created area and the appropriate space after that given the set channel width.
-            areaX++;
+            bandX++;
             lastSet = band;
         }
         

@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -18,13 +18,13 @@ import java.util.Set;
  */
 public abstract class TANTextConfiguration implements PartitionedAbNTextConfiguration {
 
-    private final TribalAbstractionNetwork tan;
+    private final ClusterTribalAbstractionNetwork tan;
 
-    public TANTextConfiguration(TribalAbstractionNetwork tan) {
+    public TANTextConfiguration(ClusterTribalAbstractionNetwork tan) {
         this.tan = tan;
     }
     
-    public TribalAbstractionNetwork getTAN() {
+    public ClusterTribalAbstractionNetwork getTAN() {
         return tan;
     }
     

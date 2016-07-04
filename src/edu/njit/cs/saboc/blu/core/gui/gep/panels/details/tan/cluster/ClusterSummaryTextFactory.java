@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -25,7 +25,7 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory {
     public String createNodeSummaryText(Node node) {
         Cluster cluster = (Cluster)node;
         
-        TribalAbstractionNetwork tan = config.getAbstractionNetwork();
+        ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         
         String conceptType = config.getTextConfiguration().getConceptTypeName(true).toLowerCase();
         

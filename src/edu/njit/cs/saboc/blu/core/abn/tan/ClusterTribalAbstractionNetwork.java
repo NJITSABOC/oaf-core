@@ -14,9 +14,9 @@ import java.util.Set;
  *
  * @author Chris
  */
-public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Cluster, Band> {
+public class ClusterTribalAbstractionNetwork extends PartitionedAbstractionNetwork<Cluster, Band> {
     
-    public TribalAbstractionNetwork(
+    public ClusterTribalAbstractionNetwork(
             BandTribalAbstractionNetwork bandTan,
             NodeHierarchy<Cluster> clusterHierarchy,
             ConceptHierarchy sourceHierarchy) {
@@ -69,23 +69,23 @@ public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Clus
                 (Set<SinglyRootedNode>)(Set<?>)this.getClusters());
     }
     
-    public TribalAbstractionNetwork createRootSubTAN(Cluster root) {
+    public ClusterTribalAbstractionNetwork createRootSubTAN(Cluster root) {
         NodeHierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getSubhierarchyRootedAt(root);
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
         
-        TribalAbstractionNetwork subtaxonomy = generator.createTANFromClusters(subhierarchy);
+        ClusterTribalAbstractionNetwork subtaxonomy = generator.createTANFromClusters(subhierarchy);
                 
         return subtaxonomy;
     }
     
-    public TribalAbstractionNetwork createAncestorTAN(Cluster source) {
+    public ClusterTribalAbstractionNetwork createAncestorTAN(Cluster source) {
         
         NodeHierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getAncestorHierarchy(source);
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
 
-        TribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy);
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy);
         
         return tan;
     }

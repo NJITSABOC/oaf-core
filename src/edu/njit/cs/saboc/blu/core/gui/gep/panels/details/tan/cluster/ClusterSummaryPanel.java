@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
@@ -49,7 +49,7 @@ public class ClusterSummaryPanel extends NodeSummaryPanel {
         
         Cluster cluster = (Cluster)node;
         
-        TribalAbstractionNetwork tan = config.getAbstractionNetwork();
+        ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         
         ArrayList<Concept> sortedPatriarchs = new ArrayList<>(cluster.getPatriarchs());
         sortedPatriarchs.sort((a,b) -> a.getName().compareToIgnoreCase(b.getName()));

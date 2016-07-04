@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
@@ -32,11 +32,11 @@ import javax.swing.JLabel;
  */
 public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout {
 
-    private final TribalAbstractionNetwork tan;
+    private final ClusterTribalAbstractionNetwork tan;
 
     private final TANConfiguration config;
 
-    public BaseTribalAbstractionNetworkLayout(BluGraph graph, TribalAbstractionNetwork tan, TANConfiguration config) {
+    public BaseTribalAbstractionNetworkLayout(BluGraph graph, ClusterTribalAbstractionNetwork tan, TANConfiguration config) {
         super(graph);
 
         this.tan = tan;
@@ -44,7 +44,7 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         this.config = config;
     }
 
-    public TribalAbstractionNetwork getTAN() {
+    public ClusterTribalAbstractionNetwork getTAN() {
         return tan;
     }
 
@@ -60,12 +60,7 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
 
         Band lastSet = null;
 
-        Collections.sort(tempSets, new Comparator<Band>() {    // Sort the areas based on the number of their relationships.
-
-            public int compare(Band a, Band b) {
-                return a.getPatriarchs().size() - b.getPatriarchs().size();
-            }
-        });
+        Collections.sort(tempSets, (a, b) -> a.getPatriarchs().size() - b.getPatriarchs().size());
 
         for (Band set : tempSets) {
 
@@ -204,7 +199,7 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         return (ClusterEntry) getGroupEntry(level, setX, partitionX, clusterY, clusterX);
     }
 
-    protected JLabel createBandPartitionLabel(TribalAbstractionNetwork tan, Set<Concept> patriarchs, String countString, int width, boolean treatAsBand) {
+    protected JLabel createBandPartitionLabel(ClusterTribalAbstractionNetwork tan, Set<Concept> patriarchs, String countString, int width, boolean treatAsBand) {
 
         Canvas canvas = new Canvas();
         FontMetrics fontMetrics = canvas.getFontMetrics(new Font("SansSerif", Font.BOLD, 14));
@@ -271,6 +266,11 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         return this.createBandPartitionLabel(tan, band.getPatriarchs(), countStr, width, true);
     }
 
+    @Override
+    public JLabel createPartitionLabel(PartitionedNode partition, int width) {
+         return createBandLabel((Band)partition, width);
+    }
+   
     public void resetLayout() {
          ArrayList<Band> bands = this.getBands();
          
@@ -312,10 +312,6 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
          }
     }
     
-    private void setBandsInLayout(ArrayList<Band> bands) {
-        super.setLayoutGroupContainers(new ArrayList<>(bands));
-    }
-    
     public ArrayList<Band> getBandsInLayout() {
         return (ArrayList<Band>)(ArrayList<?>)super.getLayoutContainers();
     }
@@ -327,5 +323,4 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
     public Map<Cluster, ClusterEntry> getClusterEntries() {
         return (Map<Cluster, ClusterEntry>)(Map<?,?>)super.getGroupEntries();
     }
-
 }

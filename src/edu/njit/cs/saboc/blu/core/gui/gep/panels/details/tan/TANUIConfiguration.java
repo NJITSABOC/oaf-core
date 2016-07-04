@@ -32,12 +32,12 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration {
     
     @Override
     public OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ParentClusterTableModel(config);
     }
 
     @Override
     public OAFAbstractTableModel<Node> getChildNodeTableModel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ChildClusterTableModel(config);
     }
 
     @Override

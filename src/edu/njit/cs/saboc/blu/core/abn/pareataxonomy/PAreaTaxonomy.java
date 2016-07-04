@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;

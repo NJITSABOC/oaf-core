@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
@@ -29,7 +28,7 @@ public class NodeConceptHierarchyLoader implements Runnable {
     }
 
     public void run() {
-        ConceptHierarchy hierarchy = node.getHierarchy();
+        ConceptHierarchy<Concept> hierarchy = node.getHierarchy();
         
         ArrayList<ArrayList<Concept>> levels = new ArrayList<>();
 

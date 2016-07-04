@@ -22,7 +22,7 @@ import java.util.Stack;
  * @param <PARENTNODE_T> The type of node in the parent abstraction network that 
  * is being separated into disjoint units
  */
-public abstract class DisjointAbNGenerator<
+public class DisjointAbNGenerator<
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
         PARENTNODE_T extends SinglyRootedNode> {
     
@@ -41,7 +41,7 @@ public abstract class DisjointAbNGenerator<
      * @return 
      */
     public DisjointAbstractionNetwork generateDisjointAbstractionNetwork(
-            DisjointAbNFactory<PARENTNODE_T, DisjointNode<PARENTNODE_T>> factory,
+            DisjointAbNFactory<PARENTNODE_T, ? extends DisjointNode<PARENTNODE_T>> factory,
             PARENTABN_T parentAbN, 
             Set<PARENTNODE_T> parentNodes) {
         
@@ -51,7 +51,7 @@ public abstract class DisjointAbNGenerator<
             originalRoots.add(node.getRoot());
         });
         
-        ConceptHierarchy conceptHierarchy = new ConceptHierarchy(originalRoots);
+        ConceptHierarchy<Concept> conceptHierarchy = new ConceptHierarchy(originalRoots);
         
         parentNodes.forEach( (node) -> {
             conceptHierarchy.addAllHierarchicalRelationships(node.getHierarchy());

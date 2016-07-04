@@ -57,6 +57,14 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
         }
     }
 
+    @Override
+    public String getDisjointNodeTypeName(boolean plural) {
+        if (plural) {
+            return "Disjoint Clusters";
+        } else {
+            return "Disjoint Cluster";
+        }
+    }
 
     @Override
     public String getContainerHelpDescription(PartitionedNode container) {

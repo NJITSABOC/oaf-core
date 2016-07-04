@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search;
 
 /**
  *
- * @author Den
+ * @author Chris O
  */
-public class SearchButtonResult {
-    private String resultStr;
+public class SearchButtonResult<T> {
+    private final String resultStr;
+    private final T result;
     
-    private Object result;
-    
-    public SearchButtonResult(String resultStr, Object result) {
+    public SearchButtonResult(String resultStr, T result) {
         this.resultStr = resultStr;
         this.result = result;
     }
@@ -24,7 +18,7 @@ public class SearchButtonResult {
         return resultStr;
     }
     
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 }

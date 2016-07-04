@@ -12,8 +12,12 @@ import java.awt.Rectangle;
  */
 public class AreaEntry extends PartitionedNodeEntry {
 
-    public AreaEntry(Area area, BluGraph g, int aX, GraphLevel parent, Rectangle prefBounds) {
-        super(area, g, aX, parent, prefBounds);
+    public AreaEntry(Area area, BluGraph graph, int aX, GraphLevel parent, Rectangle prefBounds) {
+        super(area, graph, aX, parent, prefBounds);
+    }
+    
+    public void addRegionEntry(RegionEntry regionEntry) {
+        super.addPartitionEntry(regionEntry);
     }
     
     public Area getArea() {

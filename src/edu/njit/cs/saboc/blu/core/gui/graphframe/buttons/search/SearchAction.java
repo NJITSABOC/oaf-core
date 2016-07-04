@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search;
 
 import java.util.ArrayList;
 
 /**
  *
- * @author Den
+ * @author Chris O
  */
-public abstract class SearchAction {
-    private String searchActionName;
+public abstract class SearchAction<T> {
+    private final String searchActionName;
     
-    protected SearchAction(String searchActionName) {
+    public SearchAction(String searchActionName) {
         this.searchActionName = searchActionName;
     }
     
@@ -23,7 +17,7 @@ public abstract class SearchAction {
         return searchActionName;
     }
     
-    public abstract ArrayList<SearchButtonResult> doSearch(String term);
+    public abstract ArrayList<SearchButtonResult<T>> doSearch(String term);
     
-    public abstract void resultSelected(SearchButtonResult o);
+    public abstract void resultSelected(SearchButtonResult<T> o);
 }

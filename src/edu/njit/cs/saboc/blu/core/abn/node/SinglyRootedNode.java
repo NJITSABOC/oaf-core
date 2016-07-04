@@ -13,13 +13,13 @@ import java.util.Set;
  */
 public abstract class SinglyRootedNode extends Node {
     
-    private final ConceptHierarchy hierarchy;
+    private final ConceptHierarchy<Concept> hierarchy;
 
-    protected SinglyRootedNode(ConceptHierarchy hierarchy) {
+    protected SinglyRootedNode(ConceptHierarchy<Concept> hierarchy) {
         this.hierarchy = hierarchy;
     }
     
-    public ConceptHierarchy getHierarchy() {
+    public ConceptHierarchy<Concept> getHierarchy() {
         return hierarchy;
     }
     

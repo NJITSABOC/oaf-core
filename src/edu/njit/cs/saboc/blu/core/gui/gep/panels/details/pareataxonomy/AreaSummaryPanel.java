@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class AreaSummaryPanel extends NodeSummaryPanel {
     
-    private final RelationshipPanel relationshipPanel;
+    private final PropertyPanel relationshipPanel;
     
     private final PAreaTaxonomyConfiguration configuration;
     
@@ -23,7 +23,7 @@ public class AreaSummaryPanel extends NodeSummaryPanel {
 
         this.configuration = configuration;
 
-        relationshipPanel = new RelationshipPanel(null); // TODO: Need model...
+        relationshipPanel = new PropertyPanel(configuration, configuration.getUIConfiguration().getPropertyTableModel(true)); // TODO: Need model...
 
         relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         relationshipPanel.setPreferredSize(new Dimension(-1, 100));

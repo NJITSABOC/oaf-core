@@ -1,10 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
  *
@@ -31,6 +34,9 @@ public abstract class AbNUIConfiguration {
     public AbNListenerConfiguration getListenerConfiguration() {
         return listenerConfiguration;
     }
+    
+    public abstract OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel();
+    public abstract OAFAbstractTableModel<Node> getChildNodeTableModel();
     
     public abstract AbstractNodeOptionsPanel getNodeOptionsPanel();
     

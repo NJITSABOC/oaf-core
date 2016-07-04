@@ -32,7 +32,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
     private final PAreaTaxonomyConfiguration config;
 
     public NoRegionsPAreaTaxonomyLayout(
-            BluGraph graph, 
+            PAreaBluGraph graph, 
             PAreaTaxonomy taxonomy, 
             PAreaTaxonomyConfiguration config) {
         
@@ -100,7 +100,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
                 if(a.getConceptCount() == b.getConceptCount()) {
                     return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
                 } else {
-                    return a.getConceptCount() - b.getConceptCount();
+                    return b.getConceptCount() - a.getConceptCount();
                 }
             });
 
@@ -173,14 +173,12 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
             RegionEntry regionEntry = createRegionPanel(
                     graph,
                     new Region(area.getPAreas(), area.getRelationships()), 
-                    areaLabel.getText(), //labelLayout is the lines used..
                     areaEntry,
                     regionX - regionBump,
                     10,
                     regionWidth + GraphLayoutConstants.GROUP_CHANNEL_WIDTH + 10,
                     height - 20, 
                     color,
-                    true,
                     areaLabel);
 
             regionBump++;
@@ -240,63 +238,12 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
         this.centerGraphLevels(this.getGraphLevels());
     }
     
-    private PAreaEntry createPAreaPanel(BluGraph graph, PArea parea, RegionEntry parentRegionEntry, int x, int y, int pAreaX, GraphGroupLevel pAreaLevel) {
-        PAreaEntry pareaEntry = new PAreaEntry(parea, graph, parentRegionEntry, pAreaX, pAreaLevel, new ArrayList<>());
-
-        //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
-        graph.stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
-
-        //Setup the panel's dimensions, etc.
-        pareaEntry.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
-
-        parentRegionEntry.add(pareaEntry, 0);
-
-        return pareaEntry;
-    }
-    
-    private AreaEntry createAreaPanel(BluGraph graph, 
-            Area area, 
-            int x, 
-            int y, 
-            int width, 
-            int height, 
-            Color c, 
-            int areaX, 
-            GraphLevel parentLevel) {
-        
-        AreaEntry areaPanel = new AreaEntry(area, graph, areaX, parentLevel, new Rectangle(x, y, width, height));
-
-        graph.stretchGraphToFitPanel(x, y, width, height);
-
-        areaPanel.setBounds(x, y, width, height);
-        areaPanel.setBackground(c);
-
-        graph.add(areaPanel, 0);
-
-        return areaPanel;
-    }
-    
-     private RegionEntry createRegionPanel(BluGraph graph, Region region, String regionName, 
-            AreaEntry parentAreaEntry, int x, int y, int width, int height, Color c, boolean treatRegionAsArea, JLabel regionLabel) {
-
-        RegionEntry regionPanel = new RegionEntry(region, regionName,
-                width, height, graph, parentAreaEntry, c, regionLabel);
-
-        graph.stretchGraphToFitPanel(x, y, width, height);
-
-        regionPanel.setBounds(x, y, width, height);
-
-        parentAreaEntry.add(regionPanel, 0);
-
-        return regionPanel;
-    }
-     
-        @Override
+    @Override
     public JLabel createPartitionLabel(PartitionedNode partition, int width) {
         return createAreaLabel((Area)partition, width);
     }
 
-    private JLabel createAreaLabel(Area area,int width) {
+    private JLabel createAreaLabel(Area area, int width) {
         String pareaStr;
 
         if (area.getPAreas().size() == 1) {

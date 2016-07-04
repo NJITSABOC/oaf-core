@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -19,8 +19,8 @@ public class ParentNodeTableModel extends OAFAbstractTableModel<ParentNodeDetail
     public ParentNodeTableModel(AbNConfiguration config) {
         super(new String [] {
             config.getTextConfiguration().getParentConceptTypeName(false),
-            String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)))
+            String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
+            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true))
         });
     }
     
@@ -35,7 +35,7 @@ public class ParentNodeTableModel extends OAFAbstractTableModel<ParentNodeDetail
     @Override
     protected Object[] createRow(ParentNodeDetails parentInfo) {
         return new Object [] {
-            parentInfo.getParentConcept(), 
+            parentInfo.getParentConcept().getName(), 
             parentInfo.getParentNode().getName(),
             parentInfo.getParentNode().getConceptCount()
         };

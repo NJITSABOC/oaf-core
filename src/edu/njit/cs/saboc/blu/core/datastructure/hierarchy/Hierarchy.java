@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -35,7 +36,7 @@ public class Hierarchy<T> {
         this(Collections.singleton(root));
     }
     
-    public Hierarchy(T root, HashMap<T, Set<T>> hierarchy) {
+    public Hierarchy(T root, Map<T, Set<T>> hierarchy) {
         this(Collections.singleton(root), hierarchy);
     }
         
@@ -48,7 +49,7 @@ public class Hierarchy<T> {
         });
     }
     
-    public Hierarchy(Set<T> roots, HashMap<T, Set<T>> hierarchy) {
+    public Hierarchy(Set<T> roots, Map<T, Set<T>> hierarchy) {
         this.roots = new HashSet<>(roots);
         
         Stack<T> convertStack = new Stack<>();
@@ -153,7 +154,7 @@ public class Hierarchy<T> {
     }
     
     public Hierarchy<T> getSubhierarchyRootedAt(T root) {
-        return new Hierarchy<T>(root, this.children);
+        return new Hierarchy<>(root, this.children);
     }
     
     public Set<T> getNodesInHierarchy() {

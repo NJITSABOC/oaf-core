@@ -1,10 +1,14 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
+
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -25,18 +29,23 @@ public class NodeHierarchyPanel extends BaseNodeInformationPanel {
     private final AbNConfiguration config;
     
     public NodeHierarchyPanel(AbNConfiguration config) {
-        this(config, new ParentNodeTableModel(config), new ChildNodeTableModel(config));
+        this(config, 
+                config.getUIConfiguration().getParentNodeTableModel(), 
+                config.getUIConfiguration().getChildNodeTableModel());
     }
     
-    public NodeHierarchyPanel(AbNConfiguration config, ParentNodeTableModel parentModel, ChildNodeTableModel childModel) {
+    public NodeHierarchyPanel(AbNConfiguration config, 
+            OAFAbstractTableModel<ParentNodeDetails> parentModel, 
+            OAFAbstractTableModel<Node> childModel) {
+        
         this.config = config;
 
         this.setLayout(new BorderLayout());
         
         parentNodeList = new AbstractEntityList<ParentNodeDetails>(parentModel) {
             public String getBorderText(Optional<ArrayList<ParentNodeDetails>> entries) {
-                String baseStr = String.format("Root's Parent %s %s", 
-                        config.getTextConfiguration().getConceptTypeName(true), 
+                String baseStr = String.format("Root's %s's %s", 
+                        config.getTextConfiguration().getParentConceptTypeName(false), 
                         config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entries.isPresent()) {
@@ -80,7 +89,21 @@ public class NodeHierarchyPanel extends BaseNodeInformationPanel {
     
     @Override
     public void setContents(Node node) {
-        // TODO: Set contents for parent and child lists...
+        AbstractionNetwork abn = config.getAbstractionNetwork();
+        
+        ArrayList<ParentNodeDetails> parents = new ArrayList<>(abn.getParentNodeDetails(node));
+        ArrayList<Node> children = new ArrayList<>(abn.getNodeHierarchy().getChildren(node));
+        
+        parents.sort( (a, b) -> {
+            return a.getParentNode().getName().compareToIgnoreCase(b.getParentNode().getName());
+        });
+        
+        children.sort( (a, b) -> {
+            return a.getName().compareTo(b.getName());
+        });
+        
+        parentNodeList.setContents(parents);
+        childNodeList.setContents(children);
     }
 
     @Override

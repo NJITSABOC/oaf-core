@@ -14,6 +14,10 @@ public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTe
     public PAreaTaxonomyTextConfiguration(PAreaTaxonomy taxonomy) {
         this.taxonomy = taxonomy;
     }
+    
+    public PAreaTaxonomy getPAreaTaxonomy() {
+        return taxonomy;
+    }
 
     @Override
     public String getAbNName() {

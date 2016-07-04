@@ -28,7 +28,7 @@ public class PAreaTaxonomyGenerator {
      */
     public PAreaTaxonomy derivePAreaTaxonomy(
             final PAreaTaxonomyFactory factory, 
-            final ConceptHierarchy sourceHierarchy) {
+            final ConceptHierarchy<Concept> sourceHierarchy) {
         
         HashMap<Concept, Set<InheritableProperty>> conceptRelationships = new HashMap<>();
 
@@ -61,7 +61,7 @@ public class PAreaTaxonomyGenerator {
             }
         }
 
-        HashMap<Concept, ConceptHierarchy> pareaConceptHierarchy = new HashMap<>();
+        HashMap<Concept, ConceptHierarchy<Concept>> pareaConceptHierarchy = new HashMap<>();
         
         HashMap<Concept, Set<Concept>> parentPAreaRoots = new HashMap<>();
         HashMap<Concept, Set<Concept>> childPAreaRoots = new HashMap<>();
@@ -89,7 +89,7 @@ public class PAreaTaxonomyGenerator {
                 Concept concept = stack.pop();
                 processedConcepts.add(concept);
 
-                ConceptHierarchy pareaHierarchy = pareaConceptHierarchy.get(root);
+                ConceptHierarchy<Concept> pareaHierarchy = pareaConceptHierarchy.get(root);
 
                 if (!conceptPAreas.containsKey(concept)) {
                     conceptPAreas.put(concept, new HashSet<>());
@@ -197,7 +197,7 @@ public class PAreaTaxonomyGenerator {
                      
         HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
         
-        ConceptHierarchy conceptHierarchy = new ConceptHierarchy(pareaHierarchy.getRoot().getRoot());
+        ConceptHierarchy<Concept> conceptHierarchy = new ConceptHierarchy<>(pareaHierarchy.getRoot().getRoot());
                 
         pareaHierarchy.getNodesInHierarchy().forEach( (parea) -> {
             Set<InheritableProperty> properties = parea.getRelationships();

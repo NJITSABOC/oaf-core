@@ -2,54 +2,42 @@ package edu.njit.cs.saboc.blu.core.ontology;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class ConceptHierarchy extends Hierarchy<Concept> {
+public class ConceptHierarchy<T extends Concept> extends Hierarchy<T> {
     
-    public ConceptHierarchy(Set<Concept> roots) {
+    public ConceptHierarchy(Set<T> roots) {
         super(roots);
     }
     
-    public ConceptHierarchy(Concept root) {
+    public ConceptHierarchy(T root) {
         this(Collections.singleton(root));
     }
     
-    public ConceptHierarchy(Set<Concept> roots, HashMap<Concept, Set<Concept>> hierarchy) {
+    public ConceptHierarchy(Set<T> roots, Map<T, Set<T>> hierarchy) {
         super(roots, hierarchy);
     }
     
-    public ConceptHierarchy(Concept root, HashMap<Concept, Set<Concept>> hierarchy) {
+    public ConceptHierarchy(T root, Map<T, Set<T>> hierarchy) {
         this(Collections.singleton(root), hierarchy);
     }
     
-    public ConceptHierarchy(Hierarchy<Concept> hierarchy) {
+    public ConceptHierarchy(Hierarchy<T> hierarchy) {
         super(hierarchy.getRoots(), hierarchy.getAllChildRelationships());
     }
     
-    public Set<Concept> getConceptsInHierarchy() {
+    public Set<T> getConceptsInHierarchy() {
         return super.getNodesInHierarchy();
     }
     
-    @Override
-    public ConceptHierarchy getAncestorHierarchy(Concept concept) {
-        Hierarchy<Concept> subhierarchy = super.getAncestorHierarchy(concept);
-
-        ConceptHierarchy conceptSubhierarchy = new ConceptHierarchy(concept, subhierarchy.getAllChildRelationships());
-
-        return conceptSubhierarchy;
-    }
-
-    @Override
-    public ConceptHierarchy getSubhierarchyRootedAt(Concept concept) {
-        Hierarchy<Concept> subhierarchy = super.getSubhierarchyRootedAt(concept);
-
-        ConceptHierarchy conceptSubhierarchy = new ConceptHierarchy(concept, subhierarchy.getAllChildRelationships());
-
-        return conceptSubhierarchy;
+    public ConceptHierarchy<T> getSubhierarchyRootedAt(T root) {
+        Hierarchy<T> base = super.getSubhierarchyRootedAt(root);
+        
+        return new ConceptHierarchy<>(base);
     }
 }

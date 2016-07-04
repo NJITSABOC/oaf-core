@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 
 /**
@@ -14,6 +15,8 @@ public abstract class PartitionedAbNConfiguration extends AbNConfiguration {
     }
     
     public abstract int getPartitionedNodeLevel(PartitionedNode node);
+    
+    public abstract DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(PartitionedNode node);
     
     public void setUIConfiguration(PartitionedAbNUIConfiguration config) {
         super.setUIConfiguration(config);

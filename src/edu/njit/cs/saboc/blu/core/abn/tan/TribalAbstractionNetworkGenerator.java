@@ -14,9 +14,9 @@ import java.util.Stack;
  *
  * @author Chris O
  */
-public abstract class TribalAbstractionNetworkGenerator {
+public class TribalAbstractionNetworkGenerator {
 
-    public TribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(ConceptHierarchy sourceHierarchy) {
+    public TribalAbstractionNetwork deriveTANFrom(ConceptHierarchy<Concept> sourceHierarchy) {
 
         Set<Concept> patriarchs = sourceHierarchy.getRoots();
 
@@ -223,63 +223,27 @@ public abstract class TribalAbstractionNetworkGenerator {
         return tan;
     }
     
-    /*
-    public TAN_T createTANFromClusters(
-            HashMap<Integer, CLUSTER_T> clusters, 
-            GroupHierarchy<CLUSTER_T> clusterHierarchy) {
-        
-        ArrayList<BAND_T> subhierarchyBands = new ArrayList<>();
-        
+    
+    public TribalAbstractionNetwork createTANFromClusters(NodeHierarchy<Cluster> clusterHierarchy) {
+                
         // For now assuming only one cluster is picked as a root
-        HIERARCHY_T conceptHierarchy = createHierarchy(clusterHierarchy.getRoots().iterator().next().getHierarchy().getRoot());
-             
-        int bandId = 0;
+        ConceptHierarchy<Concept> conceptHierarchy = new ConceptHierarchy<>(clusterHierarchy.getRoot().getRoot());
         
-        HashMap<HashSet<CONCEPT_T>, BAND_T> bandMap = new HashMap<>();
+        Map<Set<Concept>, Set<Cluster>> clusterBands = new HashMap<>();
         
-        for(CLUSTER_T cluster : clusters.values()) {
-            BAND_T band;
-            
-            if(!bandMap.containsKey(cluster.getPatriarchs())) {
-                band = (BAND_T)createBand(bandId++, cluster.getPatriarchs());
-                
-                bandMap.put(band.getPatriarchs(), band);
-                
-                subhierarchyBands.add(band);
-            } else {
-                band = bandMap.get(cluster.getPatriarchs());
-            }
-            
-            band.addCluster(cluster);
-            
-            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> reducedParentInfo = new HashSet<>();
-            
-            HashSet<ParentNodeInformation<CONCEPT_T, CLUSTER_T>> originalParents = cluster.getParentClusterInfo();
-                        
-            for(ParentNodeInformation<CONCEPT_T, CLUSTER_T> originalParent : originalParents) {
-                if(clusters.containsKey(originalParent.getParentGroup().getId())) {
-                    reducedParentInfo.add(new ParentNodeInformation<>(originalParent.getParentConcept(), 
-                            clusters.get(originalParent.getParentGroup().getId())));
-                } else {
-
-                }
-            }
-
-            cluster.setParentClusterInfo(reducedParentInfo);
-            
+        clusterHierarchy.getNodesInHierarchy().forEach((cluster) -> {
             conceptHierarchy.addAllHierarchicalRelationships(cluster.getHierarchy());
-        }
+            
+            if(!clusterBands.containsKey(cluster.getPatriarchs())) {
+                clusterBands.put(cluster.getPatriarchs(), new HashSet<>());
+            }
+            
+            clusterBands.get(cluster.getPatriarchs()).add(cluster);
+        });
 
-        TAN_T reducedTAN = (TAN_T)createTribalAbstractionNetwork(
-            subhierarchyBands,
-            clusters,
-            clusterHierarchy,
-            new ArrayList<>(clusterHierarchy.getRoots()),
-            conceptHierarchy);
+
+        TribalAbstractionNetwork tan = null;
         
-        return reducedTAN;
+        return tan;
     }
-    
-    */
-    
 }

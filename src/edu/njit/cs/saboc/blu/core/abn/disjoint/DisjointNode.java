@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Chris
  * @param <T> The type of node that this 
  */
-public abstract class DisjointNode<T extends Node> extends SinglyRootedNode {
+public class DisjointNode<T extends Node> extends SinglyRootedNode {
     
     private final Set<T> overlapsIn;
 

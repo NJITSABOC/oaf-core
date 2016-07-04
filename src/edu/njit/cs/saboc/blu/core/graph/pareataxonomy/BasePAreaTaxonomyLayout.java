@@ -4,15 +4,21 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
+import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import javax.swing.JLabel;
 
 /**
  *
@@ -179,6 +185,63 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
              
              y += maxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
          }
+    }
+    
+    protected PAreaEntry createPAreaPanel(BluGraph graph, PArea parea, RegionEntry parentRegionEntry, int x, int y, int pAreaX, GraphGroupLevel pAreaLevel) {
+        PAreaEntry pareaEntry = new PAreaEntry(parea, graph, parentRegionEntry, pAreaX, pAreaLevel, new ArrayList<>());
+
+        //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
+        graph.stretchGraphToFitPanel(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
+
+        //Setup the panel's dimensions, etc.
+        pareaEntry.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
+
+        parentRegionEntry.add(pareaEntry, 0);
+
+        return pareaEntry;
+    }
+
+    protected AreaEntry createAreaPanel(BluGraph graph,
+            Area area,
+            int x,
+            int y,
+            int width,
+            int height,
+            Color c,
+            int areaX,
+            GraphLevel parentLevel) {
+
+        AreaEntry areaPanel = new AreaEntry(area, graph, areaX, parentLevel, new Rectangle(x, y, width, height));
+
+        graph.stretchGraphToFitPanel(x, y, width, height);
+
+        areaPanel.setBounds(x, y, width, height);
+        areaPanel.setBackground(c);
+
+        graph.add(areaPanel, 0);
+
+        return areaPanel;
+    }
+
+    protected RegionEntry createRegionPanel(BluGraph graph, Region region, 
+            AreaEntry parentAreaEntry, int x, int y, int width, int height, Color color, JLabel regionLabel) {
+
+        RegionEntry regionPanel = new RegionEntry(region, 
+                region.getName(),
+                width, 
+                height, 
+                graph, 
+                parentAreaEntry, 
+                color, 
+                regionLabel);
+
+        graph.stretchGraphToFitPanel(x, y, width, height);
+
+        regionPanel.setBounds(x, y, width, height);
+
+        parentAreaEntry.add(regionPanel, 0);
+
+        return regionPanel;
     }
     
     private void setAreasInLayout(ArrayList<Area> areas) {

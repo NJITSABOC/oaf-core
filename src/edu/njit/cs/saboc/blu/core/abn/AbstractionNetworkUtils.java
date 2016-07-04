@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn;
 
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;

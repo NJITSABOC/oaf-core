@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class PAreaSummaryPanel extends NodeSummaryPanel {
     
-    private final RelationshipPanel relationshipPanel;
+    private final PropertyPanel relationshipPanel;
     
     private final PAreaTaxonomyConfiguration configuration;
     
@@ -23,7 +23,9 @@ public class PAreaSummaryPanel extends NodeSummaryPanel {
 
         this.configuration = configuration;
 
-        this.relationshipPanel = new RelationshipPanel(null);
+        this.relationshipPanel = new PropertyPanel(configuration,  
+                configuration.getUIConfiguration().getPropertyTableModel(false));
+        
         this.relationshipPanel.setMinimumSize(new Dimension(-1, 100));
         this.relationshipPanel.setPreferredSize(new Dimension(-1, 100));
 
@@ -53,5 +55,4 @@ public class PAreaSummaryPanel extends NodeSummaryPanel {
         
         relationshipPanel.clearContents();
     }
-
 }

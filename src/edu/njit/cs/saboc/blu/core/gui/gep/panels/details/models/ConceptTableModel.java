@@ -12,7 +12,7 @@ public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
     
     public ConceptTableModel(AbNConfiguration config) {
         super(new String [] {
-            config.getTextConfiguration().getConceptTypeName(true),
+            config.getTextConfiguration().getConceptTypeName(false),
             "ID"
         });
     }

@@ -2,8 +2,9 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class DisjointAbstractionNetwork<
     }
     
     public Set<DisjointNode<PARENTNODE_T>> getAllDisjointNodes() {
-        return (Set<DisjointNode<PARENTNODE_T>>)super.getNodeHierarchy();
+        return super.getNodeHierarchy().getNodesInHierarchy();
     }
     
     public Set<DisjointNode<PARENTNODE_T>> getOverlappingDisjointNodes() {

@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.abn.node.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
@@ -22,6 +22,10 @@ public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Clus
             ConceptHierarchy sourceHierarchy) {
 
         super(bandTan, clusterHierarchy, sourceHierarchy);
+    }
+    
+    public BandTribalAbstractionNetwork getBandTAN() {
+        return (BandTribalAbstractionNetwork)super.getBaseAbstractionNetwork();
     }
 
     public Set<Cluster> getPatriarchClusters() {
@@ -65,44 +69,24 @@ public class TribalAbstractionNetwork extends PartitionedAbstractionNetwork<Clus
                 (Set<SinglyRootedNode>)(Set<?>)this.getClusters());
     }
     
-    /*
-    
-    protected TAN_T createRootSubTAN(CLUSTER_T root, TribalAbstractionNetworkGenerator generator) {
-        SingleRootedHierarchy<CLUSTER_T> subhierarchy = this.groupHierarchy.getSubhierarchyRootedAt(root);
+    public TribalAbstractionNetwork createRootSubTAN(Cluster root) {
+        NodeHierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getSubhierarchyRootedAt(root);
+
+        TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
         
-        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = new GroupHierarchy<>(subhierarchy);
-        
-        HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
-        
-        HashMap<Integer, CLUSTER_T> clusterIds = new HashMap<>();
-        
-        clusters.forEach((CLUSTER_T parea) -> {
-            clusterIds.put(parea.getId(), parea);
-        });
-        
-        TAN_T subtaxonomy = (TAN_T)generator.createTANFromClusters(clusterIds, clusterSubhierarchy);
+        TribalAbstractionNetwork subtaxonomy = generator.createTANFromClusters(subhierarchy);
                 
         return subtaxonomy;
     }
     
-    protected TAN_T createAncestorTAN(CLUSTER_T source, TribalAbstractionNetworkGenerator generator) {
+    public TribalAbstractionNetwork createAncestorTAN(Cluster source) {
         
-        MultiRootedHierarchy<CLUSTER_T> ancestorSubhierarhcy = groupHierarchy.getAncestorHierarchy(source);
+        NodeHierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getAncestorHierarchy(source);
         
-        GroupHierarchy<CLUSTER_T> clusterSubhierarchy = new GroupHierarchy<>(ancestorSubhierarhcy);
-        
-        HashSet<CLUSTER_T> clusters = clusterSubhierarchy.getNodesInHierarchy();
-        
-        HashMap<Integer, CLUSTER_T> clusterIds = new HashMap<>();
-        
-        clusters.forEach((CLUSTER_T cluster) -> {
-            clusterIds.put(cluster.getId(), cluster);
-        });
-        
-        TAN_T tan = (TAN_T)generator.createTANFromClusters(clusterIds, clusterSubhierarchy);
+        TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
+
+        TribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy);
         
         return tan;
     }
-    
-    */
 }

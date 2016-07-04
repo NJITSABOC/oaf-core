@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,16 @@ public abstract class PartitionedNode extends Node {
     
     public int getConceptCount() {
         return concepts.size();
+    }
+    
+    public ConceptHierarchy getHierarchy() {
+        ConceptHierarchy hierarchy = new ConceptHierarchy(getRoots());
+        
+        internalNodes.forEach( (node) -> {
+            hierarchy.addAllHierarchicalRelationships(node.getHierarchy());
+        });
+        
+        return hierarchy;
     }
     
     public boolean hasOverlappingConcepts() {

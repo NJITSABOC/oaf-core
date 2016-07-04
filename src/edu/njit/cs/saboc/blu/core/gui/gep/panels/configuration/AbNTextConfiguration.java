@@ -15,7 +15,9 @@ public interface AbNTextConfiguration {
     
     public String getAbNTypeName(boolean plural);
     public String getNodeTypeName(boolean plural);
+    
     public String getConceptTypeName(boolean plural);
+    public String getPropertyTypeName(boolean plural);
     
     public String getParentConceptTypeName(boolean plural);
     public String getChildConceptTypeName(boolean plural);

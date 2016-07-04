@@ -1,6 +1,7 @@
 
-package edu.njit.cs.saboc.blu.core.abn.node;
+package edu.njit.cs.saboc.blu.core.abn;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**

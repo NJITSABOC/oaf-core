@@ -1,6 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.BandPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.ClusterPanel;
 
 /**
  *
@@ -8,11 +15,53 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIC
  */
 public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration {
     
-    public TANUIConfiguration(TANListenerConfiguration listenerConfig) {
+    private final TANConfiguration config;
+    
+    public TANUIConfiguration(TANConfiguration config, 
+            TANListenerConfiguration listenerConfig) {
+        
         super(listenerConfig);
+        
+        this.config = config;
     }
     
+    @Override
     public TANListenerConfiguration getListenerConfiguration() {
         return (TANListenerConfiguration)super.getListenerConfiguration();
+    }
+    
+    @Override
+    public OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public OAFAbstractTableModel<Node> getChildNodeTableModel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean hasContainerDetailsPanel() {
+        return true;
+    }
+
+    @Override
+    public NodeDashboardPanel createContainerDetailsPanel() {
+        return new BandPanel(config);
+    }
+
+    @Override
+    public AbstractAbNDetailsPanel createAbNDetailsPanel() {
+        return new TANDetailsPanel(config);
+    }
+
+    @Override
+    public boolean hasGroupDetailsPanel() {
+        return true;
+    }
+
+    @Override
+    public NodeDashboardPanel createGroupDetailsPanel() {
+        return new ClusterPanel(config);
     }
 }

@@ -327,7 +327,7 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
         
         splitPane.setDividerLocation(300);
         
-        DisjointAbstractionNetwork disjointAbN = null; // TODO: Need a way to get disjoint abstraction network from partitioned node
+        DisjointAbstractionNetwork disjointAbN = configuration.getDisjointAbstractionNetworkFor(partitionedNode);
         
         ArrayList<Node> overlappingGroups = new ArrayList<>(disjointAbN.getOverlappingNodes());
         

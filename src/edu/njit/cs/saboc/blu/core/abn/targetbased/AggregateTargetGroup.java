@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,18 +12,18 @@ import java.util.Set;
  */
 public class AggregateTargetGroup extends TargetGroup implements AggregateNode<TargetGroup>  {
     
-    private final NodeHierarchy<TargetGroup> aggregatedGroups;
+    private final Hierarchy<TargetGroup> aggregatedGroups;
     
-    public AggregateTargetGroup(ConceptHierarchy conceptHierarchy, 
+    public AggregateTargetGroup(Hierarchy<Concept> conceptHierarchy, 
             IncomingRelationshipDetails relationships, 
-            NodeHierarchy<TargetGroup> aggregatedGroups) {
+            Hierarchy<TargetGroup> aggregatedGroups) {
         
         super(conceptHierarchy, relationships);
         
         this.aggregatedGroups = aggregatedGroups;
     }
     
-    public NodeHierarchy<TargetGroup> getAggregatedHierarchy() {
+    public Hierarchy<TargetGroup> getAggregatedHierarchy() {
         return aggregatedGroups;
     }
     

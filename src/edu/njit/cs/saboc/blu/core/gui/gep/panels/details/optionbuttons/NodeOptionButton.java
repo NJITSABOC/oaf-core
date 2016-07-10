@@ -1,8 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Optional;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -10,8 +12,12 @@ import javax.swing.JButton;
  *
  * @author Chris O
  */
-public abstract class BaseOptionButton extends JButton {
-    protected BaseOptionButton(String iconFileName, String description) {
+public abstract class NodeOptionButton extends JButton {
+    
+    private Optional<Node> currentNode = Optional.empty();
+    
+    public NodeOptionButton(String iconFileName, String description) {
+        
         ImageIcon icon = IconManager.getIconManager().getIcon(iconFileName);
 
         this.setIcon(icon);
@@ -25,4 +31,22 @@ public abstract class BaseOptionButton extends JButton {
         
         this.setToolTipText(description);
     }
+    
+    public void setCurrentNode(Node node) {
+        this.currentNode = Optional.of(node);
+        
+        setEnabledFor(node);
+    }
+    
+    public Optional<Node> getCurrentNode() {
+        return currentNode;
+    }
+
+    public void clearCurrentNode() {
+        currentNode = Optional.empty();
+        
+        this.setEnabled(false);
+    }
+    
+    public abstract void setEnabledFor(Node node);
 }

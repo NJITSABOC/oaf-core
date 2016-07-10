@@ -5,10 +5,10 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
@@ -21,8 +21,8 @@ public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup>
     private boolean isAggregated = false;
     
     public TargetAbstractionNetwork(
-            NodeHierarchy<TargetGroup> groupHierarchy, 
-            ConceptHierarchy sourceHierarchy) {
+            Hierarchy<TargetGroup> groupHierarchy, 
+            Hierarchy<Concept> sourceHierarchy) {
         
         super(groupHierarchy, sourceHierarchy);
     }
@@ -31,7 +31,7 @@ public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup>
         return super.getNodes();
     }
     
-    public NodeHierarchy<TargetGroup> getTargetGroupHierarchy() {
+    public Hierarchy<TargetGroup> getTargetGroupHierarchy() {
         return super.getNodeHierarchy();
     }
 
@@ -62,6 +62,4 @@ public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup>
         
         return aggregateTAN;
     }
-    
-    
 }

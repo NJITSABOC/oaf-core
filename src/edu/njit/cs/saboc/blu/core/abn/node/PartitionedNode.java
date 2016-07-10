@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ public abstract class PartitionedNode extends Node {
         this.concepts = new HashSet<>();
         
         this.internalNodes.forEach( (n) -> {
-            concepts.addAll(n.getHierarchy().getConceptsInHierarchy());
+            concepts.addAll(n.getHierarchy().getNodesInHierarchy());
         });
     }
     
@@ -48,8 +48,8 @@ public abstract class PartitionedNode extends Node {
         return concepts.size();
     }
     
-    public ConceptHierarchy getHierarchy() {
-        ConceptHierarchy hierarchy = new ConceptHierarchy(getRoots());
+    public Hierarchy<Concept> getHierarchy() {
+        Hierarchy<Concept> hierarchy = new Hierarchy<>(getRoots());
         
         internalNodes.forEach( (node) -> {
             hierarchy.addAllHierarchicalRelationships(node.getHierarchy());

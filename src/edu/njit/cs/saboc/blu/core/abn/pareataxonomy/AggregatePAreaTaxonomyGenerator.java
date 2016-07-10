@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
@@ -19,21 +19,42 @@ public class AggregatePAreaTaxonomyGenerator {
             return sourceTaxonomy;
         }
         
-        NodeHierarchy<AggregatePArea> reducedPAreaHierarchy = 
+        Hierarchy<AggregatePArea> reducedPAreaHierarchy = 
                 aggregateGenerator.createReducedAbN(
                         new AggregatePAreaTaxonomyFactory(),
                         sourceTaxonomy.getPAreaHierarchy(), 
                         min);
+        
+        Hierarchy<PArea> pareaHierarchy = (Hierarchy<PArea>)(Hierarchy<?>)reducedPAreaHierarchy;
 
-        PAreaTaxonomy reducedTaxonomy = generator.createTaxonomyFromPAreas((NodeHierarchy<PArea>)(NodeHierarchy<?>)reducedPAreaHierarchy);
+        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(pareaHierarchy);
+        
+        AggregatePAreaTaxonomy aggregateTaxonomy = new AggregatePAreaTaxonomy(
+                sourceTaxonomy, 
+                min, 
+                taxonomy.getAreaTaxonomy(), 
+                taxonomy.getPAreaHierarchy(),
+                taxonomy.getSourceHierarchy());
+        
+        aggregateTaxonomy.setAggregated(true);
        
-        return reducedTaxonomy;
+        return aggregateTaxonomy;
     }
     
-    public PAreaTaxonomy createExpandedSubtaxonomy(
+    public ExpandedSubtaxonomy createExpandedSubtaxonomy(
+            AggregatePAreaTaxonomy sourceAggregateTaxonomy,
             AggregatePArea aggregatePArea, 
             PAreaTaxonomyGenerator generator) {
         
-        return generator.createTaxonomyFromPAreas(aggregatePArea.getAggregatedHierarchy());
+        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(aggregatePArea.getAggregatedHierarchy());
+        
+        ExpandedSubtaxonomy subtaxonomy = new ExpandedSubtaxonomy(
+                sourceAggregateTaxonomy, 
+                aggregatePArea, 
+                taxonomy.getAreaTaxonomy(), 
+                taxonomy.getPAreaHierarchy(), 
+                taxonomy.getSourceHierarchy());
+        
+        return subtaxonomy;
     }
 }

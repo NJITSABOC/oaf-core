@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,7 +25,7 @@ import javax.swing.JViewport;
  */
 public class NodeConceptHierarchicalViewPanel extends JPanel {
 
-    private ConceptHierarchy hierarchy;
+    private Hierarchy<Concept> hierarchy;
     
     private SinglyRootedNode node;
     
@@ -227,7 +227,7 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
     }
     
     public void initialize(
-            ConceptHierarchy hierarchy, 
+            Hierarchy<Concept> hierarchy, 
             ArrayList<ArrayList<ConceptEntry>> conceptEntries, 
             HashMap<Concept, ConceptEntry> conceptEntryMap) {
         

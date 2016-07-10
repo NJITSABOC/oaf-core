@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
  *
  * @author Chris O
  */
-public abstract class OpenBrowserButton extends BaseOptionButton {
+public abstract class OpenBrowserButton extends NodeOptionButton {
     public OpenBrowserButton(String toolTip) {
         super("BluInvestigateRoot.png", toolTip);
         

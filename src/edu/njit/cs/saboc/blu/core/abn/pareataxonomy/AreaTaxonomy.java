@@ -2,11 +2,10 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,13 +17,13 @@ import java.util.Set;
 public class AreaTaxonomy extends AbstractionNetwork<Area> {
     
     public AreaTaxonomy(
-            NodeHierarchy<Area> areaHierarchy, 
-            ConceptHierarchy sourceHierarchy) {
+            Hierarchy<Area> areaHierarchy, 
+            Hierarchy<Concept> sourceHierarchy) {
         
         super(areaHierarchy, sourceHierarchy);
     }
     
-    public NodeHierarchy<Area> getAreaHierarchy(){
+    public Hierarchy<Area> getAreaHierarchy(){
         return super.getNodeHierarchy();
     }
     

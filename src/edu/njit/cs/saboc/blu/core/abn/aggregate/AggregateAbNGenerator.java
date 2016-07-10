@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,12 +16,12 @@ public class AggregateAbNGenerator <
         NODE_T extends Node, 
         AGGREGATENODE_T extends Node & AggregateNode<NODE_T>> {
     
-    public NodeHierarchy<AGGREGATENODE_T> createReducedAbN(
+    public Hierarchy<AGGREGATENODE_T> createReducedAbN(
             AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
-            NodeHierarchy<NODE_T> sourceHierarchy, 
+            Hierarchy<NODE_T> sourceHierarchy, 
             int minNodeSize) {
         
-        HashMap<NODE_T, NodeHierarchy<NODE_T>> reducedGroupMembers = new HashMap<>();
+        HashMap<NODE_T, Hierarchy<NODE_T>> reducedGroupMembers = new HashMap<>();
 
         HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
         
@@ -41,7 +41,7 @@ public class AggregateAbNGenerator <
         }
         
         remainingNodes.forEach((group) -> {
-            reducedGroupMembers.put(group, new NodeHierarchy<>(group));
+            reducedGroupMembers.put(group, new Hierarchy<>(group));
         });
         
         Queue<NODE_T> queue = new LinkedList<>();
@@ -96,7 +96,7 @@ public class AggregateAbNGenerator <
             rootAggregateNodes.add(aggregateGroups.get(root));
         });
         
-        NodeHierarchy<AGGREGATENODE_T> aggregateNodeHierarchy = new NodeHierarchy<>(rootAggregateNodes);
+        Hierarchy<AGGREGATENODE_T> aggregateNodeHierarchy = new Hierarchy<>(rootAggregateNodes);
         
         aggregateGroups.values().forEach((aggregateNode) -> {
             

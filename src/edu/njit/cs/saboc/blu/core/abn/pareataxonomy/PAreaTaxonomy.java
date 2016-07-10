@@ -4,10 +4,10 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
@@ -21,8 +21,8 @@ public class PAreaTaxonomy extends PartitionedAbstractionNetwork<PArea, Area>
        
     public PAreaTaxonomy(
             AreaTaxonomy areaTaxonomy,
-            NodeHierarchy<PArea> pareaHierarchy, 
-            ConceptHierarchy conceptHierarchy) {
+            Hierarchy<PArea> pareaHierarchy, 
+            Hierarchy<Concept> conceptHierarchy) {
 
         super(areaTaxonomy, pareaHierarchy, conceptHierarchy);
     }
@@ -31,7 +31,7 @@ public class PAreaTaxonomy extends PartitionedAbstractionNetwork<PArea, Area>
         return (AreaTaxonomy)super.getBaseAbstractionNetwork();
     }
     
-    public NodeHierarchy<PArea> getPAreaHierarchy() {
+    public Hierarchy<PArea> getPAreaHierarchy() {
         return super.getNodeHierarchy();
     }
     
@@ -57,32 +57,48 @@ public class PAreaTaxonomy extends PartitionedAbstractionNetwork<PArea, Area>
     }
     
    
-    public PAreaTaxonomy createRootSubtaxonomy(PArea root) {
-        NodeHierarchy<PArea> subhierarchy = this.getNodeHierarchy().getSubhierarchyRootedAt(root);
+    public RootSubtaxonomy createRootSubtaxonomy(PArea root) {
+        Hierarchy<PArea> subhierarchy = this.getNodeHierarchy().getSubhierarchyRootedAt(root);
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
         PAreaTaxonomy subtaxonomy = generator.createTaxonomyFromPAreas(subhierarchy);
+        
+        RootSubtaxonomy rootSubtaxonomy = new RootSubtaxonomy(
+                this, 
+                subtaxonomy.getAreaTaxonomy(), 
+                subtaxonomy.getPAreaHierarchy(), 
+                subtaxonomy.getSourceHierarchy());
                
         if (this.isAggregated()) {
-            subtaxonomy.isAggregated = true;
+            subtaxonomy.setAggregated(true);
+        }
+        
+        return rootSubtaxonomy;
+    }
+
+    public AncestorSubtaxonomy createAncestorSubtaxonomy(PArea source) {
+        Hierarchy<PArea> subhierarchy = this.getPAreaHierarchy().getAncestorHierarchy(source);
+
+        PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
+        
+        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(subhierarchy);
+        
+        AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(this, 
+                source, 
+                taxonomy.getAreaTaxonomy(), 
+                taxonomy.getPAreaHierarchy(), 
+                taxonomy.getSourceHierarchy());
+        
+        if(this.isAggregated()) {
+            subtaxonomy.setAggregated(true);
         }
         
         return subtaxonomy;
     }
-
-    public PAreaTaxonomy createAncestorSubtaxonomy(PArea source) {
-        NodeHierarchy<PArea> subhierarchy = this.getPAreaHierarchy().getAncestorHierarchy(source);
-
-        PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
-        
-        PAreaTaxonomy subtaxonomy = generator.createTaxonomyFromPAreas(subhierarchy);
-        
-        if(this.isAggregated()) {
-            subtaxonomy.isAggregated = true;
-        }
-        
-        return subtaxonomy;
+    
+    protected void setAggregated(boolean value) {
+        this.isAggregated = value;
     }
     
     @Override

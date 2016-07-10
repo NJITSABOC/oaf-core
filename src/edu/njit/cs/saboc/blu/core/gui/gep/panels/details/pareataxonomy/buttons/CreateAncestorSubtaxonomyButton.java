@@ -1,22 +1,43 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.BaseOptionButton;
-import java.awt.event.ActionEvent;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
 
 /**
  *
  * @author Chris O
  */
-public abstract class CreateAncestorSubtaxonomyButton extends BaseOptionButton {
+public class CreateAncestorSubtaxonomyButton extends CreateSubtaxonomyButton {
+    
+    private final PAreaTaxonomyConfiguration config;
 
-    public CreateAncestorSubtaxonomyButton() {
-        super("BluAncestorSubtaxonomy.png", "Create an ancestor subtaxonomy");
-
-        this.addActionListener((ActionEvent ae) -> {
-            createSubtaxonomyAction();
-        });
-
+    public CreateAncestorSubtaxonomyButton(PAreaTaxonomyConfiguration config, DisplayAbNListener<PAreaTaxonomy> displayTaxonomyListener) {
+        super("BluAncestorSubtaxonomy.png", "Create ancestor subtaxonomy", displayTaxonomyListener);
+        
+        this.config = config;
+    }
+    
+    @Override
+    public PAreaSubtaxonomy createSubtaxonomy() {
+        PArea parea = (PArea)super.getCurrentNode().get();
+        
+        return config.getPAreaTaxonomy().createAncestorSubtaxonomy(parea);
     }
 
-    public abstract void createSubtaxonomyAction();
+    @Override
+    public void setEnabledFor(Node node) {
+        PArea parea = (PArea)node;
+        PAreaTaxonomy taxonomy = config.getPAreaTaxonomy();
+        
+        if(taxonomy.getPAreaHierarchy().getParents(parea).isEmpty()) {
+            this.setEnabled(false);
+        } else {
+            this.setEnabled(true);
+        }
+    }
+    
 }

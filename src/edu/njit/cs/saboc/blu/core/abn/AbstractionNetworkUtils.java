@@ -2,8 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +15,7 @@ public class AbstractionNetworkUtils {
 
     public static Set<ParentNodeDetails> getSinglyRootedNodeParentNodeDetails(
             SinglyRootedNode node, 
-            ConceptHierarchy conceptHierarchy, 
+            Hierarchy<Concept> conceptHierarchy, 
             Set<SinglyRootedNode> allNodes) {
 
         Set<ParentNodeDetails> parentNodeDetails = new HashSet<>();
@@ -37,7 +37,7 @@ public class AbstractionNetworkUtils {
     
     public static Set<ParentNodeDetails> getMultiRootedNodeParentNodeDetails(
             PartitionedNode node, 
-            ConceptHierarchy hierarchy, 
+            Hierarchy<Concept> hierarchy, 
             Set<PartitionedNode> allNodes) {
         
         Set<SinglyRootedNode> internalNodes = node.getInternalNodes();

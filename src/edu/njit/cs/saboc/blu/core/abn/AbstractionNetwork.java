@@ -1,9 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,12 +16,12 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractionNetwork<NODE_T extends Node> {
 
-    private final NodeHierarchy<NODE_T> nodeHierarchy;
-    private final ConceptHierarchy sourceHierarchy;
+    private final Hierarchy<NODE_T> nodeHierarchy;
+    private final Hierarchy<Concept> sourceHierarchy;
     
     protected AbstractionNetwork(
-            NodeHierarchy<NODE_T> nodeHierarchy,
-            ConceptHierarchy sourceHierarchy) {
+            Hierarchy<NODE_T> nodeHierarchy,
+            Hierarchy<Concept> sourceHierarchy) {
         
         this.nodeHierarchy = nodeHierarchy;
         this.sourceHierarchy = sourceHierarchy;
@@ -32,7 +31,7 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
         return nodeHierarchy.size();
     }
     
-    public ConceptHierarchy getSourceHierarchy() {
+    public Hierarchy<Concept> getSourceHierarchy() {
         return sourceHierarchy;
     }
     
@@ -40,7 +39,7 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
         return nodeHierarchy.getNodesInHierarchy();
     }
     
-    public NodeHierarchy<NODE_T> getNodeHierarchy() {
+    public Hierarchy<NODE_T> getNodeHierarchy() {
         return nodeHierarchy;
     }
     

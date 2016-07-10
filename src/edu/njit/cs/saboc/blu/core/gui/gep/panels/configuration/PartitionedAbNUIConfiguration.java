@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractNodeOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 
 /**
@@ -17,7 +17,7 @@ public abstract class PartitionedAbNUIConfiguration extends AbNUIConfiguration {
         return (PartitionedAbNListenerConfiguration)super.getListenerConfiguration();
     }
     
-    public abstract AbstractNodeOptionsPanel getPartitionedNodeOptionsPanel();
+    public abstract NodeOptionsPanel getPartitionedNodeOptionsPanel();
     
     public abstract boolean hasContainerDetailsPanel();
     public abstract NodeDashboardPanel createContainerDetailsPanel();

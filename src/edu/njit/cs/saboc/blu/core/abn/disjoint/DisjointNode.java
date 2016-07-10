@@ -2,7 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
@@ -15,7 +16,7 @@ public class DisjointNode<T extends Node> extends SinglyRootedNode {
     private final Set<T> overlapsIn;
 
     public DisjointNode(
-            ConceptHierarchy conceptHierarchy, 
+            Hierarchy<Concept> conceptHierarchy, 
             Set<T> overlapsIn) {
         
         super(conceptHierarchy);

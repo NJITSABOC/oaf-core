@@ -1,9 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,12 +12,12 @@ import java.util.Set;
  */
 public class AggregatePArea extends PArea implements AggregateNode<PArea> {
     
-    private final NodeHierarchy<PArea> aggregateHierarchy;
+    private final Hierarchy<PArea> aggregateHierarchy;
     
     public AggregatePArea(
-            ConceptHierarchy conceptHierarchy, 
+            Hierarchy<Concept> conceptHierarchy, 
             Set<InheritableProperty> relationships,
-            NodeHierarchy<PArea> aggregateHierarchy) {
+            Hierarchy<PArea> aggregateHierarchy) {
         
         super(conceptHierarchy, relationships);
         
@@ -26,7 +25,7 @@ public class AggregatePArea extends PArea implements AggregateNode<PArea> {
     }
 
     @Override
-    public NodeHierarchy<PArea> getAggregatedHierarchy() {
+    public Hierarchy<PArea> getAggregatedHierarchy() {
         return aggregateHierarchy;
     }
 

@@ -1,10 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,7 +50,7 @@ public class DisjointAbNGenerator<
             originalRoots.add(node.getRoot());
         });
         
-        ConceptHierarchy<Concept> conceptHierarchy = new ConceptHierarchy(originalRoots);
+        Hierarchy<Concept> conceptHierarchy = new Hierarchy<>(originalRoots);
         
         parentNodes.forEach( (node) -> {
             conceptHierarchy.addAllHierarchicalRelationships(node.getHierarchy());
@@ -209,7 +208,7 @@ public class DisjointAbNGenerator<
         
         Set<Concept> roots = new HashSet<>();
         
-        HashMap<Concept, ConceptHierarchy> disjointGroupConceptHierarchy = new HashMap<>();
+        HashMap<Concept, Hierarchy<Concept>> disjointGroupConceptHierarchy = new HashMap<>();
         HashMap<Concept, Set<Concept>> disjointGroupParents = new HashMap<>();
         
         HashMap<Concept, Concept> conceptDisjointGroup = new HashMap<>();
@@ -219,7 +218,7 @@ public class DisjointAbNGenerator<
             
             roots.add(root);
             
-            disjointGroupConceptHierarchy.put(root, new ConceptHierarchy(root));
+            disjointGroupConceptHierarchy.put(root, new Hierarchy<>(root));
 
             disjointGroupParents.put(root, new HashSet<>());
         }
@@ -229,7 +228,7 @@ public class DisjointAbNGenerator<
                 
                 roots.add(root);
 
-                disjointGroupConceptHierarchy.put(root,  new ConceptHierarchy(root));
+                disjointGroupConceptHierarchy.put(root,  new Hierarchy<>(root));
 
                 disjointGroupParents.put(root, new HashSet<>());
             }
@@ -270,13 +269,13 @@ public class DisjointAbNGenerator<
         Set<DisjointNode<PARENTNODE_T>> rootGroups = new HashSet<>();
         
         roots.forEach((disjointGroupRoot) -> {
-            ConceptHierarchy nodeConceptHierarchy = disjointGroupConceptHierarchy.get(disjointGroupRoot);
+            Hierarchy<Concept> nodeConceptHierarchy = disjointGroupConceptHierarchy.get(disjointGroupRoot);
             Set<PARENTNODE_T> overlapsIn = conceptGroupMap.get(disjointGroupRoot);
 
             disjointGroups.put(disjointGroupRoot, factory.createDisjointNode(nodeConceptHierarchy, overlapsIn));
         });
         
-        NodeHierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy = new NodeHierarchy<>(rootGroups);
+        Hierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy = new Hierarchy<>(rootGroups);
         
         disjointGroups.values().forEach((DisjointNode<PARENTNODE_T> disjointNode) -> {
             

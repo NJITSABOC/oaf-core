@@ -2,11 +2,10 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,8 +26,8 @@ public class DisjointAbstractionNetwork<
     private final int levels;
     
     public DisjointAbstractionNetwork(PARENTABN_T parentAbN, 
-            NodeHierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy,
-            ConceptHierarchy sourceHierarchy,
+            Hierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy,
+            Hierarchy<Concept> sourceHierarchy,
             int levels,
             Set<PARENTNODE_T> allNodes,
             Set<PARENTNODE_T> overlappingNodes) {

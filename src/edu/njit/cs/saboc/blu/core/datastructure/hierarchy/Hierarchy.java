@@ -12,7 +12,6 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVis
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -193,7 +192,7 @@ public class Hierarchy<T> {
     }
     
     public void BFSDown(T startingPoint, HierarchyVisitor<T> visitor) {
-        BFSDown(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+        BFSDown(Collections.singleton(startingPoint), visitor);
     }
     
     public void BFSDown(Set<T> startingPoints, HierarchyVisitor<T> visitor) {
@@ -220,13 +219,13 @@ public class Hierarchy<T> {
     }
 
     public void BFSUp(T startingPoint, HierarchyVisitor<T> visitor) {
-        BFSUp(new HashSet<>(Arrays.asList(startingPoint)), visitor);
+        BFSUp(Collections.singleton(startingPoint), visitor);
     }
     
-    public void BFSUp(HashSet<T> startingPoints, HierarchyVisitor<T> visitor) {
+    public void BFSUp(Set<T> startingPoints, HierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<>(startingPoints);
 
-        HashSet<T> visited = new HashSet<>(startingPoints);
+        Set<T> visited = new HashSet<>(startingPoints);
 
         while (!queue.isEmpty() && !visitor.isFinished()) {
             T node = queue.remove();
@@ -342,10 +341,10 @@ public class Hierarchy<T> {
     }
     
     public Hierarchy<T> getAncestorHierarchy(T node) {
-        return getAncestorHierarchy(new HashSet<>(Arrays.asList(node)));
+        return getAncestorHierarchy(Collections.singleton(node));
     }
     
-    public Hierarchy<T> getAncestorHierarchy(HashSet<T> nodes) {
+    public Hierarchy<T> getAncestorHierarchy(Set<T> nodes) {
         Set<T> ancestorRoots = new HashSet<>();
         
         nodes.forEach( (node) -> {
@@ -371,14 +370,14 @@ public class Hierarchy<T> {
     }
         
     public Hierarchy<T> getDescendantHierarchyWithinDistance(T node, int maxDistance) {
-        Hierarchy<T> hierarchy = new Hierarchy<T>(node);
+        Hierarchy<T> hierarchy = new Hierarchy<>(node);
         
         int levelProcessed = 0;
                 
         Queue<T> levelQueue = new ArrayDeque<>();
         levelQueue.add(node);
         
-        HashSet<T> processed = new HashSet<>();
+        Set<T> processed = new HashSet<>();
 
         while(!levelQueue.isEmpty() && levelProcessed < maxDistance) {
             levelProcessed++;

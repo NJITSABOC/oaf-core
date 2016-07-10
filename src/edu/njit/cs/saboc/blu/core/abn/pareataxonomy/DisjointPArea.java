@@ -1,7 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Set;
  */
 public class DisjointPArea extends DisjointNode<PArea> {
     
-    public DisjointPArea(ConceptHierarchy concepts, Set<PArea> overlaps) {
+    public DisjointPArea(Hierarchy<Concept> concepts, Set<PArea> overlaps) {
         super(concepts, overlaps);
     }
     

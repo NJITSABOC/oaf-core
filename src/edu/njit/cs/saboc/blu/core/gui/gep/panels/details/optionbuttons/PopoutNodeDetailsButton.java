@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import java.awt.event.ActionEvent;
 import javax.swing.JDialog;
@@ -9,7 +10,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Chris O
  */
-public class PopoutNodeDetailsButton extends BaseOptionButton {
+public class PopoutNodeDetailsButton extends NodeOptionButton {
     
     public interface NodeDetailsPanelGenerator {
         public NodeDashboardPanel generatePanel();
@@ -38,5 +39,10 @@ public class PopoutNodeDetailsButton extends BaseOptionButton {
         detailsDialog.add(generatorAction.generatePanel());
         detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         detailsDialog.setVisible(true);
+    }
+
+    @Override
+    public void setEnabledFor(Node node) {
+        this.setEnabled(true);
     }
 }

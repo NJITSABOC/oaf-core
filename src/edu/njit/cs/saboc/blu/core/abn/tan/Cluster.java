@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -13,7 +13,7 @@ public class Cluster extends SinglyRootedNode {
 
     private final Set<Concept> patriarchs;
     
-    public Cluster(ConceptHierarchy hierarchy, 
+    public Cluster(Hierarchy<Concept> hierarchy, 
             Set<Concept> patriarchs) {
         
         super(hierarchy);

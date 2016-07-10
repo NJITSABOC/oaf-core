@@ -19,6 +19,26 @@ public abstract class Node {
     
     public abstract Set<Concept> getConcepts();
     
+    /**
+     * Determines if two nodes represent the same SIMILARITY.
+     * No guarantees are made regarding the set of concepts being the same.
+     * 
+     * Use strictEquals to guarantee the sets of concepts summarized by the node
+     * are the same.
+     * 
+     * @param o
+     * @return 
+     */
     public abstract boolean equals(Object o);
+    
+    /**
+     * The two nodes are equal and the set of concepts they summarize is equal
+     * @param o
+     * @return 
+     */
+    public boolean strictEquals(Node o) {
+        return this.equals(o) && this.getConcepts().equals(o.getConcepts());
+    }
+    
     public abstract int hashCode();
 }

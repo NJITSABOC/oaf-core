@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -13,5 +13,5 @@ public interface TargetAbstractionNetworkFactory {
     public Set<RelationshipTriple> getRelationshipsToTargetHierarchyFor(
             Concept concept, 
             Set<InheritableProperty> relationshipTypes, 
-            ConceptHierarchy targetHierarchy);
+            Hierarchy<Concept> targetHierarchy);
 }

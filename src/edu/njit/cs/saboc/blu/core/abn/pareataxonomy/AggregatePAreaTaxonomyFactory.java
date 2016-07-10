@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
  *
@@ -11,9 +11,9 @@ import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 public class AggregatePAreaTaxonomyFactory implements AggregateAbNFactory<PArea, AggregatePArea> {
 
     @Override
-    public AggregatePArea createAggregateNode(NodeHierarchy<PArea> aggregatedNodes) {
+    public AggregatePArea createAggregateNode(Hierarchy<PArea> aggregatedNodes) {
         
-        ConceptHierarchy hierarchy = new ConceptHierarchy(aggregatedNodes.getRoot().getRoot());
+        Hierarchy<Concept> hierarchy = new Hierarchy<>(aggregatedNodes.getRoot().getRoot());
         
         aggregatedNodes.getNodesInHierarchy().forEach( (parea) -> {
             hierarchy.addAllHierarchicalRelationships(parea.getHierarchy());

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public interface AggregateNode<NODE_T extends Node> {
     
-    public NodeHierarchy<NODE_T> getAggregatedHierarchy();
+    public Hierarchy<NODE_T> getAggregatedHierarchy();
     
     public Set<NODE_T> getAggregatedNodes();
 }

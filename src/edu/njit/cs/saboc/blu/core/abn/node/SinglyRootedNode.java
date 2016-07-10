@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.node;
 
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.Set;
 
 /**
@@ -13,13 +13,13 @@ import java.util.Set;
  */
 public abstract class SinglyRootedNode extends Node {
     
-    private final ConceptHierarchy<Concept> hierarchy;
+    private final Hierarchy<Concept> hierarchy;
 
-    protected SinglyRootedNode(ConceptHierarchy<Concept> hierarchy) {
+    protected SinglyRootedNode(Hierarchy<Concept> hierarchy) {
         this.hierarchy = hierarchy;
     }
     
-    public ConceptHierarchy<Concept> getHierarchy() {
+    public Hierarchy<Concept> getHierarchy() {
         return hierarchy;
     }
     
@@ -28,7 +28,7 @@ public abstract class SinglyRootedNode extends Node {
     }
     
     public Set<Concept> getConcepts() {
-        return hierarchy.getConceptsInHierarchy();
+        return hierarchy.getNodesInHierarchy();
     }
         
     public boolean equals(Object o) {

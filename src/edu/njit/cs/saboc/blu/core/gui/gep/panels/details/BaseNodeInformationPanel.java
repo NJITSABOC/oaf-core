@@ -8,6 +8,7 @@ import javax.swing.JPanel;
  * @author Chris O
  */
 public abstract class BaseNodeInformationPanel extends JPanel {
+    
     public abstract void setContents(Node node);
     public abstract void clearContents();
 }

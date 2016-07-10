@@ -33,6 +33,10 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     public PAreaTaxonomyListenerConfiguration getListenerConfiguration() {
         return (PAreaTaxonomyListenerConfiguration)super.getListenerConfiguration();
     }
+    
+    public PAreaTaxonomyConfiguration getConfiguration() {
+        return config;
+    }
 
     @Override
     public boolean hasContainerDetailsPanel() {

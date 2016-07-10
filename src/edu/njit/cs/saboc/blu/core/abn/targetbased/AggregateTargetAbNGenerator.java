@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,13 +28,13 @@ public class AggregateTargetAbNGenerator {
             roots.add(group.getRoot());
         });
         
-        NodeHierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
+        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
                         new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getNodeHierarchy(),
                         minGroupSize);
+        
+        Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
 
-        return new TargetAbstractionNetwork(
-                (NodeHierarchy<TargetGroup>)(NodeHierarchy<?>)reducedTargetHierarchy, 
-                sourceTargetAbN.getSourceHierarchy());
+        return new TargetAbstractionNetwork(targetHierarchy, sourceTargetAbN.getSourceHierarchy());
     }
 }

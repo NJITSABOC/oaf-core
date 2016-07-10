@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
  *
  * @author Chris O
  */
-public abstract class CreateDisjointAbNButton extends BaseOptionButton {
+public abstract class CreateDisjointAbNButton extends NodeOptionButton {
     public CreateDisjointAbNButton(String toolTip) {
         super("BluDisjointAbN.png", toolTip);
         

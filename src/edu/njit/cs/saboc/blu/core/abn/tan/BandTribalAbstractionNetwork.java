@@ -2,11 +2,10 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,13 +15,13 @@ import java.util.Set;
  * @author Den
  */
 public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
-    public BandTribalAbstractionNetwork(NodeHierarchy<Band> bandHierarchy, 
-            ConceptHierarchy sourceHierarchy) {
+    public BandTribalAbstractionNetwork(Hierarchy<Band> bandHierarchy, 
+            Hierarchy<Concept> sourceHierarchy) {
         
         super(bandHierarchy, sourceHierarchy);
     }
     
-    public NodeHierarchy<Band> getBandHierarchy(){
+    public Hierarchy<Band> getBandHierarchy(){
         return super.getNodeHierarchy();
     }
     

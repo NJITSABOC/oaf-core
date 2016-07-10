@@ -21,7 +21,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
     
     private final NodeSummaryPanel nodeSummaryPanel;
 
-    private final AbstractNodeOptionsPanel nodeOptionsMenuPanel;
+    private final NodeOptionsPanel nodeOptionsMenuPanel;
 
     private final ConceptList nodeConceptList;
 
@@ -30,7 +30,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
     private Optional<Node> currentNode = Optional.empty();
 
     public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
-            AbstractNodeOptionsPanel nodeOptionsMenuPanel, 
+            NodeOptionsPanel nodeOptionsMenuPanel, 
             ConceptList nodeConceptList,
             AbNConfiguration config) {
         

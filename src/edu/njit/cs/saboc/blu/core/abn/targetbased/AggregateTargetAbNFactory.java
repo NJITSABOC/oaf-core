@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
-import edu.njit.cs.saboc.blu.core.abn.node.NodeHierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.ConceptHierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,9 +13,9 @@ import java.util.Set;
 public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGroup, AggregateTargetGroup> {
 
     @Override
-    public AggregateTargetGroup createAggregateNode(NodeHierarchy<TargetGroup> aggregatedNodes) {
+    public AggregateTargetGroup createAggregateNode(Hierarchy<TargetGroup> aggregatedNodes) {
         
-        ConceptHierarchy hierarchy = new ConceptHierarchy(aggregatedNodes.getRoot().getRoot());
+        Hierarchy<Concept> hierarchy = new Hierarchy<>(aggregatedNodes.getRoot().getRoot());
         
         Set<RelationshipTriple> allRelationshipTriples = new HashSet<>();
         

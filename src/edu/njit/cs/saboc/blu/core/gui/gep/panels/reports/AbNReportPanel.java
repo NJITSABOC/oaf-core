@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  */
 public abstract class AbNReportPanel extends JPanel {
     
-    protected final AbNConfiguration config;
+    private final AbNConfiguration config;
     
     public AbNReportPanel(AbNConfiguration config) {
         this.config = config;

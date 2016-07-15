@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 
@@ -7,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTex
  *
  * @author Chris O
  */
-public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTextConfiguration {
+public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTextConfiguration<PArea, Area> {
     
     private final PAreaTaxonomy taxonomy;
     

@@ -9,7 +9,8 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class NodeChange extends AbNChange {
+public abstract class NodeChangeDetails extends AbNChange {
+    
     private final Node changedNode;
     
     private final NodeChangeState changeState;
@@ -18,7 +19,7 @@ public abstract class NodeChange extends AbNChange {
     
     private final Set<ChildOfChange> childOfChanges;
     
-    protected NodeChange(NodeChangeState changeState, Node changedNode, 
+    protected NodeChangeDetails(NodeChangeState changeState, Node changedNode, 
             Set<NodeConceptChange> conceptChanges,
             Set<ChildOfChange> childOfChanges) {
         

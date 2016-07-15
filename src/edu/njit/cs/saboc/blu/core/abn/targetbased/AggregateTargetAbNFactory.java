@@ -19,7 +19,7 @@ public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGrou
         
         Set<RelationshipTriple> allRelationshipTriples = new HashSet<>();
         
-        aggregatedNodes.getNodesInHierarchy().forEach((group) -> {
+        aggregatedNodes.getNodes().forEach((group) -> {
             hierarchy.addAllHierarchicalRelationships(group.getHierarchy());
             
             allRelationshipTriples.addAll(group.getIncomingRelationshipDetails().getAllRelationships());

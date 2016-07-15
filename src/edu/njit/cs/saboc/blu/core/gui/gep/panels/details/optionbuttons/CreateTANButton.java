@@ -1,8 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 
@@ -10,11 +11,11 @@ import javax.swing.SwingUtilities;
  *
  * @author Chris O
  */
-public abstract class CreateTANButton extends NodeOptionButton {
+public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T> {
     
-    private final DisplayAbNListener<ClusterTribalAbstractionNetwork> displayTAN;
+    private final DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTAN;
     
-    public CreateTANButton(String forNodeType, DisplayAbNListener<ClusterTribalAbstractionNetwork> displayTAN) {
+    public CreateTANButton(String forNodeType, DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTAN) {
         
         super("BluTAN.png", String.format("Derive Tribal Abstraction Network (TAN) from %s", forNodeType));
         

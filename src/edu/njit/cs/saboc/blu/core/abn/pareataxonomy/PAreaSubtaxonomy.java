@@ -7,14 +7,14 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class PAreaSubtaxonomy extends PAreaTaxonomy {
+public class PAreaSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T> {
     
     private final PAreaTaxonomy sourceTaxonomy;
     
     public PAreaSubtaxonomy(
             PAreaTaxonomy sourceTaxonomy,
             AreaTaxonomy areaTaxonomy,
-            Hierarchy<PArea> pareaHierarchy, 
+            Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
 
         super(areaTaxonomy, pareaHierarchy, conceptHierarchy);

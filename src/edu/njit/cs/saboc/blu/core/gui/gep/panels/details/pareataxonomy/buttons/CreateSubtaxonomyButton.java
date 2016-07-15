@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 
@@ -14,12 +14,12 @@ import javax.swing.SwingUtilities;
  */
 public abstract class CreateSubtaxonomyButton extends NodeOptionButton {
     
-    private final DisplayAbNListener<PAreaTaxonomy> displayTaxonomyListener;
+    private final DisplayAbNAction<PAreaTaxonomy> displayTaxonomyListener;
     
     public CreateSubtaxonomyButton(
             String iconName,
             String toolTip,
-            DisplayAbNListener<PAreaTaxonomy> displayTaxonomyListener) {
+            DisplayAbNAction<PAreaTaxonomy> displayTaxonomyListener) {
         
         super(iconName, toolTip);
         

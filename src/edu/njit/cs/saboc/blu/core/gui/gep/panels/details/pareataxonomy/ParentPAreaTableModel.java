@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -12,7 +12,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class ParentPAreaTableModel extends OAFAbstractTableModel<ParentNodeDetails> {
+public class ParentPAreaTableModel extends OAFAbstractTableModel<ParentNodeDetails<PArea>> {
     
     private final PAreaTaxonomyConfiguration config;
     
@@ -36,8 +36,10 @@ public class ParentPAreaTableModel extends OAFAbstractTableModel<ParentNodeDetai
     }
 
     @Override
-    protected Object[] createRow(ParentNodeDetails parentInfo) {
-        Area area = config.getPAreaTaxonomy().getPartitionNodeFor((PArea)parentInfo.getParentNode());
+    protected Object[] createRow(ParentNodeDetails<PArea> parentInfo) {
+        
+        PAreaTaxonomy<PArea> taxonomy = config.getPAreaTaxonomy();
+        Area area = taxonomy.getPartitionNodeFor(parentInfo.getParentNode());
         
         return new Object [] {
             parentInfo.getParentConcept().getName(), 

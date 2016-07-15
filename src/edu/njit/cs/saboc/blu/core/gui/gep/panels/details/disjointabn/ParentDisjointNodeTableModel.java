@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
@@ -13,11 +13,11 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class ParentDisjointNodeTableModel extends ParentNodeTableModel {
+public class ParentDisjointNodeTableModel<T extends DisjointNode> extends OAFAbstractTableModel<ParentNodeDetails<T>> {
     
-    private final DisjointAbNConfiguration config;
+    private final DisjointAbNConfiguration<T> config;
     
-    public ParentDisjointNodeTableModel(DisjointAbNConfiguration config) {
+    public ParentDisjointNodeTableModel(DisjointAbNConfiguration<T> config) {
         super(new String [] {
             String.format("Parent %s", config.getTextConfiguration().getConceptTypeName(false)),
             String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
@@ -29,10 +29,10 @@ public class ParentDisjointNodeTableModel extends ParentNodeTableModel {
     }
     
     @Override
-    protected Object[] createRow(ParentNodeDetails item) {
+    protected Object[] createRow(ParentNodeDetails<T> item) {
         ArrayList<String> overlappingNodeNames = new ArrayList<>();
         
-        DisjointNode parentDisjointNode = (DisjointNode)item.getParentNode();
+        DisjointNode parentDisjointNode = item.getParentNode();
         
         Set<Node> overlaps = parentDisjointNode.getOverlaps();
         

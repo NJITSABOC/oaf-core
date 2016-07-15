@@ -13,7 +13,7 @@ import java.util.Set;
  * 
  * @author Chris O
  */
-public class Area extends SimilarityNode {
+public class Area extends SimilarityNode<PArea> {
 
     private final Set<InheritableProperty> relationships;
     
@@ -48,7 +48,9 @@ public class Area extends SimilarityNode {
         
         this.regions = new HashSet<>();
         
-        
+        regionPartition.forEach((rels, regionPAreas) -> {
+            regions.add(new Region(this, regionPAreas, rels));
+        });
     }
     
     public Set<InheritableProperty> getRelationships() {
@@ -60,7 +62,7 @@ public class Area extends SimilarityNode {
     }
     
     public Set<PArea> getPAreas() {
-        return (Set<PArea>)(Set<?>)super.getInternalNodes();
+        return super.getInternalNodes();
     }
 
     public String getName() {

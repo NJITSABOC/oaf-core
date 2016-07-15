@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
@@ -16,11 +17,11 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class TANTextConfiguration implements PartitionedAbNTextConfiguration {
+public abstract class TANTextConfiguration implements PartitionedAbNTextConfiguration<Cluster, Band> {
 
-    private final ClusterTribalAbstractionNetwork tan;
+    private final ClusterTribalAbstractionNetwork<Cluster> tan;
 
-    public TANTextConfiguration(ClusterTribalAbstractionNetwork tan) {
+    public TANTextConfiguration(ClusterTribalAbstractionNetwork<Cluster> tan) {
         this.tan = tan;
     }
     
@@ -67,7 +68,7 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     }
 
     @Override
-    public String getContainerHelpDescription(PartitionedNode container) {
+    public String getContainerHelpDescription(Band container) {
         StringBuilder helpDescription = new StringBuilder();
         
         String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
@@ -85,7 +86,7 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     }
 
     @Override
-    public String getNodeHelpDescription(Node node) {
+    public String getNodeHelpDescription(Cluster node) {
         StringBuilder helpDescription = new StringBuilder();
         
         String pluralConceptName = this.getConceptTypeName(true).toLowerCase();

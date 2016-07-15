@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
@@ -9,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  *
  * @author Chris O
  */
-public class AreaDetailsPanel extends NodeDetailsPanel {
+public class AreaDetailsPanel extends NodeDetailsPanel<Area> {
     
     public AreaDetailsPanel(PAreaTaxonomyConfiguration configuration) {
 

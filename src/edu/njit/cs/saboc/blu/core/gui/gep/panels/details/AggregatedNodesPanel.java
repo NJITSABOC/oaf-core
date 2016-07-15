@@ -14,7 +14,7 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public class AggregatedNodesPanel extends BaseNodeInformationPanel {
+public class AggregatedNodesPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 
     private final NodeList aggregateGroupList;
     private final ConceptList conceptList;
@@ -57,7 +57,7 @@ public class AggregatedNodesPanel extends BaseNodeInformationPanel {
     }
     
     @Override
-    public void setContents(Node node) {
+    public void setContents(T node) {
         splitPane.setDividerLocation(300);
         
         AggregateNode aggregateNode = (AggregateNode)node;

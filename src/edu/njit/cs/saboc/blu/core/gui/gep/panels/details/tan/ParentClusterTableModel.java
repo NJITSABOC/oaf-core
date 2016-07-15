@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class ParentClusterTableModel extends OAFAbstractTableModel<ParentNodeDetails> {
+public class ParentClusterTableModel extends OAFAbstractTableModel<ParentNodeDetails<Cluster>> {
     
     private final TANConfiguration config;
     
@@ -27,16 +27,18 @@ public class ParentClusterTableModel extends OAFAbstractTableModel<ParentNodeDet
     }
     
     public Concept getParentConcept(int row) {
-        return this.getItemAtRow(row).getParentConcept();
+        return getItemAtRow(row).getParentConcept();
     }
     
     public Cluster getParentCluster(int row) {
-        return (Cluster)this.getItemAtRow(row).getParentNode();
+        return getItemAtRow(row).getParentNode();
     }
 
     @Override
-    protected Object[] createRow(ParentNodeDetails parentInfo) {
-        Band band = config.getTribalAbstractionNetwork().getPartitionNodeFor((Cluster)parentInfo.getParentNode());
+    protected Object[] createRow(ParentNodeDetails<Cluster> parentInfo) {
+        ClusterTribalAbstractionNetwork tan = config.getTribalAbstractionNetwork();
+        
+        Band band = tan.getBandFor(parentInfo.getParentNode());
         
         return new Object [] {
             parentInfo.getParentConcept().getName(), 

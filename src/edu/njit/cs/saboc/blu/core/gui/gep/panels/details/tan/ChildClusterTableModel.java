@@ -1,15 +1,15 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
  *
  * @author Chris O
  */
-public class ChildClusterTableModel extends OAFAbstractTableModel<Node> {
+public class ChildClusterTableModel extends OAFAbstractTableModel<Cluster> {
 
     private final TANConfiguration config;
     
@@ -24,18 +24,18 @@ public class ChildClusterTableModel extends OAFAbstractTableModel<Node> {
     }
     
     public Cluster getChildCluster(int row) {
-        return (Cluster)this.getItemAtRow(row);
+        return getItemAtRow(row);
     }
 
     @Override
-    protected Object[] createRow(Node item) {
-        Cluster cluster = (Cluster)item;
+    protected Object[] createRow(Cluster cluster) {
+        ClusterTribalAbstractionNetwork tan = config.getTribalAbstractionNetwork();
         
-        Band band = config.getTribalAbstractionNetwork().getPartitionNodeFor(cluster);
-        
+        Band band = tan.getBandFor(cluster);
+
         return new Object [] {
-            item.getName(),
-            item.getConceptCount(),
+            cluster.getName(),
+            cluster.getConceptCount(),
             band.getName("\n")
         };
     }

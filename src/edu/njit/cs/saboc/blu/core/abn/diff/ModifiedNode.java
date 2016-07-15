@@ -1,18 +1,18 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeModified;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ModifiedNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 
 /**
  *
  * @author Chris O
  */
-public class ModifiedNode extends DiffNode<NodeModified> {
+public class ModifiedNode extends DiffNode<ModifiedNodeDetails> {
 
     private final Node from;
     private final Node to;
     
-    public ModifiedNode(Node from, Node to, NodeModified details) {
+    public ModifiedNode(Node from, Node to, ModifiedNodeDetails details) {
         super(details);
         
         this.from = from;

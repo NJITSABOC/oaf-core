@@ -169,10 +169,9 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
             int labelXPos =  GraphLayoutConstants.PARTITION_CHANNEL_WIDTH + (regionWidth - areaLabel.getWidth()) / 2;
             areaLabel.setLocation(labelXPos, 4);
 
-            
             RegionEntry regionEntry = createRegionPanel(
                     graph,
-                    new Region(area.getPAreas(), area.getRelationships()), 
+                    new Region(area, area.getPAreas(), area.getRelationships()), 
                     areaEntry,
                     regionX - regionBump,
                     10,
@@ -240,7 +239,9 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
     
     @Override
     public JLabel createPartitionLabel(PartitionedNode partition, int width) {
-        return createAreaLabel((Area)partition, width);
+        Region region = (Region)partition;
+        
+        return createAreaLabel(region.getArea(), width);
     }
 
     private JLabel createAreaLabel(Area area, int width) {

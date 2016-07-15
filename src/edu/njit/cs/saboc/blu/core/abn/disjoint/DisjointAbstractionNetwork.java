@@ -52,7 +52,7 @@ public class DisjointAbstractionNetwork<
     }
     
     public Set<DisjointNode<PARENTNODE_T>> getAllDisjointNodes() {
-        return super.getNodeHierarchy().getNodesInHierarchy();
+        return super.getNodeHierarchy().getNodes();
     }
     
     public Set<DisjointNode<PARENTNODE_T>> getOverlappingDisjointNodes() {
@@ -86,11 +86,11 @@ public class DisjointAbstractionNetwork<
     }
 
     @Override
-    public Set<ParentNodeDetails> getParentNodeDetails(DisjointNode<PARENTNODE_T> node) {
+    public Set<ParentNodeDetails<DisjointNode<PARENTNODE_T>>> getParentNodeDetails(DisjointNode<PARENTNODE_T> node) {
         
         return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
                 node, 
                 this.getSourceHierarchy(), 
-                (Set<SinglyRootedNode>)(Set<?>)this.getAllDisjointNodes());
+                this.getAllDisjointNodes());
     }
 }

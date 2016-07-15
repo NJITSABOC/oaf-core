@@ -26,9 +26,9 @@ import javax.swing.JLabel;
  */
 public class TargetAbNLayout extends BluGraphLayout {
 
-    private final TargetAbstractionNetwork targetAbN;
+    private final TargetAbstractionNetwork<TargetGroup> targetAbN;
     
-    public TargetAbNLayout(BluGraph graph, TargetAbstractionNetwork targetAbN) {
+    public TargetAbNLayout(BluGraph graph, TargetAbstractionNetwork<TargetGroup> targetAbN) {
         super(graph);
         
         this.targetAbN = targetAbN;

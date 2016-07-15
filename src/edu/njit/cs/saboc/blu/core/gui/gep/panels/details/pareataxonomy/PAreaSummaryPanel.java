@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class PAreaSummaryPanel extends NodeSummaryPanel {
+public class PAreaSummaryPanel extends NodeSummaryPanel<PArea> {
     
     private final PropertyPanel relationshipPanel;
     
@@ -38,11 +37,9 @@ public class PAreaSummaryPanel extends NodeSummaryPanel {
         this(configuration, new PAreaSummaryTextFactory(configuration));
     }
     
-    public void setContents(Node node) {        
-        super.setContents(node);
-        
-        PArea parea = (PArea)node;
-        
+    public void setContents(PArea parea) {        
+        super.setContents(parea);
+                
         ArrayList<InheritableProperty> sortedProperties = new ArrayList<>(parea.getRelationships());
         
         sortedProperties.sort( (a, b) -> a.getName().compareToIgnoreCase(b.getName()));

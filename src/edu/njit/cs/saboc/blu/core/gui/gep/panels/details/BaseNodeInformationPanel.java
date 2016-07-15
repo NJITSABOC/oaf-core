@@ -7,8 +7,8 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class BaseNodeInformationPanel extends JPanel {
+public abstract class BaseNodeInformationPanel<T extends Node> extends JPanel {
     
-    public abstract void setContents(Node node);
+    public abstract void setContents(T node);
     public abstract void clearContents();
 }

@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
@@ -12,11 +12,11 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class ChildDisjointNodeTableModel extends ChildNodeTableModel {
+public class ChildDisjointNodeTableModel<T extends DisjointNode> extends OAFAbstractTableModel<T> {
     
-    private final DisjointAbNConfiguration configuration;
+    private final DisjointAbNConfiguration<T> configuration;
     
-    public ChildDisjointNodeTableModel(DisjointAbNConfiguration configuration) {
+    public ChildDisjointNodeTableModel(DisjointAbNConfiguration<T> configuration) {
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false), 
             String.format("Overlapping %s", configuration.getTextConfiguration().getOverlappingNodeTypeName(true)),
@@ -27,9 +27,7 @@ public class ChildDisjointNodeTableModel extends ChildNodeTableModel {
     }
     
     @Override
-    protected Object[] createRow(Node item) {
-        DisjointNode disjointNode = (DisjointNode)item;
-        
+    protected Object[] createRow(T disjointNode) {        
         ArrayList<String> overlappingPAreaNames = new ArrayList<>();
         
         Set<Node> overlaps = disjointNode.getOverlaps();
@@ -49,9 +47,9 @@ public class ChildDisjointNodeTableModel extends ChildNodeTableModel {
         }
         
         return new Object [] {
-            item.getName(),
+            disjointNode.getName(),
             overlapsStr,
-            item.getConceptCount()
+            disjointNode.getConceptCount()
         };
     }
 }

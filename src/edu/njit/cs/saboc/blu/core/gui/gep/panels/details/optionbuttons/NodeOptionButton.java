@@ -12,9 +12,9 @@ import javax.swing.JButton;
  *
  * @author Chris O
  */
-public abstract class NodeOptionButton extends JButton {
+public abstract class NodeOptionButton<T extends Node> extends JButton {
     
-    private Optional<Node> currentNode = Optional.empty();
+    private Optional<T> currentNode = Optional.empty();
     
     public NodeOptionButton(String iconFileName, String description) {
         
@@ -32,13 +32,13 @@ public abstract class NodeOptionButton extends JButton {
         this.setToolTipText(description);
     }
     
-    public void setCurrentNode(Node node) {
+    public void setCurrentNode(T node) {
         this.currentNode = Optional.of(node);
         
         setEnabledFor(node);
     }
     
-    public Optional<Node> getCurrentNode() {
+    public Optional<T> getCurrentNode() {
         return currentNode;
     }
 
@@ -48,5 +48,5 @@ public abstract class NodeOptionButton extends JButton {
         this.setEnabled(false);
     }
     
-    public abstract void setEnabledFor(Node node);
+    public abstract void setEnabledFor(T node);
 }

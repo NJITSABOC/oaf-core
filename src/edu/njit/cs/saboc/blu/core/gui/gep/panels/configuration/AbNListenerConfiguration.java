@@ -9,10 +9,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public interface AbNListenerConfiguration {
+public interface AbNListenerConfiguration<T extends Node> {
     public EntitySelectionListener<Concept> getGroupConceptListListener();
     
-    public EntitySelectionListener<Node> getChildGroupListener();
+    public EntitySelectionListener<T> getChildGroupListener();
     
-    public EntitySelectionListener<ParentNodeDetails> getParentGroupListener();
+    public EntitySelectionListener<ParentNodeDetails<T>> getParentGroupListener();
 }

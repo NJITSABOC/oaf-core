@@ -11,15 +11,15 @@ import java.util.Optional;
  * 
  * @param <ENTITY_T> The type of the entities being displayed in the list
  */
-public abstract class NodeEntityList<ENTITY_T> extends AbstractEntityList<ENTITY_T>  {
+public abstract class NodeEntityList<T extends Node, ENTITY_T> extends AbstractEntityList<ENTITY_T>  {
     
-    private Optional<Node> currentNode = Optional.empty();
+    private Optional<T> currentNode = Optional.empty();
     
     public NodeEntityList(AbstractNodeEntityTableModel<ENTITY_T> tableModel) {
         super(tableModel);
     }
     
-    public void setCurrentNode(Node node) {
+    public void setCurrentNode(T node) {
         this.currentNode = Optional.of(node);
         
         ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).setCurrentNode(node);

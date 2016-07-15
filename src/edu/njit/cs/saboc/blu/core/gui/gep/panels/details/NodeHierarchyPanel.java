@@ -5,9 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -18,32 +16,32 @@ import javax.swing.JSplitPane;
  *
  * @author Chris O
  */
-public class NodeHierarchyPanel extends BaseNodeInformationPanel {
+public class NodeHierarchyPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 
     private final JSplitPane splitPane;
     
-    private final AbstractEntityList<ParentNodeDetails> parentNodeList;
+    private final AbstractEntityList<ParentNodeDetails<T>> parentNodeList;
     
-    private final NodeList childNodeList;
+    private final NodeList<T> childNodeList;
         
-    private final AbNConfiguration config;
+    private final AbNConfiguration<T> config;
     
-    public NodeHierarchyPanel(AbNConfiguration config) {
+    public NodeHierarchyPanel(AbNConfiguration<T> config) {
         this(config, 
                 config.getUIConfiguration().getParentNodeTableModel(), 
                 config.getUIConfiguration().getChildNodeTableModel());
     }
     
     public NodeHierarchyPanel(AbNConfiguration config, 
-            OAFAbstractTableModel<ParentNodeDetails> parentModel, 
-            OAFAbstractTableModel<Node> childModel) {
+            OAFAbstractTableModel<ParentNodeDetails<T>> parentModel, 
+            OAFAbstractTableModel<T> childModel) {
         
         this.config = config;
 
         this.setLayout(new BorderLayout());
         
-        parentNodeList = new AbstractEntityList<ParentNodeDetails>(parentModel) {
-            public String getBorderText(Optional<ArrayList<ParentNodeDetails>> entries) {
+        parentNodeList = new AbstractEntityList<ParentNodeDetails<T>>(parentModel) {
+            public String getBorderText(Optional<ArrayList<ParentNodeDetails<T>>> entries) {
                 String baseStr = String.format("Root's %s's %s", 
                         config.getTextConfiguration().getParentConceptTypeName(false), 
                         config.getTextConfiguration().getNodeTypeName(true));
@@ -57,12 +55,16 @@ public class NodeHierarchyPanel extends BaseNodeInformationPanel {
         };
         
         childNodeList = new NodeList(childModel, config) {
-            public String getBorderText(Optional<ArrayList<Node>> entries) {
+
+            @Override
+            protected String getBorderText(Optional entries) {
                 String baseStr = String.format("Child %s",
                         config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entries.isPresent()) {
-                    return String.format("%s (%d)", baseStr, entries.get().size());
+                    ArrayList<T> nodes = (ArrayList<T>)entries.get();
+                    
+                    return String.format("%s (%d)", baseStr, nodes.size());
                 } else {
                     return baseStr;
                 }
@@ -88,11 +90,11 @@ public class NodeHierarchyPanel extends BaseNodeInformationPanel {
     }
     
     @Override
-    public void setContents(Node node) {
-        AbstractionNetwork abn = config.getAbstractionNetwork();
+    public void setContents(T node) {
+        AbstractionNetwork<T> abn = config.getAbstractionNetwork();
         
-        ArrayList<ParentNodeDetails> parents = new ArrayList<>(abn.getParentNodeDetails(node));
-        ArrayList<Node> children = new ArrayList<>(abn.getNodeHierarchy().getChildren(node));
+        ArrayList<ParentNodeDetails<T>> parents = new ArrayList<>(abn.getParentNodeDetails(node));
+        ArrayList<T> children = new ArrayList<>(abn.getNodeHierarchy().getChildren(node));
         
         parents.sort( (a, b) -> {
             return a.getParentNode().getName().compareToIgnoreCase(b.getParentNode().getName());

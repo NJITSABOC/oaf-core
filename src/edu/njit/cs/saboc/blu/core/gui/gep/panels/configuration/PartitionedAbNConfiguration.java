@@ -3,26 +3,27 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**
  *
  * @author Chris O
  */
-public abstract class PartitionedAbNConfiguration extends AbNConfiguration {
+public abstract class PartitionedAbNConfiguration<T extends SinglyRootedNode, V extends PartitionedNode> extends AbNConfiguration<T> {
     
-    public PartitionedAbNConfiguration(PartitionedAbstractionNetwork abstractionNetwork) {
+    public PartitionedAbNConfiguration(PartitionedAbstractionNetwork<T, V> abstractionNetwork) {
         super(abstractionNetwork);
     }
     
-    public abstract int getPartitionedNodeLevel(PartitionedNode node);
+    public abstract int getPartitionedNodeLevel(V node);
     
-    public abstract DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(PartitionedNode node);
+    public abstract DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(V node);
     
-    public void setUIConfiguration(PartitionedAbNUIConfiguration config) {
+    public void setUIConfiguration(PartitionedAbNUIConfiguration<T, V> config) {
         super.setUIConfiguration(config);
     }
     
-    public void setTextConfiguration(PartitionedAbNTextConfiguration config) {
+    public void setTextConfiguration(PartitionedAbNTextConfiguration<T, V> config) {
         super.setTextConfiguration(config);
     }
 
@@ -31,12 +32,12 @@ public abstract class PartitionedAbNConfiguration extends AbNConfiguration {
     }
     
     @Override
-    public PartitionedAbNUIConfiguration getUIConfiguration() {
-        return (PartitionedAbNUIConfiguration)super.getUIConfiguration();
+    public PartitionedAbNUIConfiguration<T, V> getUIConfiguration() {
+        return (PartitionedAbNUIConfiguration<T, V>)super.getUIConfiguration();
     }
     
     @Override
-    public PartitionedAbNTextConfiguration getTextConfiguration() {
-        return (PartitionedAbNTextConfiguration)super.getTextConfiguration();
+    public PartitionedAbNTextConfiguration<T, V> getTextConfiguration() {
+        return (PartitionedAbNTextConfiguration<T, V>)super.getTextConfiguration();
     }
 }

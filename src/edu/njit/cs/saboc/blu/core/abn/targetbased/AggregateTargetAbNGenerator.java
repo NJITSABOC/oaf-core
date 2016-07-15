@@ -24,17 +24,23 @@ public class AggregateTargetAbNGenerator {
         
         Set<Concept> roots = new HashSet<>();
         
-        sourceTargetAbN.getTargetGroupHierarchy().getRoots().forEach( (group) -> {
+        Set<TargetGroup> rootGroups = sourceTargetAbN.getTargetGroupHierarchy().getRoots();
+        
+        rootGroups.forEach( (group) -> {
             roots.add(group.getRoot());
         });
         
         Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
                         new AggregateTargetAbNFactory(),
-                        sourceTargetAbN.getNodeHierarchy(),
+                        sourceTargetAbN.getTargetGroupHierarchy(),
                         minGroupSize);
         
         Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
+        
+        TargetAbstractionNetwork tan = new AggregateTargetAbN(sourceTargetAbN, minGroupSize, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
 
-        return new TargetAbstractionNetwork(targetHierarchy, sourceTargetAbN.getSourceHierarchy());
+        tan.setAggregated(true);
+        
+        return tan;
     }
 }

@@ -176,7 +176,7 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
             @Override
             public void entityClicked(OverlappingNodeEntry entity) {
                 if (currentMetrics.isPresent()) {
-                    displayOverlappingDetailsFor(entity.getOverlappingGroup());
+                    displayOverlappingDetailsFor(entity.getOverlappingNode());
                 }
             }
 

@@ -12,7 +12,7 @@ import javax.swing.ScrollPaneConstants;
  *
  * @author Den
  */
-public class ConceptHierarchyPanel extends BaseNodeInformationPanel {
+public class ConceptHierarchyPanel<T extends SinglyRootedNode> extends BaseNodeInformationPanel<T> {
 
     private final NodeConceptHierarchicalViewPanel conceptHierarchyPanel;
     
@@ -31,8 +31,8 @@ public class ConceptHierarchyPanel extends BaseNodeInformationPanel {
     }    
 
     @Override
-    public void setContents(Node node) {
-        conceptHierarchyPanel.setNode((SinglyRootedNode)node);
+    public void setContents(T node) {
+        conceptHierarchyPanel.setNode(node);
     }
 
     @Override

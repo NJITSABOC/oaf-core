@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.tan.Band;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
@@ -13,7 +15,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.ClusterPane
  *
  * @author Chris O
  */
-public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration {
+public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<Cluster, Band> {
     
     private final TANConfiguration config;
     
@@ -31,12 +33,12 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration {
     }
     
     @Override
-    public OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel() {
+    public OAFAbstractTableModel<ParentNodeDetails<Cluster>> getParentNodeTableModel() {
         return new ParentClusterTableModel(config);
     }
 
     @Override
-    public OAFAbstractTableModel<Node> getChildNodeTableModel() {
+    public OAFAbstractTableModel<Cluster> getChildNodeTableModel() {
         return new ChildClusterTableModel(config);
     }
 

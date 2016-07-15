@@ -36,7 +36,7 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
     }
     
     public Set<NODE_T> getNodes() {
-        return nodeHierarchy.getNodesInHierarchy();
+        return nodeHierarchy.getNodes();
     }
     
     public Hierarchy<NODE_T> getNodeHierarchy() {
@@ -48,8 +48,8 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
      * @param concept
      * @return 
      */
-    public Set<Node> getNodesWith(Concept concept) {
-        Set<Node> nodes = nodeHierarchy.getNodesInHierarchy().stream().filter( 
+    public Set<NODE_T> getNodesWith(Concept concept) {
+        Set<NODE_T> nodes = nodeHierarchy.getNodes().stream().filter( 
                 (node) -> {return node.getConcepts().contains(concept); }).collect(Collectors.toSet());
         
         return nodes;
@@ -63,8 +63,8 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
      * @param query
      * @return 
      */
-    public Set<Node> searchNodes(String query) {
-        Set<Node> nodes = nodeHierarchy.getNodesInHierarchy().stream().filter( 
+    public Set<NODE_T> searchNodes(String query) {
+        Set<NODE_T> nodes = nodeHierarchy.getNodes().stream().filter( 
                 (node) -> {return node.getName().toLowerCase().contains(query.toLowerCase()); }).collect(Collectors.toSet());
         
         return nodes;
@@ -84,7 +84,7 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
         
         Map<Concept, Set<NODE_T>> conceptNodes = new HashMap<>();
         
-        nodeHierarchy.getNodesInHierarchy().forEach( (node) -> {
+        nodeHierarchy.getNodes().forEach( (node) -> {
             Set<Concept> conceptResults = node.getConcepts().stream().filter( (concept) -> {
                 return concept.getName().toLowerCase().contains(query);
             }).collect(Collectors.toSet());
@@ -105,5 +105,5 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
         return result;
     }
         
-    public abstract Set<ParentNodeDetails> getParentNodeDetails(NODE_T node);
+    public abstract Set<ParentNodeDetails<NODE_T>> getParentNodeDetails(NODE_T node);
 }

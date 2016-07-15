@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.SubTAN;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 import javax.swing.SwingUtilities;
 
 /**
@@ -14,12 +14,12 @@ import javax.swing.SwingUtilities;
  */
 public abstract class CreateSubTANButton extends NodeOptionButton {
     
-    private final DisplayAbNListener<ClusterTribalAbstractionNetwork> displayTaxonomyListener;
+    private final DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTaxonomyListener;
     
     public CreateSubTANButton(
             String iconName,
             String toolTip,
-            DisplayAbNListener<ClusterTribalAbstractionNetwork> displayTaxonomyListener) {
+            DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTaxonomyListener) {
         
         super(iconName, toolTip);
         

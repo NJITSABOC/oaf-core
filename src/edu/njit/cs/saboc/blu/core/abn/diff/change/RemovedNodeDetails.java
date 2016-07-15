@@ -9,8 +9,9 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class NodeRemoved extends NodeChange {
-    public NodeRemoved(Node node, 
+public class RemovedNodeDetails extends NodeChangeDetails {
+    
+    public RemovedNodeDetails(Node node, 
             Set<NodeConceptChange> conceptChanges, 
             Set<ChildOfChange> childOfChanges) {
         

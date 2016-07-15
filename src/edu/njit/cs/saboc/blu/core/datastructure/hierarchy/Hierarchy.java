@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AllPathsToNode
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorDepthVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
@@ -21,16 +22,17 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * Data type representing a rooted Directed Acylic Graph.
+ * 
  * @author Chris
  */
 public class Hierarchy<T> {
     
     private final Set<T> roots;
     
-    private final HashMap<T, Set<T>> children = new HashMap<>();
     private final HashMap<T, Set<T>> parents = new HashMap<>();
-    
+    private final HashMap<T, Set<T>> children = new HashMap<>();
+
     public Hierarchy(T root) {
         this(Collections.singleton(root));
     }
@@ -46,6 +48,10 @@ public class Hierarchy<T> {
             children.put(root, new HashSet<>());
             parents.put(root, new HashSet<>());
         });
+    }
+    
+    public Hierarchy(Hierarchy<T> otherHierarchy) {
+        this(otherHierarchy.getRoots(), otherHierarchy.children);
     }
     
     public Hierarchy(Set<T> roots, Map<T, Set<T>> hierarchy) {
@@ -67,7 +73,7 @@ public class Hierarchy<T> {
                 }
 
                 for (T child : conceptChildren) {
-                    addIsA(child, concept);
+                    addEdge(child, concept);
 
                     if (!convertStack.contains(child)) {
                         convertStack.add(child);
@@ -98,6 +104,8 @@ public class Hierarchy<T> {
         return roots.iterator().next();
     }
     
+    
+    
     /**
      * Returns the number of nodes in the hierarchy
      * @return 
@@ -112,7 +120,7 @@ public class Hierarchy<T> {
      * @param from The child concept
      * @param to The parent concept
      */
-    final public void addIsA(T from, T to) {
+    final public void addEdge(T from, T to) {
         if(!parents.containsKey(from)) {
             parents.put(from, new HashSet<>());
         }
@@ -144,57 +152,129 @@ public class Hierarchy<T> {
         addAllHierarchicalRelationships(hierarchy);
     }
     
+    /**
+     * Adds the hierarchical relationships (and nodes) from the given hierarchy
+     * into this hierarchy, without copying the roots.
+     * 
+     * @param hierarchy 
+     */
     public void addAllHierarchicalRelationships(Hierarchy<T> hierarchy) {
-        hierarchy.children.forEach( (node, nodeChildren) -> {
-            nodeChildren.forEach( (child) -> {
-                addIsA(child, node);
+        hierarchy.children.forEach((node, nodeChildren) -> {
+            nodeChildren.forEach((child) -> {
+                addEdge(child, node);
             });
         });
     }
     
+    /**
+     * Returns the subhierarchy rooted at the given node.
+     * 
+     * @param root
+     * @return 
+     */
     public Hierarchy<T> getSubhierarchyRootedAt(T root) {
         return new Hierarchy<>(root, this.children);
     }
     
-    public Set<T> getNodesInHierarchy() {
+    /**
+     * Returns the set of edges in the hierarchy
+     * 
+     * @return 
+     */
+    public Set<Edge<T>> getEdges() {
+        Set<Edge<T>> edges = new HashSet<>();
+        
+        children.forEach( (node, childNodes) -> {
+            childNodes.forEach( (child) -> {
+                edges.add(new Edge(child, node));
+            });
+        });
+        
+        return edges;
+    }
+    
+    /**
+     * Returns all of the nodes (entries) in the hierarchy
+     * 
+     * @return 
+     */
+    public Set<T> getNodes() {
         Set<T> allNodes = new HashSet<>(children.keySet());
         allNodes.addAll(roots);
         
         return allNodes;
     }
     
-    public Set<T> getChildren(T c) {
-        if(children.containsKey(c)) {
-            return children.get(c);
+    /**
+     * Returns the set of child nodes of the given node
+     * 
+     * @param node
+     * @return 
+     */
+    public Set<T> getChildren(T node) {
+        if(children.containsKey(node)) {
+            return children.get(node);
         }
         
         return Collections.emptySet();
     }
     
-    public Set<T> getParents(T c) {
-        if(parents.containsKey(c)) {
-            return parents.get(c);
+    /**
+     * Returns the set of parent nodes of the given node
+     * 
+     * @param node
+     * @return 
+     */
+    public Set<T> getParents(T node) {
+        if(parents.containsKey(node)) {
+            return parents.get(node);
         }
         
         return Collections.emptySet();
     }
     
+    /**
+     * Returns a map containing all of the node -- children pairs in the hierarchy
+     * @return 
+     */
     public HashMap<T, Set<T>> getAllChildRelationships() {
         return children;
     }
     
+    
+    /**
+     * Returns a map containing all of the node -- parent parts in the hierarchy
+     * @return 
+     */
     public HashMap<T, Set<T>> getAllParentRelationships() {
         return parents;
     }
     
-    public boolean contains(T item) {
-        return children.containsKey(item);
+    /**
+     * Determines if the hierarchy contains the given node
+     * @param node
+     * @return 
+     */
+    public boolean contains(T node) {
+        return children.containsKey(node);
     }
     
+    /**
+     * Performs a breadth-first search down the hierarchy starting from the given node
+     * 
+     * @param startingPoint
+     * @param visitor 
+     */
     public void BFSDown(T startingPoint, HierarchyVisitor<T> visitor) {
         BFSDown(Collections.singleton(startingPoint), visitor);
     }
     
+    /**
+     * Performs a breadth-first search down the hierarchy starting from the given nodes
+     * 
+     * @param startingPoints
+     * @param visitor 
+     */
     public void BFSDown(Set<T> startingPoints, HierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<>();
         queue.addAll(startingPoints);
@@ -218,10 +298,22 @@ public class Hierarchy<T> {
         }
     }
 
+    /**
+     * Performs a breadth-first search UP the hierarchy starting from the given node
+     * 
+     * @param startingPoint
+     * @param visitor 
+     */
     public void BFSUp(T startingPoint, HierarchyVisitor<T> visitor) {
         BFSUp(Collections.singleton(startingPoint), visitor);
     }
     
+    /**
+     * Performs a breadth-first search UP the hierarchy starting from the given nodes
+     * 
+     * @param startingPoints
+     * @param visitor 
+     */
     public void BFSUp(Set<T> startingPoints, HierarchyVisitor<T> visitor) {
         Queue<T> queue = new ArrayDeque<>(startingPoints);
 
@@ -243,10 +335,15 @@ public class Hierarchy<T> {
         }
     }
     
+    /**
+     * Performs a topological traversal down the hierarchy
+     * 
+     * @param visitor 
+     */
     public void topologicalDown(HierarchyVisitor<T> visitor) {
         HashMap<T, Integer> parentCounts = new HashMap<>();
         
-        Set<T> nodesInHierarchy = this.getNodesInHierarchy();
+        Set<T> nodesInHierarchy = this.getNodes();
         
         nodesInHierarchy.forEach((T node) -> {
             parentCounts.put(node, this.getParents(node).size());
@@ -272,6 +369,12 @@ public class Hierarchy<T> {
         }
     }
     
+    /**
+     * Performs a topological traversal down a subhierarchy rooted at the starting point
+     * 
+     * @param startingPoint
+     * @param visitor 
+     */
     public void topologicalDownInSubhierarchy(T startingPoint, TopologicalVisitor<T> visitor) {
         Set<T> subhierarchy = this.getDescendants(startingPoint);
         
@@ -313,6 +416,11 @@ public class Hierarchy<T> {
         }
     }
     
+    /**
+     * Returns the number of descendants of the given node
+     * @param node
+     * @return 
+     */
     public int countDescendants(T node) {
         SubhierarchySizeVisitor<T> visitor = new SubhierarchySizeVisitor<>(this);
         
@@ -321,6 +429,11 @@ public class Hierarchy<T> {
         return visitor.getDescandantCount() - 1;
     }
     
+    /**
+     * Returns the set of descendants of the given node
+     * @param node
+     * @return 
+     */
     public Set<T> getDescendants(T node) {
         SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<>(this);
         
@@ -332,6 +445,11 @@ public class Hierarchy<T> {
         return members;
     }
     
+    /**
+     * Returns the roots of the top-level subhierarchies that the given node belongs to
+     * @param node
+     * @return 
+     */
     public Set<T> getMemberSubhierarchyRoots(T node) {
         TopRootVisitor<T> visitor = new TopRootVisitor<>(this);
         
@@ -340,18 +458,36 @@ public class Hierarchy<T> {
         return visitor.getRoots();
     }
     
+    /**
+     * Returns a hierarchy of the ancestors of the given node
+     * @param node
+     * @return 
+     */
     public Hierarchy<T> getAncestorHierarchy(T node) {
         return getAncestorHierarchy(Collections.singleton(node));
     }
     
+    /**
+     * Returns a hierarchy of the ancestors of the given nodes
+     * @param nodes
+     * @return 
+     */
     public Hierarchy<T> getAncestorHierarchy(Set<T> nodes) {
         Set<T> ancestorRoots = new HashSet<>();
-        
+
         nodes.forEach( (node) -> {
-            ancestorRoots.addAll(getMemberSubhierarchyRoots(node));
+            
+            Set<T> subhierarchies = getMemberSubhierarchyRoots(node);
+            
+            if(subhierarchies.isEmpty()) {
+                ancestorRoots.add(node);
+            } else {
+                ancestorRoots.addAll(subhierarchies);
+            }
         });
 
-        AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = new AncestorHierarchyBuilderVisitor<>(this, 
+        AncestorHierarchyBuilderVisitor<T> ancestorHierarchy = 
+                new AncestorHierarchyBuilderVisitor<>(this, 
                 new Hierarchy<T>(ancestorRoots));
         
         this.BFSUp(nodes, ancestorHierarchy);
@@ -359,6 +495,12 @@ public class Hierarchy<T> {
         return ancestorHierarchy.getAncestorHierarchy();
     }
     
+    /**
+     * Returns all paths from the roots of the hierarchy to the given node
+     * 
+     * @param node
+     * @return 
+     */
     public ArrayList<ArrayList<T>> getAllPathsTo(T node) {
         Hierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(node);
         
@@ -369,6 +511,12 @@ public class Hierarchy<T> {
         return visitor.getAllPaths();
     }
         
+    /**
+     * Returns a subhierarchy containing all of the descendants within a given longest-path distance
+     * @param node
+     * @param maxDistance
+     * @return 
+     */
     public Hierarchy<T> getDescendantHierarchyWithinDistance(T node, int maxDistance) {
         Hierarchy<T> hierarchy = new Hierarchy<>(node);
         
@@ -396,7 +544,7 @@ public class Hierarchy<T> {
                         nextLevelQueue.add(child);
                     }
                     
-                    hierarchy.addIsA(child, levelNode);
+                    hierarchy.addEdge(child, levelNode);
                 });
             }
             
@@ -406,6 +554,13 @@ public class Hierarchy<T> {
         return hierarchy;
     }
     
+    /**
+     * Returns a topologically sorted list of nodes within the given longest-path distance
+     * 
+     * @param node
+     * @param distance
+     * @return 
+     */
     public ArrayList<AncestorDepthResult<T>> getTopologicalDescendantListWithinDistance(T node, int distance) {
         Hierarchy<T> hierarchyWithinDistance = this.getDescendantHierarchyWithinDistance(node, distance);
         
@@ -414,5 +569,75 @@ public class Hierarchy<T> {
         hierarchyWithinDistance.topologicalDown(visitor);
         
         return visitor.getResult();
+    }
+    
+    /**
+     * Returns the siblings (nodes with at least one of the same parents) of the given node
+     * @param node
+     * @return 
+     */
+    public Set<T> getSiblings(T node) {
+        Set<T> nodeParents = this.getParents(node);
+        
+        Set<T> siblings = new HashSet<>();
+        
+        nodeParents.forEach( (parent) -> {
+            siblings.addAll(getChildren(parent));
+        });
+        
+        siblings.remove(node);
+        
+        return siblings;
+    }
+    
+    /**
+     * Returns the strict siblings (siblings with all of the same parents) of the given node
+     * 
+     * @param node
+     * @return 
+     */
+    public Set<T> getStrictSiblings(T node) {
+        Set<T> nodeParents = this.getParents(node);
+        
+        Set<T> strictSiblings = new HashSet<>();
+        
+        nodeParents.forEach( (parent) -> {
+            Set<T> siblings = getChildren(parent);
+            
+            siblings.forEach( (sibling) -> {
+               if(!siblings.equals(node) && nodeParents.equals(getParents(sibling))) {
+                   strictSiblings.add(sibling);
+               }
+            });
+        });
+        
+        return strictSiblings;
+    }
+    
+    /**
+     * Returns the leaves (external nodes) of the hierarchy
+     * 
+     * @return 
+     */
+    public Set<T> getLeaves() {
+        RetrieveLeavesVisitor<T> leavesVisitor = new RetrieveLeavesVisitor<>(this);
+        
+        this.BFSDown(getRoots(), leavesVisitor);
+        
+        return leavesVisitor.getLeaves();
+    }
+    
+    /**
+     * Returns the internal nodes of the hierarchy
+     * 
+     * @return 
+     */
+    public Set<T> getInternalNodes() {
+        Set<T> leaves = getLeaves();
+        
+        Set<T> internalNodes = this.getNodes();
+        internalNodes.removeAll(leaves);
+        
+        return internalNodes;
     }
 }

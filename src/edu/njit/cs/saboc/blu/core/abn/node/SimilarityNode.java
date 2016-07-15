@@ -8,11 +8,9 @@ import java.util.Set;
  * 
  * @author Chris O
  */
-public abstract class SimilarityNode extends PartitionedNode {
+public abstract class SimilarityNode<T extends SinglyRootedNode> extends PartitionedNode {
     
-    public SimilarityNode(Set<? extends SinglyRootedNode> internalNodes) {
+    public SimilarityNode(Set<T> internalNodes) {
         super(internalNodes);
     }
-
-    public abstract String getName(String separator);
 }

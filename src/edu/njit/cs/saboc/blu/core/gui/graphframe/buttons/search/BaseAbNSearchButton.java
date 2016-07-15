@@ -29,7 +29,7 @@ import javax.swing.border.TitledBorder;
  *
  * @author Chris
  */
-public class GenericInternalSearchButton extends PopupToggleButton {
+public abstract class BaseAbNSearchButton extends PopupToggleButton {
 
     private List<SearchButtonResult> searchResultsList;
     
@@ -50,9 +50,9 @@ public class GenericInternalSearchButton extends PopupToggleButton {
         }
     }
     
-    private ArrayList<SearchActionEntry> searchActionList = new ArrayList<SearchActionEntry>();
+    private ArrayList<SearchActionEntry> searchActionList = new ArrayList<>();
 
-    public GenericInternalSearchButton(JFrame parent) {
+    protected BaseAbNSearchButton(JFrame parent) {
         super(parent, "Search");
         
         resultList = new FilterableList();

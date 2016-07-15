@@ -36,7 +36,7 @@ public class NodeConceptHierarchyLoader implements Runnable {
         
         HashMap<Concept, Integer> parentCount = new HashMap<>();
         
-        Set<Concept> concepts = hierarchy.getNodesInHierarchy();
+        Set<Concept> concepts = hierarchy.getNodes();
         
         for(Concept concept : concepts) {
             parentCount.put(concept, hierarchy.getParents(concept).size());

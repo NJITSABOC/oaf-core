@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeTypeNameFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.label.DetailsPanelLabel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -13,21 +12,21 @@ import javax.swing.JTabbedPane;
  *
  * @author Chris O
  */
-public class NodeDashboardPanel extends BaseNodeInformationPanel {
+public class NodeDashboardPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
     private final DetailsPanelLabel nodeNameLabel;
     
-    private final ArrayList<BaseNodeInformationPanel> nodeInformationPanels = new ArrayList<>();
+    private final ArrayList<BaseNodeInformationPanel<T>> nodeInformationPanels = new ArrayList<>();
     
     private final JTabbedPane tabbedPane;
     
-    private final NodeDetailsPanel nodeDetailsPanel;
+    private final NodeDetailsPanel<T> nodeDetailsPanel;
     
-    private final AbNConfiguration configuration;
+    private final AbNConfiguration<T> configuration;
 
     public NodeDashboardPanel(
-            NodeDetailsPanel nodeDetailsPanel, 
-            AbNConfiguration configuration) {
+            NodeDetailsPanel<T> nodeDetailsPanel, 
+            AbNConfiguration<T> configuration) {
         
         this.configuration = configuration;
         this.nodeDetailsPanel = nodeDetailsPanel;
@@ -45,11 +44,11 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
         this.add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public AbNConfiguration getConfiguration() {
+    public AbNConfiguration<T> getConfiguration() {
         return configuration;
     }
     
-    public void setContents(Node node) {
+    public void setContents(T node) {
         nodeNameLabel.setText(node.getName());
         
         nodeInformationPanels.forEach((gdp) -> {
@@ -66,7 +65,7 @@ public class NodeDashboardPanel extends BaseNodeInformationPanel {
     }
 
     
-    public final int addInformationTab(BaseNodeInformationPanel panel, String tabName) {
+    public final int addInformationTab(BaseNodeInformationPanel<T> panel, String tabName) {
         tabbedPane.addTab(tabName, panel);
         nodeInformationPanels.add(panel);
         

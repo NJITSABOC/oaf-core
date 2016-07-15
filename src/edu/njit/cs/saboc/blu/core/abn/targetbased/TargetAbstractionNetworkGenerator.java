@@ -42,7 +42,7 @@ public class TargetAbstractionNetworkGenerator {
         
         Set<Concept> uniqueTargets = new HashSet<>();
         
-        sourceHierarchy.getNodesInHierarchy().forEach( (concept) -> {
+        sourceHierarchy.getNodes().forEach( (concept) -> {
             Set<RelationshipTriple> relationships = factory.getRelationshipsToTargetHierarchyFor(concept, relationshipTypes, targetHierarchy);
             
             relationshipsToTargetHierarchy.put(concept, relationships);
@@ -76,7 +76,7 @@ public class TargetAbstractionNetworkGenerator {
 
         HashMap<Concept, Set<RelationshipTriple>> groupIncomingRelationships = new HashMap<>();
         
-        for (Concept concept : targetHierarchy.getNodesInHierarchy()) {
+        for (Concept concept : targetHierarchy.getNodes()) {
             conceptsGroups.put(concept, new HashSet<>());
             
             parentCounts.put(concept, targetHierarchy.getParents(concept).size());
@@ -107,7 +107,7 @@ public class TargetAbstractionNetworkGenerator {
                     conceptsGroups.get(concept).addAll(parentGroups);
 
                     parentGroups.forEach((parentGroupRoot) -> {
-                        conceptsInGroup.get(parentGroupRoot).addIsA(concept, parent);
+                        conceptsInGroup.get(parentGroupRoot).addEdge(concept, parent);
                     });
                 });
             }
@@ -150,7 +150,7 @@ public class TargetAbstractionNetworkGenerator {
                 Set<Concept> parentGroupRoots = conceptsGroups.get(parent);
                 
                 parentGroupRoots.forEach( (parentGroupRoot) -> {
-                    nodeHierarchy.addIsA(group, targetGroups.get(parentGroupRoot));
+                    nodeHierarchy.addEdge(group, targetGroups.get(parentGroupRoot));
                 });
             });
         });

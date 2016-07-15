@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
  *
  * @author Chris O
  */
-public class PopoutNodeDetailsButton extends NodeOptionButton {
+public class PopoutNodeDetailsButton<T extends Node> extends NodeOptionButton<T> {
     
     public interface NodeDetailsPanelGenerator {
         public NodeDashboardPanel generatePanel();
@@ -42,7 +42,7 @@ public class PopoutNodeDetailsButton extends NodeOptionButton {
     }
 
     @Override
-    public void setEnabledFor(Node node) {
+    public void setEnabledFor(T node) {
         this.setEnabled(true);
     }
 }

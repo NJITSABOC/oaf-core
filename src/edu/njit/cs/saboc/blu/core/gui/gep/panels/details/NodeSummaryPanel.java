@@ -16,13 +16,13 @@ import javax.swing.JScrollPane;
  *
  * @author Den
  */
-public class NodeSummaryPanel extends BaseNodeInformationPanel {
+public class NodeSummaryPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 
     private final JEditorPane nodeDetailsPane;
     
-    private final NodeSummaryTextFactory textFactory;
+    private final NodeSummaryTextFactory<T> textFactory;
     
-    public NodeSummaryPanel(NodeSummaryTextFactory textFactory) {
+    public NodeSummaryPanel(NodeSummaryTextFactory<T> textFactory) {
         
         this.textFactory = textFactory;
         
@@ -43,7 +43,7 @@ public class NodeSummaryPanel extends BaseNodeInformationPanel {
         this.add(detailsPanel);
     }
     
-    public void setContents(Node node) {
+    public void setContents(T node) {
         nodeDetailsPane.setText(textFactory.createNodeSummaryText(node));
         
         nodeDetailsPane.setSelectionStart(0);

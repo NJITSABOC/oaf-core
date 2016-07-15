@@ -10,14 +10,16 @@ import java.util.Set;
  */
 public abstract class PAreaTaxonomyFactory {
     
-    public AreaTaxonomy createAreaTaxonomy(Hierarchy<Area> areaHierarchy, 
+    public AreaTaxonomy createAreaTaxonomy(
+            Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
-        return new AreaTaxonomy(areaHierarchy, sourceHierarchy);
+        return new AreaTaxonomy(this, areaHierarchy, sourceHierarchy);
     }
     
-    public PAreaTaxonomy createPAreaTaxonomy(AreaTaxonomy areaTaxonomy,
-            Hierarchy<PArea> pareaHierarchy, 
+    public <T extends PArea> PAreaTaxonomy createPAreaTaxonomy(
+            AreaTaxonomy areaTaxonomy,
+            Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
         
         return new PAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy);

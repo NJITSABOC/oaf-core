@@ -177,7 +177,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
     
     private void newFilter() {
 
-        RowFilter<TableModel, Object> rf = null;
+        RowFilter<TableModel, Object> rf;
         
         try {
             rf = RowFilter.regexFilter("(?i)" + filterField.getText());

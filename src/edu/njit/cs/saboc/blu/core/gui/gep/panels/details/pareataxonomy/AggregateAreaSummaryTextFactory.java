@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -20,9 +19,8 @@ public class AggregateAreaSummaryTextFactory extends AreaSummaryTextFactory {
     }
 
     @Override
-    public String createNodeSummaryText(Node node) {
-        Area area = (Area) node;
-        
+    public String createNodeSummaryText(Area area) {
+
         PAreaTaxonomyConfiguration config = this.getConfiguration();
 
         Set<PArea> aggregatePAreas = new HashSet<>();

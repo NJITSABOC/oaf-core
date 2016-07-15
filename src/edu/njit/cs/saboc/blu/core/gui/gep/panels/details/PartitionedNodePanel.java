@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class PartitionedNodePanel extends NodeDashboardPanel {
+public class PartitionedNodePanel<T extends PartitionedNode> extends NodeDashboardPanel<T> {
 
     private final PartitionedNodeSubNodeList groupListPanel;
     
@@ -19,7 +19,7 @@ public class PartitionedNodePanel extends NodeDashboardPanel {
     private final int disjointMetricsTabIndex;
 
     public PartitionedNodePanel(
-            NodeDetailsPanel containerDetailsPanel, 
+            NodeDetailsPanel<T> containerDetailsPanel, 
             PartitionedAbNConfiguration configuration) {
         
         super(containerDetailsPanel, configuration);
@@ -51,7 +51,7 @@ public class PartitionedNodePanel extends NodeDashboardPanel {
     }
 
     @Override
-    public void setContents(Node node) {
+    public void setContents(T node) {
         super.setContents(node);
         
         PartitionedNode partitionedNode = (PartitionedNode)node;

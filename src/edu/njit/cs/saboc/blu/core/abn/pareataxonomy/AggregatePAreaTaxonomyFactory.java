@@ -15,7 +15,7 @@ public class AggregatePAreaTaxonomyFactory implements AggregateAbNFactory<PArea,
         
         Hierarchy<Concept> hierarchy = new Hierarchy<>(aggregatedNodes.getRoot().getRoot());
         
-        aggregatedNodes.getNodesInHierarchy().forEach( (parea) -> {
+        aggregatedNodes.getNodes().forEach( (parea) -> {
             hierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
         });
         

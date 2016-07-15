@@ -30,7 +30,7 @@ public class AggregateAbNGenerator <
         
         HashMap<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
-        for(NODE_T group : sourceHierarchy.getNodesInHierarchy()) {
+        for(NODE_T group : sourceHierarchy.getNodes()) {
             groupParentCounts.put(group, sourceHierarchy.getParents(group).size());
             
             if (group.getConceptCount() >= minNodeSize) {
@@ -64,7 +64,7 @@ public class AggregateAbNGenerator <
 
                     // Add this group to that reducing group too
                     groupSet.get(parentGroup).forEach((reducedGroup) -> {
-                        reducedGroupMembers.get(reducedGroup).addIsA(group, parentGroup);
+                        reducedGroupMembers.get(reducedGroup).addEdge(group, parentGroup);
                     });
                 }
             }
@@ -111,7 +111,7 @@ public class AggregateAbNGenerator <
                      Set<NODE_T> parentAggregateNodes = groupSet.get(parentNode);
                    
                      parentAggregateNodes.forEach( (parentAggregateNode) -> {
-                         aggregateNodeHierarchy.addIsA(aggregateNode, aggregateGroups.get(parentAggregateNode));
+                         aggregateNodeHierarchy.addEdge(aggregateNode, aggregateGroups.get(parentAggregateNode));
                      });
                 });
             }

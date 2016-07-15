@@ -7,15 +7,15 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class AncestorSubtaxonomy extends PAreaSubtaxonomy {
+public class AncestorSubtaxonomy<T extends PArea> extends PAreaSubtaxonomy<T> {
     
-    private final PArea sourcePArea;
+    private final T sourcePArea;
     
     public AncestorSubtaxonomy(
-            PAreaTaxonomy sourceTaxonomy,
-            PArea sourcePArea,
+            PAreaTaxonomy<T> sourceTaxonomy,
+            T sourcePArea,
             AreaTaxonomy areaTaxonomy,
-            Hierarchy<PArea> pareaHierarchy,
+            Hierarchy<T> pareaHierarchy,
             Hierarchy<Concept> conceptHierarchy) {
 
         super(sourceTaxonomy, areaTaxonomy, pareaHierarchy, conceptHierarchy);
@@ -23,7 +23,7 @@ public class AncestorSubtaxonomy extends PAreaSubtaxonomy {
         this.sourcePArea = sourcePArea;
     }
     
-    public PArea getSourcePArea() {
+    public T getSourcePArea() {
         return sourcePArea;
     }
 }

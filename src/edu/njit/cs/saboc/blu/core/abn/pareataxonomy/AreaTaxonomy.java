@@ -16,19 +16,33 @@ import java.util.Set;
  */
 public class AreaTaxonomy extends AbstractionNetwork<Area> {
     
+    private final PAreaTaxonomyFactory factory;
+    
     public AreaTaxonomy(
+            PAreaTaxonomyFactory factory,
             Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
         super(areaHierarchy, sourceHierarchy);
+        
+        this.factory = factory;
     }
     
-    public Hierarchy<Area> getAreaHierarchy(){
+    protected PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
+        return factory;
+    }
+    
+    public Hierarchy<Area> getAreaHierarchy() {
         return super.getNodeHierarchy();
     }
     
     public Set<Area> getAreas() {
         return super.getNodes();
+    }
+
+    @Override
+    public Set<Area> searchNodes(String query) {
+        return findAreas(query);
     }
         
     public Set<Area> findAreas(String query) {
@@ -47,8 +61,10 @@ public class AreaTaxonomy extends AbstractionNetwork<Area> {
 
         for (Area area : areas) {
             ArrayList<String> relsInArea = new ArrayList<>();
-
-            area.getRelationships().forEach((rel) -> {
+            
+            Set<InheritableProperty> areaRels = area.getRelationships();
+            
+            areaRels.forEach((rel) -> {
                 relsInArea.add(rel.getName().toLowerCase());
             });
 
@@ -80,7 +96,7 @@ public class AreaTaxonomy extends AbstractionNetwork<Area> {
     }
 
     @Override
-    public Set<ParentNodeDetails> getParentNodeDetails(Area area) {
+    public Set<ParentNodeDetails<Area>> getParentNodeDetails(Area area) {
         return AbstractionNetworkUtils.getMultiRootedNodeParentNodeDetails(
                 area, 
                 this.getSourceHierarchy(), 

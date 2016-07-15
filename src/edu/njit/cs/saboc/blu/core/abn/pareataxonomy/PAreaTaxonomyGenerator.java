@@ -33,7 +33,7 @@ public class PAreaTaxonomyGenerator {
         
         Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
 
-        Set<Concept> concepts = hierarchy.getNodesInHierarchy();
+        Set<Concept> concepts = hierarchy.getNodes();
         
         concepts.forEach((concept) -> {
             conceptRelationships.put(concept, factory.getRelationships(concept));
@@ -110,7 +110,7 @@ public class PAreaTaxonomyGenerator {
                                 stack.add(child);
                             }
                             
-                            pareaHierarchy.addIsA(child, concept);
+                            pareaHierarchy.addEdge(child, concept);
                         }
                     }
                     
@@ -154,7 +154,7 @@ public class PAreaTaxonomyGenerator {
                 Set<Concept> parentPAreas = conceptPAreas.get(parent);
 
                 parentPAreas.forEach((parentPAreaRoot) -> {
-                    pareaHierarchy.addIsA(parea, pareasByRoot.get(parentPAreaRoot));
+                    pareaHierarchy.addEdge(parea, pareasByRoot.get(parentPAreaRoot));
                 });
             });
         });
@@ -181,9 +181,12 @@ public class PAreaTaxonomyGenerator {
         
         areas.forEach((area) -> {
             if (!area.equals(areaHierarchy.getRoot())) {
-                area.getPAreas().forEach((parea) -> {
+                
+                Set<PArea> areaPAreas = area.getPAreas();
+                
+                areaPAreas.forEach((parea) -> {
                     Area parentArea = areasByRelationships.get(parea.getRelationships());
-                    areaHierarchy.addIsA(area, parentArea);
+                    areaHierarchy.addEdge(area, parentArea);
                 });
             }
         });
@@ -194,13 +197,13 @@ public class PAreaTaxonomyGenerator {
         return pareaTaxonomy;
     }
     
-    public PAreaTaxonomy createTaxonomyFromPAreas(Hierarchy<PArea> pareaHierarchy) {
+    public <T extends PArea> PAreaTaxonomy<T> createTaxonomyFromPAreas(PAreaTaxonomyFactory factory, Hierarchy<T> pareaHierarchy) {
                      
-        HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
+        HashMap<Set<InheritableProperty>, Set<T>> pareasByRelationships = new HashMap<>();
         
         Hierarchy<Concept> conceptHierarchy = new Hierarchy<>(pareaHierarchy.getRoot().getRoot());
                 
-        pareaHierarchy.getNodesInHierarchy().forEach( (parea) -> {
+        pareaHierarchy.getNodes().forEach( (parea) -> {
             Set<InheritableProperty> properties = parea.getRelationships();
             
             if(!pareasByRelationships.containsKey(properties)) {
@@ -216,8 +219,10 @@ public class PAreaTaxonomyGenerator {
         
         Area rootArea = null;
         
-        for (Entry<Set<InheritableProperty>, Set<PArea>> entry : pareasByRelationships.entrySet()) {
-            Area area = new Area(entry.getValue(), entry.getKey());
+        for (Entry<Set<InheritableProperty>, Set<T>> entry : pareasByRelationships.entrySet()) {
+            Set<PArea> pareas = (Set<PArea>)entry.getValue();
+            
+            Area area = new Area(pareas, entry.getKey());
 
             if (area.getPAreas().contains(pareaHierarchy.getRoot())) {
                 rootArea = area;
@@ -230,15 +235,17 @@ public class PAreaTaxonomyGenerator {
  
         areasByRelationships.values().forEach((area) -> {
             if (!area.equals(areaHierarchy.getRoot())) {
-                area.getPAreas().forEach((parea) -> {
+                Set<PArea> areaPAreas = area.getPAreas();
+
+                areaPAreas.forEach((parea) -> {
                     Area parentArea = areasByRelationships.get(parea.getRelationships());
-                    areaHierarchy.addIsA(area, parentArea);
+                    areaHierarchy.addEdge(area, parentArea);
                 });
             }
         });
         
-        AreaTaxonomy areaTaxonomy = new AreaTaxonomy(areaHierarchy, conceptHierarchy);
-        PAreaTaxonomy pareaTaxonomy = new PAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy);
+        AreaTaxonomy areaTaxonomy = factory.createAreaTaxonomy(areaHierarchy, conceptHierarchy);
+        PAreaTaxonomy<T> pareaTaxonomy = factory.createPAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy);
    
         return pareaTaxonomy;
     }

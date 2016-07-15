@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.OverlappingNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 
@@ -7,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
  *
  * @author Chris O
  */
-public class OverlappingNodeTableModel extends OAFAbstractTableModel<OverlappingNodeEntry> {
+public class OverlappingNodeTableModel<T extends Node> extends OAFAbstractTableModel<OverlappingNodeEntry<T>> {
     
     private final AbNConfiguration configuration;
     
@@ -22,10 +23,10 @@ public class OverlappingNodeTableModel extends OAFAbstractTableModel<Overlapping
     }
 
     @Override
-    protected Object[] createRow(OverlappingNodeEntry item) {
+    protected Object[] createRow(OverlappingNodeEntry<T> item) {
         return new Object [] {
-            item.getOverlappingGroup().getName(),
-            item.getOverlappingGroup().getConceptCount(),
+            item.getOverlappingNode().getName(),
+            item.getOverlappingNode().getConceptCount(),
             item.getOverlappingConcepts().size()
         };
     }    

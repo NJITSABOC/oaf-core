@@ -1,12 +1,12 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeChange;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeChangeDetails;
 
 /**
  *
  * @author Chris O
  */
-public class DiffNode<T extends NodeChange> {
+public class DiffNode<T extends NodeChangeDetails> {
     private final T changeDetails;
     
     public DiffNode(T changeDetails) {

@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
@@ -9,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  *
  * @author Chris O
  */
-public class AreaSummaryTextFactory implements NodeSummaryTextFactory {
+public class AreaSummaryTextFactory implements NodeSummaryTextFactory<Area> {
     private final PAreaTaxonomyConfiguration config;
     
     public AreaSummaryTextFactory(PAreaTaxonomyConfiguration config) {
@@ -21,9 +20,7 @@ public class AreaSummaryTextFactory implements NodeSummaryTextFactory {
     }
 
     @Override
-    public String createNodeSummaryText(Node node) {
-        Area area = (Area) node;
-
+    public String createNodeSummaryText(Area area) {
         String areaName = area.getName();
         int classCount = area.getConcepts().size();
 

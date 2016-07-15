@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.diff.change;
 
-import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.diff.AbstractionNetworkDiffResult;
 
 
 /**
@@ -9,17 +9,17 @@ import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetwork;
  */
 public class AbNChange {
     
-    private DiffAbstractionNetwork diffAbN;
+    private AbstractionNetworkDiffResult diffAbN;
     
     protected AbNChange() {
         
     }
     
-    public void setSourceDiffTaxonomy(DiffAbstractionNetwork diffAbN) {
+    public void setSourceDiffTaxonomy(AbstractionNetworkDiffResult diffAbN) {
         this.diffAbN = diffAbN;
     }
     
-    public DiffAbstractionNetwork getSourceDiffAbN() {
+    public AbstractionNetworkDiffResult getSourceDiffAbN() {
         return diffAbN;
     }
 }

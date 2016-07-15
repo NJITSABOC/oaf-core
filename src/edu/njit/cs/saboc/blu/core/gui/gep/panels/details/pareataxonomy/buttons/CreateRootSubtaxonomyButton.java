@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 /**
  *
@@ -15,7 +15,7 @@ public class CreateRootSubtaxonomyButton extends CreateSubtaxonomyButton {
     
     private final PAreaTaxonomyConfiguration config;
     
-    public CreateRootSubtaxonomyButton(PAreaTaxonomyConfiguration config, DisplayAbNListener<PAreaTaxonomy> displayTaxonomyListener) {
+    public CreateRootSubtaxonomyButton(PAreaTaxonomyConfiguration config, DisplayAbNAction<PAreaTaxonomy> displayTaxonomyListener) {
         super("BluSubtaxonomy.png", "Create root subtaxonomy", displayTaxonomyListener);
         
         this.config = config;

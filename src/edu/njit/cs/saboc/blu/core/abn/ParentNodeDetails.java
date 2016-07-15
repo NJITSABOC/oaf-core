@@ -11,11 +11,11 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  * 
  * @author cro3
  */
-public class ParentNodeDetails {
+public class ParentNodeDetails<T extends Node> {
     private final Concept parentConcept;
-    private final Node parentNode;
+    private final T parentNode;
     
-    public ParentNodeDetails(Concept parentConcept, Node parentNode) {
+    public ParentNodeDetails(Concept parentConcept, T parentNode) {
         this.parentConcept = parentConcept;
         this.parentNode = parentNode;
     }
@@ -24,7 +24,7 @@ public class ParentNodeDetails {
         return parentConcept;
     }
     
-    public Node getParentNode() {
+    public T getParentNode() {
         return parentNode;
     }
 }

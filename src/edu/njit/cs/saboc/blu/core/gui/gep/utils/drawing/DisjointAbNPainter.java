@@ -31,7 +31,7 @@ public class DisjointAbNPainter extends AbNPainter {
         
         Color [] colorSet = disjointGroup.getColorSet();
         
-        int colorWidth = (int)((DisjointNodeEntry.DISJOINT_GROUP_WIDTH / colorSet.length) * scale);
+        int colorWidth = (int)((DisjointNodeEntry.DISJOINT_NODE_WIDTH / colorSet.length) * scale);
 
         int totalDrawn = 0;
         
@@ -44,10 +44,10 @@ public class DisjointAbNPainter extends AbNPainter {
                 drawWidth = colorWidth;
                 totalDrawn += drawWidth;
             } else {
-                drawWidth = ((int)(DisjointNodeEntry.DISJOINT_GROUP_WIDTH * scale)) - totalDrawn;
+                drawWidth = ((int)(DisjointNodeEntry.DISJOINT_NODE_WIDTH * scale)) - totalDrawn;
             }
             
-            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(DisjointNodeEntry.DISJOINT_GROUP_HEIGHT * scale));
+            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(DisjointNodeEntry.DISJOINT_NODE_HEIGHT * scale));
 
         }
 

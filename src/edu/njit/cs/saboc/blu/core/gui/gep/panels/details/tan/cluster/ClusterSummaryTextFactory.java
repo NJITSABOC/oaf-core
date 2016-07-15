@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
@@ -13,7 +12,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class ClusterSummaryTextFactory implements NodeSummaryTextFactory {
+public class ClusterSummaryTextFactory implements NodeSummaryTextFactory<Cluster> {
     
     private final TANConfiguration config;
     
@@ -22,9 +21,7 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory {
     }
 
     @Override
-    public String createNodeSummaryText(Node node) {
-        Cluster cluster = (Cluster)node;
-        
+    public String createNodeSummaryText(Cluster cluster) {
         ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         
         String conceptType = config.getTextConfiguration().getConceptTypeName(true).toLowerCase();

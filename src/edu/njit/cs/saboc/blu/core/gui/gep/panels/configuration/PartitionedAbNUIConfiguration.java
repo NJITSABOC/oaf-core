@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 
@@ -7,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
  *
  * @author Chris O
  */
-public abstract class PartitionedAbNUIConfiguration extends AbNUIConfiguration {
+public abstract class PartitionedAbNUIConfiguration<T extends SinglyRootedNode, V extends PartitionedNode> extends AbNUIConfiguration<T> {
     
     protected PartitionedAbNUIConfiguration(PartitionedAbNListenerConfiguration listenerConfiguration) {
         super(listenerConfiguration);
@@ -17,8 +19,8 @@ public abstract class PartitionedAbNUIConfiguration extends AbNUIConfiguration {
         return (PartitionedAbNListenerConfiguration)super.getListenerConfiguration();
     }
     
-    public abstract NodeOptionsPanel getPartitionedNodeOptionsPanel();
+    public abstract NodeOptionsPanel<V> getPartitionedNodeOptionsPanel();
     
     public abstract boolean hasContainerDetailsPanel();
-    public abstract NodeDashboardPanel createContainerDetailsPanel();
+    public abstract NodeDashboardPanel<V> createContainerDetailsPanel();
 }

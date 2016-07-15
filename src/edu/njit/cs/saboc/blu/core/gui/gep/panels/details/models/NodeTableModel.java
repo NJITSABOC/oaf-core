@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
  *
  * @author Chris O
  */
-public class NodeTableModel extends OAFAbstractTableModel<Node> {
+public class NodeTableModel<T extends Node> extends OAFAbstractTableModel<T> {
     
     public NodeTableModel(AbNConfiguration configuration) {
         super(
@@ -18,7 +18,7 @@ public class NodeTableModel extends OAFAbstractTableModel<Node> {
     }
 
     @Override
-    protected Object[] createRow(Node node) {
+    protected Object[] createRow(T node) {
         return new Object [] {
             node.getName(),
             node.getConceptCount()

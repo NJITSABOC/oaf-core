@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
@@ -19,24 +18,24 @@ public class AggregatePAreaSummaryTextFactory extends PAreaSummaryTextFactory {
     }
 
     @Override
-    public String createNodeSummaryText(Node node) {
+    public String createNodeSummaryText(PArea parea) {
         PAreaTaxonomyConfiguration config = this.getConfiguration();
         
         PAreaTaxonomy taxonomy = config.getPAreaTaxonomy();
         
-        AggregatePArea aggregatePArea = (AggregatePArea)node;
+        AggregatePArea aggregatePArea = (AggregatePArea)parea;
         
         String rootName = aggregatePArea.getName();
 
         String typeDesc;
         
         if(aggregatePArea.getAggregatedNodes().isEmpty()) {
-            PArea parea = aggregatePArea.getAggregatedHierarchy().getRoot();
+            PArea rootPArea = aggregatePArea.getAggregatedHierarchy().getRoot();
             
-            int conceptCount = parea.getConceptCount();
+            int conceptCount = rootPArea.getConceptCount();
             
             typeDesc = String.format("<b>%s</b> is a regular partial-area that summarizes %d %s.",
-                    rootName, parea.getConceptCount(), 
+                    rootName, rootPArea.getConceptCount(), 
                     config.getTextConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
             
         } else {

@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
  *
  * @author Den
  */
-public abstract class ExportButton extends NodeOptionButton {
+public abstract class ExportButton<T extends Node> extends NodeOptionButton<T> {
     public ExportButton(String toolTip) {
         super("BluExport.png", toolTip);
         
@@ -17,7 +17,7 @@ public abstract class ExportButton extends NodeOptionButton {
     }
     
     @Override
-    public void setEnabledFor(Node node) {
+    public void setEnabledFor(T node) {
         this.setEnabled(true);
     }
     

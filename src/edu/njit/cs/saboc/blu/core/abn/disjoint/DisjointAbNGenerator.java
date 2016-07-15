@@ -151,7 +151,7 @@ public class DisjointAbNGenerator<
         
         HashMap<Concept, Integer> parentCounts = new HashMap<>();
         
-        for(Concept node : conceptHierarchy.getNodesInHierarchy()) {
+        for(Concept node : conceptHierarchy.getNodes()) {
             
             if(allArticulationPoints.contains(node)) {
                 parentCounts.put(node, 0);
@@ -257,7 +257,7 @@ public class DisjointAbNGenerator<
                         if (!stack.contains(child) && !processedConcepts.contains(child)) {
                             stack.add(child);
                             
-                            disjointGroupConceptHierarchy.get(root).addIsA(child, concept);
+                            disjointGroupConceptHierarchy.get(root).addEdge(child, concept);
                         }
                     }
                 });
@@ -268,30 +268,36 @@ public class DisjointAbNGenerator<
         
         Set<DisjointNode<PARENTNODE_T>> rootGroups = new HashSet<>();
         
-        roots.forEach((disjointGroupRoot) -> {
-            Hierarchy<Concept> nodeConceptHierarchy = disjointGroupConceptHierarchy.get(disjointGroupRoot);
-            Set<PARENTNODE_T> overlapsIn = conceptGroupMap.get(disjointGroupRoot);
+        roots.forEach((disjointNodeRoot) -> {
+            Hierarchy<Concept> nodeConceptHierarchy = disjointGroupConceptHierarchy.get(disjointNodeRoot);
+            Set<PARENTNODE_T> overlapsIn = conceptGroupMap.get(disjointNodeRoot);
+            
+            DisjointNode<PARENTNODE_T> rootGroup = factory.createDisjointNode(nodeConceptHierarchy, overlapsIn);
 
-            disjointGroups.put(disjointGroupRoot, factory.createDisjointNode(nodeConceptHierarchy, overlapsIn));
+            disjointGroups.put(disjointNodeRoot, rootGroup);
+            
+            if (originalRoots.contains(disjointNodeRoot)) {
+                rootGroups.add(rootGroup);
+            }
         });
         
         Hierarchy<DisjointNode<PARENTNODE_T>> groupHierarchy = new Hierarchy<>(rootGroups);
         
-        disjointGroups.values().forEach((DisjointNode<PARENTNODE_T> disjointNode) -> {
+        disjointGroups.values().forEach( (disjointNode) -> {
             
             if (!groupHierarchy.getRoots().contains(disjointNode)) {
 
                 Set<Concept> pareaDisjointGroupRoots = disjointGroupParents.get(disjointNode.getRoot());
 
                 pareaDisjointGroupRoots.forEach( (parentNodeRoot) -> {
-                    groupHierarchy.addIsA(disjointNode, disjointGroups.get(parentNodeRoot));
+                    groupHierarchy.addEdge(disjointNode, disjointGroups.get(parentNodeRoot));
                 });
             }
         });
         
         Set<PARENTNODE_T> overlappingNodes = new HashSet<>();
         
-        groupHierarchy.getNodesInHierarchy().forEach( (disjointNode) -> {
+        groupHierarchy.getNodes().forEach( (disjointNode) -> {
             if(disjointNode.getOverlaps().size() > 1) {
                 overlappingNodes.addAll(disjointNode.getOverlaps());
             }

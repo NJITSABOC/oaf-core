@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Chris O
  */
-public class ExportSinglyRootedNodeButton extends ExportButton {
+public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends ExportButton<T> {
     
     private static final String getToolTipStr(AbNConfiguration config) {
         return String.format("Export %s's %s.", 

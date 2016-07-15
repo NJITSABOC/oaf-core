@@ -55,7 +55,7 @@ public class AbNLevelReportPanel extends AbNReportPanel {
     @Override
     public void displayAbNReport(AbstractionNetwork abn) {
         
-        PartitionedAbNConfiguration currentConfig = (PartitionedAbNConfiguration)config;
+        PartitionedAbNConfiguration currentConfig = (PartitionedAbNConfiguration)getConfiguration();
         
         PartitionedAbstractionNetwork pan = (PartitionedAbstractionNetwork)abn;
         

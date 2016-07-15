@@ -1,22 +1,23 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 
 /**
  *
  * @author Chris O
  */
-public class DisjointAbNConfiguration extends AbNConfiguration {
+public class DisjointAbNConfiguration<T extends DisjointNode> extends AbNConfiguration<T> {
 
     public DisjointAbNConfiguration(DisjointAbstractionNetwork disjointAbN) {
         super(disjointAbN);
     }
     
-    public void setUIConfiguration(DisjointAbNUIConfiguration config) {
+    public void setUIConfiguration(DisjointAbNUIConfiguration<T> config) {
         super.setUIConfiguration(config);
     }
     
-    public void setTextConfiguration(DisjointAbNTextConfiguration config) {
+    public void setTextConfiguration(DisjointAbNTextConfiguration<T> config) {
         super.setTextConfiguration(config);
     }
     
@@ -24,12 +25,12 @@ public class DisjointAbNConfiguration extends AbNConfiguration {
         return (DisjointAbstractionNetwork)super.getAbstractionNetwork();
     }
     
-    public DisjointAbNUIConfiguration getUIConfiguration() {
-        return (DisjointAbNUIConfiguration) super.getUIConfiguration();
+    public DisjointAbNUIConfiguration<T> getUIConfiguration() {
+        return (DisjointAbNUIConfiguration<T>) super.getUIConfiguration();
     }
 
     @Override
-    public DisjointAbNTextConfiguration getTextConfiguration() {
-        return (DisjointAbNTextConfiguration) super.getTextConfiguration();
+    public DisjointAbNTextConfiguration<T> getTextConfiguration() {
+        return (DisjointAbNTextConfiguration<T>) super.getTextConfiguration();
     }
 }

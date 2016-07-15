@@ -7,15 +7,15 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class AncestorSubTAN extends SubTAN {
+public class AncestorSubTAN<T extends Cluster> extends SubTAN<T> {
     
-    private final Cluster sourceCluster;
+    private final T sourceCluster;
     
     public AncestorSubTAN(
             ClusterTribalAbstractionNetwork sourceTAN,
-            Cluster sourceCluster,
+            T sourceCluster,
             BandTribalAbstractionNetwork bandTan,
-            Hierarchy<Cluster> clusterHierarchy,
+            Hierarchy<T> clusterHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
 
         super(sourceTAN, bandTan, clusterHierarchy, sourceHierarchy);
@@ -23,7 +23,7 @@ public class AncestorSubTAN extends SubTAN {
         this.sourceCluster = sourceCluster;
     }
     
-    public Cluster getSourceCluster() {
+    public T getSourceCluster() {
         return sourceCluster;
     }
 }

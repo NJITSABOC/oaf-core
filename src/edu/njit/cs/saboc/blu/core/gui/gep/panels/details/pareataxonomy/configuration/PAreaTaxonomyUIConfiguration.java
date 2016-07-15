@@ -2,7 +2,9 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configur
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
@@ -18,7 +20,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyT
  *
  * @author Den
  */
-public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfiguration {
+public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfiguration<PArea, Area> {
     
     private final PAreaTaxonomyConfiguration config;
     
@@ -68,12 +70,12 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     }
 
     @Override
-    public OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel() {
+    public OAFAbstractTableModel<ParentNodeDetails<PArea>> getParentNodeTableModel() {
         return new ParentPAreaTableModel(config);
     }
 
     @Override
-    public OAFAbstractTableModel<Node> getChildNodeTableModel() {
+    public OAFAbstractTableModel<PArea> getChildNodeTableModel() {
         return new ChildPAreaTableModel(config);
     }
     

@@ -13,12 +13,12 @@ import java.util.Set;
  */
 public class AbstractionNetworkUtils {
 
-    public static Set<ParentNodeDetails> getSinglyRootedNodeParentNodeDetails(
-            SinglyRootedNode node, 
+    public static <T extends SinglyRootedNode> Set<ParentNodeDetails<T>> getSinglyRootedNodeParentNodeDetails(
+            T node, 
             Hierarchy<Concept> conceptHierarchy, 
-            Set<SinglyRootedNode> allNodes) {
+            Set<T> allNodes) {
 
-        Set<ParentNodeDetails> parentNodeDetails = new HashSet<>();
+        Set<ParentNodeDetails<T>> parentNodeDetails = new HashSet<>();
 
         Concept root = node.getRoot();
 
@@ -27,7 +27,7 @@ public class AbstractionNetworkUtils {
         parents.forEach((parent) -> {
             allNodes.forEach((disjointNode) -> {
                 if (disjointNode.getConcepts().contains(parent)) {
-                    parentNodeDetails.add(new ParentNodeDetails(parent, disjointNode));
+                    parentNodeDetails.add(new ParentNodeDetails<>(parent, disjointNode));
                 }
             });
         });
@@ -35,14 +35,14 @@ public class AbstractionNetworkUtils {
         return parentNodeDetails;
     }
     
-    public static Set<ParentNodeDetails> getMultiRootedNodeParentNodeDetails(
+    public static <T extends PartitionedNode> Set<ParentNodeDetails<T>> getMultiRootedNodeParentNodeDetails(
             PartitionedNode node, 
             Hierarchy<Concept> hierarchy, 
             Set<PartitionedNode> allNodes) {
         
         Set<SinglyRootedNode> internalNodes = node.getInternalNodes();
         
-        Set<ParentNodeDetails> parentNodeDetails = new HashSet<>();
+        Set<ParentNodeDetails<T>> parentNodeDetails = new HashSet<>();
         
         internalNodes.forEach( (internalNode) -> {
             Concept root = internalNode.getRoot();

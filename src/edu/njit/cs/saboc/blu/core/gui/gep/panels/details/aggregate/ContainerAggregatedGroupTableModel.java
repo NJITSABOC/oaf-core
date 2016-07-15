@@ -12,7 +12,7 @@ import java.util.Collections;
  *
  * @author Chris O
  */
-public class ContainerAggregatedGroupTableModel extends OAFAbstractTableModel<AggregatedNodeEntry> {
+public class ContainerAggregatedGroupTableModel<T extends Node> extends OAFAbstractTableModel<AggregatedNodeEntry<T>> {
 
     protected final PartitionedAbNConfiguration configuration;
     
@@ -27,7 +27,7 @@ public class ContainerAggregatedGroupTableModel extends OAFAbstractTableModel<Ag
     }
     
     @Override
-    protected Object[] createRow(AggregatedNodeEntry item) {
+    protected Object[] createRow(AggregatedNodeEntry<T> item) {
         String aggregatedNodeName = item.getAggregatedNode().getName();
         
         ArrayList<String> aggregateNodeNames = new ArrayList<>();

@@ -19,8 +19,8 @@ public class DisjointNodeEntry extends SinglyRootedNodeEntry {
     
     public static final int DISJOINT_LABEL_OFFSET = DISJOINT_EXTRA_SPACE / 2;
     
-    public static final int DISJOINT_GROUP_WIDTH = SinglyRootedNodeEntry.ENTRY_WIDTH + DISJOINT_EXTRA_SPACE;
-    public static final int DISJOINT_GROUP_HEIGHT = SinglyRootedNodeEntry.ENTRY_HEIGHT + DISJOINT_EXTRA_SPACE;
+    public static final int DISJOINT_NODE_WIDTH = SinglyRootedNodeEntry.ENTRY_WIDTH + DISJOINT_EXTRA_SPACE;
+    public static final int DISJOINT_NODE_HEIGHT = SinglyRootedNodeEntry.ENTRY_HEIGHT + DISJOINT_EXTRA_SPACE;
     
     private final Color[] colorSet;
 

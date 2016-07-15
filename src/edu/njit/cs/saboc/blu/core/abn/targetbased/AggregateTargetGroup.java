@@ -28,7 +28,7 @@ public class AggregateTargetGroup extends TargetGroup implements AggregateNode<T
     }
     
     public Set<TargetGroup> getAggregatedNodes() {
-        Set<TargetGroup> nodes = new HashSet<>(aggregatedGroups.getNodesInHierarchy());
+        Set<TargetGroup> nodes = new HashSet<>(aggregatedGroups.getNodes());
         nodes.remove(aggregatedGroups.getRoot());
         
         return nodes;

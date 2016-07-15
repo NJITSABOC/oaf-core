@@ -25,7 +25,7 @@ public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
         Set<T> nodeParents = theHierarchy.getParents(node);
 
         nodeParents.forEach((T parent) -> {
-            ancestorHierarchy.addIsA(node, parent);
+            ancestorHierarchy.addEdge(node, parent);
         });
     }
     

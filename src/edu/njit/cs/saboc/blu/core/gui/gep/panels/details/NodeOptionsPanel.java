@@ -13,11 +13,11 @@ import javax.swing.BoxLayout;
  *
  * @author Chris O
  */
-public class NodeOptionsPanel extends BaseNodeInformationPanel {
+public class NodeOptionsPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
-    private final ArrayList<NodeOptionButton> nodeOptionButtons = new ArrayList<>();
+    private final ArrayList<NodeOptionButton<T>> nodeOptionButtons = new ArrayList<>();
     
-    private Optional<Node> currentNode = Optional.empty();
+    private Optional<T> currentNode = Optional.empty();
     
     public NodeOptionsPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -27,19 +27,19 @@ public class NodeOptionsPanel extends BaseNodeInformationPanel {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Options"));
     }
     
-    public void addOptionButton(NodeOptionButton optionBtn) {
+    public void addOptionButton(NodeOptionButton<T> optionBtn) {
         nodeOptionButtons.add(optionBtn);
         
         this.add(optionBtn);
         this.add(Box.createHorizontalStrut(4));
     }
     
-    public Optional<Node> getCurrentNode() {
+    public Optional<T> getCurrentNode() {
         return currentNode;
     }
 
     @Override
-    public void setContents(Node node) {
+    public void setContents(T node) {
         currentNode = Optional.of(node);
         
         nodeOptionButtons.forEach( (btn) -> {

@@ -11,18 +11,18 @@ import java.util.Set;
  * 
  * @author Chris O
  */
-public abstract class PartitionedNode extends Node {
+public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
     
-    private final Set<? extends SinglyRootedNode> internalNodes;
+    private final Set<T> internalNodes;
     private final Set<Concept> concepts;
     
-    public PartitionedNode(Set<? extends SinglyRootedNode> internalNodes) {
+    public PartitionedNode(Set<T> internalNodes) {
         this.internalNodes = internalNodes;
         
         this.concepts = new HashSet<>();
         
         this.internalNodes.forEach( (n) -> {
-            concepts.addAll(n.getHierarchy().getNodesInHierarchy());
+            concepts.addAll(n.getHierarchy().getNodes());
         });
     }
     
@@ -36,8 +36,8 @@ public abstract class PartitionedNode extends Node {
         return roots;
     }
 
-    public Set<SinglyRootedNode> getInternalNodes() {
-        return (Set<SinglyRootedNode>)internalNodes;
+    public Set<T> getInternalNodes() {
+        return internalNodes;
     }
     
     public Set<Concept> getConcepts() {
@@ -61,9 +61,9 @@ public abstract class PartitionedNode extends Node {
     public boolean hasOverlappingConcepts() {
         Set<Concept> processedConcepts = new HashSet<>();
         
-        Set<SinglyRootedNode> nodes = this.getInternalNodes();
+        Set<T> nodes = this.getInternalNodes();
         
-        for(SinglyRootedNode node : nodes) {
+        for(T node : nodes) {
             Set<Concept> pareaConcepts = node.getConcepts();
             
             for(Concept concept : pareaConcepts) {
@@ -117,4 +117,6 @@ public abstract class PartitionedNode extends Node {
         
         return overlappingResults;
     }
+    
+    public abstract String getName(String separator);
 }

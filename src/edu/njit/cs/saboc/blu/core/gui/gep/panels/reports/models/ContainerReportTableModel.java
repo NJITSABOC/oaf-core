@@ -23,7 +23,7 @@ public class ContainerReportTableModel extends OAFAbstractTableModel<ContainerRe
     @Override
     protected Object[] createRow(ContainerReport item) {
         return new Object[] {
-            item.getContainer().getName(),
+            item.getContainer().getName("\n"),
             item.getGroups().size(),
             item.getConcepts().size(),
             item.getOverlappingConcepts().size()

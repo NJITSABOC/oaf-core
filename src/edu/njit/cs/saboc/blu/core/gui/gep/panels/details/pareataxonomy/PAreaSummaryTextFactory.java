@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
@@ -13,7 +12,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class PAreaSummaryTextFactory implements NodeSummaryTextFactory {
+public class PAreaSummaryTextFactory implements NodeSummaryTextFactory<PArea> {
     
     private final PAreaTaxonomyConfiguration config;
     
@@ -26,8 +25,7 @@ public class PAreaSummaryTextFactory implements NodeSummaryTextFactory {
     }
 
     @Override
-    public String createNodeSummaryText(Node node) {
-        PArea parea = (PArea)node;
+    public String createNodeSummaryText(PArea parea) {
         PAreaTaxonomy taxonomy = config.getPAreaTaxonomy();
         
         String rootName = parea.getName();

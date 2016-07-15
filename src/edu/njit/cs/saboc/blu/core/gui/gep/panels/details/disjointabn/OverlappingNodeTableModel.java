@@ -8,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
  *
  * @author Chris O
  */
-public class OverlappingNodeTableModel extends OAFAbstractTableModel<Node>  {
+public class OverlappingNodeTableModel<T extends Node> extends OAFAbstractTableModel<T>  {
     
     private final DisjointAbNConfiguration config;
     
@@ -21,7 +21,7 @@ public class OverlappingNodeTableModel extends OAFAbstractTableModel<Node>  {
     }
     
     @Override
-    protected Object[] createRow(Node node) {
+    protected Object[] createRow(T node) {
         return new Object[] {
             node.getName()
         };

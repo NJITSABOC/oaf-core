@@ -8,17 +8,17 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class OverlappingNodeEntry {
+public class OverlappingNodeEntry<T extends Node> {
     
-    private final Node overlappingGroup;
+    private final T overlappingGroup;
     private final Set<Concept> overlappingConcepts;
     
-    public OverlappingNodeEntry(Node overlappingGroup, Set<Concept> overlappingConcepts) {
+    public OverlappingNodeEntry(T overlappingGroup, Set<Concept> overlappingConcepts) {
         this.overlappingGroup = overlappingGroup;
         this.overlappingConcepts = overlappingConcepts;
     }
     
-    public Node getOverlappingGroup() {
+    public T getOverlappingNode() {
         return overlappingGroup;
     }
     

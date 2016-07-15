@@ -5,16 +5,16 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 /**
  *
  * @author Chris O
  */
-public class CreateTANFromSinglyRootedNodeButton extends CreateTANButton {
+public class CreateTANFromSinglyRootedNodeButton<T extends SinglyRootedNode> extends CreateTANButton<T> {
     
-    public CreateTANFromSinglyRootedNodeButton(AbNConfiguration config, DisplayAbNListener listener) {
-        super(config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), listener);
+    public CreateTANFromSinglyRootedNodeButton(AbNConfiguration config, DisplayAbNAction displayTAN) {
+        super(config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), displayTAN);
     }
 
     @Override
@@ -28,10 +28,8 @@ public class CreateTANFromSinglyRootedNodeButton extends CreateTANButton {
     }
 
     @Override
-    public void setEnabledFor(Node node) {
-        SinglyRootedNode singlyRootedNode = (SinglyRootedNode)node;
-        
-        if(singlyRootedNode.getHierarchy().getChildren(singlyRootedNode.getHierarchy().getRoot()).size() > 1) {
+    public void setEnabledFor(T node) {
+        if(node.getHierarchy().getChildren(node.getHierarchy().getRoot()).size() > 1) {
             this.setEnabled(true);
         } else {
             this.setEnabled(false);

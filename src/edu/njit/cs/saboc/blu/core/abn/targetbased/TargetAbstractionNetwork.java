@@ -6,7 +6,6 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -15,37 +14,41 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup> 
-    implements AggregateableAbstractionNetwork<TargetAbstractionNetwork> {
+public class TargetAbstractionNetwork<T extends TargetGroup> extends AbstractionNetwork<T> 
+    implements AggregateableAbstractionNetwork<TargetAbstractionNetwork<T>> {
     
     private boolean isAggregated = false;
     
     public TargetAbstractionNetwork(
-            Hierarchy<TargetGroup> groupHierarchy, 
+            Hierarchy<T> groupHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
         super(groupHierarchy, sourceHierarchy);
     }
     
-    public Set<TargetGroup> getTargetGroups() {
+    public Set<T> getTargetGroups() {
         return super.getNodes();
     }
     
-    public Hierarchy<TargetGroup> getTargetGroupHierarchy() {
+    public Hierarchy<T> getTargetGroupHierarchy() {
         return super.getNodeHierarchy();
     }
 
     @Override
-    public Set<ParentNodeDetails> getParentNodeDetails(TargetGroup group) {
+    public Set<ParentNodeDetails<T>> getParentNodeDetails(T group) {
                 return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
                 group, 
                 this.getSourceHierarchy(),
-                (Set<SinglyRootedNode>)(Set<?>)this.getTargetGroups());
+                this.getTargetGroups());
     }
 
     @Override
     public boolean isAggregated() {
         return isAggregated;
+    }
+    
+    public void setAggregated(boolean value) {
+        this.isAggregated = value;
     }
 
     @Override
@@ -57,8 +60,6 @@ public class TargetAbstractionNetwork extends AbstractionNetwork<TargetGroup>
                 new TargetAbstractionNetworkGenerator(), 
                 new AggregateAbNGenerator<>(), 
                 smallestNode);
-        
-        aggregateTAN.isAggregated = true;
         
         return aggregateTAN;
     }

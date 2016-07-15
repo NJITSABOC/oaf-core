@@ -9,12 +9,12 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class NodeIntroduced extends NodeChange {
+public class ModifiedNodeDetails extends NodeChangeDetails {
     
-    public NodeIntroduced(Node node,
+    public ModifiedNodeDetails(Node node, 
             Set<NodeConceptChange> conceptChanges, 
             Set<ChildOfChange> childOfChanges) {
         
-        super(NodeChangeState.Introduced, node, conceptChanges, childOfChanges);
+        super(NodeChangeState.Modified, node, conceptChanges, childOfChanges);
     }
 }

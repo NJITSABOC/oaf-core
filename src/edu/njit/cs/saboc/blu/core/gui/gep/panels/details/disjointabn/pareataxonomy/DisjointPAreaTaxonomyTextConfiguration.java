@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.pareataxon
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNTextConfiguration;
@@ -16,11 +15,11 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class DisjointPAreaTaxonomyTextConfiguration implements DisjointAbNTextConfiguration {
+public abstract class DisjointPAreaTaxonomyTextConfiguration implements DisjointAbNTextConfiguration<DisjointNode<PArea>> {
 
-    private final DisjointAbstractionNetwork<PAreaTaxonomy, PArea> disjointTaxonomy;
+    private final DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointTaxonomy;
 
-    public DisjointPAreaTaxonomyTextConfiguration(DisjointAbstractionNetwork<PAreaTaxonomy, PArea> disjointTaxonomy) {
+    public DisjointPAreaTaxonomyTextConfiguration(DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
         this.disjointTaxonomy = disjointTaxonomy;
     }
 
@@ -52,7 +51,7 @@ public abstract class DisjointPAreaTaxonomyTextConfiguration implements Disjoint
     }
 
     @Override
-    public String getNodeHelpDescription(Node node) {
+    public String getNodeHelpDescription(DisjointNode<PArea> node) {
         StringBuilder helpDescription = new StringBuilder();
 
         helpDescription.append("A <b>disjoint partial-area</b> represents a summary of a disjoint hierarchy of concepts within a partial-area taxonomy area. ");

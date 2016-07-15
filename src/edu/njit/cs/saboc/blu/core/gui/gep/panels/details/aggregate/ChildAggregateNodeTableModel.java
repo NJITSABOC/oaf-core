@@ -3,16 +3,13 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
  *
  * @author Chris O
  */
-public class ChildAggregateNodeTableModel extends ChildNodeTableModel {
+public class ChildAggregateNodeTableModel<T extends Node> extends OAFAbstractTableModel<T> {
     
     private final AbNConfiguration configuration;
     
@@ -27,7 +24,7 @@ public class ChildAggregateNodeTableModel extends ChildNodeTableModel {
     }
     
     @Override
-    protected Object[] createRow(Node item) {
+    protected Object[] createRow(T item) {
         AggregateNode aggregateNode = (AggregateNode)item;
         
         return new Object [] {

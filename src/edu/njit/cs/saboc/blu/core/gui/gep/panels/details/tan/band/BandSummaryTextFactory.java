@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
@@ -13,7 +12,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class BandSummaryTextFactory implements NodeSummaryTextFactory {
+public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
     
     private final TANConfiguration config;
 
@@ -22,9 +21,7 @@ public class BandSummaryTextFactory implements NodeSummaryTextFactory {
     }
     
     @Override
-    public String createNodeSummaryText(Node node) {
-        Band band = (Band) node;
-
+    public String createNodeSummaryText(Band band) {
         String bandName = band.getName();
 
         Set<Cluster> clusters = band.getClusters();

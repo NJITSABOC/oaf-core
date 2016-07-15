@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class AreaSummaryPanel extends NodeSummaryPanel {
+public class AreaSummaryPanel extends NodeSummaryPanel<Area> {
     
     private final PropertyPanel relationshipPanel;
     
@@ -37,11 +36,9 @@ public class AreaSummaryPanel extends NodeSummaryPanel {
         this(configuration, new AreaSummaryTextFactory(configuration));
     }
     
-    public void setContents(Node node) {
-        super.setContents(node);
-        
-        Area area = (Area)node;
-        
+    public void setContents(Area area) {
+        super.setContents(area);
+
         ArrayList<InheritableProperty> sortedProperties = new ArrayList<>(area.getRelationships());
         
         sortedProperties.sort( (a,b) -> a.getName().compareToIgnoreCase(b.getName()));

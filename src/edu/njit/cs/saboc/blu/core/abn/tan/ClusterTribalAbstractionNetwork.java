@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -13,11 +12,11 @@ import java.util.Set;
  *
  * @author Chris
  */
-public class ClusterTribalAbstractionNetwork extends PartitionedAbstractionNetwork<Cluster, Band> {
+public class ClusterTribalAbstractionNetwork<T extends Cluster> extends PartitionedAbstractionNetwork<T, Band> {
     
     public ClusterTribalAbstractionNetwork(
             BandTribalAbstractionNetwork bandTan,
-            Hierarchy<Cluster> clusterHierarchy,
+            Hierarchy<T> clusterHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
 
         super(bandTan, clusterHierarchy, sourceHierarchy);
@@ -27,26 +26,30 @@ public class ClusterTribalAbstractionNetwork extends PartitionedAbstractionNetwo
         return (BandTribalAbstractionNetwork)super.getBaseAbstractionNetwork();
     }
 
-    public Set<Cluster> getPatriarchClusters() {
+    public Set<T> getPatriarchClusters() {
         return super.getNodeHierarchy().getRoots();
+    }
+    
+    public Band getBandFor(T cluster) {
+        return super.getPartitionNodeFor(cluster);
     }
     
     public Set<Band> getBands() {
         return super.getBaseAbstractionNetwork().getNodes();
     }
 
-    public Set<Cluster> getClusters() {
+    public Set<T> getClusters() {
         return super.getNodes();
     }
     
-    public Hierarchy<Cluster> getClusterHierarchy() {
+    public Hierarchy<T> getClusterHierarchy() {
         return super.getNodeHierarchy();
     }
     
-    public Set<Cluster> getNonOverlappingPatriarchClusters() {
-        Set<Cluster> nonoverlappingPatriarchClusters = new HashSet<>();
+    public Set<T> getNonOverlappingPatriarchClusters() {
+        Set<T> nonoverlappingPatriarchClusters = new HashSet<>();
                 
-        getPatriarchClusters().forEach( (Cluster patriarchCluster) -> {           
+        getPatriarchClusters().forEach( (patriarchCluster) -> {           
             Concept root = patriarchCluster.getRoot();
             
             if(!getClusters().stream().anyMatch( (cluster) -> {
@@ -61,15 +64,15 @@ public class ClusterTribalAbstractionNetwork extends PartitionedAbstractionNetwo
     
     
     @Override
-    public Set<ParentNodeDetails> getParentNodeDetails(Cluster cluster) {
+    public Set<ParentNodeDetails<T>> getParentNodeDetails(T cluster) {
         return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
                 cluster, 
                 this.getSourceHierarchy(),
-                (Set<SinglyRootedNode>)(Set<?>)this.getClusters());
+                this.getClusters());
     }
     
-    public RootSubTAN createRootSubTAN(Cluster root) {
-        Hierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getSubhierarchyRootedAt(root);
+    public RootSubTAN createRootSubTAN(T root) {
+        Hierarchy<T> subhierarchy = this.getClusterHierarchy().getSubhierarchyRootedAt(root);
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
         
@@ -80,9 +83,9 @@ public class ClusterTribalAbstractionNetwork extends PartitionedAbstractionNetwo
         return subTAN;
     }
     
-    public AncestorSubTAN createAncestorTAN(Cluster source) {
+    public AncestorSubTAN createAncestorTAN(T source) {
         
-        Hierarchy<Cluster> subhierarchy = this.getClusterHierarchy().getAncestorHierarchy(source);
+        Hierarchy<T> subhierarchy = this.getClusterHierarchy().getAncestorHierarchy(source);
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
 

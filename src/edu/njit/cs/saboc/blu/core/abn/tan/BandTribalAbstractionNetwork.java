@@ -30,11 +30,16 @@ public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
     }
     
     @Override
-    public Set<ParentNodeDetails> getParentNodeDetails(Band band) {
+    public Set<ParentNodeDetails<Band>> getParentNodeDetails(Band band) {
         return AbstractionNetworkUtils.getMultiRootedNodeParentNodeDetails(
                 band,
                 this.getSourceHierarchy(),
                 (Set<PartitionedNode>) (Set<?>) this.getBands());
+    }
+    
+    @Override
+    public Set<Band> searchNodes(String query) {
+        return searchBands(query);
     }
     
     public Set<Band> searchBands(String query) {

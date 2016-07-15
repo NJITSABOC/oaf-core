@@ -28,7 +28,7 @@ public abstract class SinglyRootedNode extends Node {
     }
     
     public Set<Concept> getConcepts() {
-        return hierarchy.getNodesInHierarchy();
+        return hierarchy.getNodes();
     }
         
     public boolean equals(Object o) {

@@ -21,27 +21,27 @@ public class HierarchicalChangesExplain {
         
         // Concepts that were removed from the ontology
         Set<Concept> removedOntConcepts = SetUtilities.getSetDifference(
-                fromOntology.getConceptHierarchy().getNodesInHierarchy(), 
-                toOntology.getConceptHierarchy().getNodesInHierarchy());
+                fromOntology.getConceptHierarchy().getNodes(), 
+                toOntology.getConceptHierarchy().getNodes());
         
         // Concepts that were added to the ontology
         Set<Concept> addedOntConcepts = SetUtilities.getSetDifference(
-                toOntology.getConceptHierarchy().getNodesInHierarchy(), 
-                fromOntology.getConceptHierarchy().getNodesInHierarchy());
+                toOntology.getConceptHierarchy().getNodes(), 
+                fromOntology.getConceptHierarchy().getNodes());
         
         // Concepts that were removed from the hierarchy
         Set<Concept> removedHierarchyConcepts = SetUtilities.getSetDifference(
-                fromSubhierarchy.getNodesInHierarchy(), 
-                toSubhierarchy.getNodesInHierarchy());
+                fromSubhierarchy.getNodes(), 
+                toSubhierarchy.getNodes());
         
         // Concepts that were added to the hierarchy
         Set<Concept> addedHierarchyConcepts = SetUtilities.getSetDifference(
-                toSubhierarchy.getNodesInHierarchy(), 
-                fromSubhierarchy.getNodesInHierarchy());
+                toSubhierarchy.getNodes(), 
+                fromSubhierarchy.getNodes());
         
         Set<Concept> transferredHierarchyConcepts = SetUtilities.getSetIntersection(
-                fromSubhierarchy.getNodesInHierarchy(), 
-                toSubhierarchy.getNodesInHierarchy());
+                fromSubhierarchy.getNodes(), 
+                toSubhierarchy.getNodes());
         
         
         transferredHierarchyConcepts.forEach( (concept) -> {

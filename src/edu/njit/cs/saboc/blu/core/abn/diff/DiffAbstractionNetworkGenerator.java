@@ -1,11 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeChange;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeIntroduced;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeModified;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeRemoved;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeUnmodified;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeChangeDetails;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.IntroduceNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ModifiedNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.RemovedNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.UnmodifiedNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.childof.ChildOfAdded;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.childof.ChildOfChange;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.childof.ChildOfRemoved;
@@ -38,8 +38,8 @@ public class DiffAbstractionNetworkGenerator {
 
     public void diff(Ontology fromOnt, AbstractionNetwork<Node> fromAbN, Ontology toOnt, AbstractionNetwork<Node> toAbN) {
 
-        Set<Concept> fromConcepts = fromOnt.getConceptHierarchy().getNodesInHierarchy();
-        Set<Concept> toConcepts = toOnt.getConceptHierarchy().getNodesInHierarchy();
+        Set<Concept> fromConcepts = fromOnt.getConceptHierarchy().getNodes();
+        Set<Concept> toConcepts = toOnt.getConceptHierarchy().getNodes();
         
         Set<Concept> addedConcepts = SetUtilities.getSetDifference(toConcepts, fromConcepts);
         Set<Concept> removedConcepts = SetUtilities.getSetDifference(fromConcepts, toConcepts);
@@ -76,7 +76,7 @@ public class DiffAbstractionNetworkGenerator {
         
         Set<Node> transferredNodes = SetUtilities.getSetIntersection(toNodes, fromNodes);
 
-        Map<Node, NodeChange> nodeChanges = new HashMap<>();
+        Map<Node, NodeChangeDetails> nodeChanges = new HashMap<>();
 
         removedNodes.forEach((removedNode) -> {
 
@@ -107,12 +107,12 @@ public class DiffAbstractionNetworkGenerator {
                 childOfChanges.add(new ChildOfRemoved(removedNode, parentNode));
             });
 
-            NodeRemoved removedNodeDetails = new NodeRemoved(removedNode, conceptChanges, childOfChanges);
+            RemovedNodeDetails removedNodeDetails = new RemovedNodeDetails(removedNode, conceptChanges, childOfChanges);
 
             nodeChanges.put(removedNode, removedNodeDetails);
         });
 
-        introducedNodes.forEach( (introducedNode) -> {
+        introducedNodes.forEach((introducedNode) -> {
             Set<NodeConceptChange> conceptChanges = new HashSet<>();
             
             introducedNode.getConcepts().forEach((concept) -> {
@@ -141,11 +141,11 @@ public class DiffAbstractionNetworkGenerator {
                 childOfChanges.add(new ChildOfAdded(introducedNode, parentNode));
             });
 
-            NodeIntroduced introducedNodeDetails = new NodeIntroduced(introducedNode, conceptChanges, childOfChanges);
+            IntroduceNodeDetails introducedNodeDetails = new IntroduceNodeDetails(introducedNode, conceptChanges, childOfChanges);
             nodeChanges.put(introducedNode, introducedNodeDetails);
         });
         
-        transferredNodes.forEach( (transferredNode) -> {
+        transferredNodes.forEach((transferredNode) -> {
             Node toNode = transferredNode;
             
             Optional<Node> fromNodeResult = fromNodes.stream().filter( (node) -> {
@@ -177,10 +177,10 @@ public class DiffAbstractionNetworkGenerator {
             
             if (toNode.strictEquals(fromNode)) {
                 if (childOfChanges.isEmpty()) {
-                    NodeUnmodified nodeUnmodifiedDetails = new NodeUnmodified(toNode);
+                    UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
                     nodeChanges.put(toNode, nodeUnmodifiedDetails);
                 } else {
-                     NodeModified nodeModifiedChanges = new NodeModified(toNode, Collections.emptySet(), childOfChanges);
+                     ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
                      nodeChanges.put(toNode, nodeModifiedChanges);
                 }
             } else {
@@ -242,7 +242,7 @@ public class DiffAbstractionNetworkGenerator {
                     }
                 });
                 
-                NodeModified nodeModifiedChanges = new NodeModified(toNode, conceptChanges, childOfChanges);
+                ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, conceptChanges, childOfChanges);
                 nodeChanges.put(toNode, nodeModifiedChanges);
             }
         });

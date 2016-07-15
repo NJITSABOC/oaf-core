@@ -20,20 +20,20 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class ContainerAggregatedNodePanel extends BaseNodeInformationPanel {
+public class ContainerAggregatedNodePanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
-    private final AbstractEntityList<AggregatedNodeEntry> aggregatedNodeList;
+    private final AbstractEntityList<AggregatedNodeEntry<T>> aggregatedNodeList;
     
     private final PartitionedAbNConfiguration config;
     
-    public ContainerAggregatedNodePanel(PartitionedAbNConfiguration config, OAFAbstractTableModel<AggregatedNodeEntry> model) {
+    public ContainerAggregatedNodePanel(PartitionedAbNConfiguration config, OAFAbstractTableModel<AggregatedNodeEntry<T>> model) {
         
         this.config = config;
 
-        this.aggregatedNodeList = new AbstractEntityList<AggregatedNodeEntry>(model) {
+        this.aggregatedNodeList = new AbstractEntityList<AggregatedNodeEntry<T>>(model) {
             
             @Override
-            protected String getBorderText(Optional<ArrayList<AggregatedNodeEntry>> entities) {
+            protected String getBorderText(Optional<ArrayList<AggregatedNodeEntry<T>>> entities) {
                 String base = String.format("Aggregated %s", config.getTextConfiguration().getNodeTypeName(true));
 
                 if (entities.isPresent()) {
@@ -69,7 +69,7 @@ public class ContainerAggregatedNodePanel extends BaseNodeInformationPanel {
             });
         });
         
-        ArrayList<AggregatedNodeEntry> entries = new ArrayList<>();
+        ArrayList<AggregatedNodeEntry<T>> entries = new ArrayList<>();
         
         aggregatedNodes.forEach( (aggregatedNode, aggregatedInto) -> {
             entries.add(new AggregatedNodeEntry(aggregatedNode, aggregatedInto));

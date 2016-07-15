@@ -46,9 +46,7 @@ public class OverlappingConceptReportPanel extends AbNReportPanel {
         PartitionedAbstractionNetwork pan = (PartitionedAbstractionNetwork)abn;
         
         Set<PartitionedNode> containers = pan.getBaseAbstractionNetwork().getNodes();
-        
-        PartitionedAbNConfiguration currentConfig = (PartitionedAbNConfiguration)config;
-        
+
         ArrayList<OverlappingConceptDetails> entries = new ArrayList<>();
         
         containers.forEach((container) -> {

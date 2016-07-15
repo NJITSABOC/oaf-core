@@ -17,7 +17,7 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
  *
  * @author Chris O
  */
-public class NodeDetailsPanel extends BaseNodeInformationPanel {
+public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
     private final NodeSummaryPanel nodeSummaryPanel;
 
@@ -27,7 +27,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
 
     private final JSplitPane splitPane;
     
-    private Optional<Node> currentNode = Optional.empty();
+    private Optional<T> currentNode = Optional.empty();
 
     public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
             NodeOptionsPanel nodeOptionsMenuPanel, 
@@ -59,7 +59,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
         return nodeConceptList;
     }
     
-    public void setContents(Node node) {
+    public void setContents(T node) {
         this.currentNode = Optional.of(node);
 
         nodeSummaryPanel.setContents(node);
@@ -103,7 +103,7 @@ public class NodeDetailsPanel extends BaseNodeInformationPanel {
         return splitPane;
     }
     
-    public Optional<Node> getCurrentNode() {
+    public Optional<T> getCurrentNode() {
         return currentNode;
     }
 }

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -9,7 +10,7 @@ import java.util.HashSet;
  */
 public class SubhierarchyMembersVisitor<T> extends HierarchyVisitor<T> {
     
-    private final HashSet<T> members = new HashSet<>();
+    private final Set<T> members = new HashSet<>();
 
     public SubhierarchyMembersVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
@@ -19,7 +20,7 @@ public class SubhierarchyMembersVisitor<T> extends HierarchyVisitor<T> {
         members.add(node);
     }
     
-    public HashSet<T> getSubhierarchyMembers() {
+    public Set<T> getSubhierarchyMembers() {
         return members;
     }
 }

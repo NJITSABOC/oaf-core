@@ -11,18 +11,18 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class OverlappingNodeList extends NodeList {
+public class OverlappingNodeList<T extends Node> extends NodeList<T> {
 
     private final DisjointAbNConfiguration config;
     
     public OverlappingNodeList(DisjointAbNConfiguration config) {
-        super(new OverlappingNodeTableModel(config), config);
+        super(new OverlappingNodeTableModel<T>(config), config);
         
         this.config = config;
     }
     
     @Override
-    protected String getBorderText(Optional<ArrayList<Node>> entities) {
+    protected String getBorderText(Optional<ArrayList<T>> entities) {
         if(entities.isPresent()) {
             String base = String.format("Overlapping %s", config.getTextConfiguration().getOverlappingNodeTypeName(false));
             

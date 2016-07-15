@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNContainerReportPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNLevelReportPanel;
 
 /**
  *
@@ -11,5 +13,14 @@ public class TANDetailsPanel extends AbstractAbNDetailsPanel<ClusterTribalAbstra
 
     public TANDetailsPanel(TANConfiguration config) {
         super(config);
+
+        AbNLevelReportPanel levelReportPanel = new AbNLevelReportPanel(config);
+        levelReportPanel.displayAbNReport(config.getTribalAbstractionNetwork());
+
+        AbNContainerReportPanel areaReportPanel = new AbNContainerReportPanel(config);
+        areaReportPanel.displayAbNReport(config.getTribalAbstractionNetwork());
+
+        super.addDetailsTab("Cluster TAN Levels", levelReportPanel);
+        super.addDetailsTab("Bands in Cluster TAN", areaReportPanel);
     }
 }

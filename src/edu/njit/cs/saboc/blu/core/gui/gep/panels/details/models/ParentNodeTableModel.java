@@ -10,13 +10,13 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class ParentNodeTableModel extends OAFAbstractTableModel<ParentNodeDetails> {
+public class ParentNodeTableModel<T extends Node> extends OAFAbstractTableModel<ParentNodeDetails<T>> {
     
     public ParentNodeTableModel(String [] columnNames) {
         super(columnNames);
     }
 
-    public ParentNodeTableModel(AbNConfiguration config) {
+    public ParentNodeTableModel(AbNConfiguration<T> config) {
         super(new String [] {
             config.getTextConfiguration().getParentConceptTypeName(false),
             String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
@@ -33,7 +33,7 @@ public class ParentNodeTableModel extends OAFAbstractTableModel<ParentNodeDetail
     }
 
     @Override
-    protected Object[] createRow(ParentNodeDetails parentInfo) {
+    protected Object[] createRow(ParentNodeDetails<T> parentInfo) {
         return new Object [] {
             parentInfo.getParentConcept().getName(), 
             parentInfo.getParentNode().getName(),

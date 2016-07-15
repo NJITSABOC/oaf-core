@@ -13,7 +13,7 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class BandSummaryPanel extends NodeSummaryPanel {
+public class BandSummaryPanel extends NodeSummaryPanel<Band> {
 
     private final TANConfiguration config;
     
@@ -48,11 +48,9 @@ public class BandSummaryPanel extends NodeSummaryPanel {
     }
 
     @Override
-    public void setContents(Node node) {       
-        super.setContents(node);
-        
-        Band band = (Band)node;
-        
+    public void setContents(Band band) {       
+        super.setContents(band);
+                
         ArrayList<Concept> tribalPatriarchs = new ArrayList<>(band.getPatriarchs());
         tribalPatriarchs.sort( (a,b) -> a.getName().compareToIgnoreCase(b.getName()));
         

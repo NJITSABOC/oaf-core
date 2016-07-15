@@ -1,9 +1,9 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 
@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  *
  * @author Chris O
  */
-public class ChildPAreaTableModel extends OAFAbstractTableModel<Node> {
+public class ChildPAreaTableModel extends OAFAbstractTableModel<PArea> {
 
     private final PAreaTaxonomyConfiguration config;
     
@@ -30,14 +30,14 @@ public class ChildPAreaTableModel extends OAFAbstractTableModel<Node> {
     }
 
     @Override
-    protected Object[] createRow(Node item) {
-        PArea parea = (PArea)item;
+    protected Object[] createRow(PArea parea) {
+        PAreaTaxonomy<PArea> taxonomy = config.getPAreaTaxonomy();
         
-        Area area = config.getPAreaTaxonomy().getPartitionNodeFor(parea);
+        Area area = taxonomy.getPartitionNodeFor(parea);
         
         return new Object [] {
-            item.getName(),
-            item.getConceptCount(),
+            parea.getName(),
+            parea.getConceptCount(),
             area.getName("\n")
         };
     }

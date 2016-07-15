@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author Chris O
  */
-public class ExportPartitionedNodeButton extends ExportButton {
+public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedNode>> extends ExportButton<T> {
 
     private static final String getToolTipStr(PartitionedAbNConfiguration config) {
         return String.format("Export %s's %s.",
@@ -67,7 +67,7 @@ public class ExportPartitionedNodeButton extends ExportButton {
     }
     
     private void exportPartitionedNodeConcepts(File file) {
-        PartitionedNode node = (PartitionedNode)super.getCurrentNode().get();
+        T node = super.getCurrentNode().get();
 
         try (PrintWriter writer = new PrintWriter(file)) {
             node.getConcepts().forEach((c) -> {

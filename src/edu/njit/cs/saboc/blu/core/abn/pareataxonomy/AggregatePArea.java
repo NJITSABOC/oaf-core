@@ -31,7 +31,7 @@ public class AggregatePArea extends PArea implements AggregateNode<PArea> {
 
     @Override
     public Set<PArea> getAggregatedNodes() {
-        Set<PArea> aggregatedPAreas = new HashSet<>(aggregateHierarchy.getNodesInHierarchy());
+        Set<PArea> aggregatedPAreas = new HashSet<>(aggregateHierarchy.getNodes());
         aggregatedPAreas.remove(aggregateHierarchy.getRoot());
         
         return aggregatedPAreas;

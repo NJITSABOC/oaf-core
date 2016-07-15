@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
@@ -13,13 +13,13 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
  *
  * @author Chris O
  */
-public abstract class AbNUIConfiguration {
+public abstract class AbNUIConfiguration<T extends Node> {
     
-    private final AbNListenerConfiguration listenerConfiguration;
+    private final AbNListenerConfiguration<T> listenerConfiguration;
     
     private EnhancedGraphExplorationPanel gep;
     
-    protected AbNUIConfiguration(AbNListenerConfiguration listenerConfiguration) {
+    protected AbNUIConfiguration(AbNListenerConfiguration<T> listenerConfiguration) {
         this.listenerConfiguration = listenerConfiguration;
     }
     
@@ -31,19 +31,19 @@ public abstract class AbNUIConfiguration {
         return gep;
     }
     
-    public AbNListenerConfiguration getListenerConfiguration() {
+    public AbNListenerConfiguration<T> getListenerConfiguration() {
         return listenerConfiguration;
     }
     
-    public abstract OAFAbstractTableModel<ParentNodeDetails> getParentNodeTableModel();
-    public abstract OAFAbstractTableModel<Node> getChildNodeTableModel();
+    public abstract OAFAbstractTableModel<ParentNodeDetails<T>> getParentNodeTableModel();
+    public abstract OAFAbstractTableModel<T> getChildNodeTableModel();
     
-    public abstract NodeOptionsPanel getNodeOptionsPanel();
+    public abstract NodeOptionsPanel<T> getNodeOptionsPanel();
     
     public abstract ConceptPainter getConceptHierarchyPainter();
     
     public abstract AbstractAbNDetailsPanel createAbNDetailsPanel();
     
     public abstract boolean hasGroupDetailsPanel();
-    public abstract NodeDashboardPanel createGroupDetailsPanel();
+    public abstract NodeDashboardPanel<T> createGroupDetailsPanel();
 }

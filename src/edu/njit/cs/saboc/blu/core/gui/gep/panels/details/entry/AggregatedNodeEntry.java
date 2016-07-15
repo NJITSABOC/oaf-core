@@ -1,29 +1,29 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AggregatedNodeEntry {
+public class AggregatedNodeEntry<T extends Node> {
     
-    private final SinglyRootedNode aggregatedNode;
+    private final T aggregatedNode;
     
-    private final Set<AggregateNode<SinglyRootedNode>> aggregatedInto;
+    private final Set<AggregateNode<T>> aggregatedInto;
     
-    public AggregatedNodeEntry(SinglyRootedNode aggregatedNode, Set<AggregateNode<SinglyRootedNode>> aggregatedInto) {
+    public AggregatedNodeEntry(T aggregatedNode, Set<AggregateNode<T>> aggregatedInto) {
         this.aggregatedNode = aggregatedNode;
         this.aggregatedInto = aggregatedInto;
     }
     
-    public SinglyRootedNode getAggregatedNode() {
+    public T getAggregatedNode() {
         return aggregatedNode;
     }
     
-    public Set<AggregateNode<SinglyRootedNode>> getAggregatedIntoNodes() {
+    public Set<AggregateNode<T>> getAggregatedIntoNodes() {
         return aggregatedInto;
     }
 }

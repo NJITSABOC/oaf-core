@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -14,7 +13,7 @@ import java.util.Set;
  *
  * @author Den
  */
-public class AggregateAreaPanel extends PartitionedNodePanel {
+public class AggregateAreaPanel extends PartitionedNodePanel<Area> {
     
     private final ContainerAggregatedNodePanel aggregatedNodeList;
     
@@ -31,11 +30,9 @@ public class AggregateAreaPanel extends PartitionedNodePanel {
     
     
     @Override
-    public void setContents(Node node) {
-        super.setContents(node); 
-        
-        Area area = (Area)node;
-        
+    public void setContents(Area area) {
+        super.setContents(area); 
+
         int aggregatePAreaCount = 0;
         
         Set<PArea> pareas = area.getPAreas();

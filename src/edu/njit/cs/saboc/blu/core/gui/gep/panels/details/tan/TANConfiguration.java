@@ -14,7 +14,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNCon
  *
  * @author Chris O
  */
-public class TANConfiguration extends PartitionedAbNConfiguration {
+public class TANConfiguration extends PartitionedAbNConfiguration<Cluster, Band> {
     
     public TANConfiguration(ClusterTribalAbstractionNetwork tan) {
         super(tan);
@@ -45,21 +45,21 @@ public class TANConfiguration extends PartitionedAbNConfiguration {
     }
 
     @Override
-    public int getPartitionedNodeLevel(PartitionedNode node) {
+    public int getPartitionedNodeLevel(Band node) {
         Band band = (Band)node;
         
         return band.getPatriarchs().size();
     }
 
     @Override
-    public DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(PartitionedNode node) {
+    public DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(Band node) {
         return this.getDisjointTANFor((Band)node);
     }
     
-    public DisjointAbstractionNetwork<ClusterTribalAbstractionNetwork, Cluster> getDisjointTANFor(Band band) {
-        DisjointAbNGenerator<ClusterTribalAbstractionNetwork, Cluster> generator = new DisjointAbNGenerator<>();
+    public DisjointAbstractionNetwork<ClusterTribalAbstractionNetwork<Cluster>, Cluster> getDisjointTANFor(Band band) {
+        DisjointAbNGenerator<ClusterTribalAbstractionNetwork<Cluster>, Cluster> generator = new DisjointAbNGenerator<>();
         
-        DisjointAbstractionNetwork<ClusterTribalAbstractionNetwork, Cluster> disjointTaxonomy = 
+        DisjointAbstractionNetwork<ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTaxonomy = 
                 generator.generateDisjointAbstractionNetwork(
                         new DisjointTANFactory(), 
                         getTribalAbstractionNetwork(), 

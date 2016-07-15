@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNListener;
+import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 /**
  *
@@ -17,7 +17,7 @@ public class CreateExpandedSubtaxonomyButton extends CreateSubtaxonomyButton {
     private final PAreaTaxonomyConfiguration config;
     
     public CreateExpandedSubtaxonomyButton(PAreaTaxonomyConfiguration config, 
-            DisplayAbNListener<PAreaTaxonomy> displayTaxonomyListener) {
+            DisplayAbNAction<PAreaTaxonomy> displayTaxonomyListener) {
         
         super("BluExpandedSubtaxonomy.png", 
                 "Created expanded subtaxonomy from aggregate partial-area", 

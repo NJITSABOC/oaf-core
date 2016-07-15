@@ -23,6 +23,10 @@ public class ExpandedSubtaxonomy extends PAreaSubtaxonomy {
         this.aggregatePArea = aggregatePArea;
     }
     
+    public AggregatePAreaTaxonomy getSourceTaxonomy() {
+        return (AggregatePAreaTaxonomy)super.getSourceTaxonomy();
+    }
+    
     public AggregatePArea getAggregatePArea() {
         return aggregatePArea;
     }

@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
  *
  * @author Chris O
  */
-public interface AbNTextConfiguration {
+public interface AbNTextConfiguration<T extends Node> {
     
     public String getAbNName();
     public String getAbNSummary();
@@ -22,5 +22,5 @@ public interface AbNTextConfiguration {
     public String getParentConceptTypeName(boolean plural);
     public String getChildConceptTypeName(boolean plural);
     
-    public String getNodeHelpDescription(Node node);
+    public String getNodeHelpDescription(T node);
 }

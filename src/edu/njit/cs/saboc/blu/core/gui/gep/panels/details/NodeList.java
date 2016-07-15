@@ -11,22 +11,22 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class NodeList extends AbstractEntityList<Node> {
+public class NodeList<T extends Node> extends AbstractEntityList<T> {
     
     private final AbNConfiguration config;
     
-    public NodeList(AbNConfiguration config) {
-        this(new NodeTableModel(config), config);
+    public NodeList(AbNConfiguration<T> config) {
+        this(new NodeTableModel<>(config), config);
     }
     
-    public NodeList(OAFAbstractTableModel<Node> model, AbNConfiguration config) {
+    public NodeList(OAFAbstractTableModel<T> model, AbNConfiguration config) {
         super(model);
         
         this.config = config;
     }
 
     @Override
-    protected String getBorderText(Optional<ArrayList<Node>> entities) {
+    protected String getBorderText(Optional<ArrayList<T>> entities) {
         String base = config.getTextConfiguration().getNodeTypeName(true);
         
         if(entities.isPresent()) {

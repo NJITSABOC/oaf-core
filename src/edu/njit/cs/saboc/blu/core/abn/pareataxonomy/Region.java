@@ -10,14 +10,22 @@ import java.util.Set;
  * Represents a region of an area in a partial-area taxonomy
  * @author Chris O
  */
-public class Region extends SimilarityNode {
+public class Region extends SimilarityNode<PArea> {
+    
+    private final Area area;
     
     private final Set<InheritableProperty> relationships;
     
-    public Region(Set<PArea> pareas, Set<InheritableProperty> relationships) {
+    public Region(Area area, Set<PArea> pareas, Set<InheritableProperty> relationships) {
         super(pareas);
         
         this.relationships = relationships;
+        
+        this.area = area;
+    }
+    
+    public Area getArea() {
+        return area;
     }
     
     public Set<InheritableProperty> getRelationships() {
@@ -25,7 +33,7 @@ public class Region extends SimilarityNode {
     }
 
     public Set<PArea> getPAreas() { 
-        return (Set<PArea>)(Set<?>)super.getInternalNodes();
+        return super.getInternalNodes();
     }
     
     public boolean isPAreaInRegion(PArea parea) {        

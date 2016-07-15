@@ -15,7 +15,7 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class ClusterSummaryPanel extends NodeSummaryPanel {
+public class ClusterSummaryPanel extends NodeSummaryPanel<Cluster> {
 
     private final TANConfiguration config;
     
@@ -44,10 +44,8 @@ public class ClusterSummaryPanel extends NodeSummaryPanel {
         this.add(this.patriarchList);
     }
     
-     public void setContents(Node node) {
-        super.setContents(node);
-        
-        Cluster cluster = (Cluster)node;
+     public void setContents(Cluster cluster) {
+        super.setContents(cluster);
         
         ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         

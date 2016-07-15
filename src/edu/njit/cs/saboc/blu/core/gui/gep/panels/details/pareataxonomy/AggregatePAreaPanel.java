@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AggregatedNodesPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptHierarchyPanel;
@@ -12,11 +11,12 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ChildAggregat
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ParentAggregateNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 
+
 /**
  *
  * @author Chris O
  */
-public class AggregatePAreaPanel extends SinglyRootedNodePanel { 
+public class AggregatePAreaPanel extends SinglyRootedNodePanel<AggregatePArea> { 
     
     private final AggregatedNodesPanel aggregateDetailsPanel;
     
@@ -24,11 +24,11 @@ public class AggregatePAreaPanel extends SinglyRootedNodePanel {
     
     public AggregatePAreaPanel(PAreaTaxonomyConfiguration configuration) {
 
-        super(new AggregatePAreaDetailsPanel(configuration), 
+        super(new AggregatePAreaDetailsPanel(configuration),
                 new NodeHierarchyPanel(configuration, 
                         new ParentAggregateNodeTableModel(configuration), 
                         new ChildAggregateNodeTableModel(configuration)),
-                
+               
                 new ConceptHierarchyPanel(configuration), 
                 configuration);
         
@@ -44,10 +44,8 @@ public class AggregatePAreaPanel extends SinglyRootedNodePanel {
     }
     
     @Override
-    public void setContents(Node node) {
-        super.setContents(node);
-
-        AggregatePArea aggregatePArea = (AggregatePArea) node;
+    public void setContents(AggregatePArea aggregatePArea) {
+        super.setContents(aggregatePArea);
 
         if (aggregatePArea.getAggregatedNodes().isEmpty()) {
             enableInformationTabAt(aggregateDetailsTabIndex, false);

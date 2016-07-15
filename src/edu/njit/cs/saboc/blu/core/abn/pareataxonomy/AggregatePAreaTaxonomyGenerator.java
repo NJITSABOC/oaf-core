@@ -27,7 +27,7 @@ public class AggregatePAreaTaxonomyGenerator {
         
         Hierarchy<PArea> pareaHierarchy = (Hierarchy<PArea>)(Hierarchy<?>)reducedPAreaHierarchy;
 
-        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(pareaHierarchy);
+        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(sourceTaxonomy.getPAreaTaxonomyFactory(), pareaHierarchy);
         
         AggregatePAreaTaxonomy aggregateTaxonomy = new AggregatePAreaTaxonomy(
                 sourceTaxonomy, 
@@ -46,7 +46,9 @@ public class AggregatePAreaTaxonomyGenerator {
             AggregatePArea aggregatePArea, 
             PAreaTaxonomyGenerator generator) {
         
-        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(aggregatePArea.getAggregatedHierarchy());
+        PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(
+                sourceAggregateTaxonomy.getPAreaTaxonomyFactory(), 
+                aggregatePArea.getAggregatedHierarchy());
         
         ExpandedSubtaxonomy subtaxonomy = new ExpandedSubtaxonomy(
                 sourceAggregateTaxonomy, 

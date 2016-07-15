@@ -222,7 +222,7 @@ public class HierarchyPainterPanel<T> extends JPanel {
         
         HashMap<T, Integer> parentCount = new HashMap<T, Integer>();
         
-        Set<T> concepts = hierarchy.getNodesInHierarchy();
+        Set<T> concepts = hierarchy.getNodes();
         
         for(T concept : concepts) {
             parentCount.put(concept, hierarchy.getParents(concept).size());

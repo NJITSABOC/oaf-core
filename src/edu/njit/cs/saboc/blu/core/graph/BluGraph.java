@@ -677,8 +677,8 @@ public class BluGraph extends JLayeredPane {
         if (e != null) {
             edges.remove(e);
             
-            getNodeEntries().get(e.getSource()).removeIncidentEdge(e);
-            getNodeEntries().get(e.getTarget()).removeIncidentEdge(e);
+            e.getSource().removeIncidentEdge(e);
+            e.getTarget().removeIncidentEdge(e);
             
             for (JPanel s : e.getSegments()) {
                 remove(s);

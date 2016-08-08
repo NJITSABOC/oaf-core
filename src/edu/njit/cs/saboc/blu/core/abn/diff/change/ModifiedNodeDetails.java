@@ -15,6 +15,6 @@ public class ModifiedNodeDetails extends NodeChangeDetails {
             Set<NodeConceptChange> conceptChanges, 
             Set<ChildOfChange> childOfChanges) {
         
-        super(NodeChangeState.Modified, node, conceptChanges, childOfChanges);
+        super(ChangeState.Modified, node, conceptChanges, childOfChanges);
     }
 }

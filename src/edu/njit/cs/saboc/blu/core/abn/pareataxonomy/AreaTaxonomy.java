@@ -14,13 +14,13 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class AreaTaxonomy extends AbstractionNetwork<Area> {
+public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
     
     private final PAreaTaxonomyFactory factory;
     
     public AreaTaxonomy(
             PAreaTaxonomyFactory factory,
-            Hierarchy<Area> areaHierarchy, 
+            Hierarchy<T> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
         super(areaHierarchy, sourceHierarchy);
@@ -32,26 +32,26 @@ public class AreaTaxonomy extends AbstractionNetwork<Area> {
         return factory;
     }
     
-    public Hierarchy<Area> getAreaHierarchy() {
+    public Hierarchy<T> getAreaHierarchy() {
         return super.getNodeHierarchy();
     }
     
-    public Set<Area> getAreas() {
+    public Set<T> getAreas() {
         return super.getNodes();
     }
 
     @Override
-    public Set<Area> searchNodes(String query) {
+    public Set<T> searchNodes(String query) {
         return findAreas(query);
     }
         
-    public Set<Area> findAreas(String query) {
+    public Set<T> findAreas(String query) {
         
         query = query.toLowerCase();
         
-        Set<Area> searchResults = new HashSet<>();
+        Set<T> searchResults = new HashSet<>();
 
-        Set<Area> areas = this.getAreas();
+        Set<T> areas = this.getAreas();
 
         String[] searchedRels = query.split(", ");
 
@@ -59,7 +59,7 @@ public class AreaTaxonomy extends AbstractionNetwork<Area> {
             return searchResults;
         }
 
-        for (Area area : areas) {
+        for (T area : areas) {
             ArrayList<String> relsInArea = new ArrayList<>();
             
             Set<InheritableProperty> areaRels = area.getRelationships();
@@ -96,7 +96,7 @@ public class AreaTaxonomy extends AbstractionNetwork<Area> {
     }
 
     @Override
-    public Set<ParentNodeDetails<Area>> getParentNodeDetails(Area area) {
+    public Set<ParentNodeDetails<T>> getParentNodeDetails(T area) {
         return AbstractionNetworkUtils.getMultiRootedNodeParentNodeDetails(
                 area, 
                 this.getSourceHierarchy(), 

@@ -15,6 +15,6 @@ public class RemovedNodeDetails extends NodeChangeDetails {
             Set<NodeConceptChange> conceptChanges, 
             Set<ChildOfChange> childOfChanges) {
         
-        super(NodeChangeState.Removed, node, conceptChanges, childOfChanges);
+        super(ChangeState.Removed, node, conceptChanges, childOfChanges);
     }
 }

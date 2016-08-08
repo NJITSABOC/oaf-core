@@ -20,7 +20,7 @@ public class TribalAbstractionNetworkGenerator {
         
         hierarchy = new Hierarchy<>(
                 hierarchy.getChildren(sourceHierarchy.getRoot()), 
-                hierarchy.getAllChildRelationships());
+                hierarchy);
         
         return deriveTANFromMultiRootedHierarchy(hierarchy);
     }

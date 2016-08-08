@@ -13,13 +13,13 @@ public abstract class NodeChangeDetails extends AbNChange {
     
     private final Node changedNode;
     
-    private final NodeChangeState changeState;
+    private final ChangeState changeState;
     
     private final Set<NodeConceptChange> conceptChanges;
     
     private final Set<ChildOfChange> childOfChanges;
     
-    protected NodeChangeDetails(NodeChangeState changeState, Node changedNode, 
+    protected NodeChangeDetails(ChangeState changeState, Node changedNode, 
             Set<NodeConceptChange> conceptChanges,
             Set<ChildOfChange> childOfChanges) {
         
@@ -29,7 +29,7 @@ public abstract class NodeChangeDetails extends AbNChange {
         this.childOfChanges = childOfChanges;
     }
     
-    public NodeChangeState getNodeState() {
+    public ChangeState getNodeState() {
         return changeState;
     }
     

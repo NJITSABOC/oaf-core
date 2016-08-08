@@ -10,7 +10,7 @@ import java.util.Collections;
 public class UnmodifiedNodeDetails extends NodeChangeDetails {
     
     public UnmodifiedNodeDetails(Node node) {
-        super(NodeChangeState.Unmodified, 
+        super(ChangeState.Unmodified, 
                 node, 
                 Collections.emptySet(), 
                 Collections.emptySet());

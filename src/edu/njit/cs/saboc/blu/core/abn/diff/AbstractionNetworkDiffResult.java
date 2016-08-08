@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.diff.change.NodeChangeDetails;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import java.util.Map;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -13,18 +13,17 @@ public class AbstractionNetworkDiffResult {
     private final AbstractionNetwork from;
     private final AbstractionNetwork to;
     
-    private final Map<Node, NodeChangeDetails> nodeChanges;
+    private final Set<DiffNode> diffNodes;
     
     public AbstractionNetworkDiffResult(
             AbstractionNetwork from, 
             AbstractionNetwork to, 
-            Map<Node, NodeChangeDetails> nodeChanges) {
-        
+            Set<DiffNode> diffNodes) {
         
         this.from = from;
         this.to = to;
         
-        this.nodeChanges = nodeChanges;
+        this.diffNodes = diffNodes;
     }
 
     public AbstractionNetwork getFrom() {
@@ -35,7 +34,16 @@ public class AbstractionNetworkDiffResult {
         return to;
     }
     
-    public Map<Node, NodeChangeDetails> getNodeChanges() {
-        return nodeChanges;
+    public Set<DiffNode> getDiffNodes() {
+        return diffNodes;
+    }
+    
+    public Set<DiffNode> getDiffNodesOfType(ChangeState state) {
+        
+        Set<DiffNode> nodesOfType = diffNodes.stream().filter( (diffNode) -> {
+           return diffNode.getChangeDetails().getNodeState().equals(state);
+        }).collect(Collectors.toSet());
+        
+        return nodesOfType;
     }
 }

@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -43,25 +42,26 @@ import javax.swing.event.DocumentListener;
  */
 public class FilterableList extends JPanel {
     
-    private JTextField filterField = new JTextField();
-    private JButton closeButton = new JButton();
+    private final JTextField filterField = new JTextField();
+    private final JButton closeButton = new JButton();
     
-    private DefaultListModel pleaseWaitModel = new DefaultListModel();
+    private final DefaultListModel pleaseWaitModel = new DefaultListModel();
     
-    private DefaultListModel dataEmptyModel = new DefaultListModel();
+    private final DefaultListModel dataEmptyModel = new DefaultListModel();
     
-    private DefaultListModel noResultModel = new DefaultListModel();
+    private final DefaultListModel noResultModel = new DefaultListModel();
     
-    protected FilterableListModel entryModel;
     
-    protected JList list;
-    private JPanel filterPanel = new JPanel();
+    
+    
+    private final FilterableListModel entryModel = new FilterableListModel();
+    
+    private final JList list;
+    private final JPanel filterPanel = new JPanel();
 
     public FilterableList() {
 
         setLayout(new BorderLayout());
-
-        entryModel = new FilterableListModel();
 
         list = new JList() {
             // This method is called as the cursor moves within the list.
@@ -106,7 +106,7 @@ public class FilterableList extends JPanel {
                 if (list.getModel() == entryModel) {
                     StringBuilder selectionBuilder = new StringBuilder();
                     
-                    entryModel.modelledVector.forEach( (Filterable filterable) -> {
+                    entryModel.modelledVector.forEach( (filterable) -> {
                         selectionBuilder.append( String.format("%s\n", filterable.getClipboardText()));
                     });
 
@@ -152,11 +152,8 @@ public class FilterableList extends JPanel {
             }
         });
 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFilterPanelOpen(false, null);
-            }
+        closeButton.addActionListener((e) -> {
+            setFilterPanelOpen(false, null);
         });
 
         filterField.getDocument().addDocumentListener(new DocumentListener() {
@@ -273,7 +270,7 @@ public class FilterableList extends JPanel {
             return (List<Filterable>)Collections.EMPTY_LIST;
         }
         
-        ArrayList<Filterable> selectedItems = new ArrayList<Filterable>();
+        ArrayList<Filterable> selectedItems = new ArrayList<>();
         
         int [] selectedIndices = list.getSelectedIndices();
         

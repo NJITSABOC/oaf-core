@@ -77,7 +77,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 subtaxonomy.getSourceHierarchy());
                
         if (this.isAggregated()) {
-            subtaxonomy.setAggregated(true);
+            rootSubtaxonomy.setAggregated(true);
         }
         
         return rootSubtaxonomy;

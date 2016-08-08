@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -28,59 +27,78 @@ import java.util.Stack;
  */
 public class Hierarchy<T> {
     
-    private final Set<T> roots;
+    private final Graph<T> baseGraph;
     
-    private final HashMap<T, Set<T>> parents = new HashMap<>();
-    private final HashMap<T, Set<T>> children = new HashMap<>();
+    private final Set<T> roots;
 
+    /**
+     * Initializes a singly rooted hierarchy
+     * @param root 
+     */
     public Hierarchy(T root) {
         this(Collections.singleton(root));
     }
     
-    public Hierarchy(T root, Map<T, Set<T>> hierarchy) {
-        this(Collections.singleton(root), hierarchy);
-    }
-        
+    /**
+     * Initializes a multirooted hierarchyt
+     * @param roots 
+     */
     public Hierarchy(Set<T> roots) {
+        this.baseGraph = new Graph<>();
+        
         this.roots = new HashSet<>(roots);
         
         roots.forEach((root) -> {
-            children.put(root, new HashSet<>());
-            parents.put(root, new HashSet<>());
+            baseGraph.addNode(root);
         });
     }
     
+    /**
+     * Deep copy constructor
+     * 
+     * @param otherHierarchy 
+     */
     public Hierarchy(Hierarchy<T> otherHierarchy) {
-        this(otherHierarchy.getRoots(), otherHierarchy.children);
+        this(otherHierarchy.getRoots(), otherHierarchy);
     }
     
-    public Hierarchy(Set<T> roots, Map<T, Set<T>> hierarchy) {
-        this.roots = new HashSet<>(roots);
+    /**
+     * Initializes a singlyrooted subhierarchy within the source hierarchy
+     * @param root
+     * @param sourceHierarchy 
+     */
+    public Hierarchy(T root, Hierarchy<T> sourceHierarchy) {
+        this(Collections.singleton(root), sourceHierarchy);
+    }
+       
+    /**
+     * Creates the subhierarchy (within the source hierarchy) according to given roots
+     * @param roots
+     * @param sourceHierarchy 
+     */
+    public Hierarchy(Set<T> roots, Hierarchy<T> sourceHierarchy) {
+        this(roots);
         
         Stack<T> convertStack = new Stack<>();
 
-        for (T root : roots) {
+        roots.forEach((root) -> {
             convertStack.add(root);
 
             // Construct the subhierarchy at the given root.
             while (!convertStack.isEmpty()) {
-                T concept = convertStack.pop();
-
-                Set<T> conceptChildren = hierarchy.get(concept);
-
-                if (conceptChildren == null) {
-                    continue;
-                }
-
-                for (T child : conceptChildren) {
-                    addEdge(child, concept);
+                T parent = convertStack.pop();
+    
+                Set<T> conceptChildren = sourceHierarchy.getChildren(parent);
+                
+                conceptChildren.forEach((child) -> {
+                    addEdge(child, parent);
 
                     if (!convertStack.contains(child)) {
                         convertStack.add(child);
                     }
-                }
+                });
             }
-        }
+        });
     }
     
     public boolean isSinglyRooted() {
@@ -104,14 +122,12 @@ public class Hierarchy<T> {
         return roots.iterator().next();
     }
     
-    
-    
     /**
      * Returns the number of nodes in the hierarchy
      * @return 
      */
     public int size() {
-        return children.keySet().size();
+        return baseGraph.getNodes().size();
     }
     
     /**
@@ -120,25 +136,17 @@ public class Hierarchy<T> {
      * @param from The child concept
      * @param to The parent concept
      */
-    final public void addEdge(T from, T to) {
-        if(!parents.containsKey(from)) {
-            parents.put(from, new HashSet<>());
-        }
-        
-        if(!parents.containsKey(to)) {
-            parents.put(to, new HashSet<>());
-        }
-        
-        if(!children.containsKey(to)) {
-            children.put(to, new HashSet<>());
-        }
-        
-        if(!children.containsKey(from)) {
-            children.put(from, new HashSet<>());
-        }
-        
-        parents.get(from).add(to);
-        children.get(to).add(from);       
+    public void addEdge(T from, T to) {
+        baseGraph.addEdge(from, to);
+    }
+    
+    /**
+     * Add an IS A relationship into the hierarchy
+     * 
+     * @param edge The edge
+     */
+    public void addEdge(Edge<T> edge) {
+        this.addEdge(edge.getFrom(), edge.getTo());
     }
     
     /**
@@ -159,10 +167,8 @@ public class Hierarchy<T> {
      * @param hierarchy 
      */
     public void addAllHierarchicalRelationships(Hierarchy<T> hierarchy) {
-        hierarchy.children.forEach((node, nodeChildren) -> {
-            nodeChildren.forEach((child) -> {
-                addEdge(child, node);
-            });
+        hierarchy.getEdges().forEach( (edge) -> {
+            addEdge(edge);
         });
     }
     
@@ -173,7 +179,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public Hierarchy<T> getSubhierarchyRootedAt(T root) {
-        return new Hierarchy<>(root, this.children);
+        return new Hierarchy<>(root, this);
     }
     
     /**
@@ -182,15 +188,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public Set<Edge<T>> getEdges() {
-        Set<Edge<T>> edges = new HashSet<>();
-        
-        children.forEach( (node, childNodes) -> {
-            childNodes.forEach( (child) -> {
-                edges.add(new Edge(child, node));
-            });
-        });
-        
-        return edges;
+        return baseGraph.getEdges();
     }
     
     /**
@@ -199,10 +197,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public Set<T> getNodes() {
-        Set<T> allNodes = new HashSet<>(children.keySet());
-        allNodes.addAll(roots);
-        
-        return allNodes;
+        return baseGraph.getNodes();
     }
     
     /**
@@ -212,11 +207,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public Set<T> getChildren(T node) {
-        if(children.containsKey(node)) {
-            return children.get(node);
-        }
-        
-        return Collections.emptySet();
+        return baseGraph.getIncomingEdges(node);
     }
     
     /**
@@ -226,28 +217,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public Set<T> getParents(T node) {
-        if(parents.containsKey(node)) {
-            return parents.get(node);
-        }
-        
-        return Collections.emptySet();
-    }
-    
-    /**
-     * Returns a map containing all of the node -- children pairs in the hierarchy
-     * @return 
-     */
-    public HashMap<T, Set<T>> getAllChildRelationships() {
-        return children;
-    }
-    
-    
-    /**
-     * Returns a map containing all of the node -- parent parts in the hierarchy
-     * @return 
-     */
-    public HashMap<T, Set<T>> getAllParentRelationships() {
-        return parents;
+        return baseGraph.getOutgoingEdges(node);
     }
     
     /**
@@ -256,7 +226,7 @@ public class Hierarchy<T> {
      * @return 
      */
     public boolean contains(T node) {
-        return children.containsKey(node);
+        return baseGraph.contains(node);
     }
     
     /**

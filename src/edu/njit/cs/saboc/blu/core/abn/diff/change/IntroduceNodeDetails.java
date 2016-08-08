@@ -15,6 +15,6 @@ public class IntroduceNodeDetails extends NodeChangeDetails {
             Set<NodeConceptChange> conceptChanges, 
             Set<ChildOfChange> childOfChanges) {
         
-        super(NodeChangeState.Introduced, node, conceptChanges, childOfChanges);
+        super(ChangeState.Introduced, node, conceptChanges, childOfChanges);
     }
 }

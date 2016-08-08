@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
 import java.util.HashMap;
 
@@ -8,10 +7,10 @@ import java.util.HashMap;
  *
  * @author Chris
  */
-public abstract class NATAdjustableLayout<T, BROWSER_T extends GenericNATBrowser<T>> extends NATLayout<T, BROWSER_T> {
+public abstract class NATAdjustableLayout {
     
-    protected int myWidth;
-    protected int myHeight;
+    private int myWidth;
+    private int myHeight;
     
     protected HashMap<NATLayoutPanel, NATPanelNeighborhood> panelNeighborhoods;
 
@@ -23,7 +22,13 @@ public abstract class NATAdjustableLayout<T, BROWSER_T extends GenericNATBrowser
         NORTH, SOUTH, EAST, WEST
     };
     
-    public abstract void resetSplitPanePosition();
+    public int getLayoutWidth() {
+        return myWidth;
+    }
+    
+    public int getLayoutHeight() {
+        return myHeight;
+    }
     
     public void handleResize(int newWidth, int newHeight) {
         this.myWidth = newWidth;
@@ -31,4 +36,6 @@ public abstract class NATAdjustableLayout<T, BROWSER_T extends GenericNATBrowser
         
         this.resetSplitPanePosition();
     }
+    
+    public abstract void resetSplitPanePosition();
 }

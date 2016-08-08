@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.DefaultListModelEx;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
@@ -25,18 +26,15 @@ import javax.swing.JTabbedPane;
 
 
 /**
- * The upper right panel of the NAT.  Contains tabs for the search bar, the
- * history list, and user-specified options.
- * 
  * NOTES: This code is more or less copied from the UMLS NAT, and is probably
  * from 2006.
  */
-public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements ActionListener {
+public class OptionsAndSearchPanel extends NATLayoutPanel implements ActionListener {
     
     private JTabbedPane tpane = new JTabbedPane();
        
     // History Panel
-    private BaseNavPanel<T> pnlHistory;
+    private BaseNavPanel pnlHistory;
     private JButton btnBack;
     private JButton btnForward;
     private DefaultListModelEx mdlHistory;
@@ -45,12 +43,12 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
     private OptionsPanel optionsPanel;
     
     // Other stuff
-    private History<T> history;
+    private History history;
         
-    private ConceptBrowserDataSource<T> dataSource;
+    private ConceptBrowserDataSource dataSource;
 
     // Construtor!
-    public OptionsAndSearchPanel(final GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+    public OptionsAndSearchPanel(GenericNATBrowser mainPanel, ConceptBrowserDataSource dataSource) {
         super(mainPanel);
 
         this.dataSource = dataSource;
@@ -128,7 +126,6 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
         pnlHistory.add(historyPanel, BorderLayout.SOUTH);
         pnlHistory.add(new JScrollPane(lstHistory), BorderLayout.CENTER);
 
-
         tpane.addTab("Search", new SearchPanel(mainPanel, dataSource, new SearchResultListNavigateSelectionAction(mainPanel.getFocusConcept())));
         tpane.addTab("History", pnlHistory);
         tpane.addTab("Options", optionsPanel = new OptionsPanel(mainPanel));
@@ -144,12 +141,12 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
 
     public void updateHistory() {
         mdlHistory.clear();
-        ArrayList<T> historyVector = history.getHistoryList();
+        ArrayList<Concept> historyList = history.getHistoryList();
 
-        for(int i = historyVector.size() - 1; i >= 0; --i) {
-            T c = historyVector.get(i);
+        for(int i = historyList.size() - 1; i >= 0; --i) {
+            Concept c = historyList.get(i);
 
-            String cs = dataSource.getConceptName(c).replaceAll("<", "&lt;");
+            String cs = c.getName().replaceAll("<", "&lt;");
 
             String entry = String.format("<html> <FONT color=%s><b>%s</b></FONT>",
                     i == history.getPosition() ? "black" : "gray", cs);
@@ -165,13 +162,13 @@ public class OptionsAndSearchPanel<T> extends NATLayoutPanel<T> implements Actio
         if(ae.getSource() == btnBack) {
             if(history.getPosition() > 0) {
                 history.minusPosition();
-                mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
+                getMainPanel().getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
             }
         }
         else if(ae.getSource() == btnForward) {
             if(history.getPosition() < (history.getHistoryList().size() - 1)) {
                 history.plusPosition();
-                mainPanel.getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
+                getMainPanel().getFocusConcept().navigate(history.getHistoryList().get(history.getPosition()));
             }
         }
     }

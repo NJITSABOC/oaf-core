@@ -12,13 +12,13 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class OptionsPanel<T> extends NATLayoutPanel<T> {
+public class OptionsPanel extends NATLayoutPanel {
 
-    private final ArrayList<OptionPanel<T>> optionPanels = new ArrayList<>();
+    private final ArrayList<OptionPanel> optionPanels = new ArrayList<>();
     
     private final JPanel optionsListPanel;
 
-    public OptionsPanel(GenericNATBrowser<T> mainPanel) {
+    public OptionsPanel(GenericNATBrowser mainPanel) {
         super(mainPanel);
 
         this.setLayout(new BorderLayout());
@@ -28,10 +28,10 @@ public class OptionsPanel<T> extends NATLayoutPanel<T> {
         
         this.add(optionsListPanel, BorderLayout.NORTH);
 
-        this.addOptionsPanel(new FontSizeOptionPanel<T>(mainPanel));
+        this.addOptionsPanel(new FontSizeOptionPanel(mainPanel));
     }
     
-    public final void addOptionsPanel(OptionPanel<T> optionsPanel) {
+    public final void addOptionsPanel(OptionPanel optionsPanel) {
         optionPanels.add(optionsPanel);
         
         optionsListPanel.add(optionsPanel);

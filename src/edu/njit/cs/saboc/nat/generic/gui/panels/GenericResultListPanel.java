@@ -8,7 +8,6 @@ import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -16,7 +15,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Optional;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -26,21 +24,21 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> implements Toggleable {
+public abstract class GenericResultListPanel<V> extends BaseNavPanel implements Toggleable {
 
     private FilterableList list;
     
-    private NATDataField<T, ArrayList<V>> field;
+    private NATDataField<ArrayList<V>> field;
     
     private ArrayList<DataLoadedListener<ArrayList<V>>> dataLoadedListeners;
     
     private JPanel optionsPanel;
 
     public GenericResultListPanel(
-            final GenericNATBrowser<T> mainPanel, 
+            GenericNATBrowser mainPanel, 
             FilterableList list,
-            NATDataField<T, ArrayList<V>> field, 
-            ConceptBrowserDataSource<T> dataSource,
+            NATDataField<ArrayList<V>> field, 
+            ConceptBrowserDataSource dataSource,
             boolean showFilter) {
         
         super(mainPanel, dataSource);
@@ -96,8 +94,8 @@ public abstract class GenericResultListPanel<T, V> extends BaseNavPanel<T> imple
 
     public GenericResultListPanel (
             final GenericNATBrowser mainPanel, 
-            NATDataField<T, ArrayList<V>> field,
-            ConceptBrowserDataSource<T> dataSource,
+            NATDataField<ArrayList<V>> field,
+            ConceptBrowserDataSource dataSource,
             boolean showFilter) {
         
         this(mainPanel, new FilterableList(), field, dataSource, showFilter);

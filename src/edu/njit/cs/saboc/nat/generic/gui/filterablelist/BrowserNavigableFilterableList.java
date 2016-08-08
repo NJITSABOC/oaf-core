@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
@@ -11,11 +12,14 @@ import javax.swing.JList;
 /**
  * A generic filterable list that allows a user to navigate within the NAT via 
  * double clicking on a entry in the list
+ * 
  * @author Chris O
  */
 public class BrowserNavigableFilterableList<T> extends FilterableList {
 
-    public BrowserNavigableFilterableList(final GenericNATBrowser<T> mainPanel, final FilterableListSelectionAction<T> selectionAction) {
+    public BrowserNavigableFilterableList(
+            GenericNATBrowser mainPanel, 
+            FilterableListSelectionAction selectionAction) {
 
         super.addListMouseListener(new MouseAdapter() {
             
@@ -33,5 +37,4 @@ public class BrowserNavigableFilterableList<T> extends FilterableList {
             }
         });
     }
-
 }

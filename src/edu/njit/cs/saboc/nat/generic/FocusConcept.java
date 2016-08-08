@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.nat.generic;
 
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.CommonDataFields;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
@@ -17,34 +18,35 @@ import java.util.Map;
  * 
  * @author Paul Accisano
  */
-public class FocusConcept<T> {
+public class FocusConcept {
     
-    private ConceptBrowserDataSource<T> dataSource;
-    private GenericNATBrowser<T> browser;
+    private final ConceptBrowserDataSource dataSource;
+    private final GenericNATBrowser browser;
     
-    private T activeFocusConcept = null;
 
-    // Concept data
     private final Map<NATDataField, Object> dataLists = new HashMap<>();
 
-    // Whether or not a given field has already been filled
     private final Map<NATDataField, Boolean> alreadyFilled = new HashMap<>();
     
-    // The panels that actually display concepts
-    private final Map<NATDataField, BaseNavPanel<T>> displayPanels = new HashMap<>();
+    private final Map<NATDataField, BaseNavPanel> displayPanels = new HashMap<>();
 
-    // The panels that need to be notified of a concept change
-    private final ArrayList<BaseNavPanel<T>> listeners = new ArrayList<>();
+    private final ArrayList<BaseNavPanel> listeners = new ArrayList<>();
 
-    private History<T> history = new History<T>();
+    private final History history = new History();
 
     private final NATOptions options;
 
-    private ArrayList<UpdateThread> updateThreads = new ArrayList<>();
+    private final ArrayList<UpdateThread> updateThreads = new ArrayList<>();
     
     public final CommonDataFields COMMON_DATA_FIELDS;
+    
+    private Concept activeFocusConcept = null;
 
-    public FocusConcept(GenericNATBrowser browser, NATOptions options, ConceptBrowserDataSource<T> dataSource) {
+    public FocusConcept(
+            GenericNATBrowser browser, 
+            NATOptions options, 
+            ConceptBrowserDataSource dataSource) {
+        
         this.browser = browser;
         this.options = options;
         this.dataSource = dataSource;
@@ -78,21 +80,21 @@ public class FocusConcept<T> {
 
     public void reloadCurrentConcept() {
         if(activeFocusConcept != null) {
-            navigate(getConcept());
+            navigate(getActiveFocusConcept());
         }
     }
 
     public void navigateRoot() {
-        navigate(dataSource.getRoot());
+        navigate(dataSource.getOntology().getConceptHierarchy().getRoot());
     }
 
     // Sets the Focus Concept.
-    public void navigate(T c) {
+    public void navigate(Concept c) {
         activeFocusConcept = c;
 
         history.addHistoryConcept(c);
         
-        displayPanels.keySet().forEach((NATDataField field) -> { alreadyFilled.put(field, false); });
+        displayPanels.keySet().forEach((field) -> { alreadyFilled.put(field, false); });
 
         // Clear out the old stuff
         dataLists.clear();
@@ -103,21 +105,12 @@ public class FocusConcept<T> {
         updateAll();
     }
     
-    public GenericNATBrowser<T> getAssociatedBrowser() {
+    public GenericNATBrowser getAssociatedBrowser() {
         return browser;
     }
 
-    public T getConcept() {
+    public Concept getActiveFocusConcept() {
         return activeFocusConcept;
-    }
-
-    // Convenience methods
-    public String getConceptId() {
-        return dataSource.getConceptId(activeFocusConcept);
-    }
-
-    public String getConceptName() {
-        return dataSource.getConceptName(activeFocusConcept);
     }
 
     // Returns the concepts in a field
@@ -126,17 +119,17 @@ public class FocusConcept<T> {
     }
 
     public void setAllDataEmpty() {
-        displayPanels.keySet().forEach((NATDataField field) -> {displayPanels.get(field).dataEmpty(); });
+        displayPanels.keySet().forEach( (field) -> {displayPanels.get(field).dataEmpty(); });
     }
     
     public void setAllDataPending() {
-        displayPanels.keySet().forEach((NATDataField field) -> { displayPanels.get(field).dataPending(); });
+        displayPanels.keySet().forEach( (field) -> { displayPanels.get(field).dataPending(); });
     }
 
     public void updateAll() {
-        displayPanels.keySet().forEach( (NATDataField field) -> { update(field); });
+        displayPanels.keySet().forEach( (field) -> { update(field); });
         
-        displayPanels.values().forEach((BaseNavPanel panel) -> {panel.focusConceptChanged();});
+        displayPanels.values().forEach( (panel) -> {panel.focusConceptChanged();});
     }
 
     // Updates the given field of the Focus Concept
@@ -166,9 +159,9 @@ public class FocusConcept<T> {
 
     // Cancels any query that is executing and clears the query queue.
     protected void cancel() {
-        for(UpdateThread t : updateThreads) {
+        updateThreads.forEach((t) -> {
             t.cancel();
-        }
+        });
 
         updateThreads.clear();
     }

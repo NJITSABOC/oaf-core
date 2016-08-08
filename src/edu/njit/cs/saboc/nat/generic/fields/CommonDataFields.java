@@ -1,82 +1,86 @@
 package edu.njit.cs.saboc.nat.generic.fields;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * A container class for holding generic data fields that can be used across all NAT implementations
  * @author Chris O
  */
-public class CommonDataFields<T> {
-    /**
-     * The focus concept data field
-     */
-    public final NATDataField<T, T> CONCEPT;
+public class CommonDataFields {
+
+    public final NATDataField<Concept> CONCEPT;
     
-    /**
-     * The synonyms data field
-     */
-    public final NATDataField<T, ArrayList<String>> SYNONYMS;
+    public final NATDataField<ArrayList<Concept>> PARENTS;
+
+    public final NATDataField<ArrayList<Concept>> CHILDREN;
+
+    public final NATDataField<ArrayList<Concept>> SIBLINGS;
+
+    public final NATDataField<ArrayList<Concept>> STRICT_SIBLINGS;
     
-    /**
-     * The parents data field
-     */
-    public final NATDataField<T, ArrayList<T>> PARENTS;
-    
-    /**
-     * The children data field
-     */
-    public final NATDataField<T, ArrayList<T>> CHILDREN;
-    
-    /**
-     * The siblings data field
-     */
-    public final NATDataField<T, ArrayList<T>> SIBLINGS;
-    
-    /**
-     * The history data field
-     */
-    public final NATDataField<T, String> HISTORY;
+    public final NATDataField<String> HISTORY;
     
     /**
      * 
      * @param dataSource The data source to be used by the data fields
      */
-    public CommonDataFields(ConceptBrowserDataSource<T> dataSource) {
-        this.CONCEPT = new NATDataField<T, T>("Concept", new DataSourceDataRetriever<T, T>(dataSource) {
-            public T retrieveData(T concept) {
+    public CommonDataFields(ConceptBrowserDataSource dataSource) {
+        
+        
+        this.CONCEPT = new NATDataField<>("Concept", new DataSourceDataRetriever<Concept>(dataSource) {
+            public Concept retrieveData(Concept concept) {
                 return concept;
             }
         });
-        
-        this.SYNONYMS = new NATDataField<T, ArrayList<String>>("Synonyms", new DataSourceDataRetriever<T, ArrayList<String>>(dataSource) {
-            public ArrayList<String> retrieveData(T concept) {
-                return dataSource.getConceptSynonyms(concept);
+
+        this.PARENTS = new NATDataField<>("Parents", new DataSourceDataRetriever<ArrayList<Concept>>(dataSource) {
+            public ArrayList<Concept> retrieveData(Concept concept) {
+                return getSortedConceptList(
+                        dataSource.getOntology().getConceptHierarchy().getParents(concept)
+                );
             }
         });
         
-        this.PARENTS = new NATDataField<T, ArrayList<T>>("Parents", new DataSourceDataRetriever<T, ArrayList<T>>(dataSource) {
-            public ArrayList<T> retrieveData(T concept) {
-                return dataSource.getConceptParents(concept);
+        this.CHILDREN = new NATDataField<>("Children", new DataSourceDataRetriever<ArrayList<Concept>>(dataSource) {
+            public ArrayList<Concept> retrieveData(Concept concept) {
+                return getSortedConceptList(
+                        dataSource.getOntology().getConceptHierarchy().getChildren(concept)
+                );
             }
         });
         
-        this.CHILDREN = new NATDataField<T, ArrayList<T>>("Children", new DataSourceDataRetriever<T, ArrayList<T>>(dataSource) {
-            public ArrayList<T> retrieveData(T concept) {
-                return dataSource.getConceptChildren(concept);
+        this.SIBLINGS = new NATDataField<>("Siblings", new DataSourceDataRetriever<ArrayList<Concept>>(dataSource) {
+            public ArrayList<Concept> retrieveData(Concept concept) {
+                return getSortedConceptList(
+                        dataSource.getOntology().getConceptHierarchy().getSiblings(concept)
+                );
             }
         });
         
-        this.SIBLINGS = new NATDataField<T, ArrayList<T>>("Siblings", new DataSourceDataRetriever<T, ArrayList<T>>(dataSource) {
-            public ArrayList<T> retrieveData(T concept) {
-                return dataSource.getConceptSiblings(concept);
+        this.STRICT_SIBLINGS = new NATDataField<>("Strict Siblings", new DataSourceDataRetriever<ArrayList<Concept>>(dataSource) {
+            public ArrayList<Concept> retrieveData(Concept concept) {
+                return getSortedConceptList(
+                        dataSource.getOntology().getConceptHierarchy().getStrictSiblings(concept)
+                );
             }
         });
         
-        this.HISTORY = new NATDataField<T, String>("History", new DataSourceDataRetriever<T, String>(dataSource) {
-            public String retrieveData(T concept) {
+        this.HISTORY = new NATDataField<>("History", new DataSourceDataRetriever<String>(dataSource) {
+            public String retrieveData(Concept concept) {
                 return "";
             }
         });
+    }
+    
+    private ArrayList<Concept> getSortedConceptList(Set<Concept> concepts) {
+        ArrayList<Concept> sortedConcepts = new ArrayList<>(concepts);
+        sortedConcepts.sort( (a, b) -> {
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
+        
+        return sortedConcepts;
     }
 }

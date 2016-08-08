@@ -11,7 +11,7 @@ import javax.swing.JRadioButton;
  *
  * @author Chris O
  */
-public class FontSizeOptionPanel<T> extends OptionPanel<T> {
+public class FontSizeOptionPanel extends OptionPanel {
 
     private final JRadioButton tinyBtn = new JRadioButton("Tiny");
     private final JRadioButton smallBtn = new JRadioButton("Small");
@@ -19,7 +19,7 @@ public class FontSizeOptionPanel<T> extends OptionPanel<T> {
     private final JRadioButton largeBtn = new JRadioButton("Large");
     private final JRadioButton hugeBtn = new JRadioButton("Huge");
     
-    public FontSizeOptionPanel(GenericNATBrowser<T> mainPanel) {
+    public FontSizeOptionPanel(GenericNATBrowser mainPanel) {
         super(mainPanel);
         
         this.setBorder(BaseNavPanel.createTitledLineBorder("Font Size", mainPanel.getOptions().getFontSize()));
@@ -69,6 +69,6 @@ public class FontSizeOptionPanel<T> extends OptionPanel<T> {
         largeBtn.setFont(optFont);
         hugeBtn.setFont(optFont);
 
-        this.setBorder(BaseNavPanel.createTitledLineBorder("Font Size", mainPanel.getOptions().getFontSize()));
+        this.setBorder(BaseNavPanel.createTitledLineBorder("Font Size", getMainPanel().getOptions().getFontSize()));
     }
 }

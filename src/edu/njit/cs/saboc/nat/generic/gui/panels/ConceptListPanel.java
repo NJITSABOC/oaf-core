@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
@@ -13,20 +14,20 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class ConceptListPanel<T> extends GenericResultListPanel<T, T> {
+public class ConceptListPanel extends GenericResultListPanel<Concept> {
 
     public ConceptListPanel(
-            GenericNATBrowser<T> mainPanel, 
-            NATDataField<T, ArrayList<T>> field, 
-            ConceptBrowserDataSource<T> dataSource,
+            GenericNATBrowser mainPanel, 
+            NATDataField<ArrayList<Concept>> field, 
+            ConceptBrowserDataSource dataSource,
             boolean showFilter) {
         
         super(mainPanel, 
-                new BrowserNavigableFilterableList(mainPanel, new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
+                new BrowserNavigableFilterableList(mainPanel,  new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
                 field, dataSource,showFilter);
     }
     
-    protected Filterable<T> createFilterableEntry(T item) {
-        return new FilterableConceptEntry<T>(item, dataSource);
+    protected Filterable<Concept> createFilterableEntry(Concept item) {
+        return new FilterableConceptEntry(item, dataSource);
     }
 }

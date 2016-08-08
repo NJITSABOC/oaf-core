@@ -1,17 +1,19 @@
 package edu.njit.cs.saboc.nat.generic;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 
 /**
  * A  class that keeps track of the user's browsing history.
  * 
- * @param <T> The type of concept stored in this history
  */
-public class History<T> {
+
+public class History {
+    
     /**
      * ArrayList which stores the history of visited concepts
      */
-    private final ArrayList<T> conceptHistory = new ArrayList<>();
+    private final ArrayList<Concept> conceptHistory = new ArrayList<>();
     
     /**
      * The initial position in the history
@@ -26,7 +28,7 @@ public class History<T> {
      * 
      * @param concept Concept to be added to the end of the history (most recently visited)
      */
-    public void addHistoryConcept(T concept) {
+    public void addHistoryConcept(Concept concept) {
         if(!conceptHistory.isEmpty() && conceptHistory.get(getPosition()).equals(concept)) {
             return;
         }
@@ -69,7 +71,7 @@ public class History<T> {
      * 
      * @return The list of visited concepts in chronological order (index 0 is the first visited).
      */
-    public ArrayList<T> getHistoryList() {
+    public ArrayList<Concept> getHistoryList() {
         return conceptHistory;
     }
 
@@ -77,7 +79,7 @@ public class History<T> {
      * 
      * @return The currently selected concept in the browser history
      */
-    public T getCurrentConcept() {
+    public Concept getCurrentConcept() {
         return conceptHistory.get(position);
     }
 

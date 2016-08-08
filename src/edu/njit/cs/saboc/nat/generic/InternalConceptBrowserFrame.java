@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import javax.swing.JFrame;
@@ -16,16 +17,16 @@ public class InternalConceptBrowserFrame<T> extends JInternalFrame {
     /**
      * The NAT browser
      */
-    private final GenericNATBrowser<T> browser;
+    private final GenericNATBrowser browser;
     
-    public InternalConceptBrowserFrame(JFrame parentFrame, ConceptBrowserDataSource<T> dataSource, NATLayout layout) {
+    public InternalConceptBrowserFrame(JFrame parentFrame, ConceptBrowserDataSource dataSource, NATLayout layout) {
         super("Generic NAT",
                 true, //resizable
                 true, //closable
                 true, //maximizable
                 true);//iconifiable
         
-        browser = new GenericNATBrowser<T>(parentFrame, dataSource, layout, new NATOptions());
+        browser = new GenericNATBrowser(parentFrame, dataSource, layout, new NATOptions());
         
 
         this.setSize(1200, 550);
@@ -39,7 +40,7 @@ public class InternalConceptBrowserFrame<T> extends JInternalFrame {
      * 
      * @param c Concept to navigate to
      */
-    public void nagivateTo(T c) {
+    public void nagivateTo(Concept c) {
         browser.navigateTo(c);
     }
 }

@@ -1,16 +1,15 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.NATOptions;
 import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSearchEntry;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.FilterableListSelectionAction;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Font;
@@ -37,18 +36,18 @@ import javax.swing.SwingUtilities;
  *
  * @author Den
  */
-public class SearchPanel<T> extends NATLayoutPanel<T> {
+public class SearchPanel extends NATLayoutPanel {
 
-    private JRadioButton optAnywhere;
-    private JRadioButton optStarting;
-    private JRadioButton optExact;
+    private final JRadioButton optAnywhere;
+    private final JRadioButton optStarting;
+    private final JRadioButton optExact;
     
-    protected SpinnerTextField txtSearchBox;
+    private final SpinnerTextField txtSearchBox;
     
-    private JButton btnDoSearch;
-    private JButton btnCancelSearch;
+    private final JButton btnDoSearch;
+    private final JButton btnCancelSearch;
 
-    protected FilterableList searchList;
+    private final FilterableList searchList;
     
     private volatile int searchID = 0;
 
@@ -58,8 +57,8 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
     // The special textbox with the spinner in it
     protected class SpinnerTextField extends JPanel {
 
-        private JTextField textField;
-        private JLabel spinner;
+        private final JTextField textField;
+        private final JLabel spinner;
 
         public SpinnerTextField() {
             super(new BorderLayout());
@@ -90,11 +89,12 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
         }
     }
 
-    private final GenericNATBrowser<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
+    private final GenericNATBrowser mainPanel;
+    private final ConceptBrowserDataSource dataSource;
 
-    public SearchPanel(GenericNATBrowser<T> mainPanel, ConceptBrowserDataSource<T> dataSource, 
-            FilterableListSelectionAction<T> resultSelectionAction) {
+    public SearchPanel(GenericNATBrowser mainPanel, 
+            ConceptBrowserDataSource dataSource, 
+            FilterableListSelectionAction resultSelectionAction) {
         
         super(mainPanel);
         
@@ -214,11 +214,10 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
             }
         }
 
-        Optional<T> c = dataSource.getConceptFromId(searchText);
+        Optional<Concept> c = dataSource.getConceptFromId(searchText);
 
         if (c.isPresent()) {
-            BrowserSearchResult<T> sr = new BrowserSearchResult<>(dataSource.getConceptName(c.get()),
-                    dataSource.getConceptId(c.get()), c.get());
+            BrowserSearchResult sr = new BrowserSearchResult(c.get(), searchText);
 
             ArrayList<Filterable> entry = new ArrayList<>();
             entry.add(new FilterableSearchEntry(sr));
@@ -268,7 +267,7 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
 
         @Override
         public void run() {
-            ArrayList<BrowserSearchResult<T>> results = new ArrayList<>();
+            ArrayList<BrowserSearchResult> results = new ArrayList<>();
 
             if (optExact.isSelected()) {
                 results = dataSource.searchExact(term);
@@ -286,10 +285,10 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
     // This will be used to send the results back through the main thread
     private class ResultSender implements Runnable {
 
-        private ArrayList<BrowserSearchResult<T>> results;
-        private int id;
+        private final ArrayList<BrowserSearchResult> results;
+        private final int id;
 
-        public ResultSender(ArrayList<BrowserSearchResult<T>> results, int id) {
+        public ResultSender(ArrayList<BrowserSearchResult> results, int id) {
             this.results = results;
             this.id = id;
         }
@@ -300,7 +299,7 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
         }
     }
 
-    private void displaySearchResults(ArrayList<BrowserSearchResult<T>> results, int id) {
+    private void displaySearchResults(ArrayList<BrowserSearchResult> results, int id) {
         if (id != searchID) {
             return;
         }
@@ -328,14 +327,14 @@ public class SearchPanel<T> extends NATLayoutPanel<T> {
         txtSearchBox.setSpinnerVisible(false);
     }
     
-    public Optional<T> getSelectedResultConcept() {
+    public Optional<Concept> getSelectedResultConcept() {
         
         if(searchList.getSelectedIndex() >= 0) {
             List<Filterable> selected = searchList.getSelectedValues();
             
             FilterableSearchEntry selectedEntry = (FilterableSearchEntry)selected.get(0);
             
-            BrowserSearchResult<T> searchResult = (BrowserSearchResult<T>)selectedEntry.getObject();
+            BrowserSearchResult searchResult = (BrowserSearchResult)selectedEntry.getObject();
             
             return Optional.of(searchResult.getConcept());
         }

@@ -7,8 +7,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
  *
  * @author Chris O
  */
-public abstract class OptionPanel<T> extends NATLayoutPanel<T> {
-    protected OptionPanel(GenericNATBrowser<T> mainPanel) {
+public abstract class OptionPanel extends NATLayoutPanel {
+    protected OptionPanel(GenericNATBrowser mainPanel) {
         super(mainPanel);
     }
 }

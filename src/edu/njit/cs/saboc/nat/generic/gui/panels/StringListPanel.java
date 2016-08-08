@@ -5,17 +5,18 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import java.util.ArrayList;
 
 /**
  *
  * @author Chris O
  */
-public class StringListPanel<T> extends GenericResultListPanel<T, String> {
+public class StringListPanel extends GenericResultListPanel<String> {
 
-    public StringListPanel(final GenericNATBrowser mainPanel, NATDataField<T, ArrayList<String>> field, 
-            ConceptBrowserDataSource<T> dataSource, 
+    public StringListPanel(
+            GenericNATBrowser mainPanel, 
+            NATDataField<ArrayList<String>> field, 
+            ConceptBrowserDataSource dataSource, 
             boolean showFilter) {
         
         super(mainPanel, field, dataSource, showFilter);

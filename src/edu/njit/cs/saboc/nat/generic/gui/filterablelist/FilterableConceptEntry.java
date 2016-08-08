@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 
@@ -7,32 +8,35 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
  * A generic entry for a concept. It only displays its name and its unique ID
  * @author Chris
  */
-public class FilterableConceptEntry<T> extends Filterable<T> implements NavigableEntry<T> {
+public class FilterableConceptEntry extends Filterable<Concept> implements NavigableEntry<Concept> {
 
     /**
      * The concept
      */
-    private final T concept;
+    private final Concept concept;
     
     /**
      * The data source
      */
-    private final ConceptBrowserDataSource<T> dataSource;
+    private final ConceptBrowserDataSource dataSource;
 
     /**
      * 
-     * @param concept The concept
-     * @param dataSource The data source
+     * @param concept
+     * @param dataSource
      */
-    public FilterableConceptEntry(T concept, ConceptBrowserDataSource<T> dataSource) {
+    public FilterableConceptEntry(Concept concept, 
+            ConceptBrowserDataSource dataSource) {
+        
         this.concept = concept;
         this.dataSource = dataSource;
     }
 
     /**
-     * @return The concept  
+     * @return 
      */
-    public T getObject() {
+    @Override
+    public Concept getObject() {
         return concept;
     }
 
@@ -40,7 +44,8 @@ public class FilterableConceptEntry<T> extends Filterable<T> implements Navigabl
      * 
      * @return The concept
      */
-    public T getNavigableConcept() {
+    @Override
+    public Concept getNavigableConcept() {
         return getObject();
     }
 
@@ -83,11 +88,11 @@ public class FilterableConceptEntry<T> extends Filterable<T> implements Navigabl
      * @return True if the concept's name or id contains the filter, false otherwise
      */
     public boolean containsFilter(String filter) {
-        return dataSource.getConceptName(concept).toLowerCase().contains(filter) || dataSource.getConceptId(concept).toLowerCase().contains(filter);
+        return concept.getName().toLowerCase().contains(filter) || concept.getIDAsString().toLowerCase().contains(filter);
     }
     
     @Override
     public String getClipboardText() {
-        return String.format("%s\t%s", dataSource.getConceptId(concept), dataSource.getConceptName(concept));
+        return String.format("%s\t%s", concept.getIDAsString(), concept.getName());
     }
 }

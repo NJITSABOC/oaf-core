@@ -1,66 +1,37 @@
 package edu.njit.cs.saboc.nat.generic.data;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+
 /**
  * A class that represents a search result for the Search panel
  * 
  * @author Chris O
  */
-public class BrowserSearchResult<T> {
+public class BrowserSearchResult {
 
-    /**
-     * The name of the concepts which is a search result (may not be preferred name)
-     */
-    private String conceptName;
+    private final Concept concept;
     
-    /**
-     * The unique ID of the concept that is a search result
-     */
-    private String conceptId;
-
-    /**
-     * The concept that is a search result
-     */
-    private T concept;
+    private final String matchedTerm;
 
     /**
      * 
-     * @param conceptName The name (or a synonym, potentially) of the search result concept
-     * @param conceptId The unique ID of the search result concept
-     * @param concept  The search result concept
+     * @param concept  
+     * @param matchedTerm
      */
-    public BrowserSearchResult(String conceptName, String conceptId, T concept) {
-        this.conceptName = conceptName;
-        this.conceptId = conceptId;
+    public BrowserSearchResult(Concept concept, String matchedTerm) {
         this.concept = concept;
+        this.matchedTerm = matchedTerm;
     }
 
-    /**
-     * Returns the term of the search result
-     *
-     * @return The term of the search result
-     */
-    public String getName() {
-        return conceptName;
+    public Concept getConcept() {
+        return concept;
     }
     
-    /**
-     * 
-     * @return The unique ID of the search result concept
-     */
-    public String getConceptId() {
-        return conceptId;
-    }
-
-
-    /**
-     * 
-     * @return The search result concept
-     */
-    public T getConcept() {
-        return concept;
+    public String getMatchedTerm() {
+        return matchedTerm;
     }
 
     public String toString() {
-        return String.format("%s {%s}", conceptName, conceptId);
+        return String.format("%s {%s}", concept.getName(), concept.getIDAsString());
     }
 }

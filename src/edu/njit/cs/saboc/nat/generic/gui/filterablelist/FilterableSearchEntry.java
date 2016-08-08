@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
 
@@ -7,18 +8,18 @@ import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
  * A filterable entry for a search result list
  * @author Chris
  */
-public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>> implements NavigableEntry<T> {
+public class FilterableSearchEntry extends Filterable<BrowserSearchResult> implements NavigableEntry<Concept> {
    
     /**
      * The search result
      */
-    private BrowserSearchResult<T> entry;
+    private BrowserSearchResult entry;
 
     /**
      * 
      * @param entry The search result
      */
-    public FilterableSearchEntry(BrowserSearchResult<T> entry) {
+    public FilterableSearchEntry(BrowserSearchResult entry) {
         this.entry = entry;
     }
     
@@ -26,7 +27,7 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
      * 
      * @return The search result
      */
-    public BrowserSearchResult<T> getObject() {
+    public BrowserSearchResult getObject() {
         return entry;
     }
 
@@ -34,21 +35,21 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
      * 
      * @return The search result concept
      */
-    public T getNavigableConcept() {
+    public Concept getNavigableConcept() {
         return entry.getConcept();
     }
 
     public String getInitialText() {
         return String.format("<html>%s &nbsp;<font color='blue'>{%s}</font>", 
-                entry.getName(),
-                entry.getConceptId());
+                entry.getConcept().getName(),
+                entry.getConcept().getIDAsString());
     }
     
     public String getInitialText(boolean showURIs) {
         if (showURIs) {
             return getInitialText();
         } else {
-            return String.format("<html>%s", entry.getName());
+            return String.format("<html>%s", entry.getConcept().getName());
         }
     }
 
@@ -71,12 +72,13 @@ public class FilterableSearchEntry<T> extends Filterable<BrowserSearchResult<T>>
      * @return True if the search result's term or search result concept's unique ID contains the filter
      */
     public boolean containsFilter(String filter) {
-        return entry.getName().toLowerCase().contains(filter) || 
+        return 
+                entry.getName().toLowerCase().contains(filter) || 
                 entry.getConceptId().contains(filter);
     }
     
     @Override
     public String getClipboardText() {
-        return String.format("%s\t%s", entry.getConceptId(), entry.getName());
+        return String.format("%s\t%s", entry.getConcept().getIDAsString(), entry.getConcept().getName());
     }
 }

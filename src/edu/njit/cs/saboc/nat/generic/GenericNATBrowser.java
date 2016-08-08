@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import java.awt.BorderLayout;
@@ -13,7 +14,7 @@ import javax.swing.SwingUtilities;
  * 
  * @param <T> The type of concept used in this NAT (e.g., OWL Class or SNOMED CT concept)
  */
-public class GenericNATBrowser<T> extends JPanel {
+public class GenericNATBrowser extends JPanel {
     
     /**
      * Background color shared by all of the neighborhood panels
@@ -23,12 +24,12 @@ public class GenericNATBrowser<T> extends JPanel {
     /**
      * The data source used by every field in this NAT
      */
-    private ConceptBrowserDataSource<T> dataSource;
+    private ConceptBrowserDataSource dataSource;
 
     /**
      * The focus concept for this instance of a NAT
      */
-    private FocusConcept<T> focusConcept;
+    private FocusConcept focusConcept;
     
     /**
      * The options for this NAT
@@ -48,10 +49,12 @@ public class GenericNATBrowser<T> extends JPanel {
     /**
      * 
      * @param parentFrame The top-level JFrame that this NAT belongs to
-     * @param dataSource A data source
-     * @param layout The visual layout of the NAT's elements
+     * 
+     * @param dataSource
+     * @param layout 
+     * @param options
      */
-    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource<T> dataSource, NATLayout layout, NATOptions options) {
+    public GenericNATBrowser(JFrame parentFrame, ConceptBrowserDataSource dataSource, NATLayout layout, NATOptions options) {
         this.setLayout(new BorderLayout());
                
         this.options = options;
@@ -66,7 +69,7 @@ public class GenericNATBrowser<T> extends JPanel {
         focusConcept = new FocusConcept(this, options, dataSource);
 
         this.initConceptBrowser();
-        this.navigateTo(dataSource.getRoot());
+        this.navigateTo(dataSource.getOntology().getConceptHierarchy().getRoot());
         
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -75,7 +78,7 @@ public class GenericNATBrowser<T> extends JPanel {
         });
     }
     
-    public ConceptBrowserDataSource<T> getDataSource() {
+    public ConceptBrowserDataSource getDataSource() {
         return dataSource;
     }
 
@@ -83,7 +86,7 @@ public class GenericNATBrowser<T> extends JPanel {
      * Navigates the NAT to the 
      * @param c 
      */
-    public void navigateTo(T c) {
+    public void navigateTo(Concept c) {
         focusConcept.navigate(c);
     }
 
@@ -114,7 +117,7 @@ public class GenericNATBrowser<T> extends JPanel {
      * 
      * @return The Focus Concept for this NAT
      */
-    public FocusConcept<T> getFocusConcept() {
+    public FocusConcept getFocusConcept() {
         return focusConcept;
     }
 

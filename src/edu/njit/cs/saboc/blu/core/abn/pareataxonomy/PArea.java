@@ -22,6 +22,16 @@ public class PArea extends SinglyRootedNode {
         this.relationships = relationships;
     }
     
+    public boolean equals(Object o) {
+        if(o instanceof PArea) {
+            PArea other = (PArea)o;
+            
+            return super.equals(other) && this.getRelationships().equals(other.getRelationships());
+        }
+        
+        return false;
+    }
+    
     public Set<InheritableProperty> getRelationships() {
         return relationships;
     }

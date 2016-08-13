@@ -1,7 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffEdge.EdgeState;
-import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Edge;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,14 +18,24 @@ public class DiffNodeHierarchy {
     
     private final DiffNodeGraph diffGraph = new DiffNodeGraph();
     
-    public DiffNodeHierarchy(Set<DiffNode> beforeRoots, Set<DiffNode> afterRoots) {
-        addedRoots = SetUtilities.getSetDifference(afterRoots, beforeRoots);
-        removedRoots = SetUtilities.getSetDifference(afterRoots, beforeRoots);
-        transferredRoots = SetUtilities.getSetIntersection(afterRoots, beforeRoots);
+    public DiffNodeHierarchy(Set<DiffNode> removedRoots, Set<DiffNode> introducedRoots, Set<DiffNode> transferredRoots) {
+        this.removedRoots = removedRoots;
+        this.addedRoots = introducedRoots;
+        this.transferredRoots = transferredRoots;
     }
     
     public void addEdge(DiffNode from, DiffNode to, EdgeState edgeState) {
         diffGraph.addEdge(from, to, edgeState);
+    }
+    
+    public Set<DiffNode> getRoots() {
+        Set<DiffNode> roots = new HashSet<>();
+        
+        roots.addAll(addedRoots);
+        roots.addAll(removedRoots);
+        roots.addAll(transferredRoots);
+        
+        return roots;
     }
     
     public Set<DiffNode> getAddedRoots() {
@@ -53,5 +64,9 @@ public class DiffNodeHierarchy {
     
     public Set<DiffNode> getChildren(DiffNode node, EdgeState state) {
         return diffGraph.getIncomingEdges(node, state);
+    }
+    
+    public Set<DiffEdge> getEdges() {
+        return diffGraph.getEdges();
     }
 }

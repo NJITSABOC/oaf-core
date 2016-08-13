@@ -6,13 +6,13 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
  *
  * @author Chris O
  */
-public class SinglyRootedNodeLabelCreator {
+public class SinglyRootedNodeLabelCreator<T extends SinglyRootedNode> {
     
-    public String getRootNameStr(SinglyRootedNode node) {
+    public String getRootNameStr(T node) {
         return node.getRoot().getName();
     }
     
-    public String getCountStr(SinglyRootedNode node) {
+    public String getCountStr(T node) {
         return String.format("(%d)", node.getConceptCount());
     }
     

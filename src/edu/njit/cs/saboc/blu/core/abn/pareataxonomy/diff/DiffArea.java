@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -23,5 +24,9 @@ public class DiffArea extends Area {
     
     public DiffNode getDiffNode() {
         return diffNode;
+    }
+    
+    public ChangeState getAreaState() {
+        return diffNode.getChangeDetails().getNodeState();
     }
 }

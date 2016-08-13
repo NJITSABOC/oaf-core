@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ImportedConceptNodeReport;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.ImportReportTableModel;
@@ -27,20 +28,27 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class AbNConceptLocationReportPanel extends AbNReportPanel {
+public class AbNConceptLocationReportPanel extends AbNReportPanel {
     
     private final AbstractEntityList<ImportedConceptNodeReport> conceptReportList; 
     
-    public AbNConceptLocationReportPanel(
+     public AbNConceptLocationReportPanel(
             AbNConfiguration config, 
             ConceptLocationDataFactory factory) {
+         
+         this(config, factory, new ImportReportTableModel(config));
+     }
+    
+    public AbNConceptLocationReportPanel(
+            AbNConfiguration config, 
+            ConceptLocationDataFactory factory,
+            OAFAbstractTableModel<ImportedConceptNodeReport> model) {
         
         super(config);
         
         super.setLayout(new BorderLayout());
         
-        this.conceptReportList = new AbstractEntityList<ImportedConceptNodeReport>(
-                new ImportReportTableModel(config)) {
+        this.conceptReportList = new AbstractEntityList<ImportedConceptNodeReport>(model) {
 
             @Override
             protected String getBorderText(Optional<ArrayList<ImportedConceptNodeReport>> entities) {
@@ -70,8 +78,6 @@ public abstract class AbNConceptLocationReportPanel extends AbNReportPanel {
         JButton loadBtn = new JButton(String.format("Load %s IDs from File", config.getTextConfiguration().getConceptTypeName(false)));
         loadBtn.addActionListener((ActionEvent ae) -> {
             ArrayList<String> loadedIds = loadConceptIdentifiers();
-            
-
 
             if(!loadedIds.isEmpty()) {
                 Set<Concept> concepts = factory.getConceptsFromIds(loadedIds);

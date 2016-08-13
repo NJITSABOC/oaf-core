@@ -61,7 +61,6 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 this.getSourceHierarchy(), 
                 this.getPAreas());
     }
-    
    
     public RootSubtaxonomy<T> createRootSubtaxonomy(T root) {
         Hierarchy<T> subhierarchy = this.getPAreaHierarchy().getSubhierarchyRootedAt(root);
@@ -124,5 +123,4 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         return aggregateTaxonomy;
     }
-    
 }

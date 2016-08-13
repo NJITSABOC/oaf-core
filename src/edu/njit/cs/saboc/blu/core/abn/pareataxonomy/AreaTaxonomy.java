@@ -28,7 +28,7 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
         this.factory = factory;
     }
     
-    protected PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
+    public PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
         return factory;
     }
     

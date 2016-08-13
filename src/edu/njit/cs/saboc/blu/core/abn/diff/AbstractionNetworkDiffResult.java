@@ -15,15 +15,19 @@ public class AbstractionNetworkDiffResult {
     
     private final Set<DiffNode> diffNodes;
     
+    private final DiffNodeHierarchy diffHierarchy;
+    
     public AbstractionNetworkDiffResult(
             AbstractionNetwork from, 
             AbstractionNetwork to, 
-            Set<DiffNode> diffNodes) {
+            Set<DiffNode> diffNodes,
+            DiffNodeHierarchy diffHierarchy) {
         
         this.from = from;
         this.to = to;
         
         this.diffNodes = diffNodes;
+        this.diffHierarchy = diffHierarchy;
     }
 
     public AbstractionNetwork getFrom() {
@@ -45,5 +49,9 @@ public class AbstractionNetworkDiffResult {
         }).collect(Collectors.toSet());
         
         return nodesOfType;
+    }
+    
+    public DiffNodeHierarchy getDiffNodeHierarchy() {
+        return diffHierarchy;
     }
 }

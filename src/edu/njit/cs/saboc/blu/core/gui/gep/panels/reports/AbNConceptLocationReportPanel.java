@@ -107,11 +107,11 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
                 
                 conceptReportList.setContents(reports);
                 
-//                Map<Concept, Integer> depths = abn.getSourceHierarchy().getAllLongestPathDepths();
-//                
-//                concepts.forEach( (concept) -> {
-//                    System.out.println(concept.getName() + "\t" + depths.get(concept));
-//                });
+                Map<Concept, Integer> depths = abn.getSourceHierarchy().getAllLongestPathDepths();
+                
+                concepts.forEach( (concept) -> {
+                    System.out.println(concept.getName() + "\t" + depths.get(concept));
+                });
             }
         });
         

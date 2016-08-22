@@ -76,6 +76,8 @@ public class DiffAbstractionNetworkGenerator {
         Set<Node> transferredNodes = SetUtilities.getSetIntersection(toNodes, fromNodes);
 
         Map<Node, DiffNode> diffNodes = new HashMap<>();
+        
+        Map<Node, Set<Node>> parentNodes = new HashMap<>();
 
         removedNodes.forEach( (removedNode) -> {
 
@@ -102,8 +104,11 @@ public class DiffAbstractionNetworkGenerator {
             
             Set<ChildOfChange> childOfChanges = new HashSet<>();
             
+            parentNodes.put(removedNode, new HashSet<>());
+            
             fromAbN.getNodeHierarchy().getParents(removedNode).forEach( (parentNode) -> {
                 childOfChanges.add(new ChildOfChange(removedNode, parentNode, ChangeState.Removed));
+                parentNodes.get(removedNode).add(parentNode);
             });
 
             RemovedNodeDetails removedNodeDetails = new RemovedNodeDetails(removedNode, conceptChanges, childOfChanges);
@@ -136,8 +141,11 @@ public class DiffAbstractionNetworkGenerator {
             
             Set<ChildOfChange> childOfChanges = new HashSet<>();
             
+            parentNodes.put(introducedNode, new HashSet<>());
+            
             toAbN.getNodeHierarchy().getParents(introducedNode).forEach( (parentNode) -> {
                 childOfChanges.add(new ChildOfChange(introducedNode, parentNode, ChangeState.Introduced));
+                parentNodes.get(introducedNode).add(parentNode);
             });
 
             IntroduceNodeDetails introducedNodeDetails = new IntroduceNodeDetails(introducedNode, conceptChanges, childOfChanges);
@@ -159,9 +167,14 @@ public class DiffAbstractionNetworkGenerator {
             
             Set<Node> addedParentNodes = SetUtilities.getSetDifference(toParentNodes, fromParentNodes);
             Set<Node> removedParentNodes = SetUtilities.getSetDifference(fromParentNodes, toParentNodes);
-            Set<Node> unchangedParentNodes = SetUtilities.getSetIntersection(fromParentNodes, toParentNodes);
+            Set<Node> allParentNodes = SetUtilities.getSetUnion(fromParentNodes, toParentNodes);
  
             Set<ChildOfChange> childOfChanges = new HashSet<>();
+            
+            parentNodes.put(toNode, new HashSet<>());
+            allParentNodes.forEach( (parentNode) -> {
+               parentNodes.get(toNode).add(parentNode);
+            });
             
             addedParentNodes.forEach( (parent) -> {
                 childOfChanges.add(new ChildOfChange(toNode, parent, ChangeState.Introduced));
@@ -170,25 +183,16 @@ public class DiffAbstractionNetworkGenerator {
             removedParentNodes.forEach( (parent) -> {
                 childOfChanges.add(new ChildOfChange(toNode, parent, ChangeState.Removed));
             });
-            
-            unchangedParentNodes.forEach( (parent) -> {
-                childOfChanges.add(new ChildOfChange(toNode, parent, ChangeState.Unmodified));
-            });
-            
+                        
             if (toNode.strictEquals(fromNode)) {
-                
-                boolean childOfsChanged = childOfChanges.stream().anyMatch((change) -> {
-                    return change.getChangeState() != ChangeState.Unmodified;
-                });
-                
-                if (childOfsChanged) {
-                    ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
-
-                    diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
-                } else {
+                if (childOfChanges.isEmpty()) {
                     UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
 
                     diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
+                } else {
+                    ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
+
+                    diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
                 }
             } else {
                 Set<Concept> nodeRemovedConcepts = SetUtilities.getSetDifference(fromNode.getConcepts(), toNode.getConcepts());
@@ -278,30 +282,29 @@ public class DiffAbstractionNetworkGenerator {
         DiffNodeHierarchy diffHierarchy = new DiffNodeHierarchy(removedRoots, introducedRoots, transferredRoots);
         
         diffNodeSet.forEach( (diffNode) -> {
-
+            
+            Set<Node> diffNodeParents = parentNodes.get(diffNode.getChangeDetails().getChangedNode());
             Set<ChildOfChange> childOfChanges = diffNode.getChangeDetails().getChildOfChanges();
             
-            childOfChanges.forEach( (childOfChange) -> {
-                DiffNode parentDiffNode = diffNodes.get(childOfChange.getParentNode());
+            diffNodeParents.forEach( (parent) -> {
+                DiffNode parentDiffNode = diffNodes.get(parent);
                 
-                switch(childOfChange.getChangeState()) {
-                    case Introduced:
+                Optional<ChildOfChange> relatedChange = childOfChanges.stream().filter( (change) -> {
+                   return change.getParentNode().equals(parent);
+                }).findAny();
+                
+                if(relatedChange.isPresent()) {
+                    ChildOfChange childOfChange = relatedChange.get();
+                    
+                    if(childOfChange.getChangeState() == ChangeState.Introduced) {
                         diffHierarchy.addEdge(diffNode, parentDiffNode, DiffEdge.EdgeState.Added);
-                        break;
-                    case Removed:
+                    } else {
                         diffHierarchy.addEdge(diffNode, parentDiffNode, DiffEdge.EdgeState.Removed);
-                        break;
-                    case Unmodified: 
-                        diffHierarchy.addEdge(diffNode, parentDiffNode, DiffEdge.EdgeState.Unmodified);
-                        break;
-                        
-                    default:
-                        break;
+                    }
+                } else {
+                    diffHierarchy.addEdge(diffNode, parentDiffNode, DiffEdge.EdgeState.Unmodified);
                 }
-            });
-            
-            diffNode.getChangeDetails().getChildOfChanges().removeIf( (change) -> {
-               return change.getChangeState() == ChangeState.Unmodified;
+                
             });
         });
         

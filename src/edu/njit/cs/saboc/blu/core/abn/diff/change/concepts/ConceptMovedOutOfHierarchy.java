@@ -9,6 +9,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  */
 public class ConceptMovedOutOfHierarchy extends NodeConceptChange {
     public ConceptMovedOutOfHierarchy(Node node, Concept concept) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.RemovedFromHierarchy, node, concept);
     }
 }

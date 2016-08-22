@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ImportedConceptNo
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.ImportReportTableModel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         loadPanel.add(loadLabel, BorderLayout.CENTER);
         
         JButton loadBtn = new JButton(String.format("Load %s IDs from File", config.getTextConfiguration().getConceptTypeName(false)));
-        loadBtn.addActionListener((ActionEvent ae) -> {
+        loadBtn.addActionListener( (ae) -> {
             ArrayList<String> loadedIds = loadConceptIdentifiers();
 
             if(!loadedIds.isEmpty()) {
@@ -105,8 +104,14 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
                 reports.sort( (a, b) -> {
                     return a.getConcept().getName().compareToIgnoreCase(b.getConcept().getName());
                 });
-
+                
                 conceptReportList.setContents(reports);
+                
+//                Map<Concept, Integer> depths = abn.getSourceHierarchy().getAllLongestPathDepths();
+//                
+//                concepts.forEach( (concept) -> {
+//                    System.out.println(concept.getName() + "\t" + depths.get(concept));
+//                });
             }
         });
         

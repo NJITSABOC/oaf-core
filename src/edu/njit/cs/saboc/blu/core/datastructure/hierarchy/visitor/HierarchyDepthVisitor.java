@@ -4,19 +4,20 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AncestorDepthVisitor<T> extends TopologicalVisitor<T> {
+public class HierarchyDepthVisitor<T> extends TopologicalVisitor<T> {
     
     private final HashMap<T, Integer> depth = new HashMap<>();
     
     private final ArrayList<AncestorDepthResult<T>> result = new ArrayList<>();
        
-    public AncestorDepthVisitor(Hierarchy<T> theHierarchy) {
+    public HierarchyDepthVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
     }
     
@@ -39,5 +40,9 @@ public class AncestorDepthVisitor<T> extends TopologicalVisitor<T> {
     
     public ArrayList<AncestorDepthResult<T>> getResult() {
         return result;
+    }
+    
+    public Map<T, Integer> getAllDepths() {
+        return depth;
     }
 }

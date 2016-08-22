@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class OverlappingConceptReportPanel extends AbNReportPanel {
+public class OverlappingConceptReportPanel extends AbNReportPanel<PartitionedAbstractionNetwork> {
     
     private final AbstractEntityList<OverlappingConceptDetails> overlappingConceptReportList; 
     
@@ -42,10 +42,9 @@ public class OverlappingConceptReportPanel extends AbNReportPanel {
     }
     
     @Override
-    public void displayAbNReport(AbstractionNetwork abn) {
-        PartitionedAbstractionNetwork pan = (PartitionedAbstractionNetwork)abn;
-        
-        Set<PartitionedNode> containers = pan.getBaseAbstractionNetwork().getNodes();
+    public void displayAbNReport(PartitionedAbstractionNetwork abn) {
+   
+        Set<PartitionedNode> containers = abn.getBaseAbstractionNetwork().getNodes();
 
         ArrayList<OverlappingConceptDetails> entries = new ArrayList<>();
         

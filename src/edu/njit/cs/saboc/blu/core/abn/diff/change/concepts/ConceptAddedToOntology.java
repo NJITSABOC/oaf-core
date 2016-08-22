@@ -10,6 +10,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 public class ConceptAddedToOntology extends NodeConceptChange {
 
     public ConceptAddedToOntology(Node node, Concept concept) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.AddedToOnt, node, concept);
     }
 }

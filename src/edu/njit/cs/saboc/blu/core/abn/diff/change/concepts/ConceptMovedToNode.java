@@ -11,7 +11,7 @@ public class ConceptMovedToNode extends NodeConceptChange {
     private final Node to;
     
     public ConceptMovedToNode(Node from, Node to, Concept concept) {
-        super(from, concept);
+        super(NodeConceptSetChangeType.MovedToNode, from, concept);
         
         this.to = to;
     }

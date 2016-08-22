@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.DiffNodeInstance;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
@@ -11,7 +12,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class DiffArea extends Area {
+public class DiffArea extends Area implements DiffNodeInstance {
 
     private final DiffNode diffNode;
 

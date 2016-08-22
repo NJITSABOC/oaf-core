@@ -32,40 +32,39 @@ public abstract class DiffPAreaTaxonomyTextConfiguration extends PAreaTaxonomyTe
         return "*** DIFF PARTIAL-AREA HELP DESCRIPTION ***";
     }
 
-    
     @Override
     public String getAbNTypeName(boolean plural) {
         if(plural) {
-            return "Partial-area Taxonomies";
+            return "Diff Partial-area Taxonomies";
         } else {
-            return "Partial-area Taxonomy";
+            return "Diff Partial-area Taxonomy";
         }
     }
     
     @Override
     public String getDisjointNodeTypeName(boolean plural) {
         if(plural) {
-            return "Disjoint partial-areas";
+            return "Diff Disjoint partial-areas";
         } else {
-            return "Disjoint partial-area";
+            return "Diff Disjoint partial-area";
         }
     }
 
     @Override
     public String getContainerTypeName(boolean plural) {
         if(plural) {
-            return "Areas";
+            return "Diff Areas";
         } else {
-            return "Area";
+            return "Diff Area";
         }
     }
 
     @Override
     public String getNodeTypeName(boolean plural) {
         if(plural) {
-            return "Partial-areas";
+            return "Diff Partial-areas";
         } else {
-            return "Partial-area";
+            return "Diff Partial-area";
         }
     }
 }

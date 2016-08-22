@@ -175,6 +175,10 @@ public abstract class AbstractEntityList<T> extends JPanel {
         return tableModel;
     }
     
+    public void setSelectionMode(int selectionMode) {
+        entityTable.setSelectionMode(selectionMode);
+    }
+    
     private void newFilter() {
 
         RowFilter<TableModel, Object> rf;

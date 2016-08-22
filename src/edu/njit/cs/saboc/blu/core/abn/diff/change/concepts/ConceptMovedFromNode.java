@@ -12,7 +12,7 @@ public class ConceptMovedFromNode extends NodeConceptChange {
     private final Node from;
     
     public ConceptMovedFromNode(Node to, Node from, Concept concept) {
-        super(to, concept);
+        super(NodeConceptSetChangeType.MovedFromNode, to, concept);
         
         this.from = from;
     }

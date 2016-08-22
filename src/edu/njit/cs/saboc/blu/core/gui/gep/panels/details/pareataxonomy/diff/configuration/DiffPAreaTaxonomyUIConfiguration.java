@@ -3,6 +3,9 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.con
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyUIConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffAreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffPAreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffPAreaTaxonomyDetailsPanel;
 
 /**
  *
@@ -27,26 +30,26 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
 
     @Override
     public boolean hasContainerDetailsPanel() {
-        return false;
+        return true;
     }
 
     @Override
     public NodeDashboardPanel createContainerDetailsPanel() {
-        return null;
+        return new DiffAreaPanel(getConfiguration());
     }
 
     @Override
     public AbstractAbNDetailsPanel createAbNDetailsPanel() {
-        return new AbstractAbNDetailsPanel(super.getConfiguration());
+        return new DiffPAreaTaxonomyDetailsPanel(getConfiguration());
     }
 
     @Override
     public boolean hasGroupDetailsPanel() {
-        return false;
+        return true;
     }
 
     @Override
     public NodeDashboardPanel createGroupDetailsPanel() {
-        return null;
+        return new DiffPAreaPanel(getConfiguration());
     }
 }

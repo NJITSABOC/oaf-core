@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class NodeChangeDetails extends AbNChange {
+public abstract class NodeChangeDetails {
     
     private final Node changedNode;
     

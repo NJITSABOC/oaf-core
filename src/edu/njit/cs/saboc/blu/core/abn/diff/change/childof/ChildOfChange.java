@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.diff.change.childof;
 
+import edu.njit.cs.saboc.blu.core.abn.diff.change.AbNChange;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 
@@ -7,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
  *
  * @author Chris
  */
-public class ChildOfChange {
+public class ChildOfChange implements AbNChange {
     private final Node child;
     private final Node parent;
     private final ChangeState state;
@@ -28,5 +29,23 @@ public class ChildOfChange {
     
     public ChangeState getChangeState() {
         return state;
+    }
+
+    @Override
+    public String getChangeName() {
+        if(state.equals(ChangeState.Introduced)) {
+            return "Child of introduced";
+        } else {
+            return "Child of removed";
+        }
+    }
+
+    @Override
+    public String getChangeDescription() {
+        if(state.equals(ChangeState.Introduced)) {
+            return String.format("Child of to %s introduced", parent.getName());
+        } else {
+            return String.format("Child of to %s removed", parent.getName());
+        }
     }
 }

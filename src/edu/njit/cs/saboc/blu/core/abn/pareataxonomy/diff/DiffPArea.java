@@ -2,6 +2,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.DiffNodeInstance;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 
@@ -9,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
  *
  * @author Chris O
  */
-public class DiffPArea extends PArea {
+public class DiffPArea extends PArea implements DiffNodeInstance {
 
     private final DiffNode diffNode;
     

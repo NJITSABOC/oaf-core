@@ -2,7 +2,7 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AllPathsToNodeVisitor;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorDepthVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyDepthVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -534,7 +535,7 @@ public class Hierarchy<T> {
     public ArrayList<AncestorDepthResult<T>> getTopologicalDescendantListWithinDistance(T node, int distance) {
         Hierarchy<T> hierarchyWithinDistance = this.getDescendantHierarchyWithinDistance(node, distance);
         
-        AncestorDepthVisitor<T> visitor = new AncestorDepthVisitor<>(hierarchyWithinDistance);
+        HierarchyDepthVisitor<T> visitor = new HierarchyDepthVisitor<>(hierarchyWithinDistance);
         
         hierarchyWithinDistance.topologicalDown(visitor);
         
@@ -609,5 +610,13 @@ public class Hierarchy<T> {
         internalNodes.removeAll(leaves);
         
         return internalNodes;
+    }
+    
+    public Map<T, Integer> getAllLongestPathDepths() {
+        HierarchyDepthVisitor<T> hierarchyDepthVisitor = new HierarchyDepthVisitor(this);
+        
+        this.topologicalDown(hierarchyDepthVisitor);
+        
+        return hierarchyDepthVisitor.getAllDepths();
     }
 }

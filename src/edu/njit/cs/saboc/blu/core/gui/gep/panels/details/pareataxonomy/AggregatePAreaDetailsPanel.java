@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 
@@ -15,7 +15,7 @@ public class AggregatePAreaDetailsPanel extends NodeDetailsPanel<AggregatePArea>
         
         super(new AggregatePAreaSummaryPanel(config), 
                 config.getUIConfiguration().getNodeOptionsPanel(), 
-                new ConceptList(config),
+                new NodeConceptList(config),
                 config);
     }
 }

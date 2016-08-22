@@ -42,12 +42,8 @@ public class DiffAbstractionNetworkGenerator {
             Ontology toOnt, 
              AbstractionNetwork<Node> toAbN) {
 
-        Set<Concept> fromConcepts = fromOnt.getConceptHierarchy().getNodes();
-        Set<Concept> toConcepts = toOnt.getConceptHierarchy().getNodes();
+        OntologyDifferences ontDifferences = this.computeOntologyDifferences(fromOnt, toOnt);
         
-        Set<Concept> addedConcepts = SetUtilities.getSetDifference(toConcepts, fromConcepts);
-        Set<Concept> removedConcepts = SetUtilities.getSetDifference(fromConcepts, toConcepts);
-
         Set<Node> fromNodes = fromAbN.getNodes();
         Set<Node> toNodes = toAbN.getNodes();
         
@@ -86,7 +82,7 @@ public class DiffAbstractionNetworkGenerator {
             Set<NodeConceptChange> conceptChanges = new HashSet<>();
 
             removedNode.getConcepts().forEach((concept) -> {
-                if (removedConcepts.contains(concept)) {
+                if (ontDifferences.getRemovedConcepts().contains(concept)) {
                     conceptChanges.add(new ConceptRemovedFromOntology(removedNode, concept));
                 } else {
                     if(toConceptNodes.containsKey(concept)) {
@@ -119,7 +115,7 @@ public class DiffAbstractionNetworkGenerator {
             Set<NodeConceptChange> conceptChanges = new HashSet<>();
             
             introducedNode.getConcepts().forEach((concept) -> {
-                if(addedConcepts.contains(concept)) {
+                if(ontDifferences.getAddedConcepts().contains(concept)) {
                     conceptChanges.add(new ConceptAddedToOntology(introducedNode, concept));
                 } else {
                     if(fromConceptNodes.containsKey(concept)) {
@@ -180,14 +176,19 @@ public class DiffAbstractionNetworkGenerator {
             });
             
             if (toNode.strictEquals(fromNode)) {
-                if (childOfChanges.isEmpty()) {
-                    UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
-                    
-                        diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
+                
+                boolean childOfsChanged = childOfChanges.stream().anyMatch((change) -> {
+                    return change.getChangeState() != ChangeState.Unmodified;
+                });
+                
+                if (childOfsChanged) {
+                    ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
+
+                    diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
                 } else {
-                     ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
-                     
-                     diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
+                    UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
+
+                    diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
                 }
             } else {
                 Set<Concept> nodeRemovedConcepts = SetUtilities.getSetDifference(fromNode.getConcepts(), toNode.getConcepts());
@@ -197,7 +198,7 @@ public class DiffAbstractionNetworkGenerator {
 
                 nodeRemovedConcepts.forEach( (concept) -> {
 
-                    if (removedConcepts.contains(concept)) {
+                    if (ontDifferences.getRemovedConcepts().contains(concept)) {
                         conceptChanges.add(new ConceptRemovedFromOntology(toNode, concept));
                     } else {
                         if (toConceptNodes.containsKey(concept)) {
@@ -223,7 +224,7 @@ public class DiffAbstractionNetworkGenerator {
                 });
                 
                 nodeAddedConcepts.forEach((concept) -> {
-                    if (addedConcepts.contains(concept)) {
+                    if (ontDifferences.getAddedConcepts().contains(concept)) {
                         conceptChanges.add(new ConceptAddedToOntology(toNode, concept));
                     } else {
                         if (fromConceptNodes.containsKey(concept)) {
@@ -298,8 +299,24 @@ public class DiffAbstractionNetworkGenerator {
                         break;
                 }
             });
+            
+            diffNode.getChangeDetails().getChildOfChanges().removeIf( (change) -> {
+               return change.getChangeState() == ChangeState.Unmodified;
+            });
         });
         
-        return new AbstractionNetworkDiffResult(fromAbN, toAbN, diffNodeSet, diffHierarchy);
+        return new AbstractionNetworkDiffResult(fromAbN, toAbN, ontDifferences, diffNodeSet, diffHierarchy);
+    }
+    
+    protected OntologyDifferences computeOntologyDifferences(Ontology fromOnt, Ontology toOnt) {
+        Set<Concept> fromConcepts = fromOnt.getConceptHierarchy().getNodes();
+        Set<Concept> toConcepts = toOnt.getConceptHierarchy().getNodes();
+        
+        Set<Concept> addedConcepts = SetUtilities.getSetDifference(toConcepts, fromConcepts);
+        Set<Concept> removedConcepts = SetUtilities.getSetDifference(fromConcepts, toConcepts);
+        
+        OntologyDifferences ontDifferences = new OntologyDifferences(removedConcepts, addedConcepts);
+        
+        return ontDifferences;
     }
 }

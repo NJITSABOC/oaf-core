@@ -23,7 +23,7 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
 
     private final NodeOptionsPanel nodeOptionsMenuPanel;
 
-    private final ConceptList nodeConceptList;
+    private final NodeConceptList nodeConceptList;
 
     private final JSplitPane splitPane;
     
@@ -31,7 +31,7 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
 
     public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
             NodeOptionsPanel nodeOptionsMenuPanel, 
-            ConceptList nodeConceptList,
+            NodeConceptList nodeConceptList,
             AbNConfiguration config) {
         
         this.nodeSummaryPanel = nodeSummaryPanel;
@@ -65,6 +65,8 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
         nodeSummaryPanel.setContents(node);
         nodeOptionsMenuPanel.setContents(node);
         
+        nodeConceptList.setCurrentNode(node);
+        
         ArrayList<Concept> sortedConcepts = new ArrayList<>(node.getConcepts());
         
         sortedConcepts.sort( (a, b) -> {
@@ -79,6 +81,8 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
 
         nodeSummaryPanel.clearContents();
         nodeOptionsMenuPanel.clearContents();
+        
+        nodeConceptList.clearCurrentNode();
         nodeConceptList.clearContents();
     }
     

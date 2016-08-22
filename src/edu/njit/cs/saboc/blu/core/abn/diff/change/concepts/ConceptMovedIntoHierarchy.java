@@ -10,6 +10,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 public class ConceptMovedIntoHierarchy extends NodeConceptChange {
     
     public ConceptMovedIntoHierarchy(Node node, Concept concept) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.AddedToHierarchy, node, concept);
     }
 }

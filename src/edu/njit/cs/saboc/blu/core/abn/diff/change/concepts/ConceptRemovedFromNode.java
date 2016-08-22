@@ -13,7 +13,7 @@ public class ConceptRemovedFromNode extends NodeConceptChange {
     private final Set<Node> remainsInNodes;
     
     public ConceptRemovedFromNode(Node node, Concept concept, Set<Node> remainsInNodes) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.RemovedFromNode, node, concept);
         
         this.remainsInNodes = remainsInNodes;
     }

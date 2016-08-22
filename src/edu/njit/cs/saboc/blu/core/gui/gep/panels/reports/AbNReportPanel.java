@@ -9,7 +9,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class AbNReportPanel extends JPanel {
+public abstract class AbNReportPanel<T extends AbstractionNetwork> extends JPanel {
     
     private final AbNConfiguration config;
     
@@ -21,5 +21,5 @@ public abstract class AbNReportPanel extends JPanel {
         return config;
     }
     
-    public abstract void displayAbNReport(AbstractionNetwork abn);
+    public abstract void displayAbNReport(T abn);
 }

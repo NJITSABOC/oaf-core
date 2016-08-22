@@ -13,6 +13,8 @@ public class AbstractionNetworkDiffResult {
     private final AbstractionNetwork from;
     private final AbstractionNetwork to;
     
+    private final OntologyDifferences ontDifferences;
+    
     private final Set<DiffNode> diffNodes;
     
     private final DiffNodeHierarchy diffHierarchy;
@@ -20,11 +22,14 @@ public class AbstractionNetworkDiffResult {
     public AbstractionNetworkDiffResult(
             AbstractionNetwork from, 
             AbstractionNetwork to, 
+            OntologyDifferences ontDifferences,
             Set<DiffNode> diffNodes,
             DiffNodeHierarchy diffHierarchy) {
         
         this.from = from;
         this.to = to;
+        
+        this.ontDifferences = ontDifferences; 
         
         this.diffNodes = diffNodes;
         this.diffHierarchy = diffHierarchy;
@@ -36,6 +41,10 @@ public class AbstractionNetworkDiffResult {
 
     public AbstractionNetwork getTo() {
         return to;
+    }
+    
+    public OntologyDifferences getOntologyDifferences() {
+        return ontDifferences;
     }
     
     public Set<DiffNode> getDiffNodes() {

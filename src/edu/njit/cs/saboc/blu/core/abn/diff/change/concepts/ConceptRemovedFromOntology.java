@@ -10,6 +10,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 public class ConceptRemovedFromOntology extends NodeConceptChange {
     
     public ConceptRemovedFromOntology(Node node, Concept concept) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.RemovedFromOnt, node, concept);
     }
 }

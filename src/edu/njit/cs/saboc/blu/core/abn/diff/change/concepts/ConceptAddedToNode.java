@@ -13,7 +13,7 @@ public class ConceptAddedToNode extends NodeConceptChange {
     private final Set<Node> otherCurrentNodes;
     
     public ConceptAddedToNode(Node node, Concept concept, Set<Node> otherCurrentNodes) {
-        super(node, concept);
+        super(NodeConceptSetChangeType.AddedToNode, node, concept);
         
         this.otherCurrentNodes = otherCurrentNodes;
     }

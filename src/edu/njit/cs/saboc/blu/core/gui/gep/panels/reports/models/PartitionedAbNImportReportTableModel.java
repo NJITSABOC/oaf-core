@@ -33,7 +33,9 @@ public class PartitionedAbNImportReportTableModel extends OAFAbstractTableModel<
     protected Object[] createRow(ImportedConceptNodeReport item) {
         ArrayList<String> groupNames = new ArrayList<>();
         
-        PartitionedNode pNode = config.getAbstractionNetwork().getPartitionNodeFor((SinglyRootedNode)item.getNodes().iterator().next());
+        SinglyRootedNode theNode = (SinglyRootedNode)item.getNodes().iterator().next();
+        
+        PartitionedNode pNode = config.getAbstractionNetwork().getPartitionNodeFor(theNode);
         
         item.getNodes().forEach( (group) -> {
             groupNames.add(group.getName());

@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.SubTAN;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -16,7 +15,7 @@ public class CreateAncestorTANButton extends CreateSubTANButton {
     private final TANConfiguration config;
     
     public CreateAncestorTANButton(TANConfiguration config,
-            DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTaxonomyListener) {
+            DisplayAbNAction displayTaxonomyListener) {
         super("BluAncestorSubtaxonomy.png", "Create an ancestor TAN", displayTaxonomyListener);
         
         this.config = config;

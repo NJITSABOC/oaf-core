@@ -15,10 +15,21 @@ import java.util.Set;
  * @author Den
  */
 public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
-    public BandTribalAbstractionNetwork(Hierarchy<Band> bandHierarchy, 
+    
+    private final TANFactory sourceFactory;
+    
+    public BandTribalAbstractionNetwork(
+            TANFactory sourceFactory,
+            Hierarchy<Band> bandHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
         super(bandHierarchy, sourceHierarchy);
+        
+        this.sourceFactory = sourceFactory;
+    }
+    
+    public TANFactory getSourceFactory() {
+        return sourceFactory;
     }
     
     public Hierarchy<Band> getBandHierarchy(){

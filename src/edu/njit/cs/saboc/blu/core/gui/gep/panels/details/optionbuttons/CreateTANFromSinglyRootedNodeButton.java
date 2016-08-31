@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -13,8 +13,17 @@ import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
  */
 public class CreateTANFromSinglyRootedNodeButton<T extends SinglyRootedNode> extends CreateTANButton<T> {
     
-    public CreateTANFromSinglyRootedNodeButton(AbNConfiguration config, DisplayAbNAction displayTAN) {
+    private final TANFactory factory;
+    
+    public CreateTANFromSinglyRootedNodeButton(
+            TANFactory factory,
+            
+            AbNConfiguration config, 
+            DisplayAbNAction displayTAN) {
+        
         super(config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), displayTAN);
+        
+        this.factory = factory;
     }
 
     @Override
@@ -22,7 +31,7 @@ public class CreateTANFromSinglyRootedNodeButton<T extends SinglyRootedNode> ext
         SinglyRootedNode currentNode = (SinglyRootedNode)super.getCurrentNode().get();
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromSingleRootedHierarchy(currentNode.getHierarchy());
+        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromSingleRootedHierarchy(currentNode.getHierarchy(), factory);
         
         return tan;
     }

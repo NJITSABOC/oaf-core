@@ -14,18 +14,23 @@ import java.util.Stack;
  * @author Chris O
  */
 public class TribalAbstractionNetworkGenerator {
-    
-    public ClusterTribalAbstractionNetwork deriveTANFromSingleRootedHierarchy(Hierarchy<? extends Concept> sourceHierarchy) {
+        
+    public ClusterTribalAbstractionNetwork deriveTANFromSingleRootedHierarchy(
+            Hierarchy<? extends Concept> sourceHierarchy,
+            TANFactory factory) {
+        
         Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
         
         hierarchy = new Hierarchy<>(
                 hierarchy.getChildren(sourceHierarchy.getRoot()), 
                 hierarchy);
         
-        return deriveTANFromMultiRootedHierarchy(hierarchy);
+        return deriveTANFromMultiRootedHierarchy(hierarchy, factory);
     }
 
-    public ClusterTribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(Hierarchy<? extends Concept> sourceHierarchy) {
+    public ClusterTribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(
+            Hierarchy<? extends Concept> sourceHierarchy,
+            TANFactory factory) {
         
         Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
 
@@ -231,14 +236,16 @@ public class TribalAbstractionNetworkGenerator {
             }
         });
         
-        BandTribalAbstractionNetwork bandTAN = new BandTribalAbstractionNetwork(bandHierarchy, hierarchy);
-        ClusterTribalAbstractionNetwork tan = new ClusterTribalAbstractionNetwork(bandTAN, clusterHierarchy, hierarchy);
+        BandTribalAbstractionNetwork bandTAN = factory.createBandTAN(bandHierarchy, hierarchy);
+        ClusterTribalAbstractionNetwork tan = factory.createClusterTAN(bandTAN, clusterHierarchy, hierarchy);
 
         return tan;
     }
     
     
-    public <T extends Cluster> ClusterTribalAbstractionNetwork<T> createTANFromClusters(Hierarchy<T> clusterHierarchy) {
+    public <T extends Cluster> ClusterTribalAbstractionNetwork<T> createTANFromClusters(
+            Hierarchy<T> clusterHierarchy,
+            TANFactory factory) {
                 
         // For now assuming only one cluster is picked as a root
         Hierarchy<Concept> conceptHierarchy = new Hierarchy<>(clusterHierarchy.getRoot().getRoot());
@@ -282,8 +289,8 @@ public class TribalAbstractionNetworkGenerator {
             });
         });
         
-        BandTribalAbstractionNetwork bandTAN = new BandTribalAbstractionNetwork(bandHierarchy, conceptHierarchy);
-        ClusterTribalAbstractionNetwork<T> tan = new ClusterTribalAbstractionNetwork(bandTAN, clusterHierarchy, conceptHierarchy);
+        BandTribalAbstractionNetwork bandTAN = factory.createBandTAN(bandHierarchy, conceptHierarchy);
+        ClusterTribalAbstractionNetwork<T> tan = factory.createClusterTAN(bandTAN, clusterHierarchy, conceptHierarchy);
         
         return tan;
     }

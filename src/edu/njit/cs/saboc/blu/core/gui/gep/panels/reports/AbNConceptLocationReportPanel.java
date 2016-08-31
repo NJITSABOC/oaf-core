@@ -98,7 +98,9 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
                 });
                 
                 concepts.forEach((concept) -> {
-                    reports.add(new ImportedConceptNodeReport(concept, conceptNodes.get(concept)));
+                    if(conceptNodes.containsKey(concept)) {
+                        reports.add(new ImportedConceptNodeReport(concept, conceptNodes.get(concept)));
+                    }
                 });
 
                 reports.sort( (a, b) -> {

@@ -17,7 +17,7 @@ public class CreateRootTANButton extends CreateSubTANButton {
     private final TANConfiguration config;
     
     public CreateRootTANButton(TANConfiguration config,
-            DisplayAbNAction<ClusterTribalAbstractionNetwork> displayTaxonomyListener) {
+            DisplayAbNAction<? extends ClusterTribalAbstractionNetwork> displayTaxonomyListener) {
         super("BluSubtaxonomy.png", "Create Root Sub TAN", displayTaxonomyListener);
         
         this.config = config;

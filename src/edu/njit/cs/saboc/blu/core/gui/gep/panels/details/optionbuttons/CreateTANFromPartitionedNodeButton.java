@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
@@ -15,8 +15,16 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  */
 public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> extends CreateTANButton<T> {
 
-    public CreateTANFromPartitionedNodeButton(PartitionedAbNConfiguration config, DisplayAbNAction listener) {
+    private final TANFactory factory;
+    
+    public CreateTANFromPartitionedNodeButton(
+            TANFactory factory,
+            PartitionedAbNConfiguration config,
+            DisplayAbNAction listener) {
+        
         super(config.getTextConfiguration().getContainerTypeName(false).toLowerCase(), listener);
+        
+        this.factory = factory;
     }
 
     @Override
@@ -26,7 +34,7 @@ public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> exten
         Hierarchy<Concept> hierarchy = partitionedNode.getHierarchy();
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromMultiRootedHierarchy(hierarchy);
+        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromMultiRootedHierarchy(hierarchy, factory);
         
         return tan;
     }

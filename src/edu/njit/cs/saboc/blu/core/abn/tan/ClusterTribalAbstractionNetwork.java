@@ -25,6 +25,10 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     public BandTribalAbstractionNetwork getBandTAN() {
         return (BandTribalAbstractionNetwork)super.getBaseAbstractionNetwork();
     }
+    
+    public TANFactory getSourceFactory() {
+        return getBandTAN().getSourceFactory();
+    }
 
     public Set<T> getPatriarchClusters() {
         return super.getNodeHierarchy().getRoots();
@@ -76,7 +80,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
         
-        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy);
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy, this.getSourceFactory());
         
         RootSubTAN subTAN = new RootSubTAN(this, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
                 
@@ -89,7 +93,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
 
-        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy);
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy, this.getSourceFactory());
         
         AncestorSubTAN subTAN = new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
         

@@ -1,7 +1,14 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration;
 
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyTextConfiguration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -24,7 +31,47 @@ public abstract class DiffPAreaTaxonomyTextConfiguration extends PAreaTaxonomyTe
 
     @Override
     public String getAbNSummary() {
-       return "*** DIFF PARTIAL-AREA TAXONOMY SUMMARY TEXT ***";
+        
+        DiffPAreaTaxonomy diffTaxonomy = this.getPAreaTaxonomy();
+        
+        Set<DiffArea> diffAreas = diffTaxonomy.getDiffAreas();
+        
+        Map<ChangeState, Set<DiffArea>> diffAreasByType = new HashMap<>();
+        
+        diffAreas.forEach( (diffArea) -> {
+            if(!diffAreasByType.containsKey(diffArea.getAreaState())) {
+                diffAreasByType.put(diffArea.getAreaState(), new HashSet<>());
+            }
+            
+            diffAreasByType.get(diffArea.getAreaState()).add(diffArea);
+        });
+        
+        
+        Map<ChangeState, Set<DiffPArea>> diffPAreasByType = new HashMap<>();
+        
+        diffTaxonomy.getPAreas().forEach( (diffPArea) -> {
+            if(!diffPAreasByType.containsKey(diffPArea.getPAreaState())) {
+                diffPAreasByType.put(diffPArea.getPAreaState(), new HashSet<>());
+            }
+            
+            diffPAreasByType.get(diffPArea.getPAreaState()).add(diffPArea);
+        });
+        
+        
+        StringBuilder diffTaxonomySummaryStr = new StringBuilder("Diff Areas:<br>");
+        
+        diffAreasByType.forEach( (type, diffAreasOfType) -> {
+            diffTaxonomySummaryStr.append(String.format("%s: %d<br>", type, diffAreasOfType.size()));
+        });
+        
+        diffTaxonomySummaryStr.append("<br>Diff Partial-areas:<br>");
+        
+        diffPAreasByType.forEach((type, diffPAreasOfType) -> {
+            diffTaxonomySummaryStr.append(String.format("%s: %d<br>", type, diffPAreasOfType.size()));
+        });
+        
+
+       return diffTaxonomySummaryStr.toString();
     }
     
     @Override

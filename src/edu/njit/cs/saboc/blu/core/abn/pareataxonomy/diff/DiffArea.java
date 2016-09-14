@@ -23,6 +23,10 @@ public class DiffArea extends Area implements DiffNodeInstance {
         this.diffNode = diffNode;
     }
     
+    public Set<DiffPArea> getDiffPAreas() {
+        return (Set<DiffPArea>)(Set<?>)super.getPAreas();
+    }
+    
     public DiffNode getDiffNode() {
         return diffNode;
     }

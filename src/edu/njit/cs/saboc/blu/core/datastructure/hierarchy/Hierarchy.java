@@ -423,7 +423,7 @@ public class Hierarchy<T> {
      */
     public Set<T> getMemberSubhierarchyRoots(T node) {
         TopRootVisitor<T> visitor = new TopRootVisitor<>(this);
-        
+                
         this.BFSUp(node, visitor);
         
         return visitor.getRoots();

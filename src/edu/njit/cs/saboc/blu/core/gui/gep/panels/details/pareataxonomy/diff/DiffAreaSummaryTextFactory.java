@@ -1,9 +1,15 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff;
 
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.AreaSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration.DiffPAreaTaxonomyConfiguration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -32,8 +38,27 @@ public class DiffAreaSummaryTextFactory extends AreaSummaryTextFactory {
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("<html><b>%s</b> is a diff area.", areaName));
+        
+        
+        Map<ChangeState, Set<DiffPArea>> diffPAreasByType = new HashMap<>();
+        
+        diffArea.getDiffPAreas().forEach((diffPArea) -> {
+            if(!diffPAreasByType.containsKey(diffPArea.getPAreaState())) {
+                diffPAreasByType.put(diffPArea.getPAreaState(), new HashSet<>());
+            }
+            
+            diffPAreasByType.get(diffPArea.getPAreaState()).add(diffPArea);
+        });
+        
+        
+        builder.append("<p>Diff Partial-areas:<br>");
+        
+        diffPAreasByType.forEach( (type, diffPAreasOfType) -> {
+            builder.append(String.format("%s: %d<br>", type, diffPAreasOfType.size()));
+        });
+        
 
-        builder.append("<p>");
+        builder.append("<br>");
         builder.append("<b>Help / Description</b><p>");
         builder.append(config.getTextConfiguration().getContainerHelpDescription(area));
 

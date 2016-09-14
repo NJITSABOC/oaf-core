@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkInstance;
 import edu.njit.cs.saboc.blu.core.abn.diff.OntologyDifferences;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import java.util.Set;
 
 /**
  *
@@ -30,15 +31,31 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
         return (DiffAreaTaxonomy)super.getAreaTaxonomy();
     }
 
+    public Set<DiffArea> getDiffAreas() {
+        return getAreaTaxonomy().getAreas();
+    }
+
+    @Override
+    public DiffPArea getRootPArea() {
+        return (DiffPArea)super.getRootPArea();
+    }
+
+    @Override
+    public DiffArea getAreaFor(DiffPArea parea) {
+        return (DiffArea)super.getAreaFor(parea); 
+    }
+    
     @Override
     public OntologyDifferences getOntologyDifferences() {
         return getAreaTaxonomy().getOntologyDifferences();
     }
     
+    @Override
     public PAreaTaxonomy getFrom() {
         return fromTaxonomy;
     }
     
+    @Override
     public PAreaTaxonomy getTo() {
         return toTaxonomy;
     }

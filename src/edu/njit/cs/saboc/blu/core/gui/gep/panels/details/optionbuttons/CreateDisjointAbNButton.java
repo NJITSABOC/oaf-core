@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
  */
 public class CreateDisjointAbNButton<T extends Node> extends NodeOptionButton<T> {
     
-    public final PartitionedAbNConfiguration config;
+    private final PartitionedAbNConfiguration config;
     private final DisplayAbNAction<DisjointAbstractionNetwork> displayAbNAction;
     
     public CreateDisjointAbNButton(
@@ -73,7 +73,7 @@ public class CreateDisjointAbNButton<T extends Node> extends NodeOptionButton<T>
 
         loadThread.start();
         */
-        DisplayNewDisjointAbNAction display = new DisplayNewDisjointAbNAction(this, displayAbNAction, node, String.format("Creating %s Disjoint %s", 
+        DisplayNewDisjointAbNAction display = new DisplayNewDisjointAbNAction(config, displayAbNAction, node, String.format("Creating %s Disjoint %s", 
                                 node.getName(),
                                 config.getTextConfiguration().getAbNTypeName(false)));
         display.startThread();

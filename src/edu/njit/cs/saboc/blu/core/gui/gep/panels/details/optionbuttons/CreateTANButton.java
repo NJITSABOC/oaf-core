@@ -28,7 +28,7 @@ public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T
     
     public void createAndDisplayTAN() {
         if (getCurrentNode().isPresent()) {
-
+            /*
             Thread loadThread = new Thread(new Runnable() {
 
                 private LoadStatusDialog loadStatusDialog = null;
@@ -56,6 +56,9 @@ public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T
             });
 
             loadThread.start();
+            */
+            DisplayNewTAN display = new DisplayNewTAN(this, this.displayTAN, "Creating Tribal Abstraction Network (TAN)");
+            display.startThread();
         }
     }
     

@@ -31,7 +31,7 @@ public abstract class CreateSubTANButton extends NodeOptionButton {
     
     public final void createAndDisplaySubTAN() {
         if (getCurrentNode().isPresent()) {
-
+            /*
             Thread loadThread = new Thread(new Runnable() {
 
                 private LoadStatusDialog loadStatusDialog = null;
@@ -59,6 +59,9 @@ public abstract class CreateSubTANButton extends NodeOptionButton {
             });
 
             loadThread.start();
+            */
+            DisplayNewSubTAN display = new DisplayNewSubTAN(this, displayTaxonomyListener, "Creating Sub TAN");
+            display.startThread();
         }
     }
     

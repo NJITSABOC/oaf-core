@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -56,14 +57,13 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.tableModel = tableModel;
         this.entityTable = new JTable(tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
-        this.entityTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
+        setDefaultTableStringRenderer(new MultiLineTextRenderer());
         
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(entityTable.getSelectedRow() >= 0) {
                                         
                     T entity = tableModel.getItemAtRow(sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
-                    
                     
                     if (e.getClickCount() == 1) {
                         selectionListeners.forEach( (listener) -> {
@@ -238,8 +238,12 @@ public abstract class AbstractEntityList<T> extends JPanel {
         tableModel.setContents(new ArrayList<>());
     }
     
-    public void setDefaultTableRenderer(MultiLineTextRenderer renderer) {
-        this.entityTable.setDefaultRenderer(String.class, renderer);
+    public final void setDefaultTableRenderer(Class clazz, TableCellRenderer renderer) {
+        this.entityTable.setDefaultRenderer(clazz, renderer);
+    }
+    
+    public final void setDefaultTableStringRenderer(MultiLineTextRenderer renderer) {
+        setDefaultTableRenderer(String.class, renderer);
     }
     
     protected void addOptionButton(JButton btn) {

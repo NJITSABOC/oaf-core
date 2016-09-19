@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.conf
  * @author Chris O
  */
 public class DiffPAreaPanel extends DiffSinglyRootedNodePanel<DiffPArea> {
+    
     public DiffPAreaPanel(DiffPAreaTaxonomyConfiguration configuration) {
         
         super(new DiffPAreaDetailsPanel(configuration),

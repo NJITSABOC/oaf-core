@@ -22,4 +22,16 @@ public class DiffPAreaPanel extends DiffSinglyRootedNodePanel<DiffPArea> {
                 
                 configuration);
     }
+    
+    public DiffPAreaPanel(DiffPAreaTaxonomyConfiguration configuration,  
+            DiffPAreaSummaryTextFactory textFactory) {
+        
+        super(new DiffPAreaDetailsPanel(configuration, textFactory),
+                new NodeHierarchyPanel(
+                        configuration,
+                        new DiffParentPAreaTableModel(configuration),
+                        new DiffChildPAreaTableModel(configuration)),
+                
+                configuration);
+    }
 }

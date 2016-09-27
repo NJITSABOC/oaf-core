@@ -13,4 +13,10 @@ public class DiffAreaPanel extends DiffPartitionedNodePanel<DiffArea> {
     public DiffAreaPanel(DiffPAreaTaxonomyConfiguration configuration) {
         super(new DiffAreaDetailsPanel(configuration), configuration);
     }
+    
+    public DiffAreaPanel(DiffPAreaTaxonomyConfiguration configuration, 
+            DiffAreaSummaryTextFactory textFactory) {
+        
+        super(new DiffAreaDetailsPanel(configuration, textFactory), configuration);
+    }
 }

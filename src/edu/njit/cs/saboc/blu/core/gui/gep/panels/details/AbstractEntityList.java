@@ -152,7 +152,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         entityTable.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
-                if (!e.isControlDown() && !e.isAltDown() && (e.getKeyCode() < 37 || e.getKeyCode() > 40)) {
+                if (!e.isControlDown() && !e.isAltDown() && isPrintable(e.getKeyChar())) {
                     if (!filterPanel.isVisible()) {
                         setFilterPanelOpen(true, e);
                     } else {
@@ -259,5 +259,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     private final void setBorderText(String text) {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), text));
+    }
+
+    private boolean isPrintable(char c) {
+        return (c >= 32 && c < 127);
     }
 }

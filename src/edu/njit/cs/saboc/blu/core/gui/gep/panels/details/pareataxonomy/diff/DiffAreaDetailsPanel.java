@@ -20,4 +20,11 @@ public class DiffAreaDetailsPanel extends NodeDetailsPanel<DiffArea> {
                 config);
     }
     
+    public DiffAreaDetailsPanel(DiffPAreaTaxonomyConfiguration config, DiffAreaSummaryTextFactory textFactory) {
+        super(new AreaSummaryPanel(config, textFactory),
+                config.getUIConfiguration().getPartitionedNodeOptionsPanel(),
+                new NodeConceptList(new DiffPartitionedNodeConceptListModel(config), config),
+                config);
+    }
+
 }

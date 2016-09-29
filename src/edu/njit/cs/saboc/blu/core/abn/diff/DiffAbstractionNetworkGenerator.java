@@ -57,6 +57,8 @@ public class DiffAbstractionNetworkGenerator {
                 }
 
                 fromConceptNodes.get(concept).add(node);
+                
+
             });
         });
 
@@ -93,9 +95,14 @@ public class DiffAbstractionNetworkGenerator {
                         
                         Set<Node> newConceptNodes = SetUtilities.getSetDifference(currentConceptNodes, previousConceptNodes);
                         
-                        newConceptNodes.forEach((newNode) -> {
-                            conceptChanges.add(new ConceptMovedToNode(removedNode, newNode, concept));
-                        });
+                        if(newConceptNodes.isEmpty()) {
+                            conceptChanges.add(new ConceptRemovedFromNode(removedNode, concept, currentConceptNodes));
+                        } else {
+                            newConceptNodes.forEach((newNode) -> {
+                                conceptChanges.add(new ConceptMovedToNode(removedNode, newNode, concept));
+                            });
+                        }
+                        
                     } else {
                         conceptChanges.add(new ConceptMovedOutOfHierarchy(removedNode, concept));
                     }
@@ -129,10 +136,13 @@ public class DiffAbstractionNetworkGenerator {
                         
                         Set<Node> oldConceptNodes = SetUtilities.getSetDifference(previousConceptNodes, currentConceptNodes);
                         
-                        oldConceptNodes.forEach((oldNode) -> {
-                             conceptChanges.add(new ConceptMovedFromNode(introducedNode, oldNode, concept));
-                        });
-                        
+                        if(oldConceptNodes.isEmpty()) {
+                            conceptChanges.add(new ConceptAddedToNode(introducedNode, concept, currentConceptNodes));
+                        } else {
+                            oldConceptNodes.forEach((oldNode) -> {
+                                conceptChanges.add(new ConceptMovedFromNode(introducedNode, oldNode, concept));
+                            });
+                        }
                     } else {
                         conceptChanges.add(new ConceptMovedIntoHierarchy(introducedNode, concept));
                     }

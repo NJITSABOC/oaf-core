@@ -21,6 +21,4 @@ public class DiffPAreaTaxonomyDetailsPanel extends AbstractAbNDetailsPanel<DiffP
         super.addDetailsTab("Diff Parital-area Status", nodeStatusReportPanel);
         nodeStatusReportPanel.displayAbNReport(config.getAbstractionNetwork());
     }
-    
-    
 }

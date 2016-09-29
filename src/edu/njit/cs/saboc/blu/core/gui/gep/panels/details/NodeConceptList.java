@@ -28,9 +28,7 @@ public class NodeConceptList<T extends Node> extends NodeEntityList<T, Concept> 
     
     @Override
     protected String getBorderText(Optional<ArrayList<Concept>> entities) {
-        if(entities.isPresent()) {
-            // TODO: Identify # added, removed...
-            
+        if(entities.isPresent()) {            
             return String.format("%s (%d)", 
                     config.getTextConfiguration().getConceptTypeName(true),
                     entities.get().size());

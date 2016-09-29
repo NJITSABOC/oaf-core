@@ -40,10 +40,12 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
         return internalNodes;
     }
     
+    @Override
     public Set<Concept> getConcepts() {
         return concepts;
     }
     
+    @Override
     public int getConceptCount() {
         return concepts.size();
     }

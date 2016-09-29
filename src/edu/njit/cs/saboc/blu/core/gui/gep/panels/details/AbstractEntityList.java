@@ -206,6 +206,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         if (!filterPanel.isVisible()) {
             setFilterPanelOpen(true, null);
         } else {
+            filterField.setText("");
             setFilterPanelOpen(false, null);
         }
     }
@@ -225,6 +226,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
                 filterField.requestFocus();
             }
         } else {
+            filterField.setText("");
             filterPanel.setVisible(false);
         }
     }

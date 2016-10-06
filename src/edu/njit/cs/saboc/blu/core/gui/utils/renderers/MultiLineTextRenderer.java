@@ -1,13 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.utils.renderers;
 
 import java.awt.Component;
+import javax.swing.JEditorPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-public class MultiLineTextRenderer extends JTextArea implements TableCellRenderer {
+public class MultiLineTextRenderer extends JEditorPane implements TableCellRenderer {
 
     public MultiLineTextRenderer() {
         super();

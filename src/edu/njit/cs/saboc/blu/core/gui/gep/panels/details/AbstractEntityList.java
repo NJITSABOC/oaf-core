@@ -13,6 +13,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
@@ -50,6 +51,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     private final JPanel filterPanel;
 
+    NodeOptionsPanel optionsPanel;
+
     protected AbstractEntityList(OAFAbstractTableModel<T> tableModel) {
 
         super(new BorderLayout());
@@ -58,14 +61,23 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable = new JTable(tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         setDefaultTableStringRenderer(new MultiLineTextRenderer());
-        
+
+        this.entityTable.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseMoved(MouseEvent e) {
+                int row = entityTable.rowAtPoint(e.getPoint());
+                if (row > -1) {
+                    entityTable.clearSelection();
+                    entityTable.setRowSelectionInterval(row, row);
+                }
+            }
+        });
+
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (entityTable.getSelectedRow() >= 0) {
 
                     T entity = tableModel.getItemAtRow(sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
 
-                    
                     if (e.getClickCount() == 1) {
                         selectionListeners.forEach((listener) -> {
                             listener.entityClicked(entity);
@@ -165,20 +177,32 @@ public abstract class AbstractEntityList<T> extends JPanel {
             }
         });
 
-        RightClickMenu rMenu = new RightClickMenu();
+        RightClickMenu rMenu = new RightClickMenu(entityTable);
 
         rMenu.addMenuItem("Print Name", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("hi");
+                int row = entityTable.getSelectedRow();
+                String data = entityTable.getModel().getValueAt(row, 0).toString();
+                System.out.println(data);
             }
         });
 
         entityTable.addMouseListener(rMenu.getListener());
 
-        /*
-        optionsPanel = new JPanel();
+        ///*
+        optionsPanel = new NodeOptionsPanel();
+        JButton b = new JButton("test");
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                System.out.println("Button pressed");
+            }
+
+        });
+        optionsPanel.add(b);
+        
         this.add(optionsPanel, BorderLayout.SOUTH);
-         */
+        // */
         //setBorderText(getBorderText(Optional.empty()));
     }
 
@@ -250,11 +274,11 @@ public abstract class AbstractEntityList<T> extends JPanel {
     public void clearContents() {
         tableModel.setContents(new ArrayList<>());
     }
-    
+
     public final void setDefaultTableRenderer(Class clazz, TableCellRenderer renderer) {
         this.entityTable.setDefaultRenderer(clazz, renderer);
     }
-    
+
     public final void setDefaultTableStringRenderer(MultiLineTextRenderer renderer) {
         setDefaultTableRenderer(String.class, renderer);
     }

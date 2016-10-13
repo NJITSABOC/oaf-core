@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +59,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.tableModel = tableModel;
         this.entityTable = new MouseOverTable(tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
-        setDefaultTableStringRenderer(new MultiLineTextRenderer());
+        setDefaultTableStringRenderer(new MultiLineTextRenderer(entityTable));
 
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -94,14 +95,13 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
         filterPanel = new JPanel();
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
-        filterPanel.add(closeButton);
+        //filterPanel.add(closeButton);
         filterPanel.add(Box.createHorizontalStrut(10));
         filterPanel.add(new JLabel("Filter:  "));
         filterPanel.add(filterField);
         filterPanel.setVisible(false);
 
-        this.add(filterPanel, BorderLayout.SOUTH);
-
+        //this.add(filterPanel, BorderLayout.SOUTH);
         ///////////////////////////
         //End Filtering Container//
         //  Start Sorter Model   //
@@ -175,20 +175,40 @@ public abstract class AbstractEntityList<T> extends JPanel {
         });
 
         entityTable.addMouseListener(rMenu.getListener());
-
         optionsPanel = new NodeOptionsPanel();
-        JButton b = new JButton("test");
+
+        JButton b = new JButton("Filter");
         b.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                System.out.println("Button pressed");
                 toggleFilterPanel();
             }
-
         });
         optionsPanel.add(b);
 
-        this.add(optionsPanel, BorderLayout.SOUTH);
+        b = new JButton("Resize");
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                for (int row = 0; row < entityTable.getRowCount(); row++) {
+                    int rowHeight = entityTable.getRowHeight(row);
+
+                    for (int column = 0; column < entityTable.getColumnCount(); column++) {
+                        Component comp = entityTable.prepareRenderer(entityTable.getCellRenderer(row, column), row, column);
+                        rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+                    }
+
+                    entityTable.setRowHeight(row, rowHeight);
+                }
+            }
+        });
+        optionsPanel.add(b);
+        
+        JPanel menuBar = new JPanel();
+        menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.LINE_AXIS));
+        menuBar.add(optionsPanel);
+        menuBar.add(filterPanel);
+        this.add(menuBar, BorderLayout.SOUTH);
 
         //setBorderText(getBorderText(Optional.empty()));
     }

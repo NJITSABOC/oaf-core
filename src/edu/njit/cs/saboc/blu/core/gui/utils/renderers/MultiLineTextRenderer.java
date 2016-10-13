@@ -9,8 +9,8 @@ import javax.swing.table.TableCellRenderer;
 
 public class MultiLineTextRenderer extends JEditorPane implements TableCellRenderer {
 
-    public MultiLineTextRenderer() {
-        super();
+    public MultiLineTextRenderer(JTable table) {
+        super();      
     }
 
     @Override

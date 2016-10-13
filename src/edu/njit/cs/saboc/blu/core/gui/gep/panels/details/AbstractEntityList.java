@@ -13,7 +13,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
@@ -24,7 +23,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -39,7 +37,7 @@ import javax.swing.table.TableRowSorter;
  */
 public abstract class AbstractEntityList<T> extends JPanel {
 
-    private final JTable entityTable;
+    private final MouseOverTable entityTable;
     private final OAFAbstractTableModel<T> tableModel;
 
     private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
@@ -58,19 +56,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
         super(new BorderLayout());
 
         this.tableModel = tableModel;
-        this.entityTable = new JTable(tableModel);
+        this.entityTable = new MouseOverTable(tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         setDefaultTableStringRenderer(new MultiLineTextRenderer());
-
-        this.entityTable.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseMoved(MouseEvent e) {
-                int row = entityTable.rowAtPoint(e.getPoint());
-                if (row > -1) {
-                    entityTable.clearSelection();
-                    entityTable.setRowSelectionInterval(row, row);
-                }
-            }
-        });
 
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -178,7 +166,6 @@ public abstract class AbstractEntityList<T> extends JPanel {
         });
 
         RightClickMenu rMenu = new RightClickMenu(entityTable);
-
         rMenu.addMenuItem("Print Name", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int row = entityTable.getSelectedRow();
@@ -189,20 +176,20 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
         entityTable.addMouseListener(rMenu.getListener());
 
-        ///*
         optionsPanel = new NodeOptionsPanel();
         JButton b = new JButton("test");
         b.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
                 System.out.println("Button pressed");
+                toggleFilterPanel();
             }
 
         });
         optionsPanel.add(b);
-        
+
         this.add(optionsPanel, BorderLayout.SOUTH);
-        // */
+
         //setBorderText(getBorderText(Optional.empty()));
     }
 

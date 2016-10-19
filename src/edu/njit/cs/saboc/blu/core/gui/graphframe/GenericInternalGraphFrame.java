@@ -159,15 +159,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         goToRootBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                if (tabbedPane.getSelectedIndex() == 0) {
-                    SinglyRootedNodeEntry entry = graph.getNodeEntries().get((SinglyRootedNode)graph.getAbstractionNetwork().getNodeHierarchy().getRoot());
-
-                    scroller.getViewport().setViewPosition(
-                            new Point(entry.getAbsoluteX() - GenericInternalGraphFrame.this.getWidth() / 2, 0));
-                } else {
-                    gep.centerOnRoot();
-                    gep.repaint();
-                }
+                gep.centerOnRoot();
+                gep.repaint();
             }
         });
         

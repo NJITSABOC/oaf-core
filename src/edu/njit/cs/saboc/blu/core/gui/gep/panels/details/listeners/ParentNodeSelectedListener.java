@@ -8,16 +8,17 @@ import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
  *
  * @author Chris O
  */
-public class ParentGroupSelectedListener extends EntitySelectionAdapter<ParentNodeDetails> {
+public class ParentNodeSelectedListener<T extends SinglyRootedNode> 
+    extends EntitySelectionAdapter<ParentNodeDetails<T>> {
 
     private final NavigateToNodeListener navigateOption;
     
-    public ParentGroupSelectedListener(EnhancedGraphExplorationPanel gep) {
+    public ParentNodeSelectedListener(EnhancedGraphExplorationPanel gep) {
         navigateOption = new NavigateToNodeListener(gep);
     }
     
     @Override
-    public void entityDoubleClicked(ParentNodeDetails entity) {
-        navigateOption.entityDoubleClicked((SinglyRootedNode)entity.getParentNode());
+    public void entityDoubleClicked(ParentNodeDetails<T> entity) {
+        navigateOption.entityDoubleClicked(entity.getParentNode());
     }
 }

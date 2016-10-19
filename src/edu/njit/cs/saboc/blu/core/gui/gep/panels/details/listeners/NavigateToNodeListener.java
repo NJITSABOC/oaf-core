@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *
+ * A listener for navigating to some kind of singly rooted node (e.g., partial-area) in the GEP
+ * 
  * @author Chris O
  */
-public class NavigateToNodeListener extends EntitySelectionAdapter<SinglyRootedNode> {
+public class NavigateToNodeListener<T extends SinglyRootedNode> extends EntitySelectionAdapter<T> {
 
     private final EnhancedGraphExplorationPanel gep;
     

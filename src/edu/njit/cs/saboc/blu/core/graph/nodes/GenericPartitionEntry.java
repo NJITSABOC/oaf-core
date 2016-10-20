@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,10 +23,8 @@ import javax.swing.SwingConstants;
  */
 public class GenericPartitionEntry extends AbNNodeEntry {
 
-
     private ArrayList<GraphGroupLevel> groupLevels = new ArrayList<>();
     
-
     private final PartitionedNodeEntry parent;
 
     /**

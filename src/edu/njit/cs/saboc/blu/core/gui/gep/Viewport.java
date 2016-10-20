@@ -19,6 +19,10 @@ public class Viewport {
         this.graph = graph;
     }
     
+    public BluGraph getGraph() {
+        return graph;
+    }
+    
     public void setSizeAbsolute(int width, int height) {
         region.setSize(width, height);
     }

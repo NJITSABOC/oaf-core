@@ -6,15 +6,12 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel.NavigationPanelListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -36,6 +33,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -46,13 +44,17 @@ import javax.swing.Timer;
  */
 public class AbNDisplayPanel extends JPanel {
     
-    public interface AbNPanelSelectionListener {
+    public interface AbNEntitySelectionListener {
         public void nodeEntrySelected(SinglyRootedNodeEntry nodeEntry);
         public void partitionEntrySelected(GenericPartitionEntry entry);
         public void noEntriesSelected();
     }
     
-    private enum GEPState {
+    public interface ZoomFactorChangedListener {
+        public void zoomFactorChanged(int zoomFactor);
+    }
+    
+    private enum DisplayState {
         Uninitialized,
         Initializing,
         Alive,
@@ -61,18 +63,28 @@ public class AbNDisplayPanel extends JPanel {
         Dead
     }
 
-    private GEPState gepState = GEPState.Uninitialized;
+    private DisplayState panelState = DisplayState.Uninitialized;
     
     private BluGraph graph;
     private Viewport viewport;
     
-    private NavigationPanel navigationPanel;
-         
+
+    private final ArrayList<AbNDisplayWidget> widgets = new ArrayList<>();
+    
+    private final ArrayList<UpdateableEntity> updateableEntities = new ArrayList<>();
+    
+    private int currentTick = 0;
+    
     private final Timer updateTimer = new Timer(50, (ae) -> {
-        if (gepState == GEPState.Alive) {
+        if (panelState == DisplayState.Alive) {
             
-            navigationPanel.update();
-            updateViewportMovementByMouse();
+            updateableEntities.forEach((entity) -> {
+               entity.update(currentTick);
+            });
+
+            updateViewportMovementByMouse(currentTick);
+            
+            currentTick++;
         }
     });
     
@@ -85,7 +97,7 @@ public class AbNDisplayPanel extends JPanel {
     private final Thread drawThread = new Thread(() -> {
         long lastDraw = System.currentTimeMillis();
         
-        while(gepState != GEPState.Dead) {
+        while(panelState != DisplayState.Dead) {
             
             long currentDraw = System.currentTimeMillis();
             
@@ -110,12 +122,17 @@ public class AbNDisplayPanel extends JPanel {
     
     private GraphSelectionStateMonitor selectionStateMonitor;
     
-    private AbNPainter painter;
+    private final ViewportAutoScroller autoScroller  = new ViewportAutoScroller();
     
-    private final ArrayList<AbNPanelSelectionListener> selectionListeners = new ArrayList<>();
+    
+    private AbNPainter painter;
+
+    private final ArrayList<AbNEntitySelectionListener> selectionListeners = new ArrayList<>();
+    private final ArrayList<ZoomFactorChangedListener> zoomFactorChangedListeners = new ArrayList<>();
 
     public AbNDisplayPanel() {
-        intitializeFixedUIComponents();
+        this.setLayout(null);
+        
         initializeFixedListeners();
 
         setFocusable(true);
@@ -123,33 +140,92 @@ public class AbNDisplayPanel extends JPanel {
         drawThread.start();
     }
     
-    public void addAbNSelectionListener(AbNPanelSelectionListener listener) {
+    public ViewportAutoScroller getAutoScroller() {
+        return autoScroller;
+    }
+    
+    public Viewport getViewport() {
+        return viewport;
+    }
+    
+    public final void addWidget(AbNDisplayWidget widget) {
+        widgets.add(widget);
+        
+        addUpdateableEntity(widget);
+        
+        this.add(widget);
+    }
+    
+    public final void removeWidget(AbNDisplayWidget widget) {
+        widgets.remove(widget);
+        
+        removeUpdateableEntity(widget);
+        
+        this.remove(widget);
+    }
+    
+    public final void addUpdateableEntity(UpdateableEntity entity) {
+        this.updateableEntities.add(entity);
+    }
+    
+    public final void removeUpdateableEntity(UpdateableEntity entity) {
+        this.updateableEntities.remove(entity);
+    }
+    
+    public void addAbNSelectionListener(AbNEntitySelectionListener listener) {
         selectionListeners.add(listener);
     }
     
-    public void removeAbNSelectionListener(AbNPanelSelectionListener listener) {
+    public void removeAbNSelectionListener(AbNEntitySelectionListener listener) {
         selectionListeners.remove(listener);
     }
+    
+    public void addZoomFactorChangedListener(ZoomFactorChangedListener listener) {
+        zoomFactorChangedListeners.add(listener);
+    }
+    
+    public void removeZoomFactorChangedListener(ZoomFactorChangedListener listener) {
+        zoomFactorChangedListeners.remove(listener);
+    }
         
-    public void setContents(final BluGraph graph, AbNPainter painter) {
+    public void initialize(BluGraph graph, AbNPainter painter, AbNInitialDisplayAction initialDisplayAction) {
         updateTimer.stop();
         
-        this.gepState = GEPState.Initializing;
+        this.panelState = DisplayState.Initializing;
+
+        reset();
         
         this.graph = graph;
         this.painter = painter;
         
-        //this.configuration.getUIConfiguration().setGEP(this);
-        
         this.viewport = new Viewport(graph);
         this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
-
-        navigationPanel.setZoomLevel(100);
-        viewport.setZoom(100, getWidth(), getHeight());
         
-        this.gepState = GEPState.Alive;
+        this.autoScroller.setViewport(viewport);
+                
+        addUpdateableEntity(autoScroller);
+
+        viewport.setParentFrameSize(this.getSize());
+        
+        setZoomFactor(100);
+        
+        this.panelState = DisplayState.Alive;
         
         updateTimer.start();
+        
+        initialDisplayAction.doInitialDisplay(this);
+    }
+    
+    public void setZoomFactor(int zoomLevel) {
+        viewport.setZoom(zoomLevel);
+        
+        zoomFactorChanged(zoomLevel);
+    }
+    
+    private void zoomFactorChanged(int zoomValue) {
+        zoomFactorChangedListeners.forEach( (listener) -> {
+           listener.zoomFactorChanged(zoomValue); 
+        });
     }
     
     public void paintComponent(Graphics g) {
@@ -158,7 +234,7 @@ public class AbNDisplayPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (gepState == GEPState.Alive) {
+        if (panelState == DisplayState.Alive) {
             viewport.setSizeScaled(getWidth(), getHeight());
 
             drawAbstractionNetwork(g2d, viewport);
@@ -168,7 +244,7 @@ public class AbNDisplayPanel extends JPanel {
             if (mouseStateMonitor.mouseDragging()) {
                 drawNavigationPipper(g2d);
             }
-        } else if (gepState == GEPState.Loading || gepState == GEPState.Initializing || gepState == GEPState.Uninitialized) {
+        } else if (panelState == DisplayState.Loading || panelState == DisplayState.Initializing || panelState == DisplayState.Uninitialized) {
 
             if (graph != null) {
                 drawAbstractionNetwork(g2d, viewport);
@@ -183,63 +259,35 @@ public class AbNDisplayPanel extends JPanel {
         }
     }
     
-    public void killGEP() {
-        this.gepState = GEPState.Dead;
+    public void kill() {
+        this.panelState = DisplayState.Dead;
+        updateTimer.stop();
     }
     
-    public void showLoading() {
-        this.gepState = GEPState.Loading;
+    public void doLoading() {
+        this.panelState = DisplayState.Loading;
     }
 
-    private void intitializeFixedUIComponents() {
-
-        navigationPanel = new NavigationPanel();
-        navigationPanel.setBounds(10, 10, 200, 150);
-        navigationPanel.addNavigationPanelListener(new NavigationPanelListener() {
-
-            @Override
-            public void zoomLevelChanged(int zoomLevel) {
-                viewport.setZoom(zoomLevel, getWidth(), getHeight());
-                
-                AbNDisplayPanel.this.requestRedraw();
-            }
-
-            @Override
-            public void navigationButtonPressed(NavigationPanel.NavigationDirection direction) {
-                final int MOVE_SPEED = 16;
-                
-                switch(direction) {
-                    case Up:
-                        viewport.moveVertical(-MOVE_SPEED);
-                        break;
-                        
-                    case Down:
-                        viewport.moveVertical(MOVE_SPEED);
-                        break;
-                        
-                    case Left:
-                        viewport.moveHorizontal(-MOVE_SPEED);
-                        break;
-                        
-                    case Right:
-                        viewport.moveHorizontal(MOVE_SPEED);
-                        break;
-                }
-                
-                AbNDisplayPanel.this.requestRedraw();
-            }
+    private void reset() {
+        autoScroller.cancelAutoNavigation();
+        
+        selectionListeners.clear();
+        zoomFactorChangedListeners.clear();
+        
+        updateableEntities.clear();
+        
+        widgets.forEach( (widget) -> {
+            AbNDisplayPanel.this.remove(widget);
         });
         
-        this.add(navigationPanel);
-
-        this.setLayout(new BorderLayout());
+        widgets.clear();
     }
     
     private void initializeFixedListeners() {
 
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         mouseStateMonitor.setClickedLocation(e.getPoint());
 
@@ -249,7 +297,7 @@ public class AbNDisplayPanel extends JPanel {
             }
 
             public void mouseReleased(MouseEvent e) {
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
 
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         mouseStateMonitor.setClickedLocation(null);
@@ -264,7 +312,7 @@ public class AbNDisplayPanel extends JPanel {
 
                 AbNDisplayPanel.this.requestFocus();
 
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         int clickCount = e.getClickCount();
 
@@ -309,7 +357,7 @@ public class AbNDisplayPanel extends JPanel {
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     if (mouseStateMonitor.mouseDragging()) {
                         mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
                         mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
@@ -325,7 +373,7 @@ public class AbNDisplayPanel extends JPanel {
             }
 
             public void mouseMoved(MouseEvent e) {
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     Point mouseLocation = viewport.getPointOnGraph(e.getPoint());
 
                     mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
@@ -357,8 +405,8 @@ public class AbNDisplayPanel extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             
             public void componentResized(ComponentEvent e) {
-                if (gepState == GEPState.Alive) {
-                    viewport.setZoom(navigationPanel.getZoomLevel(), getWidth(), getHeight());
+                if (panelState == DisplayState.Alive) {
+                    viewport.setParentFrameSize(getSize());
 
                     AbNDisplayPanel.this.requestRedraw();
                 }
@@ -368,16 +416,14 @@ public class AbNDisplayPanel extends JPanel {
         this.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
                         int zoomLevelChange = -e.getUnitsToScroll() / 3;
-                        int currentZoomValue = navigationPanel.getZoomLevel();
+                        int currentZoomValue = viewport.getZoomFactor();
 
                         int newZoomLevel = currentZoomValue + zoomLevelChange * 10;
 
-                        viewport.setZoom(newZoomLevel, getWidth(), getHeight());
-                        
-                        navigationPanel.setZoomLevel(newZoomLevel);
+                        setZoomFactor(newZoomLevel);
 
                         AbNDisplayPanel.this.requestRedraw();
                     }
@@ -388,7 +434,7 @@ public class AbNDisplayPanel extends JPanel {
         this.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
-                if (gepState == GEPState.Alive) {
+                if (panelState == DisplayState.Alive) {
                     
                     final int MOVE_SPEED = 64;
                     
@@ -457,7 +503,7 @@ public class AbNDisplayPanel extends JPanel {
         return null;
     }
 
-    public void highlightEntriesForSearch(ArrayList<SinglyRootedNode> nodes) {       
+    public void highlightEntriesForSearch(Set<SinglyRootedNode> nodes) {       
         selectionStateMonitor.setSearchResults(nodes);
     }
 
@@ -470,14 +516,14 @@ public class AbNDisplayPanel extends JPanel {
         
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         
-        if (viewport.scale > 0.2) {
+        if (viewport.getViewScale() > 0.2) {
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
         for(PartitionedNodeEntry container : containerEntries) {
-            if(viewport.region.intersects(container.getBounds())) {
+            if(viewport.getViewRegion().intersects(container.getBounds())) {
                 AbNDrawingUtilities.paintContainer(painter, g2d, container, viewport, graph.getLabelManager());
             }
         }
@@ -486,7 +532,7 @@ public class AbNDisplayPanel extends JPanel {
         
         for(GraphEdge edge : graphEdges) {
             for(JPanel segment : edge.getSegments()) {
-                if(viewport.region.intersects(segment.getBounds())) {
+                if(viewport.getViewRegion().intersects(segment.getBounds())) {
                     AbNDrawingUtilities.paintEdge(g2d, edge, viewport);
                     break;
                 }
@@ -495,7 +541,7 @@ public class AbNDisplayPanel extends JPanel {
     }
     
     public BufferedImage getCurrentViewImage() {
-        Rectangle viewportRegion = viewport.region;
+        Rectangle viewportRegion = viewport.getViewRegion();
         
         BufferedImage image = new BufferedImage(
                 Math.min(viewportRegion.width, graph.getWidth()),
@@ -522,15 +568,17 @@ public class AbNDisplayPanel extends JPanel {
     
     private void drawLocationIndicators(Graphics2D g2d, Color color) {
         g2d.setColor(color);
+        
+        Rectangle viewportRegion = viewport.getViewRegion();
 
-        int xStartPoint = (int)(((float)viewport.region.x / graph.getWidth()) * getWidth());
-        int xEndPoint = xStartPoint + (int)(((float)viewport.region.width / graph.getWidth()) * getWidth());
+        int xStartPoint = (int)(((double)viewportRegion.x / graph.getWidth()) * getWidth());
+        int xEndPoint = xStartPoint + (int)(((double)viewportRegion.width / graph.getWidth()) * getWidth());
 
         g2d.fill3DRect(xStartPoint, getHeight() - 20, 2, 20, true);
         g2d.fill3DRect(xEndPoint - 2, getHeight() - 20, 2, 20, true);
 
-        int yStartPoint = (int)(((float)viewport.region.y / graph.getHeight()) * getHeight());
-        int yEndPoint = yStartPoint + (int)(((float)viewport.region.height / graph.getHeight()) * getHeight());
+        int yStartPoint = (int)(((double)viewportRegion.y / graph.getHeight()) * getHeight());
+        int yEndPoint = yStartPoint + (int)(((double)viewportRegion.height / graph.getHeight()) * getHeight());
 
         g2d.fill3DRect(getWidth() - 20, yStartPoint, 20, 2, true);
         g2d.fill3DRect(getWidth() - 20, yEndPoint - 2, 20, 2, true);
@@ -633,7 +681,8 @@ public class AbNDisplayPanel extends JPanel {
         
     }
 
-    private void updateViewportMovementByMouse() {
+    private void updateViewportMovementByMouse(int tick) {
+        
         if (mouseStateMonitor.mouseDragging()) {
             
             Point currentMousePoint = mouseStateMonitor.getCurrentMouseLocation();
@@ -649,6 +698,7 @@ public class AbNDisplayPanel extends JPanel {
         }
     }
      
+    
     private void handleSingleClickOnGroupEntry(SinglyRootedNodeEntry nodeEntry) {
         selectionListeners.forEach( (listener) -> {
             listener.nodeEntrySelected(nodeEntry);

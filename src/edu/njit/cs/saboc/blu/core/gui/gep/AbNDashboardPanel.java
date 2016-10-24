@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading.LoadingPanel;
 import java.awt.BorderLayout;
 import java.util.Optional;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -30,7 +29,7 @@ public class AbNDashboardPanel extends JPanel {
         loadingPanel = new LoadingPanel();
     }
     
-    public void setAbNDetailsComponents(AbNConfiguration configuration) {
+    public void initialize(AbNConfiguration configuration) {
         this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
 
         if (abnDetailsPanel != null) {

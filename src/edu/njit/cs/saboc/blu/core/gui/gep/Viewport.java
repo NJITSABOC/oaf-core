@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -10,17 +11,39 @@ import java.awt.Rectangle;
  */
 public class Viewport {
 
-    public Rectangle region = new Rectangle(0, 0, 0, 0);
-    public double scale = 1.0;
+    private Rectangle region = new Rectangle(0, 0, 0, 0);
     
+    private double scale = 1.0;
+    
+    private int zoomLevel = 100;
+
     private final BluGraph graph;
+    
+    private Dimension parentFrameSize;
 
     public Viewport(BluGraph graph) {
         this.graph = graph;
+        this.parentFrameSize = new Dimension(0, 0);
     }
     
     public BluGraph getGraph() {
         return graph;
+    }
+    
+    public Rectangle getViewRegion() {
+        return region;
+    }
+    
+    public double getViewScale() {
+        return scale;
+    }
+    
+    /**
+     * Returns the zoom level as a integer percent
+     * @return 
+     */
+    public int getZoomFactor() {
+        return zoomLevel;
     }
     
     public void setSizeAbsolute(int width, int height) {
@@ -29,6 +52,10 @@ public class Viewport {
     
     public void setSizeScaled(int width, int height) {
         setSizeAbsolute((int)(width / scale), (int)(height / scale));
+    }
+    
+    public void setParentFrameSize(Dimension parentFrameSize) {
+        this.parentFrameSize = parentFrameSize;
     }
     
     public Point getScaledPoint(Point point) {
@@ -101,20 +128,23 @@ public class Viewport {
         moveVertical((int)(distance / scale));
     }
     
-    public void setZoom(int percent, int frameWidth, int frameHeight) {
+    public void setZoom(int percent) {
+        
         if(percent < 10) {
             percent = 10;
         } else if(percent > 200) {
             percent = 200;
         }
+        
+        this.zoomLevel = percent;
 
         this.scale = percent / 100.0;
 
         int midPointX = region.x + (region.width / 2);
         int midPointY = region.y + (region.height / 2);
 
-        region.width = (int)(frameWidth / scale); // TODO: change to frame size
-        region.height = (int)(frameHeight / scale);
+        region.width = (int)(this.parentFrameSize.width / scale);
+        region.height = (int)(this.parentFrameSize.height / scale);
 
         if(region.height > graph.getAbNHeight()) {
             region.height = graph.getAbNHeight();
@@ -124,7 +154,7 @@ public class Viewport {
 
             region.width = graph.getAbNWidth();
             
-            int x = frameWidth - (int)(region.width * scale);
+            int x = this.parentFrameSize.width - (int)(region.width * scale);
             
             x /= 2;
             
@@ -155,8 +185,8 @@ public class Viewport {
         return new Point(x, y);
     }
 
-    public void focusOnPoint(int x, int y, int frameWidth, int frameHeight) {
-        this.setZoom(100, frameWidth, frameHeight);
+    public void focusOnPoint(int x, int y) {
+        this.setZoom(100);
 
         int xView = x - (region.width / 2);
         int yView = y - (region.height / 2);

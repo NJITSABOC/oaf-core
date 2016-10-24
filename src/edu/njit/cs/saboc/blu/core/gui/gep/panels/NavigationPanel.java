@@ -1,8 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -11,7 +12,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author cro3
  */
-public class NavigationPanel extends JPanel {
+public class NavigationPanel extends AbNDisplayWidget {
     
     public static enum NavigationDirection {
         Up,
@@ -33,7 +34,9 @@ public class NavigationPanel extends JPanel {
 
     private final ArrayList<NavigationPanelListener> listeners = new ArrayList<>();
     
-    public NavigationPanel() {
+    public NavigationPanel(AbNDisplayPanel displayPanel) {
+        super(displayPanel);
+        
         this.setLayout(null);
         this.setOpaque(false);
         
@@ -80,7 +83,8 @@ public class NavigationPanel extends JPanel {
         return zoomSlider.getValue();
     }
     
-    public void update() {
+    @Override
+    public void update(int tick) {
 
         NavigationDirection direction = null;
 

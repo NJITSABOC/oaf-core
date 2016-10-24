@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -138,7 +137,7 @@ public class GraphSelectionStateMonitor {
         }
     }
     
-    public void setSearchResults(ArrayList<SinglyRootedNode> nodes) {
+    public void setSearchResults(Set<SinglyRootedNode> nodes) {
         resetAll();
         
         Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();

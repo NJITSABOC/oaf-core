@@ -1,10 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe;
 
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
@@ -43,7 +42,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     protected JFrame parentFrame;
        
-    protected final EnhancedGraphExplorationPanel gep;
+    protected final AbNExplorationPanel gep;
 
     protected final JTabbedPane tabbedPane = new JTabbedPane();
    
@@ -76,7 +75,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         this.scrollerContentPanel = new JPanel(new BorderLayout());
         this.scroller = new JScrollPane(scrollerContentPanel);
         
-        this.gep = new EnhancedGraphExplorationPanel();
+        this.gep = new AbNExplorationPanel();
         this.gep.showLoading();
 
         tabbedPane.addTab("Explore", gep);
@@ -91,7 +90,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                     button.disposePopup();
                 }
                 
-                gep.killGEP();
+                gep.getDisplayPanel().kill();
             }
             public void internalFrameDeactivated(InternalFrameEvent e) {
                 for(PopupToggleButton button : toggleMenuButtons) {
@@ -159,8 +158,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         goToRootBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                gep.centerOnRoot();
-                gep.repaint();
+                //TODO: Fix GO TO ROOT
             }
         });
         
@@ -211,7 +209,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         return graph;
     }
     
-    public EnhancedGraphExplorationPanel getEnhancedGraphExplorationPanel() {
+    public AbNExplorationPanel getAbNExplorationPanel() {
         return gep;
     }
     
@@ -275,8 +273,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                 scroller.getViewport().setViewPosition(new Point(scrollXPos, scrollYPos));
 
                 graph.repaint();
-                gep.focusOnPoint(midPointX, midPointY);
-                gep.repaint();
+                gep.getDisplayPanel().getAutoScroller().navigateToPoint(new Point(midPointX, midPointY));
             }
         });
     }
@@ -320,7 +317,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 
-                gep.setContents(graph, painter, gepConfiguration);
+                gep.initialize(graph, gepConfiguration, painter);
                 
                 scrollerContentPanel.add(graph, BorderLayout.CENTER);
                 
@@ -379,7 +376,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         int returnVal = chooser.showSaveDialog(null);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            BufferedImage graphImage = gep.getCurrentViewImage();
+            BufferedImage graphImage = gep.getDisplayPanel().getCurrentViewImage();
 
             try {
                 String file = chooser.getSelectedFile().getAbsolutePath();

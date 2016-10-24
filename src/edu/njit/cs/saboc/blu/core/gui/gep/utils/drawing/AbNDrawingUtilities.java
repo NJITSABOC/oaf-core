@@ -21,7 +21,7 @@ public class AbNDrawingUtilities {
 
         Point p = viewport.getDrawingPoint(new Point(container.getLocation()));
 
-        painter.paintContainerAtPoint(g2d, container, p, viewport.scale);
+        painter.paintContainerAtPoint(g2d, container, p, viewport.getViewScale());
 
         Component [] components = container.getComponents();
 
@@ -36,7 +36,7 @@ public class AbNDrawingUtilities {
 
                     Point drawPoint = viewport.getDrawingPoint(new Point(container.getX() + labelLocation.x, container.getY() + labelLocation.y));
 
-                    labelManager.drawLabel(g2d, label, viewport.scale, drawPoint.x, drawPoint.y);
+                    labelManager.drawLabel(g2d, label, viewport.getViewScale(), drawPoint.x, drawPoint.y);
                 }
             }
         }
@@ -45,7 +45,7 @@ public class AbNDrawingUtilities {
     public static void paintPartition(AbNPainter painter, Graphics2D g2d, GenericPartitionEntry partition, Viewport viewport, AbNLabelManager labelManager) {
         Point p = viewport.getDrawingPoint(new Point(partition.getAbsoluteX(), partition.getAbsoluteY()));
         
-        painter.paintPartitionAtPoint(g2d, partition, p, viewport.scale);
+        painter.paintPartitionAtPoint(g2d, partition, p, viewport.getViewScale());
         
         Component [] components = partition.getComponents();
 
@@ -59,7 +59,7 @@ public class AbNDrawingUtilities {
 
                 Point drawPoint = viewport.getDrawingPoint(new Point(partition.getAbsoluteX() + labelLocation.x, partition.getAbsoluteY() + labelLocation.y));
 
-                labelManager.drawLabel(g2d, label, viewport.scale, drawPoint.x, drawPoint.y);
+                labelManager.drawLabel(g2d, label, viewport.getViewScale(), drawPoint.x, drawPoint.y);
                 
             } else {
                 // What else could be drawing?
@@ -71,7 +71,7 @@ public class AbNDrawingUtilities {
         
         Point p = viewport.getDrawingPoint(new Point(group.getAbsoluteX(), group.getAbsoluteY()));
 
-        painter.paintGroupAtPoint(g2d, group, p, viewport.scale);
+        painter.paintGroupAtPoint(g2d, group, p, viewport.getViewScale());
 
         Component[] components = group.getComponents();
         JLabel label = ((JLabel) components[0]);
@@ -82,7 +82,13 @@ public class AbNDrawingUtilities {
         
         Point labelOffset = group.getLabelOffset();
         
-        labelManager.drawGroupLabel(group.getNode(), viewport.scale, g2d, p.x + (int)(viewport.scale * labelOffset.x), p.y + (int)(viewport.scale * labelOffset.y));
+        
+        labelManager.drawGroupLabel(
+                group.getNode(), 
+                viewport.getViewScale(), 
+                g2d, 
+                p.x + (int)(viewport.getViewScale() * labelOffset.x), 
+                p.y + (int)(viewport.getViewScale() * labelOffset.y));
         
         g2d.setFont(savedFont);
     }
@@ -91,11 +97,11 @@ public class AbNDrawingUtilities {
         g2d.setColor(edge.getSegments().get(0).getBackground());
         
         for(JPanel segment : edge.getSegments()) {
-            if(viewport.region.intersects(segment.getBounds())) {
+            if(viewport.getViewRegion().intersects(segment.getBounds())) {
                 Point p = viewport.getDrawingPoint(segment.getLocation());
                 
-                int width = (int)(segment.getWidth() * viewport.scale);
-                int height = (int)(segment.getHeight() * viewport.scale);
+                int width = (int)(segment.getWidth() * viewport.getViewScale());
+                int height = (int)(segment.getHeight() * viewport.getViewScale());
                 
                 g2d.fillRect(p.x, p.y, width, height);
             }

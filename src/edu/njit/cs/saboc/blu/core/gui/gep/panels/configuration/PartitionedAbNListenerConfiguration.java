@@ -22,15 +22,15 @@ public abstract class PartitionedAbNListenerConfiguration<T extends SinglyRooted
 
     @Override
     public EntitySelectionListener<T> getChildGroupListener() {
-        return new NavigateToNodeListener<>(super.getConfiguration().getUIConfiguration().getGEP());
+        return new NavigateToNodeListener<>(super.getConfiguration().getUIConfiguration().getDisplayPanel());
     }
 
     @Override
     public EntitySelectionListener<ParentNodeDetails<T>> getParentGroupListener() {
-        return new ParentNodeSelectedListener(super.getConfiguration().getUIConfiguration().getGEP());
+        return new ParentNodeSelectedListener(super.getConfiguration().getUIConfiguration().getDisplayPanel());
     }
     
     public EntitySelectionListener<ContainerReport> getContainerReportSelectedListener() {
-        return new NavigateToContainerReportListener(super.getConfiguration().getUIConfiguration().getGEP());
+        return new NavigateToContainerReportListener(super.getConfiguration().getUIConfiguration().getDisplayPanel());
     }
 }

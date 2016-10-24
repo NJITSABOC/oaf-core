@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.entry.FilterableStringEntry;
@@ -51,6 +52,8 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
     }
     
     private ArrayList<SearchActionEntry> searchActionList = new ArrayList<>();
+    
+    private AbNConfiguration config;
 
     protected BaseAbNSearchButton(JFrame parent) {
         super(parent, "Search");
@@ -156,6 +159,14 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
         popupPanel.add(resultsPanel, BorderLayout.SOUTH);
 
         this.setPopupContent(popupPanel);
+    }
+    
+    public void initialize(AbNConfiguration config) {
+        this.config = config;
+    }
+    
+    public AbNConfiguration getConfiguration() {
+        return config;
     }
     
     protected void addSearchAction(SearchAction searchAction) {

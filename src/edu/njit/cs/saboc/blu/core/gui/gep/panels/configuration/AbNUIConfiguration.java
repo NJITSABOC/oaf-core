@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptPainter;
-import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
@@ -17,18 +17,18 @@ public abstract class AbNUIConfiguration<T extends Node> {
     
     private final AbNListenerConfiguration<T> listenerConfiguration;
     
-    private EnhancedGraphExplorationPanel gep;
+    private AbNDisplayPanel abnDisplayPanel;
     
     protected AbNUIConfiguration(AbNListenerConfiguration<T> listenerConfiguration) {
         this.listenerConfiguration = listenerConfiguration;
     }
     
-    public void setGEP(EnhancedGraphExplorationPanel gep) {
-        this.gep = gep;
+    public void setDisplayPanel(AbNDisplayPanel abnDisplayPanel) {
+        this.abnDisplayPanel = abnDisplayPanel;
     }
     
-    public EnhancedGraphExplorationPanel getGEP() {
-        return gep;
+    public AbNDisplayPanel getDisplayPanel() {
+        return abnDisplayPanel;
     }
     
     public AbNListenerConfiguration<T> getListenerConfiguration() {

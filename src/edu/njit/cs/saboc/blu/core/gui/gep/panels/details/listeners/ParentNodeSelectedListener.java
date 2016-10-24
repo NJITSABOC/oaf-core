@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 
 /**
  *
@@ -13,8 +13,8 @@ public class ParentNodeSelectedListener<T extends SinglyRootedNode>
 
     private final NavigateToNodeListener navigateOption;
     
-    public ParentNodeSelectedListener(EnhancedGraphExplorationPanel gep) {
-        navigateOption = new NavigateToNodeListener(gep);
+    public ParentNodeSelectedListener(AbNDisplayPanel displayPanel) {
+        navigateOption = new NavigateToNodeListener(displayPanel);
     }
     
     @Override

@@ -2,11 +2,10 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -27,6 +26,7 @@ public class NavigationPanel extends AbNDisplayWidget {
     }
     
     private final JSlider zoomSlider;
+    
     private final JButton moveUpBtn;
     private final JButton moveDownBtn;
     private final JButton moveLeftBtn;
@@ -34,7 +34,10 @@ public class NavigationPanel extends AbNDisplayWidget {
 
     private final ArrayList<NavigationPanelListener> listeners = new ArrayList<>();
     
+    private final Dimension panelSize = new Dimension(200, 150);
+    
     public NavigationPanel(AbNDisplayPanel displayPanel) {
+        
         super(displayPanel);
         
         this.setLayout(null);
@@ -45,13 +48,11 @@ public class NavigationPanel extends AbNDisplayWidget {
         zoomSlider.setMajorTickSpacing(10);
         zoomSlider.setPaintTicks(true);
         zoomSlider.setSnapToTicks(true);
-        zoomSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent ce) {
-                if (!zoomSlider.getValueIsAdjusting()) {
-                    listeners.forEach((listener) -> {
-                        listener.zoomLevelChanged(zoomSlider.getValue());
-                    });
-                }
+        zoomSlider.addChangeListener((ce) -> {
+            if (!zoomSlider.getValueIsAdjusting()) {
+                listeners.forEach((listener) -> {
+                    listener.zoomLevelChanged(zoomSlider.getValue());
+                });
             }
         });
 
@@ -82,7 +83,12 @@ public class NavigationPanel extends AbNDisplayWidget {
     public int getZoomLevel() {
         return zoomSlider.getValue();
     }
-    
+
+    @Override
+    public void initialize(AbNDisplayPanel displayPanel) {
+        setZoomLevel(100);
+    }
+
     @Override
     public void update(int tick) {
 
@@ -111,5 +117,12 @@ public class NavigationPanel extends AbNDisplayWidget {
     
     public void removeNavigationPanelListener(NavigationPanelListener listener) {
         this.listeners.remove(listener);
+    }
+
+    @Override
+    public void displayPanelResized(AbNDisplayPanel displayPanel) {
+        super.displayPanelResized(displayPanel);
+        
+        this.setBounds(10, 10, panelSize.width, panelSize.height);
     }
 }

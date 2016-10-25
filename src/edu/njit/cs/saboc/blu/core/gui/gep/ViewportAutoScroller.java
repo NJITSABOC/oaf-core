@@ -9,7 +9,8 @@ import java.util.Optional;
  *
  * @author Chris O
  */
-public class ViewportAutoScroller implements UpdateableEntity {
+public class ViewportAutoScroller implements UpdateableAbNDisplayEntity {
+    
     private Optional<Point> targetPoint = Optional.empty();
     
     private Viewport viewport;
@@ -18,7 +19,7 @@ public class ViewportAutoScroller implements UpdateableEntity {
         
     }
     
-    public void setViewport(Viewport viewport) {
+    private void setViewport(Viewport viewport) {
         this.viewport = viewport;
         this.targetPoint = Optional.empty();
     }
@@ -30,11 +31,19 @@ public class ViewportAutoScroller implements UpdateableEntity {
     public void cancelAutoNavigation() {
         this.targetPoint = Optional.empty();
     }
+
+    @Override
+    public void initialize(AbNDisplayPanel displayPanel) {
+        this.setViewport(displayPanel.getViewport());
+        
+        resetDisplay();
+    }
     
     public void resetDisplay() {
         int xMidpoint = viewport.getGraph().getAbNWidth() / 2 - viewport.getViewRegion().width / 2;
         
         this.snapToPoint(new Point(xMidpoint, 0));
+        
     }
     
     public void autoNavigateToNodeEntry(AbNNodeEntry entry) {

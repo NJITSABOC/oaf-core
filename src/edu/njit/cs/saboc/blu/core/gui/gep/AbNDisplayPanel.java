@@ -70,13 +70,12 @@ public class AbNDisplayPanel extends JPanel {
     
     private final ArrayList<AbNDisplayWidget> widgets = new ArrayList<>();
     
-    private final ArrayList<UpdateableEntity> updateableEntities = new ArrayList<>();
+    private final ArrayList<UpdateableAbNDisplayEntity> updateableEntities = new ArrayList<>();
     
     private int currentTick = 0;
     
     private final Timer updateTimer = new Timer(50, (ae) -> {
         if (panelState == DisplayState.Alive) {
-            
             updateableEntities.forEach((entity) -> {
                entity.update(currentTick);
             });
@@ -121,7 +120,7 @@ public class AbNDisplayPanel extends JPanel {
     
     private final ScrollBarManager scrollBarManager = new ScrollBarManager();
     
-    private GraphSelectionStateMonitor selectionStateMonitor;
+    private final GraphSelectionStateMonitor selectionStateMonitor = new GraphSelectionStateMonitor();
     
     private final ViewportAutoScroller autoScroller  = new ViewportAutoScroller();
     
@@ -133,11 +132,16 @@ public class AbNDisplayPanel extends JPanel {
     public AbNDisplayPanel() {
         this.setLayout(null);
         
+        addUpdateableEntity(selectionStateMonitor);
+        addUpdateableEntity(scrollBarManager);
+        addUpdateableEntity(autoScroller);
+        
         initializeFixedListeners();
 
         setFocusable(true);
         
         drawThread.start();
+        updateTimer.start();
     }
     
     public ViewportAutoScroller getAutoScroller() {
@@ -164,11 +168,17 @@ public class AbNDisplayPanel extends JPanel {
         this.remove(widget);
     }
     
-    public final void addUpdateableEntity(UpdateableEntity entity) {
+    private void updateWidgetLocations() {
+        widgets.forEach( (widget) -> {
+            widget.displayPanelResized(this);
+        });
+    }
+    
+    public final void addUpdateableEntity(UpdateableAbNDisplayEntity entity) {
         this.updateableEntities.add(entity);
     }
     
-    public final void removeUpdateableEntity(UpdateableEntity entity) {
+    public final void removeUpdateableEntity(UpdateableAbNDisplayEntity entity) {
         this.updateableEntities.remove(entity);
     }
     
@@ -192,33 +202,24 @@ public class AbNDisplayPanel extends JPanel {
             BluGraph graph, 
             AbNPainter painter, 
             AbNInitialDisplayAction initialDisplayAction) {
-        
-        updateTimer.stop();
+
+        autoScroller.cancelAutoNavigation();
         
         this.panelState = DisplayState.Initializing;
 
-        reset();
-        
         this.graph = graph;
         this.painter = painter;
         
         this.viewport = new Viewport(graph);
         
-        this.scrollBarManager.initialize(this);
-        this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
-        
-        this.autoScroller.setViewport(viewport);
-                
-        addUpdateableEntity(autoScroller);
-        addUpdateableEntity(scrollBarManager);
+        resetUpdateables();
+        updateWidgetLocations();
 
         viewport.setParentFrameSize(this.getSize());
         
         setZoomFactor(100);
         
         this.panelState = DisplayState.Alive;
-        
-        updateTimer.start();
         
         initialDisplayAction.doInitialDisplay(this);
     }
@@ -277,19 +278,10 @@ public class AbNDisplayPanel extends JPanel {
         this.panelState = DisplayState.Loading;
     }
 
-    private void reset() {
-        autoScroller.cancelAutoNavigation();
-        
-        selectionListeners.clear();
-        zoomFactorChangedListeners.clear();
-        
-        updateableEntities.clear();
-        
-        widgets.forEach( (widget) -> {
-            AbNDisplayPanel.this.remove(widget);
+    private void resetUpdateables() {
+        updateableEntities.forEach( (updateable) -> {
+            updateable.initialize(this);
         });
-        
-        widgets.clear();
     }
     
     private void initializeFixedListeners() {
@@ -447,6 +439,8 @@ public class AbNDisplayPanel extends JPanel {
                 if (panelState == DisplayState.Alive) {
                     viewport.setParentFrameSize(getSize());
 
+                    updateWidgetLocations();
+                    
                     AbNDisplayPanel.this.requestRedraw();
                 }
             }

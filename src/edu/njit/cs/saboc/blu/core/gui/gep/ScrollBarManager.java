@@ -9,7 +9,7 @@ import java.awt.Rectangle;
  *
  * @author Chris O
  */
-public class ScrollBarManager implements UpdateableEntity {
+public class ScrollBarManager implements UpdateableAbNDisplayEntity {
     
     private final int SCROLLER_SIZE = 10;
     

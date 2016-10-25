@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.BaseAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
@@ -308,7 +310,16 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    protected void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, AbNConfiguration gepConfiguration) {
+    public void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, AbNConfiguration gepConfiguration) {
+        displayAbstractionNetwork(graph, painter, gepConfiguration, new BaseAbNExplorationPanelInitializer());
+    }
+    
+    public void displayAbstractionNetwork(
+            BluGraph graph, 
+            AbNPainter painter, 
+            AbNConfiguration gepConfiguration,
+            AbNExplorationPanelGUIInitializer initializer) {
+        
         this.graph = graph;
         
         gep.showLoading();
@@ -317,7 +328,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 
-                gep.initialize(graph, gepConfiguration, painter);
+                gep.initialize(graph, gepConfiguration, painter, initializer);
                 
                 scrollerContentPanel.add(graph, BorderLayout.CENTER);
                 

@@ -6,7 +6,7 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public abstract class AbNDisplayWidget extends JPanel implements UpdateableEntity {
+public abstract class AbNDisplayWidget extends JPanel implements UpdateableAbNDisplayEntity {
     
     private final AbNDisplayPanel displayPanel;
     
@@ -25,5 +25,14 @@ public abstract class AbNDisplayWidget extends JPanel implements UpdateableEntit
     @Override
     public void update(int tick) {
 
+    }
+
+    @Override
+    public void initialize(AbNDisplayPanel displayPanel) {
+
+    }
+    
+    public void displayPanelResized(AbNDisplayPanel displayPanel) {
+        
     }
 }

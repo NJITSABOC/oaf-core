@@ -7,8 +7,6 @@ import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel.AbNEntitySelectionListener;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.ViewportNavigationListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -48,6 +46,28 @@ public class AbNExplorationPanel extends JPanel {
             }
         });
 
+        displayPanel.addAbNSelectionListener(new AbNEntitySelectionListener() {
+
+            @Override
+            public void nodeEntrySelected(SinglyRootedNodeEntry nodeEntry) {
+                dashboardPanel.displayDetailsForNode(nodeEntry.getNode());
+            }
+
+            @Override
+            public void partitionEntrySelected(GenericPartitionEntry entry) {
+                PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)configuration.getAbstractionNetwork();
+
+                PartitionedNode node = partitionedAbN.getPartitionNodeFor((SinglyRootedNode)entry.getNode().getInternalNodes().iterator().next());
+
+                dashboardPanel.displayDetailsForPartitionedNode(node);
+            }
+
+            @Override
+            public void noEntriesSelected() {
+                dashboardPanel.clearContents();
+            }
+        });
+
         this.add(splitPane, BorderLayout.CENTER);
     }
     
@@ -63,51 +83,29 @@ public class AbNExplorationPanel extends JPanel {
         displayPanel.doLoading();
     }
     
-    public void initialize(
+     public void initialize(
             BluGraph graph, 
             AbNConfiguration config, 
             AbNPainter painter) {
+         
+         initialize(graph, config, painter, new BaseAbNExplorationPanelInitializer());
+     }
+    
+    public void initialize(
+            BluGraph graph, 
+            AbNConfiguration config, 
+            AbNPainter painter,
+            AbNExplorationPanelGUIInitializer initializer) {
         
         this.configuration = config;
                 
         dashboardPanel.initialize(config);
-        displayPanel.initialize(graph, painter, new AbNInitialDisplayAction());
-        
-        NavigationPanel navigationPanel = new NavigationPanel(displayPanel);
-        navigationPanel.setBounds(10, 10, 200, 150);
-        navigationPanel.addNavigationPanelListener(new ViewportNavigationListener(displayPanel));
-        
-        displayPanel.addZoomFactorChangedListener( (zoomFactor) -> {
-            navigationPanel.setZoomLevel(zoomFactor);
-        });
+        displayPanel.initialize(graph, painter, initializer.getInitialDisplayAction());
+
+        // Add display-specific widgets and wizbangs
+        initializer.initializeAbNDisplayPanel(displayPanel);
+        initializer.initializeAbNDDashboardPanel(dashboardPanel);
         
         config.getUIConfiguration().setDisplayPanel(displayPanel);
-        
-        displayPanel.addAbNSelectionListener(new AbNEntitySelectionListener() {
-
-            @Override
-            public void nodeEntrySelected(SinglyRootedNodeEntry nodeEntry) {
-                dashboardPanel.displayDetailsForNode(nodeEntry.getNode());
-            }
-
-            @Override
-            public void partitionEntrySelected(GenericPartitionEntry entry) {
-                
-                PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)config.getAbstractionNetwork();
-
-                PartitionedNode node = partitionedAbN.getPartitionNodeFor((SinglyRootedNode)entry.getNode().getInternalNodes().iterator().next());
-                
-                dashboardPanel.displayDetailsForPartitionedNode(node);
-            }
-
-            @Override
-            public void noEntriesSelected() {
-                dashboardPanel.clearContents();
-            }
-        });
-
-        displayPanel.addWidget(navigationPanel);
-        
-        
     }
 }

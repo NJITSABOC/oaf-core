@@ -68,7 +68,6 @@ public class AbNDisplayPanel extends JPanel {
     private BluGraph graph;
     private Viewport viewport;
     
-
     private final ArrayList<AbNDisplayWidget> widgets = new ArrayList<>();
     
     private final ArrayList<UpdateableEntity> updateableEntities = new ArrayList<>();
@@ -120,10 +119,11 @@ public class AbNDisplayPanel extends JPanel {
 
     private final GraphMouseStateMonitor mouseStateMonitor = new GraphMouseStateMonitor();
     
+    private final ScrollBarManager scrollBarManager = new ScrollBarManager();
+    
     private GraphSelectionStateMonitor selectionStateMonitor;
     
     private final ViewportAutoScroller autoScroller  = new ViewportAutoScroller();
-    
     
     private AbNPainter painter;
 
@@ -188,7 +188,11 @@ public class AbNDisplayPanel extends JPanel {
         zoomFactorChangedListeners.remove(listener);
     }
         
-    public void initialize(BluGraph graph, AbNPainter painter, AbNInitialDisplayAction initialDisplayAction) {
+    public void initialize(
+            BluGraph graph, 
+            AbNPainter painter, 
+            AbNInitialDisplayAction initialDisplayAction) {
+        
         updateTimer.stop();
         
         this.panelState = DisplayState.Initializing;
@@ -199,11 +203,14 @@ public class AbNDisplayPanel extends JPanel {
         this.painter = painter;
         
         this.viewport = new Viewport(graph);
+        
+        this.scrollBarManager.initialize(this);
         this.selectionStateMonitor = new GraphSelectionStateMonitor(graph);
         
         this.autoScroller.setViewport(viewport);
                 
         addUpdateableEntity(autoScroller);
+        addUpdateableEntity(scrollBarManager);
 
         viewport.setParentFrameSize(this.getSize());
         
@@ -239,10 +246,12 @@ public class AbNDisplayPanel extends JPanel {
 
             drawAbstractionNetwork(g2d, viewport);
 
-            drawLocationIndicators(g2d, Color.RED);
+            drawLocationIndicators(g2d);
 
             if (mouseStateMonitor.mouseDragging()) {
-                drawNavigationPipper(g2d);
+                if (!scrollBarManager.xScrollerPressed() && !scrollBarManager.yScrollerPressed()) {
+                    drawNavigationPipper(g2d);
+                }
             }
         } else if (panelState == DisplayState.Loading || panelState == DisplayState.Initializing || panelState == DisplayState.Uninitialized) {
 
@@ -290,6 +299,12 @@ public class AbNDisplayPanel extends JPanel {
                 if (panelState == DisplayState.Alive) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         mouseStateMonitor.setClickedLocation(e.getPoint());
+                        
+                        if(scrollBarManager.xScrollerContainsPoint(e.getPoint())) {
+                            scrollBarManager.setXScrollerPressed(e.getX(), true);
+                        } else if(scrollBarManager.yScrollerContainsPoint(e.getPoint())) {
+                            scrollBarManager.setYScrollerPressed(e.getY(), true);
+                        }
 
                         AbNDisplayPanel.this.requestRedraw();
                     }
@@ -300,6 +315,8 @@ public class AbNDisplayPanel extends JPanel {
                 if (panelState == DisplayState.Alive) {
 
                     if (e.getButton() == MouseEvent.BUTTON1) {
+                        scrollBarManager.setNoScrollerPressed();
+                        
                         mouseStateMonitor.setClickedLocation(null);
                         mouseStateMonitor.setCurrentDraggedLocation(null);
 
@@ -313,6 +330,7 @@ public class AbNDisplayPanel extends JPanel {
                 AbNDisplayPanel.this.requestFocus();
 
                 if (panelState == DisplayState.Alive) {
+                    
                     if (e.getButton() == MouseEvent.BUTTON1) {
                         int clickCount = e.getClickCount();
 
@@ -361,6 +379,27 @@ public class AbNDisplayPanel extends JPanel {
                     if (mouseStateMonitor.mouseDragging()) {
                         mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
                         mouseStateMonitor.setCurrentMouseLocation(e.getPoint());
+                        
+                        Rectangle viewportRegion = viewport.getViewRegion();
+                        
+                        if(scrollBarManager.xScrollerPressed()) {                        
+
+                            int x = mouseStateMonitor.getCurrentMouseLocation().x + scrollBarManager.getXScrollerClickLocationOffset();
+                            
+                            double relativeXPosition = (double)x / (double)getWidth();
+
+                            getAutoScroller().snapToPoint(new Point((int)(graph.getAbNWidth() * relativeXPosition) , viewportRegion.y));
+                        } else if (scrollBarManager.yScrollerPressed()) {
+                            int y = mouseStateMonitor.getCurrentMouseLocation().y + scrollBarManager.getYScrollerClickLocationOffset();
+                                                        
+                            double relativeYPosition = (double) y / (double) getHeight();
+                            
+                            if(y < 0) {
+                                relativeYPosition = 0;
+                            }
+                            
+                            getAutoScroller().snapToPoint(new Point(viewportRegion.x, (int) (graph.getAbNHeight() * relativeYPosition)));
+                        }
                     } else {
                         if (e.getPoint().distance(mouseStateMonitor.getClickedLocation()) > 16) {
                             mouseStateMonitor.setCurrentDraggedLocation(e.getPoint());
@@ -566,22 +605,24 @@ public class AbNDisplayPanel extends JPanel {
         return image;
     }
     
-    private void drawLocationIndicators(Graphics2D g2d, Color color) {
-        g2d.setColor(color);
+    private void drawLocationIndicators(Graphics2D g2d) {
+        Color baseColor = new Color(100, 100, 255);
         
-        Rectangle viewportRegion = viewport.getViewRegion();
+        g2d.setColor(baseColor);
+        
+        if(scrollBarManager.xScrollerPressed()) {
+            g2d.setColor(baseColor.darker());
+        } 
 
-        int xStartPoint = (int)(((double)viewportRegion.x / graph.getWidth()) * getWidth());
-        int xEndPoint = xStartPoint + (int)(((double)viewportRegion.width / graph.getWidth()) * getWidth());
-
-        g2d.fill3DRect(xStartPoint, getHeight() - 20, 2, 20, true);
-        g2d.fill3DRect(xEndPoint - 2, getHeight() - 20, 2, 20, true);
-
-        int yStartPoint = (int)(((double)viewportRegion.y / graph.getHeight()) * getHeight());
-        int yEndPoint = yStartPoint + (int)(((double)viewportRegion.height / graph.getHeight()) * getHeight());
-
-        g2d.fill3DRect(getWidth() - 20, yStartPoint, 20, 2, true);
-        g2d.fill3DRect(getWidth() - 20, yEndPoint - 2, 20, 2, true);
+        g2d.fill(scrollBarManager.getXScrollerBounds());
+        
+        g2d.setColor(baseColor);
+        
+        if(scrollBarManager.yScrollerPressed()) {
+            g2d.setColor(baseColor.darker());
+        }
+        
+        g2d.fill(scrollBarManager.getYScrollerBounds());
     }
 
     private void drawNavigationPipper(Graphics2D g2d) {
@@ -684,16 +725,17 @@ public class AbNDisplayPanel extends JPanel {
     private void updateViewportMovementByMouse(int tick) {
         
         if (mouseStateMonitor.mouseDragging()) {
-            
-            Point currentMousePoint = mouseStateMonitor.getCurrentMouseLocation();
-            Point lastClickedPoint = mouseStateMonitor.getClickedLocation();
-            
-            Point delta = new Point(
-                    (currentMousePoint.x - lastClickedPoint.x) / 5,
-                    (currentMousePoint.y - lastClickedPoint.y) / 5);
+            if (!scrollBarManager.scrollerPressed()) {
+                Point currentMousePoint = mouseStateMonitor.getCurrentMouseLocation();
+                Point lastClickedPoint = mouseStateMonitor.getClickedLocation();
 
-            viewport.moveScaled(delta);
-            
+                Point delta = new Point(
+                        (currentMousePoint.x - lastClickedPoint.x) / 5,
+                        (currentMousePoint.y - lastClickedPoint.y) / 5);
+
+                viewport.moveScaled(delta);
+            }
+
             AbNDisplayPanel.this.requestRedraw();
         }
     }

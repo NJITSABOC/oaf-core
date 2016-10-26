@@ -59,6 +59,13 @@ public class ViewportAutoScroller implements UpdateableAbNDisplayEntity {
         viewport.setLocation(point);
     }
     
+    public void snapToPointCentered(Point point) {
+        int xCentered = point.x - (viewport.getViewRegion().width / 2);
+        int yCentered = point.y - (viewport.getViewRegion().height / 2);
+        
+        this.snapToPoint(new Point(xCentered, yCentered));
+    }
+    
     public void snapToNodeEntry(AbNNodeEntry entry) {
         snapToPoint(getNodeEntryNavigationPoint(entry));
     }

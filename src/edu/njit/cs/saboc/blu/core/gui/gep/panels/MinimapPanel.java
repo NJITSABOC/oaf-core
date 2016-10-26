@@ -26,12 +26,6 @@ public class MinimapPanel extends AbNDisplayWidget {
     
     private double miniMapZoomFactor;
     
-    private Viewport userViewport;
-    
-    private BluGraph graph;
-    
-    private AbNPainter painter;
-    
     private boolean initialized = false;
     
     private final Rectangle viewportBoxBounds = new Rectangle();
@@ -63,18 +57,12 @@ public class MinimapPanel extends AbNDisplayWidget {
     }
     
     public void initialize(AbNDisplayPanel displayPanel) {
-        this.userViewport = displayPanel.getViewport();
-        this.graph = displayPanel.getGraph();
-        this.painter = displayPanel.getAbNPainter();
-        
         this.initialized = true;
         
         this.miniMapZoomFactor = DEFAULT_MINIMAP_ZOOM_FACTOR;
         
-        this.miniMapViewport = new Viewport(graph);
-        this.miniMapViewport.setLocation(new Point(graph.getAbNWidth() / 2, 0));
-        
-        // TODO: Centered location for above...
+        this.miniMapViewport = new Viewport(displayPanel.getGraph());
+        this.miniMapViewport.setLocation(new Point(displayPanel.getGraph().getAbNWidth() / 2, 0));
     }
     
     public boolean initialized() {
@@ -88,8 +76,8 @@ public class MinimapPanel extends AbNDisplayWidget {
             return;
         }
                
-        final int abnRelativeWidth = (int)Math.ceil(graph.getAbNWidth() * miniMapZoomFactor);
-        final int abnRelativeHeight = (int)Math.ceil(graph.getAbNHeight() * miniMapZoomFactor);
+        final int abnRelativeWidth = (int)Math.ceil(getDisplayPanel().getGraph().getAbNWidth() * miniMapZoomFactor);
+        final int abnRelativeHeight = (int)Math.ceil(getDisplayPanel().getGraph().getAbNHeight() * miniMapZoomFactor);
         
         BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
         
@@ -126,7 +114,7 @@ public class MinimapPanel extends AbNDisplayWidget {
         
         final int xDrawOffset = xOffset;
         
-        graph.getContainerEntries().values().forEach((c) -> {
+        getDisplayPanel().getGraph().getContainerEntries().values().forEach((c) -> {
 
             if(miniMapViewport.getViewRegion().intersects(c.getBounds())) {
                 Point location = c.getLocation();
@@ -134,7 +122,7 @@ public class MinimapPanel extends AbNDisplayWidget {
                 Point p = miniMapViewport.getDrawingPoint(location);
                 p.x += xDrawOffset;
                 
-                painter.paintMiniMapContainer(g2d, c, p, miniMapZoomFactor);
+                getDisplayPanel().getAbNPainter().paintMiniMapContainer(g2d, c, p, miniMapZoomFactor);
             }
             
         });
@@ -160,19 +148,20 @@ public class MinimapPanel extends AbNDisplayWidget {
         int x = p.x;
         int y = p.y;
         
-        if ((graph.getAbNWidth() * miniMapZoomFactor) < this.getWidth()) {
-            int xOffset = (this.getWidth() - (int)(graph.getAbNWidth() * miniMapZoomFactor));
+        if ((getDisplayPanel().getGraph().getAbNWidth() * miniMapZoomFactor) < this.getWidth()) {
+            
+            int xOffset = (this.getWidth() - (int)(getDisplayPanel().getGraph().getAbNWidth() * miniMapZoomFactor));
             
             x -= (xOffset / 2);
         }
 
-        Point abnLocationClicked = miniMapViewport.getPointOnGraph(new Point(x, y));
-        
-        userViewport.setLocation(abnLocationClicked);
-        // TODO: Set location centered...
+        getDisplayPanel().getAutoScroller().snapToPointCentered(miniMapViewport.getPointOnGraph(new Point(x, y)));
     }
     
     public void update(int tick) {
+        BluGraph graph = getDisplayPanel().getGraph();
+        Viewport userViewport = getDisplayPanel().getViewport();
+        
         final int abnRelativeWidth = (int)Math.ceil(graph.getAbNWidth() * miniMapZoomFactor);
         final int abnRelativeHeight = (int)Math.ceil(graph.getAbNHeight() * miniMapZoomFactor);
                
@@ -284,7 +273,7 @@ public class MinimapPanel extends AbNDisplayWidget {
                     viewportBoxBounds.x = (int) (currentX * miniMapZoomFactor);
                 }
             } else {
-                viewportBoxBounds.x = (int) ((this.userViewport.getViewRegion().x - this.miniMapViewport.getViewRegion().x) * miniMapZoomFactor);
+                viewportBoxBounds.x = (int) ((userViewport.getViewRegion().x - this.miniMapViewport.getViewRegion().x) * miniMapZoomFactor);
             }
 
             if (viewportBoxBounds.x < 0) {
@@ -305,7 +294,7 @@ public class MinimapPanel extends AbNDisplayWidget {
                     viewportBoxBounds.y = (int) (currentY * miniMapZoomFactor);
                 }
             } else {
-                viewportBoxBounds.y = (int) ((this.userViewport.getViewRegion().y - this.miniMapViewport.getViewRegion().y) * miniMapZoomFactor);
+                viewportBoxBounds.y = (int) ((userViewport.getViewRegion().y - this.miniMapViewport.getViewRegion().y) * miniMapZoomFactor);
             }
             
             if(viewportBoxBounds.y < 0) {

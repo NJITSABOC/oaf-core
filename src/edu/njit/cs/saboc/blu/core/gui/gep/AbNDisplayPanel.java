@@ -152,6 +152,10 @@ public class AbNDisplayPanel extends JPanel {
         return viewport;
     }
     
+    public AbNPainter getAbNPainter() {
+        return painter;
+    }
+    
     public final void addWidget(AbNDisplayWidget widget) {
         widgets.add(widget);
         
@@ -225,7 +229,7 @@ public class AbNDisplayPanel extends JPanel {
     }
     
     public void setZoomFactor(int zoomLevel) {
-        viewport.setZoom(zoomLevel);
+        viewport.setZoomChecked(zoomLevel);
         
         zoomFactorChanged(zoomLevel);
     }
@@ -278,7 +282,7 @@ public class AbNDisplayPanel extends JPanel {
         this.panelState = DisplayState.Loading;
     }
 
-    private void resetUpdateables() {
+    public void resetUpdateables() {
         updateableEntities.forEach( (updateable) -> {
             updateable.initialize(this);
         });

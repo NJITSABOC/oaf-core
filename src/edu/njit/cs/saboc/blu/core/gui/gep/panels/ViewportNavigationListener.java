@@ -18,7 +18,7 @@ public class ViewportNavigationListener implements NavigationPanelListener {
 
     @Override
     public void zoomLevelChanged(int zoomLevel) {
-        displayPanel.getViewport().setZoom(zoomLevel);
+        displayPanel.getViewport().setZoomChecked(zoomLevel);
         displayPanel.requestRedraw();
     }
 

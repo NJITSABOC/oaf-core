@@ -106,6 +106,9 @@ public class AbNExplorationPanel extends JPanel {
         initializer.initializeAbNDisplayPanel(displayPanel);
         initializer.initializeAbNDDashboardPanel(dashboardPanel);
         
+                
+        displayPanel.resetUpdateables();
+        
         config.getUIConfiguration().setDisplayPanel(displayPanel);
     }
 }

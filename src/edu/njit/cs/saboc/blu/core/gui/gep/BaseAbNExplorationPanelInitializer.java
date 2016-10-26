@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.ViewportNavigationListener;
 
@@ -23,6 +24,11 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
         });
         
         displayPanel.addWidget(navigationPanel);
+        
+        
+        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+        
+        displayPanel.addWidget(minimapPanel);
     }
 
     @Override

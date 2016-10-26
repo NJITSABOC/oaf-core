@@ -128,18 +128,10 @@ public class Viewport {
         moveVertical((int)(distance / scale));
     }
     
-    public void setZoom(int percent) {
-        
-        if(percent < 10) {
-            percent = 10;
-        } else if(percent > 200) {
-            percent = 200;
-        }
-        
+    public void forceZoom(int percent) {
         this.zoomLevel = percent;
-
         this.scale = percent / 100.0;
-
+        
         int midPointX = region.x + (region.width / 2);
         int midPointY = region.y + (region.height / 2);
 
@@ -178,6 +170,17 @@ public class Viewport {
         }
     }
     
+    public void setZoomChecked(int percent) {
+        
+        if(percent < 10) {
+            percent = 10;
+        } else if(percent > 200) {
+            percent = 200;
+        }
+        
+        forceZoom(percent);
+    }
+    
     public Point getPointOnGraph(Point clicked) {
         int x = region.x + (int) (clicked.x / scale);
         int y = region.y + (int) (clicked.y / scale);
@@ -186,7 +189,7 @@ public class Viewport {
     }
 
     public void focusOnPoint(int x, int y) {
-        this.setZoom(100);
+        this.setZoomChecked(100);
 
         int xView = x - (region.width / 2);
         int yView = y - (region.height / 2);

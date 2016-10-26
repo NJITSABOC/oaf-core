@@ -118,4 +118,10 @@ public class AbNPainter {
 
         g2d.setStroke(savedStroke);
     }
+
+    public void paintMiniMapContainer(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
+        g2d.setPaint(entry.getBackground());
+        
+        g2d.fillRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
+    }
 }

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -24,6 +25,29 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         
         this.sourceTAN = sourceTAN;
         this.minBound = minBound;
+    }
+    
+    public ExpandedClusterTribalAbstractionNetwork createExpandedTAN(AggregateCluster cluster) {
+        
+        AggregateTANGenerator generator = new AggregateTANGenerator();
+        
+        return generator.createExpandedSubtaxonomy(this, 
+                cluster,
+                new TribalAbstractionNetworkGenerator());
+    }
+    
+    @Override
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
+        
+        AggregateTANGenerator generator = new AggregateTANGenerator();
+        
+        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregatePAreaTaxonomy(
+            this.getSourceTAN(), 
+            new TribalAbstractionNetworkGenerator(),
+            new AggregateAbNGenerator<>(),
+            smallestNode);
+
+        return aggregateTAN;
     }
     
     public ClusterTribalAbstractionNetwork getSourceTAN() {

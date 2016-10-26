@@ -3,6 +3,11 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePAreaTaxonomyGenerator;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -12,7 +17,8 @@ import java.util.Set;
  *
  * @author Chris
  */
-public class ClusterTribalAbstractionNetwork<T extends Cluster> extends PartitionedAbstractionNetwork<T, Band> {
+public class ClusterTribalAbstractionNetwork<T extends Cluster> extends PartitionedAbstractionNetwork<T, Band> 
+        implements AggregateableAbstractionNetwork<ClusterTribalAbstractionNetwork<T>>{
     
     private boolean isAggregated = false;
     
@@ -101,6 +107,18 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         AncestorSubTAN subTAN = new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
         
         return subTAN;
+    }
+
+    @Override
+    public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode) {
+        AggregateTANGenerator generator = new AggregateTANGenerator();
+        
+        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregatePAreaTaxonomy(this, 
+            new TribalAbstractionNetworkGenerator(),
+            new AggregateAbNGenerator<>(),
+            smallestNode);
+
+        return aggregateTAN;
     }
     
     public void setAggregated(boolean isAggregated) {

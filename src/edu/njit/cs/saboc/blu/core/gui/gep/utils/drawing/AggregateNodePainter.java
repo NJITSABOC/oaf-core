@@ -13,11 +13,10 @@ import java.awt.Stroke;
  *
  * @author Chris O
  */
-public class ReducedAbNPainter extends AbNPainter {
+public class AggregateNodePainter {
+    private static final int EDGE_RADIUS = 24;
     
-    private final int EDGE_RADIUS = 24;
-    
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry nodeEntry, Point p, double scale) {
+    public static void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry nodeEntry, Point p, double scale) {
         
         AggregateNode aggregateGroup = (AggregateNode)(nodeEntry.getNode());
         
@@ -54,7 +53,12 @@ public class ReducedAbNPainter extends AbNPainter {
         if (aggregateGroup.getAggregatedNodes().isEmpty()) {
             g2d.fillRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale));
         } else {
-            g2d.fillRoundRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
+            g2d.fillRoundRect(p.x, 
+                    p.y, 
+                    (int) (nodeEntry.getWidth() * scale), 
+                    (int) (nodeEntry.getHeight() * scale), 
+                    AggregateNodePainter.EDGE_RADIUS, 
+                    AggregateNodePainter.EDGE_RADIUS);
         }
         
         Stroke savedStroke = g2d.getStroke();
@@ -79,7 +83,12 @@ public class ReducedAbNPainter extends AbNPainter {
         if (aggregateGroup.getAggregatedNodes().isEmpty()) {
             g2d.drawRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale));
         } else {
-            g2d.drawRoundRect(p.x, p.y, (int) (nodeEntry.getWidth() * scale), (int) (nodeEntry.getHeight() * scale), EDGE_RADIUS, EDGE_RADIUS);
+            g2d.drawRoundRect(p.x, 
+                    p.y, 
+                    (int) (nodeEntry.getWidth() * scale), 
+                    (int) (nodeEntry.getHeight() * scale), 
+                    AggregateNodePainter.EDGE_RADIUS, 
+                    AggregateNodePainter.EDGE_RADIUS);
         }
 
         g2d.setStroke(savedStroke);

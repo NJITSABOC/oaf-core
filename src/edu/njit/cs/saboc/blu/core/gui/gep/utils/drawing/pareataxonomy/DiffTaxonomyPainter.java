@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.pareataxonomy.diff;
+package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;

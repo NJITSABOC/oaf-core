@@ -45,7 +45,7 @@ public class AggregateAbNGenerator <
         });
         
         Queue<NODE_T> queue = new LinkedList<>();
-        queue.add(sourceHierarchy.getRoot());
+        queue.addAll(sourceHierarchy.getRoots());
         
         while(!queue.isEmpty()) {
             

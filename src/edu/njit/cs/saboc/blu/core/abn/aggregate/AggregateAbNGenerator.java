@@ -26,7 +26,7 @@ public class AggregateAbNGenerator <
         HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
         
         Set<NODE_T> remainingNodes = new HashSet<>();
-        remainingNodes.addAll(sourceHierarchy.getRoots()); // The root parea is always included
+        remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
         
         HashMap<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         

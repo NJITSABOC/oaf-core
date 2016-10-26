@@ -14,6 +14,8 @@ import java.util.Set;
  */
 public class ClusterTribalAbstractionNetwork<T extends Cluster> extends PartitionedAbstractionNetwork<T, Band> {
     
+    private boolean isAggregated = false;
+    
     public ClusterTribalAbstractionNetwork(
             BandTribalAbstractionNetwork bandTan,
             Hierarchy<T> clusterHierarchy,
@@ -22,6 +24,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         super(bandTan, clusterHierarchy, sourceHierarchy);
     }
     
+
     public BandTribalAbstractionNetwork getBandTAN() {
         return (BandTribalAbstractionNetwork)super.getBaseAbstractionNetwork();
     }
@@ -99,4 +102,13 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         
         return subTAN;
     }
+    
+    public void setAggregated(boolean isAggregated) {
+        this.isAggregated = isAggregated;
+    }
+    
+    public boolean isAggregated() {
+        return isAggregated;
+    }
+    
 }

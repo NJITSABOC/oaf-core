@@ -30,7 +30,6 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> {
     public PAreaTaxonomy getSourceTaxonomy() {
         return sourceTaxonomy;
     }
-
     
     public int getMinBound() {
         return minBound;
@@ -42,7 +41,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> {
         return generator.createExpandedSubtaxonomy(this, parea, new PAreaTaxonomyGenerator());
     }
     
-        @Override
+    @Override
     public PAreaTaxonomy getAggregated(int smallestNode) {
         
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();

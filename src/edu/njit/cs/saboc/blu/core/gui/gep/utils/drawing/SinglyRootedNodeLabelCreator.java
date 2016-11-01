@@ -15,5 +15,4 @@ public class SinglyRootedNodeLabelCreator<T extends SinglyRootedNode> {
     public String getCountStr(T node) {
         return String.format("(%d)", node.getConceptCount());
     }
-    
 }

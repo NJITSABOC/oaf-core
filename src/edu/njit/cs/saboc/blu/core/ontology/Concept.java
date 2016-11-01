@@ -17,6 +17,12 @@ public abstract class Concept<ID_T> {
    
     public abstract String getIDAsString();
     
+    public String toString() {
+        return String.format("%s (%s)", 
+                getName(),
+                getIDAsString());
+    }
+    
     public final ID_T getID() {
         return id;
     }

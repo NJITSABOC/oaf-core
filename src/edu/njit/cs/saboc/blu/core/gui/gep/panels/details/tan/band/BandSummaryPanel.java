@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
@@ -20,8 +19,12 @@ public class BandSummaryPanel extends NodeSummaryPanel<Band> {
     private final ConceptList bandTribesList;
     
     public BandSummaryPanel(TANConfiguration config) {
+        this(config, new BandSummaryTextFactory(config));
+    }
+    
+    public BandSummaryPanel(TANConfiguration config, BandSummaryTextFactory textFactory) {
         
-        super(new BandSummaryTextFactory(config));
+        super(textFactory);
 
         this.bandTribesList = new ConceptList(config, new BandPatriarchTableModel(config)) {
 

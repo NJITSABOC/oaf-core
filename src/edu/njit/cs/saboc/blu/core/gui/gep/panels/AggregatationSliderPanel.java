@@ -117,6 +117,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             }
         }
         
+        bound = Math.min(bound, 100);
+        
         aggregationSlider.setMaximum(bound);
     }
 

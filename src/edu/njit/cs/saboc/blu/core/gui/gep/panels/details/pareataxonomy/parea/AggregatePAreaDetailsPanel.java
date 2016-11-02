@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeConceptList;

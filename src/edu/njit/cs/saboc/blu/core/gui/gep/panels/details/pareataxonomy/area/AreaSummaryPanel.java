@@ -1,8 +1,9 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import java.awt.Dimension;
 import java.util.ArrayList;

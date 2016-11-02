@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
@@ -22,7 +21,11 @@ public class ClusterSummaryPanel extends NodeSummaryPanel<Cluster> {
     private final ConceptList patriarchList;
     
     public ClusterSummaryPanel(TANConfiguration config) {
-        super(new ClusterSummaryTextFactory(config));
+        this(config, new ClusterSummaryTextFactory(config));
+    }
+    
+    public ClusterSummaryPanel(TANConfiguration config, ClusterSummaryTextFactory textFactory) {
+        super(textFactory);
         
         this.config = config;
         

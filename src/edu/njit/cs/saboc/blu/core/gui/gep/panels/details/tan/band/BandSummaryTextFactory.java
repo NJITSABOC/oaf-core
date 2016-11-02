@@ -20,6 +20,10 @@ public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
         this.config = config;
     }
     
+    public TANConfiguration getConfiguration() {
+        return config;
+    }
+    
     @Override
     public String createNodeSummaryText(Band band) {
         String bandName = band.getName();

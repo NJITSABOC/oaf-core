@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
@@ -9,11 +8,13 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIC
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.AreaPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.ChildPAreaTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.ParentPAreaTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AggregateAreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.AggregatePAreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ChildPAreaTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaTaxonomyDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ParentPAreaTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyTableModel;
 
 /**
@@ -47,7 +48,11 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
 
     @Override
     public NodeDashboardPanel createContainerDetailsPanel() {
-        return new AreaPanel(config);
+        if(config.getPAreaTaxonomy().isAggregated()) {
+            return new AggregateAreaPanel(config);
+        } else {
+            return new AreaPanel(config);
+        }
     }
 
     @Override
@@ -62,7 +67,11 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
 
     @Override
     public NodeDashboardPanel createGroupDetailsPanel() {
-        return new PAreaPanel(config);
+        if(config.getPAreaTaxonomy().isAggregated()) {
+            return new AggregatePAreaPanel(config);
+        } else {
+            return new PAreaPanel(config);
+        }
     }
     
     public OAFAbstractTableModel<InheritableProperty> getPropertyTableModel(boolean forArea) {

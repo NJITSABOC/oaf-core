@@ -19,6 +19,10 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory<Cluster
     public ClusterSummaryTextFactory(TANConfiguration config) {
         this.config = config;
     }
+    
+    public TANConfiguration getConfiguration() {
+        return config;
+    }
 
     @Override
     public String createNodeSummaryText(Cluster cluster) {

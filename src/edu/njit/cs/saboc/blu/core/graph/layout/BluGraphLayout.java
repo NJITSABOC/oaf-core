@@ -26,7 +26,7 @@ public abstract class BluGraphLayout {
 
     private final BluGraph graph;
 
-    private final ArrayList<PartitionedNode> layoutContainers = new ArrayList<>();
+    private final ArrayList<PartitionedNode> partitionedNodesInLayout = new ArrayList<>();
 
     private final ArrayList<GraphLevel> levels = new ArrayList<>();
 
@@ -34,13 +34,12 @@ public abstract class BluGraphLayout {
 
     private final Map<PartitionedNode, PartitionedNodeEntry> containerEntries = new HashMap<>();
 
-    private final Map<SinglyRootedNode, SinglyRootedNodeEntry> groupEntries = new HashMap<>();
+    private final Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = new HashMap<>();
 
     protected BluGraphLayout(BluGraph graph) {
         this.graph = graph;
     }
 
-    
     public ArrayList<GraphLevel> getGraphLevels() {
         return levels;
     }
@@ -54,12 +53,12 @@ public abstract class BluGraphLayout {
     }
     
     protected void setLayoutGroupContainers(ArrayList<PartitionedNode> containers) {
-        layoutContainers.clear();
-        layoutContainers.addAll(containers);
+        partitionedNodesInLayout.clear();
+        partitionedNodesInLayout.addAll(containers);
     }
     
     public ArrayList<PartitionedNode> getLayoutContainers() {
-        return layoutContainers;
+        return partitionedNodesInLayout;
     }
     
     public Map<PartitionedNode, PartitionedNodeEntry> getContainerEntries() {
@@ -67,7 +66,7 @@ public abstract class BluGraphLayout {
     }
     
     public Map<SinglyRootedNode, SinglyRootedNodeEntry> getGroupEntries() {
-        return groupEntries;
+        return nodeEntries;
     }
 
     protected PartitionedNodeEntry getConainterAt(int level, int areaX) {
@@ -94,6 +93,9 @@ public abstract class BluGraphLayout {
         levels.add(l);
     }
 
+    private final int GRAPH_LANE_XOFFSET = -1;
+    private final int GRAPH_LANE_YOFFSET = -1;
+    
     /**
      * This method creates and returns an arraylist of lanes creating a column above a given y coordinate.
      * @param y The vertical coordinate (in pixels) of the lower edge of the row.
@@ -107,7 +109,7 @@ public abstract class BluGraphLayout {
         ArrayList<GraphLane> result = new ArrayList<>();
 
         while (spaceUsed + laneHeight <= height) {
-            result.add(new GraphLane(-1, y, laneHeight, parent));
+            result.add(new GraphLane(GRAPH_LANE_XOFFSET, y, laneHeight, parent));
             y = y - laneHeight;
             spaceUsed += laneHeight;
         }
@@ -125,10 +127,10 @@ public abstract class BluGraphLayout {
     protected ArrayList<GraphLane> generateColumnLanes(int x, int width, int laneWidth, PartitionedNodeEntry parent) {
         int spaceUsed = 0;
 
-        ArrayList<GraphLane> result = new ArrayList<GraphLane>();
+        ArrayList<GraphLane> result = new ArrayList<>();
 
         while (spaceUsed + laneWidth <= width) {
-            result.add(new GraphLane(x, -1, laneWidth, parent));
+            result.add(new GraphLane(x, GRAPH_LANE_YOFFSET, laneWidth, parent));
             x = x - laneWidth;
             spaceUsed += laneWidth;
         }
@@ -144,8 +146,12 @@ public abstract class BluGraphLayout {
      */
     protected void addColumn(int x, int y, ArrayList<GraphLane> col) {
         
+        final int DEFAULT_COL_COUNT = 50;
+        final double INCREASE_SIZE = 1.5;
+        
         if(x >= columns.length) {
-             ArrayList<GraphLane>[][] columnsCopy = new ArrayList[(int)(x * 1.5)][];
+            // TODO: replace this with array lists
+             ArrayList<GraphLane>[][] columnsCopy = new ArrayList[(int)(x * INCREASE_SIZE)][];
              
              for(int c = 0; c < columns.length; c++) {
                  columnsCopy[c] = columns[c];
@@ -155,11 +161,11 @@ public abstract class BluGraphLayout {
         }
         
         if(columns[x] == null) {
-            columns[x] = new ArrayList[50];
+            columns[x] = new ArrayList[DEFAULT_COL_COUNT];
         }
         
         if(y >= columns[x].length) {
-            ArrayList<GraphLane>[] rowCopy = new ArrayList[(int)(y * 1.5)];
+            ArrayList<GraphLane>[] rowCopy = new ArrayList[(int)(y * INCREASE_SIZE)];
             
             for(int c = 0; c < columns[x].length; c++) {
                 rowCopy[c] = columns[x][c];
@@ -196,35 +202,41 @@ public abstract class BluGraphLayout {
      * @param road The ArrayList of GraphLane objects that make up the row currently.
      * @param level The level of the pArea row that is being resized.
      * @param newLanes The number of new lanes to create.
-     * @param pArea A pArea below the row being resized.
+     * @param nodeEntry A pArea below the row being resized.
      * @return The resized road.
      */
-    public ArrayList<GraphLane> resizeGroupRow(ArrayList<GraphLane> road, int level, int newLanes, SinglyRootedNodeEntry group) {
+    public ArrayList<GraphLane> resizeGroupRow(ArrayList<GraphLane> road, int level, int newLanes, SinglyRootedNodeEntry nodeEntry) {
+        
         int laneHeight = road.get(0).getSize();
         int bump = laneHeight * newLanes;
         int lowerBound = road.get(road.size() - 1).getPosY() - laneHeight;
 
         // Add new lanes
-        road.addAll(road.size(), generateUpperRowLanes(lowerBound, bump, laneHeight, group.getGroupLevelParent().getParentPartition().getParentContainer()));
-        group.getGroupLevelParent().setRowAbove(road);
+        road.addAll(road.size(), 
+                generateUpperRowLanes(lowerBound, 
+                        bump, 
+                        laneHeight, 
+                        nodeEntry.getGroupLevelParent().getParentPartition().getParentContainer()));
+        
+        nodeEntry.getGroupLevelParent().setRowAbove(road);
 
         int s = 0;
-        int pAreaLevel = group.getGroupLevelParent().getGroupLevelY();
+        int pAreaLevel = nodeEntry.getGroupLevelParent().getGroupLevelY();
         GraphGroupLevel l;
         SinglyRootedNodeEntry p;
 
-        PartitionedNodeEntry parentContainer = group.getParentContainer();
+        PartitionedNodeEntry parentContainer = nodeEntry.getParentContainer();
 
-        // If the area is now the tallest area in the level, bump down the areas below it.
+        // If the partition entry is now the tallest area in the level, bump down the areas below it.
         if (parentContainer.getHeight() + bump > parentContainer.getParentLevel().getHeight()) {
+            
             bumpDownContainersAt(parentContainer.getParentLevel().getLevelY() + 1, bump / 2);
         }
 
         resizeBox(parentContainer, parentContainer.getWidth(), parentContainer.getHeight() + bump);
 
-        // Resize the regions and bump down any necessary pAreas.
+        // Resize the regions and bump down any necessary nodes.
         for (GenericPartitionEntry r : parentContainer.getContainerPartitions()) {
-
             resizeBox(r, r.getWidth(), r.getHeight() + bump);
 
             for (int n = pAreaLevel; n < r.getGroupLevels().size(); n++) {
@@ -233,6 +245,7 @@ public abstract class BluGraphLayout {
             }
 
             JPanel[] pBelow = new JPanel[s];
+            
             int i2 = 0;
 
             for (int n = pAreaLevel; n < r.getGroupLevels().size(); n++) {
@@ -257,18 +270,20 @@ public abstract class BluGraphLayout {
      * Resize a pArea column (the columns between pAreas inside an area) to add more lanes and redraw the edges.
      * @param road The ArrayList of GraphLane objects that make up the column currently.
      * @param newLanes The number of new lanes to create.
-     * @param pArea A pArea below the row being resized.
+     * @param nodeEntry A pArea below the row being resized.
      * @return The resized road.
      */
-    public ArrayList<GraphLane> resizeGroupColumn(ArrayList<GraphLane> road,
-            int newLanes, SinglyRootedNodeEntry groupEntry) {
+    public ArrayList<GraphLane> resizeGroupColumn(
+            ArrayList<GraphLane> road,
+            int newLanes, 
+            SinglyRootedNodeEntry nodeEntry) {
         
         int laneWidth = road.get(0).getSize();
         int bump = laneWidth * newLanes;
         int rightBound = road.get(road.size() - 1).getPosX() - laneWidth;
 
-        PartitionedNodeEntry parentContainer = groupEntry.getParentContainer();
-        GenericPartitionEntry parentPartition = groupEntry.getParentPartition();
+        PartitionedNodeEntry parentContainer = nodeEntry.getParentContainer();
+        GenericPartitionEntry parentPartition = nodeEntry.getParentPartition();
 
         road.addAll(road.size(), generateColumnLanes(rightBound, bump, laneWidth, parentContainer));
 
@@ -286,7 +301,7 @@ public abstract class BluGraphLayout {
         ArrayList<JPanel> groupsTemp = new ArrayList<>();
 
         for (GraphGroupLevel pL : parentPartition.getGroupLevels()) {
-            for (int i = groupEntry.getGroupX(); i < pL.getGroupEntries().size(); i++) {
+            for (int i = nodeEntry.getGroupX(); i < pL.getGroupEntries().size(); i++) {
                 groupsTemp.add((JPanel) pL.getGroupEntries().get(i));
             }
         }
@@ -312,7 +327,7 @@ public abstract class BluGraphLayout {
      * Resizes a column between areas, adding new lanes, and returns the updated one.
      * @param road The ArrayList of GraphLane objects that make up the column currently.
      * @param newLanes The number of new lanes to create.
-     * @param area The area to the right of the column being resized.
+     * @param containerEntry The area to the right of the column being resized.
      * @return The resized road.
      */
     public ArrayList<GraphLane> resizeColumn(ArrayList<GraphLane> road, int newLanes, PartitionedNodeEntry containerEntry) {
@@ -506,16 +521,19 @@ public abstract class BluGraphLayout {
      * @param y The amount to move the JPanel vertically.
      */
     public void moveBox(JPanel j, int x, int y) {
+                
+        final int MOVE_OFFSET = 40;
+        
         if (j != null) {
             j.setLocation(j.getX() + x, j.getY() + y);
 
-            if (j.getX() + j.getWidth() > graph.getWidth() - 40) {
-                graph.setGraphWidth(j.getX() + j.getWidth() + 40);
+            if (j.getX() + j.getWidth() > graph.getWidth() - MOVE_OFFSET) {
+                graph.setGraphWidth(j.getX() + j.getWidth() + MOVE_OFFSET);
                 graph.updateSize();
             }
 
-            if (j.getY() + j.getHeight() > graph.getHeight() - 40) {
-                graph.setGraphHeight(j.getY() + j.getHeight() + 40);
+            if (j.getY() + j.getHeight() > graph.getHeight() - MOVE_OFFSET) {
+                graph.setGraphHeight(j.getY() + j.getHeight() + MOVE_OFFSET);
                 graph.updateSize();
             }
         }

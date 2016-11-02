@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -8,7 +9,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> {
+public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> 
+        implements AggregateAbstractionNetwork<PAreaTaxonomy> {
 
     private final PAreaTaxonomy sourceTaxonomy;
     
@@ -27,11 +29,11 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> {
         this.minBound = minBound;
     }
     
-    public PAreaTaxonomy getSourceTaxonomy() {
+    public PAreaTaxonomy getSource() {
         return sourceTaxonomy;
     }
     
-    public int getMinBound() {
+    public int getBound() {
         return minBound;
     }
     
@@ -47,7 +49,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> {
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
         
         PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(
-            this.getSourceTaxonomy(), 
+                this.getSource(), 
             new PAreaTaxonomyGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);

@@ -67,7 +67,10 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy<T> subtaxonomy = generator.createTaxonomyFromPAreas(getPAreaTaxonomyFactory(), subhierarchy);
+        PAreaTaxonomy<T> subtaxonomy = generator.createTaxonomyFromPAreas(
+                getPAreaTaxonomyFactory(), 
+                subhierarchy,
+                this.getSourceHierarchy());
         
         RootSubtaxonomy rootSubtaxonomy = new RootSubtaxonomy(
                 this, 
@@ -87,7 +90,10 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy<T> taxonomy = generator.createTaxonomyFromPAreas(getPAreaTaxonomyFactory(), subhierarchy);
+        PAreaTaxonomy<T> taxonomy = generator.createTaxonomyFromPAreas(
+                getPAreaTaxonomyFactory(), 
+                subhierarchy,
+                this.getSourceHierarchy());
         
         AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(this, 
                 source, 

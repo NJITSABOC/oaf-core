@@ -2,9 +2,6 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -22,25 +19,18 @@ public class AggregateTargetAbNGenerator {
             return sourceTargetAbN;
         }
         
-        Set<Concept> roots = new HashSet<>();
-        
-        Set<TargetGroup> rootGroups = sourceTargetAbN.getTargetGroupHierarchy().getRoots();
-        
-        rootGroups.forEach( (group) -> {
-            roots.add(group.getRoot());
-        });
-        
         Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
                         new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
+                        sourceTargetAbN.getSourceHierarchy(),
                         minGroupSize);
         
         Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
         
-        TargetAbstractionNetwork tan = new AggregateTargetAbN(sourceTargetAbN, minGroupSize, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
+        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, minGroupSize, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
 
-        tan.setAggregated(true);
+        targetAbN.setAggregated(true);
         
-        return tan;
+        return targetAbN;
     }
 }

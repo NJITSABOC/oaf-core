@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
  */
 public class AggregateTANGenerator {
 
-    public ClusterTribalAbstractionNetwork createAggregatePAreaTaxonomy(
+    public ClusterTribalAbstractionNetwork createAggregateTAN(
             final ClusterTribalAbstractionNetwork sourceTAN,
             final TribalAbstractionNetworkGenerator generator,
             final AggregateAbNGenerator<Cluster, AggregateCluster> aggregateGenerator,
@@ -23,11 +23,15 @@ public class AggregateTANGenerator {
                 aggregateGenerator.createReducedAbN(
                         new AggregateTANFactory(),
                         sourceTAN.getClusterHierarchy(),
+                        sourceTAN.getSourceHierarchy(),
                         min);
 
         Hierarchy<Cluster> clusterHierarchy = (Hierarchy<Cluster>) (Hierarchy<?>) aggregateClusterHierarchy;
 
-        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(clusterHierarchy, sourceTAN.getSourceFactory());
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(
+                clusterHierarchy, 
+                sourceTAN.getSourceHierarchy(),
+                sourceTAN.getSourceFactory());
 
         AggregateClusterTribalAbstractionNetwork aggregateTaxonomy = new AggregateClusterTribalAbstractionNetwork(
                 sourceTAN,
@@ -41,13 +45,14 @@ public class AggregateTANGenerator {
         return aggregateTaxonomy;
     }
 
-    public ExpandedClusterTribalAbstractionNetwork createExpandedSubtaxonomy(
+    public ExpandedClusterTribalAbstractionNetwork createExpandedTAN(
             AggregateClusterTribalAbstractionNetwork sourceAggregateTAN,
             AggregateCluster aggregateCluster,
             TribalAbstractionNetworkGenerator generator) {
 
         ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(
                 aggregateCluster.getAggregatedHierarchy(), 
+                sourceAggregateTAN.getSourceHierarchy(),
                 sourceAggregateTAN.getSourceFactory());
 
         ExpandedClusterTribalAbstractionNetwork expandedTAN = new ExpandedClusterTribalAbstractionNetwork(

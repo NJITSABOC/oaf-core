@@ -5,9 +5,6 @@ import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePAreaTaxonomyGenerator;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -89,7 +86,10 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
         
-        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy, this.getSourceFactory());
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(
+                subhierarchy, 
+                this.getSourceHierarchy(),
+                this.getSourceFactory());
         
         RootSubTAN subTAN = new RootSubTAN(this, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
                 
@@ -102,7 +102,10 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
 
-        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(subhierarchy, this.getSourceFactory());
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(
+                subhierarchy, 
+                this.getSourceHierarchy(),
+                this.getSourceFactory());
         
         AncestorSubTAN subTAN = new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
         
@@ -113,7 +116,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode) {
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
-        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregatePAreaTaxonomy(this, 
+        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregateTAN(this, 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);

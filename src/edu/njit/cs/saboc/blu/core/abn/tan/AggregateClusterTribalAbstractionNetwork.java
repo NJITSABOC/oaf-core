@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -8,7 +9,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstractionNetwork<AggregateCluster> {
+public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstractionNetwork<AggregateCluster> 
+        implements AggregateAbstractionNetwork<ClusterTribalAbstractionNetwork> {
     
     private final ClusterTribalAbstractionNetwork sourceTAN;
     
@@ -31,7 +33,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
-        return generator.createExpandedSubtaxonomy(this, 
+        return generator.createExpandedTAN(this, 
                 cluster,
                 new TribalAbstractionNetworkGenerator());
     }
@@ -41,8 +43,8 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
-        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregatePAreaTaxonomy(
-            this.getSourceTAN(), 
+        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregateTAN(
+            this.getSource(), 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);
@@ -50,11 +52,11 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         return aggregateTAN;
     }
     
-    public ClusterTribalAbstractionNetwork getSourceTAN() {
+    public ClusterTribalAbstractionNetwork getSource() {
         return sourceTAN;
     }
     
-    public int getMinBound() {
+    public int getBound() {
         return minBound;
     }
 }

@@ -132,6 +132,10 @@ public class Hierarchy<T> {
         return baseGraph.getNodes().size();
     }
     
+    public void addNode(T node) {
+        baseGraph.addNode(node);
+    }
+    
     /**
      * Adds an IS A relationship between from and to. e.g., from IS A to.
      * 
@@ -169,7 +173,14 @@ public class Hierarchy<T> {
      * @param hierarchy 
      */
     public void addAllHierarchicalRelationships(Hierarchy<T> hierarchy) {
-        hierarchy.getEdges().forEach( (edge) -> {
+        
+        Set<Edge<T>> otherEdges = hierarchy.getEdges();
+        
+        hierarchy.getNodes().forEach( (node) -> {
+            addNode(node);
+        });
+                
+        otherEdges.forEach( (edge) -> {
             addEdge(edge);
         });
     }

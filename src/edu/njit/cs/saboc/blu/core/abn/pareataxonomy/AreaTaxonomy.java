@@ -102,5 +102,14 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
                 this.getSourceHierarchy(), 
                 (Set<PartitionedNode>)(Set<?>)this.getAreas());
     }
-
+    
+    public Set<InheritableProperty> getPropertiesInTaxonomy() {
+        Set<InheritableProperty> allProperties = new HashSet<>();
+        
+        getAreas().forEach( (area) -> {
+            allProperties.addAll(area.getRelationships());
+        });
+        
+        return allProperties;
+    }
 }

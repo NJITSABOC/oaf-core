@@ -116,6 +116,15 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     public boolean isAggregated() {
         return isAggregated;
     }
+    
+    public PAreaTaxonomy getRelationshipSubtaxonomy(Set<InheritableProperty> allowedRelTypes) {
+        PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
+        PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
+                this,
+                allowedRelTypes);
+
+        return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
+    }
 
     @Override
     public PAreaTaxonomy getAggregated(int smallestNode) {

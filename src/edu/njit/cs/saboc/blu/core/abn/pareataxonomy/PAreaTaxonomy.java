@@ -117,21 +117,25 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
         return isAggregated;
     }
     
+    public Set<InheritableProperty> getPropertiesInTaxonomy() {
+        return this.getAreaTaxonomy().getPropertiesInTaxonomy();
+    }
+    
     public PAreaTaxonomy getRelationshipSubtaxonomy(Set<InheritableProperty> allowedRelTypes) {
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
                 this,
                 allowedRelTypes);
-
+        
         return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
     }
 
     @Override
     public PAreaTaxonomy getAggregated(int smallestNode) {
-        
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
-        
-        PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(this, 
+
+        PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(
+            this, 
             new PAreaTaxonomyGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);

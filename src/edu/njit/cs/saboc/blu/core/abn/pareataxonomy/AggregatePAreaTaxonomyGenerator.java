@@ -25,7 +25,7 @@ public class AggregatePAreaTaxonomyGenerator {
                         sourceTaxonomy.getPAreaHierarchy(), 
                         sourceTaxonomy.getSourceHierarchy(),
                         min);
-        
+
         Hierarchy<PArea> pareaHierarchy = (Hierarchy<PArea>)(Hierarchy<?>)reducedPAreaHierarchy;
 
         PAreaTaxonomy taxonomy = generator.createTaxonomyFromPAreas(

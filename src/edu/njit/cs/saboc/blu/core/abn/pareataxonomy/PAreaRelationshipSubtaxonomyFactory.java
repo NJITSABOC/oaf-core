@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,7 +17,7 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
     public PAreaRelationshipSubtaxonomyFactory(
             PAreaTaxonomy baseTaxonomy, 
             Set<InheritableProperty> allowedTypes) {
-        
+
         this.baseTaxonomy = baseTaxonomy;
         this.allowedRels = allowedTypes;
     }
@@ -24,7 +25,7 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
     public AreaTaxonomy createAreaTaxonomy(
             Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
-        
+
         return baseTaxonomy.getPAreaTaxonomyFactory().createAreaTaxonomy(areaHierarchy, sourceHierarchy);
     }
     
@@ -32,15 +33,15 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
             AreaTaxonomy areaTaxonomy,
             Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
-        
+
         return new RelationshipSubtaxonomy(baseTaxonomy, allowedRels, areaTaxonomy, pareaHierarchy, conceptHierarchy);
     }
     
     public Set<InheritableProperty> getRelationships(Concept c) {
-        Set<InheritableProperty> allRels = baseTaxonomy.getPAreaTaxonomyFactory().getRelationships(c);
+        Set<InheritableProperty> allRels = new HashSet<>(baseTaxonomy.getPAreaTaxonomyFactory().getRelationships(c));
         
         allRels.retainAll(allowedRels);
-        
+
         return allRels;
     }
 }

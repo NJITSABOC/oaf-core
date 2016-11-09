@@ -33,15 +33,12 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
     private final JButton derivationButton;
     
     public RelationshipSubtaxonomyDerivationPanel(
-            PAreaTaxonomyConfiguration config,
             RelationshipSubtaxonomyDerivationAction derivationAction) {
         
         super(new BorderLayout());
         
         this.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.BLACK), 
-                    String.format("Select %s to Use in Derivation", 
-                        config.getTextConfiguration().getPropertyTypeName(true))));
+                BorderFactory.createLineBorder(Color.BLACK), "Select [Inheritable Property] to Use in Derivation"));
         
         this.propertyBoxes = new ArrayList<>();
         this.availableProperties = new ArrayList<>();
@@ -98,22 +95,28 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         return propertyDetails;
     }
     
-    public void initialize(PAreaTaxonomy taxonomy) {
-        ArrayList<InheritableProperty> availableProperties = new ArrayList<>(
-                taxonomy.getAreaTaxonomy().getPropertiesInTaxonomy());
+    public void initialize(PAreaTaxonomyConfiguration config, PAreaTaxonomy taxonomy) {
+
+        this.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.BLACK),
+                String.format("Select %s to Use in Derivation",
+                        config.getTextConfiguration().getPropertyTypeName(true))));
         
-        availableProperties.sort( (a, b) -> {
+        ArrayList<InheritableProperty> taxonomyAvailableProperties = new ArrayList<>(
+                taxonomy.getPropertiesInTaxonomy());
+        
+        taxonomyAvailableProperties.sort( (a, b) -> {
             return a.getName().compareToIgnoreCase(b.getName());
         });
         
         propertyBoxes.clear();
         
         this.availableProperties.clear();
-        availableProperties.addAll(availableProperties);
+        availableProperties.addAll(taxonomyAvailableProperties);
         
         propertyListPanel.removeAll();
         
-        availableProperties.forEach((property) -> {
+        taxonomyAvailableProperties.forEach((property) -> {
             String propertyName = property.getName();
 
             JCheckBox chkSelectProperty = new JCheckBox(propertyName);
@@ -128,8 +131,8 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         propertyListPanel.repaint();
     }
     
-    public void initializeSubtaxonomy(RelationshipSubtaxonomy taxonomy) {
-        initialize(taxonomy.getSourceTaxonomy());
+    public void initializeSubtaxonomy(PAreaTaxonomyConfiguration config, RelationshipSubtaxonomy taxonomy) {
+        initialize(config, taxonomy.getSourceTaxonomy());
         
         Set<InheritableProperty> usedProperties = taxonomy.getAllowedProperties();
                 

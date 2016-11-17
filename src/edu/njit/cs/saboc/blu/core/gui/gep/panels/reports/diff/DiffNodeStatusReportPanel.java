@@ -16,6 +16,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.diff.DiffNodeSta
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -100,14 +101,14 @@ public class DiffNodeStatusReportPanel extends AbNReportPanel<AbstractionNetwork
 
         Map<ChangeState, Set<SinglyRootedNode>> diffNodesByType = new HashMap<>();
         
+        Arrays.asList(ChangeState.values()).forEach( (state) -> {
+            diffNodesByType.put(state, new HashSet<>());
+        });
+        
         abn.getNodes().forEach( (node) -> {
             DiffNodeInstance diffNode = (DiffNodeInstance)node;
             
             ChangeState changeState = diffNode.getDiffNode().getChangeDetails().getNodeState();
-
-            if (!diffNodesByType.containsKey(changeState)) {
-                diffNodesByType.put(changeState, new HashSet<>());
-            }
             
             diffNodesByType.get(changeState).add(node);
         });

@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkInstance;
-import edu.njit.cs.saboc.blu.core.abn.diff.OntologyDifferences;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyChanges;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
@@ -13,14 +13,14 @@ public class DiffAreaTaxonomy extends AreaTaxonomy<DiffArea> implements DiffAbst
     
     private final DiffPAreaTaxonomyFactory diffFactory;
     
-    private final OntologyDifferences ontDifferences;
+    private final InheritablePropertyChanges ontDifferences;
     
     private final AreaTaxonomy fromAreaTaxonomy;
     private final AreaTaxonomy toAreaTaxonomy;
     
     public DiffAreaTaxonomy(
             DiffPAreaTaxonomyFactory diffFactory,
-            OntologyDifferences ontDifferences,
+            InheritablePropertyChanges ontDifferences,
             AreaTaxonomy fromAreaTaxonomy,
             AreaTaxonomy toAreaTaxonomy,
             Hierarchy<DiffArea> areaHierarchy) {
@@ -41,7 +41,7 @@ public class DiffAreaTaxonomy extends AreaTaxonomy<DiffArea> implements DiffAbst
         return diffFactory;
     }
     
-    public OntologyDifferences getOntologyDifferences() {
+    public InheritablePropertyChanges getOntologyDifferences() {
         return ontDifferences;
     }
     

@@ -16,6 +16,8 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.concepts.ConceptMovedToNode;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.concepts.ConceptRemovedFromNode;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.concepts.ConceptRemovedFromOntology;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.concepts.NodeConceptChange;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.HierarchicalChanges;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.OntologyChanges;
 import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -40,9 +42,13 @@ public class DiffAbstractionNetworkGenerator {
             Ontology fromOnt, 
             AbstractionNetwork<Node> fromAbN, 
             Ontology toOnt, 
-             AbstractionNetwork<Node> toAbN) {
+            AbstractionNetwork<Node> toAbN) {
 
-        OntologyDifferences ontDifferences = this.computeOntologyDifferences(fromOnt, toOnt);
+        HierarchicalChanges ontDifferences = this.findHierarchicalChanges(
+                fromOnt, 
+                toOnt, 
+                fromAbN, 
+                toAbN);
         
         Set<Node> fromNodes = fromAbN.getNodes();
         Set<Node> toNodes = toAbN.getNodes();
@@ -57,8 +63,6 @@ public class DiffAbstractionNetworkGenerator {
                 }
 
                 fromConceptNodes.get(concept).add(node);
-                
-
             });
         });
 
@@ -86,7 +90,7 @@ public class DiffAbstractionNetworkGenerator {
             Set<NodeConceptChange> conceptChanges = new HashSet<>();
 
             removedNode.getConcepts().forEach((concept) -> {
-                if (ontDifferences.getRemovedConcepts().contains(concept)) {
+                if (ontDifferences.getRemovedOntConcepts().contains(concept)) {
                     conceptChanges.add(new ConceptRemovedFromOntology(removedNode, concept));
                 } else {
                     if(toConceptNodes.containsKey(concept)) {
@@ -127,7 +131,7 @@ public class DiffAbstractionNetworkGenerator {
             Set<NodeConceptChange> conceptChanges = new HashSet<>();
             
             introducedNode.getConcepts().forEach((concept) -> {
-                if(ontDifferences.getAddedConcepts().contains(concept)) {
+                if(ontDifferences.getAddedOntConcepts().contains(concept)) {
                     conceptChanges.add(new ConceptAddedToOntology(introducedNode, concept));
                 } else {
                     if(fromConceptNodes.containsKey(concept)) {
@@ -212,7 +216,7 @@ public class DiffAbstractionNetworkGenerator {
 
                 nodeRemovedConcepts.forEach( (concept) -> {
 
-                    if (ontDifferences.getRemovedConcepts().contains(concept)) {
+                    if (ontDifferences.getRemovedOntConcepts().contains(concept)) {
                         conceptChanges.add(new ConceptRemovedFromOntology(toNode, concept));
                     } else {
                         if (toConceptNodes.containsKey(concept)) {
@@ -238,7 +242,7 @@ public class DiffAbstractionNetworkGenerator {
                 });
                 
                 nodeAddedConcepts.forEach((concept) -> {
-                    if (ontDifferences.getAddedConcepts().contains(concept)) {
+                    if (ontDifferences.getAddedOntConcepts().contains(concept)) {
                         conceptChanges.add(new ConceptAddedToOntology(toNode, concept));
                     } else {
                         if (fromConceptNodes.containsKey(concept)) {
@@ -321,15 +325,14 @@ public class DiffAbstractionNetworkGenerator {
         return new AbstractionNetworkDiffResult(fromAbN, toAbN, ontDifferences, diffNodeSet, diffHierarchy);
     }
     
-    protected OntologyDifferences computeOntologyDifferences(Ontology fromOnt, Ontology toOnt) {
-        Set<Concept> fromConcepts = fromOnt.getConceptHierarchy().getNodes();
-        Set<Concept> toConcepts = toOnt.getConceptHierarchy().getNodes();
+    protected HierarchicalChanges findHierarchicalChanges(
+            Ontology fromOnt, 
+            Ontology toOnt,
+            AbstractionNetwork<Node> fromAbN,
+            AbstractionNetwork<Node> toAbN) {
+
+        HierarchicalChanges changes = new HierarchicalChanges(fromOnt, fromAbN.getSourceHierarchy(), toOnt, toAbN.getSourceHierarchy());
         
-        Set<Concept> addedConcepts = SetUtilities.getSetDifference(toConcepts, fromConcepts);
-        Set<Concept> removedConcepts = SetUtilities.getSetDifference(fromConcepts, toConcepts);
-        
-        OntologyDifferences ontDifferences = new OntologyDifferences(removedConcepts, addedConcepts);
-        
-        return ontDifferences;
+        return changes;
     }
 }

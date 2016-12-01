@@ -2,14 +2,14 @@ package edu.njit.cs.saboc.blu.core.gui.gep.utils;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.UpdateableAbNDisplayEntity;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,26 +22,37 @@ import java.util.Set;
  * 
  * @author Chris
  */
-public class GraphSelectionStateMonitor {
+public class GraphSelectionStateMonitor implements UpdateableAbNDisplayEntity {
+    
     private SinglyRootedNodeEntry selectedGroupEntry = null;
     private GenericPartitionEntry selectedPartitionEntry = null;
     
     private SinglyRootedNodeEntry mousedOverGroupEntry = null;
     private GenericPartitionEntry mousedOverPartitionEntry = null;
     
-    private final Collection<? extends SinglyRootedNodeEntry> groupEntries;
-    private final ArrayList<GenericPartitionEntry> partitionEntries = new ArrayList<>();
+    private Collection<? extends SinglyRootedNodeEntry> groupEntries;
+    private ArrayList<GenericPartitionEntry> partitionEntries = new ArrayList<>();
     
-    private final BluGraph graph;
+    private AbNDisplayPanel displayPanel;
     
-    public GraphSelectionStateMonitor(BluGraph graph) {
-        this.graph =  graph;
+    public GraphSelectionStateMonitor() {
+
+    }
+
+    @Override
+    public void update(int tick) {
         
-        this.groupEntries = graph.getNodeEntries().values();
+    }
+
+    @Override
+    public void initialize(AbNDisplayPanel displayPanel) {
+        this.displayPanel = displayPanel;
         
-        Collection<? extends PartitionedNodeEntry> containers = graph.getContainerEntries().values();
+        this.groupEntries = displayPanel.getGraph().getNodeEntries().values();
         
-        containers.forEach((PartitionedNodeEntry entry) -> {
+        Collection<? extends PartitionedNodeEntry> containers = displayPanel.getGraph().getContainerEntries().values();
+        
+        containers.forEach( (entry) -> {
             partitionEntries.addAll(entry.getPartitionEntries());
         });
     }
@@ -138,10 +149,10 @@ public class GraphSelectionStateMonitor {
         }
     }
     
-    public void setSearchResults(ArrayList<SinglyRootedNode> nodes) {
+    public void setSearchResults(Set<SinglyRootedNode> nodes) {
         resetAll();
         
-        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = displayPanel.getGraph().getNodeEntries();
         
         nodes.forEach((node) -> {
             SinglyRootedNodeEntry entry = nodeEntries.get(node);
@@ -150,9 +161,9 @@ public class GraphSelectionStateMonitor {
     }   
     
     private void highlightGroupParents(SinglyRootedNodeEntry nodeEntry) {
-        AbstractionNetwork<SinglyRootedNode> abn = graph.getAbstractionNetwork();
+        AbstractionNetwork<SinglyRootedNode> abn = displayPanel.getGraph().getAbstractionNetwork();
         
-        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = displayPanel.getGraph().getNodeEntries();
         
         Set<SinglyRootedNode> parentNodes = abn.getNodeHierarchy().getParents(nodeEntry.getNode());
         
@@ -166,9 +177,9 @@ public class GraphSelectionStateMonitor {
     
     private void highlightGroupChildren(SinglyRootedNodeEntry nodeEntry) {
         
-        AbstractionNetwork<SinglyRootedNode> abn = graph.getAbstractionNetwork();
+        AbstractionNetwork<SinglyRootedNode> abn = displayPanel.getGraph().getAbstractionNetwork();
         
-        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = graph.getNodeEntries();
+        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = displayPanel.getGraph().getNodeEntries();
         
         Set<SinglyRootedNode> parentNodes = abn.getNodeHierarchy().getChildren(nodeEntry.getNode());
         

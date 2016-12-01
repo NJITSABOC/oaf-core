@@ -32,7 +32,7 @@ public abstract class CreateSubtaxonomyButton extends NodeOptionButton {
     
     public final void createAndDisplaySubtaxonomy() {
         if (getCurrentNode().isPresent()) {
-
+            /*
             Thread loadThread = new Thread(new Runnable() {
 
                 private LoadStatusDialog loadStatusDialog = null;
@@ -60,6 +60,9 @@ public abstract class CreateSubtaxonomyButton extends NodeOptionButton {
             });
 
             loadThread.start();
+            */
+            DisplayNewSubtaxonomy display = new DisplayNewSubtaxonomy(this, displayTaxonomyListener, "Creating Subtaxonomy");
+            display.startThread();
         }
     }
     

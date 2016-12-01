@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.AreaSummaryTextFactory;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration.DiffPAreaTaxonomyConfiguration;
 import java.util.HashMap;
 import java.util.HashSet;

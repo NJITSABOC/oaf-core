@@ -60,7 +60,12 @@ public abstract class OAFAbstractTableModel<T> extends AbstractTableModel {
         if(data.length == 0) {
             return Object.class;
         } else {
-            return getValueAt(0, c).getClass();
+            
+            if(getValueAt(0,c) != null) {
+                return getValueAt(0, c).getClass();
+            } else {
+                return Object.class;
+            }
         }
     }
     

@@ -93,6 +93,9 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
         int containerY = 0; 
         int y = 20;
         int x = 0;
+        int maxRowNodes = 14;
+        int widthPadding = 40;
+        int heightPadding = 60; 
 
         addGraphLevel(new GraphLevel(0, getGraph(), new ArrayList<>())); 
 
@@ -101,17 +104,16 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
 
             int nodeCount = nodeLevel.size();
 
-            int nodeEntriesWide = Math.min(14, nodeCount);
+            int nodeEntriesWide = Math.min(maxRowNodes, nodeCount);
 
             int levelWidth = nodeEntriesWide * (DisjointNodeEntry.DISJOINT_NODE_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
 
-            width += levelWidth + 20;
+            width += levelWidth + widthPadding;
 
             int height = (int) (Math.ceil((double) nodeCount / nodeEntriesWide))
                     * (DisjointNodeEntry.DISJOINT_NODE_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);
 
-            width += 20;
-            height += 60 + GraphLayoutConstants.GROUP_ROW_HEIGHT;
+            height += heightPadding + GraphLayoutConstants.GROUP_ROW_HEIGHT;
 
             GraphLevel currentLevel = getLevels().get(containerY);
 
@@ -165,7 +167,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
             containerEntry.addRow(0, generateUpperRowLanes(-4,
                     GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, containerEntry));
 
-            int i = 0;
+            int nodeIndex = 0;
 
             for (DisjointNode group : nodeLevel) {
                 
@@ -182,7 +184,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
 
                 currentClusterLevel.addGroupEntry(targetGroupEntry);
 
-                if ((i + 1) % nodeEntriesWide == 0 && i < nodeLevel.size() - 1) {
+                if ((nodeIndex + 1) % nodeEntriesWide == 0 && nodeIndex < nodeLevel.size() - 1) {
                     y2 += DisjointNodeEntry.DISJOINT_NODE_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;
                     x2 = (int) (1.5 * GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
                     disjointGroupX = 0;
@@ -203,7 +205,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
                     groupX[disjointGroupY]++;
                 }
 
-                i++;
+                nodeIndex++;
             }
 
             x = 0;  // Reset the x coordinate to the left

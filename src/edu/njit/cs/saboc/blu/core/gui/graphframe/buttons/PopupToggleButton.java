@@ -30,7 +30,6 @@ public class PopupToggleButton extends JToggleButton {
         
         private boolean buttonHasFocus = false;
         
-        
         private boolean popupLostFocus = false;
                 
         private boolean clickedToClose = false;
@@ -85,9 +84,7 @@ public class PopupToggleButton extends JToggleButton {
     
     private final PopupStateManager popupState = new PopupStateManager();
             
-    private JDialog popup;
-    
-    protected BluGraph graph;
+    private final JDialog popup;
     
     public PopupToggleButton(JFrame parent, String text) {
         this.setText(text);
@@ -169,10 +166,6 @@ public class PopupToggleButton extends JToggleButton {
     protected void setPopupContent(JComponent component) {
         popup.add(component);
         popup.pack();
-    }
-
-    public void setGraph(BluGraph graph) {
-        this.graph = graph;
     }
     
     public void disposePopup() {

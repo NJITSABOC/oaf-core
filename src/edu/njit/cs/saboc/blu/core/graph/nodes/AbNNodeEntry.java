@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import java.awt.Point;
 import javax.swing.JPanel;
 
 /**
@@ -32,6 +33,13 @@ public abstract class AbNNodeEntry extends JPanel {
     
     public Node getNode() {
         return node;
+    }
+    
+    public abstract int getAbsoluteX();
+    public abstract int getAbsoluteY();
+    
+    public Point getAbsoluteLocation() {
+        return new Point(getAbsoluteX(), getAbsoluteY());
     }
     
     public boolean isMousedOver() {

@@ -13,7 +13,8 @@ import java.util.Set;
 public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGroup, AggregateTargetGroup> {
 
     @Override
-    public AggregateTargetGroup createAggregateNode(Hierarchy<TargetGroup> aggregatedNodes) {
+    public AggregateTargetGroup createAggregateNode(Hierarchy<TargetGroup> aggregatedNodes, 
+            Hierarchy<Concept> sourceHierarchy) {
         
         Hierarchy<Concept> hierarchy = new Hierarchy<>(aggregatedNodes.getRoot().getRoot());
         

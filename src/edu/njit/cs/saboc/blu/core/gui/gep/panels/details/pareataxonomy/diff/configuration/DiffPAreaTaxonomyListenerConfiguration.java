@@ -6,6 +6,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  *
  * @author Chris O
  */
-public interface DiffPAreaTaxonomyListenerConfiguration extends PAreaTaxonomyListenerConfiguration {
-
+public abstract class DiffPAreaTaxonomyListenerConfiguration extends PAreaTaxonomyListenerConfiguration {
+    
+    public DiffPAreaTaxonomyListenerConfiguration(DiffPAreaTaxonomyConfiguration config) {
+        super(config);
+    }
 }

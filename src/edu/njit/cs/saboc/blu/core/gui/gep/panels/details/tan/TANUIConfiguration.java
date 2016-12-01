@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -8,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIC
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.AggregateBandPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.BandPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.AggregateClusterPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.ClusterPanel;
 
 /**
@@ -49,7 +50,11 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
 
     @Override
     public NodeDashboardPanel createContainerDetailsPanel() {
-        return new BandPanel(config);
+        if(config.getTribalAbstractionNetwork().isAggregated()) {
+            return new AggregateBandPanel(config);
+        } else {
+            return new BandPanel(config);
+        }
     }
 
     @Override
@@ -64,6 +69,10 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
 
     @Override
     public NodeDashboardPanel createGroupDetailsPanel() {
-        return new ClusterPanel(config);
+        if(config.getTribalAbstractionNetwork().isAggregated()) {
+            return new AggregateClusterPanel(config);
+        } else {
+            return new ClusterPanel(config);
+        }
     }
 }

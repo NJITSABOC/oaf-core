@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeaves
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalListVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result.AncestorDepthResult;
 import java.util.ArrayDeque;
@@ -22,7 +23,7 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- * Data type representing a rooted Directed Acylic Graph.
+ * Data type representing a rooted Directed Acylic Graph (DAG).
  * 
  * @author Chris
  */
@@ -131,6 +132,10 @@ public class Hierarchy<T> {
         return baseGraph.getNodes().size();
     }
     
+    public void addNode(T node) {
+        baseGraph.addNode(node);
+    }
+    
     /**
      * Adds an IS A relationship between from and to. e.g., from IS A to.
      * 
@@ -168,7 +173,14 @@ public class Hierarchy<T> {
      * @param hierarchy 
      */
     public void addAllHierarchicalRelationships(Hierarchy<T> hierarchy) {
-        hierarchy.getEdges().forEach( (edge) -> {
+        
+        Set<Edge<T>> otherEdges = hierarchy.getEdges();
+        
+        hierarchy.getNodes().forEach( (node) -> {
+            addNode(node);
+        });
+                
+        otherEdges.forEach( (edge) -> {
             addEdge(edge);
         });
     }
@@ -480,6 +492,19 @@ public class Hierarchy<T> {
         ancestorHierarchy.topologicalDown(visitor);
         
         return visitor.getAllPaths();
+    }
+    
+    /**
+     * Returns all of the nodes in this hierarchy in a topological order
+     * 
+     * @return 
+     */
+    public ArrayList<T> getTopologicalOrdering() {
+        TopologicalListVisitor<T> visitor = new TopologicalListVisitor<>(this);
+        
+        this.topologicalDown(visitor);
+        
+        return visitor.getTopologicalList();
     }
         
     /**

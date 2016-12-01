@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
@@ -52,12 +51,12 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
         
         ArrayList<Color> colors = new ArrayList<>(Arrays.asList(baseColors));
         
-        for(int c = 0 ; c < baseColors.length; c++) {
-            colors.add(baseColors[c].brighter());
+        for (Color baseColor : baseColors) {
+            colors.add(baseColor.brighter());
         }
         
-        for(int c = 0 ; c < baseColors.length; c++) {
-            colors.add(baseColors[c].darker());
+        for (Color baseColor : baseColors) {
+            colors.add(baseColor.darker());
         }
         
         return colors;
@@ -77,24 +76,14 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
                 if (a.getRelationships() == null || b.getRelationships() == null) {
                     return 0;
                 }
-
-                if (a.getRelationships().size() > b.getRelationships().size()) {
-                    return 1;
-                } else if (a.getRelationships().size() < b.getRelationships().size()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+                
+                return a.getRelationships().size() - b.getRelationships().size();
             }
         });
 
-        for (Area a : tempAreas) {
-            if (lastArea != null && lastArea.getRelationships().size() != a.getRelationships().size()) {
-                Collections.sort(levelAreas, new Comparator<Area>() {    // Sort the areas based on concept count
-                    public int compare(Area a, Area b) {
-                        return a.getPAreas().size() - b.getPAreas().size();
-                    }
-                });
+        for (Area area : tempAreas) {
+            if (lastArea != null && lastArea.getRelationships().size() != area.getRelationships().size()) {
+                levelAreas.sort((a, b) -> a.getPAreas().size() - b.getPAreas().size());
 
                 int c = 0;
 
@@ -115,17 +104,12 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
                 levelAreas.clear();
             }
 
-            levelAreas.add(a);
+            levelAreas.add(area);
 
-            lastArea = a;
+            lastArea = area;
         }
 
-        Collections.sort(levelAreas, new Comparator<Area>() {    // Sort the areas based on the number of their relationships.
-
-            public int compare(Area a, Area b) {
-                return a.getPAreas().size() - b.getPAreas().size();
-            }
-        });
+        levelAreas.sort((a, b) -> a.getPAreas().size() - b.getPAreas().size());
 
         int c = 0;
 
@@ -168,7 +152,9 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
          
          areasByLevel.add(level);
          
-         int y = 40;
+         final int TOP_LEVEL_YOFFSET = 40;
+         
+         int y = TOP_LEVEL_YOFFSET;
          
          for(ArrayList<Area> levelAreas : areasByLevel) {
              int maxHeight = 0;
@@ -187,7 +173,15 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
          }
     }
     
-    protected PAreaEntry createPAreaPanel(BluGraph graph, PArea parea, RegionEntry parentRegionEntry, int x, int y, int pAreaX, GraphGroupLevel pAreaLevel) {
+    protected PAreaEntry createPAreaPanel(
+            BluGraph graph, 
+            PArea parea, 
+            RegionEntry parentRegionEntry, 
+            int x, 
+            int y, 
+            int pAreaX, 
+            GraphGroupLevel pAreaLevel) {
+        
         PAreaEntry pareaEntry = new PAreaEntry(parea, graph, parentRegionEntry, pAreaX, pAreaLevel, new ArrayList<>());
 
         //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary

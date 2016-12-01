@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,11 +24,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -37,77 +38,78 @@ import javax.swing.table.TableRowSorter;
  */
 public abstract class AbstractEntityList<T> extends JPanel {
 
-    private final JTable entityTable;
+    private final MouseOverTable entityTable;
     private final OAFAbstractTableModel<T> tableModel;
-    
+
     private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
-    
+
     private final JTextField filterField = new JTextField();
     private final JButton closeButton = new JButton();
 
     private final TableRowSorter<TableModel> sorter;
-    
+
     private final JPanel filterPanel;
-    
+
+    NodeOptionsPanel optionsPanel;
+
     protected AbstractEntityList(OAFAbstractTableModel<T> tableModel) {
-        
+
         super(new BorderLayout());
 
         this.tableModel = tableModel;
-        this.entityTable = new JTable(tableModel);
+        this.entityTable = new MouseOverTable(tableModel);
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
-        this.entityTable.setDefaultRenderer(String.class, new MultiLineTextRenderer());
-        
+        setDefaultTableStringRenderer(new MultiLineTextRenderer(entityTable));
+
         this.entityTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(entityTable.getSelectedRow() >= 0) {
-                                        
+                if (entityTable.getSelectedRow() >= 0) {
+
                     T entity = tableModel.getItemAtRow(sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
-                    
-                    
+
                     if (e.getClickCount() == 1) {
-                        selectionListeners.forEach( (listener) -> {
+                        selectionListeners.forEach((listener) -> {
                             listener.entityClicked(entity);
                         });
                     } else if (e.getClickCount() == 2) {
-                        selectionListeners.forEach( (listener) -> {
+                        selectionListeners.forEach((listener) -> {
                             listener.entityDoubleClicked(entity);
                         });
                     }
 
                 } else {
-                    selectionListeners.forEach( (listener) -> {
+                    selectionListeners.forEach((listener) -> {
                         listener.noEntitySelected();
                     });
                 }
             }
         });
-        
+
         this.add(new JScrollPane(entityTable), BorderLayout.CENTER);
-        
+
         ///////////////////////////
         //Container for filtering//
         ///////////////////////////
         closeButton.setIcon(IconManager.getIconManager().getIcon("cross.png"));
         closeButton.setToolTipText("Close");
-        
+
         filterPanel = new JPanel();
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
-        filterPanel.add(closeButton);
+        //filterPanel.add(closeButton);
         filterPanel.add(Box.createHorizontalStrut(10));
         filterPanel.add(new JLabel("Filter:  "));
         filterPanel.add(filterField);
         filterPanel.setVisible(false);
 
-        this.add(filterPanel, BorderLayout.SOUTH);
-
+        //this.add(filterPanel, BorderLayout.SOUTH);
         ///////////////////////////
         //End Filtering Container//
         //  Start Sorter Model   //
         ///////////////////////////
         sorter = new TableRowSorter<>(tableModel);
-        
+
         entityTable.setRowSorter(sorter);
+        this.entityTable.getRowSorter().toggleSortOrder(0);
 
         /////////////////////////
         //Filters for Listening//
@@ -117,9 +119,9 @@ public abstract class AbstractEntityList<T> extends JPanel {
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     filterField.setText("");
-                    
+
                     setFilterPanelOpen(false, null);
-                    
+
                     entityTable.requestFocus();
                 }
             }
@@ -152,7 +154,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         entityTable.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
 
-                if (!e.isControlDown() && !e.isAltDown()) {
+                if (!e.isControlDown() && !e.isAltDown() && isPrintable(e.getKeyChar())) {
                     if (!filterPanel.isVisible()) {
                         setFilterPanelOpen(true, e);
                     } else {
@@ -162,41 +164,82 @@ public abstract class AbstractEntityList<T> extends JPanel {
                 }
             }
         });
+
+        RightClickMenu rMenu = new RightClickMenu(entityTable);
+        rMenu.addMenuItem("Print Name", new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int row = entityTable.getSelectedRow();
+                String data = entityTable.getModel().getValueAt(row, 0).toString();
+                System.out.println(data);
+            }
+        });
+
+        entityTable.addMouseListener(rMenu.getListener());
+        optionsPanel = new NodeOptionsPanel();
+
+        JButton b = new JButton("Filter");
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                toggleFilterPanel();
+            }
+        });
+        optionsPanel.add(b);
+
+        b = new JButton("Resize");
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                for (int row = 0; row < entityTable.getRowCount(); row++) {
+                    int rowHeight = entityTable.getRowHeight(row);
+
+                    for (int column = 0; column < entityTable.getColumnCount(); column++) {
+                        Component comp = entityTable.prepareRenderer(entityTable.getCellRenderer(row, column), row, column);
+                        rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+                    }
+
+                    entityTable.setRowHeight(row, rowHeight);
+                }
+            }
+        });
+        optionsPanel.add(b);
         
-        /*
-        optionsPanel = new JPanel();
-        this.add(optionsPanel, BorderLayout.SOUTH);
-        */
-        
+        JPanel menuBar = new JPanel();
+        menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.LINE_AXIS));
+        menuBar.add(optionsPanel);
+        menuBar.add(filterPanel);
+        this.add(menuBar, BorderLayout.SOUTH);
+
         //setBorderText(getBorderText(Optional.empty()));
     }
-    
+
     public OAFAbstractTableModel<T> getTableModel() {
         return tableModel;
     }
-    
+
     public void setSelectionMode(int selectionMode) {
         entityTable.setSelectionMode(selectionMode);
     }
-    
+
     private void newFilter() {
 
         RowFilter<TableModel, Object> rf;
-        
+
         try {
             rf = RowFilter.regexFilter("(?i)" + filterField.getText());
         } catch (PatternSyntaxException e) {
             return;
         }
-        
+
         sorter.setRowFilter(rf);
     }
-    
+
     /* opens (open = true) or closes the filter panel */
     public void toggleFilterPanel() {
         if (!filterPanel.isVisible()) {
             setFilterPanelOpen(true, null);
         } else {
+            filterField.setText("");
             setFilterPanelOpen(false, null);
         }
     }
@@ -216,39 +259,48 @@ public abstract class AbstractEntityList<T> extends JPanel {
                 filterField.requestFocus();
             }
         } else {
+            filterField.setText("");
             filterPanel.setVisible(false);
         }
     }
-    
+
     public void addEntitySelectionListener(EntitySelectionListener<T> listener) {
         selectionListeners.add(listener);
     }
-    
+
     public void removeEntitySelectionListener(EntitySelectionListener<T> listener) {
         selectionListeners.remove(listener);
     }
-    
+
     public void setContents(ArrayList<T> entities) {
         tableModel.setContents(entities);
-        
+
         setBorderText(getBorderText(Optional.of(entities)));
     }
-    
+
     public void clearContents() {
         tableModel.setContents(new ArrayList<>());
     }
-    
-    public void setDefaultTableRenderer(MultiLineTextRenderer renderer) {
-        this.entityTable.setDefaultRenderer(String.class, renderer);
+
+    public final void setDefaultTableRenderer(Class clazz, TableCellRenderer renderer) {
+        this.entityTable.setDefaultRenderer(clazz, renderer);
     }
-    
+
+    public final void setDefaultTableStringRenderer(MultiLineTextRenderer renderer) {
+        setDefaultTableRenderer(String.class, renderer);
+    }
+
     protected void addOptionButton(JButton btn) {
         //optionsPanel.add(btn);
     }
 
     protected abstract String getBorderText(Optional<ArrayList<T>> entities);
-    
+
     private final void setBorderText(String text) {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), text));
+    }
+
+    private boolean isPrintable(char c) {
+        return (c >= 32 && c < 127);
     }
 }

@@ -314,7 +314,7 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
     public int getAbsoluteY() {
         return this.getY();
     }
-
+    
     public GraphLevel getLevelParent() {
         return parentLevel;
     }

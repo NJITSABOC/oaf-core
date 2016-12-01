@@ -61,8 +61,13 @@ public class Graph<T> {
     
     public Set<Edge<T>> getEdges() {
         Set<Edge<T>> edges = new HashSet<>();
+        
+        Set<T> allNodes = new HashSet<>();
 
         outgoingEdges.forEach((node, adjacentNodes) -> {
+            
+            allNodes.add(node);
+            allNodes.addAll(adjacentNodes);
             
             adjacentNodes.forEach( (adjacentNode) -> {
                 edges.add(new Edge(node, adjacentNode));

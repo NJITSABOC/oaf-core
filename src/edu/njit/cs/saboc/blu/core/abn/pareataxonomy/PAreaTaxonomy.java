@@ -67,7 +67,10 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy<T> subtaxonomy = generator.createTaxonomyFromPAreas(getPAreaTaxonomyFactory(), subhierarchy);
+        PAreaTaxonomy<T> subtaxonomy = generator.createTaxonomyFromPAreas(
+                getPAreaTaxonomyFactory(), 
+                subhierarchy,
+                this.getSourceHierarchy());
         
         RootSubtaxonomy rootSubtaxonomy = new RootSubtaxonomy(
                 this, 
@@ -87,7 +90,10 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy<T> taxonomy = generator.createTaxonomyFromPAreas(getPAreaTaxonomyFactory(), subhierarchy);
+        PAreaTaxonomy<T> taxonomy = generator.createTaxonomyFromPAreas(
+                getPAreaTaxonomyFactory(), 
+                subhierarchy,
+                this.getSourceHierarchy());
         
         AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(this, 
                 source, 
@@ -110,13 +116,26 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     public boolean isAggregated() {
         return isAggregated;
     }
+    
+    public Set<InheritableProperty> getPropertiesInTaxonomy() {
+        return this.getAreaTaxonomy().getPropertiesInTaxonomy();
+    }
+    
+    public PAreaTaxonomy getRelationshipSubtaxonomy(Set<InheritableProperty> allowedRelTypes) {
+        PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
+        PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
+                this,
+                allowedRelTypes);
+        
+        return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
+    }
 
     @Override
     public PAreaTaxonomy getAggregated(int smallestNode) {
-        
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
-        
-        PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(this, 
+
+        PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(
+            this, 
             new PAreaTaxonomyGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);

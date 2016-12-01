@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffPartitionedNodeConceptListModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.AreaSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration.DiffPAreaTaxonomyConfiguration;
 
 /**
@@ -20,4 +20,11 @@ public class DiffAreaDetailsPanel extends NodeDetailsPanel<DiffArea> {
                 config);
     }
     
+    public DiffAreaDetailsPanel(DiffPAreaTaxonomyConfiguration config, DiffAreaSummaryTextFactory textFactory) {
+        super(new AreaSummaryPanel(config, textFactory),
+                config.getUIConfiguration().getPartitionedNodeOptionsPanel(),
+                new NodeConceptList(new DiffPartitionedNodeConceptListModel(config), config),
+                config);
+    }
+
 }

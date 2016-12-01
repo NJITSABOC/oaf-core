@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.tan;
 
-import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import java.awt.BasicStroke;
@@ -16,6 +14,7 @@ import java.awt.Stroke;
  * @author Chris O
  */
 public class TANPainter extends AbNPainter {
+    
     public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
         Stroke savedStroke = g2d.getStroke();
         

@@ -197,7 +197,10 @@ public class PAreaTaxonomyGenerator {
         return pareaTaxonomy;
     }
     
-    public <T extends PArea> PAreaTaxonomy<T> createTaxonomyFromPAreas(PAreaTaxonomyFactory factory, Hierarchy<T> pareaHierarchy) {
+    public <T extends PArea> PAreaTaxonomy<T> createTaxonomyFromPAreas(
+            PAreaTaxonomyFactory factory, 
+            Hierarchy<T> pareaHierarchy,
+            Hierarchy<Concept> sourceHierarchy) {
                      
         HashMap<Set<InheritableProperty>, Set<T>> pareasByRelationships = new HashMap<>();
         
@@ -213,6 +216,16 @@ public class PAreaTaxonomyGenerator {
             pareasByRelationships.get(properties).add(parea);
             
             conceptHierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
+        });
+        
+        pareaHierarchy.getNodes().forEach( (parea) -> {
+            Concept root = parea.getRoot();
+            
+            sourceHierarchy.getParents(root).forEach( (parent) -> {
+               if(conceptHierarchy.contains(parent)) {
+                   conceptHierarchy.addEdge(root, parent);
+               } 
+            });
         });
         
         HashMap<Set<InheritableProperty>, Area> areasByRelationships = new HashMap<>();

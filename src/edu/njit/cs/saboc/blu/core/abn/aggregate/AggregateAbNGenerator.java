@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ public class AggregateAbNGenerator <
     public Hierarchy<AGGREGATENODE_T> createReducedAbN(
             AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
             Hierarchy<NODE_T> sourceHierarchy, 
+            Hierarchy<Concept> sourceConceptHierarchy,
             int minNodeSize) {
         
         HashMap<NODE_T, Hierarchy<NODE_T>> reducedGroupMembers = new HashMap<>();
@@ -26,7 +28,7 @@ public class AggregateAbNGenerator <
         HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
         
         Set<NODE_T> remainingNodes = new HashSet<>();
-        remainingNodes.addAll(sourceHierarchy.getRoots()); // The root parea is always included
+        remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
         
         HashMap<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
@@ -45,7 +47,7 @@ public class AggregateAbNGenerator <
         });
         
         Queue<NODE_T> queue = new LinkedList<>();
-        queue.add(sourceHierarchy.getRoot());
+        queue.addAll(sourceHierarchy.getRoots());
         
         while(!queue.isEmpty()) {
             
@@ -87,7 +89,8 @@ public class AggregateAbNGenerator <
         HashMap<NODE_T, AGGREGATENODE_T> aggregateGroups = new HashMap<>();
         
         remainingNodes.forEach((aggregateGroup) -> {
-            aggregateGroups.put(aggregateGroup, factory.createAggregateNode(reducedGroupMembers.get(aggregateGroup)));
+            aggregateGroups.put(aggregateGroup, 
+                    factory.createAggregateNode(reducedGroupMembers.get(aggregateGroup), sourceConceptHierarchy));
         });
         
         Set<AGGREGATENODE_T> rootAggregateNodes = new HashSet<>();

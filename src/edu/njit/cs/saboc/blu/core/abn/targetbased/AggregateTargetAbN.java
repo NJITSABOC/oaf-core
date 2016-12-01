@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -7,7 +8,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstractionNetwork<T> {
+public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstractionNetwork<T> 
+        implements AggregateAbstractionNetwork<TargetAbstractionNetwork> {
     
     private final TargetAbstractionNetwork sourceTargetAbN;
     
@@ -24,11 +26,11 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         this.minBound = minBound;
     }
 
-    public TargetAbstractionNetwork getTargetAbN() {
+    public TargetAbstractionNetwork getSource() {
         return sourceTargetAbN;
     }
     
-    public int getMinBound() {
+    public int getBound() {
         return minBound;
     }
 }

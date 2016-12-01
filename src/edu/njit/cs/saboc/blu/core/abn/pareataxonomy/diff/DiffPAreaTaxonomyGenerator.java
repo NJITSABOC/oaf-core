@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyChanges;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.HashMap;
@@ -99,7 +100,7 @@ public class DiffPAreaTaxonomyGenerator {
         });
         
         DiffAreaTaxonomy diffAreaTaxonomy = factory.createDiffAreaTaxonomy(
-                areaDiffResult.getOntologyDifferences(),
+                (InheritablePropertyChanges)areaDiffResult.getOntologyDifferences(),
                 fromTaxonomy.getAreaTaxonomy(), 
                 toTaxonomy.getAreaTaxonomy(), 
                 diffAreaHierarchy);

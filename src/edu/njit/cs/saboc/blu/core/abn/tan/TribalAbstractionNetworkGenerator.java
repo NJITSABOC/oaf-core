@@ -245,6 +245,7 @@ public class TribalAbstractionNetworkGenerator {
     
     public <T extends Cluster> ClusterTribalAbstractionNetwork<T> createTANFromClusters(
             Hierarchy<T> clusterHierarchy,
+            Hierarchy<Concept> sourceHierarchy,
             TANFactory factory) {
                 
         // For now assuming only one cluster is picked as a root
@@ -260,6 +261,16 @@ public class TribalAbstractionNetworkGenerator {
             }
             
             clusterBands.get(cluster.getPatriarchs()).add(cluster);
+        });
+        
+        clusterHierarchy.getNodes().forEach( (cluster) -> {
+            Concept root = cluster.getRoot();
+            
+            sourceHierarchy.getParents(root).forEach( (parent) -> {
+               if(conceptHierarchy.contains(parent)) {
+                   conceptHierarchy.addEdge(root, parent);
+               } 
+            });
         });
 
         Map<Set<Concept>, Band> bandsByPatriarchs = new HashMap<>();
@@ -288,6 +299,7 @@ public class TribalAbstractionNetworkGenerator {
                 });
             });
         });
+        
         
         BandTribalAbstractionNetwork bandTAN = factory.createBandTAN(bandHierarchy, conceptHierarchy);
         ClusterTribalAbstractionNetwork<T> tan = factory.createClusterTAN(bandTAN, clusterHierarchy, conceptHierarchy);

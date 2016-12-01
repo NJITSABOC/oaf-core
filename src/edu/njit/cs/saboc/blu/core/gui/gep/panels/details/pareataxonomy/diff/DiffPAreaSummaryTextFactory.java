@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.concepts.NodeConceptSetChangeT
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaSummaryTextFactory;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration.DiffPAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;

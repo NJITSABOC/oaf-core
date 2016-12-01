@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkInstance;
-import edu.njit.cs.saboc.blu.core.abn.diff.OntologyDifferences;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.OntologyChanges;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
@@ -46,7 +46,7 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
     }
     
     @Override
-    public OntologyDifferences getOntologyDifferences() {
+    public OntologyChanges getOntologyDifferences() {
         return getAreaTaxonomy().getOntologyDifferences();
     }
     

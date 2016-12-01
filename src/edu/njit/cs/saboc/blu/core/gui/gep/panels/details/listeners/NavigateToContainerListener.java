@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
-import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 
 /**
  *
@@ -10,16 +10,16 @@ import edu.njit.cs.saboc.blu.core.gui.gep.EnhancedGraphExplorationPanel;
  */
 public class NavigateToContainerListener extends EntitySelectionAdapter<PartitionedNode> {
 
-    private final EnhancedGraphExplorationPanel gep;
+    private final AbNDisplayPanel displayPanel;
 
-    public NavigateToContainerListener(EnhancedGraphExplorationPanel gep) {
-        this.gep = gep;
+    public NavigateToContainerListener(AbNDisplayPanel displayPanel) {
+        this.displayPanel = displayPanel;
     }
 
     @Override
     public void entityDoubleClicked(PartitionedNode container) {
-        PartitionedNodeEntry entry = gep.getGraph().getContainerEntries().get(container);
+        PartitionedNodeEntry entry = displayPanel.getGraph().getContainerEntries().get(container);
         
-        gep.focusOnPoint(entry.getX(), entry.getY());
+        displayPanel.getAutoScroller().autoNavigateToNodeEntry(entry);
     }
 }

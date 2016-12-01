@@ -59,8 +59,6 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
         
         int areaY = 0;  // The first row of areas is given an areaY value of 0.
 
-        int style = 0;
-
         int pAreaX;
         int pAreaY;
 
@@ -89,8 +87,6 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
                 areaY++;    // Update the areaY variable to reflect the new row.
                 
                 areaX = 0;  // Reset the areaX variable.
-
-                style++;    // Update the style variable which is used to display different colors for the different rows.
 
                 addGraphLevel(
                         new GraphLevel(areaY, graph, 
@@ -142,7 +138,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
 
             currentLevel = super.getLevels().get(areaY);
 
-            Color color = taxonomyLevelColors.get(style % taxonomyLevelColors.size());
+            Color color = taxonomyLevelColors.get(area.getRelationships().size() % taxonomyLevelColors.size());
 
             AreaEntry areaEntry = createAreaPanel(graph, area, areaXOffset, areaYOffset, levelWidth, height, color, areaX, currentLevel); // Create the area
 

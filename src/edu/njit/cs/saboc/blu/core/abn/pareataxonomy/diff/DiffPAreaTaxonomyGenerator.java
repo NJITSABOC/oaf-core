@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 import edu.njit.cs.saboc.blu.core.abn.diff.AbstractionNetworkDiffResult;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.HierarchicalChanges;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -100,7 +101,7 @@ public class DiffPAreaTaxonomyGenerator {
         });
         
         DiffAreaTaxonomy diffAreaTaxonomy = factory.createDiffAreaTaxonomy(
-                (InheritablePropertyChanges)areaDiffResult.getOntologyDifferences(),
+                new InheritablePropertyChanges((HierarchicalChanges)areaDiffResult.getOntologyDifferences(), null),
                 fromTaxonomy.getAreaTaxonomy(), 
                 toTaxonomy.getAreaTaxonomy(), 
                 diffAreaHierarchy);

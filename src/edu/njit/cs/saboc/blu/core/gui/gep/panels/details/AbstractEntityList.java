@@ -205,6 +205,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         optionsPanel.add(b);
         
         JPanel menuBar = new JPanel();
+        menuBar.setVisible(false);
         menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.LINE_AXIS));
         menuBar.add(optionsPanel);
         menuBar.add(filterPanel);

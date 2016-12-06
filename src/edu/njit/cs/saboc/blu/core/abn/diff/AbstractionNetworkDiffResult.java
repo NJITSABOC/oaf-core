@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.DiffAbNConceptChanges;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
-import edu.njit.cs.saboc.blu.core.abn.diff.explain.OntologyChanges;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,7 +14,7 @@ public class AbstractionNetworkDiffResult {
     private final AbstractionNetwork from;
     private final AbstractionNetwork to;
     
-    private final OntologyChanges ontDifferences;
+    private final DiffAbNConceptChanges ontDifferences;
     
     private final Set<DiffNode> diffNodes;
     
@@ -23,7 +23,7 @@ public class AbstractionNetworkDiffResult {
     public AbstractionNetworkDiffResult(
             AbstractionNetwork from, 
             AbstractionNetwork to, 
-            OntologyChanges ontDifferences,
+            DiffAbNConceptChanges ontDifferences,
             Set<DiffNode> diffNodes,
             DiffNodeHierarchy diffHierarchy) {
         
@@ -44,7 +44,7 @@ public class AbstractionNetworkDiffResult {
         return to;
     }
     
-    public OntologyChanges getOntologyDifferences() {
+    public DiffAbNConceptChanges getOntologyDifferences() {
         return ontDifferences;
     }
     

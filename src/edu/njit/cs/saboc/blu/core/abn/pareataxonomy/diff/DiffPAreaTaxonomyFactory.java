@@ -3,22 +3,23 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyChanges;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.PropertyChangeDetailsFactory;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
  * @author Chris O
  */
-public class DiffPAreaTaxonomyFactory {
+public abstract class DiffPAreaTaxonomyFactory {
     
     public DiffAreaTaxonomy createDiffAreaTaxonomy(
-            InheritablePropertyChanges ontDifferences,
+            DiffPAreaTaxonomyConceptChanges conceptChanges,
             AreaTaxonomy fromSourceTaxonomy, 
             AreaTaxonomy toSourceTaxonomy, 
             Hierarchy<DiffArea> diffAreas) {
         
         return new DiffAreaTaxonomy(this, 
-                ontDifferences,
+                conceptChanges,
                 fromSourceTaxonomy,
                 toSourceTaxonomy, 
                 diffAreas);
@@ -35,4 +36,6 @@ public class DiffPAreaTaxonomyFactory {
                 toSourceTaxonomy, 
                 pareaHierarchy);
     }
+    
+    public abstract PropertyChangeDetailsFactory getPropertyChangeDetailsFactory();
 }

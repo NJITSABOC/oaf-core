@@ -1,8 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.diff.AbstractionNetworkDiffResult;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.explain.HierarchicalChanges;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -30,9 +33,21 @@ public class DiffPAreaTaxonomyGenerator {
         
         DiffAbstractionNetworkGenerator diffGenerator = new DiffAbstractionNetworkGenerator();
         
-        AbstractionNetworkDiffResult areaDiffResult = diffGenerator.diff(fromOnt, fromTaxonomy.getAreaTaxonomy(), toOnt, toTaxonomy.getAreaTaxonomy());
+        DiffPAreaTaxonomyConceptChangesFactory conceptChangesFactory = new DiffPAreaTaxonomyConceptChangesFactory(factory.getPropertyChangeDetailsFactory());
         
-        AbstractionNetworkDiffResult pareaDiffResult = diffGenerator.diff(fromOnt, fromTaxonomy, toOnt, toTaxonomy);
+        AbstractionNetworkDiffResult areaDiffResult = diffGenerator.diff(
+                fromOnt, 
+                fromTaxonomy.getAreaTaxonomy(), 
+                toOnt, 
+                toTaxonomy.getAreaTaxonomy(),
+                conceptChangesFactory);
+        
+        AbstractionNetworkDiffResult pareaDiffResult = diffGenerator.diff(
+                fromOnt, 
+                fromTaxonomy, 
+                toOnt, 
+                toTaxonomy,
+                conceptChangesFactory);
         
         Map<DiffNode, DiffPArea> diffPAreas = new HashMap<>();
         
@@ -100,7 +115,7 @@ public class DiffPAreaTaxonomyGenerator {
         });
         
         DiffAreaTaxonomy diffAreaTaxonomy = factory.createDiffAreaTaxonomy(
-                (InheritablePropertyChanges)areaDiffResult.getOntologyDifferences(),
+                (DiffPAreaTaxonomyConceptChanges)areaDiffResult.getOntologyDifferences(),
                 fromTaxonomy.getAreaTaxonomy(), 
                 toTaxonomy.getAreaTaxonomy(), 
                 diffAreaHierarchy);
@@ -113,4 +128,6 @@ public class DiffPAreaTaxonomyGenerator {
         
         return diffPAreaTaxonomy;
     }
+    
+    
 }

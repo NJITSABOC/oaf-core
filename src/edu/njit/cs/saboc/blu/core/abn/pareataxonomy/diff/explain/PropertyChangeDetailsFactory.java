@@ -9,12 +9,13 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public interface PropertyChangeDetailsFactory {
+public abstract class PropertyChangeDetailsFactory {
     
-    public Set<InheritableProperty> getFromProperties(Concept c);
-    public Set<InheritableProperty> getToProperties(Concept c);
+    public abstract Set<InheritableProperty> getFromOntProperties();
+    public abstract Set<InheritableProperty> getToOntProperties();
+    
+    public abstract Set<InheritableProperty> getFromPropertiesFor(Concept c);
+    public abstract Set<InheritableProperty> getToPropertiesFor(Concept c);
 
-    public Map<Concept, Set<InheritablePropertyChange>> getPropertyChangesFor(
-            Concept concept, 
-            Set<Concept> descendants);
+    public abstract Map<Concept, Set<InheritablePropertyChange>> getPropertyChanges();
 }

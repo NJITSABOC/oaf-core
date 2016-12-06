@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
  * @author Chris O
  */
 public abstract class OntologyChanges {
+    
     private final Ontology fromOntology;
     private final Ontology toOntology;
     
@@ -22,4 +23,5 @@ public abstract class OntologyChanges {
     public Ontology getToOntology() {
         return toOntology;
     }
+    
 }

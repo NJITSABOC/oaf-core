@@ -46,7 +46,7 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
     }
     
     @Override
-    public OntologyChanges getOntologyDifferences() {
+    public DiffPAreaTaxonomyConceptChanges getOntologyDifferences() {
         return getAreaTaxonomy().getOntologyDifferences();
     }
     

@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkInstance;
-import edu.njit.cs.saboc.blu.core.abn.diff.explain.OntologyChanges;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;

@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -111,5 +113,17 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
         });
         
         return allProperties;
+    }
+    
+    public Map<Concept, Area> getConceptAreas() {
+        Map<Concept, Area> conceptAreas = new HashMap<>();
+        
+        this.getAreas().forEach( (area) -> {
+            area.getConcepts().forEach( (concept) -> {
+                conceptAreas.put((Concept)concept, area);
+            });
+        });
+        
+        return conceptAreas;
     }
 }

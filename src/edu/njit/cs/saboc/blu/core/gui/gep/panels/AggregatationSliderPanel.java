@@ -10,12 +10,15 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -28,7 +31,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     private final JSlider aggregationSlider;
-    private final JLabel boundLabel = new JLabel("(1)");
+    
+    private final JTextField txtCurrentBound;
     
     private final AggregationAction aggregationAction;
     
@@ -43,7 +47,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
-        
+
         aggregationSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 1);
         aggregationSlider.setMajorTickSpacing(1);
         aggregationSlider.setSnapToTicks(true);
@@ -53,18 +57,52 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             int newValue = aggregationSlider.getValue();
             
             if (!aggregationSlider.getValueIsAdjusting()) {
-                if (currentBound != newValue) {
-                    aggregationAction.createAndDisplayAggregateAbN(newValue);
-                    this.currentBound = newValue;
-                }
+                setBound(newValue);
                 
+                displayCurrentBound();
+            } else {
+                displayBound(newValue);
             }
+        });
+        
+        this.txtCurrentBound = new JTextField();
+        this.txtCurrentBound.setText("1");
+        this.txtCurrentBound.setPreferredSize(new Dimension(50, -1));
+        
+        this.txtCurrentBound.addActionListener((ae) -> {
+            String txt = txtCurrentBound.getText();
+
+            try {
+                int x = Integer.parseInt(txt);
                 
-            boundLabel.setText(String.format("(%d/%d)", newValue, aggregationSlider.getMaximum()));
+                aggregationSlider.setValue(Integer.min(x, aggregationSlider.getMaximum()));
+
+                setBound(x);
+            } catch (NumberFormatException nfe) {
+
+            }
+
+            displayCurrentBound();
         });
 
         this.add(aggregationSlider, BorderLayout.CENTER);
-        this.add(boundLabel, BorderLayout.EAST);
+        this.add(txtCurrentBound, BorderLayout.EAST);
+    }
+    
+    private void setBound(int bound) {
+        if (currentBound != bound) {
+            aggregationAction.createAndDisplayAggregateAbN(bound);
+            
+            this.currentBound = bound;
+        }
+    }
+    
+    private void displayCurrentBound() {
+        displayBound(currentBound);
+    }
+    
+    private void displayBound(int bound) {
+        txtCurrentBound.setText(Integer.toString(bound));
     }
     
     @Override

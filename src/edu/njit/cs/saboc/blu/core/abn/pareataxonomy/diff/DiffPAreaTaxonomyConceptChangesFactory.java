@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbNConceptChangesFactory;
 import edu.njit.cs.saboc.blu.core.abn.diff.explain.DiffAbNConceptChanges;
 import edu.njit.cs.saboc.blu.core.abn.diff.explain.HierarchicalChanges;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyChanges;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.PropertyChangeDetailsFactory;
 
@@ -14,13 +15,30 @@ public class DiffPAreaTaxonomyConceptChangesFactory implements DiffAbNConceptCha
     
     private final PropertyChangeDetailsFactory propertyChangesFactory;
     
-    public DiffPAreaTaxonomyConceptChangesFactory(PropertyChangeDetailsFactory propertyChangesFactory) {
+    private final PAreaTaxonomy fromTaxonomy;
+    
+    private final PAreaTaxonomy toTaxonomy;
+    
+    public DiffPAreaTaxonomyConceptChangesFactory(
+            PAreaTaxonomy fromTaxonomy,
+            PAreaTaxonomy toTaxonomy,
+            PropertyChangeDetailsFactory propertyChangesFactory) {
+        
         this.propertyChangesFactory = propertyChangesFactory;
+        
+        this.fromTaxonomy = fromTaxonomy;
+        this.toTaxonomy = toTaxonomy;
     }
 
+    
     @Override
     public DiffAbNConceptChanges getConceptChanges(HierarchicalChanges hierarchyChanges) {
-        InheritablePropertyChanges propertyChanges = new InheritablePropertyChanges(hierarchyChanges, propertyChangesFactory);
+        
+        InheritablePropertyChanges propertyChanges = new InheritablePropertyChanges(
+                fromTaxonomy,
+                toTaxonomy,
+                hierarchyChanges, 
+                propertyChangesFactory);
         
         return new DiffPAreaTaxonomyConceptChanges(hierarchyChanges, propertyChanges);
     }

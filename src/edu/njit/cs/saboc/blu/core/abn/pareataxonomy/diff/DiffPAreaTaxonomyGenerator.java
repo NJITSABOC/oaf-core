@@ -1,15 +1,12 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 
-import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.diff.AbstractionNetworkDiffResult;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
-import edu.njit.cs.saboc.blu.core.abn.diff.explain.HierarchicalChanges;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyChanges;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.HashMap;
@@ -32,7 +29,12 @@ public class DiffPAreaTaxonomyGenerator {
         
         DiffAbstractionNetworkGenerator diffGenerator = new DiffAbstractionNetworkGenerator();
         
-        DiffPAreaTaxonomyConceptChangesFactory conceptChangesFactory = new DiffPAreaTaxonomyConceptChangesFactory(factory.getPropertyChangeDetailsFactory());
+        DiffPAreaTaxonomyConceptChangesFactory conceptChangesFactory = 
+                new DiffPAreaTaxonomyConceptChangesFactory(
+                        fromTaxonomy,
+                        toTaxonomy,
+                        factory.getPropertyChangeDetailsFactory());
+        
         
         AbstractionNetworkDiffResult areaDiffResult = diffGenerator.diff(
                 fromOnt, 
@@ -114,7 +116,7 @@ public class DiffPAreaTaxonomyGenerator {
         });
         
         DiffAreaTaxonomy diffAreaTaxonomy = factory.createDiffAreaTaxonomy(
-                new InheritablePropertyChanges((HierarchicalChanges)areaDiffResult.getOntologyDifferences(), null),
+                (DiffPAreaTaxonomyConceptChanges)areaDiffResult.getOntologyDifferences(),
                 fromTaxonomy.getAreaTaxonomy(), 
                 toTaxonomy.getAreaTaxonomy(), 
                 diffAreaHierarchy);

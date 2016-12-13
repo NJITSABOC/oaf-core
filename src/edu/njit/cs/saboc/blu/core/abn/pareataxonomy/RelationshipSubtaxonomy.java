@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;

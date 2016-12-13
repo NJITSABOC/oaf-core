@@ -7,14 +7,10 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -25,74 +21,31 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         public void createAndDisplayRelationshipSubtaxonomy(Set<InheritableProperty> properties);
     }
     
-    private final ArrayList<JCheckBox> propertyBoxes;
-    private final ArrayList<InheritableProperty> availableProperties;
-    
-    private final JPanel propertyListPanel;
-    
     private final JButton derivationButton;
+    
+    private final InheritablePropertySelectionPanel propertySelectionPanel;
     
     public RelationshipSubtaxonomyDerivationPanel(
             RelationshipSubtaxonomyDerivationAction derivationAction) {
         
         super(new BorderLayout());
         
+        this.propertySelectionPanel = new InheritablePropertySelectionPanel();
+        
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.BLACK), "Select [Inheritable Property] to Use in Derivation"));
-        
-        this.propertyBoxes = new ArrayList<>();
-        this.availableProperties = new ArrayList<>();
-        
-        this.propertyListPanel = new JPanel();
-        this.propertyListPanel.setLayout(new BoxLayout(propertyListPanel, BoxLayout.Y_AXIS));
-        
-        this.propertyListPanel.setBackground(Color.WHITE);
-        
-        this.add(new JScrollPane(propertyListPanel), BorderLayout.CENTER);
-        
-        JPanel selectionBtnPanel = new JPanel(new BorderLayout());
-        
-        JButton unselectAllBtn = new JButton("Select None");
-        unselectAllBtn.addActionListener( (ae) -> {
-            propertyBoxes.forEach( (cb) -> {
-               cb.setSelected(false);
-            });
-        });
-        
-        JButton selectAllbtn = new JButton("Select All");
-        selectAllbtn.addActionListener( (ae) -> {
-            propertyBoxes.forEach( (cb) -> {
-               cb.setSelected(true);
-            });
-        });
-        
-        JPanel optionPanel = new JPanel(new BorderLayout());
-        
-        selectionBtnPanel.add(unselectAllBtn, BorderLayout.WEST);
-        selectionBtnPanel.add(selectAllbtn, BorderLayout.EAST);
-        
-        optionPanel.add(selectionBtnPanel, BorderLayout.NORTH);
-        
+
         derivationButton = new JButton("Derive Subtaxonomy");
         derivationButton.addActionListener( (ae) -> {
-            derivationAction.createAndDisplayRelationshipSubtaxonomy(this.getUserSelectedProperties());
+            derivationAction.createAndDisplayRelationshipSubtaxonomy(propertySelectionPanel.getUserSelectedProperties());
         });
         
-        optionPanel.add(derivationButton, BorderLayout.SOUTH);
+        JPanel contentPanel = new JPanel(new BorderLayout());
         
-        this.add(optionPanel, BorderLayout.SOUTH);
-    }
-    
-    public Set<InheritableProperty> getUserSelectedProperties() {
-        Set<InheritableProperty> propertyDetails = new HashSet<>();
+        contentPanel.add(propertySelectionPanel, BorderLayout.CENTER);
+        contentPanel.add(derivationButton, BorderLayout.SOUTH);
         
-        for(int c = 0; c < availableProperties.size(); c++) {
-            if(propertyBoxes.get(c).isSelected()) {
-                propertyDetails.add(availableProperties.get(c));
-            }
-        }
-        
-        return propertyDetails;
+        this.add(contentPanel, BorderLayout.CENTER);
     }
     
     public void initialize(PAreaTaxonomyConfiguration config, PAreaTaxonomy taxonomy) {
@@ -109,38 +62,21 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
             return a.getName().compareToIgnoreCase(b.getName());
         });
         
-        propertyBoxes.clear();
-        
-        this.availableProperties.clear();
-        availableProperties.addAll(taxonomyAvailableProperties);
-        
-        propertyListPanel.removeAll();
-        
-        taxonomyAvailableProperties.forEach((property) -> {
-            String propertyName = property.getName();
-
-            JCheckBox chkSelectProperty = new JCheckBox(propertyName);
-            chkSelectProperty.setOpaque(false);
-            chkSelectProperty.setSelected(true);
-
-            propertyBoxes.add(chkSelectProperty);
-            propertyListPanel.add(chkSelectProperty);
-        });
- 
-        propertyListPanel.validate();
-        propertyListPanel.repaint();
+        propertySelectionPanel.initialize(taxonomyAvailableProperties);
     }
     
     public void initializeSubtaxonomy(PAreaTaxonomyConfiguration config, RelationshipSubtaxonomy taxonomy) {
         initialize(config, taxonomy.getSourceTaxonomy());
         
         Set<InheritableProperty> usedProperties = taxonomy.getAllowedProperties();
+        
+        ArrayList<InheritableProperty> taxonomyAvailableProperties = new ArrayList<>(
+                taxonomy.getPropertiesInTaxonomy());
+        
+        taxonomyAvailableProperties.sort( (a, b) -> {
+            return a.getName().compareToIgnoreCase(b.getName());
+        });
                 
-        for(int c = 0; c < propertyBoxes.size(); c++) {
-            InheritableProperty property = availableProperties.get(c);
-            JCheckBox propertyBox = propertyBoxes.get(c);
-            
-            propertyBox.setSelected(usedProperties.contains(property));
-        }
+        propertySelectionPanel.initialize(taxonomyAvailableProperties, usedProperties);
     }
 }

@@ -1,14 +1,14 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain;
 
-import edu.njit.cs.saboc.blu.core.abn.diff.explain.DiffAbNConceptChange;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Objects;
 
 /**
  *
  * @author Chris O
  */
-public class InheritablePropertyChange extends DiffAbNConceptChange {
+public class InheritablePropertyDomainChange extends InheritablePropertyChange {
     
    public static enum PropertyState {
         Added,
@@ -24,22 +24,19 @@ public class InheritablePropertyChange extends DiffAbNConceptChange {
     
     private final PropertyState propertyState;
     
-    private final InheritableProperty property;
-
     private final Concept domain;
     
     private final DomainModificationType domainModificationType;
 
-    public InheritablePropertyChange(PropertyState modificationState, 
+    public InheritablePropertyDomainChange(PropertyState modificationState, 
             InheritableProperty property, 
             ChangeInheritanceType domainType, 
             Concept domain, 
             DomainModificationType domainModificationType) {
         
-        super(domain, domainType);
+        super(domain, property, domainType);
         
         this.propertyState = modificationState;
-        this.property = property;
         
         this.domain = domain;
         this.domainModificationType = domainModificationType;
@@ -52,12 +49,55 @@ public class InheritablePropertyChange extends DiffAbNConceptChange {
     public Concept getPropertyDomain() {
         return domain;
     }
-    
-    public InheritableProperty getProperty() {
-        return property;
-    }
+
 
     public DomainModificationType getModificationType() {
         return domainModificationType;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        
+        hash = 29 * hash + Objects.hashCode(this.propertyState);
+        hash = 29 * hash + Objects.hashCode(this.getProperty());
+        hash = 29 * hash + Objects.hashCode(this.domain);
+        hash = 29 * hash + Objects.hashCode(this.domainModificationType);
+        
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final InheritablePropertyDomainChange other = (InheritablePropertyDomainChange) obj;
+        
+        if (this.propertyState != other.propertyState) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.getProperty(), other.getProperty())) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.domain, other.domain)) {
+            return false;
+        }
+        
+        if (this.domainModificationType != other.domainModificationType) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    
+
 }

@@ -43,8 +43,6 @@ public class ConceptSearchPanel extends JPanel {
         public SpinnerTextField() {
             super(new BorderLayout());
             
-            JPanel p = new JPanel(new BorderLayout());
-            
             textField = new JTextField();
             spinner = new JLabel(IconManager.getIconManager().getIcon("spinner.gif"));
             spinner.setOpaque(true);
@@ -66,6 +64,10 @@ public class ConceptSearchPanel extends JPanel {
         
         public String getText() {
             return textField.getText();
+        }
+        
+        public void clearText() {
+            textField.setText("");
         }
 
         public void setSpinnerVisible(boolean value) {
@@ -242,5 +244,15 @@ public class ConceptSearchPanel extends JPanel {
         });
         
         searchThread.start();
+    }
+    
+    public void clearResults() {
+        resultList.clearContents();
+    }
+    
+    public void clear() {
+        txtSearchBox.clearText();
+        
+        clearResults();
     }
 }

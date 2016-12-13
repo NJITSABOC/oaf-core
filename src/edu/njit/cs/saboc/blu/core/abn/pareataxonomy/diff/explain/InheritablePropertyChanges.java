@@ -40,6 +40,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
         
         this.propertyChanges = changeDetailsFactory.getPropertyChanges();
 
+        /*
         hierarchyChanges.getTransferredHierarchyConcepts().forEach((concept) -> {
             Set<Concept> fromParents = hierarchyChanges.getFromSubhierarchy().getParents(concept);
             Set<Concept> toParents = hierarchyChanges.getToSubhierarchy().getParents(concept);
@@ -56,7 +57,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
             }
             
         });
-        
+        */
         
         
         

@@ -51,24 +51,12 @@ public class RegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
         GraphGroupLevel currentPAreaLevel = null; // Used for generating the graph
 
         // These are a set of styles such that each new row is given a different color.
-        Color[] background = {
-            new Color(178, 178, 178),
-            new Color(55, 213, 102),
-            new Color(121, 212, 250),
-            new Color(242, 103, 103),
-            new Color(232, 255, 114),
-            Color.cyan,
-            Color.orange,
-            Color.pink,
-            Color.green,
-            Color.yellow
-        };
+        ArrayList<Color> backgrounds = super.getTaxonomyLevelColors();
 
         int areaX = 0;  // The first area on each line is given an areaX value of 0.
         int areaY = 0;  // The first row of areas is given an areaY value of 0.
         int pAreaX, pAreaY;
         int x = 0, y = 20, maxHeight = 0;
-        int style = 0;
 
         currentLevel = null; // This is used as a temporary variable in this method to hold the current level.
         currentArea = null;
@@ -99,7 +87,6 @@ public class RegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
                 areaX = 0;  // Reset the areaX variable.
 
                 maxHeight = 0;  // Reset the maxHeight variable since this is a new row.
-                style++;    // Update the style variable which is used to display different colors for the different rows.
 
                 addGraphLevel(new GraphLevel(areaY, getGraph(),
                         generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null))); // Add a level object to the arrayList in the dataGraph object
@@ -146,7 +133,7 @@ public class RegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
 
             currentLevel = getLevels().get(areaY);
 
-            Color color = background[style % background.length];
+            Color color = backgrounds.get(area.getRelationships().size() % backgrounds.size());
 
             AreaEntry areaEntry = createAreaPanel(getGraph(), area, x, y, areaWidth, areaHeight, color, areaX, currentLevel); // Create the area
 

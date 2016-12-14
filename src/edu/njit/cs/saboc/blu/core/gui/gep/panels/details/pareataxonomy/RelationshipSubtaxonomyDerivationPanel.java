@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.pareataxonomy.InheritablePropertySelectionPanel;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RelationshipSubtaxonomy;

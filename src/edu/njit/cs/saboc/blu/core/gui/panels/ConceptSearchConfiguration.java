@@ -13,5 +13,7 @@ public interface ConceptSearchConfiguration {
     
     public void searchResultSelected(Concept c);
     
+    public void searchResultDoubleClicked(Concept c);
+    
     public void noSearchResultSelected();
 }

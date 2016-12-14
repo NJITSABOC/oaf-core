@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
@@ -19,13 +20,11 @@ import javax.swing.JToggleButton;
  *
  * @author Chris O
  */
-public class TANPatriarchListPanel extends JPanel {
+public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     
-    private Optional<Ontology> optCurrentOntology = Optional.empty();
-
-    private final Set<Concept> selectedRoots = new HashSet<>();
+    private final Set<Concept> selectedPatriarchs = new HashSet<>();
     
-    private final ConceptList selectedRootList;
+    private final ConceptList selectedPatriarchList;
     
     private final JToggleButton useChildrenBtn;
     private final JToggleButton userSelectionBtn;
@@ -36,8 +35,14 @@ public class TANPatriarchListPanel extends JPanel {
         
         this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", 
                     config.getTextConfiguration().getChildConceptTypeName(true)));
+        this.useChildrenBtn.addActionListener( (ae) -> {
+            useChildrenSelected();
+        });
         
         this.userSelectionBtn = new JToggleButton("Select Individual Roots");
+        this.userSelectionBtn.addActionListener( (ae) -> {
+            userSelectionSelected();
+        });
         
         ButtonGroup bg = new ButtonGroup();
         bg.add(useChildrenBtn);
@@ -50,41 +55,71 @@ public class TANPatriarchListPanel extends JPanel {
         
         this.add(northPanel, BorderLayout.NORTH);
         
-        this.selectedRootList = new ConceptList(config);
+        this.selectedPatriarchList = new ConceptList(config);
         
-        this.add(selectedRootList, BorderLayout.CENTER);
+        this.add(selectedPatriarchList, BorderLayout.CENTER);
         
-        reset();
+        resetView();
     }
     
+    public Set<Concept> getSelectedPatriarchs() {
+        return selectedPatriarchs;
+    }
+    
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        useChildrenBtn.setEnabled(value);
+        userSelectionBtn.setEnabled(value);
+    }
     
     public void conceptSelected(Concept concept) {
-        selectedRoots.clear();
 
         if (useChildrenBtn.isSelected()) {
-            if (optCurrentOntology.isPresent()) {
-                selectedRoots.addAll(optCurrentOntology.get().getConceptHierarchy().getChildren(concept));
+            selectedPatriarchs.clear();
+            
+            if (super.getCurrentOntology().isPresent()) {
+                selectedPatriarchs.addAll(super.getCurrentOntology().get().getConceptHierarchy().getChildren(concept));
             }
         } else {
-            selectedRoots.add(concept);
+            selectedPatriarchs.add(concept);
         }
 
-        ArrayList<Concept> sortedConcepts = new ArrayList<>(selectedRoots);
+        ArrayList<Concept> sortedConcepts = new ArrayList<>(selectedPatriarchs);
         sortedConcepts.sort(new ConceptNameComparator());
 
-        selectedRootList.setContents(sortedConcepts);
+        selectedPatriarchList.setContents(sortedConcepts);
     }
     
     public void initialize(Ontology ont) {
-        this.optCurrentOntology = Optional.of(ont);
+        super.initialize(ont);
+        
+        resetView();
     }
     
-    public final void reset() {
-        this.optCurrentOntology = Optional.empty();
+    public void clearContents() {
+        super.clearContents();
         
+        this.selectedPatriarchList.clearContents();
+    }
+    
+    public final void resetView() {
         useChildrenBtn.setSelected(true);
         
-        selectedRootList.clearContents();
+        useChildrenSelected();
     }
     
+    public boolean inUseChildrenMode() {
+        return useChildrenBtn.isSelected();
+    }
+    
+    private void useChildrenSelected() {
+        this.selectedPatriarchList.clearContents();
+        this.selectedPatriarchs.clear();
+    }
+    
+    private void userSelectionSelected() {
+        this.selectedPatriarchList.clearContents();
+        this.selectedPatriarchs.clear();
+    }
 }

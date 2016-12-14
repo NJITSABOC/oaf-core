@@ -41,7 +41,8 @@ public class RightClickMenu {
         private void showPopup(MouseEvent e) {
             //disable options
             int row = table.getSelectedRow();
-            String data = table.getModel().getValueAt(row, 0).toString();           
+            String data = table.getModel().getValueAt(row, 0).toString();
+            
             if (data.length() > 10){
                 toggleMenuItem("Print Name", false);
             }

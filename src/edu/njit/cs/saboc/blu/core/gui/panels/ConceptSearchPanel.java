@@ -189,7 +189,7 @@ public class ConceptSearchPanel extends JPanel {
 
             @Override
             public void entityDoubleClicked(Concept entity) {
-                entityClicked(entity);
+                searchConfiguration.searchResultDoubleClicked(entity);
             }
 
             @Override
@@ -246,11 +246,13 @@ public class ConceptSearchPanel extends JPanel {
         searchThread.start();
     }
     
+    
+    
     public void clearResults() {
         resultList.clearContents();
     }
     
-    public void clear() {
+    public void clearContents() {
         txtSearchBox.clearText();
         
         clearResults();

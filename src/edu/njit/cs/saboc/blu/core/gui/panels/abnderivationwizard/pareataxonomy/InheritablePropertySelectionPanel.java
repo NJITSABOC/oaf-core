@@ -1,6 +1,7 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -17,7 +18,7 @@ import javax.swing.JScrollPane;
  *
  * @author Chris O
  */
-public class InheritablePropertySelectionPanel extends JPanel {
+public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel {
         
     private final ArrayList<JCheckBox> propertyBoxes;
     private final ArrayList<InheritableProperty> availableProperties;
@@ -89,17 +90,17 @@ public class InheritablePropertySelectionPanel extends JPanel {
         btnSelectAll.setEnabled(value);
     }
     
-    public void reset() {
+    public void clearContents() {
         propertyBoxes.clear();
         availableProperties.clear();
 
         propertyListPanel.removeAll();
-
-        propertyScroller.validate();
-        propertyScroller.repaint();
+    }
+    
+    public void resetView() {
+        clearContents();
         
-        propertyListPanel.validate();
-        propertyListPanel.repaint();
+        doRepaint();
     }
     
     public void initialize(ArrayList<InheritableProperty> availableProperties) {
@@ -126,6 +127,10 @@ public class InheritablePropertySelectionPanel extends JPanel {
             this.availableProperties.add(property);
         });
         
+       doRepaint();
+    }
+    
+    private void doRepaint() {
         propertyScroller.validate();
         propertyScroller.repaint();
 

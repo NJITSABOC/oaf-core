@@ -298,7 +298,6 @@ public class InheritablePropertyChanges extends OntologyChanges {
 
                 transferredConceptsAffectedByPropertyChange.get(transferredConcept).addAll(conceptsAffectedByPropertyChange.get(transferredConcept));
             }
-
         }
 
         // Only consider classes that are still in the hierarchy

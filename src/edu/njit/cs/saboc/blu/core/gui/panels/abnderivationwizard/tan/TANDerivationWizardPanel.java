@@ -5,11 +5,11 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionListener;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,15 +21,23 @@ import javax.swing.JPanel;
  */
 public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     
+    public interface DeriveTANAction {
+        public void deriveTribalAbstractionNetwork(Set<Concept> patriarchs);
+    }
+    
     private final RootSelectionPanel<ClusterTribalAbstractionNetwork> rootSelectionPanel;
     
     private final TANPatriarchListPanel selectedPatriarchPanel;
     
     private final JButton deriveButton;
     
-    public TANDerivationWizardPanel(TANConfiguration config) {
+    private final DeriveTANAction derivationAction;
+        
+    public TANDerivationWizardPanel(TANConfiguration config, DeriveTANAction derivationAction) {
         
         this.setLayout(new BorderLayout());
+        
+        this.derivationAction = derivationAction;
         
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
@@ -37,29 +45,10 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         this.rootSelectionPanel = new RootSelectionPanel<>(config);
         
         this.rootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
-                "1. Select Tribal Abstraction Network Root Classes"));
-        
-        this.rootSelectionPanel.addRootSelectionListener(new RootSelectionListener() {
-
-            @Override
-            public void rootSelected(Concept root) {
-                if(selectedPatriarchPanel.inUseChildrenMode()) {
-                    selectedPatriarchPanel.conceptSelected(root);
-                }
-            }
-
-            @Override
-            public void rootDoubleClicked(Concept root) {
-                selectedPatriarchPanel.conceptSelected(root);
-            }
-
-            @Override
-            public void noRootSelected() {
-                selectedPatriarchPanel.resetView();
-            }
-        });
-        
-        this.selectedPatriarchPanel = new TANPatriarchListPanel(config);
+                String.format("1. Select Tribal Abstraction Network Root %s", 
+                        config.getTextConfiguration().getConceptTypeName(true))));
+                
+        this.selectedPatriarchPanel = new TANPatriarchListPanel(config, rootSelectionPanel);
         this.selectedPatriarchPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
                 "2. Selected Patriarchs"));
         
@@ -69,6 +58,9 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
         
         this.deriveButton = new JButton("Derive Tribal Abstraction Network");
+        this.deriveButton.addActionListener( (ae) -> {
+            deriveTribalAbstractionNetwork();
+        });
         
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.add(deriveButton, BorderLayout.EAST);
@@ -92,10 +84,32 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         
         rootSelectionPanel.initialize(ontology, searcher);
         selectedPatriarchPanel.initialize(ontology);
+        
+        selectedPatriarchPanel.resetView();
+        rootSelectionPanel.resetView();
     }
     
     public final void resetView() {
         rootSelectionPanel.resetView();
         selectedPatriarchPanel.resetView();
+    }
+    
+    private void deriveTribalAbstractionNetwork() {
+        if(!super.getCurrentOntology().isPresent()) {
+            
+           return;
+        }
+        
+        if(!rootSelectionPanel.getSelectedRoot().isPresent()) {
+            
+            return;
+        }
+        
+        if(selectedPatriarchPanel.getSelectedPatriarchs().size() < 2) {
+            
+            return;
+        }
+        
+        derivationAction.deriveTribalAbstractionNetwork(selectedPatriarchPanel.getSelectedPatriarchs());
     }
 }

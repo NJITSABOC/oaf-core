@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionMode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
@@ -10,7 +12,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -29,8 +30,45 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     private final JToggleButton useChildrenBtn;
     private final JToggleButton userSelectionBtn;
     
-    public TANPatriarchListPanel(AbNConfiguration config) {
+    private final RootSelectionPanel rootSelectionPanel;
+    
+    public TANPatriarchListPanel(AbNConfiguration config, RootSelectionPanel rootSelectionPanel) {
         
+        this.rootSelectionPanel = rootSelectionPanel;
+        this.rootSelectionPanel.addRootSelectionListener( new RootSelectionPanel.RootSelectionListener() {
+
+            @Override
+            public void rootSelected(Concept root) {
+                if (inUseChildrenMode()) {
+                    conceptSelected(root);
+                }
+            }
+            
+            @Override
+            public void rootDoubleClicked(Concept root) {
+                conceptSelected(root);
+            }
+            
+            @Override
+            public void noRootSelected() {
+                resetView();
+            }
+        });
+        
+        this.rootSelectionPanel.addRootSelectionModeChangedListener( (mode) -> {
+            this.useChildrenBtn.setSelected(true);
+            
+            if(mode.equals(RootSelectionMode.WholeOntology)) {
+                useChildrenSelected();
+                
+                this.useChildrenBtn.setEnabled(false);
+                this.userSelectionBtn.setEnabled(false);
+            } else {
+                this.useChildrenBtn.setEnabled(true);
+                this.userSelectionBtn.setEnabled(true);
+            }
+        });
+                
         this.setLayout(new BorderLayout());
         
         this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", 
@@ -68,13 +106,18 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     
     public void setEnabled(boolean value) {
         super.setEnabled(value);
-        
-        useChildrenBtn.setEnabled(value);
-        userSelectionBtn.setEnabled(value);
+
+        if (rootSelectionPanel.getRootSelectionMode().equals(RootSelectionMode.WholeOntology)) {
+            // Don't enable when in whole ontology selection mode...
+            
+        } else {
+            useChildrenBtn.setEnabled(value);
+            userSelectionBtn.setEnabled(value);
+        }
+
     }
     
     public void conceptSelected(Concept concept) {
-
         if (useChildrenBtn.isSelected()) {
             selectedPatriarchs.clear();
             

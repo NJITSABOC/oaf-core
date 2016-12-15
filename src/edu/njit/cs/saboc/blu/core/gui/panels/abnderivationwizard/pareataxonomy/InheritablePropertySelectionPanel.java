@@ -9,18 +9,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
 
 /**
  *
  * @author Chris O
  */
 public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel {
-        
-    private final ArrayList<JCheckBox> propertyBoxes;
+    
+    public static enum SelectionType {
+        Multiple,
+        Single
+    }
+    
+    private final ArrayList<JToggleButton> propertyBoxes;
     private final ArrayList<InheritableProperty> availableProperties;
     
     private final JPanel propertyListPanel;
@@ -30,7 +38,11 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
     
     private final JScrollPane propertyScroller;
     
-    public InheritablePropertySelectionPanel() {
+    private final SelectionType selectionType;
+    
+    public InheritablePropertySelectionPanel(SelectionType selectionType) {
+        this.selectionType = selectionType;
+        
         this.setLayout(new BorderLayout());
         
         this.propertyBoxes = new ArrayList<>();
@@ -62,8 +74,11 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         JPanel selectionBtnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
         selectionBtnPanel.add(btnUnselectAll);
-        selectionBtnPanel.add(btnSelectAll);
         
+        if(this.selectionType == SelectionType.Multiple) {
+            selectionBtnPanel.add(btnSelectAll);
+        }
+
         this.add(selectionBtnPanel, BorderLayout.SOUTH);
     }
     
@@ -113,20 +128,30 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
 
         this.propertyListPanel.removeAll();
         
-        availableProperties.forEach( (property) -> {
+        ButtonGroup buttonGroup = new ButtonGroup();
+        
+        availableProperties.forEach((property) -> {
             String propertyName = property.getName();
 
-            JCheckBox chkSelectProperty = new JCheckBox(propertyName);
+            JToggleButton chkSelectProperty;
+            
+            if(selectionType == SelectionType.Multiple) {
+                chkSelectProperty = new JCheckBox(propertyName);
+            } else {
+                chkSelectProperty = new JRadioButton(propertyName);
+                buttonGroup.add(chkSelectProperty);
+            }
+            
             chkSelectProperty.setOpaque(false);
 
             chkSelectProperty.setSelected(selectedProperties.contains(property));
 
             propertyBoxes.add(chkSelectProperty);
             propertyListPanel.add(chkSelectProperty);
-            
+
             this.availableProperties.add(property);
         });
-        
+
        doRepaint();
     }
     

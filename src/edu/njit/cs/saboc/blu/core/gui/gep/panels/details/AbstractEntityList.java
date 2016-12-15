@@ -170,6 +170,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int row = entityTable.getSelectedRow();
                 String data = entityTable.getModel().getValueAt(row, 0).toString();
+                
                 System.out.println(data);
             }
         });

@@ -17,7 +17,7 @@ public abstract class AbNDerivationWizardPanel extends JPanel {
         
     }
     
-    public void initialize(Ontology<Concept> ont) {
+    public void initialize(Ontology ont) {
         this.optCurrentOntology = Optional.of(ont);
     }
     

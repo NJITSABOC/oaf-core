@@ -21,22 +21,34 @@ import javax.swing.JToggleButton;
  */
 public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDerivationWizardPanel {
 
+    public static enum RootSelectionMode {
+        WholeOntology,
+        SearchForRoot
+    }
+    
     public interface RootSelectionListener {
         public void rootSelected(Concept root);
         public void rootDoubleClicked(Concept root);
         public void noRootSelected();
     }
     
+    public interface RootSelectionModeChangedListener {
+        public void selectionModeChanged(RootSelectionMode mode);
+    }
+        
     private final ConceptSearchPanel conceptSearchPanel;
     
     private final JToggleButton btnUseWholeOntology;
     private final JToggleButton btnSearchForRoot;
     
     private final ArrayList<RootSelectionListener> rootSelectionListeners = new ArrayList<>();
+    private final ArrayList<RootSelectionModeChangedListener> selectionModeChangedListeners = new ArrayList<>();
     
     private Optional<Concept> selectedRoot = Optional.empty();
     
     private Optional<OntologySearcher> optSearcher = Optional.empty();
+    
+    private RootSelectionMode rootSelectionMode = RootSelectionMode.WholeOntology;
 
     public RootSelectionPanel(AbNConfiguration config) {
         this.setLayout(new BorderLayout());
@@ -104,8 +116,20 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
         rootSelectionListeners.remove(rootSelectionListener);
     }
     
+    public void addRootSelectionModeChangedListener(RootSelectionModeChangedListener rootSelectionModeChangedListener) {
+        selectionModeChangedListeners.add(rootSelectionModeChangedListener);
+    }
+    
+    public void removeRootSelectionModeChangedListener(RootSelectionModeChangedListener rootSelectionModeChangedListener) {
+        selectionModeChangedListeners.remove(rootSelectionModeChangedListener);
+    }
+    
     public Optional<Concept> getSelectedRoot() {
         return selectedRoot;
+    }
+    
+    public RootSelectionMode getRootSelectionMode() {
+        return rootSelectionMode;
     }
 
     public void initialize(Ontology ontology, OntologySearcher searcher) {        
@@ -137,10 +161,17 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
     }
 
     private void useEntireOntologySelected() {
+        
+        this.rootSelectionMode = RootSelectionMode.WholeOntology;
+        
         this.btnSearchForRoot.setSelected(false);
         
         this.conceptSearchPanel.setEnabled(false);
         this.conceptSearchPanel.clearResults();
+        
+        this.selectionModeChangedListeners.forEach( (listener) -> {
+            listener.selectionModeChanged(RootSelectionMode.WholeOntology);
+        });
 
         if (super.getCurrentOntology().isPresent()) {
             Concept root = super.getCurrentOntology().get().getConceptHierarchy().getRoot();
@@ -160,7 +191,13 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
     }
     
     private void useSpecificRootSelected() {
+        this.rootSelectionMode = RootSelectionMode.SearchForRoot;
+        
         this.conceptSearchPanel.setEnabled(true);
+
+        this.selectionModeChangedListeners.forEach( (listener) -> {
+            listener.selectionModeChanged(RootSelectionMode.SearchForRoot);
+        });
         
         rootSelectionListeners.forEach((listener) -> {
             listener.noRootSelected();

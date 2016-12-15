@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RelationshipSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.pareataxonomy.InheritablePropertySelectionPanel.SelectionType;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         
         super(new BorderLayout());
         
-        this.propertySelectionPanel = new InheritablePropertySelectionPanel();
+        this.propertySelectionPanel = new InheritablePropertySelectionPanel(SelectionType.Multiple);
         
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.BLACK), "Select [Inheritable Property] to Use in Derivation"));

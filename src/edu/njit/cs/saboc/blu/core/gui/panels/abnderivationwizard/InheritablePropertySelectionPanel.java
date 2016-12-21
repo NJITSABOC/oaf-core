@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
@@ -28,6 +28,10 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         Single
     }
     
+    public interface InheritablePropertySelectionListener {
+        public void propertiesSelected(Set<InheritableProperty> properties);
+    }
+    
     private final ArrayList<JToggleButton> propertyBoxes;
     private final ArrayList<InheritableProperty> availableProperties;
     
@@ -39,6 +43,8 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
     private final JScrollPane propertyScroller;
     
     private final SelectionType selectionType;
+    
+    private final ArrayList<InheritablePropertySelectionListener> selectedPropertiesChangedListeners = new ArrayList<>();
     
     public InheritablePropertySelectionPanel(SelectionType selectionType) {
         this.selectionType = selectionType;
@@ -82,6 +88,14 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         this.add(selectionBtnPanel, BorderLayout.SOUTH);
     }
     
+    public void addSelectedPropertiesChangedListener(InheritablePropertySelectionListener listener) {
+        this.selectedPropertiesChangedListeners.add(listener);
+    }
+    
+    public void removeSelectedPropertiesChangedListener(InheritablePropertySelectionListener listener) {
+        this.selectedPropertiesChangedListeners.remove(listener);
+    }
+    
     public Set<InheritableProperty> getAvailableProperties() {
         return new HashSet<>(availableProperties);
     }
@@ -108,6 +122,8 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
     public void clearContents() {
         propertyBoxes.clear();
         availableProperties.clear();
+        
+        fireSelectedPropertiesChangedListeners();
 
         propertyListPanel.removeAll();
     }
@@ -127,32 +143,40 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         this.availableProperties.clear();
 
         this.propertyListPanel.removeAll();
-        
+
         ButtonGroup buttonGroup = new ButtonGroup();
-        
-        availableProperties.forEach((property) -> {
+
+        availableProperties.forEach( (property) -> {
             String propertyName = property.getName();
 
             JToggleButton chkSelectProperty;
-            
-            if(selectionType == SelectionType.Multiple) {
+
+            if (selectionType == SelectionType.Multiple) {
                 chkSelectProperty = new JCheckBox(propertyName);
             } else {
                 chkSelectProperty = new JRadioButton(propertyName);
                 buttonGroup.add(chkSelectProperty);
             }
-            
+
             chkSelectProperty.setOpaque(false);
 
             chkSelectProperty.setSelected(selectedProperties.contains(property));
+            
+            chkSelectProperty.addActionListener( (ae) -> {
+                fireSelectedPropertiesChangedListeners();
+            });
 
             propertyBoxes.add(chkSelectProperty);
             propertyListPanel.add(chkSelectProperty);
 
             this.availableProperties.add(property);
         });
+        
+        fireSelectedPropertiesChangedListeners();
 
-       doRepaint();
+        buttonGroup.clearSelection();
+
+        doRepaint();
     }
     
     private void doRepaint() {
@@ -161,5 +185,11 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
 
         propertyListPanel.validate();
         propertyListPanel.repaint();
+    }
+    
+    private void fireSelectedPropertiesChangedListeners() {
+        selectedPropertiesChangedListeners.forEach( (listener) -> {
+            listener.propertiesSelected(this.getUserSelectedProperties());
+        });
     }
 }

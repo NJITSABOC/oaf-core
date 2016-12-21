@@ -3,12 +3,14 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Objects;
 
 /**
  *
  * @author Chris O
  */
 public class RelationshipTriple {
+    
     private final Concept source;
     private final InheritableProperty property;
     private final Concept target;
@@ -30,4 +32,44 @@ public class RelationshipTriple {
     public Concept getTarget() {
         return target;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        
+        hash = 47 * hash + Objects.hashCode(this.source);
+        hash = 47 * hash + Objects.hashCode(this.property);
+        hash = 47 * hash + Objects.hashCode(this.target);
+        
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final RelationshipTriple other = (RelationshipTriple) obj;
+        
+        if (!Objects.equals(this.source, other.source)) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.property, other.property)) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.target, other.target)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
 }

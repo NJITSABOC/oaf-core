@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionMode;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
@@ -32,42 +33,11 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     
     private final RootSelectionPanel rootSelectionPanel;
     
-    public TANPatriarchListPanel(AbNConfiguration config, RootSelectionPanel rootSelectionPanel) {
+    public TANPatriarchListPanel(AbNConfiguration config, 
+            RootSelectionPanel rootSelectionPanel) {
         
         this.rootSelectionPanel = rootSelectionPanel;
-        this.rootSelectionPanel.addRootSelectionListener( new RootSelectionPanel.RootSelectionListener() {
-
-            @Override
-            public void rootSelected(Concept root) {
-                if (inUseChildrenMode()) {
-                    conceptSelected(root);
-                }
-            }
-            
-            @Override
-            public void rootDoubleClicked(Concept root) {
-                conceptSelected(root);
-            }
-            
-            @Override
-            public void noRootSelected() {
-                resetView();
-            }
-        });
         
-        this.rootSelectionPanel.addRootSelectionModeChangedListener( (mode) -> {
-            this.useChildrenBtn.setSelected(true);
-            
-            if(mode.equals(RootSelectionMode.WholeOntology)) {
-                useChildrenSelected();
-                
-                this.useChildrenBtn.setEnabled(false);
-                this.userSelectionBtn.setEnabled(false);
-            } else {
-                this.useChildrenBtn.setEnabled(true);
-                this.userSelectionBtn.setEnabled(true);
-            }
-        });
                 
         this.setLayout(new BorderLayout());
         
@@ -86,6 +56,7 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         bg.add(useChildrenBtn);
         bg.add(userSelectionBtn);
         
+
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
         northPanel.add(useChildrenBtn);
@@ -96,6 +67,40 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         this.selectedPatriarchList = new ConceptList(config);
         
         this.add(selectedPatriarchList, BorderLayout.CENTER);
+        
+        this.rootSelectionPanel.addRootSelectionListener(new RootSelectionListener() {
+
+            @Override
+            public void rootSelected(Concept root) {
+                if (inUseChildrenMode()) {
+                    conceptSelected(root);
+                }
+            }
+
+            @Override
+            public void rootDoubleClicked(Concept root) {
+                conceptSelected(root);
+            }
+
+            @Override
+            public void noRootSelected() {
+                resetView();
+            }
+        });
+
+        this.rootSelectionPanel.addRootSelectionModeChangedListener((mode) -> {
+            this.useChildrenBtn.setSelected(true);
+
+            if (mode.equals(RootSelectionMode.WholeOntology)) {
+                useChildrenSelected();
+
+                this.useChildrenBtn.setEnabled(false);
+                this.userSelectionBtn.setEnabled(false);
+            } else {
+                this.useChildrenBtn.setEnabled(true);
+                this.userSelectionBtn.setEnabled(true);
+            }
+        });
         
         resetView();
     }

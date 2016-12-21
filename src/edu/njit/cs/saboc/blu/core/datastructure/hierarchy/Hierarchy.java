@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
+import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AllPathsToNodeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyDepthVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
@@ -478,6 +479,18 @@ public class Hierarchy<T> {
         return ancestorHierarchy.getAncestorHierarchy();
     }
     
+    public Set<T> getAncestors(T node) {
+        return getAncestors(Collections.singleton(node));
+    }
+    
+    public Set<T> getAncestors(Set<T> nodes) {
+        Set<T> ancestors = getAncestorHierarchy(nodes).getNodes();
+        ancestors.removeAll(nodes);
+
+        return ancestors;
+    }
+    
+    
     /**
      * Returns all paths from the roots of the hierarchy to the given node
      * 
@@ -643,5 +656,24 @@ public class Hierarchy<T> {
         this.topologicalDown(hierarchyDepthVisitor);
         
         return hierarchyDepthVisitor.getAllDepths();
+    }
+    
+    public Set<T> lowestCommonAncestors(Set<T> nodes) {
+        Hierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(nodes);
+        
+        Set<T> potentialLCAs = new HashSet<>();
+        
+        ancestorHierarchy.getNodes().forEach( (node) -> {
+            Set<T> descendants = ancestorHierarchy.getDescendants(node);
+            
+            if(SetUtilities.getSetIntersection(descendants, nodes).size() == nodes.size()) {
+                potentialLCAs.add(node);
+            }
+            
+        });
+        
+        // TODO: Finish all of this...
+        
+        return potentialLCAs;
     }
 }

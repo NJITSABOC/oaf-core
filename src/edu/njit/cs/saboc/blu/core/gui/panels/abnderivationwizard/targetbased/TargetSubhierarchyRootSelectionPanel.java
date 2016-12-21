@@ -1,9 +1,11 @@
-package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard;
+package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.targetbased;
 
-import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.ConceptSearchConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.ConceptSearchPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.SubhierarchySearcher;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
@@ -19,38 +21,26 @@ import javax.swing.JToggleButton;
  *
  * @author Chris O
  */
-public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDerivationWizardPanel {
+public class TargetSubhierarchyRootSelectionPanel extends AbNDerivationWizardPanel {
 
-    public static enum RootSelectionMode {
-        WholeOntology,
+    public static enum TargetRootSelectionMode {
+        WholeSubhierarchy,
         SearchForRoot
     }
-    
-    public interface RootSelectionListener {
-        public void rootSelected(Concept root);
-        public void rootDoubleClicked(Concept root);
-        public void noRootSelected();
-    }
-    
-    public interface RootSelectionModeChangedListener {
-        public void selectionModeChanged(RootSelectionMode mode);
-    }
-        
+            
     private final ConceptSearchPanel conceptSearchPanel;
     
-    private final JToggleButton btnUseWholeOntology;
+    private final JToggleButton btnUseWholeSubhierarchy;
     private final JToggleButton btnSearchForRoot;
     
-    private final ArrayList<RootSelectionListener> rootSelectionListeners = new ArrayList<>();
-    private final ArrayList<RootSelectionModeChangedListener> selectionModeChangedListeners = new ArrayList<>();
     
     private Optional<Concept> selectedRoot = Optional.empty();
     
-    private Optional<OntologySearcher> optSearcher = Optional.empty();
+    private Optional<SubhierarchySearcher> optSearcher = Optional.empty();
     
-    private RootSelectionMode rootSelectionMode = RootSelectionMode.WholeOntology;
+    private TargetRootSelectionMode targetRootSelectionMode = TargetRootSelectionMode.WholeSubhierarchy;
 
-    public RootSelectionPanel(AbNConfiguration config) {
+    public TargetSubhierarchyRootSelectionPanel(AbNConfiguration config) {
         this.setLayout(new BorderLayout());
                 
         this.conceptSearchPanel = new ConceptSearchPanel(config, new ConceptSearchConfiguration() {
@@ -63,30 +53,22 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
             @Override
             public void searchResultSelected(Concept c) {
                 selectedRoot = Optional.of(c);
-                
-                rootSelectionListeners.forEach( (listener) -> {
-                   listener.rootSelected(c);
-                });
             }
 
             @Override
             public void searchResultDoubleClicked(Concept c) {
-               rootSelectionListeners.forEach( (listener) -> {
-                   listener.rootDoubleClicked(c);
-                });
+                searchResultSelected(c);
             }
 
             @Override
             public void noSearchResultSelected() {
-                rootSelectionListeners.forEach((listener) -> {
-                    listener.noRootSelected();
-                });
+                selectedRoot = Optional.empty();
             }
         });
 
-        this.btnUseWholeOntology = new JToggleButton("Use Complete Ontology");
-        this.btnUseWholeOntology.addActionListener( (ae) -> {
-            useEntireOntologySelected();
+        this.btnUseWholeSubhierarchy = new JToggleButton("Use Complete Target Subhierarchy");
+        this.btnUseWholeSubhierarchy.addActionListener( (ae) -> {
+            useEntireSubhierarchy();
         });
         
         this.btnSearchForRoot = new JToggleButton("Search for a Root");
@@ -95,11 +77,11 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
         });
         
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(btnUseWholeOntology);
+        buttonGroup.add(btnUseWholeSubhierarchy);
         buttonGroup.add(btnSearchForRoot);
 
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        northPanel.add(btnUseWholeOntology);
+        northPanel.add(btnUseWholeSubhierarchy);
         northPanel.add(btnSearchForRoot);
 
         this.add(northPanel, BorderLayout.NORTH);
@@ -108,40 +90,21 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
         resetView();
     }
     
-    public void addRootSelectionListener(RootSelectionListener rootSelectionListener) {
-        rootSelectionListeners.add(rootSelectionListener);
-    }
-    
-    public void removeRootSelectionListener(RootSelectionListener rootSelectionListener) {
-        rootSelectionListeners.remove(rootSelectionListener);
-    }
-    
-    public void addRootSelectionModeChangedListener(RootSelectionModeChangedListener rootSelectionModeChangedListener) {
-        selectionModeChangedListeners.add(rootSelectionModeChangedListener);
-    }
-    
-    public void removeRootSelectionModeChangedListener(RootSelectionModeChangedListener rootSelectionModeChangedListener) {
-        selectionModeChangedListeners.remove(rootSelectionModeChangedListener);
-    }
-    
-    public Optional<OntologySearcher> getSearcher() {
-        return optSearcher;
-    }
     
     public Optional<Concept> getSelectedRoot() {
         return selectedRoot;
     }
     
-    public RootSelectionMode getRootSelectionMode() {
-        return rootSelectionMode;
+    public TargetRootSelectionMode getRootSelectionMode() {
+        return targetRootSelectionMode;
     }
 
-    public void initialize(Ontology ontology, OntologySearcher searcher) {        
+    public void initialize(Ontology ontology, SubhierarchySearcher searcher) {        
         super.initialize(ontology);
         
         this.optSearcher = Optional.of(searcher);
         
-        btnUseWholeOntology.setSelected(true);
+        btnUseWholeSubhierarchy.setSelected(true);
         
         resetView();
     }
@@ -154,64 +117,45 @@ public class RootSelectionPanel<ABN_T extends AbstractionNetwork> extends AbNDer
     }
 
     public final void resetView() {
-        
         conceptSearchPanel.clearContents();
+        
+        btnUseWholeSubhierarchy.setSelected(true);
         
         if(btnSearchForRoot.isSelected()) {
             useSpecificRootSelected();
         } else {
-            useEntireOntologySelected();
+            useEntireSubhierarchy();
         }
     }
 
-    private void useEntireOntologySelected() {
+    private void useEntireSubhierarchy() {
         
-        this.rootSelectionMode = RootSelectionMode.WholeOntology;
+        this.targetRootSelectionMode = TargetRootSelectionMode.WholeSubhierarchy;
         
         this.btnSearchForRoot.setSelected(false);
         
         this.conceptSearchPanel.setEnabled(false);
         this.conceptSearchPanel.clearResults();
         
-        this.selectionModeChangedListeners.forEach( (listener) -> {
-            listener.selectionModeChanged(RootSelectionMode.WholeOntology);
-        });
-
         if (super.getCurrentOntology().isPresent()) {
             Concept root = super.getCurrentOntology().get().getConceptHierarchy().getRoot();
             
-            rootSelectionListeners.forEach((listener) -> {
-                listener.rootSelected(root);
-            });
-            
             this.selectedRoot = Optional.of(root);
         } else {
-            rootSelectionListeners.forEach((listener) -> {
-                listener.noRootSelected();
-            });
-
             this.selectedRoot = Optional.empty();
         }
     }
     
     private void useSpecificRootSelected() {
-        this.rootSelectionMode = RootSelectionMode.SearchForRoot;
+        this.targetRootSelectionMode = TargetRootSelectionMode.SearchForRoot;
         
         this.conceptSearchPanel.setEnabled(true);
-
-        this.selectionModeChangedListeners.forEach( (listener) -> {
-            listener.selectionModeChanged(RootSelectionMode.SearchForRoot);
-        });
-        
-        rootSelectionListeners.forEach((listener) -> {
-            listener.noRootSelected();
-        });
     }
     
     public void setEnabled(boolean value) {
         super.setEnabled(value);
         
-        this.btnUseWholeOntology.setEnabled(value);
+        this.btnUseWholeSubhierarchy.setEnabled(value);
         this.btnSearchForRoot.setEnabled(value);
         
         this.conceptSearchPanel.setEnabled(value && btnSearchForRoot.isSelected());

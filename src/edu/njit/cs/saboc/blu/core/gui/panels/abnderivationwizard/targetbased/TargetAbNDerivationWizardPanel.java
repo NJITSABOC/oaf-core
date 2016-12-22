@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
@@ -50,8 +51,9 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     private final DeriveTargetAbNAction derivationAction;
     
     private Optional<InheritablePropertyRetriever> optPropertyRetriever = Optional.empty();
-    
     private Optional<TargetHierarchyRetriever> targetSubhierarchyRetriever = Optional.empty();
+    
+    private final JButton deriveButton;
     
     public TargetAbNDerivationWizardPanel(
             AbNConfiguration config,
@@ -148,6 +150,16 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         derivationOptionsPanel.add(targetRootSelectionPanel);
         
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
+        
+        this.deriveButton = new JButton("Derive Target Abstraction Network");
+        this.deriveButton.addActionListener( (ae) -> {
+            deriveTargetAbstractionNetwork();
+        });
+        
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(deriveButton, BorderLayout.EAST);
+        
+        this.add(southPanel, BorderLayout.SOUTH);
     }
 
     public void initialize(
@@ -194,5 +206,22 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
        sourceRootSelectionPanel.resetView();
        propertyListPanel.resetView();
        targetRootSelectionPanel.resetView();
+    }
+    
+    private void deriveTargetAbstractionNetwork() {
+        
+        if(!sourceRootSelectionPanel.getSelectedRoot().isPresent()) {
+            return;
+        }
+        
+        if(propertyListPanel.getUserSelectedProperties().isEmpty()) {
+            return;
+        }
+        
+        if(!targetRootSelectionPanel.getSelectedRoot().isPresent()) {
+            return;
+        }
+        
+        // TODO: Derive the target AbN
     }
 }

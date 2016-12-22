@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -102,7 +103,9 @@ public class NodeConceptHierarchyLoader implements Runnable {
             levelEntries.add(conceptEntries);
         }
         
-        hierarchyViewPanel.initialize(hierarchy, levelEntries, conceptEntryMap);
+        SwingUtilities.invokeLater( () -> {
+            hierarchyViewPanel.initialize(hierarchy, levelEntries, conceptEntryMap);
+        });
     }
 
 }

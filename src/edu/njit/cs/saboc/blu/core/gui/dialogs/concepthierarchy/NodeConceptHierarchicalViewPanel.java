@@ -159,7 +159,7 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
                 xPos = startX;
                 
                 if (parent.getViewRect().contains(xPos, yPos)) {
-                    String title = "";
+                    String title;
 
                     if (l == 0) {
                         title = String.format("%s Root %s (NOTE: Longest path is shown)",

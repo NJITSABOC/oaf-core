@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -138,7 +139,31 @@ public class TargetAbNLayout extends BluGraphLayout {
             TargetContainerEntry containerEntry = createContainerPanel(x, y, width, height, containerX, currentLevel);
 
             // TODO: Do we still need this?
-            //containerEntries.put(areaId++, containerEntry);
+            
+            PartitionedNode dummyNode = new PartitionedNode(new HashSet<>()) {
+                @Override
+                public String getName(String separator) {
+                    return "NULL";
+                }
+
+                @Override
+                public String getName() {
+                    return "NULL";
+                }
+
+                @Override
+                public boolean equals(Object o) {
+                    return this == o;
+                }
+
+                @Override
+                public int hashCode() {
+                    return super.getInternalNodes().hashCode();
+                }
+                
+            };
+                       
+            super.getContainerEntries().put(dummyNode, containerEntry);
 
             // Add a data representation for this new area to the current area Level obj.
             currentLevel.addContainerEntry(containerEntry);
@@ -219,6 +244,8 @@ public class TargetAbNLayout extends BluGraphLayout {
         }
         
         this.centerGraphLevels(this.getGraphLevels());
+        
+        super.getGraph().setBounds(0, 0, this.getAbNWidth(), this.getAbNHeight());
     }
     
      private TargetGroupEntry createGroupPanel(TargetGroup p, TargetPartitionEntry parent, int x, int y, int groupX, GraphGroupLevel clusterLevel) {

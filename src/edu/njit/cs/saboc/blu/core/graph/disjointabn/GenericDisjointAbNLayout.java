@@ -118,6 +118,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
             GraphLevel currentLevel = getLevels().get(containerY);
 
             EmptyContainerEntry containerEntry = createContainerPanel(x, y, width, height, containerX, currentLevel);
+            
             PartitionedNode dummyNode = new PartitionedNode(new HashSet<>()) {
                 @Override
                 public String getName(String separator) {

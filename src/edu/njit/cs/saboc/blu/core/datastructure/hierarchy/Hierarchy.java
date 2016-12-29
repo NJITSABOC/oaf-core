@@ -1,11 +1,11 @@
 
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
-import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AllPathsToNodeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyDepthVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.LowestCommonAncestorVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderListener;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
@@ -688,19 +688,9 @@ public class Hierarchy<T> {
     public Set<T> lowestCommonAncestors(Set<T> nodes) {
         Hierarchy<T> ancestorHierarchy = this.getAncestorHierarchy(nodes);
         
-        Set<T> potentialLCAs = new HashSet<>();
-        
-        ancestorHierarchy.getNodes().forEach( (node) -> {
-            Set<T> descendants = ancestorHierarchy.getDescendants(node);
-            
-            if(SetUtilities.getSetIntersection(descendants, nodes).size() == nodes.size()) {
-                potentialLCAs.add(node);
-            }
-            
-        });
-        
-        // TODO: Finish all of this...
-        
-        return potentialLCAs;
+        LowestCommonAncestorVisitor<T> visitor = new LowestCommonAncestorVisitor(ancestorHierarchy, nodes);
+        ancestorHierarchy.topologicalUp(nodes, visitor);
+
+        return visitor.getLowestCommonAncestors();
     }
 }

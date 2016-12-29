@@ -22,6 +22,7 @@ public class HierarchyDepthVisitor<T> extends TopologicalVisitor<T> {
     }
     
     public void visit(T node) {
+        Hierarchy<T> theHierarchy = super.getHierarchy();
         
         Set<T> parents = theHierarchy.getParents(node);
 

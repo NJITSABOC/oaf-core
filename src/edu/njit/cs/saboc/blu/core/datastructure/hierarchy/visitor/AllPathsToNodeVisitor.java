@@ -33,6 +33,7 @@ public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
     }
     
     public void visit(T node) {
+        Hierarchy<T> theHierarchy = super.getHierarchy();
         
         if(theHierarchy.getRoots().contains(node)) {
             return;

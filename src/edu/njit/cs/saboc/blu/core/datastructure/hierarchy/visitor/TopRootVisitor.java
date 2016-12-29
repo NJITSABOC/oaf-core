@@ -16,6 +16,8 @@ public class TopRootVisitor<T> extends HierarchyVisitor<T> {
     }
     
     public void visit(T node) {
+        Hierarchy<T> theHierarchy = super.getHierarchy();
+        
         if(theHierarchy.getRoots().contains(node)) {
             roots.add(node);
         }

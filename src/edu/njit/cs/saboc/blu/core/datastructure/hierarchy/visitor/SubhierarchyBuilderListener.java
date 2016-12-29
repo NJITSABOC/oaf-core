@@ -19,6 +19,8 @@ public class SubhierarchyBuilderListener<T> extends TopologicalVisitor<T> {
 
     @Override
     public void visit(T node) {
+        Hierarchy<T> theHierarchy = super.getHierarchy();
+        
         theHierarchy.getChildren(node).forEach( (child) -> {
             subhierarchy.addEdge(child, node);
         });

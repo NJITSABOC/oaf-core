@@ -21,7 +21,8 @@ public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
     }
     
     public void visit(T node) {
-
+        Hierarchy<T> theHierarchy = super.getHierarchy();
+        
         Set<T> nodeParents = theHierarchy.getParents(node);
 
         nodeParents.forEach((T parent) -> {

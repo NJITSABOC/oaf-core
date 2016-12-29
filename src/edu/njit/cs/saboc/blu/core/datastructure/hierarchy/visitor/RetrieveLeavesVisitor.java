@@ -16,6 +16,8 @@ public class RetrieveLeavesVisitor<T> extends HierarchyVisitor<T> {
     }
     
     public void visit(T node) {
+        Hierarchy<T> theHierarchy = super.getHierarchy();
+        
         if(theHierarchy.getChildren(node).isEmpty()) {
             leaves.add(node);
         }

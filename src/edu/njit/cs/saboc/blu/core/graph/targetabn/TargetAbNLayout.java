@@ -196,9 +196,9 @@ public class TargetAbNLayout extends BluGraphLayout {
                 Set<Concept> targets = group.getIncomingRelationshipTargets();
                 Set<Concept> sources = group.getIncomingRelationshipSources();
                 
-                GraphGroupLevel currentClusterLevel = currentPartition.getGroupLevels().get(clusterY);
+                GraphGroupLevel currentGroupLevel = currentPartition.getGroupLevels().get(clusterY);
                 
-                TargetGroupEntry targetGroupEntry = createGroupPanel(group, currentPartition, x2, y2, clusterX, currentClusterLevel);
+                TargetGroupEntry targetGroupEntry = createGroupPanel(group, currentPartition, x2, y2, clusterX, currentGroupLevel);
 
                 currentPartition.getVisibleGroups().add(targetGroupEntry);
 
@@ -207,7 +207,7 @@ public class TargetAbNLayout extends BluGraphLayout {
 
                 getGroupEntries().put(group, targetGroupEntry);    // Store it in a map keyed by its ID...
 
-                currentClusterLevel.addGroupEntry(targetGroupEntry);
+                currentGroupLevel.addGroupEntry(targetGroupEntry);
 
                 if ((i + 1) % groupEntriesWide == 0 && i < groupLevel.size() - 1) {
                     y2 += SinglyRootedNodeEntry.ENTRY_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT;

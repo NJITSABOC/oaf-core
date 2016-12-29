@@ -63,7 +63,6 @@ public class NodeDashboardPanel<T extends Node> extends BaseNodeInformationPanel
             gdp.clearContents();
         });
     }
-
     
     public final int addInformationTab(BaseNodeInformationPanel<T> panel, String tabName) {
         tabbedPane.addTab(tabName, panel);

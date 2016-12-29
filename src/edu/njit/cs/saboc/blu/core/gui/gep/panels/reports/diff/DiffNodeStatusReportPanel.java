@@ -170,7 +170,7 @@ public class DiffNodeStatusReportPanel extends AbNReportPanel<AbstractionNetwork
         Set<SinglyRootedNode> fromOneNode = new HashSet<>();
         Set<SinglyRootedNode> fromMultipleNodes = new HashSet<>();
         
-        HierarchicalChanges changes = diffAbN.getOntologyDifferences().getHierarchicalChanges();
+        HierarchicalChanges changes = diffAbN.getOntologyStructuralChanges().getHierarchicalChanges();
         
         addedRoots.forEach( (node) -> {
             Set<Concept> concepts = node.getConcepts();

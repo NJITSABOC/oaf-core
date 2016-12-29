@@ -148,18 +148,7 @@ public class GraphSelectionStateMonitor implements UpdateableAbNDisplayEntity {
             partition.setMousedOver(true);
         }
     }
-    
-    public void setSearchResults(Set<SinglyRootedNode> nodes) {
-        resetAll();
         
-        Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = displayPanel.getGraph().getNodeEntries();
-        
-        nodes.forEach((node) -> {
-            SinglyRootedNodeEntry entry = nodeEntries.get(node);
-            entry.setHighlightState(AbNNodeEntry.HighlightState.SearchResult);
-        });
-    }   
-    
     private void highlightGroupParents(SinglyRootedNodeEntry nodeEntry) {
         AbstractionNetwork<SinglyRootedNode> abn = displayPanel.getGraph().getAbstractionNetwork();
         

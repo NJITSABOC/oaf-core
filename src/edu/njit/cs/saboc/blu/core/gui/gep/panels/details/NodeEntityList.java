@@ -25,6 +25,10 @@ public abstract class NodeEntityList<T extends Node, ENTITY_T> extends AbstractE
         ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).setCurrentNode(node);
     }
     
+    public Optional<T> getCurrentNode() {
+        return currentNode;
+    }
+    
     public void clearCurrentNode() {
         this.currentNode = Optional.empty();
         

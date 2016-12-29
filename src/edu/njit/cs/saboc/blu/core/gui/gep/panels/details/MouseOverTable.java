@@ -14,6 +14,7 @@ public class MouseOverTable extends JTable {
 
     public MouseOverTable(TableModel model) {
         super(model);
+        
         RollOverListener lst = new RollOverListener();
         addMouseMotionListener(lst);
         addMouseListener(lst);
@@ -43,6 +44,7 @@ public class MouseOverTable extends JTable {
 
         public void mouseMoved(MouseEvent e) {
             int row = rowAtPoint(e.getPoint());
+            
             if (row != rollOverRowIndex) {
                 rollOverRowIndex = row;
                 repaint();

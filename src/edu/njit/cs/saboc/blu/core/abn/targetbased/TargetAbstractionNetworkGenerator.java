@@ -24,10 +24,11 @@ public class TargetAbstractionNetworkGenerator {
             InheritableProperty relationshipType, 
             Hierarchy<Concept> targetHierarchy) {
         
-        Set<InheritableProperty> relTypes = new HashSet<>();
-        relTypes.add(relationshipType);
-        
-        return this.deriveTargetAbstractionNetwork(factory, sourceHierarchy, relTypes, targetHierarchy);
+        return this.deriveTargetAbstractionNetwork(
+                factory, 
+                sourceHierarchy, 
+                Collections.singleton(relationshipType), 
+                targetHierarchy);
     }
     
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
@@ -114,7 +115,7 @@ public class TargetAbstractionNetworkGenerator {
             
             // Add any incoming relationships
             conceptsGroups.get(concept).forEach( (root) -> {
-                groupIncomingRelationships.get(root).addAll(relationshipsFromSourceHierarchy.get(concept));
+                groupIncomingRelationships.get(root).addAll(relationshipsFromSourceHierarchy.getOrDefault(concept, Collections.emptySet()));
             });
 
             Set<Concept> children = targetHierarchy.getChildren(concept);
@@ -162,7 +163,7 @@ public class TargetAbstractionNetworkGenerator {
         
         Map<Concept, Set<Concept>> lowestNontargetConcepts = new HashMap<>();
         
-        for(Concept target : targets) {
+        targets.forEach((target) -> {
             Set<Concept> lowestAncestorsWithoutIncoming = new HashSet<>();
             
             Stack<Concept> stack = new Stack<>();
@@ -184,7 +185,7 @@ public class TargetAbstractionNetworkGenerator {
             }
             
             lowestNontargetConcepts.put(target, lowestAncestorsWithoutIncoming);
-        }
+        });
         
         return lowestNontargetConcepts;
     }

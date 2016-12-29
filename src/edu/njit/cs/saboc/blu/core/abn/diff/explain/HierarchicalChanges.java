@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -135,6 +136,10 @@ public class HierarchicalChanges extends OntologyChanges {
 
     public Set<Concept> getTransferredHierarchyConcepts() {
         return transferredHierarchyConcepts;
+    }
+    
+    public Set<ConceptHierarchicalChange> getChangesFor(Concept concept) {
+        return changeEffects.getOrDefault(concept, Collections.emptySet());
     }
     
     private void determineConceptAddedRemovedEffects(Concept changedConcept, Hierarchy<Concept> subhierarchy, ConceptAddedRemovedChangeType changeType) {

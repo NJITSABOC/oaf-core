@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading.LoadingPanel;
 import java.awt.BorderLayout;
 import java.util.Optional;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -61,9 +62,19 @@ public class AbNDashboardPanel extends JPanel {
         }
         
         if (groupDetailsPanel.isPresent()) {
+            setDetailsPanelContents(loadingPanel);
+            
             groupDetailsPanel.get().clearContents();
-            groupDetailsPanel.get().setContents(node);
-            setDetailsPanelContents(groupDetailsPanel.get());
+            
+            Thread loadThread = new Thread( () -> {
+                groupDetailsPanel.get().setContents(node);
+                
+                SwingUtilities.invokeLater( () -> {
+                    setDetailsPanelContents(groupDetailsPanel.get());
+                });
+            });
+            
+            loadThread.start();
         }
     }
     
@@ -73,16 +84,27 @@ public class AbNDashboardPanel extends JPanel {
         }
 
         if (containerDetailsPanel.isPresent()) {
+            setDetailsPanelContents(loadingPanel);
+            
             containerDetailsPanel.get().clearContents();
-            containerDetailsPanel.get().setContents(container);
-
-            setDetailsPanelContents(containerDetailsPanel.get());
+            
+            Thread loadThread = new Thread( () -> {
+                containerDetailsPanel.get().setContents(container);
+                
+                SwingUtilities.invokeLater( () -> {
+                    setDetailsPanelContents(containerDetailsPanel.get());
+                });
+            });
+            
+            loadThread.start();
         }
     }
 
     private void setDetailsPanelContents(JPanel panel) {
         this.removeAll();
+        
         this.add(panel, BorderLayout.CENTER);
+        
         this.revalidate();
         this.repaint();
     }

@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 public class AbNSearchButton extends BaseAbNSearchButton {
 
     public AbNSearchButton(JFrame parent, AbNTextConfiguration textConfig) {
-        
         super(parent);
         
         String conceptTypeName = textConfig.getConceptTypeName(true);
@@ -59,7 +58,8 @@ public class AbNSearchButton extends BaseAbNSearchButton {
                         result.getNodes().iterator().next());
                 
                 config.getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(firstResultEntry);
-                config.getUIConfiguration().getDisplayPanel().highlightEntriesForSearch(result.getNodes());
+                
+                config.getUIConfiguration().getDisplayPanel().highlightSinglyRootedNodes(result.getNodes());
             }
         });
         
@@ -94,9 +94,8 @@ public class AbNSearchButton extends BaseAbNSearchButton {
                 SinglyRootedNodeEntry resultEntry = config.getUIConfiguration().getDisplayPanel().getGraph().getNodeEntries().get(result);
                 
                 config.getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(resultEntry);
-                config.getUIConfiguration().getDisplayPanel().highlightEntriesForSearch(Collections.singleton(result));
+                config.getUIConfiguration().getDisplayPanel().highlightSinglyRootedNodes(Collections.singleton(result));
             }
-        });
-        
+        });       
     }
 }

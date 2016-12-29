@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyDepth
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderListener;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
@@ -21,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 
 /**
  * Data type representing a rooted Directed Acylic Graph (DAG).
@@ -48,7 +48,6 @@ public class Hierarchy<T> {
      */
     public Hierarchy(Set<T> roots) {
         this.baseGraph = new Graph<>();
-        
         this.roots = new HashSet<>(roots);
         
         roots.forEach((root) -> {
@@ -82,25 +81,11 @@ public class Hierarchy<T> {
     public Hierarchy(Set<T> roots, Hierarchy<T> sourceHierarchy) {
         this(roots);
         
-        Stack<T> convertStack = new Stack<>();
-
-        roots.forEach((root) -> {
-            convertStack.add(root);
-
-            // Construct the subhierarchy at the given root.
-            while (!convertStack.isEmpty()) {
-                T parent = convertStack.pop();
-    
-                Set<T> conceptChildren = sourceHierarchy.getChildren(parent);
-                
-                conceptChildren.forEach((child) -> {
-                    addEdge(child, parent);
-
-                    if (!convertStack.contains(child)) {
-                        convertStack.add(child);
-                    }
-                });
-            }
+        SubhierarchyBuilderListener<T> subhierarchyBuilderVisitor = new SubhierarchyBuilderListener<>(sourceHierarchy, roots);
+        sourceHierarchy.topologicalDownInSubhierarchy(roots, subhierarchyBuilderVisitor);
+        
+        subhierarchyBuilderVisitor.getResult().getEdges().forEach( (edge) -> {
+            addEdge(edge);
         });
     }
     
@@ -143,7 +128,7 @@ public class Hierarchy<T> {
      * @param from The child concept
      * @param to The parent concept
      */
-    public void addEdge(T from, T to) {
+    public final void addEdge(T from, T to) {
         baseGraph.addEdge(from, to);
     }
     
@@ -152,7 +137,7 @@ public class Hierarchy<T> {
      * 
      * @param edge The edge
      */
-    public void addEdge(Edge<T> edge) {
+    public final void addEdge(Edge<T> edge) {
         this.addEdge(edge.getFrom(), edge.getTo());
     }
     
@@ -193,7 +178,18 @@ public class Hierarchy<T> {
      * @return 
      */
     public Hierarchy<T> getSubhierarchyRootedAt(T root) {
-        return new Hierarchy<>(root, this);
+        return getSubhierarchyRootedAt(Collections.singleton(root));
+    }
+    
+    /**
+     * Returns the subhierarchy rooted at the given nodes.
+     * 
+     * @param roots
+     * @return 
+     */
+    
+    public Hierarchy<T> getSubhierarchyRootedAt(Set<T> roots) {
+        return new Hierarchy<>(roots, this);
     }
     
     /**
@@ -324,33 +320,8 @@ public class Hierarchy<T> {
      * 
      * @param visitor 
      */
-    public void topologicalDown(HierarchyVisitor<T> visitor) {
-        HashMap<T, Integer> parentCounts = new HashMap<>();
-        
-        Set<T> nodesInHierarchy = this.getNodes();
-        
-        nodesInHierarchy.forEach((T node) -> {
-            parentCounts.put(node, this.getParents(node).size());
-        });
-        
-        Queue<T> queue = new ArrayDeque<>();
-        queue.addAll(this.getRoots());
-        
-        while(!queue.isEmpty() && !visitor.isFinished()) {
-            T node = queue.remove();
-            
-            visitor.visit(node);
-            
-            Set<T> nodeChildren = this.getChildren(node);
-            
-            nodeChildren.forEach((T child) -> {
-                if(parentCounts.get(child) == 1) {
-                    queue.add(child);
-                } else {
-                    parentCounts.put(child, parentCounts.get(child) - 1);
-                }
-            });
-        }
+    public void topologicalDown(TopologicalVisitor<T> visitor) {
+        topologicalDownInSubhierarchy(getRoots(), visitor);
     }
     
     /**
@@ -360,12 +331,15 @@ public class Hierarchy<T> {
      * @param visitor 
      */
     public void topologicalDownInSubhierarchy(T startingPoint, TopologicalVisitor<T> visitor) {
-        Set<T> subhierarchy = this.getDescendants(startingPoint);
-        
-        subhierarchy.add(startingPoint);
-        
+        topologicalDownInSubhierarchy(Collections.singleton(startingPoint), visitor);
+    }
+    
+    public void topologicalDownInSubhierarchy(Set<T> startingPoints, TopologicalVisitor<T> visitor) {
+        Set<T> subhierarchy = this.getDescendants(startingPoints);
+        subhierarchy.addAll(startingPoints);
+
         HashMap<T, Integer> parentCountInSubhierarchy = new HashMap<>();
-        
+
         subhierarchy.forEach((T node) -> {
             int parentCount = 0;
 
@@ -381,7 +355,7 @@ public class Hierarchy<T> {
         });
 
         Queue<T> queue = new ArrayDeque<>();
-        queue.add(startingPoint);
+        queue.addAll(startingPoints);
 
         while (!queue.isEmpty() && !visitor.isFinished()) {
             T node = queue.remove();
@@ -400,6 +374,50 @@ public class Hierarchy<T> {
         }
     }
     
+    public void topologicalUp(T startingPoint, TopologicalVisitor<T> visitor) {
+        topologicalUp(Collections.singleton(startingPoint), visitor);
+    }
+    
+    public void topologicalUp(Set<T> startingPoints, TopologicalVisitor<T> visitor) {
+        Set<T> ancestors = this.getAncestors(startingPoints);
+        ancestors.addAll(startingPoints);
+
+        HashMap<T, Integer> childCountInSubhierarchy = new HashMap<>();
+
+        ancestors.forEach((node) -> {
+            int childCount = 0;
+
+            Set<T> children = this.getParents(node);
+
+            for (T child : children) {
+                if (ancestors.contains(child)) {
+                    childCount++;
+                }
+            }
+
+            childCountInSubhierarchy.put(node, childCount);
+        });
+
+        Queue<T> queue = new ArrayDeque<>();
+        queue.addAll(startingPoints);
+
+        while (!queue.isEmpty() && !visitor.isFinished()) {
+            T node = queue.remove();
+
+            visitor.visit(node);
+
+            Set<T> nodeParents = this.getParents(node);
+
+            nodeParents.forEach((parent) -> {
+                if (childCountInSubhierarchy.get(parent) == 1) {
+                    queue.add(parent);
+                } else {
+                    childCountInSubhierarchy.put(parent, childCountInSubhierarchy.get(parent) - 1);
+                }
+            });
+        }
+    }
+
     /**
      * Returns the number of descendants of the given node
      * @param node
@@ -419,12 +437,21 @@ public class Hierarchy<T> {
      * @return 
      */
     public Set<T> getDescendants(T node) {
+        return getDescendants(Collections.singleton(node));
+    }
+    
+        /**
+     * Returns the set of descendants of the given node
+     * @param nodes
+     * @return 
+     */
+    public Set<T> getDescendants(Set<T> nodes) {
         SubhierarchyMembersVisitor<T> visitor = new SubhierarchyMembersVisitor<>(this);
         
-        this.BFSDown(node, visitor);
+        this.BFSDown(nodes, visitor);
         
         Set<T> members = visitor.getSubhierarchyMembers();
-        members.remove(node);
+        members.removeAll(nodes);
         
         return members;
     }

@@ -40,7 +40,7 @@ public class DiffAreaTaxonomy extends AreaTaxonomy<DiffArea> implements DiffAbst
         return diffFactory;
     }
     
-    public DiffPAreaTaxonomyConceptChanges getOntologyDifferences() {
+    public DiffPAreaTaxonomyConceptChanges getOntologyStructuralChanges() {
         return conceptChanges;
     }
     

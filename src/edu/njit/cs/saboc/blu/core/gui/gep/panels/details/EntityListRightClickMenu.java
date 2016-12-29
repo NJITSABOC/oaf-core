@@ -17,18 +17,21 @@ import javax.swing.JTable;
  *
  * @author Kevyn
  */
-public class RightClickMenu {
+public class EntityListRightClickMenu {
 
-    private JTable table;
-    private HashMap<String, JMenuItem> menuItems = new HashMap<>();
-    private JPopupMenu popup = new JPopupMenu();
-    private PopupListener popupListener = new PopupListener();
+    private final JTable table;
     
-    public RightClickMenu(JTable table){
+    private final HashMap<String, JMenuItem> menuItems = new HashMap<>();
+    
+    private final JPopupMenu popup = new JPopupMenu();
+    
+    private final EntityListPopupMenuMouseListener popupListener = new EntityListPopupMenuMouseListener();
+    
+    public EntityListRightClickMenu(JTable table){
         this.table = table;
     }
 
-    private class PopupListener extends MouseAdapter {
+    public class EntityListPopupMenuMouseListener extends MouseAdapter {
              
         public void mousePressed(MouseEvent e) {
             showPopup(e);
@@ -41,23 +44,17 @@ public class RightClickMenu {
         private void showPopup(MouseEvent e) {
             //disable options
             int row = table.getSelectedRow();
-            String data = table.getModel().getValueAt(row, 0).toString();
-            
-            if (data.length() > 10){
-                toggleMenuItem("Print Name", false);
-            }
-            else{
-                toggleMenuItem("Print Name", true);
-            }
-            
-            if (e.isPopupTrigger()) {
-                popup.show(e.getComponent(),
-                        e.getX(), e.getY());
+
+            if (row >= 0) {
+                if (e.isPopupTrigger()) {
+                    popup.show(e.getComponent(),
+                            e.getX(), e.getY());
+                }
             }
         }
     }
 
-    public PopupListener getListener() {
+    public EntityListPopupMenuMouseListener getListener() {
         return popupListener;
     }
 
@@ -77,5 +74,4 @@ public class RightClickMenu {
         JMenuItem menuItem = menuItems.get(name);
         menuItem.setEnabled(enabled);
     }
-
 }

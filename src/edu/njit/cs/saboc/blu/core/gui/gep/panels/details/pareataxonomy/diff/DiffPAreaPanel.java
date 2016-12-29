@@ -53,7 +53,7 @@ public class DiffPAreaPanel extends DiffSinglyRootedNodePanel<DiffPArea> {
         DiffPAreaTaxonomy diffTaxonomy = diffConfiguration.getPAreaTaxonomy();
         
         Set<InheritablePropertyDomainChange> domainChanges = 
-                diffTaxonomy.getOntologyDifferences().getInheritablePropertyChanges().getPropertyDomainChangesFor(node.getRoot());
+                diffTaxonomy.getOntologyStructuralChanges().getInheritablePropertyChanges().getPropertyDomainChangesFor(node.getRoot());
         
         
         System.out.println("Property Domain Changes");
@@ -66,7 +66,7 @@ public class DiffPAreaPanel extends DiffSinglyRootedNodePanel<DiffPArea> {
         System.out.println();
         
         Set<InheritablePropertyHierarchyChange> hierarchyChanges = 
-                diffTaxonomy.getOntologyDifferences().getInheritablePropertyChanges().getPropertyHierarchyChangesFor(node.getRoot());
+                diffTaxonomy.getOntologyStructuralChanges().getInheritablePropertyChanges().getPropertyHierarchyChangesFor(node.getRoot());
         
         
         hierarchyChanges.forEach( (change) -> {

@@ -23,21 +23,24 @@ public class PartitionedAbNSearchButton extends AbNSearchButton {
         String partitionedNodeTypeName = textConfig.getContainerTypeName(true);
         
         this.addSearchAction(new BluGraphSearchAction<PartitionedNode>(partitionedNodeTypeName) {
+            
             public ArrayList<SearchButtonResult<PartitionedNode>> doSearch(String query) {
                 
                 PartitionedAbstractionNetwork abn = (PartitionedAbstractionNetwork)getConfiguration().getAbstractionNetwork();
                 
-                Set<PartitionedNode> areas = abn.getBaseAbstractionNetwork().searchNodes(query);
+                Set<PartitionedNode> partitionedNodes = abn.getBaseAbstractionNetwork().searchNodes(query);
                 
                 ArrayList<SearchButtonResult<PartitionedNode>> results = new ArrayList<>();
 
-                areas.stream().forEach((node) -> {
+                partitionedNodes.stream().forEach((node) -> {
                     results.add(new SearchButtonResult<>(node.getName(), node));
                 });
                 
                 results.sort( (a, b) -> {
                     return a.getResult().getName().compareTo(b.getResult().getName());
                 });
+                
+                getConfiguration().getUIConfiguration().getDisplayPanel().highlightPartitionedNodes(partitionedNodes);
 
                 return results;
             }

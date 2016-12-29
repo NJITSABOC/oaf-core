@@ -10,14 +10,11 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**

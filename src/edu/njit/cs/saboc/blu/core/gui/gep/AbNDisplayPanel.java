@@ -1,11 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.ResetHighlightsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNDrawingUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphMouseStateMonitor;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.GraphSelectionStateMonitor;
@@ -29,11 +31,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -49,7 +51,7 @@ public class AbNDisplayPanel extends JPanel {
         public void partitionEntrySelected(GenericPartitionEntry entry);
         public void noEntriesSelected();
     }
-    
+
     public interface ZoomFactorChangedListener {
         public void zoomFactorChanged(int zoomFactor);
     }
@@ -75,6 +77,7 @@ public class AbNDisplayPanel extends JPanel {
     private int currentTick = 0;
     
     private final Timer updateTimer = new Timer(50, (ae) -> {
+        
         if (panelState == DisplayState.Alive) {
             updateableEntities.forEach((entity) -> {
                entity.update(currentTick);
@@ -84,6 +87,7 @@ public class AbNDisplayPanel extends JPanel {
             
             currentTick++;
         }
+        
     });
     
     private volatile boolean doDraw = false;
@@ -128,6 +132,9 @@ public class AbNDisplayPanel extends JPanel {
 
     private final ArrayList<AbNEntitySelectionListener> selectionListeners = new ArrayList<>();
     private final ArrayList<ZoomFactorChangedListener> zoomFactorChangedListeners = new ArrayList<>();
+    
+        
+    private final ResetHighlightsPanel resetHighlightsPanel;
 
     public AbNDisplayPanel() {
         this.setLayout(null);
@@ -135,6 +142,10 @@ public class AbNDisplayPanel extends JPanel {
         addUpdateableEntity(selectionStateMonitor);
         addUpdateableEntity(scrollBarManager);
         addUpdateableEntity(autoScroller);
+        
+        this.resetHighlightsPanel = new ResetHighlightsPanel(this);
+        
+        addWidget(resetHighlightsPanel);
         
         initializeFixedListeners();
 
@@ -345,7 +356,7 @@ public class AbNDisplayPanel extends JPanel {
 
                         } else {
 
-                            final GenericPartitionEntry partition = getContainerPartitionAtPoint(pointOnGraph);
+                            GenericPartitionEntry partition = getContainerPartitionAtPoint(pointOnGraph);
 
                             if (partition != null) {
                                 selectionStateMonitor.setSelectedPartition(partition);
@@ -450,20 +461,17 @@ public class AbNDisplayPanel extends JPanel {
             }
         });
         
-        this.addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                
-                if (panelState == DisplayState.Alive) {
-                    if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-                        int zoomLevelChange = -e.getUnitsToScroll() / 3;
-                        int currentZoomValue = viewport.getZoomFactor();
-
-                        int newZoomLevel = currentZoomValue + zoomLevelChange * 10;
-
-                        setZoomFactor(newZoomLevel);
-
-                        AbNDisplayPanel.this.requestRedraw();
-                    }
+        this.addMouseWheelListener( (e) -> {
+            if (panelState == DisplayState.Alive) {
+                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+                    int zoomLevelChange = -e.getUnitsToScroll() / 3;
+                    int currentZoomValue = viewport.getZoomFactor();
+                    
+                    int newZoomLevel = currentZoomValue + zoomLevelChange * 10;
+                    
+                    setZoomFactor(newZoomLevel);
+                    
+                    AbNDisplayPanel.this.requestRedraw();
                 }
             }
         });
@@ -540,17 +548,41 @@ public class AbNDisplayPanel extends JPanel {
         return null;
     }
 
-    public void highlightEntriesForSearch(Set<SinglyRootedNode> nodes) {       
-        selectionStateMonitor.setSearchResults(nodes);
+    public void highlightSinglyRootedNodes(Set<SinglyRootedNode> nodes) {
+        
+        Set<SinglyRootedNodeEntry> nodeEntries = new HashSet<>();
+        
+        nodes.forEach( (node) -> {
+            if(graph.getNodeEntries().containsKey(node)) {
+                nodeEntries.add(graph.getNodeEntries().get(node));
+            }
+        });
+        
+        painter.setHighlightedSinglyRootedNodes(nodeEntries);
+    }
+    
+    public void highlightPartitionedNodes(Set<PartitionedNode> nodes) {
+        
+        Set<PartitionedNodeEntry> nodeEntries = new HashSet<>();
+        
+        nodes.forEach( (node) -> {
+            if(graph.getContainerEntries().containsKey(node)) {
+                nodeEntries.add(graph.getContainerEntries().get(node));
+            }
+        });
+        
+        painter.setHighlightedPartitionNodes(nodeEntries);
+    }
+    
+    public void clearHighlights() {
+        painter.clearHighlights();
     }
 
     private void drawAbstractionNetwork(Graphics2D g2d, Viewport viewport) {
                
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        
-        Collection<? extends PartitionedNodeEntry> containerEntries = graph.getContainerEntries().values();
-        
+                
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         
         if (viewport.getViewScale() > 0.2) {
@@ -559,12 +591,14 @@ public class AbNDisplayPanel extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-        for(PartitionedNodeEntry container : containerEntries) {
-            if(viewport.getViewRegion().intersects(container.getBounds())) {
-                AbNDrawingUtilities.paintContainer(painter, g2d, container, viewport, graph.getLabelManager());
-            }
-        }
+        Set<PartitionedNodeEntry> entriesToDraw = graph.getContainerEntries().values().stream().filter( (entry) -> {
+           return viewport.getViewRegion().intersects(entry.getBounds());
+        }).collect(Collectors.toSet());
         
+        entriesToDraw.forEach( (entry) -> {
+            AbNDrawingUtilities.paintContainer(painter, g2d, entry, viewport, graph.getLabelManager());
+        });
+
         ArrayList<GraphEdge> graphEdges = graph.getEdges();
         
         for(GraphEdge edge : graphEdges) {

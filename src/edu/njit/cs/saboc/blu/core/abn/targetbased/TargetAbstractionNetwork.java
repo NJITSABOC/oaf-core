@@ -36,7 +36,7 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
 
     @Override
     public Set<ParentNodeDetails<T>> getParentNodeDetails(T group) {
-                return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
+        return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
                 group, 
                 this.getSourceHierarchy(),
                 this.getTargetGroups());

@@ -1,21 +1,15 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
-import edu.njit.cs.saboc.blu.core.utils.filterable.entry.FilterableStringEntry;
-import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -32,9 +26,7 @@ import javax.swing.border.TitledBorder;
  */
 public abstract class BaseAbNSearchButton extends PopupToggleButton {
 
-    private List<SearchButtonResult> searchResultsList;
-    
-    private FilterableList resultList;
+    private final SearchResultList resultList;
     
     private final JTextField searchText = new JTextField();
     
@@ -56,30 +48,32 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
     private AbNConfiguration config;
 
     protected BaseAbNSearchButton(JFrame parent) {
+        this(parent, new SearchResultListModel());
+    }
+    
+    protected BaseAbNSearchButton(JFrame parent, OAFAbstractTableModel<SearchButtonResult> resultTableModel) {
         super(parent, "Search");
         
-        resultList = new FilterableList();
-        resultList.showDataEmpty();
-        
-        resultList.addListMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        SearchAction searchAction = getSelectedAction();
-                        String selectedResultStr = (String)resultList.getSelectedValues().get(0).getObject();
+        this.resultList = new SearchResultList(resultTableModel);
+        this.resultList.addEntitySelectionListener(new EntitySelectionListener<SearchButtonResult>() {
 
-                        for (SearchButtonResult result : searchResultsList) {
-                            if (result.toString().equals(selectedResultStr)) {
+            @Override
+            public void entityClicked(SearchButtonResult entity) {
+                SearchAction searchAction = getSelectedAction();
+                searchAction.resultSelected(entity);
+            }
 
-                                searchAction.resultSelected(result);
-                                return;
-                            }
-                        }
-                    }
-                });
+            @Override
+            public void entityDoubleClicked(SearchButtonResult entity) {
+                entityClicked(entity);
+            }
+
+            @Override
+            public void noEntitySelected() {
+                
             }
         });
-
+        
         JPanel popupPanel  = new JPanel(new BorderLayout());
 
         popupPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -104,39 +98,25 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
         
         resultsPanel.add(resultList, BorderLayout.CENTER);
        
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (searchText.getText().trim().isEmpty()) {
-                    return;
-                }
-
-                final SearchAction searchAction = getSelectedAction();
-
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        ArrayList<Filterable> filterableResults = new ArrayList<>();
-
-                        ArrayList<SearchButtonResult> results = searchAction.doSearch(searchText.getText().trim());
-
-                        searchResultsList = results;
-                        
-                        if(results.isEmpty()) {
-                            resultList.showNoResults();
-                        } else {
-                            results.forEach((SearchButtonResult result) -> {
-                                filterableResults.add(new FilterableStringEntry(result.toString()));
-                            });
-
-                            resultList.setContents(filterableResults);
-                        }
-                    }
-                });
+        searchButton.addActionListener((ae) -> {
+            if (searchText.getText().trim().isEmpty()) {
+                return;
             }
-     
+            
+            final SearchAction searchAction = getSelectedAction();
+            
+            SwingUtilities.invokeLater(() -> {
+                ArrayList<SearchButtonResult> results = searchAction.doSearch(searchText.getText().trim());
+
+                if(results.isEmpty()) {
+                    resultList.clearContents();
+                } else {
+                    resultList.setContents(results);
+                }
+            });
         });
         
-        filterButton.addActionListener( (ActionEvent ae) -> {
+        filterButton.addActionListener( (ae) -> {
             resultList.toggleFilterPanel();
         });
         
@@ -169,16 +149,19 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
         return config;
     }
     
+    protected SearchResultList getSearchResultList() {
+        return resultList;
+    }
+    
     protected void addSearchAction(SearchAction searchAction) {
         JRadioButton actionButton = new JRadioButton(searchAction.getSearchActionName());
         
-        actionButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                resultList.showDataEmpty();
-            }
+        actionButton.addActionListener((ae) -> {
+            resultList.clearContents();
         });
         
         searchActionList.add(new SearchActionEntry(actionButton, searchAction));
+        
         searchTypeGroup.add(actionButton);
         
         searchTypePanel.add(actionButton);

@@ -39,7 +39,10 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     }
     
     public interface DeriveTargetAbNAction {
-        public void deriveTargetAbN();
+        public void deriveTargetAbN(
+                Hierarchy<Concept> sourceHierarchy, 
+                InheritableProperty propertyType, 
+                Hierarchy<Concept> targetHierarchy);
     }
     
     private final RootSelectionPanel<TargetAbstractionNetwork> sourceRootSelectionPanel;
@@ -131,7 +134,10 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
                 Hierarchy<Concept> targetSubhierarchy = targetSubhierarchyRetriever.get().getTargetSubhierarchy(
                         sourceRoot, properties.iterator().next());
 
-                targetRootSelectionPanel.initialize(ont, new SubhierarchySearcher(sourceRootSelectionPanel.getSearcher().get(), targetSubhierarchy));
+                targetRootSelectionPanel.initialize(
+                        ont, 
+                        new SubhierarchySearcher(sourceRootSelectionPanel.getSearcher().get(), 
+                        targetSubhierarchy));
             }
         });
         
@@ -210,6 +216,10 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     
     private void deriveTargetAbstractionNetwork() {
         
+        if(!super.getCurrentOntology().isPresent()) {
+            return;
+        }
+        
         if(!sourceRootSelectionPanel.getSelectedRoot().isPresent()) {
             return;
         }
@@ -222,6 +232,15 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
             return;
         }
         
-        // TODO: Derive the target AbN
+        Ontology ont = super.getCurrentOntology().get();
+        
+        Concept sourceRoot = sourceRootSelectionPanel.getSelectedRoot().get();
+        InheritableProperty propertyType = propertyListPanel.getUserSelectedProperties().stream().findAny().get();
+        Concept targetRoot = targetRootSelectionPanel.getSelectedRoot().get();
+        
+        Hierarchy<Concept> sourceHierarchy = ont.getConceptHierarchy().getSubhierarchyRootedAt(sourceRoot);
+        Hierarchy<Concept> targetHierarchy = ont.getConceptHierarchy().getSubhierarchyRootedAt(targetRoot);
+        
+        derivationAction.deriveTargetAbN(sourceHierarchy, propertyType, targetHierarchy);
     }
 }

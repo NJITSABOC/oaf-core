@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -14,8 +16,12 @@ import java.util.stream.Collectors;
  * @author Chris
  */
 public class DisjointAbstractionNetwork<
+        T extends DisjointNode<PARENTNODE_T>,
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
-        PARENTNODE_T extends SinglyRootedNode> extends AbstractionNetwork<DisjointNode<PARENTNODE_T>> {
+        PARENTNODE_T extends SinglyRootedNode> 
+            extends AbstractionNetwork<DisjointNode<PARENTNODE_T>>
+
+        implements AggregateableAbstractionNetwork<DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T>> {
     
     private final Set<PARENTNODE_T> allNodes;
     
@@ -45,6 +51,10 @@ public class DisjointAbstractionNetwork<
     
     public PARENTABN_T getParentAbstractionNetwork() {
         return parentAbN;
+    }
+    
+    public Set<PARENTNODE_T> getAllSourceNodes() {
+        return allNodes;
     }
     
     public Set<PARENTNODE_T> getOverlappingNodes() {
@@ -87,10 +97,23 @@ public class DisjointAbstractionNetwork<
 
     @Override
     public Set<ParentNodeDetails<DisjointNode<PARENTNODE_T>>> getParentNodeDetails(DisjointNode<PARENTNODE_T> node) {
-        
         return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
                 node, 
                 this.getSourceHierarchy(), 
                 this.getAllDisjointNodes());
+    }
+
+    @Override
+    public boolean isAggregated() {
+        return false;
+    }
+
+    @Override
+    public DisjointAbstractionNetwork getAggregated(int smallestNode) {
+        AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
+        
+        AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = new AggregateAbNGenerator<>();
+        
+        return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode);
     }
 }

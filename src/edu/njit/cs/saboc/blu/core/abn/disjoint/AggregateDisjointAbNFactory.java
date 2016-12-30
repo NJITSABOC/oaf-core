@@ -1,25 +1,23 @@
-package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
+package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  *
  * @author Chris O
  */
-public class AggregatePAreaTaxonomyFactory implements AggregateAbNFactory<PArea, AggregatePArea> {
+public class AggregateDisjointAbNFactory<T extends Node> implements AggregateAbNFactory<DisjointNode<T>, AggregateDisjointNode<T>> {
 
     @Override
-    public AggregatePArea createAggregateNode(
-            Hierarchy<PArea> aggregatedNodes, 
-            Hierarchy<Concept> sourceHierarchy) {
+    public AggregateDisjointNode createAggregateNode(Hierarchy<DisjointNode<T>> aggregatedNodes, Hierarchy<Concept> sourceHierarchy) {
         
         Hierarchy<Concept> hierarchy = new Hierarchy<>(aggregatedNodes.getRoot().getRoot());
-
-        aggregatedNodes.getNodes().forEach( (parea) -> {
+        
+        aggregatedNodes.getNodes().forEach( (parea) -> {           
             hierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
         });
         
@@ -35,6 +33,6 @@ public class AggregatePAreaTaxonomyFactory implements AggregateAbNFactory<PArea,
             });
         });
         
-        return new AggregatePArea(hierarchy, aggregatedNodes.getRoot().getRelationships(), aggregatedNodes);
+        return new AggregateDisjointNode(hierarchy, aggregatedNodes.getRoot().getOverlaps(), aggregatedNodes);
     }
 }

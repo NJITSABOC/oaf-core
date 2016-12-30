@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configur
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -46,14 +47,14 @@ public abstract class PAreaTaxonomyConfiguration extends PartitionedAbNConfigura
     }
 
     @Override
-    public DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> getDisjointAbstractionNetworkFor(Area node) {
+    public DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> getDisjointAbstractionNetworkFor(Area node) {
         return getDisjointPAreaTaxonomyFor((Area)node);
     }
     
-    public DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> getDisjointPAreaTaxonomyFor(Area area) {
+    public DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> getDisjointPAreaTaxonomyFor(Area area) {
         DisjointAbNGenerator<PAreaTaxonomy<PArea>, PArea> generator = new DisjointAbNGenerator<>();
         
-        DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointTaxonomy = 
+        DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy = 
                 generator.generateDisjointAbstractionNetwork(
                         new DisjointPAreaTaxonomyFactory(), 
                         getPAreaTaxonomy(), 

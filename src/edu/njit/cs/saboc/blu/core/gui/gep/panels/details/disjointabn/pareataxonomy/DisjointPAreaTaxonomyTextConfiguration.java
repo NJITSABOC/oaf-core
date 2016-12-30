@@ -17,9 +17,9 @@ import java.util.Set;
  */
 public abstract class DisjointPAreaTaxonomyTextConfiguration implements DisjointAbNTextConfiguration<DisjointNode<PArea>> {
 
-    private final DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointTaxonomy;
+    private final DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy;
 
-    public DisjointPAreaTaxonomyTextConfiguration(DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
+    public DisjointPAreaTaxonomyTextConfiguration(DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
         this.disjointTaxonomy = disjointTaxonomy;
     }
 

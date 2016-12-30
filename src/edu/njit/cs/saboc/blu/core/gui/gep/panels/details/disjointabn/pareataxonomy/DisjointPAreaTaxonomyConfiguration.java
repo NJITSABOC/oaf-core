@@ -12,12 +12,12 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfig
  */
 public class DisjointPAreaTaxonomyConfiguration extends DisjointAbNConfiguration<DisjointNode<PArea>> {
     
-    public DisjointPAreaTaxonomyConfiguration(DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> disjointAbN) {
+    public DisjointPAreaTaxonomyConfiguration(DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointAbN) {
         super(disjointAbN);
     }
     
-    public DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea> getDisjointPAreaTaxonomy() {
-        return (DisjointAbstractionNetwork<PAreaTaxonomy<PArea>, PArea>)super.getAbstractionNetwork();
+    public DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> getDisjointPAreaTaxonomy() {
+        return (DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea>)super.getAbstractionNetwork();
     }
 
 }

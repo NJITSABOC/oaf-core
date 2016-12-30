@@ -17,7 +17,7 @@ public abstract class PartitionedAbNConfiguration<T extends SinglyRootedNode, V 
     
     public abstract int getPartitionedNodeLevel(V node);
     
-    public abstract DisjointAbstractionNetwork<?, ?> getDisjointAbstractionNetworkFor(V node);
+    public abstract DisjointAbstractionNetwork<?, ?, ?> getDisjointAbstractionNetworkFor(V node);
     
     public void setUIConfiguration(PartitionedAbNUIConfiguration<T, V> config) {
         super.setUIConfiguration(config);

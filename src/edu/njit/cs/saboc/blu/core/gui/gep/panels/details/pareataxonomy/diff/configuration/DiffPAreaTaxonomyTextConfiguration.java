@@ -74,10 +74,6 @@ public abstract class DiffPAreaTaxonomyTextConfiguration extends PAreaTaxonomyTe
        return diffTaxonomySummaryStr.toString();
     }
     
-    @Override
-    public String getAbNHelpDescription() {
-        return "*** DIFF PARTIAL-AREA HELP DESCRIPTION ***";
-    }
 
     @Override
     public String getAbNTypeName(boolean plural) {

@@ -25,35 +25,13 @@ public class DisjointAbNPainter extends AbNPainter {
 
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
         
-        DisjointNodeEntry disjointGroup = (DisjointNodeEntry)group;
-        
-        Color [] colorSet = disjointGroup.getColorSet();
-        
-        int colorWidth = (int)((DisjointNodeEntry.DISJOINT_NODE_WIDTH / colorSet.length) * scale);
-
-        int totalDrawn = 0;
-        
-        for (int c = 0; c < colorSet.length; c++) {
-            g2d.setColor(colorSet[c]);
-            
-            int drawWidth;
-            
-            if(c < colorSet.length - 1) {
-                drawWidth = colorWidth;
-                totalDrawn += drawWidth;
-            } else {
-                drawWidth = ((int)(DisjointNodeEntry.DISJOINT_NODE_WIDTH * scale)) - totalDrawn;
-            }
-            
-            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(DisjointNodeEntry.DISJOINT_NODE_HEIGHT * scale));
-
-        }
+        paintOverlapBackground(g2d, entry, p, scale);
 
         Color bgColor;
         
-        switch(group.getHighlightState()) {
+        switch(entry.getHighlightState()) {
                 
             case Parent:
                 bgColor = new Color(150, 150, 255);
@@ -75,28 +53,28 @@ public class DisjointAbNPainter extends AbNPainter {
                 bgColor = Color.WHITE;
         }
         
-        if(group.isMousedOver()) {
+        if(entry.isMousedOver()) {
             bgColor = bgColor.brighter();
         }
         
-        Point labelOffset = group.getLabelOffset();
+        Point labelOffset = entry.getLabelOffset();
         
         int textAreaX = p.x + (int)(scale * labelOffset.x);
         int textAreaY = p.y + (int)(scale * labelOffset.y);
         
         g2d.setPaint(bgColor);
         
-        g2d.fillRect(textAreaX, textAreaY, (int)(SinglyRootedNodeEntry.ENTRY_WIDTH * scale), (int)(SinglyRootedNodeEntry.ENTRY_HEIGHT* scale));
+        g2d.fillRect(textAreaX, textAreaY, (int)(entry.getWidth() * scale), (int)(entry.getHeight()* scale));
 
         Stroke savedStroke = g2d.getStroke();
         
         Color outlineColor;
         
-        if(group.isMousedOver()) {
+        if(entry.isMousedOver()) {
             g2d.setStroke(new BasicStroke(2));
             outlineColor = Color.CYAN;
         } else {
-            if(group.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
+            if(entry.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
                 g2d.setStroke(new BasicStroke(2));
             } else {
                 g2d.setStroke(new BasicStroke(1));
@@ -107,9 +85,34 @@ public class DisjointAbNPainter extends AbNPainter {
 
         g2d.setPaint(outlineColor);
 
-        g2d.drawRect(p.x, p.y, (int)(group.getWidth() * scale), (int)(group.getHeight() * scale));
-        g2d.drawRect(textAreaX, textAreaY, (int)(SinglyRootedNodeEntry.ENTRY_WIDTH * scale), (int)(SinglyRootedNodeEntry.ENTRY_HEIGHT* scale));
+        g2d.drawRect(p.x, p.y, (int)(DisjointNodeEntry.DISJOINT_NODE_WIDTH  * scale), (int)(DisjointNodeEntry.DISJOINT_NODE_HEIGHT * scale));
+        g2d.drawRect(textAreaX, textAreaY, (int)(entry.getWidth() * scale), (int)(entry.getHeight() * scale));
 
         g2d.setStroke(savedStroke);
+    }
+    
+    protected void paintOverlapBackground(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+        DisjointNodeEntry disjointGroup = (DisjointNodeEntry)group;
+        
+        Color [] colorSet = disjointGroup.getColorSet();
+        
+        int colorWidth = (int)((DisjointNodeEntry.DISJOINT_NODE_WIDTH / colorSet.length) * scale);
+
+        int totalDrawn = 0;
+        
+        for (int c = 0; c < colorSet.length; c++) {
+            g2d.setColor(colorSet[c]);
+            
+            int drawWidth;
+            
+            if(c < colorSet.length - 1) {
+                drawWidth = colorWidth;
+                totalDrawn += drawWidth;
+            } else {
+                drawWidth = ((int)(DisjointNodeEntry.DISJOINT_NODE_WIDTH * scale)) - totalDrawn;
+            }
+            
+            g2d.fillRect(p.x + c * colorWidth, p.y, drawWidth, (int)(DisjointNodeEntry.DISJOINT_NODE_HEIGHT * scale));
+        }
     }
 }

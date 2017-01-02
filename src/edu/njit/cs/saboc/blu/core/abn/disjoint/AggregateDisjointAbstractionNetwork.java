@@ -33,7 +33,7 @@ public class AggregateDisjointAbstractionNetwork<
             Set<PARENTNODE_T> overlappingNodes) {
         
         super(parentAbN, 
-                (Hierarchy<DisjointNode<PARENTNODE_T>>)(Hierarchy<?>)groupHierarchy, 
+                groupHierarchy, 
                 sourceHierarchy, 
                 levels, 
                 allNodes, 

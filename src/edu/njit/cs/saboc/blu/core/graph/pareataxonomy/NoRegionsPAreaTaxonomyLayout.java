@@ -66,11 +66,10 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
         int areaYOffset = 20;
         
         int levelWidth = 0;
-        int levelHeight = 0;
+        int previousLevelHeight = 0;
 
         addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
 
-        
         for (Area area : super.getAreasInLayout()) {  // Loop through the areas and generate the diagram for each of them
             int x2;
             int y2;
@@ -82,11 +81,12 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
             if (lastArea != null && lastArea.getRelationships().size() != area.getRelationships().size()) {
 
                 areaXOffset = 0;
-                areaYOffset += levelHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
+                areaYOffset += previousLevelHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
 
                 areaY++;    // Update the areaY variable to reflect the new row.
                 
                 areaX = 0;  // Reset the areaX variable.
+                previousLevelHeight = 0;
 
                 addGraphLevel(
                         new GraphLevel(areaY, graph, 
@@ -132,8 +132,8 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
             height += 50 + GraphLayoutConstants.GROUP_ROW_HEIGHT;
 
             // Keeps track of the tallest cell on a row so that it knows how much lower to position the next row to avoid overlap.
-            if (height > levelHeight) {
-                levelHeight = height;
+            if (height > previousLevelHeight) {
+                previousLevelHeight = height;
             }
 
             currentLevel = super.getLevels().get(areaY);

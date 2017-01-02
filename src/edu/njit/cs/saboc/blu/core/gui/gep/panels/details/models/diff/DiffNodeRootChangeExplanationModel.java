@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
 public class DiffNodeRootChangeExplanationModel extends OAFAbstractTableModel<DiffAbNConceptChange> {
     
     public interface ChangeExplanationRowEntryFactory {
-        public Object[] getChangeEntry(DiffAbNConceptChange item);
+        public ChangeExplanationRowEntry getChangeEntry(DiffAbNConceptChange item);
     }
     
     private final ChangeExplanationRowEntryFactory factory;
@@ -28,6 +28,6 @@ public class DiffNodeRootChangeExplanationModel extends OAFAbstractTableModel<Di
 
     @Override
     protected Object[] createRow(DiffAbNConceptChange item) {
-        return factory.getChangeEntry(item);
+        return factory.getChangeEntry(item).asRow();
     }
 }

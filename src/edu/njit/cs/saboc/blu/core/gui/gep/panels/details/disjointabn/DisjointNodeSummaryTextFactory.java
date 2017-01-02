@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory.NodeSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -15,24 +15,27 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class DisjointNodeSummaryTextFactory implements NodeSummaryTextFactory {
+public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implements NodeSummaryTextFactory<DisjointNode<T>> {
     
     private final DisjointAbNConfiguration config;
     
     public DisjointNodeSummaryTextFactory(DisjointAbNConfiguration config) {
         this.config = config;
     }
+    
+    public DisjointAbNConfiguration getConfiguration() {
+        return config;
+    }
 
     @Override
-    public String createNodeSummaryText(Node node) {
-        DisjointNode disjointNode = (DisjointNode)node;
-               
-        String rootName = disjointNode.getName();
-        int classCount = disjointNode.getConceptCount();
+    public String createNodeSummaryText(DisjointNode<T> node) {
+
+        String rootName = node.getName();
+        int classCount = node.getConceptCount();
         
         DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork();
 
-        Set<DisjointNode> descendantDisjointNodes = disjointAbN.getNodeHierarchy().getDescendants(disjointNode);
+        Set<DisjointNode> descendantDisjointNodes = disjointAbN.getNodeHierarchy().getDescendants(node);
         
         int descendantGroupCount = descendantDisjointNodes.size();
 
@@ -44,7 +47,7 @@ public class DisjointNodeSummaryTextFactory implements NodeSummaryTextFactory {
         
         int descendantConceptCount = descendantClasses.size();
         
-        Set<Node> overlaps = disjointNode.getOverlaps();
+        Set<T> overlaps = node.getOverlaps();
         
         String result;
         
@@ -90,7 +93,7 @@ public class DisjointNodeSummaryTextFactory implements NodeSummaryTextFactory {
         
         result += "<p><b>Help / Description:</b><br>";
         
-        result += config.getTextConfiguration().getNodeHelpDescription(disjointNode);
+        result += config.getTextConfiguration().getNodeHelpDescription(node);
         
         return result;
     }

@@ -133,10 +133,8 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         chkHideGroups = new JCheckBox("TEXT NOT SET"); // TODO: Hide all what?
 
-        chkHideGroups.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                handleHideGroupClick();
-            }
+        chkHideGroups.addActionListener((ae) -> {
+            handleHideGroupClick();
         });
 
         menuPanel.add(chkHideGroups);
@@ -158,19 +156,15 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         goToRootBtn.setToolTipText("Click to return to the root of this abstraction network.");
         
-        goToRootBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                //TODO: Fix GO TO ROOT
-            }
+        goToRootBtn.addActionListener((ae) -> {
+            //TODO: Fix GO TO ROOT
         });
         
         final JButton saveButton = new JButton("Save As Image");
         saveButton.setToolTipText("Save the current screen as a PNG image. Available only in Graph Exploration mode.");
 
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                saveCurrentView();
-            }
+        saveButton.addActionListener((ae) -> {
+            saveCurrentView();
         });
         
         menuPanel.add(goToRootBtn);
@@ -181,16 +175,14 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         
         menuPanel.add(optionsPanel);
 
-        tabbedPane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent ce) {
-                if (tabbedPane.getSelectedIndex() == 1) {
-                    saveButton.setEnabled(true);
-                    saveButton.setToolTipText("Save the current screen as a PNG image.");
-                } else {
-                    saveButton.setEnabled(false);
-                    saveButton.setToolTipText("Save the current screen as a PNG image. "
-                            + "Available only in Graph Exploration mode.");
-                }
+        tabbedPane.addChangeListener((ce) -> {
+            if (tabbedPane.getSelectedIndex() == 1) {
+                saveButton.setEnabled(true);
+                saveButton.setToolTipText("Save the current screen as a PNG image.");
+            } else {
+                saveButton.setEnabled(false);
+                saveButton.setToolTipText("Save the current screen as a PNG image. "
+                        + "Available only in Graph Exploration mode.");
             }
         });
 
@@ -239,44 +231,39 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
     
     public void focusOnComponent(final Component c) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                int x = c.getX();
-                int y = c.getY();
-
-                if (c instanceof SinglyRootedNodeEntry) {
-                    SinglyRootedNodeEntry group = ((SinglyRootedNodeEntry) c);
-
-                    x = group.getAbsoluteX();
-                    y = group.getAbsoluteY();
-                }
-
-                int width = c.getWidth();
-                int height = c.getHeight();
-
-                int midPointX = x + width / 2;
-                int midPointY = y + height / 2;
-
-                int scrollXPos = midPointX - getWidth() / 2;
-                int scrollYPos = midPointY - getHeight() / 2;
-
-                if (scrollXPos < 0) {
-                    scrollXPos = 0;
-                } else if (scrollXPos > graph.getWidth() - getWidth()) {
-                    scrollXPos = graph.getWidth() - getWidth();
-                }
-
-                if (scrollYPos < 0) {
-                    scrollYPos = 0;
-                } else if (scrollYPos > graph.getHeight() - getHeight()) {
-                    scrollYPos = graph.getHeight() - getHeight();
-                }
-
-                scroller.getViewport().setViewPosition(new Point(scrollXPos, scrollYPos));
-
-                graph.repaint();
-                gep.getDisplayPanel().getAutoScroller().navigateToPoint(new Point(midPointX, midPointY));
+        SwingUtilities.invokeLater(() -> {
+            int x1 = c.getX();
+            int y1 = c.getY();
+            
+            if (c instanceof SinglyRootedNodeEntry) {
+                SinglyRootedNodeEntry group = ((SinglyRootedNodeEntry) c);
+                x1 = group.getAbsoluteX();
+                y1 = group.getAbsoluteY();
             }
+            
+            int width1 = c.getWidth();
+            int height1 = c.getHeight();
+            int midPointX = x1 + width1 / 2;
+            int midPointY = y1 + height1 / 2;
+            int scrollXPos = midPointX - getWidth() / 2;
+            int scrollYPos = midPointY - getHeight() / 2;
+            
+            if (scrollXPos < 0) {
+                scrollXPos = 0;
+            } else if (scrollXPos > graph.getWidth() - getWidth()) {
+                scrollXPos = graph.getWidth() - getWidth();
+            }
+            
+            if (scrollYPos < 0) {
+                scrollYPos = 0;
+            } else if (scrollYPos > graph.getHeight() - getHeight()) {
+                scrollYPos = graph.getHeight() - getHeight();
+            }
+            
+            scroller.getViewport().setViewPosition(new Point(scrollXPos, scrollYPos));
+            
+            graph.repaint();
+            gep.getDisplayPanel().getAutoScroller().navigateToPoint(new Point(midPointX, midPointY));
         });
     }
     
@@ -310,8 +297,16 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         hierarchyInfoLabel.setText(text);
     }
     
-    public void displayAbstractionNetwork(BluGraph graph, AbNPainter painter, AbNConfiguration gepConfiguration) {
-        displayAbstractionNetwork(graph, painter, gepConfiguration, new BaseAbNExplorationPanelInitializer());
+    public void displayAbstractionNetwork(
+            BluGraph graph, 
+            AbNPainter painter, 
+            AbNConfiguration gepConfiguration) {
+        
+        displayAbstractionNetwork(
+                graph, 
+                painter, 
+                gepConfiguration, 
+                new BaseAbNExplorationPanelInitializer());
     }
     
     public void displayAbstractionNetwork(
@@ -325,22 +320,19 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         gep.showLoading();
         tabbedPane.setEnabled(false);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-
-                gep.initialize(graph, gepConfiguration, painter, initializer);
-                
-                scrollerContentPanel.add(graph, BorderLayout.CENTER);
-                
-                scroller.revalidate();
-                scroller.repaint();
-
-                initializeTabs(graph, gepConfiguration);
-
-                tabbedPane.setEnabled(true);
-                tabbedPane.validate();
-                tabbedPane.repaint();
-            }
+        SwingUtilities.invokeLater(() -> {
+            gep.initialize(graph, gepConfiguration, painter, initializer);
+            
+            scrollerContentPanel.add(graph, BorderLayout.CENTER);
+            
+            scroller.revalidate();
+            scroller.repaint();
+            
+            initializeTabs(graph, gepConfiguration);
+            
+            tabbedPane.setEnabled(true);
+            tabbedPane.validate();
+            tabbedPane.repaint();
         });
     }
     
@@ -372,11 +364,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
                     return true;
                 }
 
-                if (f.getName().endsWith(".png")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return f.getName().endsWith(".png");
             }
 
             public String getDescription() {

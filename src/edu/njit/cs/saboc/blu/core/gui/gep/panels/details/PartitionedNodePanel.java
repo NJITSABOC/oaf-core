@@ -31,7 +31,7 @@ public class PartitionedNodePanel<T extends PartitionedNode> extends NodeDashboa
         
         super.addInformationTab(groupListPanel, subnodeListTabTitle);
         
-        this.disjointMetricsPanel = new DisjointAbNMetricsPanel(configuration);
+        this.disjointMetricsPanel = new DisjointAbNMetricsPanel(configuration, DisjointAbNMetricsPanel.PanelOrientation.Vertical);
         
         String overlappingTabTitle = String.format("Overlapping %s Metrics", 
                 configuration.getTextConfiguration().getNodeTypeName(false));
@@ -55,17 +55,8 @@ public class PartitionedNodePanel<T extends PartitionedNode> extends NodeDashboa
         
         PartitionedNode partitionedNode = (PartitionedNode)node;
 
-        groupListPanel.setContents(node);
-        disjointMetricsPanel.setContents(node);
-        
         Set<OverlappingConceptDetails> overlaps = partitionedNode.getOverlappingConceptDetails();
         
-        if (!overlaps.isEmpty()) {
-            disjointMetricsPanel.setContents(node);
-
-            this.enableInformationTabAt(disjointMetricsTabIndex, true);
-        } else {
-            this.enableInformationTabAt(disjointMetricsTabIndex, false);
-        }
+        this.enableInformationTabAt(disjointMetricsTabIndex, !overlaps.isEmpty());
     }
 }

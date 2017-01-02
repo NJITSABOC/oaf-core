@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
  *
@@ -19,7 +20,7 @@ public class ExpandedDisjointAbN<
             AggregateDisjointNode<PARENTNODE_T> aggregatedNode) {
         
         super(sourceAbN.getParentAbstractionNetwork(), 
-                aggregatedNode.getAggregatedHierarchy(), 
+                (Hierarchy<T>)aggregatedNode.getAggregatedHierarchy(), 
                 aggregatedNode.getHierarchy(), 
                 sourceAbN.getLevelCount(), 
                 sourceAbN.getAllSourceNodes(),

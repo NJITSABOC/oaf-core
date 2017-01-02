@@ -19,8 +19,12 @@ public class DisjointNodeSummaryPanel extends NodeSummaryPanel {
     private final DisjointAbNConfiguration configuration;
     
     public DisjointNodeSummaryPanel(DisjointAbNConfiguration configuration) {
+        this(configuration, new DisjointNodeSummaryTextFactory(configuration));
+    }
+    
+    public DisjointNodeSummaryPanel(DisjointAbNConfiguration configuration, DisjointNodeSummaryTextFactory summaryTextFactory) {
         
-        super(new DisjointNodeSummaryTextFactory(configuration));
+        super(summaryTextFactory);
         
         this.configuration = configuration;
         
@@ -30,6 +34,7 @@ public class DisjointNodeSummaryPanel extends NodeSummaryPanel {
         
         this.add(this.overlapsPanel);
     }
+    
     
     public void setContents(DisjointNode disjointNode) {
         super.setContents(disjointNode);

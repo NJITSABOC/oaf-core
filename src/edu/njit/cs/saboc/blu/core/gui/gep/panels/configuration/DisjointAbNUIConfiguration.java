@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.AggregateDisjointNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.ChildDisjointNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.DisjointNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.ParentDisjointNodeTableModel;
@@ -45,6 +46,11 @@ public abstract class DisjointAbNUIConfiguration<T extends DisjointNode> extends
 
     @Override
     public NodeDashboardPanel<T> createGroupDetailsPanel() {
-        return new DisjointNodePanel(config);
+        
+        if(config.getAbstractionNetwork().isAggregated()) {
+            return new AggregateDisjointNodePanel(config);
+        } else {
+            return new DisjointNodePanel(config);
+        }
     }
 }

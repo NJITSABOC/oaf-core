@@ -55,6 +55,10 @@ public class AbNExplorationPanel extends JPanel {
 
             @Override
             public void partitionEntrySelected(GenericPartitionEntry entry) {
+                if(!(configuration.getAbstractionNetwork() instanceof PartitionedAbstractionNetwork)) {
+                    return;
+                }
+                
                 PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)configuration.getAbstractionNetwork();
 
                 PartitionedNode node = partitionedAbN.getPartitionNodeFor((SinglyRootedNode)entry.getNode().getInternalNodes().iterator().next());

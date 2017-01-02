@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.graph.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.BluGraph;
@@ -11,14 +12,15 @@ import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerPartitionEntry;
+import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.JLabel;
 
@@ -72,21 +74,21 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
         ArrayList<ArrayList<DisjointNode>> nodeLevels = new ArrayList<>();
         
          for (int overlapSize = 1; overlapSize <= disjointAbN.getLevelCount(); overlapSize++) {
-            ArrayList<DisjointNode> levelGroups = new ArrayList<>();
+            ArrayList<DisjointNode> levelNodes = new ArrayList<>();
 
             for (DisjointNode disjointGroup : disjointNodes) {
                 if (disjointGroup.getOverlaps().size() == overlapSize) {
-                    levelGroups.add(disjointGroup);
+                    levelNodes.add(disjointGroup);
                 }
             }
 
-            Collections.sort(levelGroups, (a, b) -> b.getConceptCount() - a.getConceptCount());
-
             if (overlapSize > 1) {
-                levelGroups = disjointPAreaSort(levelGroups, nonoverlappingNodes, 0, disjointAbN.getLevelCount());
+                levelNodes = disjointPAreaSort(levelNodes);
+            } else {
+                Collections.sort(levelNodes, (a, b) -> b.getConceptCount() - a.getConceptCount());
             }
-
-            nodeLevels.add(levelGroups);
+            
+            nodeLevels.add(levelNodes);
         }
         
         int containerX = 0;
@@ -255,41 +257,44 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
         return colors;
     }
         
-    private ArrayList<DisjointNode> disjointPAreaSort(ArrayList<DisjointNode> entries, ArrayList<DisjointNode> topLevel, int currentLevel, int maxLevel) {
+    private ArrayList<DisjointNode> disjointPAreaSort(ArrayList<DisjointNode> entries) {
         
-        if(currentLevel >= maxLevel) {
-            return entries;
-        }
-
-        ArrayList<ArrayList<DisjointNode>> sortedEntries = new ArrayList<>();
-
-        HashSet<DisjointNode> processed = new HashSet<>();
-
-        for (int c = currentLevel; c < topLevel.size(); c++) {
-            SinglyRootedNode overlap = (SinglyRootedNode)topLevel.get(c).getOverlaps().iterator().next();
-
-            ArrayList<DisjointNode> sorted = new ArrayList<>();
-
-            for (DisjointNode entry : entries) {
-                if (!processed.contains(entry)) {
-                    if (entry.getOverlaps().contains(overlap)) {
-                        sorted.add(entry);
-                        processed.add(entry);
-                    }
-                }
+        Map<Set<Node>, ArrayList<DisjointNode>> overlapsMap = new HashMap<>();
+        
+        entries.forEach( (entry) -> {
+            Set<Node> overlaps = entry.getOverlaps();
+            
+            if(!overlapsMap.containsKey(entry.getOverlaps())) {
+                overlapsMap.put(overlaps, new ArrayList<>());
             }
-
-            sorted = disjointPAreaSort(sorted, topLevel, c + 1, maxLevel);
-
-            sortedEntries.add(sorted);
-        }
+            
+            overlapsMap.get(overlaps).add(entry);
+        });
+                
+        ArrayList<ArrayList<DisjointNode>> sortedDisjointNodes = new ArrayList<>();
+        
+        overlapsMap.values().forEach( (disjointNodes) -> {
+            
+            disjointNodes.sort( (a, b) -> {
+                if(a.getConceptCount() == b.getConceptCount()) {
+                    return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
+                } else {
+                    return b.getConceptCount() - a.getConceptCount();
+                }
+            });
+            
+            sortedDisjointNodes.add(disjointNodes);
+        });
+        
+        sortedDisjointNodes.sort( (a, b) -> {
+            return b.size() - a.size();
+        });
 
         ArrayList<DisjointNode> finalSortedEntries = new ArrayList<>();
-
-        for (ArrayList<DisjointNode> entry : sortedEntries) {
-            finalSortedEntries.addAll(entry);
-        }
-
+        sortedDisjointNodes.forEach( (list) -> {
+            finalSortedEntries.addAll(list);
+        });
+        
         return finalSortedEntries;
     }
 
@@ -303,11 +308,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
          
         ArrayList<SinglyRootedNode> groups = new ArrayList<>(node.getOverlaps());
 
-        Collections.sort(groups, new Comparator<SinglyRootedNode>() {
-            public int compare(SinglyRootedNode a, SinglyRootedNode b) {
-                return b.getConceptCount() - a.getConceptCount();
-            }
-        });
+        Collections.sort(groups, (a, b) -> b.getConceptCount() - a.getConceptCount());
 
         Color[] dpaColors = new Color[groups.size()];
 
@@ -323,7 +324,7 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
         getGraph().stretchGraphToFitPanel(x, y, DisjointNodeEntry.DISJOINT_NODE_WIDTH, DisjointNodeEntry.DISJOINT_NODE_HEIGHT);
 
         //Setup the panel's dimensions, etc.
-        targetGroupEntry.setBounds(x, y,DisjointNodeEntry.DISJOINT_NODE_WIDTH, DisjointNodeEntry.DISJOINT_NODE_HEIGHT);
+        targetGroupEntry.setBounds(x, y,  SinglyRootedNodeEntry.ENTRY_WIDTH,  SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         parent.add(targetGroupEntry, 0);
 

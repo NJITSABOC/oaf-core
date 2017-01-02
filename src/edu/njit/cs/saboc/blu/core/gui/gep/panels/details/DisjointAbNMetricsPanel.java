@@ -12,10 +12,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelecti
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingCombinationsTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingDetailsTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingNodeTableModel;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,116 +28,6 @@ import javax.swing.JTabbedPane;
  */
 public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
     
-    private class NodeOverlapMetrics {
-        
-        private final HashMap<Set<Node>, Set<DisjointNode>> intersectionGroups;
-        
-        private final Set<Concept> overlappingConcepts = new HashSet<>();
-        
-        private final Node overlappingGroup;
-        
-        private final DisjointNode disjointBasis;
-        
-        public NodeOverlapMetrics(
-                Node overlappingGroup, 
-                DisjointNode disjointBasis,
-                HashMap<Set<Node>, Set<DisjointNode>> intersectionGroups) {
-            
-            this.intersectionGroups = intersectionGroups;
-            this.overlappingGroup = overlappingGroup;
-            this.disjointBasis = disjointBasis;
-            
-            Set<DisjointNode> disjointGroups = getAllIntersectionNodes();
-            
-            for(DisjointNode group : disjointGroups) {
-                overlappingConcepts.addAll(group.getConcepts());
-            }
-        }
-        
-        public Set<Concept> getOverlappingConcepts() {
-            return overlappingConcepts;
-        }
-        
-        public Set<Set<Node>> getIntersections() {
-            return intersectionGroups.keySet();
-        }
-        
-        public Collection<Set<DisjointNode>> intersectionDisjointGroups() {
-            return intersectionGroups.values();
-        } 
-        
-        public Node getOverlappingGroup() {
-            return overlappingGroup;
-        }
-        
-        public DisjointNode getBasisDisjointGroup() {
-            return disjointBasis;
-        }
-        
-        public final Set<DisjointNode> getAllIntersectionNodes() {
-            
-            Set<DisjointNode> disjointGroups = new HashSet<>();
-            
-            for(Set<DisjointNode> groups : intersectionGroups.values()) {
-                disjointGroups.addAll(groups);
-            }
-            
-            return disjointGroups;
-        }
-        
-        public Set<DisjointNode> groupsOverlapWith(Node group) {
-            Set<DisjointNode> groups = new HashSet<>();
-            
-            for(Set<Node> overlaps : intersectionGroups.keySet()) {
-                if(overlaps.contains(group)) {
-                    groups.addAll(intersectionGroups.get(overlaps));
-                }
-            }
-            
-            return groups;
-        }
-    }
-    
-    private class DisjointAbNOverlapMetrics {
-
-        private final HashMap<Node, NodeOverlapMetrics> groupMetrics = new HashMap<>();
-
-        public DisjointAbNOverlapMetrics(DisjointAbstractionNetwork disjointAbN) {
-            Set<Node> overlappingGroups = disjointAbN.getOverlappingNodes();
-
-            Set<DisjointNode> disjointGroups = disjointAbN.getAllDisjointNodes();
-
-            for (Node group : overlappingGroups) {
-
-                DisjointNode disjointBasis = null;
-
-                HashMap<Set<Node>, Set<DisjointNode>> intersectionGroups = new HashMap<>();
-
-                for (DisjointNode disjointGroup : disjointGroups) {
-                    if (disjointGroup.getOverlaps().contains(group)) {
-                        if (disjointGroup.getOverlaps().size() == 1) {
-                            disjointBasis = disjointGroup;
-                        } else {
-                            Set<Node> overlaps = disjointGroup.getOverlaps();
-
-                            if (!intersectionGroups.containsKey(overlaps)) {
-                                intersectionGroups.put(overlaps, new HashSet<>());
-                            }
-
-                            intersectionGroups.get(overlaps).add(disjointGroup);
-                        }
-                    }
-                }
-
-                groupMetrics.put(group, new NodeOverlapMetrics(group, disjointBasis, intersectionGroups));
-            }
-        }
-
-        public HashMap<Node, NodeOverlapMetrics> getGroupMetrics() {
-            return groupMetrics;
-        }
-    }
-
     private final AbstractEntityList<OverlappingNodeEntry> overlappingGroupTable;
     private final AbstractEntityList<OverlappingDetailsEntry> overlappingDetailsTable;
     private final AbstractEntityList<OverlappingNodeCombinationsEntry> overlappingCombinationsTable; 
@@ -149,14 +37,21 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
     private final JSplitPane splitPane;
     
     private Optional<DisjointAbNOverlapMetrics> currentMetrics = Optional.empty();
+    
+    public static enum PanelOrientation {
+        Horizontal,
+        Vertical
+    }
 
-    public DisjointAbNMetricsPanel(PartitionedAbNConfiguration configuration) {
+    public DisjointAbNMetricsPanel(PartitionedAbNConfiguration configuration, PanelOrientation orientation) {
 
         this.configuration = configuration;
         
         this.setLayout(new BorderLayout());
         
-        this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        int split = orientation.equals(PanelOrientation.Horizontal) ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT;
+        
+        this.splitPane = NodeDetailsPanel.createStyledSplitPane(split);
         
         overlappingGroupTable = new AbstractEntityList<OverlappingNodeEntry>(new OverlappingNodeTableModel(configuration)) {
             @Override
@@ -220,6 +115,7 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
     }
     
     private void displayOverlappingDetailsFor(Node selectedNode) {
+        
         DisjointAbNOverlapMetrics metrics = currentMetrics.get();
 
         NodeOverlapMetrics overlapMetrics = metrics.getGroupMetrics().get(selectedNode);
@@ -248,16 +144,7 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
             entries.add(new OverlappingDetailsEntry(node, disjointNodes));
         });
 
-        Collections.sort(entries, (a, b) -> {
-            int aCount = a.getDisjointGroups().size();
-            int bCount = b.getDisjointGroups().size();
-            
-            if (aCount == bCount) {
-                return a.getOverlappingNode().getName().compareToIgnoreCase(b.getOverlappingNode().getName());
-            } else {
-                return bCount - aCount;
-            }
-        });
+        Collections.sort(entries, new OverlappingDetailsEntryComparator());
 
         overlappingDetailsTable.setContents(entries);
         
@@ -273,50 +160,11 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
 
         ArrayList<OverlappingNodeCombinationsEntry> combinationEntries = new ArrayList<>();
         
-        disjointGroupsByOverlap.forEach((overlappingGroups, disjointNodeSet) -> {
+        disjointGroupsByOverlap.forEach( (overlappingGroups, disjointNodeSet) -> {
             combinationEntries.add(new OverlappingNodeCombinationsEntry(selectedNode, disjointNodeSet));
         });
         
-        Collections.sort(combinationEntries, (a, b) -> {
-            if (a.getOtherOverlappingNodes().size() == b.getOtherOverlappingNodes().size()) {
-                
-                // Sort by name of overlaps
-                if (a.getOverlappingConcepts().size() == b.getOverlappingConcepts().size()) { 
-                    ArrayList<String> aOverlappingNames = new ArrayList<>();
-                    
-                    a.getOtherOverlappingNodes().forEach((overlappingGroup) -> {
-                        aOverlappingNames.add(overlappingGroup.getName());
-                    });
-                    
-                    ArrayList<String> bOverlappingNames = new ArrayList<>();
-                    
-                    b.getOtherOverlappingNodes().forEach((overlappingGroup) -> {
-                        bOverlappingNames.add(overlappingGroup.getName());
-                    });
-                    
-                    Collections.sort(aOverlappingNames);
-                    Collections.sort(bOverlappingNames);
-                    
-                    for (int c = 0; c < aOverlappingNames.size(); c++) {
-                        String aName = aOverlappingNames.get(c);
-                        String bName = bOverlappingNames.get(c);
-                        
-                        int compare = aName.compareTo(bName);
-                        
-                        if (compare != 0) {
-                            return compare;
-                        }
-                    }
-                    
-                    return 0; // Though this shouldn't happen...
-                    
-                } else {
-                    return a.getOverlappingConcepts().size() - b.getOverlappingConcepts().size();
-                }
-            } else {
-                return a.getOtherOverlappingNodes().size() - b.getOtherOverlappingNodes().size();
-            }
-        });
+        Collections.sort(combinationEntries, new OverlappingNodeCombinationsComparator());
         
         overlappingCombinationsTable.setContents(combinationEntries);
     }

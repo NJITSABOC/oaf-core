@@ -13,6 +13,7 @@ public class OverlappingNodeTableModel<T extends Node> extends OAFAbstractTableM
     private final AbNConfiguration configuration;
     
     public OverlappingNodeTableModel(AbNConfiguration configuration) {
+        
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false),
             String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true)),

@@ -25,7 +25,7 @@ public class AggregateDisjointAbNGenerator<
 
         Hierarchy<AggregateDisjointNode<PARENTNODE_T>> reducedNodeHierarchy
                 = aggregateGenerator.createReducedAbN(new AggregateDisjointAbNFactory(),
-                        sourceDisjointAbN.getNodeHierarchy(),
+                        (Hierarchy<DisjointNode<PARENTNODE_T>>)sourceDisjointAbN.getNodeHierarchy(),
                         sourceDisjointAbN.getSourceHierarchy(),
                         min);
 

@@ -13,10 +13,9 @@ public abstract class Node {
     protected Node() {
         
     }
-    
+
     public abstract int getConceptCount();
     public abstract String getName();
-    
     public abstract Set<Concept> getConcepts();
     
     /**
@@ -41,4 +40,8 @@ public abstract class Node {
     }
     
     public abstract int hashCode();
+    
+    public String toString() {
+        return getName();
+    }
 }

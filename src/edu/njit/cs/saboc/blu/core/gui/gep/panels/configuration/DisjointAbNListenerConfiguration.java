@@ -18,11 +18,11 @@ public abstract class DisjointAbNListenerConfiguration<T extends DisjointNode> e
     
     @Override
     public EntitySelectionListener<T> getChildGroupListener() {
-        return new NavigateToNodeListener<>(super.getConfiguration().getUIConfiguration().getDisplayPanel());
+        return new NavigateToNodeListener<>(super.getConfiguration());
     }
 
     @Override
     public EntitySelectionListener<ParentNodeDetails<T>> getParentGroupListener() {
-        return new ParentNodeSelectedListener(super.getConfiguration().getUIConfiguration().getDisplayPanel());
+        return new ParentNodeSelectedListener(super.getConfiguration());
     }
 }

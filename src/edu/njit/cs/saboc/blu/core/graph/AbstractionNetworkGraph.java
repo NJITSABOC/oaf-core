@@ -11,7 +11,6 @@ import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
-import edu.njit.cs.saboc.blu.core.graph.targetabn.TargetAbNLayout;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.NodeEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
@@ -144,7 +143,7 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
      */
     private SinglyRootedNodeEntry currentGroup;
 
-    private AbstractionNetworkGraphLayout layout;
+    private AbstractionNetworkGraphLayout<T> layout;
     
     private final AbNLabelManager labelManager;
 
@@ -851,7 +850,7 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
         return groupMenu;
     }
 
-    public AbstractionNetwork getAbstractionNetwork() {
+    public T getAbstractionNetwork() {
         return abstractionNetwork;
     }
 

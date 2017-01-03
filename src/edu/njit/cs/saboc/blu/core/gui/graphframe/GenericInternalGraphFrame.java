@@ -321,6 +321,7 @@ public abstract class GenericInternalGraphFrame extends JInternalFrame {
         tabbedPane.setEnabled(false);
 
         SwingUtilities.invokeLater(() -> {
+            
             gep.initialize(graph, gepConfiguration, painter, initializer);
             
             scrollerContentPanel.add(graph, BorderLayout.CENTER);

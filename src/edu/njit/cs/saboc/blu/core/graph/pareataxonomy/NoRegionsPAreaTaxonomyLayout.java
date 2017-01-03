@@ -97,8 +97,6 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
 
             levelWidth = 0;
 
-            int pareaCount = 0;
-
             ArrayList<PArea> areaPAreas = new ArrayList<>(area.getPAreas());
 
             areaPAreas.sort((a, b) -> {
@@ -109,7 +107,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
                 }
             });
 
-            pareaCount = areaPAreas.size();
+            int pareaCount = areaPAreas.size();
 
             // Take the number of cells and find the square root of it (rounded up) to
             // find the minimum width required for a square that could hold all the pAreas.

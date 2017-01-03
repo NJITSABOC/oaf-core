@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
@@ -159,7 +159,7 @@ public class MinimapPanel extends AbNDisplayWidget {
     }
     
     public void update(int tick) {
-        BluGraph graph = getDisplayPanel().getGraph();
+        AbstractionNetworkGraph graph = getDisplayPanel().getGraph();
         Viewport userViewport = getDisplayPanel().getViewport();
         
         final int abnRelativeWidth = (int)Math.ceil(graph.getAbNWidth() * miniMapZoomFactor);

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.targetabn;
 
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class TargetGroupEntry extends SinglyRootedNodeEntry {
     public TargetGroupEntry(TargetGroup targetGroup, 
-            BluGraph g, 
+            AbstractionNetworkGraph g, 
             TargetPartitionEntry emptyPartition, 
             int pX, 
             GraphGroupLevel parent, 

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -12,12 +12,12 @@ import javax.swing.JLabel;
  */
 public class RegionEntry extends GenericPartitionEntry {
     
-    public RegionEntry(Region region, String regionName, int width, int height, BluGraph g, AreaEntry area, Color c) {
+    public RegionEntry(Region region, String regionName, int width, int height, AbstractionNetworkGraph g, AreaEntry area, Color c) {
         super(region, regionName, width, height, g, area, c);
     }
     
     public RegionEntry(Region region, String regionName,
-            int width, int height, BluGraph g, AreaEntry p, Color c, JLabel label) {
+            int width, int height, AbstractionNetworkGraph g, AreaEntry p, Color c, JLabel label) {
 
         super(region, regionName, width, height, g, p, c);
         

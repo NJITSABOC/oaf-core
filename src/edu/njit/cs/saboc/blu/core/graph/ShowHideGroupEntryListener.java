@@ -26,9 +26,9 @@ import javax.swing.JScrollPane;
  */
 public class ShowHideGroupEntryListener implements ActionListener {
 
-    private final BluGraph graph;
+    private final AbstractionNetworkGraph graph;
 
-    public ShowHideGroupEntryListener(BluGraph graph) {
+    public ShowHideGroupEntryListener(AbstractionNetworkGraph graph) {
         this.graph = graph;
     }
     

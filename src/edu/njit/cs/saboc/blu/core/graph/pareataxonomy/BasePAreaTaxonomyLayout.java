@@ -4,10 +4,10 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Color;
@@ -23,11 +23,11 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
+public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends AbstractionNetworkGraphLayout<T> {
 
     private final PAreaTaxonomy taxonomy;
 
-    protected BasePAreaTaxonomyLayout(BluGraph graph, PAreaTaxonomy taxonomy) {
+    protected BasePAreaTaxonomyLayout(AbstractionNetworkGraph<T> graph, T taxonomy) {
         super(graph);
 
         this.taxonomy = taxonomy;
@@ -174,7 +174,7 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
     }
     
     protected PAreaEntry createPAreaPanel(
-            BluGraph graph, 
+            AbstractionNetworkGraph graph, 
             PArea parea, 
             RegionEntry parentRegionEntry, 
             int x, 
@@ -195,7 +195,7 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
         return pareaEntry;
     }
 
-    protected AreaEntry createAreaPanel(BluGraph graph,
+    protected AreaEntry createAreaPanel(AbstractionNetworkGraph graph,
             Area area,
             int x,
             int y,
@@ -217,7 +217,7 @@ public abstract class BasePAreaTaxonomyLayout extends BluGraphLayout {
         return areaPanel;
     }
 
-    protected RegionEntry createRegionPanel(BluGraph graph, Region region, 
+    protected RegionEntry createRegionPanel(AbstractionNetworkGraph graph, Region region, 
             AreaEntry parentAreaEntry, int x, int y, int width, int height, Color color, JLabel regionLabel) {
 
         RegionEntry regionPanel = new RegionEntry(region, 

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -15,12 +15,12 @@ import javax.swing.JLabel;
  */
 public class BandPartitionEntry extends GenericPartitionEntry {
     
-    public BandPartitionEntry(Band band, String bandName, int width, int height, BluGraph graph, BandEntry parentBandEntry, Color c) {
+    public BandPartitionEntry(Band band, String bandName, int width, int height, AbstractionNetworkGraph graph, BandEntry parentBandEntry, Color c) {
         super(band, bandName, width, height, graph, parentBandEntry, c);
     }
     
     public BandPartitionEntry(Band band, String bandName,
-            int width, int height, BluGraph graph, BandEntry parentBandEntry, Color c, JLabel label) {
+            int width, int height, AbstractionNetworkGraph graph, BandEntry parentBandEntry, Color c, JLabel label) {
 
         super(band, bandName, width, height, graph, parentBandEntry, c);
         

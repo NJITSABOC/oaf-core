@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.edges;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import java.util.ArrayList;
@@ -14,8 +14,8 @@ public class GraphLevel {
     /**
      * List of the areas in a given level
      */
-    private ArrayList<PartitionedNodeEntry> containerEntries =
-            new ArrayList<PartitionedNodeEntry>();
+    private final ArrayList<PartitionedNodeEntry> containerEntries =
+            new ArrayList<>();
 
     /**
      * List of the lanes above this Level.
@@ -30,9 +30,9 @@ public class GraphLevel {
     /**
      * The graph object this level is part of.
      */
-    private BluGraph parentGraph;
+    private AbstractionNetworkGraph<?> parentGraph;
 
-    public GraphLevel(int lY, BluGraph parent, ArrayList<GraphLane> above) {
+    public GraphLevel(int lY, AbstractionNetworkGraph<?> parent, ArrayList<GraphLane> above) {
         levelY = lY;
         parentGraph = parent;
         rowAbove = above;
@@ -101,7 +101,7 @@ public class GraphLevel {
         return y;
     }
 
-    public BluGraph getParentGraph() {
+    public AbstractionNetworkGraph getParentGraph() {
         return parentGraph;
     }
 

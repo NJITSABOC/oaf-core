@@ -54,7 +54,7 @@ public class AbNSearchButton extends BaseAbNSearchButton {
                 ConceptNodeDetails<SinglyRootedNode> result = o.getResult();
 
                 // Java!
-                SinglyRootedNodeEntry firstResultEntry = config.getUIConfiguration().getDisplayPanel().getGraph().getNodeEntries().get(
+                SinglyRootedNodeEntry firstResultEntry = (SinglyRootedNodeEntry)config.getUIConfiguration().getDisplayPanel().getGraph().getNodeEntries().get(
                         result.getNodes().iterator().next());
                 
                 config.getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(firstResultEntry);
@@ -91,7 +91,7 @@ public class AbNSearchButton extends BaseAbNSearchButton {
                 
                 SinglyRootedNode result = o.getResult();
                 
-                SinglyRootedNodeEntry resultEntry = config.getUIConfiguration().getDisplayPanel().getGraph().getNodeEntries().get(result);
+                SinglyRootedNodeEntry resultEntry = (SinglyRootedNodeEntry)config.getUIConfiguration().getDisplayPanel().getGraph().getNodeEntries().get(result);
                 
                 config.getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(resultEntry);
                 config.getUIConfiguration().getDisplayPanel().highlightSinglyRootedNodes(Collections.singleton(result));

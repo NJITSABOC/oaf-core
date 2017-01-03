@@ -7,10 +7,11 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdgeHandle;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
+import edu.njit.cs.saboc.blu.core.graph.targetabn.TargetAbNLayout;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.ContainerResize;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.NodeEditMenu;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNLabelManager;
@@ -42,7 +43,7 @@ import javax.swing.JPopupMenu;
  *
  * @author David Daudelin and Chris Ochs
  */
-public class BluGraph extends JLayeredPane {
+public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLayeredPane {
     
     /**
      * Defines the thickness of the edges.
@@ -116,7 +117,7 @@ public class BluGraph extends JLayeredPane {
     /**
      * Popup menu displayed when a pArea is right-clicked
      */
-    protected NodeEditMenu groupMenu;
+    private NodeEditMenu groupMenu;
     
     /**
      * Popup menu displayed when an edge is right-clicked
@@ -126,24 +127,24 @@ public class BluGraph extends JLayeredPane {
     /**
      * Popup menu displayed when a region is right-clicked
      */
-    protected JPopupMenu partitionMenu;
+    private JPopupMenu partitionMenu;
 
     /**
      * Stores the data for the hierarchy this graph represents.
      */
-    protected AbstractionNetwork abstractionNetwork;
+    private final T abstractionNetwork;
 
     /**
      * Keeps track of the currently selected region
      */
-    protected GenericPartitionEntry currentPartition;
+    private GenericPartitionEntry currentPartition;
     
     /**
      * Keeps track of the currently selected pArea
      */
-    protected SinglyRootedNodeEntry currentGroup;
+    private SinglyRootedNodeEntry currentGroup;
 
-    protected BluGraphLayout layout;
+    private AbstractionNetworkGraphLayout layout;
     
     private final AbNLabelManager labelManager;
 
@@ -153,7 +154,7 @@ public class BluGraph extends JLayeredPane {
      * @param labelCreator
      * 
      */
-    public BluGraph(AbstractionNetwork abstractionNetwork, SinglyRootedNodeLabelCreator labelCreator) {
+    public AbstractionNetworkGraph(T abstractionNetwork, SinglyRootedNodeLabelCreator labelCreator) {
         this.abstractionNetwork = abstractionNetwork;
         
         this.groupMenu = new NodeEditMenu(this);
@@ -177,14 +178,10 @@ public class BluGraph extends JLayeredPane {
 
         JMenuItem resizeMenuItem = new JMenuItem("Resize Container");
 
-        resizeMenuItem.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                
-                new ContainerResize(currentPartition, BluGraph.this);
-                
-                partitionMenu.setVisible(false);
-            }
+        resizeMenuItem.addActionListener((ae) -> {
+            new ContainerResize(currentPartition, AbstractionNetworkGraph.this);
+            
+            partitionMenu.setVisible(false);
         });
 
         partitionMenu.add(resizeMenuItem);
@@ -198,6 +195,13 @@ public class BluGraph extends JLayeredPane {
         setFocusable(true);
 
         initializeEdgeMenu();
+    }
+    
+    
+    public void setAbstractionNetworkLayout(AbstractionNetworkGraphLayout<T> layout) {
+        this.layout = layout;
+        
+        this.layout.doLayout();
     }
     
     /**
@@ -596,16 +600,16 @@ public class BluGraph extends JLayeredPane {
 
                             if (s.getName().equals("Vertical")) {
                                 s.setBounds(s.getX(), s.getY(), EDGE_WIDTH + 1, s.getHeight());
-                                handle = new GraphEdgeHandle(s.getX() + EDGE_WIDTH / 2 - 5, s.getY() + s.getHeight() / 2 - 6, s, BluGraph.this);
+                                handle = new GraphEdgeHandle(s.getX() + EDGE_WIDTH / 2 - 5, s.getY() + s.getHeight() / 2 - 6, s, AbstractionNetworkGraph.this);
                             } else if (s.getName().equals("Horizontal")) {
                                 s.setBounds(s.getX(), s.getY(), s.getWidth() + widthBump, EDGE_WIDTH + 1);
-                                handle = new GraphEdgeHandle(s.getX() + s.getWidth() / 2 - 6, s.getY() + EDGE_WIDTH / 2 - 5, s, BluGraph.this);
+                                handle = new GraphEdgeHandle(s.getX() + s.getWidth() / 2 - 6, s.getY() + EDGE_WIDTH / 2 - 5, s, AbstractionNetworkGraph.this);
                             } else {
                                 System.out.println("**ERROR - Edge layout not specified**");
                             }
 
                             if (i != 0 && i != edge.getSegments().size() - 1) {
-                                BluGraph.this.add(handle, new Integer(5));
+                                AbstractionNetworkGraph.this.add(handle, new Integer(5));
                                 activeHandles.add(handle);
                             }
                         }
@@ -615,7 +619,7 @@ public class BluGraph extends JLayeredPane {
                     } else {
                         if (e.getClickCount() == 2) {
                             try {
-                                GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
+                                GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
 
                                 if (e.isControlDown()) {
                                     igf.focusOnComponent(getNodeEntries().get(edge.getSource()));
@@ -912,7 +916,7 @@ public class BluGraph extends JLayeredPane {
 
             public void actionPerformed(ActionEvent e) {
                 try {
-                    GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
+                    GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
                     igf.focusOnComponent(getNodeEntries().get(selectedEdge.getTarget()));
                 } catch (Exception exception) {
                     System.err.println(exception);
@@ -927,7 +931,7 @@ public class BluGraph extends JLayeredPane {
 
             public void actionPerformed(ActionEvent e) {
                 try {
-                    GenericInternalGraphFrame igf = BluGraph.this.getParentInternalFrame();
+                    GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
                     igf.focusOnComponent(getNodeEntries().get(selectedEdge.getSource()));
                 } catch (Exception exception) {
                     System.err.println(exception);
@@ -952,7 +956,7 @@ public class BluGraph extends JLayeredPane {
         edgeMenu.add(removeEdgeMenuItem);
     }
 
-    public BluGraphLayout getGraphLayout() {
+    public AbstractionNetworkGraphLayout getGraphLayout() {
         return layout;
     }
     

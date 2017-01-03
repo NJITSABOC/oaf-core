@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Color;
@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -21,11 +20,11 @@ import javax.swing.JPopupMenu;
  */
 public class NodeEditMenu extends JPopupMenu {
     
-    private final BluGraph graph;
+    private final AbstractionNetworkGraph<?> graph;
     
     private SinglyRootedNode currentNode;
 
-    public NodeEditMenu(BluGraph graph) {
+    public NodeEditMenu(AbstractionNetworkGraph<?> graph) {
         this.graph = graph;
         
         this.setFocusable(true);

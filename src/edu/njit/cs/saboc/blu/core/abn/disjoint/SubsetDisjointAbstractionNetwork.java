@@ -45,6 +45,9 @@ public class SubsetDisjointAbstractionNetwork<
 
     @Override
     public DisjointAbstractionNetwork getAggregated(int smallestNode) {
+        
+        
+        
         return super.getAggregated(smallestNode); 
     }
 }

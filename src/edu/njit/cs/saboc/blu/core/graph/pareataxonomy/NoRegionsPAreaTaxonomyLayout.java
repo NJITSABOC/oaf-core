@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
@@ -26,13 +26,13 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
+public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
 
     private final PAreaTaxonomyConfiguration config;
 
     public NoRegionsPAreaTaxonomyLayout(
-            PAreaBluGraph graph,
-            PAreaTaxonomy taxonomy,
+            PAreaTaxonomyGraph graph,
+            T taxonomy,
             PAreaTaxonomyConfiguration config) {
 
         super(graph, taxonomy);
@@ -43,7 +43,7 @@ public class NoRegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
     public void doLayout() {
         super.doLayout();
 
-        BluGraph graph = super.getGraph();
+        AbstractionNetworkGraph graph = super.getGraph();
 
         Area lastArea = null;   // Used for generating the graph - this is the data version of an area
         AreaEntry currentAreaEntry;    // Used for generating the graph - this is the graphical representation of an area

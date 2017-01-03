@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
@@ -31,7 +31,7 @@ public class SinglyRootedNodeEntry extends AbNNodeEntry {
 
     private final JLabel panelLabel;
         
-    private final BluGraph graph;
+    private final AbstractionNetworkGraph graph;
     
     /**
      * Index of this group in the <i>group</i> arrayList from GraphPAreaLevel
@@ -48,7 +48,7 @@ public class SinglyRootedNodeEntry extends AbNNodeEntry {
     private Point labelOffset;
         
     public SinglyRootedNodeEntry(SinglyRootedNode node, 
-            BluGraph g, 
+            AbstractionNetworkGraph g, 
             GenericPartitionEntry partitionEntry,
             int pX, 
             GraphGroupLevel parent, 

@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.dialogs;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,9 +24,9 @@ public class ContainerResize extends JDialog {
 
     private GenericPartitionEntry partition;
     
-    private BluGraph graph;
+    private AbstractionNetworkGraph graph;
 
-    public ContainerResize(GenericPartitionEntry r, BluGraph g) {
+    public ContainerResize(GenericPartitionEntry r, AbstractionNetworkGraph g) {
      
         setModal(true);
         

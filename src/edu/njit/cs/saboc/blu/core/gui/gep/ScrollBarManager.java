@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -55,7 +55,7 @@ public class ScrollBarManager implements UpdateableAbNDisplayEntity {
         Viewport viewport = displayPanel.getViewport();
         
         Rectangle viewportRegion = viewport.getViewRegion();
-        BluGraph graph = displayPanel.getGraph();
+        AbstractionNetworkGraph graph = displayPanel.getGraph();
         
         int xStartPoint = (int)(((double)viewportRegion.x / graph.getAbNWidth()) * displayPanel.getWidth());
         int xEndPoint = xStartPoint + (int)(((double)viewportRegion.width / graph.getAbNWidth()) * displayPanel.getWidth());

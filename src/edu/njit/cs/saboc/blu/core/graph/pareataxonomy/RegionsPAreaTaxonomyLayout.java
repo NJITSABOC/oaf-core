@@ -27,13 +27,13 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class RegionsPAreaTaxonomyLayout extends BasePAreaTaxonomyLayout {
+public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
     
     private final PAreaTaxonomyConfiguration config;
 
     public RegionsPAreaTaxonomyLayout(
-            PAreaBluGraph graph, 
-            PAreaTaxonomy taxonomy, 
+            PAreaTaxonomyGraph graph, 
+            T taxonomy, 
             PAreaTaxonomyConfiguration config) {
         
         super(graph, taxonomy);

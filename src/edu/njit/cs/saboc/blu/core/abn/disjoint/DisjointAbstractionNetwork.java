@@ -129,8 +129,6 @@ public class DisjointAbstractionNetwork<
 
         Hierarchy<T> subsetSubhierarchy = (Hierarchy<T>)visitor.getSubsetSubhierarchy();
         
-        System.out.println(subsetSubhierarchy.getNodes().size());
-        
         Set<Concept> roots = new HashSet<>();
         
         subsetSubhierarchy.getRoots().forEach( (rootNode) -> {

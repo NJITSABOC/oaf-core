@@ -5,10 +5,10 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerPartitionEntry;
@@ -28,11 +28,11 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class GenericDisjointAbNLayout extends BluGraphLayout {
+public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
 
     private final DisjointAbstractionNetwork disjointAbN;
 
-    public GenericDisjointAbNLayout(BluGraph graph, DisjointAbstractionNetwork disjointAbN) {
+    public GenericDisjointAbNLayout(AbstractionNetworkGraph<T> graph, DisjointAbstractionNetwork disjointAbN) {
         super(graph);
 
         this.disjointAbN = disjointAbN;
@@ -359,5 +359,4 @@ public class GenericDisjointAbNLayout extends BluGraphLayout {
     public JLabel createPartitionLabel(PartitionedNode partition, int width) {
         return new JLabel();
     }
-    
 }

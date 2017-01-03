@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ClusterEntry extends SinglyRootedNodeEntry {
     public ClusterEntry(Cluster cluster, 
-            BluGraph g, 
+            AbstractionNetworkGraph g, 
             BandPartitionEntry emptyPartition, 
             int pX, 
             GraphGroupLevel parent, 

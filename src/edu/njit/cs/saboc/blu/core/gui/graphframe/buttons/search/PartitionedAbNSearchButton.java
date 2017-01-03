@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class PartitionedAbNSearchButton extends AbNSearchButton {
             public void resultSelected(SearchButtonResult<PartitionedNode> o) {
                 PartitionedNode node = o.getResult();
                 
-                BluGraph graph = getConfiguration().getUIConfiguration().getDisplayPanel().getGraph();
+                AbstractionNetworkGraph<?> graph = getConfiguration().getUIConfiguration().getDisplayPanel().getGraph();
                 
                 PartitionedNodeEntry entry = graph.getContainerEntries().get(node);
                 getConfiguration().getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(entry);

@@ -3,10 +3,10 @@ package edu.njit.cs.saboc.blu.core.graph.targetabn;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -25,11 +25,11 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class TargetAbNLayout extends BluGraphLayout {
+public class TargetAbNLayout<T extends TargetAbstractionNetwork<TargetGroup>>  extends AbstractionNetworkGraphLayout<T> {
 
-    private final TargetAbstractionNetwork<TargetGroup> targetAbN;
+    private final T targetAbN;
     
-    public TargetAbNLayout(BluGraph graph, TargetAbstractionNetwork<TargetGroup> targetAbN) {
+    public TargetAbNLayout(AbstractionNetworkGraph<T> graph, T targetAbN) {
         super(graph);
         
         this.targetAbN = targetAbN;

@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphEdge;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
@@ -67,7 +67,7 @@ public class AbNDisplayPanel extends JPanel {
 
     private DisplayState panelState = DisplayState.Uninitialized;
     
-    private BluGraph graph;
+    private AbstractionNetworkGraph<?> graph;
     private Viewport viewport;
     
     private final ArrayList<AbNDisplayWidget> widgets = new ArrayList<>();
@@ -214,7 +214,7 @@ public class AbNDisplayPanel extends JPanel {
     }
         
     public void initialize(
-            BluGraph graph, 
+            AbstractionNetworkGraph graph, 
             AbNPainter painter, 
             AbNInitialDisplayAction initialDisplayAction) {
 
@@ -504,7 +504,7 @@ public class AbNDisplayPanel extends JPanel {
         });
     }
     
-    public BluGraph getGraph() {
+    public AbstractionNetworkGraph<?> getGraph() {
         return graph;
     }
     

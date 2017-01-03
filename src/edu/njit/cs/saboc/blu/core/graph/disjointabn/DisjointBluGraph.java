@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.disjointabn;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import javax.swing.JFrame;
 
@@ -9,18 +9,16 @@ import javax.swing.JFrame;
  *
  * @author Chris O
  */
-public class DisjointBluGraph extends BluGraph {
+public class DisjointBluGraph<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraph<T> {
 
     public DisjointBluGraph(
             final JFrame parentFrame, 
-            final DisjointAbstractionNetwork disjointAbN, 
+            final T disjointAbN, 
             final SinglyRootedNodeLabelCreator labelCreator) {
         
         super(disjointAbN, labelCreator);
         
-        this.layout = new GenericDisjointAbNLayout(this, disjointAbN);
-
-        ((GenericDisjointAbNLayout)layout).doLayout();
+        super.setAbstractionNetworkLayout(new GenericDisjointAbNLayout(this, disjointAbN));
     }
 
     public DisjointAbstractionNetwork getDisjointPAreaTaxonomy() {

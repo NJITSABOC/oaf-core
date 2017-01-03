@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
@@ -20,9 +20,9 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class TANLayout extends BaseTribalAbstractionNetworkLayout {
+public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTribalAbstractionNetworkLayout<T> {
     
-    public TANLayout(BluGraph graph, ClusterTribalAbstractionNetwork tan, TANConfiguration config) {
+    public TANLayout(AbstractionNetworkGraph<T> graph, T tan, TANConfiguration config) {
         super(graph, tan, config);
     }
     
@@ -30,7 +30,7 @@ public class TANLayout extends BaseTribalAbstractionNetworkLayout {
 
         super.doLayout();
         
-        BluGraph graph = this.getGraph();
+        AbstractionNetworkGraph graph = this.getGraph();
 
         Band lastSet = null;   // Used for generating the graph - this is the data version of an area
         BandEntry currentBandEntry = null;    // Used for generating the graph - this is the graphical representation of an area

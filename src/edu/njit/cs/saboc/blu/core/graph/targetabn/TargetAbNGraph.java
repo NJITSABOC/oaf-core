@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.targetabn;
 
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import javax.swing.JFrame;
 
@@ -9,17 +9,15 @@ import javax.swing.JFrame;
  *
  * @author Chris O
  */
-public class TargetBluGraph extends BluGraph {
-
-    public TargetBluGraph(
+public class TargetAbNGraph<T extends TargetAbstractionNetwork> extends AbstractionNetworkGraph<T> {
+    
+    public TargetAbNGraph(
             final JFrame parentFrame, 
-            final TargetAbstractionNetwork targetAbN, 
+            final T targetAbN, 
             final SinglyRootedNodeLabelCreator labelCreator) {
 
         super(targetAbN, labelCreator);
-
-        layout = new TargetAbNLayout(this, targetAbN);
-
-        ((TargetAbNLayout)layout).doLayout();
+        
+        super.setAbstractionNetworkLayout(new TargetAbNLayout(this, targetAbN));
     }
 }

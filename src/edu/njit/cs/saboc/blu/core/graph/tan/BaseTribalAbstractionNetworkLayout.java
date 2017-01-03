@@ -4,10 +4,10 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
-import edu.njit.cs.saboc.blu.core.graph.layout.BluGraphLayout;
+import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
 import edu.njit.cs.saboc.blu.core.graph.nodes.EmptyContainerPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
@@ -20,7 +20,6 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,13 +29,13 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout {
+public abstract class BaseTribalAbstractionNetworkLayout<T extends ClusterTribalAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
 
-    private final ClusterTribalAbstractionNetwork tan;
+    private final T tan;
 
     private final TANConfiguration config;
 
-    public BaseTribalAbstractionNetworkLayout(BluGraph graph, ClusterTribalAbstractionNetwork tan, TANConfiguration config) {
+    public BaseTribalAbstractionNetworkLayout(AbstractionNetworkGraph<T> graph, T tan, TANConfiguration config) {
         super(graph);
 
         this.tan = tan;
@@ -44,7 +43,7 @@ public abstract class BaseTribalAbstractionNetworkLayout extends BluGraphLayout 
         this.config = config;
     }
 
-    public ClusterTribalAbstractionNetwork getTAN() {
+    public T getTAN() {
         return tan;
     }
 

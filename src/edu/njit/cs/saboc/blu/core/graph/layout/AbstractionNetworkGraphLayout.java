@@ -1,8 +1,9 @@
 package edu.njit.cs.saboc.blu.core.graph.layout;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
@@ -22,9 +23,9 @@ import javax.swing.JPanel;
  *
  * @author Chris
  */
-public abstract class BluGraphLayout {
+public abstract class AbstractionNetworkGraphLayout<T extends AbstractionNetwork> {
 
-    private final BluGraph graph;
+    private final AbstractionNetworkGraph<T> graph;
 
     private final ArrayList<PartitionedNode> partitionedNodesInLayout = new ArrayList<>();
 
@@ -36,7 +37,7 @@ public abstract class BluGraphLayout {
 
     private final Map<SinglyRootedNode, SinglyRootedNodeEntry> nodeEntries = new HashMap<>();
 
-    protected BluGraphLayout(BluGraph graph) {
+    protected AbstractionNetworkGraphLayout(AbstractionNetworkGraph<T> graph) {
         this.graph = graph;
     }
 
@@ -44,7 +45,7 @@ public abstract class BluGraphLayout {
         return levels;
     }
     
-    protected BluGraph getGraph() {
+    protected AbstractionNetworkGraph getGraph() {
         return graph;
     }
     
@@ -651,7 +652,7 @@ public abstract class BluGraphLayout {
        return GraphLayoutUtilities.createFittedPartitionLabel(entries, boundingWidth, fontMetrics);
     }
     
-    protected abstract void doLayout();
+    public abstract void doLayout();
     
     public abstract JLabel createPartitionLabel(PartitionedNode partition, int width);
     

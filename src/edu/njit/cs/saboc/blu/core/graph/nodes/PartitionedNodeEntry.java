@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
@@ -25,7 +25,7 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
 
     private JButton collapseExpand;
 
-    private BluGraph graph;
+    private AbstractionNetworkGraph graph;
     
     /**
      * Index of this area in the ArrayList <i>areas</i> in the GraphLevel class.
@@ -56,7 +56,7 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
 
     public PartitionedNodeEntry(
             PartitionedNode node,
-            BluGraph g,
+            AbstractionNetworkGraph g,
             int aX, 
             GraphLevel parent, 
             Rectangle preferredBounds) {

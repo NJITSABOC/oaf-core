@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
 import java.awt.Dimension;
 import java.awt.Point;

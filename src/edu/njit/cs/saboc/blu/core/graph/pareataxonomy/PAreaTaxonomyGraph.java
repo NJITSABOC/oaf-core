@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import javax.swing.JFrame;
@@ -10,22 +10,20 @@ import javax.swing.JFrame;
  *
  * @author Chris O
  */
-public class PAreaBluGraph extends BluGraph {
+public class PAreaTaxonomyGraph<T extends PAreaTaxonomy> extends AbstractionNetworkGraph<T> {
 
-    public PAreaBluGraph(
+    public PAreaTaxonomyGraph(
             final JFrame parentFrame, 
-            final PAreaTaxonomy taxonomy, 
+            final T taxonomy, 
             final SinglyRootedNodeLabelCreator labelCreator,
             final PAreaTaxonomyConfiguration config) {
         
         super(taxonomy, labelCreator);
-
-        layout = new NoRegionsPAreaTaxonomyLayout(this, taxonomy, config);
         
-        ((NoRegionsPAreaTaxonomyLayout) layout).doLayout();
+        super.setAbstractionNetworkLayout(new NoRegionsPAreaTaxonomyLayout(this, taxonomy, config));
     }
 
-    public PAreaTaxonomy getPAreaTaxonomy() {
-        return (PAreaTaxonomy) getAbstractionNetwork();
+    public T getPAreaTaxonomy() {
+        return (T)getAbstractionNetwork();
     }
 }

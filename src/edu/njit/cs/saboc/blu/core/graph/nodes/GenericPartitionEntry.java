@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.graph.nodes;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLane;
 import java.awt.Color;
@@ -34,7 +34,7 @@ public class GenericPartitionEntry extends AbNNodeEntry {
 
     protected JLabel partitionLabel;
 
-    protected BluGraph graph;
+    protected AbstractionNetworkGraph graph;
 
     private final String partitionName;
 
@@ -50,7 +50,7 @@ public class GenericPartitionEntry extends AbNNodeEntry {
             int width, 
             int height, 
             
-            BluGraph g, 
+            AbstractionNetworkGraph g, 
             
             PartitionedNodeEntry parentEntry, 
             Color c) {

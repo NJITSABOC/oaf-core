@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel.AbNEntitySelectionListener;
@@ -88,7 +88,7 @@ public class AbNExplorationPanel extends JPanel {
     }
     
      public void initialize(
-            BluGraph graph, 
+            AbstractionNetworkGraph graph, 
             AbNConfiguration config, 
             AbNPainter painter) {
          
@@ -96,7 +96,7 @@ public class AbNExplorationPanel extends JPanel {
      }
     
     public void initialize(
-            BluGraph graph, 
+            AbstractionNetworkGraph graph, 
             AbNConfiguration config, 
             AbNPainter painter,
             AbNExplorationPanelGUIInitializer initializer) {

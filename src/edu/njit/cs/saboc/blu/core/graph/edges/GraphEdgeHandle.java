@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.graph.edges;
 
-import edu.njit.cs.saboc.blu.core.graph.BluGraph;
+import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -16,12 +16,13 @@ import javax.swing.event.MouseInputListener;
  */
 public class GraphEdgeHandle extends JPanel implements MouseInputListener {
 
-    private BluGraph graph;
-    private JPanel segment;
+    private final AbstractionNetworkGraph<?> graph;
+    private final JPanel segment;
 
-    public GraphEdgeHandle(int x, int y, JPanel s, BluGraph g) {
+    public GraphEdgeHandle(int x, int y, JPanel s, AbstractionNetworkGraph g) {
         setBounds(x, y, 11, 11);
         setVisible(true);
+        
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 

@@ -33,6 +33,10 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
     public DiffPAreaTaxonomyConfiguration getConfiguration() {
         return (DiffPAreaTaxonomyConfiguration)super.getConfiguration();
     }
+    
+    public ChangeExplanationRowEntryFactory getChangeExplanationEntryFactory() {
+        return changeExplanationFactory;
+    }
 
     @Override
     public boolean hasContainerDetailsPanel() {

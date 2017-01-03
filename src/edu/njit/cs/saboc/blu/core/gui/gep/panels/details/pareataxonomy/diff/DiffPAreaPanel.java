@@ -30,7 +30,8 @@ public class DiffPAreaPanel extends DiffSinglyRootedNodePanel<DiffPArea> {
         this.diffConfiguration = configuration;
     }
     
-    public DiffPAreaPanel(DiffPAreaTaxonomyConfiguration configuration,  
+    public DiffPAreaPanel(
+            DiffPAreaTaxonomyConfiguration configuration,  
             DiffPAreaSummaryTextFactory textFactory, 
             ChangeExplanationRowEntryFactory changeExplanationFactory) {
         

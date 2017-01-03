@@ -4,8 +4,6 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -34,16 +32,6 @@ public class BLUFrame extends JFrame {
      */
     private final JFileChooser pngFileChooser = new JFileChooser();
 
-//    /**
-//     * *
-//     * Initializes the BLUSNO application.
-//     *
-//     * @param args args[0] may contain a host address, args[1] may contain
-//     * middleware servlet path.
-//     */
-//    public static void main(String[] args) {
-//        BLUFrame bluTool = new BLUFrame();
-//    }
 
     /**
      * *
@@ -69,25 +57,20 @@ public class BLUFrame extends JFrame {
     public JComboBox getHierarchyBox() {
         return hierarchyBox;
     }
-
-
     
     /**
      * *
-     * Constructs the MainToolFrame. Only one MainToolFrame should exist and
-     * this constructed should only be called by the <b>getMainFrame</b> static
-     * method.
+     * Constructs the main frame of the tool. 
+     * 
+     * @param abnSelectionFrameFactory
      */
     public BLUFrame(AbnSelectionFrameFactory abnSelectionFrameFactory) {
         
-
-      
-        setTitle("Biomedical Layout Utility for SNOMED CT and OWL (BLUSNO/BLUOWL) by SABOC");
+        setTitle("Ontology Abstraction Framework (OAF) by SABOC at NJIT");
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
-        
 
         final JMenuBar menu = new JMenuBar();
 
@@ -102,22 +85,20 @@ public class BLUFrame extends JFrame {
         file.add(print);
 
         JMenuItem exit = new JMenuItem("Exit");
-        exit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                Object[] options = {"Yes", "No"};
-
-                int n = JOptionPane.showOptionDialog(BLUFrame.this,
-                        "Are you sure you want to exit?",
-                        "Confirm Exit",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        options[1]);
-
-                if (n == 0) {
-                    System.exit(0);
-                }
+        exit.addActionListener((ae) -> {
+            Object[] options = {"Yes", "No"};
+            
+            int n = JOptionPane.showOptionDialog(BLUFrame.this,
+                    "Are you sure you want to exit?",
+                    "Confirm Exit",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            
+            if (n == 0) {
+                System.exit(0);
             }
         });
 
@@ -154,10 +135,8 @@ public class BLUFrame extends JFrame {
         JMenuItem aboutUs = new JMenuItem("About Us");
         help.add(aboutUs);
 
-        aboutUs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                new AboutUsDialog(BLUFrame.this);
-            }
+        aboutUs.addActionListener((ae) -> {
+            new AboutUsDialog(BLUFrame.this);
         });
 
         menu.add(help);
@@ -165,36 +144,27 @@ public class BLUFrame extends JFrame {
 
         setJMenuBar(menu);
 
-        cascade.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cascader(desktopPane);
-            }
+        cascade.addActionListener((e) -> {
+            cascader(desktopPane);
         });
 
-        verticalcomp.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                tiler(desktopPane);
-            }
+        verticalcomp.addActionListener((e) -> {
+            tiler(desktopPane);
         });
 
-        horizontalcomp.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                sideBySide(desktopPane);
-            }
+        horizontalcomp.addActionListener((e) -> {
+            sideBySide(desktopPane);
         });
 
         add(desktopPane);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                
-                JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.returnSelectionFrame(BLUFrame.this);
-
-                desktopPane.add(abnSelectionFrame);
-                
-                abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
-                        getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
-            }
+        SwingUtilities.invokeLater(() -> {
+            JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(BLUFrame.this);
+            
+            desktopPane.add(abnSelectionFrame);
+            
+            abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
+                    getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {
@@ -203,11 +173,7 @@ public class BLUFrame extends JFrame {
                     return true;
                 }
 
-                if (f.getName().endsWith(".png")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return f.getName().endsWith(".png");
             }
 
             public String getDescription() {
@@ -236,7 +202,7 @@ public class BLUFrame extends JFrame {
      * @return An array of non-iconified internal graph frames.
      */
     private JInternalFrame[] getGraphFrames(JInternalFrame[] frames) {
-        ArrayList<JInternalFrame> graphFrames = new ArrayList<JInternalFrame>();
+        ArrayList<JInternalFrame> graphFrames = new ArrayList<>();
 
         for (JInternalFrame frame : frames) {
             if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
@@ -450,7 +416,7 @@ public class BLUFrame extends JFrame {
      *
      * @param frame Internal frame to be added.
      */
-    public void addFrame(JInternalFrame frame) {
+    public void addInternalFrame(JInternalFrame frame) {
         desktopPane.add(frame);
 
         for (int i = desktopPane.getComponentCount() - 2; i >= 0; i--) {

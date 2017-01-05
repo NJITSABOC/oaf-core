@@ -40,14 +40,6 @@ public class SubsetDisjointAbstractionNetwork<
     
     @Override
     public SubsetDisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSubsetDisjointAbN(Set<PARENTNODE_T> overlaps) {
-        return super.getSubsetDisjointAbN(overlaps);
-    }
-
-    @Override
-    public DisjointAbstractionNetwork getAggregated(int smallestNode) {
-        
-        
-        
-        return super.getAggregated(smallestNode); 
+        return sourceDisjointAbN.getSubsetDisjointAbN(overlaps);
     }
 }

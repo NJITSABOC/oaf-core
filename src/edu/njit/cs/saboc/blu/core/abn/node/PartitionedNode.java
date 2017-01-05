@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -94,10 +95,23 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
         
     public Set<OverlappingConceptDetails> getOverlappingConceptDetails() {
 
-        HashMap<Concept, Set<SinglyRootedNode>> conceptNodes = new HashMap<>();
+        Map<Concept, Set<T>> conceptNodes = getConceptNodes();
 
-        for (SinglyRootedNode node : internalNodes) {
-
+        Set<OverlappingConceptDetails> overlappingResults = new HashSet<>();
+        
+        conceptNodes.forEach( (c, overlappingNodes) -> {
+            if(overlappingNodes.size() > 1) {
+                overlappingResults.add(new OverlappingConceptDetails(c, overlappingNodes));
+            }
+        });
+        
+        return overlappingResults;
+    }
+    
+    public Map<Concept, Set<T>> getConceptNodes() {
+        Map<Concept, Set<T>> conceptNodes = new HashMap<>();
+        
+        internalNodes.forEach((node) -> {
             Set<Concept> nodeConcepts = node.getConcepts();
 
             for (Concept concept : nodeConcepts) {
@@ -105,19 +119,11 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
                     conceptNodes.put(concept, new HashSet<>());
                 }
                 
-                conceptNodes.get(concept).add(node);
-            }
-        }
-
-        HashSet<OverlappingConceptDetails> overlappingResults = new HashSet<>();
-        
-        conceptNodes.forEach( (Concept c, Set<SinglyRootedNode> overlappingNodes) -> {
-            if(overlappingNodes.size() > 1) {
-                overlappingResults.add(new OverlappingConceptDetails(c, overlappingNodes));
+                conceptNodes.get(concept).add((T)node);
             }
         });
         
-        return overlappingResults;
+        return conceptNodes;
     }
     
     public abstract String getName(String separator);

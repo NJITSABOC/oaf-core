@@ -16,7 +16,7 @@ public class NodeConceptList<T extends Node> extends NodeEntityList<T, Concept> 
     
     private AbNConfiguration config;
     
-    public NodeConceptList(AbstractNodeEntityTableModel<Concept> model, 
+    public NodeConceptList(AbstractNodeEntityTableModel<Concept, T> model, 
             AbNConfiguration config) {
         
         super(model);

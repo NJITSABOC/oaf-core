@@ -8,11 +8,11 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-public class MouseOverTable extends JTable {
+public class MouseOverJTable extends JTable {
 
     private int rollOverRowIndex = -1;
 
-    public MouseOverTable(TableModel model) {
+    public MouseOverJTable(TableModel model) {
         super(model);
         
         RollOverListener lst = new RollOverListener();

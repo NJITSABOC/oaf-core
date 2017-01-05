@@ -15,14 +15,18 @@ public abstract class NodeEntityList<T extends Node, ENTITY_T> extends AbstractE
     
     private Optional<T> currentNode = Optional.empty();
     
-    public NodeEntityList(AbstractNodeEntityTableModel<ENTITY_T> tableModel) {
+    public NodeEntityList(AbstractNodeEntityTableModel<ENTITY_T, T> tableModel) {
         super(tableModel);
+    }
+    
+    public AbstractNodeEntityTableModel<ENTITY_T, T> getTableModel() {
+        return (AbstractNodeEntityTableModel<ENTITY_T, T>)super.getTableModel();
     }
     
     public void setCurrentNode(T node) {
         this.currentNode = Optional.of(node);
         
-        ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).setCurrentNode(node);
+        getTableModel().setCurrentNode(node);
     }
     
     public Optional<T> getCurrentNode() {
@@ -32,6 +36,6 @@ public abstract class NodeEntityList<T extends Node, ENTITY_T> extends AbstractE
     public void clearCurrentNode() {
         this.currentNode = Optional.empty();
         
-        ((AbstractNodeEntityTableModel<ENTITY_T>)super.getTableModel()).clearCurrentNode();
+        getTableModel().clearCurrentNode();
     }
 }

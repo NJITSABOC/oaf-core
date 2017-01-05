@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models;
 
+import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -7,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class NodeConceptListTableModel extends AbstractNodeEntityTableModel<Concept> {
+public class NodeConceptListTableModel<T extends Node> extends AbstractNodeEntityTableModel<Concept, T> {
     
     private final AbNConfiguration config;
     

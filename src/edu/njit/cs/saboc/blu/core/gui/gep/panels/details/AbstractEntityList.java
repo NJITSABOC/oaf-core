@@ -39,8 +39,8 @@ import javax.swing.table.TableRowSorter;
  */
 public abstract class AbstractEntityList<T> extends JPanel {
 
-    private final MouseOverTable entityTable;
-    private final OAFAbstractTableModel<T> tableModel;
+    private final MouseOverJTable entityTable;
+    private OAFAbstractTableModel<T> tableModel;
 
     private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
 
@@ -59,7 +59,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
         this.tableModel = tableModel;
         
-        this.entityTable = new MouseOverTable(tableModel);
+        this.entityTable = new MouseOverJTable(tableModel);
+
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         
         setDefaultTableStringRenderer(new MultiLineTextRenderer(entityTable));
@@ -224,6 +225,12 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     public OAFAbstractTableModel<T> getTableModel() {
         return tableModel;
+    }
+    
+    public void setTableModel(OAFAbstractTableModel<T> model) {
+        this.tableModel = model;
+        
+        this.entityTable.setModel(tableModel);
     }
 
     public void setSelectionMode(int selectionMode) {

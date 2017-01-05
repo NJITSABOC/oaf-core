@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class DiffNodeConceptListModel extends AbstractNodeEntityTableModel<Concept> {
+public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntityTableModel<Concept, T> {
     
     private final Map<Concept, NodeConceptChange> changedConcepts = new HashMap<>();
     
@@ -49,7 +49,7 @@ public class DiffNodeConceptListModel extends AbstractNodeEntityTableModel<Conce
     }
 
     @Override
-    public void setCurrentNode(Node node) {
+    public void setCurrentNode(T node) {
         super.setCurrentNode(node);
         
         Set<NodeConceptChange> changes = ((DiffNodeInstance)node).getDiffNode().getChangeDetails().getConceptChanges();

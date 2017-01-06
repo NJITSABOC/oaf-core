@@ -52,8 +52,6 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
 
     private Optional<AbstractionNetworkGraph<T>> optGraph = Optional.empty();
 
-    private final JCheckBox chkHideGroups;
-
     private final JLabel hierarchyInfoLabel = new JLabel();
 
     private final JPanel menuPanel = new JPanel();
@@ -133,14 +131,6 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
             }
         });
 
-        chkHideGroups = new JCheckBox("TEXT NOT SET"); // TODO: Hide all what?
-
-        chkHideGroups.addActionListener((ae) -> {
-            handleHideGroupClick();
-        });
-
-        menuPanel.add(chkHideGroups);
-
         menuPanel.add(new JSeparator(SwingConstants.VERTICAL));
         menuPanel.add(Box.createHorizontalStrut(5));
 
@@ -197,10 +187,6 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
         setVisible(true);
     }
 
-    public void setContainerAbNCheckboxText(String text) {
-        chkHideGroups.setText(text);
-    }
-
     public Optional<AbstractionNetworkGraph<T>> getGraph() {
         return optGraph;
     }
@@ -229,10 +215,6 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
         toggleMenuButtons.add(button);
 
         optionsPanel.add(button);
-    }
-
-    public void setAllGroupsHidden(boolean allGroupsHidden) {
-        this.chkHideGroups.setSelected(allGroupsHidden);
     }
 
     public void focusOnComponent(final Component c) {
@@ -278,39 +260,6 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
             abnGraph.repaint();
             gep.getDisplayPanel().getAutoScroller().navigateToPoint(new Point(midPointX, midPointY));
         });
-    }
-
-    private void handleHideGroupClick() {
-
-        if (!optGraph.isPresent()) {
-            return;
-        }
-
-        AbstractionNetworkGraph<T> abnGraph = optGraph.get();
-
-        Component[] components = abnGraph.getComponents();
-
-        if (chkHideGroups.isSelected()) {
-
-            for (Component c : components) {
-                if (c instanceof PartitionedNodeEntry) {
-                    if (!((PartitionedNodeEntry) c).isCollapsed()) {
-                        ((PartitionedNodeEntry) c).collapseContainer();
-                    }
-                }
-            }
-        } else {
-
-            for (Component c : components) {
-                if (c instanceof PartitionedNodeEntry) {
-                    if (((PartitionedNodeEntry) c).isCollapsed()) {
-                        ((PartitionedNodeEntry) c).expandContainer();
-                    }
-                }
-            }
-        }
-
-        abnGraph.getGraphLayout().resetLayout();
     }
 
     protected void setHierarchyInfoText(String text) {

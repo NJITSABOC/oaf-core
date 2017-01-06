@@ -16,7 +16,7 @@ import java.awt.Stroke;
 public class AggregateDisjointAbNPainter extends DisjointAbNPainter {
 
     @Override
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
         super.paintOverlapBackground(g2d, entry, p, scale);
 
         Point savedPoint = p.getLocation();

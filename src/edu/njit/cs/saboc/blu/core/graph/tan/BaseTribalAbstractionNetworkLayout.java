@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -34,6 +35,29 @@ public abstract class BaseTribalAbstractionNetworkLayout<T extends ClusterTribal
     private final T tan;
 
     private final TANConfiguration config;
+    
+    public static ArrayList<Color> getBandLevelColors() {
+        // These are a set of styles such that each new row is given a different color.
+        Color[] background = {
+            Color.GRAY,
+            new Color(250, 250, 250),
+            new Color(55, 213, 102),
+            new Color(121, 212, 250),
+            new Color(242, 103, 103),
+            new Color(232, 255, 114),
+            Color.cyan,
+            Color.orange,
+            Color.pink,
+            Color.green,
+            Color.yellow
+        };
+        
+        for(int c = 1; c < background.length; c++) {
+            background[c] = background[c].brighter();
+        }
+        
+        return new ArrayList<>(Arrays.asList(background));
+    }
 
     public BaseTribalAbstractionNetworkLayout(AbstractionNetworkGraph<T> graph, T tan, TANConfiguration config) {
         super(graph);

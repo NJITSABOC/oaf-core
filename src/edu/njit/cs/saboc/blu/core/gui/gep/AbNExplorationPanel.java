@@ -59,11 +59,9 @@ public class AbNExplorationPanel extends JPanel {
                     return;
                 }
                 
-                PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)configuration.getAbstractionNetwork();
+                PartitionedNode parentNode = entry.getParentContainer().getNode();
 
-                PartitionedNode node = partitionedAbN.getPartitionNodeFor((SinglyRootedNode)entry.getNode().getInternalNodes().iterator().next());
-
-                dashboardPanel.displayDetailsForPartitionedNode(node);
+                dashboardPanel.displayDetailsForPartitionedNode(parentNode);
             }
 
             @Override

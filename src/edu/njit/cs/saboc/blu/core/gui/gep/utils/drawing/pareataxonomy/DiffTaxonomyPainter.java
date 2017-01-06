@@ -19,7 +19,7 @@ import java.awt.Stroke;
  */
 public class DiffTaxonomyPainter extends AbNPainter {
     
-    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
+    public void paintPartitionedNodeAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
 
         DiffArea area = (DiffArea) entry.getNode();
         
@@ -45,10 +45,10 @@ public class DiffTaxonomyPainter extends AbNPainter {
         }
 
 
-        super.paintContainerAtPoint(g2d, entry, p, scale);
+        super.paintPartitionedNodeAtPoint(g2d, entry, p, scale);
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
 
         Color bgColor;
 

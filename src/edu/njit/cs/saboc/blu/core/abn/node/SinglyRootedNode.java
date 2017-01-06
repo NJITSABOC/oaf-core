@@ -50,6 +50,6 @@ public abstract class SinglyRootedNode extends Node {
     }
     
     public String getName() {
-        return String.format("%s (%d)", getRoot().getName(), getConceptCount());
+        return String.format("%s", getRoot().getName());
     }
 }

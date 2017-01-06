@@ -14,8 +14,8 @@ import java.awt.Point;
 public class TargetAbNPainter extends AbNPainter {
 
     @Override
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
-        super.paintGroupAtPoint(g2d, entry, p, scale);
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
+        super.paintSinglyRootedNodeAtPoint(g2d, entry, p, scale);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TargetAbNPainter extends AbNPainter {
     }
 
     @Override
-    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
+    public void paintPartitionedNodeAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
         
     }
 }

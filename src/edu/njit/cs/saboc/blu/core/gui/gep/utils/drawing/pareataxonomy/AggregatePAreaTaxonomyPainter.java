@@ -11,7 +11,7 @@ import java.awt.Point;
  * @author Chris O
  */
 public class AggregatePAreaTaxonomyPainter extends AbNPainter {
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry nodeEntry, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry nodeEntry, Point p, double scale) {
         AggregateNodePainter.paintGroupAtPoint(g2d, nodeEntry, p, scale);
     }
 }

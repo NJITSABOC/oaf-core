@@ -112,12 +112,9 @@ public class TargetAbNLayout<T extends TargetAbstractionNetwork<TargetGroup>>  e
         int x = 0;
         int y = 20;
         
-        int areaId = 0;
-
         addGraphLevel(new GraphLevel(0, getGraph(), new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
 
         for (ArrayList<TargetGroup> groupLevel : groupLevels) {  // Loop through the areas and generate the diagram for each of them
-            int maxRows = 0;
             int width = 0;
 
             int groupCount = groupLevel.size();

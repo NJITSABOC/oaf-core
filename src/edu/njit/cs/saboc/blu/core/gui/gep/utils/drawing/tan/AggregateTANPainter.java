@@ -12,7 +12,7 @@ import java.awt.Point;
 public class AggregateTANPainter extends TANPainter {
     
     @Override
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
         AggregateNodePainter.paintGroupAtPoint(g2d, group, p, scale);
     }
 }

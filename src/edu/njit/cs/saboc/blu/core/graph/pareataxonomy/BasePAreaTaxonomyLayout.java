@@ -25,15 +25,8 @@ import javax.swing.JLabel;
  */
 public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends AbstractionNetworkGraphLayout<T> {
 
-    private final PAreaTaxonomy taxonomy;
-
-    protected BasePAreaTaxonomyLayout(AbstractionNetworkGraph<T> graph, T taxonomy) {
-        super(graph);
-
-        this.taxonomy = taxonomy;
-    }
-    
-    protected ArrayList<Color> getTaxonomyLevelColors() {
+    public static ArrayList<Color> getTaxonomyLevelColors() {
+        
         Color[] baseColors = new Color[]{
             new Color(178, 178, 178),
             new Color(55, 213, 102),
@@ -48,20 +41,28 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
             Color.BLUE,
             Color.MAGENTA
         };
-        
+
         ArrayList<Color> colors = new ArrayList<>(Arrays.asList(baseColors));
-        
+
         for (Color baseColor : baseColors) {
             colors.add(baseColor.brighter());
         }
-        
+
         for (Color baseColor : baseColors) {
             colors.add(baseColor.darker());
         }
-        
+
         return colors;
     }
+    
+    private final PAreaTaxonomy taxonomy;
 
+    protected BasePAreaTaxonomyLayout(AbstractionNetworkGraph<T> graph, T taxonomy) {
+        super(graph);
+
+        this.taxonomy = taxonomy;
+    }
+    
     public void doLayout() {
         ArrayList<Area> sortedAreas = new ArrayList<>();    // Used for generating the graph
         ArrayList<Area> levelAreas = new ArrayList<>();     // Used for generating the graph
@@ -253,5 +254,4 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
     public Map<PArea, PAreaEntry> getPAreaEntries() {
         return (Map<PArea, PAreaEntry>)(Map<?,?>)super.getGroupEntries();
     }
-
 }

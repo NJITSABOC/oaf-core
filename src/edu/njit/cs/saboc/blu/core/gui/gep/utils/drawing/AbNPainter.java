@@ -59,7 +59,15 @@ public class AbNPainter {
         return showingHighlights && highlightedPartitionNodes.contains(entry);
     }
     
-    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
+    public Set<SinglyRootedNodeEntry> getHighlightedSinglyRootedNodeEntries() {
+        return highlightedSinglyRootedNodes;
+    }
+    
+    public Set<PartitionedNodeEntry> getHighlightedPartitionEntries() {
+        return highlightedPartitionNodes;
+    }
+    
+    public void paintPartitionedNodeAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
         Stroke savedStroke = g2d.getStroke();
         
         g2d.setPaint(entry.getBackground());
@@ -127,7 +135,7 @@ public class AbNPainter {
         g2d.setStroke(savedStroke);
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
         
         Color bgColor;
         

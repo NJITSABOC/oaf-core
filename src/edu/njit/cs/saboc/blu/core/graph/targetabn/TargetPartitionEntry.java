@@ -16,13 +16,8 @@ public class TargetPartitionEntry extends GenericPartitionEntry {
     }
     
     public TargetPartitionEntry(int width, int height, AbstractionNetworkGraph graph, TargetContainerEntry parentBandEntry, Color c, JLabel label) {
-
-        super(null, "", width, height, graph, parentBandEntry, c);
+        this(width, height, graph, parentBandEntry, c);
         
-        this.remove(partitionLabel);
-        
-        this.partitionLabel = label;
-
-        this.add(label);
+        this.setLabel(label);
     }
 }

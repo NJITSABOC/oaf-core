@@ -46,12 +46,9 @@ public class GenericPartitionEntry extends AbNNodeEntry {
     public GenericPartitionEntry(
             PartitionedNode partition, 
             String regionName,
-            
             int width, 
             int height, 
-            
             AbstractionNetworkGraph g, 
-            
             PartitionedNodeEntry parentEntry, 
             Color c) {
         

@@ -17,7 +17,7 @@ import java.awt.Stroke;
  * @author Chris O
  */
 public class DisjointAbNPainter extends AbNPainter {
-    public void paintContainerAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
+    public void paintPartitionedNodeAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
 
     }
     
@@ -25,7 +25,7 @@ public class DisjointAbNPainter extends AbNPainter {
 
     }
     
-    public void paintGroupAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
         
         paintOverlapBackground(g2d, entry, p, scale);
 

@@ -21,7 +21,7 @@ public class AbNDrawingUtilities {
 
         Point p = viewport.getDrawingPoint(new Point(container.getLocation()));
 
-        painter.paintContainerAtPoint(g2d, container, p, viewport.getViewScale());
+        painter.paintPartitionedNodeAtPoint(g2d, container, p, viewport.getViewScale());
 
         Component [] components = container.getComponents();
 
@@ -52,6 +52,8 @@ public class AbNDrawingUtilities {
         for(Component component : components) {
             if(component instanceof SinglyRootedNodeEntry) {
                 paintGroupEntry(painter, g2d, (SinglyRootedNodeEntry)component, viewport, labelManager);
+                
+                
             } else if(component instanceof JLabel) {
                 JLabel label = ((JLabel) component);
                 
@@ -71,7 +73,7 @@ public class AbNDrawingUtilities {
         
         Point p = viewport.getDrawingPoint(new Point(group.getAbsoluteX(), group.getAbsoluteY()));
 
-        painter.paintGroupAtPoint(g2d, group, p, viewport.getViewScale());
+        painter.paintSinglyRootedNodeAtPoint(g2d, group, p, viewport.getViewScale());
 
         Component[] components = group.getComponents();
         JLabel label = ((JLabel) components[0]);

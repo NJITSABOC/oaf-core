@@ -39,29 +39,12 @@ public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTr
         GraphLevel currentLevel = null; // This is used as a temporary variable in this method to hold the current level.
         GraphGroupLevel currentClusterLevel = null; // Used for generating the graph
 
-        // These are a set of styles such that each new row is given a different color.
-        Color[] background = {
-            new Color(250, 250, 250),
-            new Color(55, 213, 102),
-            new Color(121, 212, 250),
-            new Color(242, 103, 103),
-            new Color(232, 255, 114),
-            Color.cyan,
-            Color.orange,
-            Color.pink,
-            Color.green,
-            Color.yellow
-        };
-        
-        for(int c = 1; c < background.length; c++) {
-            background[c] = background[c].brighter();
-        }
+        ArrayList<Color> levelColors = BaseTribalAbstractionNetworkLayout.getBandLevelColors();
 
         int bandX = 0;  // The first area on each line is given an areaX value of 0.
         int bandY = 0;  // The first row of areas is given an areaY value of 0.
         int clusterX, clusterY;
         int x = 0, y = 20, width = 0, maxHeight = 0;
-        int style = 0;
 
         addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); 
 
@@ -91,7 +74,6 @@ public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTr
                 bandX = 0;  // Reset the areaX variable.
 
                 maxHeight = 0;  // Reset the maxHeight variable since this is a new row.
-                style++;    // Update the style variable which is used to display different colors for the different rows.
 
                 addGraphLevel(new GraphLevel(bandY, graph,
                         generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null))); // Add a level object to the arrayList in the dataGraph object
@@ -148,7 +130,7 @@ public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTr
 
             currentLevel = getLevels().get(bandY);
 
-            Color color = background[style % background.length];
+            Color color = levelColors.get(band.getPatriarchs().size() % levelColors.size());
 
             bandEntry = createBandEntry(band, x, y, width, height, color, bandX, currentLevel); // Create the area
 

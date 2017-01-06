@@ -86,12 +86,6 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
                 
                 isCollapsed = false;
 
-                try {
-                    graph.getParentInternalFrame().setAllGroupsHidden(false);
-                } catch (Exception exc) {
-                    System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
-                }
-                
             } else {
                 this.collapseContainer();
                 
@@ -104,14 +98,6 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
                         return;
                     }
                 }
-
-                try {
-                    graph.getParentInternalFrame().setAllGroupsHidden(true);
-                } catch (Exception exc) {
-                    System.err.println("ERROR: BluGraph does not belong to an internal graph frame.");
-                }
-                
-                
             }
         });
 
@@ -299,7 +285,7 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
         return partitions;
     }
 
-    public PartitionedNode getGroupContainer() {
+    public PartitionedNode getPartitionedNode() {
         return (PartitionedNode)super.getNode();
     }
 
@@ -372,7 +358,7 @@ public class PartitionedNodeEntry extends AbNNodeEntry {
     @Override
     public String toString() {
         return "Container: ContainerX = " + nodeX + ", ContainerY = " + getLevelParent().getLevelY() + ", x = " + getAbsoluteX() + ", y = " + getAbsoluteY() + ", width = " + getWidth() + ", height = " + getHeight() + "\n"
-                + getGroupContainer().toString();
+                + getPartitionedNode().toString();
 
     }
 

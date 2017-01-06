@@ -26,6 +26,10 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
         super(areaTaxonomy, pareaHierarchy, conceptHierarchy);
     }
     
+    public PAreaTaxonomy(PAreaTaxonomy taxonomy) {
+        this(taxonomy.getAreaTaxonomy(), taxonomy.getPAreaHierarchy(), taxonomy.getSourceHierarchy());
+    }
+    
     protected PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
         return getAreaTaxonomy().getPAreaTaxonomyFactory();
     }

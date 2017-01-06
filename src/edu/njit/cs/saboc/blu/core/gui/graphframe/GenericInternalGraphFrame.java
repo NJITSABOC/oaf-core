@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
-import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
@@ -23,7 +22,7 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -50,17 +49,19 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
     private final JScrollPane scroller;
     private final JPanel scrollerContentPanel;
 
-    private Optional<AbstractionNetworkGraph<T>> optGraph = Optional.empty();
+    private Optional<AbstractionNetworkGraph<T>> optCurrentGraph = Optional.empty();
 
     private final JLabel hierarchyInfoLabel = new JLabel();
 
     private final JPanel menuPanel = new JPanel();
+    
+    private final JPanel otherOptionsPanel = new JPanel();
 
-    private final JPanel reportsPanel = new JPanel();
+    private final JPanel reportsButtonPanel = new JPanel();
 
-    private final JPanel optionsPanel = new JPanel();
+    private final JPanel toggleButtonPanel = new JPanel();
 
-    private ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<PopupToggleButton>();
+    private ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<>();
 
     protected GenericInternalGraphFrame(JFrame parentFrame, String title) {
         super(title,
@@ -85,9 +86,9 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
 
         this.addInternalFrameListener(new InternalFrameAdapter() {
             public void internalFrameClosing(InternalFrameEvent e) {
-                for (PopupToggleButton button : toggleMenuButtons) {
+                toggleMenuButtons.forEach((button) -> {
                     button.disposePopup();
-                }
+                });
 
                 gep.getDisplayPanel().kill();
             }
@@ -133,8 +134,13 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
 
         menuPanel.add(new JSeparator(SwingConstants.VERTICAL));
         menuPanel.add(Box.createHorizontalStrut(5));
+        
+        menuPanel.add(otherOptionsPanel);
+        
+        menuPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        menuPanel.add(Box.createHorizontalStrut(5));
 
-        menuPanel.add(reportsPanel);
+        menuPanel.add(reportsButtonPanel);
 
         menuPanel.add(new JSeparator(SwingConstants.VERTICAL));
         menuPanel.add(Box.createHorizontalStrut(5));
@@ -149,7 +155,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
         goToRootBtn.setToolTipText("Click to return to the root of this abstraction network.");
 
         goToRootBtn.addActionListener((ae) -> {
-            //TODO: Fix GO TO ROOT
+            gep.getDisplayPanel().getAutoScroller().resetDisplay();
         });
 
         final JButton saveButton = new JButton("Save As Image");
@@ -165,7 +171,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
         menuPanel.add(new JSeparator(SwingConstants.VERTICAL));
         menuPanel.add(Box.createHorizontalStrut(5));
 
-        menuPanel.add(optionsPanel);
+        menuPanel.add(toggleButtonPanel);
 
         tabbedPane.addChangeListener((ce) -> {
             if (tabbedPane.getSelectedIndex() == 1) {
@@ -188,7 +194,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
     }
 
     public Optional<AbstractionNetworkGraph<T>> getGraph() {
-        return optGraph;
+        return optCurrentGraph;
     }
 
     public AbNExplorationPanel getAbNExplorationPanel() {
@@ -198,34 +204,46 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
     public JFrame getParentFrame() {
         return parentFrame;
     }
+    
+    public void addOtherOptionsComponent(JComponent component) {
+        this.otherOptionsPanel.add(component);
+        otherOptionsPanel.revalidate();
+        otherOptionsPanel.repaint();
+    }
+    
+    public void removeOtherOptionsComponent(JComponent component) {
+        this.otherOptionsPanel.remove(component);
+        otherOptionsPanel.revalidate();
+        otherOptionsPanel.repaint();
+    }
 
     public void addReportButtonToMenu(final AbstractButton button) {
-        reportsPanel.add(button);
-        reportsPanel.revalidate();
-        reportsPanel.repaint();
+        reportsButtonPanel.add(button);
+        reportsButtonPanel.revalidate();
+        reportsButtonPanel.repaint();
     }
 
     public void removeReportButtonFromMenu(final AbstractButton button) {
-        reportsPanel.remove(button);
-        reportsPanel.revalidate();
-        reportsPanel.repaint();
+        reportsButtonPanel.remove(button);
+        reportsButtonPanel.revalidate();
+        reportsButtonPanel.repaint();
     }
 
     protected void addToggleableButtonToMenu(final PopupToggleButton button) {
         toggleMenuButtons.add(button);
-
-        optionsPanel.add(button);
+        
+        toggleButtonPanel.add(button);
     }
 
     public void focusOnComponent(final Component c) {
 
         SwingUtilities.invokeLater(() -> {
 
-            if (!optGraph.isPresent()) {
+            if (!optCurrentGraph.isPresent()) {
                 return;
             }
 
-            AbstractionNetworkGraph<T> abnGraph = optGraph.get();
+            AbstractionNetworkGraph<T> abnGraph = optCurrentGraph.get();
 
             int x1 = c.getX();
             int y1 = c.getY();
@@ -284,7 +302,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
             AbNConfiguration gepConfiguration,
             AbNExplorationPanelGUIInitializer initializer) {
 
-        this.optGraph = Optional.of(graph);
+        this.optCurrentGraph = Optional.of(graph);
 
         gep.showLoading();
         tabbedPane.setEnabled(false);

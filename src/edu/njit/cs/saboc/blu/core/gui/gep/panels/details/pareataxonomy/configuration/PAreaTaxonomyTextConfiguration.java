@@ -36,6 +36,14 @@ public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTe
         return "*** PARTIAL-AREA HELP DESCRIPTION ***";
     }
 
+    @Override
+    public String getBaseAbstractionNetworkTypeName(boolean plural) {
+        if(plural) {
+            return "Area Taxonomies";
+        } else {
+            return "Area Taxonomy";
+        }
+    }
     
     @Override
     public String getAbNTypeName(boolean plural) {

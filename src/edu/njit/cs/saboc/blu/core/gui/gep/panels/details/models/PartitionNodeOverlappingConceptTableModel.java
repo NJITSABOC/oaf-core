@@ -22,7 +22,7 @@ public class PartitionNodeOverlappingConceptTableModel<T extends PartitionedNode
         super(new String [] { 
             config.getTextConfiguration().getConceptTypeName(false),
             "ID",
-            String.format("# %s", config.getTextConfiguration().getNodeTypeName(true))
+            String.format("In # %s", config.getTextConfiguration().getNodeTypeName(true))
         });
         
         this.config = config;

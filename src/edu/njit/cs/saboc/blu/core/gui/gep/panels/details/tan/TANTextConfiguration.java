@@ -1,7 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -28,13 +26,22 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     public ClusterTribalAbstractionNetwork getTAN() {
         return tan;
     }
-    
+
+    @Override
+    public String getBaseAbstractionNetworkTypeName(boolean plural) {
+        if(plural) {
+            return "Band TANs";
+        } else {
+            return "Band TAN";
+        }
+    }
+
     @Override
     public String getAbNTypeName(boolean plural) {
         if(plural) {
-            return "Tribal Abstraction Networks";
+            return "Cluster TANs";
         } else {
-            return "Tribal Abstraction Network";
+            return "Cluster TAN";
         }
     }
     
@@ -46,8 +53,6 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
             return "Band";
         }
     }
-
-
 
     @Override
     public String getNodeTypeName(boolean plural) {

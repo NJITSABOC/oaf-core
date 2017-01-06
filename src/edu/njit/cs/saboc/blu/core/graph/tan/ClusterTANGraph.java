@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCre
  */
 public class ClusterTANGraph<T extends ClusterTribalAbstractionNetwork> extends AbstractionNetworkGraph<T> {
     
-    public ClusterTANGraph(final T tan, SinglyRootedNodeLabelCreator labelCreator, TANConfiguration config) {
+    public ClusterTANGraph(T tan, SinglyRootedNodeLabelCreator labelCreator, TANConfiguration config) {
         
         super(tan, labelCreator);
         

@@ -43,7 +43,6 @@ public class ViewportAutoScroller implements UpdateableAbNDisplayEntity {
         int xMidpoint = viewport.getGraph().getAbNWidth() / 2 - viewport.getViewRegion().width / 2;
         
         this.snapToPoint(new Point(xMidpoint, 0));
-        
     }
     
     public void autoNavigateToNodeEntry(AbNNodeEntry entry) {

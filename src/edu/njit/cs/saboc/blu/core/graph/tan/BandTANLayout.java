@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class BandTANLayout extends PartitionedAbNLayout<ClusterTribalAbstractionNetwork> {
 
     public BandTANLayout(
-            AbstractionNetworkGraph<ClusterTribalAbstractionNetwork> graph,
+            AbstractionNetworkGraph graph,
             ClusterTribalAbstractionNetwork taxonomy,
             TANConfiguration config) {
 

@@ -32,6 +32,8 @@ public class DisjointAbstractionNetwork<
     
     private final int levels;
     
+    private boolean isAggregated;
+    
     public DisjointAbstractionNetwork(PARENTABN_T parentAbN, 
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy,
@@ -48,6 +50,8 @@ public class DisjointAbstractionNetwork<
         this.overlappingNodes = overlappingNodes;
         
         this.levels = levels;
+        
+        this.isAggregated = false;
     }
     
     public PARENTABN_T getParentAbstractionNetwork() {
@@ -104,9 +108,13 @@ public class DisjointAbstractionNetwork<
                 this.getAllDisjointNodes());
     }
 
+    protected void setAggregated(boolean value) {
+        this.isAggregated = value;
+    }
+    
     @Override
     public boolean isAggregated() {
-        return false;
+        return isAggregated;
     }
 
     @Override
@@ -116,6 +124,14 @@ public class DisjointAbstractionNetwork<
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = new AggregateAbNGenerator<>();
         
         return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode);
+    }
+    
+    public AncestorDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(T root) {
+        Hierarchy<T> ancestorSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(root);
+        
+        Hierarchy<Concept> conceptSubhierarchy = getSubhierarchyConcepts(ancestorSubhierarchy);
+        
+        return new AncestorDisjointAbN<>(root, this, ancestorSubhierarchy, conceptSubhierarchy);
     }
     
     public SubsetDisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSubsetDisjointAbN(Set<PARENTNODE_T> overlaps) {
@@ -129,26 +145,32 @@ public class DisjointAbstractionNetwork<
 
         Hierarchy<T> subsetSubhierarchy = (Hierarchy<T>)visitor.getSubsetSubhierarchy();
         
+        Hierarchy<Concept> conceptSubhierarchy = getSubhierarchyConcepts(subsetSubhierarchy);
+        
+        return new SubsetDisjointAbstractionNetwork<>(subsetSubhierarchy, conceptSubhierarchy, this);
+    }
+    
+    private Hierarchy<Concept> getSubhierarchyConcepts(Hierarchy<T> disjointNodeSubhierarchy) {
         Set<Concept> roots = new HashSet<>();
         
-        subsetSubhierarchy.getRoots().forEach( (rootNode) -> {
+        disjointNodeSubhierarchy.getRoots().forEach( (rootNode) -> {
             roots.add(rootNode.getRoot());
         });
         
-        Hierarchy<Concept> conceptHierarchy = new Hierarchy<>(roots);
+        Hierarchy<Concept> conceptSubhierarchy = new Hierarchy<>(roots);
         
-        subsetSubhierarchy.getNodes().forEach( (node) -> {
-            conceptHierarchy.addAllHierarchicalRelationships(node.getHierarchy());
+        disjointNodeSubhierarchy.getNodes().forEach( (node) -> {
+            conceptSubhierarchy.addAllHierarchicalRelationships(node.getHierarchy());
         });
         
-        subsetSubhierarchy.getNodes().forEach( (node) -> {            
+        disjointNodeSubhierarchy.getNodes().forEach( (node) -> {            
             this.getSourceHierarchy().getParents(node.getRoot()).forEach( (parent) -> {
-               if(conceptHierarchy.contains(parent)) {
-                   conceptHierarchy.addEdge(node.getRoot(), parent);
+               if(conceptSubhierarchy.contains(parent)) {
+                   conceptSubhierarchy.addEdge(node.getRoot(), parent);
                } 
             });
         });
         
-        return new SubsetDisjointAbstractionNetwork<>(subsetSubhierarchy, conceptHierarchy, this);
+        return conceptSubhierarchy;
     }
 }

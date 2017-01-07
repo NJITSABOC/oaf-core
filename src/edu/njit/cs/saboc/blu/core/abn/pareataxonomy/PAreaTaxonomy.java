@@ -16,8 +16,6 @@ import java.util.Set;
 public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwork<T, Area> 
     implements AggregateableAbstractionNetwork<PAreaTaxonomy<T>> {
     
-    private boolean isAggregated = false;
-       
     public PAreaTaxonomy(
             AreaTaxonomy areaTaxonomy,
             Hierarchy<T> pareaHierarchy, 
@@ -46,7 +44,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
         return super.getPartitionNodeFor(parea);
     }
     
-    public PArea getRootPArea() {
+    public T getRootPArea() {
         return getPAreaHierarchy().getRoot();
     }
     
@@ -66,7 +64,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 this.getPAreas());
     }
    
-    public RootSubtaxonomy<T> createRootSubtaxonomy(T root) {
+    public PAreaTaxonomy createRootSubtaxonomy(T root) {
         Hierarchy<T> subhierarchy = this.getPAreaHierarchy().getSubhierarchyRootedAt(root);
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
@@ -81,15 +79,11 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 subtaxonomy.getAreaTaxonomy(), 
                 subtaxonomy.getPAreaHierarchy(), 
                 subtaxonomy.getSourceHierarchy());
-               
-        if (this.isAggregated()) {
-            rootSubtaxonomy.setAggregated(true);
-        }
-        
+
         return rootSubtaxonomy;
     }
 
-    public AncestorSubtaxonomy<T> createAncestorSubtaxonomy(T source) {
+    public PAreaTaxonomy createAncestorSubtaxonomy(T source) {
         Hierarchy<T> subhierarchy = this.getPAreaHierarchy().getAncestorHierarchy(source);
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
@@ -105,20 +99,12 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 taxonomy.getPAreaHierarchy(), 
                 taxonomy.getSourceHierarchy());
         
-        if(this.isAggregated()) {
-            subtaxonomy.setAggregated(true);
-        }
-        
         return subtaxonomy;
     }
-    
-    protected void setAggregated(boolean value) {
-        this.isAggregated = value;
-    }
-    
+
     @Override
     public boolean isAggregated() {
-        return isAggregated;
+        return false;
     }
     
     public Set<InheritableProperty> getPropertiesInTaxonomy() {
@@ -126,12 +112,18 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     }
     
     public PAreaTaxonomy getRelationshipSubtaxonomy(Set<InheritableProperty> allowedRelTypes) {
-        PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
-        PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
-                this,
-                allowedRelTypes);
-        
-        return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
+
+        if (allowedRelTypes.equals(this.getAreaTaxonomy().getPropertiesInTaxonomy())) {
+            return this;
+            
+        } else {
+            PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
+            PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
+                    this,
+                    allowedRelTypes);
+
+            return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
+        }
     }
 
     @Override

@@ -91,8 +91,9 @@ public class DisjointAbNPainter extends AbNPainter {
         g2d.setStroke(savedStroke);
     }
     
-    protected void paintOverlapBackground(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
-        DisjointNodeEntry disjointGroup = (DisjointNodeEntry)group;
+    protected void paintOverlapBackground(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
+        
+        DisjointNodeEntry disjointGroup = (DisjointNodeEntry)entry;
         
         Color [] colorSet = disjointGroup.getColorSet();
         

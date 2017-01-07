@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
-public class DisplayNewDisjointAbNAction extends DisplayNewAbN{
+public class DisplayNewDisjointAbNAction extends CreateAndDisplayAbNThread{
 	private final PartitionedAbNConfiguration config;
         private final PartitionedNode node;
 	

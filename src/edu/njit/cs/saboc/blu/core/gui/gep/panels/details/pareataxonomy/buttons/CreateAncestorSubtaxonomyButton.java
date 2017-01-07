@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -22,7 +21,7 @@ public class CreateAncestorSubtaxonomyButton extends CreateSubtaxonomyButton {
     }
     
     @Override
-    public PAreaSubtaxonomy createSubtaxonomy() {
+    public PAreaTaxonomy createSubtaxonomy() {
         PArea parea = (PArea)super.getCurrentNode().get();
         
         return config.getPAreaTaxonomy().createAncestorSubtaxonomy(parea);

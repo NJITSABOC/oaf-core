@@ -46,31 +46,24 @@ public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> exte
         
         Set<DisjointNode> disjointNodes = disjointAbN.getAllDisjointNodes();
                 
-        ArrayList<DisjointNode> nonoverlappingNodes = new ArrayList<>();
-        
-        disjointNodes.forEach((group) -> {
-            if(group.getOverlaps().size() == 1) {
-                nonoverlappingNodes.add(group);
-            }
-        });
-        
+
         Color[] colors = this.createOverlapColors();
 
-        HashMap<SinglyRootedNode, Color> colorMap = new HashMap<>();
+        Map<SinglyRootedNode, Color> colorMap = new HashMap<>();
         
         int colorId = 0;
-
-        for (DisjointNode dpa : nonoverlappingNodes) {
-            SinglyRootedNode overlapGroup = (SinglyRootedNode)dpa.getOverlaps().iterator().next();
-
+        
+        Set<SinglyRootedNode> overlappingNodes = disjointAbN.getOverlappingNodes();
+        
+        for(SinglyRootedNode node : overlappingNodes) {
             if (colorId >= colors.length) {
-                colorMap.put(overlapGroup, Color.gray);
+                colorMap.put(node, Color.GRAY);
             } else {
-                colorMap.put(overlapGroup, colors[colorId]);
+                colorMap.put(node, colors[colorId]);
                 colorId++;
             }
         }
-        
+
         ArrayList<ArrayList<DisjointNode>> nodeLevels = new ArrayList<>();
         
          for (int overlapSize = 1; overlapSize <= disjointAbN.getLevelCount(); overlapSize++) {
@@ -230,7 +223,16 @@ public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> exte
 
         int iterations = 4;
 
-        Color[] seedColors = new Color[]{Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.PINK, Color.ORANGE, Color.CYAN, Color.LIGHT_GRAY, Color.MAGENTA};
+        Color[] seedColors = new Color[]{ 
+            Color.RED, 
+            Color.BLUE, 
+            Color.GREEN, 
+            Color.YELLOW, 
+            Color.PINK, 
+            Color.ORANGE, 
+            Color.CYAN, 
+            Color.LIGHT_GRAY, 
+            Color.MAGENTA};
 
         Color[] colors = new Color[seedColors.length * iterations];
 
@@ -304,7 +306,7 @@ public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> exte
              int y,
              int groupX, 
              GraphGroupLevel groupLevel, 
-             HashMap<SinglyRootedNode, Color> colorMap) {
+             Map<SinglyRootedNode, Color> colorMap) {
          
         ArrayList<SinglyRootedNode> groups = new ArrayList<>(node.getOverlaps());
 

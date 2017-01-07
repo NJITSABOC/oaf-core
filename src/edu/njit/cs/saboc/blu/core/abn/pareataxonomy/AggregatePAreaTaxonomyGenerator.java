@@ -39,9 +39,7 @@ public class AggregatePAreaTaxonomyGenerator {
                 taxonomy.getAreaTaxonomy(), 
                 taxonomy.getPAreaHierarchy(),
                 taxonomy.getSourceHierarchy());
-        
-        aggregateTaxonomy.setAggregated(true);
-       
+               
         return aggregateTaxonomy;
     }
     

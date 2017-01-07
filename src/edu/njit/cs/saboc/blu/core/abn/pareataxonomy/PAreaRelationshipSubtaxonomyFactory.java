@@ -22,6 +22,7 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
         this.allowedRels = allowedTypes;
     }
     
+    @Override
     public AreaTaxonomy createAreaTaxonomy(
             Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
@@ -29,6 +30,7 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
         return baseTaxonomy.getPAreaTaxonomyFactory().createAreaTaxonomy(areaHierarchy, sourceHierarchy);
     }
     
+    @Override
     public <T extends PArea> PAreaTaxonomy createPAreaTaxonomy(
             AreaTaxonomy areaTaxonomy,
             Hierarchy<T> pareaHierarchy, 
@@ -37,6 +39,7 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
         return new RelationshipSubtaxonomy(baseTaxonomy, allowedRels, areaTaxonomy, pareaHierarchy, conceptHierarchy);
     }
     
+    @Override
     public Set<InheritableProperty> getRelationships(Concept c) {
         Set<InheritableProperty> allRels = new HashSet<>(baseTaxonomy.getPAreaTaxonomyFactory().getRelationships(c));
         

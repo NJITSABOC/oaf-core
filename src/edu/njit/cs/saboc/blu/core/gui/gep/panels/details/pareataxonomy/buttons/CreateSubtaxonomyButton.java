@@ -1,12 +1,11 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -32,39 +31,17 @@ public abstract class CreateSubtaxonomyButton extends NodeOptionButton {
     
     public final void createAndDisplaySubtaxonomy() {
         if (getCurrentNode().isPresent()) {
-            /*
-            Thread loadThread = new Thread(new Runnable() {
+            CreateAndDisplayAbNThread display = new CreateAndDisplayAbNThread("Creating Subtaxonomy", displayTaxonomyListener) {
 
-                private LoadStatusDialog loadStatusDialog = null;
-                private boolean doLoad = true;
-
-                public void run() {
-                    
-                    loadStatusDialog = LoadStatusDialog.display(null,
-                            "Creating Subtaxonomy", 
-                            ( ) -> {
-                                doLoad = false;
-                    });
-
-                    PAreaTaxonomy subtaxonomy = createSubtaxonomy();
-
-                    SwingUtilities.invokeLater(() -> {
-                        if (doLoad) {
-                            displayTaxonomyListener.displayAbstractionNetwork(subtaxonomy);
-
-                            loadStatusDialog.setVisible(false);
-                            loadStatusDialog.dispose();
-                        }
-                    });
+                @Override
+                public AbstractionNetwork getAbN() {
+                    return createSubtaxonomy();
                 }
-            });
-
-            loadThread.start();
-            */
-            DisplayNewSubtaxonomy display = new DisplayNewSubtaxonomy(this, displayTaxonomyListener, "Creating Subtaxonomy");
+            };
+                    
             display.startThread();
         }
     }
     
-    public abstract PAreaSubtaxonomy createSubtaxonomy();
+    public abstract PAreaTaxonomy createSubtaxonomy();
 }

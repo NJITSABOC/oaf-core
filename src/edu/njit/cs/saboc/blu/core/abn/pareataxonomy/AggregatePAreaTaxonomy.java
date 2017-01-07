@@ -36,7 +36,12 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     public int getBound() {
         return minBound;
     }
-    
+
+    @Override
+    public boolean isAggregated() {
+        return true;
+    }
+
     public ExpandedSubtaxonomy createExpandedSubtaxonomy(AggregatePArea parea) {
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
         
@@ -55,5 +60,5 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
             smallestNode);
 
         return aggregateTaxonomy;
-    }
+    }    
 }

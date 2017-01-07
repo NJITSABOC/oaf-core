@@ -12,7 +12,7 @@ import java.util.Collections;
  *
  * @author Chris O
  */
-public class DisjointNodeSummaryPanel extends NodeSummaryPanel {
+public class DisjointNodeSummaryPanel extends NodeSummaryPanel<DisjointNode> {
     
     private final OverlappingNodeList overlapsPanel;
     

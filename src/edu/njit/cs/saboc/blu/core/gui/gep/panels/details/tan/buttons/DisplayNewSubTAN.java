@@ -1,10 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.DisplayNewAbN;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
-public class DisplayNewSubTAN extends DisplayNewAbN{
+public class DisplayNewSubTAN extends CreateAndDisplayAbNThread{
 	private final CreateSubTANButton btn;
 	
 	public DisplayNewSubTAN(CreateSubTANButton btn, DisplayAbNAction display, String displayText){

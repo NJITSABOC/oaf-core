@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

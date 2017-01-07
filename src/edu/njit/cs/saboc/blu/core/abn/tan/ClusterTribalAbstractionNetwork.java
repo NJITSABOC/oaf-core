@@ -27,7 +27,6 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         super(bandTan, clusterHierarchy, sourceHierarchy);
     }
     
-
     public BandTribalAbstractionNetwork getBandTAN() {
         return (BandTribalAbstractionNetwork)super.getBaseAbstractionNetwork();
     }
@@ -92,6 +91,8 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 this.getSourceFactory());
         
         RootSubTAN subTAN = new RootSubTAN(this, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
+        
+        subTAN.setAggregated(this.isAggregated());
                 
         return subTAN;
     }
@@ -108,6 +109,8 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 this.getSourceFactory());
         
         AncestorSubTAN subTAN = new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
+        
+        subTAN.setAggregated(this.isAggregated());
         
         return subTAN;
     }
@@ -131,5 +134,4 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     public boolean isAggregated() {
         return isAggregated;
     }
-    
 }

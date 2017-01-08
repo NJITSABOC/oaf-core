@@ -1,6 +1,9 @@
-package edu.njit.cs.saboc.blu.core.abn.tan;
+package edu.njit.cs.saboc.blu.core.abn.tan.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
@@ -33,20 +36,18 @@ public class AggregateTANGenerator {
                 sourceTAN.getSourceHierarchy(),
                 sourceTAN.getSourceFactory());
 
-        AggregateClusterTribalAbstractionNetwork aggregateTaxonomy = new AggregateClusterTribalAbstractionNetwork(
+        return new AggregateClusterTribalAbstractionNetwork(
                 sourceTAN,
                 min,
                 tan.getBandTAN(),
                 tan.getClusterHierarchy(),
                 tan.getSourceHierarchy());
-
-        aggregateTaxonomy.setAggregated(true);
-
-        return aggregateTaxonomy;
     }
+    
+    
 
     public ExpandedClusterTribalAbstractionNetwork createExpandedTAN(
-            AggregateClusterTribalAbstractionNetwork sourceAggregateTAN,
+            ClusterTribalAbstractionNetwork sourceAggregateTAN,
             AggregateCluster aggregateCluster,
             TribalAbstractionNetworkGenerator generator) {
 

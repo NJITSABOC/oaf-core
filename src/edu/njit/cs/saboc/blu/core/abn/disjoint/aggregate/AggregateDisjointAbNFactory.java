@@ -1,6 +1,7 @@
-package edu.njit.cs.saboc.blu.core.abn.disjoint;
+package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;

@@ -3,8 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.AggregateDisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.AggregateDisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.ExpandAggregateButton;

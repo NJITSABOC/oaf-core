@@ -1,13 +1,15 @@
-package edu.njit.cs.saboc.blu.core.abn.disjoint;
+package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.diff.utils.SetUtilities;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -25,53 +27,14 @@ public class AggregateDisjointAbstractionNetwork<
             DisjointAbstractionNetwork nonAggregateDisjointAbN,
             DisjointAbstractionNetwork superAggregateDisjointAbN,
             AggregateDisjointNode selectedRoot) {
-        
-        Hierarchy<AggregateDisjointNode> ancestors = superAggregateDisjointAbN.getNodeHierarchy().getAncestorHierarchy(selectedRoot);
-        
-        Set<DisjointNode> ancestorRoots = new HashSet<>();
-        
-        ancestors.getRoots().forEach( (root) ->{
-            ancestorRoots.add((DisjointNode)root.getAggregatedHierarchy().getRoot());
-        });
-        
-        Set<DisjointNode> aggregatedNodes = new HashSet<>();
-        
-        ancestors.getNodes().forEach((aggregatePArea) -> {
-            aggregatedNodes.addAll(aggregatePArea.getAggregatedHierarchy().getNodes());
-        });
-        
-        //TODO: This can be done with a topological traversal, probably
-        Hierarchy<DisjointNode> potentialNodeHierarchy = nonAggregateDisjointAbN.getNodeHierarchy().getAncestorHierarchy(aggregatedNodes);
-        
-        
-        Hierarchy<DisjointNode> actualNodeHierarchy = new Hierarchy<>(
-                SetUtilities.getSetIntersection(potentialNodeHierarchy.getRoots(), ancestorRoots));
-        
-        aggregatedNodes.forEach((parea) -> {
-            actualNodeHierarchy.addNode(parea);
-        });
-        
-        potentialNodeHierarchy.getEdges().forEach((edge) -> {
-            if(aggregatedNodes.contains(edge.getFrom()) && aggregatedNodes.contains(edge.getTo())) {
-                actualNodeHierarchy.addEdge(edge);
-            }
-        });
-        
-        Hierarchy<Concept> sourceHierarchy = new Hierarchy(actualNodeHierarchy.getRoot().getRoot());
-        
-        actualNodeHierarchy.getNodes().forEach( (parea) -> {
-            sourceHierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
-        });
-        
-        actualNodeHierarchy.getNodes().forEach((parea) -> {
-            nonAggregateDisjointAbN.getSourceHierarchy().getParents(parea.getRoot()).forEach( (p) -> {
-                Concept parent = (Concept)p;
-                
-                if(sourceHierarchy.contains(parent)) {
-                    sourceHierarchy.addEdge(parea.getRoot(), parent);
-                }
-            });
-        });
+
+        Hierarchy<DisjointNode> actualNodeHierarchy = AbstractionNetworkUtils.getDeaggregatedAncestorHierarchy(
+                nonAggregateDisjointAbN.getNodeHierarchy(), 
+                superAggregateDisjointAbN.getNodeHierarchy().getAncestorHierarchy(selectedRoot));
+               
+        Hierarchy<Concept> sourceHierarchy = AbstractionNetworkUtils.getConceptHierarchy(
+                actualNodeHierarchy, 
+                nonAggregateDisjointAbN.getSourceHierarchy());
         
         DisjointAbstractionNetwork unaggregatedAncestorAbN = new DisjointAbstractionNetwork(
                 nonAggregateDisjointAbN.getParentAbstractionNetwork(), 

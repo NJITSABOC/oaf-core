@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.RootedSubAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -7,17 +8,29 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class RootSubTAN<T extends Cluster> extends SubTAN<T> {
+public class RootSubTAN<T extends Cluster> extends ClusterTribalAbstractionNetwork<T> 
+        implements RootedSubAbstractionNetwork<T, ClusterTribalAbstractionNetwork<T>> {
+    
+    private final ClusterTribalAbstractionNetwork<T> sourceTAN;
+    
     public RootSubTAN(
             ClusterTribalAbstractionNetwork sourceTAN,
             BandTribalAbstractionNetwork bandTan,
             Hierarchy<T> clusterHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
 
-        super(sourceTAN, bandTan, clusterHierarchy, sourceHierarchy);
+        super(bandTan, clusterHierarchy, sourceHierarchy);
+        
+        this.sourceTAN = sourceTAN;
     }
-    
-    public T getSelectedRootCluster() {
-        return super.getClusterHierarchy().getRoot();
+
+    @Override
+    public T getSelectedRoot() {
+        return this.getClusterHierarchy().getRoot();
+    }
+
+    @Override
+    public ClusterTribalAbstractionNetwork<T> getSuperAbN() {
+        return sourceTAN;
     }
 }

@@ -1,10 +1,12 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateTANGenerator;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -16,8 +18,6 @@ import java.util.Set;
  */
 public class ClusterTribalAbstractionNetwork<T extends Cluster> extends PartitionedAbstractionNetwork<T, Band> 
         implements AggregateableAbstractionNetwork<ClusterTribalAbstractionNetwork<T>>{
-    
-    private boolean isAggregated = false;
     
     public ClusterTribalAbstractionNetwork(
             BandTribalAbstractionNetwork bandTan,
@@ -71,7 +71,6 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         return nonoverlappingPatriarchClusters;
     }
     
-    
     @Override
     public Set<ParentNodeDetails<T>> getParentNodeDetails(T cluster) {
         return AbstractionNetworkUtils.getSinglyRootedNodeParentNodeDetails(
@@ -79,6 +78,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 this.getSourceHierarchy(),
                 this.getClusters());
     }
+    
     
     public RootSubTAN createRootSubTAN(T root) {
         Hierarchy<T> subhierarchy = this.getClusterHierarchy().getSubhierarchyRootedAt(root);
@@ -88,13 +88,9 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         ClusterTribalAbstractionNetwork tan = generator.createTANFromClusters(
                 subhierarchy, 
                 this.getSourceHierarchy(),
-                this.getSourceFactory());
-        
-        RootSubTAN subTAN = new RootSubTAN(this, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
-        
-        subTAN.setAggregated(this.isAggregated());
-                
-        return subTAN;
+                this.getSourceFactory());       
+
+        return new RootSubTAN(this, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
     }
     
     public AncestorSubTAN createAncestorTAN(T source) {
@@ -107,31 +103,17 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 subhierarchy, 
                 this.getSourceHierarchy(),
                 this.getSourceFactory());
-        
-        AncestorSubTAN subTAN = new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
-        
-        subTAN.setAggregated(this.isAggregated());
-        
-        return subTAN;
+                
+        return new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
     }
 
     @Override
     public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode) {
-        AggregateTANGenerator generator = new AggregateTANGenerator();
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, smallestNode);
+    }
         
-        ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregateTAN(this, 
-            new TribalAbstractionNetworkGenerator(),
-            new AggregateAbNGenerator<>(),
-            smallestNode);
-
-        return aggregateTAN;
-    }
-    
-    public void setAggregated(boolean isAggregated) {
-        this.isAggregated = isAggregated;
-    }
-    
+    @Override
     public boolean isAggregated() {
-        return isAggregated;
+        return false;
     }
 }

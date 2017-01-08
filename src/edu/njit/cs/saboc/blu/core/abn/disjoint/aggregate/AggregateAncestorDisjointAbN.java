@@ -1,7 +1,10 @@
-package edu.njit.cs.saboc.blu.core.abn.disjoint;
+package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**

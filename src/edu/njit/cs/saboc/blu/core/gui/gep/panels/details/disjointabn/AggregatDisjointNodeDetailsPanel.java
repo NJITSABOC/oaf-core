@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn;
 
-import edu.njit.cs.saboc.blu.core.abn.disjoint.AggregateDisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeConceptList;

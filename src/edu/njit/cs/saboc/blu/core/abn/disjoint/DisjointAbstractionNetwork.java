@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;

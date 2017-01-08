@@ -2,7 +2,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
-import edu.njit.cs.saboc.blu.core.abn.tan.AggregateCluster;
+import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateCluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AggregatedNodesPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;

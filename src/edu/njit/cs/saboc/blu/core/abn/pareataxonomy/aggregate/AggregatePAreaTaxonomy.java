@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AncestorSubtaxonomy;
@@ -10,8 +11,6 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RootSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -54,45 +53,13 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
             PAreaTaxonomy superAggregateTaxonomy,
             AggregatePArea selectedRoot) {
         
-        Hierarchy<AggregatePArea> ancestors = superAggregateTaxonomy.getPAreaHierarchy().getAncestorHierarchy(selectedRoot);
+        Hierarchy<PArea> actualPAreaHierarchy = AbstractionNetworkUtils.getDeaggregatedAncestorHierarchy(
+                nonAggregateTaxonomy.getPAreaHierarchy(), 
+                superAggregateTaxonomy.getPAreaHierarchy().getAncestorHierarchy(selectedRoot));
         
-        Set<PArea> aggregatedPAreas = new HashSet<>();
-        
-        ancestors.getNodes().forEach( (aggregatePArea) -> {
-            aggregatedPAreas.addAll(aggregatePArea.getAggregatedHierarchy().getNodes());
-        });
-        
-        
-        //TODO: This can be done with a topological traversal, probably
-        Hierarchy<PArea> potentialPAreaHierarchy = nonAggregateTaxonomy.getPAreaHierarchy().getAncestorHierarchy(aggregatedPAreas);
-        
-        Hierarchy<PArea> actualPAreaHierarchy = new Hierarchy<>(potentialPAreaHierarchy.getRoot());
-        
-        aggregatedPAreas.forEach( (parea) -> {
-            actualPAreaHierarchy.addNode(parea);
-        });
-        
-        potentialPAreaHierarchy.getEdges().forEach( (edge) -> {
-            if(aggregatedPAreas.contains(edge.getFrom()) && aggregatedPAreas.contains(edge.getTo())) {
-                actualPAreaHierarchy.addEdge(edge);
-            }
-        });
-        
-        Hierarchy<Concept> sourceHierarchy = new Hierarchy(actualPAreaHierarchy.getRoot().getRoot());
-        
-        actualPAreaHierarchy.getNodes().forEach( (parea) -> {
-            sourceHierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
-        });
-        
-        actualPAreaHierarchy.getNodes().forEach( (parea) -> {
-            nonAggregateTaxonomy.getSourceHierarchy().getParents(parea.getRoot()).forEach( (p) -> {
-                Concept parent = (Concept)p;
-                
-                if(sourceHierarchy.contains(parent)) {
-                    sourceHierarchy.addEdge(parea.getRoot(), parent);
-                }
-            });
-        });
+        Hierarchy<Concept> sourceHierarchy = AbstractionNetworkUtils.getConceptHierarchy(
+                actualPAreaHierarchy, 
+                nonAggregateTaxonomy.getSourceHierarchy());
         
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         PAreaTaxonomy nonAggregatedAncestorSubtaxonomy = generator.createTaxonomyFromPAreas(
@@ -100,7 +67,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 actualPAreaHierarchy, 
                 sourceHierarchy);
 
-        int aggregateBound = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregateBound();
+        int aggregateBound = ((AggregateAbstractionNetwork)superAggregateTaxonomy).getAggregateBound();
         
         // Convert to ancestor subhierarchy
         AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(
@@ -126,8 +93,6 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
         
         return generator.createExpandedSubtaxonomy(aggregateTaxonomy, parea, new PAreaTaxonomyGenerator());
     }
-
-    
     
     private final PAreaTaxonomy nonAggregateBaseTaxonomy;
     

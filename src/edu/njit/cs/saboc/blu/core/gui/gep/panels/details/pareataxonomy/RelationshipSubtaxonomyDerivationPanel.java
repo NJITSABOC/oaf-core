@@ -68,7 +68,7 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
     }
     
     public void initializeSubtaxonomy(PAreaTaxonomyConfiguration config, RelationshipSubtaxonomy taxonomy) {
-        initialize(config, taxonomy.getSourceTaxonomy());
+        initialize(config, taxonomy.getSuperAbN());
         
         Set<InheritableProperty> usedProperties = taxonomy.getAllowedProperties();
         

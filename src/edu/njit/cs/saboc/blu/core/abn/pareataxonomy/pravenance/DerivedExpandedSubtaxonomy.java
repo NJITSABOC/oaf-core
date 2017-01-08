@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.pravenance;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -26,6 +26,6 @@ public class DerivedExpandedSubtaxonomy extends DerivedPAreaTaxonomy {
         
         Set<AggregatePArea> pareas = taxonomy.getNodesWith(aggregatePAreaRoot);
         
-        return taxonomy.createExpandedSubtaxonomy(pareas.iterator().next());
+        return taxonomy.expandAggregateNode(pareas.iterator().next());
     }
 }

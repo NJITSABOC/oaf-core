@@ -43,7 +43,7 @@ public class AggregateDisjointAbNGenerator<
     }
 
     public ExpandedDisjointAbN createExpandedDisjointAbN(
-            AggregateDisjointAbstractionNetwork sourceAggregateDisjointAbN,
+            DisjointAbstractionNetwork sourceAggregateDisjointAbN,
             AggregateDisjointNode aggregateDisjointNode) {
 
         ExpandedDisjointAbN expandedDisjointAbN = new ExpandedDisjointAbN(

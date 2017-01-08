@@ -13,10 +13,10 @@ public class ExpandedDisjointAbN<
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
         PARENTNODE_T extends SinglyRootedNode> extends DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> {
     
-    private final AggregateDisjointAbstractionNetwork<PARENTABN_T, PARENTNODE_T> sourceAbN;
+    private final DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceAbN;
     private final AggregateDisjointNode<PARENTNODE_T> aggregatedNode;
     
-    public ExpandedDisjointAbN(AggregateDisjointAbstractionNetwork<PARENTABN_T, PARENTNODE_T> sourceAbN, 
+    public ExpandedDisjointAbN(DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceAbN, 
             AggregateDisjointNode<PARENTNODE_T> aggregatedNode) {
         
         super(sourceAbN.getParentAbstractionNetwork(), 
@@ -30,7 +30,7 @@ public class ExpandedDisjointAbN<
         this.aggregatedNode = aggregatedNode;
     }
     
-    public AggregateDisjointAbstractionNetwork<PARENTABN_T, PARENTNODE_T> getSourceAggregateDisjointAbN() {
+    public  DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSourceAggregateDisjointAbN() {
         return sourceAbN;
     }
     

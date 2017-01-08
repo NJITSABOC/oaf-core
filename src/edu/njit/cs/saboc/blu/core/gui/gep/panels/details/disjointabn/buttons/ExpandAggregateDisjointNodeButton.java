@@ -2,6 +2,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AggregateDisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AggregateDisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
@@ -37,9 +38,9 @@ public class ExpandAggregateDisjointNodeButton<T extends AggregateDisjointNode> 
 
                 @Override
                 public AbstractionNetwork getAbN() {
-                    AggregateDisjointAbstractionNetwork disjointAbN = (AggregateDisjointAbstractionNetwork)config.getAbstractionNetwork();
+                    AggregateAbstractionNetwork disjointAbN = (AggregateAbstractionNetwork)config.getAbstractionNetwork();
                     
-                    return disjointAbN.getExpandedDisjointAbN(getCurrentNode().get());
+                    return disjointAbN.expandAggregateNode(getCurrentNode().get());
                 }
             };
 

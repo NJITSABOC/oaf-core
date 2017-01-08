@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  * @author Chris O
  */
 public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstractionNetwork<AggregateCluster> 
-        implements AggregateAbstractionNetwork<ClusterTribalAbstractionNetwork> {
+        implements AggregateAbstractionNetwork<AggregateCluster, ClusterTribalAbstractionNetwork> {
     
     private final ClusterTribalAbstractionNetwork sourceTAN;
     
@@ -44,19 +44,26 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
         ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregateTAN(
-            this.getSource(), 
+            this.getNonAggregateSource(), 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);
 
         return aggregateTAN;
     }
+
+    @Override
+    public ClusterTribalAbstractionNetwork expandAggregateNode(AggregateCluster node) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
-    public ClusterTribalAbstractionNetwork getSource() {
+    @Override
+    public ClusterTribalAbstractionNetwork getNonAggregateSource() {
         return sourceTAN;
     }
     
-    public int getBound() {
+    @Override
+    public int getAggregateBound() {
         return minBound;
     }
 }

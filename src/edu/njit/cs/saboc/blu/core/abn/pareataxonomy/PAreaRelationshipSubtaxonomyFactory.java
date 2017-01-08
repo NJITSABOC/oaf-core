@@ -36,7 +36,10 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
             Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
 
-        return new RelationshipSubtaxonomy(baseTaxonomy, allowedRels, areaTaxonomy, pareaHierarchy, conceptHierarchy);
+        return new RelationshipSubtaxonomy(
+                baseTaxonomy, 
+                allowedRels, 
+                super.createPAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy));
     }
     
     @Override

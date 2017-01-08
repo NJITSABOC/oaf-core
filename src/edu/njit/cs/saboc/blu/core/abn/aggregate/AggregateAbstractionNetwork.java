@@ -5,9 +5,13 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 /**
  *
  * @author Chris O
+ * @param <ABN_T>
  */
-public interface AggregateAbstractionNetwork<ABN_T extends AbstractionNetwork> {
-    public ABN_T getSource();
+public interface AggregateAbstractionNetwork<T extends AggregateNode,
+        ABN_T extends AbstractionNetwork> {
     
-    public int getBound();
+    public ABN_T getNonAggregateSource();
+    public int getAggregateBound();
+    public ABN_T expandAggregateNode(T node);
+    
 }

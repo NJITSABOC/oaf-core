@@ -18,6 +18,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingDetai
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OverlappingNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -36,6 +38,7 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
     
     public interface DeriveDisjointAbNSubsetAction<T> {
         public void deriveSubsetDisjointAbN(Set<T> subset);
+        public void deriveCompleteDisjointAbN();
     }
     
     private final Set<T> selectedOverlaps = new HashSet<>();
@@ -46,7 +49,9 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
 
     private final NodeList<T> selectedSubsetList;
     
-    private final JButton deriveButton;
+    private final JButton showFullDisjointTaxonomyBtn;
+    
+    private final JButton deriveBtn;
 
     private Optional<DisjointAbstractionNetwork> optCurrentDisjointAbN = Optional.empty();
 
@@ -179,13 +184,22 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
         
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
         
-        this.deriveButton = new JButton("Display Subset");
-        this.deriveButton.addActionListener( (ae) -> {
+        this.showFullDisjointTaxonomyBtn = new JButton("Display Full " + config.getTextConfiguration().getAbNTypeName(false));
+        this.showFullDisjointTaxonomyBtn.addActionListener( (ae) -> {
+            this.deriveDisjointAbNSubsetAction.deriveCompleteDisjointAbN();
+        });
+        
+        this.deriveBtn = new JButton("Display Subset");
+        this.deriveBtn.addActionListener( (ae) -> {
             this.deriveDisjointAbNSubsetAction.deriveSubsetDisjointAbN(selectedOverlaps);
         });
         
-        JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(deriveButton, BorderLayout.EAST);
+        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        
+        southPanel.add(showFullDisjointTaxonomyBtn);
+        southPanel.add(Box.createHorizontalStrut(150));
+        southPanel.add(deriveBtn, BorderLayout.EAST);
+
         
         this.add(southPanel, BorderLayout.SOUTH);
         

@@ -1,13 +1,17 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.SubsetDisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.disjointabn.DisjointAbNSubsetSelectionPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.disjointabn.DisjointAbNSubsetSelectionPanel.DeriveDisjointAbNSubsetAction;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
@@ -18,7 +22,7 @@ import javax.swing.JDialog;
 public class DisplayDisjointAbNSubsetSelectionPanel extends AbNDisplayWidget {
     
     public interface DisplayDisjointAbNSubsetAction {
-        public void displayDisjointAbNSubset(DisjointAbstractionNetwork subsetDisjointAbN);
+        public void displayDisjointAbN(DisjointAbstractionNetwork subsetDisjointAbN);
     }
     
     private final JButton createSubsetButton;
@@ -44,17 +48,37 @@ public class DisplayDisjointAbNSubsetSelectionPanel extends AbNDisplayWidget {
         this.createSubsetButton.addActionListener((ae) -> {
             
             JDialog dialog = new JDialog();
-            
-            DisjointAbNSubsetSelectionPanel selectionPanel = new DisjointAbNSubsetSelectionPanel(parentConfig, (subset) -> {
 
-                DisjointAbstractionNetwork parentDisjointAbN = config.getAbstractionNetwork();
+            DisjointAbNSubsetSelectionPanel<PArea> selectionPanel = new DisjointAbNSubsetSelectionPanel<>(parentConfig,
+                    new DeriveDisjointAbNSubsetAction<PArea>() {
 
-                DisjointAbstractionNetwork subsetDisjointAbN = parentDisjointAbN.getSubsetDisjointAbN(subset);
+                        @Override
+                        public void deriveSubsetDisjointAbN(Set<PArea> subset) {
+                            DisjointAbstractionNetwork parentDisjointAbN = config.getAbstractionNetwork();
 
-                displayAction.displayDisjointAbNSubset(subsetDisjointAbN);
-                
-                dialog.dispose();
-            });
+                            DisjointAbstractionNetwork subsetDisjointAbN = parentDisjointAbN.getSubsetDisjointAbN(subset);
+
+                            displayAction.displayDisjointAbN(subsetDisjointAbN);
+
+                            dialog.dispose();
+                        }
+
+                        @Override
+                        public void deriveCompleteDisjointAbN() {
+                            
+                            DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork();
+                            
+                            if(disjointAbN instanceof SubsetDisjointAbstractionNetwork) {
+                                SubsetDisjointAbstractionNetwork subsetDisjointAbN = (SubsetDisjointAbstractionNetwork)disjointAbN;
+                                
+                                displayAction.displayDisjointAbN(subsetDisjointAbN.getSuperAbN());
+                            } else {
+                                displayAction.displayDisjointAbN(disjointAbN);
+                            }
+                        }
+                    });
+
+
             
             dialog.setSize(1800, 600);
             dialog.add(selectionPanel);

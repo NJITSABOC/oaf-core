@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;

@@ -1,34 +1,40 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.abn.SubAbstractionNetwork;
 import java.util.Set;
 
 /**
  *
  * @author cro3
  */
-public class RelationshipSubtaxonomy<T extends PArea> extends PAreaSubtaxonomy<T> {
+public class RelationshipSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T> implements SubAbstractionNetwork<PAreaTaxonomy> {
     
+    private final PAreaTaxonomy superTaxonomy;
     private final Set<InheritableProperty> allowedProperties;
     
     public RelationshipSubtaxonomy(
-            PAreaTaxonomy sourceTaxonomy,
+            PAreaTaxonomy superTaxonomy,
             Set<InheritableProperty> allowedProperties,
-            AreaTaxonomy areaTaxonomy,
-            Hierarchy<T> pareaHierarchy, 
-            Hierarchy<Concept> conceptHierarchy) {
+            PAreaTaxonomy subTaxonomy) {
 
-        super(sourceTaxonomy, areaTaxonomy, pareaHierarchy, conceptHierarchy);
+        super(subTaxonomy);
+        
+        this.superTaxonomy = superTaxonomy;
         
         this.allowedProperties = allowedProperties;
     }
     
+    @Override
     public PAreaTaxonomy getRelationshipSubtaxonomy(Set<InheritableProperty> allowedRelTypes) {
-        return getSourceTaxonomy().getRelationshipSubtaxonomy(allowedRelTypes);
+        return superTaxonomy.getRelationshipSubtaxonomy(allowedRelTypes);
     }
     
     public Set<InheritableProperty> getAllowedProperties() {
         return allowedProperties;
+    }
+
+    @Override
+    public PAreaTaxonomy getSuperAbN() {
+        return superTaxonomy;
     }
 }

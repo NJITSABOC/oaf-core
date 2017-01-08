@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
@@ -28,7 +28,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
         this(taxonomy.getAreaTaxonomy(), taxonomy.getPAreaHierarchy(), taxonomy.getSourceHierarchy());
     }
     
-    protected PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
+    public PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
         return getAreaTaxonomy().getPAreaTaxonomyFactory();
     }
         
@@ -74,11 +74,9 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 subhierarchy,
                 this.getSourceHierarchy());
         
-        RootSubtaxonomy rootSubtaxonomy = new RootSubtaxonomy(
+        RootSubtaxonomy<T> rootSubtaxonomy = new RootSubtaxonomy<>(
                 this, 
-                subtaxonomy.getAreaTaxonomy(), 
-                subtaxonomy.getPAreaHierarchy(), 
-                subtaxonomy.getSourceHierarchy());
+                subtaxonomy);
 
         return rootSubtaxonomy;
     }
@@ -88,18 +86,14 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy<T> taxonomy = generator.createTaxonomyFromPAreas(
+        PAreaTaxonomy<T> ancestorSubtaxonomy = generator.createTaxonomyFromPAreas(
                 getPAreaTaxonomyFactory(), 
                 subhierarchy,
                 this.getSourceHierarchy());
         
-        AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(this, 
+        return new AncestorSubtaxonomy(this, 
                 source, 
-                taxonomy.getAreaTaxonomy(), 
-                taxonomy.getPAreaHierarchy(), 
-                taxonomy.getSourceHierarchy());
-        
-        return subtaxonomy;
+                ancestorSubtaxonomy);
     }
 
     @Override
@@ -115,7 +109,6 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
         if (allowedRelTypes.equals(this.getAreaTaxonomy().getPropertiesInTaxonomy())) {
             return this;
-            
         } else {
             PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
             PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
@@ -127,15 +120,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     }
 
     @Override
-    public PAreaTaxonomy getAggregated(int smallestNode) {
-        AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
-
-        PAreaTaxonomy aggregateTaxonomy = generator.createAggregatePAreaTaxonomy(
-            this, 
-            new PAreaTaxonomyGenerator(),
-            new AggregateAbNGenerator<>(),
-            smallestNode);
-
-        return aggregateTaxonomy;
+    public PAreaTaxonomy getAggregated(int aggregateBound) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, aggregateBound);
     }
 }

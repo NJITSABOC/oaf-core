@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  * @author Chris O
  */
 public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstractionNetwork<T> 
-        implements AggregateAbstractionNetwork<TargetAbstractionNetwork> {
+        implements AggregateAbstractionNetwork<AggregateTargetGroup, TargetAbstractionNetwork> {
     
     private final TargetAbstractionNetwork sourceTargetAbN;
     
@@ -26,11 +26,18 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         this.minBound = minBound;
     }
 
-    public TargetAbstractionNetwork getSource() {
+    @Override
+    public TargetAbstractionNetwork expandAggregateNode(AggregateTargetGroup node) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public TargetAbstractionNetwork getNonAggregateSource() {
         return sourceTargetAbN;
     }
     
-    public int getBound() {
+    @Override
+    public int getAggregateBound() {
         return minBound;
     }
 }

@@ -1,9 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AggregatePAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -27,12 +26,12 @@ public class CreateExpandedSubtaxonomyButton extends CreateSubtaxonomyButton {
     }
 
     @Override
-    public PAreaSubtaxonomy createSubtaxonomy() {
+    public PAreaTaxonomy createSubtaxonomy() {
         AggregatePArea parea = (AggregatePArea)super.getCurrentNode().get();
         
-        AggregatePAreaTaxonomy taxonomy = (AggregatePAreaTaxonomy)config.getPAreaTaxonomy();
+        AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> taxonomy = (AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)config.getPAreaTaxonomy();
         
-        return taxonomy.createExpandedSubtaxonomy(parea);
+        return taxonomy.expandAggregateNode(parea);
     }
 
     @Override

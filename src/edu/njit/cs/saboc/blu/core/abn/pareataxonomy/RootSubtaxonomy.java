@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.RootedSubAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -7,18 +8,27 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *
  * @author Chris O
  */
-public class RootSubtaxonomy<T extends PArea> extends PAreaSubtaxonomy<T> {
+public class RootSubtaxonomy<T extends PArea> 
+        extends PAreaTaxonomy<T> implements RootedSubAbstractionNetwork<T, PAreaTaxonomy> {
 
-    public RootSubtaxonomy(
-            PAreaTaxonomy<T> sourceTaxonomy,
-            AreaTaxonomy areaTaxonomy,
-            Hierarchy<T> pareaHierarchy,
-            Hierarchy<Concept> conceptHierarchy) {
-
-        super(sourceTaxonomy, areaTaxonomy, pareaHierarchy, conceptHierarchy);
-    }
+    private final PAreaTaxonomy superTaxonomy;
     
+    public RootSubtaxonomy(
+            PAreaTaxonomy superTaxonomy,
+            PAreaTaxonomy subTaxonomy) {
+
+        super(subTaxonomy);
+        
+        this.superTaxonomy = superTaxonomy;
+    }
+
+    @Override
+    public PAreaTaxonomy getSuperAbN() {
+        return superTaxonomy;
+    }
+
+    @Override
     public T getSelectedRoot() {
-        return super.getPAreaHierarchy().getRoot();
+        return this.getPAreaHierarchy().getRoot();
     }
 }

@@ -147,7 +147,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     }
     
     @Override
-    public PAreaTaxonomy getNonAggregateSource() {
+    public PAreaTaxonomy getNonAggregateSourceAbN() {
         return nonAggregateBaseTaxonomy;
     }
     
@@ -168,16 +168,16 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
     @Override
     public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSource(), aggregateBound);
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound);
     }
 
     @Override
     public PAreaTaxonomy createRootSubtaxonomy(AggregatePArea root) {
-        return AggregatePAreaTaxonomy.generateAggregateRootSubtaxonomy(this.getNonAggregateSource(), this, root);
+        return AggregatePAreaTaxonomy.generateAggregateRootSubtaxonomy(this.getNonAggregateSourceAbN(), this, root);
     }
 
     @Override
     public PAreaTaxonomy createAncestorSubtaxonomy(AggregatePArea source) {
-        return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSource(), this, source);
+        return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSourceAbN(), this, source);
     }
 }

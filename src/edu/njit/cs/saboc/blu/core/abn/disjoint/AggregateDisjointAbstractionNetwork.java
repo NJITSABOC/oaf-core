@@ -125,7 +125,7 @@ public class AggregateDisjointAbstractionNetwork<
     }
 
     @Override
-    public DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> getNonAggregateSource() {
+    public DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> getNonAggregateSourceAbN() {
         return sourceAbN;
     }
 
@@ -146,7 +146,7 @@ public class AggregateDisjointAbstractionNetwork<
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
                 new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this.getNonAggregateSource(), aggregateGenerator, smallestNode);
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode);
     }
     
     @Override
@@ -157,8 +157,7 @@ public class AggregateDisjointAbstractionNetwork<
     @Override
     public AggregateAncestorDisjointAbN<PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(AggregateDisjointNode<PARENTNODE_T> root) {
         
-        return AggregateDisjointAbstractionNetwork.generateAggregateSubsetDisjointAbstractionNetwork(
-                this.getNonAggregateSource(), 
+        return AggregateDisjointAbstractionNetwork.generateAggregateSubsetDisjointAbstractionNetwork(this.getNonAggregateSourceAbN(), 
                 this, 
                 root);
         

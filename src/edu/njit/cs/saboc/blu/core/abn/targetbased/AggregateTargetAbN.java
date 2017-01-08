@@ -32,7 +32,7 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     }
 
     @Override
-    public TargetAbstractionNetwork getNonAggregateSource() {
+    public TargetAbstractionNetwork getNonAggregateSourceAbN() {
         return sourceTargetAbN;
     }
     

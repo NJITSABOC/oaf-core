@@ -26,9 +26,17 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
         this.aggregateBound = aggregateBound;
     }
+    
+    public AggregateAncestorSubtaxonomy(AggregateAncestorSubtaxonomy subtaxonomy) {
+        this(subtaxonomy.getSuperAbN(), 
+                subtaxonomy.getAggregateBound(), 
+                subtaxonomy.getSelectedRoot(), 
+                subtaxonomy.getNonAggregateSourceAbN(), 
+                subtaxonomy);
+    }
 
     @Override
-    public AncestorSubtaxonomy getNonAggregateSource() {
+    public AncestorSubtaxonomy getNonAggregateSourceAbN() {
         return nonAggregatedRootSubtaxonomy;
     }
 
@@ -49,16 +57,16 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     
     @Override
     public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSource(), aggregateBound);
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound);
     }
 
     @Override
     public PAreaTaxonomy createRootSubtaxonomy(AggregatePArea root) {
-        return AggregatePAreaTaxonomy.generateAggregateRootSubtaxonomy(this, this.getNonAggregateSource(), root);
+        return AggregatePAreaTaxonomy.generateAggregateRootSubtaxonomy(this, this.getNonAggregateSourceAbN(), root);
     }
     
     @Override
     public PAreaTaxonomy createAncestorSubtaxonomy(AggregatePArea source) {
-        return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSource(), this, source);
+        return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSourceAbN(), this, source);
     }
 }

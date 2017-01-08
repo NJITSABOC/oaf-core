@@ -112,7 +112,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         if(abn.isAggregated()) {
             AggregateAbstractionNetwork aggregateAbN = (AggregateAbstractionNetwork)abn;
             
-            abnToProcess = aggregateAbN.getNonAggregateSource();
+            abnToProcess = aggregateAbN.getNonAggregateSourceAbN();
         } else {
             abnToProcess = displayPanel.getGraph().getAbstractionNetwork();
         }

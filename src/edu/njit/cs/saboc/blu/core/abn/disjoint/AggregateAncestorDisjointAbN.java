@@ -35,7 +35,7 @@ public class AggregateAncestorDisjointAbN<
     }
 
     @Override
-    public AncestorDisjointAbN getNonAggregateSource() {
+    public AncestorDisjointAbN getNonAggregateSourceAbN() {
         return nonAggregatedDisjointAbN;
     }
 
@@ -59,8 +59,7 @@ public class AggregateAncestorDisjointAbN<
     @Override
     public AncestorDisjointAbN<AggregateDisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(AggregateDisjointNode<PARENTNODE_T> root) {
      
-        return AggregateDisjointAbstractionNetwork.generateAggregateSubsetDisjointAbstractionNetwork(
-                this.getNonAggregateSource(), 
+        return AggregateDisjointAbstractionNetwork.generateAggregateSubsetDisjointAbstractionNetwork(this.getNonAggregateSourceAbN(), 
                 this, 
                 (AggregateDisjointNode)root);
     }

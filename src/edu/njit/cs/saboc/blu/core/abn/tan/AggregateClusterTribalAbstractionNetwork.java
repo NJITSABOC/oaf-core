@@ -44,7 +44,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
         ClusterTribalAbstractionNetwork aggregateTAN = generator.createAggregateTAN(
-            this.getNonAggregateSource(), 
+            this.getNonAggregateSourceAbN(), 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
             smallestNode);
@@ -58,7 +58,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getNonAggregateSource() {
+    public ClusterTribalAbstractionNetwork getNonAggregateSourceAbN() {
         return sourceTAN;
     }
     

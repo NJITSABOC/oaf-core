@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
@@ -14,34 +15,11 @@ import java.util.Stack;
  */
 public class PAreaTaxonomyGenerator {
     
-    /**
-     * Builds a partial-area taxonomy from the given source hierarchy. 
-     * 
-     * This process is done by first initializing temporary data structures
-     * with the area/parea/parea taxonomy dependencies and then 
-     * injecting them into the proper data structures at the end.
-     * 
-     * @param factory
-     * @param sourceHierarchy
-     * @return 
-     */
-    public PAreaTaxonomy derivePAreaTaxonomy(
-            final PAreaTaxonomyFactory factory, 
-            final Hierarchy<? extends Concept> sourceHierarchy) {
+    protected Set<Concept> identifyPAreaRoots(Hierarchy<Concept> hierarchy,  Map<Concept, Set<InheritableProperty>> conceptRelationships) {
         
-        HashMap<Concept, Set<InheritableProperty>> conceptRelationships = new HashMap<>();
-        
-        Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
+        Set<Concept> roots = new HashSet<>();
 
-        Set<Concept> concepts = hierarchy.getNodes();
-        
-        concepts.forEach((concept) -> {
-            conceptRelationships.put(concept, factory.getRelationships(concept));
-        });
-        
-        Set<Concept> pareaRoots = new HashSet<>();
-
-        for (Concept concept : concepts) {
+        for (Concept concept : hierarchy.getNodes()) {
             Set<Concept> parents = hierarchy.getParents(concept);
 
             Set<InheritableProperty> rels = conceptRelationships.get(concept);
@@ -58,14 +36,46 @@ public class PAreaTaxonomyGenerator {
             }
 
             if (parents.isEmpty() || !equalsParent) {
-                pareaRoots.add(concept);
+                roots.add(concept);
             }
         }
-
-        HashMap<Concept, Hierarchy<Concept>> pareaConceptHierarchy = new HashMap<>();
         
-        HashMap<Concept, Set<Concept>> parentPAreaRoots = new HashMap<>();
-        HashMap<Concept, Set<Concept>> childPAreaRoots = new HashMap<>();
+        return roots;
+    }
+    
+    /**
+     * Builds a partial-area taxonomy from the given source hierarchy. 
+     * 
+     * This process is done by first initializing temporary data structures
+     * with the area/parea/parea taxonomy dependencies and then 
+     * injecting them into the proper data structures at the end.
+     * 
+     * @param factory
+     * @param sourceHierarchy
+     * @return 
+     */
+    public PAreaTaxonomy derivePAreaTaxonomy(
+            final PAreaTaxonomyFactory factory, 
+            final Hierarchy<? extends Concept> sourceHierarchy) {
+        
+        // TODO: This whole process can be replaced by one topological traversal
+        
+        Map<Concept, Set<InheritableProperty>> conceptRelationships = new HashMap<>();
+        
+        Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
+
+        Set<Concept> concepts = hierarchy.getNodes();
+        
+        concepts.forEach((concept) -> {
+            conceptRelationships.put(concept, factory.getRelationships(concept));
+        });
+        
+        Set<Concept> pareaRoots = identifyPAreaRoots(hierarchy, conceptRelationships);
+
+        Map<Concept, Hierarchy<Concept>> pareaConceptHierarchy = new HashMap<>();
+        
+        Map<Concept, Set<Concept>> parentPAreaRoots = new HashMap<>();
+        Map<Concept, Set<Concept>> childPAreaRoots = new HashMap<>();
 
         // Initialize the partial-area data structures
         pareaRoots.forEach( (root) -> {
@@ -75,7 +85,7 @@ public class PAreaTaxonomyGenerator {
             childPAreaRoots.put(root, new HashSet<>());
         });
 
-        HashMap<Concept, HashSet<Concept>> conceptPAreas = new HashMap<>();
+        Map<Concept, HashSet<Concept>> conceptPAreas = new HashMap<>();
 
         Stack<Concept> stack = new Stack<>();
         
@@ -115,14 +125,13 @@ public class PAreaTaxonomyGenerator {
                     }
                     
                 });
-                
-            } // end while
+            }
         });
         
         Set<PArea> pareas = new HashSet<>();
         
-        HashMap<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
-        HashMap<Concept, PArea> pareasByRoot = new HashMap<>();
+        Map<Set<InheritableProperty>, Set<PArea>> pareasByRelationships = new HashMap<>();
+        Map<Concept, PArea> pareasByRoot = new HashMap<>();
 
         PArea rootPArea = null;
 
@@ -163,7 +172,7 @@ public class PAreaTaxonomyGenerator {
         
         Area rootArea = null;
         
-        HashMap<Set<InheritableProperty>, Area> areasByRelationships = new HashMap<>();
+        Map<Set<InheritableProperty>, Area> areasByRelationships = new HashMap<>();
         
         for(Entry<Set<InheritableProperty>, Set<PArea>> entry : pareasByRelationships.entrySet()) {
             Area area = new Area(entry.getValue(), entry.getKey());

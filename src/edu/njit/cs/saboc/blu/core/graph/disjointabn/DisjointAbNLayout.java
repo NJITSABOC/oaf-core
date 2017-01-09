@@ -28,11 +28,11 @@ import javax.swing.JLabel;
  *
  * @author Chris O
  */
-public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
+public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
 
     private final DisjointAbstractionNetwork disjointAbN;
 
-    public GenericDisjointAbNLayout(AbstractionNetworkGraph<T> graph, DisjointAbstractionNetwork disjointAbN) {
+    public DisjointAbNLayout(AbstractionNetworkGraph<T> graph, DisjointAbstractionNetwork disjointAbN) {
         super(graph);
 
         this.disjointAbN = disjointAbN;
@@ -46,7 +46,6 @@ public class GenericDisjointAbNLayout<T extends DisjointAbstractionNetwork> exte
         
         Set<DisjointNode> disjointNodes = disjointAbN.getAllDisjointNodes();
                 
-
         Color[] colors = this.createOverlapColors();
 
         Map<SinglyRootedNode, Color> colorMap = new HashMap<>();

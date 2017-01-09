@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsP
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
@@ -17,14 +18,17 @@ public abstract class TargetAbNUIConfiguration extends AbNUIConfiguration<Target
     
     private final TargetAbNConfiguration config;
     
-    public TargetAbNUIConfiguration(TargetAbNConfiguration config, 
+    public TargetAbNUIConfiguration(
+            TargetAbNConfiguration config, 
+            AbNDisplayManager displayManager,
             TargetAbNListenerConfiguration listenerConfig) {
         
-        super(listenerConfig);
+        super(displayManager, listenerConfig);
         
         this.config = config;
     }
     
+    @Override
     public TargetAbNListenerConfiguration getListenerConfiguration() {
         return (TargetAbNListenerConfiguration)super.getListenerConfiguration();
     }

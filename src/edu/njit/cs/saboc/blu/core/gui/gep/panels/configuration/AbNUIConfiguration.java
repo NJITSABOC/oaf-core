@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
@@ -17,10 +18,16 @@ public abstract class AbNUIConfiguration<T extends Node> {
     
     private final AbNListenerConfiguration<T> listenerConfiguration;
     
+    private final AbNDisplayManager abnDisplayManager;
+    
     private AbNDisplayPanel abnDisplayPanel;
     
-    protected AbNUIConfiguration(AbNListenerConfiguration<T> listenerConfiguration) {
+    protected AbNUIConfiguration(
+            AbNDisplayManager abnDisplayManager,
+            AbNListenerConfiguration<T> listenerConfiguration) {
+        
         this.listenerConfiguration = listenerConfiguration;
+        this.abnDisplayManager = abnDisplayManager;
     }
     
     public void setDisplayPanel(AbNDisplayPanel abnDisplayPanel) {
@@ -29,6 +36,10 @@ public abstract class AbNUIConfiguration<T extends Node> {
     
     public AbNDisplayPanel getDisplayPanel() {
         return abnDisplayPanel;
+    }
+    
+    public AbNDisplayManager getAbNDisplayManager() {
+        return abnDisplayManager;
     }
     
     public AbNListenerConfiguration<T> getListenerConfiguration() {

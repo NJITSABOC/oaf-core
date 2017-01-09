@@ -16,6 +16,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAr
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaTaxonomyDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ParentPAreaTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyTableModel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
@@ -25,14 +26,17 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     
     private final PAreaTaxonomyConfiguration config;
     
-    public PAreaTaxonomyUIConfiguration(PAreaTaxonomyConfiguration config, 
+    public PAreaTaxonomyUIConfiguration(
+            PAreaTaxonomyConfiguration config, 
+            AbNDisplayManager displayManager,
             PAreaTaxonomyListenerConfiguration listenerConfig) {
         
-        super(listenerConfig);
+        super(displayManager, listenerConfig);
         
         this.config = config;
     }
     
+    @Override
     public PAreaTaxonomyListenerConfiguration getListenerConfiguration() {
         return (PAreaTaxonomyListenerConfiguration)super.getListenerConfiguration();
     }

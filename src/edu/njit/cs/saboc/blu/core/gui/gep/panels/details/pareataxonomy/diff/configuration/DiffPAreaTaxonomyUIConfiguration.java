@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffAreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffPAreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffPAreaTaxonomyDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
@@ -18,18 +19,21 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
     
     public DiffPAreaTaxonomyUIConfiguration(
             DiffPAreaTaxonomyConfiguration config, 
+            AbNDisplayManager displayManager,
             DiffPAreaTaxonomyListenerConfiguration listenerConfig, 
             ChangeExplanationRowEntryFactory changeExplanationFactory) {
         
-        super(config, listenerConfig);
+        super(config, displayManager, listenerConfig);
         
         this.changeExplanationFactory = changeExplanationFactory;
     }
     
+    @Override
     public DiffPAreaTaxonomyListenerConfiguration getListenerConfiguration() {
         return (DiffPAreaTaxonomyListenerConfiguration)super.getListenerConfiguration();
     }
     
+    @Override
     public DiffPAreaTaxonomyConfiguration getConfiguration() {
         return (DiffPAreaTaxonomyConfiguration)super.getConfiguration();
     }

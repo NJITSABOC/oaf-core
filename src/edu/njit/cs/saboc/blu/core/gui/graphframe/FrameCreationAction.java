@@ -6,6 +6,6 @@ import javax.swing.JInternalFrame;
  *
  * @author Chris
  */
-public interface FrameCreationListener {
+public interface FrameCreationAction {
     public void displayFrame(JInternalFrame frame);
 }

@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.AggregateBandP
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.BandPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.AggregateClusterPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.ClusterPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
@@ -20,10 +21,12 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
     
     private final TANConfiguration config;
     
-    public TANUIConfiguration(TANConfiguration config, 
+    public TANUIConfiguration(
+            TANConfiguration config, 
+            AbNDisplayManager displayManager,
             TANListenerConfiguration listenerConfig) {
         
-        super(listenerConfig);
+        super(displayManager, listenerConfig);
         
         this.config = config;
     }

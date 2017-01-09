@@ -9,19 +9,19 @@ import javax.swing.JFrame;
  *
  * @author Chris O
  */
-public class DisjointBluGraph<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraph<T> {
+public class DisjointAbNGraph<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraph<T> {
 
-    public DisjointBluGraph(
+    public DisjointAbNGraph(
             final JFrame parentFrame, 
             final T disjointAbN, 
             final SinglyRootedNodeLabelCreator labelCreator) {
         
         super(disjointAbN, labelCreator);
         
-        super.setAbstractionNetworkLayout(new GenericDisjointAbNLayout(this, disjointAbN));
+        super.setAbstractionNetworkLayout(new DisjointAbNLayout<>(this, disjointAbN));
     }
 
-    public DisjointAbstractionNetwork getDisjointPAreaTaxonomy() {
+    public DisjointAbstractionNetwork getDisjointAbN() {
         return (DisjointAbstractionNetwork)getAbstractionNetwork();
     }
 }

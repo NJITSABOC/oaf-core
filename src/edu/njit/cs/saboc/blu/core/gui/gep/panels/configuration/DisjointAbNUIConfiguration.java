@@ -9,17 +9,23 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.ChildDisjoi
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.DisjointNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.ParentDisjointNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public abstract class DisjointAbNUIConfiguration<T extends DisjointNode> extends AbNUIConfiguration<T> {
     
     private final DisjointAbNConfiguration<T> config;
     
-    public DisjointAbNUIConfiguration(DisjointAbNConfiguration<T> config, DisjointAbNListenerConfiguration<T> listenerConfig) {
-        super(listenerConfig);
+    public DisjointAbNUIConfiguration(
+            DisjointAbNConfiguration<T> config, 
+            AbNDisplayManager abnDisplayManager,
+            DisjointAbNListenerConfiguration<T> listenerConfig) {
+        
+        super(abnDisplayManager, listenerConfig);
         
         this.config = config;
     }

@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -73,11 +72,17 @@ public class AbstractionNetworkUtils {
                 aggregatedAncestorHierarchy.getNodes().forEach((aggregateNode) -> {
                     allAggregatedNodes.addAll(aggregateNode.getAggregatedHierarchy().getNodes());
                 });
+                
+                Set<T> actualRoots = new HashSet<>();
+                
+                aggregatedAncestorHierarchy.getRoots().forEach( (root) -> {
+                    actualRoots.add(root.getAggregatedHierarchy().getRoot());
+                });
 
                 //TODO: This can be done with a topological traversal, probably
                 Hierarchy<T> potentialHierarchy = fullNonAggregatedHierarchy.getAncestorHierarchy(allAggregatedNodes);
 
-                Hierarchy<T> resultHierarchy = new Hierarchy<>(potentialHierarchy.getRoot());
+                Hierarchy<T> resultHierarchy = new Hierarchy<>(actualRoots);
 
                 allAggregatedNodes.forEach((parea) -> {
                     resultHierarchy.addNode(parea);

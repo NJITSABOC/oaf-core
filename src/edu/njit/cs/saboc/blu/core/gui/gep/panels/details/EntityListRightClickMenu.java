@@ -1,77 +1,139 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTable;
 
 /**
  *
  * @author Kevyn
+ * @param <T>
  */
-public class EntityListRightClickMenu {
-
-    private final JTable table;
+public class EntityListRightClickMenu<T> {
     
-    private final HashMap<String, JMenuItem> menuItems = new HashMap<>();
+    public class EntityListPopupMenuMouseListener extends MouseAdapter {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if(e.getButton() == MouseEvent.BUTTON3) {
+                showPopup(e);
+            }
+        }
+   
+        private void showPopup(MouseEvent e) {
+            
+            int row = entityList.getEntityTable().rowAtPoint(e.getPoint());
+
+            if (row >= 0) {
+                if (e.isPopupTrigger()) {
+                    T selectedValue = entityList.getTableModel().getItemAtRow(row);
+                    
+                    rightClickedItem = Optional.of(selectedValue);
+                    
+                    menuItems.forEach((action, menuItem) -> {
+                        menuItem.setEnabled(action.isEnabledFor(selectedValue));
+                    });
+                    
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                    
+                    return;
+                }
+            }
+            
+            menuItems.values().forEach((menuItem) -> {
+                menuItem.setEnabled(false);
+            });
+            
+            rightClickedItem = Optional.empty();
+        }
+    }
+    
+    public abstract class EntityListRightClickMenuItem {
+        private final String itemName;
+        
+        public EntityListRightClickMenuItem(String itemName) {
+            this.itemName = itemName;
+        }
+        
+        public String getItemName() {
+            return itemName;
+        }
+        
+        public abstract boolean isEnabledFor(T item);
+        
+        public abstract void doActionFor(T item);
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 53 * hash + Objects.hashCode(this.itemName);
+            
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            
+            final EntityListRightClickMenuItem other = (EntityListRightClickMenuItem) obj;
+            
+            if (!Objects.equals(this.itemName, other.itemName)) {
+                return false;
+            }
+            
+            return true;
+        }
+    }
+    
+    private Optional<T> rightClickedItem = Optional.empty();
+    
+    private final AbstractEntityList<T> entityList;
+        
+    private final Map<EntityListRightClickMenuItem, JMenuItem> menuItems = new HashMap<>();
     
     private final JPopupMenu popup = new JPopupMenu();
     
     private final EntityListPopupMenuMouseListener popupListener = new EntityListPopupMenuMouseListener();
     
-    public EntityListRightClickMenu(JTable table){
-        this.table = table;
-    }
-
-    public class EntityListPopupMenuMouseListener extends MouseAdapter {
-             
-        public void mousePressed(MouseEvent e) {
-            showPopup(e);
-        }
-
-        public void mouseReleased(MouseEvent e) {
-            showPopup(e);
-        }
-
-        private void showPopup(MouseEvent e) {
-            //disable options
-            int row = table.getSelectedRow();
-
-            if (row >= 0) {
-                if (e.isPopupTrigger()) {
-                    popup.show(e.getComponent(),
-                            e.getX(), e.getY());
-                }
-            }
-        }
+    public EntityListRightClickMenu(AbstractEntityList<T> entityList){
+        this.entityList = entityList;
     }
 
     public EntityListPopupMenuMouseListener getListener() {
         return popupListener;
     }
 
-    public void addMenuItem(String name, ActionListener action) {
-        JMenuItem menuItem = new JMenuItem(name);
-        menuItems.put(name, menuItem);
-        menuItem.addActionListener(action);
+    public void addMenuItem(EntityListRightClickMenuItem item) {
+                
+        JMenuItem menuItem = new JMenuItem(item.getItemName());
+        menuItem.addActionListener( (ae) -> {
+            
+            if(rightClickedItem.isPresent()) {
+                item.doActionFor(rightClickedItem.get());
+            }
+
+        });
 
         popup.add(menuItem);
+        
+        menuItems.put(item, menuItem);
     }
 
-    public void removeMenuItem(int index) {
-        popup.remove(index);
-    }
-    
-    public void toggleMenuItem(String name, boolean enabled){
-        JMenuItem menuItem = menuItems.get(name);
-        menuItem.setEnabled(enabled);
+    public void removeMenuItem(EntityListRightClickMenuItem item) {
+        if(menuItems.containsKey(item)) {
+            popup.remove(menuItems.get(item));
+            menuItems.remove(item);
+        }
     }
 }

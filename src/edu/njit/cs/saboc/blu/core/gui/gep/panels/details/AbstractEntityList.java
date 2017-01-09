@@ -8,8 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -51,6 +49,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     private final JPanel filterPanel;
 
+    private final EntityListRightClickMenu rightClickMenu;
+    
     private final NodeOptionsPanel optionsPanel;
 
     protected AbstractEntityList(OAFAbstractTableModel<T> tableModel) {
@@ -66,6 +66,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
         setDefaultTableStringRenderer(new MultiLineTextRenderer(entityTable));
 
         this.entityTable.addMouseListener(new MouseAdapter() {
+            
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (entityTable.getSelectedRow() >= 0) {
 
@@ -91,9 +93,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
         this.add(new JScrollPane(entityTable), BorderLayout.CENTER);
 
-        ///////////////////////////
-        //Container for filtering//
-        ///////////////////////////
+
         closeButton.setIcon(IconManager.getIconManager().getIcon("cross.png"));
         closeButton.setToolTipText("Close");
 
@@ -104,18 +104,12 @@ public abstract class AbstractEntityList<T> extends JPanel {
         filterPanel.add(filterField);
         filterPanel.setVisible(false);
 
-        ///////////////////////////
-        //End Filtering Container//
-        //  Start Sorter Model   //
-        ///////////////////////////
+
         sorter = new TableRowSorter<>(tableModel);
 
         entityTable.setRowSorter(sorter);
-        this.entityTable.getRowSorter().toggleSortOrder(0);
+        entityTable.getRowSorter().toggleSortOrder(0);
 
-        /////////////////////////
-        //Filters for Listening//
-        /////////////////////////
         filterField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
@@ -129,11 +123,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
             }
         });
 
-        closeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setFilterPanelOpen(false, null);
-            }
+        closeButton.addActionListener((e) -> {
+            setFilterPanelOpen(false, null);
         });
 
         filterField.getDocument().addDocumentListener(new DocumentListener() {
@@ -154,6 +145,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         });
 
         entityTable.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!e.isControlDown() && !e.isAltDown() && isPrintable(e.getKeyChar())) {
@@ -167,43 +159,30 @@ public abstract class AbstractEntityList<T> extends JPanel {
             }
         });
 
-        EntityListRightClickMenu rMenu = new EntityListRightClickMenu(entityTable);
-        rMenu.addMenuItem("Print Name", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int row = entityTable.getSelectedRow();
-                String data = entityTable.getModel().getValueAt(row, 0).toString();
-                
-                System.out.println(data);
-            }
-        });
-
-        entityTable.addMouseListener(rMenu.getListener());
+        rightClickMenu = new EntityListRightClickMenu<>(this);
+        
+        entityTable.addMouseListener(rightClickMenu.getListener());
+        
         optionsPanel = new NodeOptionsPanel();
 
         JButton b = new JButton("Filter");
-        b.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                toggleFilterPanel();
-            }
+        b.addActionListener((ae) -> {
+            toggleFilterPanel();
         });
         
         optionsPanel.add(b);
 
         b = new JButton("Resize");
-        b.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                for (int row = 0; row < entityTable.getRowCount(); row++) {
-                    int rowHeight = entityTable.getRowHeight(row);
-
-                    for (int column = 0; column < entityTable.getColumnCount(); column++) {
-                        Component comp = entityTable.prepareRenderer(entityTable.getCellRenderer(row, column), row, column);
-                        rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
-                    }
-
-                    entityTable.setRowHeight(row, rowHeight);
+        b.addActionListener((ae) -> {
+            for (int row = 0; row < entityTable.getRowCount(); row++) {
+                int rowHeight = entityTable.getRowHeight(row);
+                
+                for (int column = 0; column < entityTable.getColumnCount(); column++) {
+                    Component comp = entityTable.prepareRenderer(entityTable.getCellRenderer(row, column), row, column);
+                    rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
                 }
+                
+                entityTable.setRowHeight(row, rowHeight);
             }
         });
         
@@ -221,6 +200,17 @@ public abstract class AbstractEntityList<T> extends JPanel {
     
     public JTable getEntityTable() {
         return entityTable;
+    }
+    
+    public Optional<T> getSelectedItem() {
+        if (entityTable.getSelectedRow() >= 0) {
+            T entity = tableModel.getItemAtRow(
+                    sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
+            
+            return Optional.of(entity);
+        }
+        
+        return Optional.empty();
     }
 
     public OAFAbstractTableModel<T> getTableModel() {
@@ -308,14 +298,18 @@ public abstract class AbstractEntityList<T> extends JPanel {
     public final void setColumnRenderer(int column, TableCellRenderer renderer) {
         this.entityTable.getColumnModel().getColumn(column).setCellRenderer(renderer);
     }
+    
+    public void addRightClickMenuItem() {
+        
+    }
 
-    protected void addOptionButton(JButton btn) {
-        //optionsPanel.add(btn);
+    public void addOptionButton(JButton btn) {
+        
     }
 
     protected abstract String getBorderText(Optional<ArrayList<T>> entities);
 
-    private final void setBorderText(String text) {
+    private void setBorderText(String text) {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), text));
     }
 

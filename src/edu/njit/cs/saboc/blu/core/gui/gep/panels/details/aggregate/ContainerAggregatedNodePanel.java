@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.entry.AggregatedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ public class ContainerAggregatedNodePanel<T extends Node> extends BaseNodeInform
     
     public ContainerAggregatedNodePanel(PartitionedAbNConfiguration config, OAFAbstractTableModel<AggregatedNodeEntry<T>> model) {
         
+        this.setLayout(new BorderLayout());
+        
         this.config = config;
 
         this.aggregatedNodeList = new AbstractEntityList<AggregatedNodeEntry<T>>(model) {
@@ -43,6 +46,8 @@ public class ContainerAggregatedNodePanel<T extends Node> extends BaseNodeInform
                 }
             }
         };
+        
+        this.add(this.aggregatedNodeList, BorderLayout.CENTER);
     }
     
     public ContainerAggregatedNodePanel(PartitionedAbNConfiguration config) {

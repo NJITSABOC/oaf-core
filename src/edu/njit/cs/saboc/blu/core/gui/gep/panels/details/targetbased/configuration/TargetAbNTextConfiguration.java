@@ -22,17 +22,17 @@ public abstract class TargetAbNTextConfiguration implements AbNTextConfiguration
 
     @Override
     public String getAbNName() {
-        return "Target Abstraction Network";
+        return "[TARGET Abstraction Network NAME]";
     }
 
     @Override
     public String getAbNSummary() {
-       return "*** TARGET ABN SUMMARY TEXT ***";
+       return "[TARGET ABN SUMMARY TEXT]";
     }
     
     @Override
     public String getAbNHelpDescription() {
-        return "*** TARGET ABN HELP DESCRIPTION ***";
+        return "[TARGET ABN HELP DESCRIPTION]";
     }
 
     @Override

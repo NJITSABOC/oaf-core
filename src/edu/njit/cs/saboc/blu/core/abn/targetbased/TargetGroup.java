@@ -18,7 +18,17 @@ public class TargetGroup extends SinglyRootedNode {
         
         this.relationships = relationships;
     }
-    
+
+    @Override
+    public int getConceptCount() {
+        return getIncomingRelationshipTargets().size();
+    }
+
+    @Override
+    public Set<Concept> getConcepts() {
+        return getIncomingRelationshipTargets();
+    }
+ 
     public IncomingRelationshipDetails getIncomingRelationshipDetails() {
         return relationships;
     }

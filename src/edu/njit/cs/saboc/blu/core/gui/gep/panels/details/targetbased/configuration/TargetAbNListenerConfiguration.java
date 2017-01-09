@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNListenerConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.NavigateToNodeListener;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.ParentNodeSelectedListener;
 
 /**
  *
@@ -17,11 +19,11 @@ public class TargetAbNListenerConfiguration extends AbNListenerConfiguration<Tar
 
     @Override
     public EntitySelectionListener<TargetGroup> getChildGroupListener() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new NavigateToNodeListener<>(super.getConfiguration());
     }
 
     @Override
     public EntitySelectionListener<ParentNodeDetails<TargetGroup>> getParentGroupListener() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ParentNodeSelectedListener(super.getConfiguration());
     }
 }

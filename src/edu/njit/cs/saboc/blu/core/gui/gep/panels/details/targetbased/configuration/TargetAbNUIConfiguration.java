@@ -4,10 +4,13 @@ import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ChildNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ParentNodeTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.AggregateTargetGroupPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.ChildTargetGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.ParentTargetGroupTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.TargetAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.TargetGroupPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
@@ -38,28 +41,32 @@ public abstract class TargetAbNUIConfiguration extends AbNUIConfiguration<Target
     }
 
     @Override
-    public AbstractAbNDetailsPanel createAbNDetailsPanel() {
-        return new AbstractAbNDetailsPanel(config);
+    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
+        return new TargetAbNDetailsPanel(config);
     }
 
     @Override
     public boolean hasGroupDetailsPanel() {
-        return false;
+        return true;
     }
 
     @Override
     public NodeDashboardPanel createGroupDetailsPanel() {
-        return null;
+        
+        if(config.getTargetAbstractionNetwork().isAggregated()) {
+            return new AggregateTargetGroupPanel(config);
+        } else {
+            return new TargetGroupPanel(config);
+        }
     }
     
     @Override
     public OAFAbstractTableModel<ParentNodeDetails<TargetGroup>> getParentNodeTableModel() {
-        return new ParentNodeTableModel(config);
+        return new ParentTargetGroupTableModel(config);
     }
 
     @Override
     public OAFAbstractTableModel<TargetGroup> getChildNodeTableModel() {
-        return new ChildNodeTableModel<>(config);
+        return new ChildTargetGroupTableModel(config);
     }
-    
 }

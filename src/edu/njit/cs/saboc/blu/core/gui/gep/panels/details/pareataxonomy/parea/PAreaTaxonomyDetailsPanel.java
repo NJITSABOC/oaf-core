@@ -2,7 +2,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNContainerReportPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNLevelReportPanel;
@@ -13,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.aggregate.AggregateCont
  *
  * @author Chris O
  */
-public class PAreaTaxonomyDetailsPanel extends AbstractAbNDetailsPanel<PAreaTaxonomy> {
+public class PAreaTaxonomyDetailsPanel extends SimpleAbNDetailsPanel<PAreaTaxonomy> {
     
     public PAreaTaxonomyDetailsPanel(PAreaTaxonomyConfiguration config) {
         super(config);

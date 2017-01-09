@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  *  Factory for creating listeners for various UI elements in the GEP
  * 
  * @author Chris O
+ * @param <T>
  */
 public abstract class AbNListenerConfiguration<T extends Node> {
     

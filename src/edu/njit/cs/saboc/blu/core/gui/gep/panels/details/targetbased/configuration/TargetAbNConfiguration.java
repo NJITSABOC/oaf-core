@@ -26,10 +26,12 @@ public abstract class TargetAbNConfiguration extends AbNConfiguration<TargetGrou
         super.setTextConfiguration(textConfig);
     }
     
+    @Override
     public TargetAbNUIConfiguration getUIConfiguration() {
         return (TargetAbNUIConfiguration)super.getUIConfiguration();
     }
 
+    @Override
     public TargetAbNTextConfiguration getTextConfiguration() {
         return (TargetAbNTextConfiguration)super.getTextConfiguration();
     }

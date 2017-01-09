@@ -53,14 +53,6 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
 
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        AggregateTargetAbNGenerator generator = new AggregateTargetAbNGenerator();
-        
-        TargetAbstractionNetwork aggregateTAN = 
-                generator.createAggregateTargetAbN(this, 
-                new TargetAbstractionNetworkGenerator(), 
-                new AggregateAbNGenerator<>(), 
-                smallestNode);
-        
-        return aggregateTAN;
+        return AggregateTargetAbN.createAggregated(this, smallestNode);
     }
 }

@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNContainerReportPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNLevelReportPanel;
 
@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNLevelReportPanel;
  *
  * @author Chris O
  */
-public class TANDetailsPanel extends AbstractAbNDetailsPanel<ClusterTribalAbstractionNetwork> {
+public class TANDetailsPanel extends SimpleAbNDetailsPanel<ClusterTribalAbstractionNetwork> {
 
     public TANDetailsPanel(TANConfiguration config) {
         super(config);

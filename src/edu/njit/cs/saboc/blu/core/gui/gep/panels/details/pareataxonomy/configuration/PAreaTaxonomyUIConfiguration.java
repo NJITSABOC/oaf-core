@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AggregateAreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.AggregatePAreaPanel;
@@ -60,7 +60,7 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     }
 
     @Override
-    public AbstractAbNDetailsPanel createAbNDetailsPanel() {
+    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
         return new PAreaTaxonomyDetailsPanel(config);
     }
 

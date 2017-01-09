@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.AggregateBandPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.BandPanel;
@@ -61,7 +61,7 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
     }
 
     @Override
-    public AbstractAbNDetailsPanel createAbNDetailsPanel() {
+    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
         return new TANDetailsPanel(config);
     }
 

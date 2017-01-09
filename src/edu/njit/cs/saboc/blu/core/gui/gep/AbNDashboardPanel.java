@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbstractAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.loading.LoadingPanel;
 import java.awt.BorderLayout;
 import java.util.Optional;
@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 public class AbNDashboardPanel extends JPanel {
     
     private final LoadingPanel loadingPanel;
-    private AbstractAbNDetailsPanel abnDetailsPanel;
+    private SimpleAbNDetailsPanel abnDetailsPanel;
     
     private Optional<NodeDashboardPanel> groupDetailsPanel;
     private Optional<NodeDashboardPanel> containerDetailsPanel;

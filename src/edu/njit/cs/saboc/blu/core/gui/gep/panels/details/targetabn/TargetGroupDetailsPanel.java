@@ -15,7 +15,7 @@ public class TargetGroupDetailsPanel extends NodeDetailsPanel<TargetGroup> {
         
         super(new TargetGroupSummaryPanel(config), 
                 config.getUIConfiguration().getNodeOptionsPanel(), 
-                new NodeConceptList(config),
+                new NodeConceptList(new TargetGroupConceptTableModel(config), config),
                 config);
     }
 }

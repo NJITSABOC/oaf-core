@@ -11,12 +11,15 @@ import java.util.Set;
  */
 public class TargetGroup extends SinglyRootedNode {
     
-    private final IncomingRelationshipDetails relationships;
+    private final IncomingRelationshipDetails relationshipDetails;
     
-    public TargetGroup(Hierarchy<Concept> conceptHierarchy, IncomingRelationshipDetails relationships) {
+    public TargetGroup(
+            Hierarchy<Concept> conceptHierarchy, 
+            IncomingRelationshipDetails relationships) {
+        
         super(conceptHierarchy);
         
-        this.relationships = relationships;
+        this.relationshipDetails = relationships;
     }
 
     @Override
@@ -30,14 +33,14 @@ public class TargetGroup extends SinglyRootedNode {
     }
  
     public IncomingRelationshipDetails getIncomingRelationshipDetails() {
-        return relationships;
+        return relationshipDetails;
     }
     
     public Set<Concept> getIncomingRelationshipSources() {
-        return relationships.getSourceConcepts();
+        return relationshipDetails.getSourceConcepts();
     }
     
     public Set<Concept> getIncomingRelationshipTargets() {
-        return relationships.getTargetConcepts();
+        return relationshipDetails.getTargetConcepts();
     }
 }

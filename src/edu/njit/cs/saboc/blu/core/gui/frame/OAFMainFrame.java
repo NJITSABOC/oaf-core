@@ -24,7 +24,7 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Chris
  */
-public class BLUFrame extends JFrame {
+public class OAFMainFrame extends JFrame {
 
     /**
      * *
@@ -64,7 +64,7 @@ public class BLUFrame extends JFrame {
      * 
      * @param abnSelectionFrameFactory
      */
-    public BLUFrame(AbnSelectionFrameFactory abnSelectionFrameFactory) {
+    public OAFMainFrame(AbnSelectionFrameFactory abnSelectionFrameFactory) {
         
         setTitle("Ontology Abstraction Framework (OAF) by SABOC at NJIT");
         
@@ -88,7 +88,7 @@ public class BLUFrame extends JFrame {
         exit.addActionListener((ae) -> {
             Object[] options = {"Yes", "No"};
             
-            int n = JOptionPane.showOptionDialog(BLUFrame.this,
+            int n = JOptionPane.showOptionDialog(OAFMainFrame.this,
                     "Are you sure you want to exit?",
                     "Confirm Exit",
                     JOptionPane.YES_NO_OPTION,
@@ -136,7 +136,7 @@ public class BLUFrame extends JFrame {
         help.add(aboutUs);
 
         aboutUs.addActionListener((ae) -> {
-            new AboutUsDialog(BLUFrame.this);
+            new AboutUsDialog(OAFMainFrame.this);
         });
 
         menu.add(help);
@@ -159,7 +159,7 @@ public class BLUFrame extends JFrame {
         add(desktopPane);
 
         SwingUtilities.invokeLater(() -> {
-            JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(BLUFrame.this);
+            JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
             
             desktopPane.add(abnSelectionFrame);
             

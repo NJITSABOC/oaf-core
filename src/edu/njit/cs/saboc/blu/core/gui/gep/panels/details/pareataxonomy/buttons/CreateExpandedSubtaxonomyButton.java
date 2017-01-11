@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
@@ -19,7 +19,7 @@ public class CreateExpandedSubtaxonomyButton extends CreateSubtaxonomyButton {
             DisplayAbNAction<PAreaTaxonomy> displayTaxonomyListener) {
         
         super("BluExpandedSubtaxonomy.png", 
-                "Created expanded subtaxonomy from aggregate partial-area", 
+                "Expand aggregate partial-area", 
                 displayTaxonomyListener);
         
         this.config = config;
@@ -35,13 +35,9 @@ public class CreateExpandedSubtaxonomyButton extends CreateSubtaxonomyButton {
     }
 
     @Override
-    public void setEnabledFor(Node node) {
-        AggregatePArea parea = (AggregatePArea)node;
+    public void setEnabledFor(PArea parea) {
+        AggregatePArea aggregatePArea = (AggregatePArea)parea;
         
-        if(!parea.getAggregatedNodes().isEmpty()) {
-            this.setEnabled(true);
-        } else {
-            this.setEnabled(false);
-        }
+        this.setEnabled(!aggregatePArea.getAggregatedNodes().isEmpty());
     }
 }

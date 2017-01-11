@@ -30,8 +30,7 @@ public class CreateRootTANButton extends CreateSubTANButton {
     }
 
     @Override
-    public void setEnabledFor(Node node) {
-        Cluster cluster = (Cluster)node;
+    public void setEnabledFor(Cluster cluster) {
         
         if(config.getTribalAbstractionNetwork().getClusterHierarchy().getChildren(cluster).isEmpty()) {
             this.setEnabled(false);

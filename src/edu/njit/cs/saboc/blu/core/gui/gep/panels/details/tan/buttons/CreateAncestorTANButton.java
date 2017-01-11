@@ -23,15 +23,13 @@ public class CreateAncestorTANButton extends CreateSubTANButton {
 
     @Override
     public ClusterTribalAbstractionNetwork createSubTAN() {
-        Cluster cluster = (Cluster)super.getCurrentNode().get();
+        Cluster cluster = super.getCurrentNode().get();
         
         return config.getTribalAbstractionNetwork().createAncestorTAN(cluster);
     }
 
     @Override
-    public void setEnabledFor(Node node) {
-        Cluster cluster = (Cluster)node;
-        
+    public void setEnabledFor(Cluster cluster) {
         if(config.getTribalAbstractionNetwork().getClusterHierarchy().getParents(cluster).isEmpty()) {
             this.setEnabled(false);
         } else {

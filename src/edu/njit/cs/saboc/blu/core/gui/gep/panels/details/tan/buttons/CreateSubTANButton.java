@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.buttons;
 
+import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -9,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
  *
  * @author Chris O
  */
-public abstract class CreateSubTANButton extends NodeOptionButton {
+public abstract class CreateSubTANButton extends NodeOptionButton<Cluster> {
     
     private final DisplayAbNAction displayTaxonomyListener;
     

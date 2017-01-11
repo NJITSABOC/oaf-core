@@ -31,14 +31,9 @@ public class CreateRootSubtaxonomyButton extends CreateSubtaxonomyButton {
     }
 
     @Override
-    public void setEnabledFor(Node node) {
-        PArea parea = (PArea)node;
+    public void setEnabledFor(PArea parea) {
         PAreaTaxonomy taxonomy = config.getPAreaTaxonomy();
         
-        if(taxonomy.getPAreaHierarchy().getChildren(parea).isEmpty()) {
-            this.setEnabled(false);
-        } else {
-            this.setEnabled(true);
-        }
+        this.setEnabled(!taxonomy.getPAreaHierarchy().getChildren(parea).isEmpty());
     }
 }

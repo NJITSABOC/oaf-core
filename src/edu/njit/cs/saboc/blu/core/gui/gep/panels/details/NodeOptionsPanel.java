@@ -2,57 +2,46 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.options.EntityOptionsPanel;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NodeOptionsPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
-    private final ArrayList<NodeOptionButton<T>> nodeOptionButtons = new ArrayList<>();
-    
-    private Optional<T> currentNode = Optional.empty();
-    
+    private final EntityOptionsPanel<T> basePanel;
+
     public NodeOptionsPanel() {
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setLayout(new BorderLayout());
         
-        this.add(Box.createHorizontalStrut(4));
+        this.basePanel = new EntityOptionsPanel<>();
         
-        this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Options"));
+        this.add(basePanel, BorderLayout.CENTER);
     }
     
     public void addOptionButton(NodeOptionButton<T> optionBtn) {
-        nodeOptionButtons.add(optionBtn);
-        
-        this.add(optionBtn);
-        this.add(Box.createHorizontalStrut(4));
+        basePanel.add(optionBtn);
     }
     
     public Optional<T> getCurrentNode() {
-        return currentNode;
+        return basePanel.getCurrentEntity();
     }
 
     @Override
     public void setContents(T node) {
-        currentNode = Optional.of(node);
-        
-        nodeOptionButtons.forEach( (btn) -> {
-            btn.setCurrentNode(node);
-        });
+        basePanel.setContents(node);
     }
 
     @Override
     public void clearContents() {
-        currentNode = Optional.empty();
-        
-        nodeOptionButtons.forEach((btn) -> {
-            btn.clearCurrentNode();
-        });
+        basePanel.clearContents();
     }
 }

@@ -1,52 +1,27 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
-import java.awt.Color;
-import java.awt.Dimension;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.options.IconOptionButton;
 import java.util.Optional;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 /**
  *
  * @author Chris O
  */
-public abstract class NodeOptionButton<T extends Node> extends JButton {
+public abstract class NodeOptionButton<T extends Node> extends IconOptionButton<T> {
     
-    private Optional<T> currentNode = Optional.empty();
-    
-    public NodeOptionButton(String iconFileName, String description) {
+    public NodeOptionButton(
+            String iconFileName, 
+            String toolTipText) {
         
-        ImageIcon icon = IconManager.getIconManager().getIcon(iconFileName);
-
-        this.setIcon(icon);
-        this.setBackground(new Color(240, 240, 255));
-
-        Dimension sizeDimension = new Dimension(50, 50);
-
-        this.setMinimumSize(sizeDimension);
-        this.setMaximumSize(sizeDimension);
-        this.setPreferredSize(sizeDimension);
-        
-        this.setToolTipText(description);
+        super(iconFileName, toolTipText); 
     }
     
     public void setCurrentNode(T node) {
-        this.currentNode = Optional.of(node);
-        
-        setEnabledFor(node);
+        super.setCurrentEntity(node);;
     }
     
     public Optional<T> getCurrentNode() {
-        return currentNode;
+        return super.getCurrentEntity();
     }
-
-    public void clearCurrentNode() {
-        currentNode = Optional.empty();
-        
-        this.setEnabled(false);
-    }
-    
-    public abstract void setEnabledFor(T node);
 }

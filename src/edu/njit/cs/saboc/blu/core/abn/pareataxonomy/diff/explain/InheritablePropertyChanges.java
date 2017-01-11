@@ -412,7 +412,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                     Set<InheritableProperty> descendantToProps = toInferredProperties.get(descendant);
                                     
                                     if (!descendantToProps.contains(inheritedProp)) {
-                                        if (!hierarchicalPropertyChanges.containsKey(transferredConcept)) {
+                                        if (!hierarchicalPropertyChanges.containsKey(descendant)) {
                                             hierarchicalPropertyChanges.put(descendant, new HashSet<>());
                                         }
 
@@ -465,7 +465,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                     Set<InheritableProperty> descendantFromProps = fromInferredProperties.getOrDefault(descendant, Collections.emptySet());
                                     
                                     if (!descendantFromProps.contains(inheritedProp)) {
-                                        if (!hierarchicalPropertyChanges.containsKey(transferredConcept)) {
+                                        if (!hierarchicalPropertyChanges.containsKey(descendant)) {
                                             hierarchicalPropertyChanges.put(descendant, new HashSet<>());
                                         }
 

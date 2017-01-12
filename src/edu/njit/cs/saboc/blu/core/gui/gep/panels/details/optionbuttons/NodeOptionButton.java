@@ -18,7 +18,7 @@ public abstract class NodeOptionButton<T extends Node> extends IconOptionButton<
     }
     
     public void setCurrentNode(T node) {
-        super.setCurrentEntity(node);;
+        super.setCurrentEntity(node);
     }
     
     public Optional<T> getCurrentNode() {

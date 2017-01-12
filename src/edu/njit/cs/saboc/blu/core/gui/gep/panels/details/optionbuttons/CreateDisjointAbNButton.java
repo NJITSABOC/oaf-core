@@ -3,11 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -29,7 +26,7 @@ public class CreateDisjointAbNButton<T extends Node> extends NodeOptionButton<T>
         this.config = config;
         this.displayAbNAction = displayAbNAction;
 
-        this.addActionListener((ActionEvent ae) -> {
+        this.addActionListener((ae) -> {
             createAndDisplayDisjointAbNAction();
         });
     }

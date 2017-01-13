@@ -4,11 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.options.EntityOptionsPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Optional;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 
 /**
  *
@@ -28,7 +24,7 @@ public class NodeOptionsPanel<T extends Node> extends BaseNodeInformationPanel<T
     }
     
     public void addOptionButton(NodeOptionButton<T> optionBtn) {
-        basePanel.add(optionBtn);
+        basePanel.addOptionButton(optionBtn);
     }
     
     public Optional<T> getCurrentNode() {

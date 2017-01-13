@@ -56,7 +56,6 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
         ArrayList<Color> taxonomyLevelColors = getTaxonomyLevelColors();
 
         int areaX = 0;  // The first area on each line is given an areaX value of 0.
-        
         int areaY = 0;  // The first row of areas is given an areaY value of 0.
 
         int pAreaX;

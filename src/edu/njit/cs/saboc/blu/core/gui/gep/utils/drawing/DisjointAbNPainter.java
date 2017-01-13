@@ -1,6 +1,8 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing;
 
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.disjointabn.DisjointNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
@@ -17,8 +19,19 @@ import java.awt.Stroke;
  * @author Chris O
  */
 public class DisjointAbNPainter extends AbNPainter {
+    
     public void paintPartitionedNodeAtPoint(Graphics2D g2d, PartitionedNodeEntry entry, Point p, double scale) {
-
+        Stroke savedStroke = g2d.getStroke();
+        
+        DisjointNode node = (DisjointNode)entry.getPartitionEntries().get(0).getSubNodeEntries().get(0).getNode();
+        
+        if (node.getOverlaps().size() > 1) {
+            g2d.setStroke(new BasicStroke(1));
+            g2d.setPaint(Color.GRAY);
+            g2d.drawRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
+        }
+        
+        g2d.setStroke(savedStroke);
     }
     
     public void paintPartitionAtPoint(Graphics2D g2d, GenericPartitionEntry partition, Point p, double scale) {

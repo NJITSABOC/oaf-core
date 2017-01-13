@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.pravenance;
+package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
@@ -12,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
  * @author Chris O
  */
 public class DerivedPAreaTaxonomy extends DerivedAbstractionNetwork<PAreaTaxonomy> {
+    
     private final Concept root;
     private final PAreaTaxonomyFactory factory;
     
@@ -26,6 +27,10 @@ public class DerivedPAreaTaxonomy extends DerivedAbstractionNetwork<PAreaTaxonom
         this.factory = factory;
     }
     
+    public DerivedPAreaTaxonomy(DerivedPAreaTaxonomy base) {
+        this(base.getSourceOntology(), base.root, base.factory);
+    }
+
     public Concept getRoot() {
         return root;
     }
@@ -34,15 +39,12 @@ public class DerivedPAreaTaxonomy extends DerivedAbstractionNetwork<PAreaTaxonom
         return factory;
     }
     
-    public DerivedPAreaTaxonomy(DerivedPAreaTaxonomy base) {
-        this(base.getSourceOntology(), base.root, base.factory);
-    }
-
     @Override
     public PAreaTaxonomy getAbstractionNetwork() {
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
         
-        PAreaTaxonomy taxonomy = generator.derivePAreaTaxonomy(factory, 
+        PAreaTaxonomy taxonomy = generator.derivePAreaTaxonomy(
+                factory, 
                 super.getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(root));
         
         return taxonomy;
@@ -50,6 +52,6 @@ public class DerivedPAreaTaxonomy extends DerivedAbstractionNetwork<PAreaTaxonom
 
     @Override
     public String getDescription() {
-        return String.format("Derived partial-area taxonomy with root: " + root.getName());
+        return String.format("Derived partial-area taxonomy (root: %s)" + root.getName());
     }
 }

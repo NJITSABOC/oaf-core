@@ -6,14 +6,14 @@ import java.util.ArrayList;
  *
  * @author Chris O
  */
-public class AbNProvenance {
+public class AbNDerivationHistory {
     private final ArrayList<AbNDerivationHistoryEntry> historyEntries = new ArrayList<>();
     
-    public AbNProvenance() {
+    public AbNDerivationHistory() {
         
     }
     
-    public AbNProvenance(ArrayList<AbNDerivationHistoryEntry> historyEntries) {
+    public AbNDerivationHistory(ArrayList<AbNDerivationHistoryEntry> historyEntries) {
         this.historyEntries.addAll(historyEntries);
     }
     
@@ -21,7 +21,7 @@ public class AbNProvenance {
         historyEntries.add(entry);
     }
    
-    public ArrayList<AbNDerivationHistoryEntry> getProvenance() {
+    public ArrayList<AbNDerivationHistoryEntry> getHistory() {
         return historyEntries;
     }
 }

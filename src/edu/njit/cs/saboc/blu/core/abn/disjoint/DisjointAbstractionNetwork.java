@@ -133,7 +133,7 @@ public class DisjointAbstractionNetwork<
     public AncestorDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(T root) {
         Hierarchy<T> ancestorSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(root);
         
-        Hierarchy<Concept> conceptSubhierarchy = getSubhierarchyConcepts(ancestorSubhierarchy);
+        Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(ancestorSubhierarchy, this.getSourceHierarchy());
         
         return new AncestorDisjointAbN<>(root, this, ancestorSubhierarchy, conceptSubhierarchy);
     }
@@ -149,33 +149,25 @@ public class DisjointAbstractionNetwork<
         this.getNodeHierarchy().topologicalDown(visitor);
 
         Hierarchy<T> subsetSubhierarchy = (Hierarchy<T>)visitor.getSubsetSubhierarchy();
+        Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(subsetSubhierarchy, this.getSourceHierarchy());
         
-        Hierarchy<Concept> conceptSubhierarchy = getSubhierarchyConcepts(subsetSubhierarchy);
-        
-        return new SubsetDisjointAbstractionNetwork<>(subsetSubhierarchy, conceptSubhierarchy, this);
+        return new SubsetDisjointAbstractionNetwork<>(overlaps, subsetSubhierarchy, conceptSubhierarchy, this);
     }
     
-    private Hierarchy<Concept> getSubhierarchyConcepts(Hierarchy<T> disjointNodeSubhierarchy) {
-        Set<Concept> roots = new HashSet<>();
+    
+    public OverlappingNodeDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getOverlappingNodeDisjointAbN(PARENTNODE_T overlappingNode) {
         
-        disjointNodeSubhierarchy.getRoots().forEach( (rootNode) -> {
-            roots.add(rootNode.getRoot());
+        Set<T> validNodes = new HashSet<>();
+        
+        this.getOverlappingDisjointNodes().forEach( (disjointNode) -> {
+            if(disjointNode.getOverlaps().contains(overlappingNode)) {
+                validNodes.add(disjointNode);
+            }
         });
         
-        Hierarchy<Concept> conceptSubhierarchy = new Hierarchy<>(roots);
+        Hierarchy<T> nodeSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(validNodes);
+        Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(nodeSubhierarchy, this.getSourceHierarchy());
         
-        disjointNodeSubhierarchy.getNodes().forEach( (node) -> {
-            conceptSubhierarchy.addAllHierarchicalRelationships(node.getHierarchy());
-        });
-        
-        disjointNodeSubhierarchy.getNodes().forEach( (node) -> {            
-            this.getSourceHierarchy().getParents(node.getRoot()).forEach( (parent) -> {
-               if(conceptSubhierarchy.contains(parent)) {
-                   conceptSubhierarchy.addEdge(node.getRoot(), parent);
-               } 
-            });
-        });
-        
-        return conceptSubhierarchy;
+        return new OverlappingNodeDisjointAbN<>(overlappingNode, nodeSubhierarchy, conceptSubhierarchy, this);
     }
 }

@@ -11,30 +11,31 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class SubsetDisjointAbstractionNetwork<
-        T extends DisjointNode<PARENTNODE_T>,
-        PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
-        PARENTNODE_T extends SinglyRootedNode> extends DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> 
-            implements SubAbstractionNetwork<DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T>> {
-    
+public class OverlappingNodeDisjointAbN<
+        T extends DisjointNode<PARENTNODE_T>, 
+        PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>, 
+        PARENTNODE_T extends SinglyRootedNode> extends DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T>
+       
+        implements SubAbstractionNetwork<DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T>> {
+
     private final DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN;
-    
-    private final Set<PARENTNODE_T> selectedSubset;
-    
-    public SubsetDisjointAbstractionNetwork(
-            Set<PARENTNODE_T> selectedSubset,
+
+    private final PARENTNODE_T overlappingNode;
+
+    public OverlappingNodeDisjointAbN(
+            PARENTNODE_T overlappingNode,
             Hierarchy<T> subset,
-            Hierarchy<Concept> sourceHierarchy, 
+            Hierarchy<Concept> sourceHierarchy,
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN) {
-        
-        super(sourceDisjointAbN.getParentAbstractionNetwork(), 
-                subset, 
-                sourceHierarchy, 
-                sourceDisjointAbN.getLevelCount(), 
+
+        super(sourceDisjointAbN.getParentAbstractionNetwork(),
+                subset,
+                sourceHierarchy,
+                sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
                 sourceDisjointAbN.getOverlappingNodes());
-        
-        this.selectedSubset = selectedSubset;
+
+        this.overlappingNode = overlappingNode;
         this.sourceDisjointAbN = sourceDisjointAbN;
     }
 
@@ -42,13 +43,13 @@ public class SubsetDisjointAbstractionNetwork<
     public DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSuperAbN() {
         return sourceDisjointAbN;
     }
-    
+
     @Override
     public SubsetDisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSubsetDisjointAbN(Set<PARENTNODE_T> overlaps) {
         return sourceDisjointAbN.getSubsetDisjointAbN(overlaps);
     }
-    
-    public  Set<PARENTNODE_T> getSelectedSubset() {
-        return selectedSubset;
+
+    public PARENTNODE_T getSelectedSubset() {
+        return overlappingNode;
     }
 }

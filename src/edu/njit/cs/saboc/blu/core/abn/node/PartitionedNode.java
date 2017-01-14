@@ -8,22 +8,31 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Represents an abstraction network node that can be partitioned into sub-nodes
+ * Represents an abstraction network node that can be partitioned into one or more single rooted nodes
  * 
  * @author Chris O
+ * @param <T>
  */
 public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
     
     private final Set<T> internalNodes;
-    private final Set<Concept> concepts;
+    private final Map<Concept, Set<T>> conceptNodes;
     
     public PartitionedNode(Set<T> internalNodes) {
         this.internalNodes = internalNodes;
         
-        this.concepts = new HashSet<>();
+        this.conceptNodes = new HashMap<>();
         
-        this.internalNodes.forEach( (n) -> {
-            concepts.addAll(n.getHierarchy().getNodes());
+        this.internalNodes.forEach( (node) -> {
+            Set<Concept> nodeConcepts = node.getConcepts();
+
+            for (Concept concept : nodeConcepts) {
+                if (!conceptNodes.containsKey(concept)) {
+                    conceptNodes.put(concept, new HashSet<>());
+                }
+                
+                conceptNodes.get(concept).add(node);
+            }
         });
     }
     
@@ -43,12 +52,16 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
     
     @Override
     public Set<Concept> getConcepts() {
-        return concepts;
+        return conceptNodes.keySet();
     }
     
     @Override
     public int getConceptCount() {
-        return concepts.size();
+        return conceptNodes.keySet().size();
+    }
+    
+    public Map<Concept, Set<T>> getConceptNodes() {
+        return conceptNodes;
     }
     
     public Hierarchy<Concept> getHierarchy() {
@@ -94,36 +107,16 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
     }
         
     public Set<OverlappingConceptDetails> getOverlappingConceptDetails() {
-
-        Map<Concept, Set<T>> conceptNodes = getConceptNodes();
-
+        
         Set<OverlappingConceptDetails> overlappingResults = new HashSet<>();
         
-        conceptNodes.forEach( (c, overlappingNodes) -> {
+        getConceptNodes().forEach( (c, overlappingNodes) -> {
             if(overlappingNodes.size() > 1) {
                 overlappingResults.add(new OverlappingConceptDetails(c, overlappingNodes));
             }
         });
         
         return overlappingResults;
-    }
-    
-    public Map<Concept, Set<T>> getConceptNodes() {
-        Map<Concept, Set<T>> conceptNodes = new HashMap<>();
-        
-        internalNodes.forEach((node) -> {
-            Set<Concept> nodeConcepts = node.getConcepts();
-
-            for (Concept concept : nodeConcepts) {
-                if (!conceptNodes.containsKey(concept)) {
-                    conceptNodes.put(concept, new HashSet<>());
-                }
-                
-                conceptNodes.get(concept).add((T)node);
-            }
-        });
-        
-        return conceptNodes;
     }
     
     public abstract String getName(String separator);

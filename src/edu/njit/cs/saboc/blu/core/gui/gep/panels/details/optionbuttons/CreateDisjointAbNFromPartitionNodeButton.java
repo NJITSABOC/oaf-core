@@ -10,12 +10,12 @@ import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
  *
  * @author Chris O
  */
-public class CreateDisjointAbNButton<T extends Node> extends NodeOptionButton<T> {
+public class CreateDisjointAbNFromPartitionNodeButton<T extends Node> extends NodeOptionButton<T> {
 
     private final PartitionedAbNConfiguration config;
     private final DisplayAbNAction<DisjointAbstractionNetwork> displayAbNAction;
 
-    public CreateDisjointAbNButton(
+    public CreateDisjointAbNFromPartitionNodeButton(
             PartitionedAbNConfiguration config,
             DisplayAbNAction<DisjointAbstractionNetwork> displayAbNAction) {
 
@@ -34,11 +34,15 @@ public class CreateDisjointAbNButton<T extends Node> extends NodeOptionButton<T>
     public final void createAndDisplayDisjointAbNAction() {
         final PartitionedNode node = (PartitionedNode) super.getCurrentNode().get();
        
-        DisplayNewDisjointAbNAction display = new DisplayNewDisjointAbNAction(config, displayAbNAction, node, String.format("Creating %s Disjoint %s",
-                node.getName(),
-                config.getTextConfiguration().getAbNTypeName(false)));
+        DisplayDisjointAbNAction display = new DisplayDisjointAbNAction(
+                config, 
+                displayAbNAction, 
+                node, 
+                String.format("Creating %s Disjoint %s",
+                    node.getName(),
+                    config.getTextConfiguration().getAbNTypeName(false)));
+        
         display.startThread();
-
     }
 
     @Override

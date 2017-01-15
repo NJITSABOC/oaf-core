@@ -242,6 +242,8 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
         }
 
         this.centerGraphLevels(this.getGraphLevels());
+        
+        graph.setBounds(0, 0, this.getAbNWidth(), this.getAbNHeight());
     }
 
     @Override

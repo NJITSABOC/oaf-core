@@ -10,13 +10,13 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNCon
  *
  * @author Chris O
  */
-public class DisjointAbNInitializer extends AggregateableAbNInitializer {
+public class DisjointAbNExplorationPanelInitializer extends AggregateableAbNExplorationPanelInitializer {
     
     private final DisjointAbNConfiguration config;
     private final PartitionedAbNConfiguration parentConfig;
     private final DisplayDisjointAbNSubsetAction displayAction;
     
-    public DisjointAbNInitializer(DisjointAbNConfiguration config, 
+    public DisjointAbNExplorationPanelInitializer(DisjointAbNConfiguration config, 
             PartitionedAbNConfiguration parentConfig, 
             AggregationAction aggregationAction,
             DisplayDisjointAbNSubsetAction displayAction) {

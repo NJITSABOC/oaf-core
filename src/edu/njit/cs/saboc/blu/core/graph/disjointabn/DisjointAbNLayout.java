@@ -319,9 +319,10 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
                 containerX++;
             }
         }
-        
 
         this.centerGraphLevels(this.getGraphLevels());
+        
+        super.getGraph().setBounds(0, 0, super.getGraph().getAbNWidth(), super.getGraph().getAbNHeight());
     }
 
     private Color[] createOverlapColors() {

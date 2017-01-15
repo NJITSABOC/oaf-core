@@ -8,11 +8,11 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel.Aggreg
  *
  * @author Chris O
  */
-public class AggregateableAbNInitializer extends BaseAbNExplorationPanelInitializer {
+public class AggregateableAbNExplorationPanelInitializer extends BaseAbNExplorationPanelInitializer {
     
     private final AggregationAction aggregationAction;
     
-    public AggregateableAbNInitializer(AggregationAction aggregationAction) {
+    public AggregateableAbNExplorationPanelInitializer(AggregationAction aggregationAction) {
         this.aggregationAction = aggregationAction;
     }
 

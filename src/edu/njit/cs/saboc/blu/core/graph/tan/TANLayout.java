@@ -220,5 +220,7 @@ public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTr
         }
         
         this.centerGraphLevels(this.getGraphLevels());
+        
+        graph.setBounds(0, 0, graph.getAbNWidth(), graph.getAbNHeight());
     }
 }

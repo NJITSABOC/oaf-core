@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.disjointabn.DisjointAbNGraph;
-import edu.njit.cs.saboc.blu.core.gui.gep.DisjointAbNInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.DisjointAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNButton;
@@ -10,8 +10,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateDisjointAbNPain
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.DisjointAbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -100,11 +98,10 @@ public class DisjointAbNInternalGraphFrame
             searchBtn.initialize(currentConfiguration);
             
             SwingUtilities.invokeLater(() -> {
-                displayAbstractionNetwork(
-                        graph,
+                displayAbstractionNetwork(graph,
                         painter,
                         currentConfiguration,
-                        new DisjointAbNInitializer(
+                        new DisjointAbNExplorationPanelInitializer(
                                 currentConfiguration,
                                 parentConfig,
                                 (bound) -> {

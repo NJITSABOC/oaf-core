@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.tan.BandTANGraph;
 import edu.njit.cs.saboc.blu.core.graph.tan.ClusterTANGraph;
-import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportPartitionedAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -157,7 +157,7 @@ public class ClusterInternalGraphFrame extends GenericInternalGraphFrame<Cluster
             displayAbstractionNetwork(graph,
                     painter,
                     currentConfiguration,
-                    new AggregateableAbNInitializer((bound) -> {
+                    new AggregateableAbNExplorationPanelInitializer((bound) -> {
                         ClusterTribalAbstractionNetwork aggregateTAN = currentConfiguration.getAbstractionNetwork().getAggregated(bound);
 
                         displayClusterTAN(aggregateTAN);

@@ -32,6 +32,10 @@ public class ClusterTANFromPartitionedNode<
         this.sourceNode = sourceNode;
     }
     
+    public ClusterTANFromPartitionedNode(ClusterTANFromPartitionedNode<T, V> tan) {
+        this(tan, tan.getParentAbN(), tan.getSourceNode());
+    }
+    
     @Override
     public DerivedTANFromPartitionedNode getDerivation() {
         return (DerivedTANFromPartitionedNode)super.getDerivation();

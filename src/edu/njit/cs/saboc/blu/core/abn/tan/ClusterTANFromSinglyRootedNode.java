@@ -31,6 +31,10 @@ public class ClusterTANFromSinglyRootedNode<
         this.sourceNode = sourceNode;
     }
     
+    public ClusterTANFromSinglyRootedNode(ClusterTANFromSinglyRootedNode<T, V> tan) {
+        this(tan, tan.getParentAbN(), tan.getSourceNode());
+    }
+    
     @Override
     public DerivedTANFromSinglyRootedNode getDerivation() {
         return (DerivedTANFromSinglyRootedNode)super.getDerivation();

@@ -10,17 +10,28 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.pareataxonomy.AggregatePAreaTaxonomyPainter;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PartitionedAbNSelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Chris O
  */
 public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> {
+    
+    public static enum PAreaInitializerType {
+        PAreaTaxonomy,
+        AreaTaxonomy
+    }
+    
+    public PAreaInitializerType getInitializerType() {
+        return PAreaInitializerType.PAreaTaxonomy;
+    }
 
     @Override
     public AbstractionNetworkGraph getGraph(
@@ -35,7 +46,26 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, 
             PAreaTaxonomyConfiguration config) {
         
-        return new PartitionedAbNTaskBarPanel(graphFrame, config);
+        PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
+        
+        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
+
+            @Override
+            public void showFullClicked() {
+                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(config.getPAreaTaxonomy());
+            }
+
+            @Override
+            public void showBaseClicked() {
+                config.getUIConfiguration().getAbNDisplayManager().displayAreaTaxonomy(config.getPAreaTaxonomy());
+            }
+        };
+
+        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(PAreaInitializerType.PAreaTaxonomy));
+        
+        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
+        
+        return taskBar;
     }
 
     @Override

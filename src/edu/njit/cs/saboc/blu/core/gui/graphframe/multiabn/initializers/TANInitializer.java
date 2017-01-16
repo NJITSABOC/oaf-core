@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNod
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.tan.AggregateTANPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.tan.TANPainter;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PartitionedAbNSelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
@@ -23,6 +24,15 @@ import javax.swing.JFrame;
  */
 public abstract class TANInitializer implements GraphFrameInitializer<ClusterTribalAbstractionNetwork, TANConfiguration> {
 
+    public static enum TANInitializerType {
+        ClusterTAN,
+        BandTAN
+    }
+    
+    public TANInitializerType getInitializerType() {
+        return TANInitializerType.ClusterTAN;
+    }
+    
     @Override
     public AbstractionNetworkGraph getGraph(JFrame parentFrame, TANConfiguration config, SinglyRootedNodeLabelCreator labelCreator) {
         return new ClusterTANGraph(config.getAbstractionNetwork(), labelCreator, config);
@@ -30,7 +40,26 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
 
     @Override
     public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TANConfiguration config) {
-        return new PartitionedAbNTaskBarPanel(graphFrame, config);
+        PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
+        
+        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
+
+            @Override
+            public void showFullClicked() {
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(config.getAbstractionNetwork());
+            }
+
+            @Override
+            public void showBaseClicked() {
+                config.getUIConfiguration().getAbNDisplayManager().displayBandTribalAbstractionNetwork(config.getAbstractionNetwork());
+            }
+        };
+        
+        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(TANInitializerType.ClusterTAN));
+        
+        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
+        
+        return taskBar;
     }
 
     @Override

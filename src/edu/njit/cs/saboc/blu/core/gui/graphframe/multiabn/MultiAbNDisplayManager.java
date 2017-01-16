@@ -34,6 +34,11 @@ public class MultiAbNDisplayManager extends AbNDisplayManager {
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
         graphFrame.displayPAreaTaxonomy(taxonomy);
     }
+    
+    @Override
+    public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
+        graphFrame.displayAreaTaxonomy(taxonomy);
+    }
 
     @Override
     public void displayDiffPAreaTaxonomy(DiffPAreaTaxonomy diffPAreaTaxonomy) {
@@ -43,6 +48,11 @@ public class MultiAbNDisplayManager extends AbNDisplayManager {
     @Override
     public void displayTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan) {
         graphFrame.displayTAN(tan);
+    }
+    
+    @Override
+    public void displayBandTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan) {
+        graphFrame.displayBandTAN(tan);
     }
 
     @Override
@@ -61,6 +71,4 @@ public class MultiAbNDisplayManager extends AbNDisplayManager {
     public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
         graphFrame.displayTargetAbstractionNewtork(targetAbN);
     }
-    
-    
 }

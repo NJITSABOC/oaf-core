@@ -15,7 +15,11 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurati
  */
 public interface AbNGraphFrameInitializers {
     public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getPAreaTaxonomyInitializer();
+    public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getAreaTaxonomyInitializer();
+    
     public GraphFrameInitializer<ClusterTribalAbstractionNetwork, TANConfiguration> getTANInitializer();
+    public GraphFrameInitializer<ClusterTribalAbstractionNetwork, TANConfiguration> getBandTANInitializer();
+    
     public GraphFrameInitializer<TargetAbstractionNetwork, TargetAbNConfiguration> getTargetAbNInitializer();
     
     public GraphFrameInitializer<DisjointAbstractionNetwork, DisjointAbNConfiguration> getDisjointPAreaTaxonomyInitializer();

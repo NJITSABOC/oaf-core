@@ -26,8 +26,14 @@ public abstract class AbNDisplayManager {
     }
     
     public abstract void displayPAreaTaxonomy(PAreaTaxonomy taxonomy);
+    
+    public abstract void displayAreaTaxonomy(PAreaTaxonomy taxonomy);
+    
     public abstract void displayDiffPAreaTaxonomy(DiffPAreaTaxonomy diffPAreaTaxonomy);
+    
     public abstract void displayTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan);
+    
+    public abstract void displayBandTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan);
     
     public abstract void displayDisjointPAreaTaxonomy(
             DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy);

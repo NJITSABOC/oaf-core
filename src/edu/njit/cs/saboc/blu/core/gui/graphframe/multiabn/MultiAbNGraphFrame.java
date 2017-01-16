@@ -73,7 +73,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         this.add(taskPanel, BorderLayout.NORTH);
         this.add(abnExplorationPanel, BorderLayout.CENTER);
         
-        
         this.addInternalFrameListener(new InternalFrameAdapter() {
             
             @Override
@@ -137,6 +136,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
     }
     
+    public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
+        initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
+    }
+    
     public void displayDisjointPAreaTaxonomy(
         DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
         
@@ -145,6 +148,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     
     public void displayTAN(ClusterTribalAbstractionNetwork tan) {
         initialize(tan, initializers.getTANInitializer());
+    }
+    
+    public void displayBandTAN(ClusterTribalAbstractionNetwork tan) {
+        initialize(tan, initializers.getBandTANInitializer());
     }
     
     public void displayDisjointTAN(DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN) {

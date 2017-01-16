@@ -44,7 +44,7 @@ public class DerivedRootSubtaxonomy extends DerivedPAreaTaxonomy
 
     @Override
     public PAreaTaxonomy getAbstractionNetwork() {
-        PAreaTaxonomy taxonomy = super.getAbstractionNetwork();
+        PAreaTaxonomy taxonomy = base.getAbstractionNetwork();
         
         Set<PArea> pareas = taxonomy.getNodesWith(pareaRootConcept);
         

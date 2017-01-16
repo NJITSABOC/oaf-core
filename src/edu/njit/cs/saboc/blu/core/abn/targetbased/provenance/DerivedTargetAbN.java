@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
-import edu.njit.cs.saboc.blu.core.abn.provenance.DerivedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkFactory;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
@@ -13,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
  *
  * @author Chris O
  */
-public class DerivedTargetAbN extends DerivedAbstractionNetwork<TargetAbstractionNetwork> {
+public class DerivedTargetAbN extends AbNDerivation<TargetAbstractionNetwork> {
     
     private final TargetAbstractionNetworkFactory factory;
     
@@ -26,6 +26,7 @@ public class DerivedTargetAbN extends DerivedAbstractionNetwork<TargetAbstractio
             Concept sourceHierarchyRoot, 
             InheritableProperty propertyType, 
             Concept targetHierarchyRoot) {
+        
         super(ont);
         
         this.factory = factory;

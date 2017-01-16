@@ -24,6 +24,4 @@ public class Cluster extends SinglyRootedNode {
     public Set<Concept> getPatriarchs() {
         return patriarchs;
     }
-    
-    
 }

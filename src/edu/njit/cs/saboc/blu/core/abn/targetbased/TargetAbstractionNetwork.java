@@ -3,9 +3,9 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
-import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DerivedTargetAbN;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -13,6 +13,7 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class TargetAbstractionNetwork<T extends TargetGroup> extends AbstractionNetwork<T> 
     implements AggregateableAbstractionNetwork<TargetAbstractionNetwork<T>> {
@@ -21,9 +22,15 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     
     public TargetAbstractionNetwork(
             Hierarchy<T> groupHierarchy, 
-            Hierarchy<Concept> sourceHierarchy) {
+            Hierarchy<Concept> sourceHierarchy,
+            DerivedTargetAbN derivation) {
         
-        super(groupHierarchy, sourceHierarchy);
+        super(groupHierarchy, sourceHierarchy, derivation);
+    }
+    
+    @Override
+    public DerivedTargetAbN getDerivation() {
+        return (DerivedTargetAbN)super.getDerivation();
     }
     
     public Set<T> getTargetGroups() {

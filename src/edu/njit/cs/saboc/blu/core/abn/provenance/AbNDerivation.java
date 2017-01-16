@@ -8,15 +8,18 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
  *
  * @author Chris O
  */
-public abstract class DerivedAbstractionNetwork<ABN_T extends AbstractionNetwork> implements AbNDerivationHistoryEntry<ABN_T> {
+public abstract class AbNDerivation<T extends AbstractionNetwork> {
 
     private final Ontology sourceOntology;
     
-    public DerivedAbstractionNetwork(Ontology sourceOntology) {
+    public AbNDerivation(Ontology sourceOntology) {
         this.sourceOntology = sourceOntology;
     }
     
     public Ontology getSourceOntology() {
         return sourceOntology;
     }
+    
+    public abstract String getDescription();
+    public abstract T getAbstractionNetwork();
 }

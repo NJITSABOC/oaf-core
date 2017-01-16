@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.SubAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedOverlappingNodeDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -26,19 +27,26 @@ public class OverlappingNodeDisjointAbN<
             PARENTNODE_T overlappingNode,
             Hierarchy<T> subset,
             Hierarchy<Concept> sourceHierarchy,
-            DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN) {
+            DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
+            DerivedOverlappingNodeDisjointAbN derivation) {
 
         super(sourceDisjointAbN.getParentAbstractionNetwork(),
                 subset,
                 sourceHierarchy,
                 sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
-                sourceDisjointAbN.getOverlappingNodes());
+                sourceDisjointAbN.getOverlappingNodes(),
+                derivation);
 
         this.overlappingNode = overlappingNode;
         this.sourceDisjointAbN = sourceDisjointAbN;
     }
 
+    @Override
+    public DerivedOverlappingNodeDisjointAbN getDerivation() {
+        return (DerivedOverlappingNodeDisjointAbN)super.getDerivation();
+    }
+    
     @Override
     public DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSuperAbN() {
         return sourceDisjointAbN;

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DerivedAggregateTargetAbN;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -33,7 +34,9 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
 
-        super(groupHierarchy, sourceHierarchy);
+        super(groupHierarchy, 
+                sourceHierarchy, 
+                new DerivedAggregateTargetAbN(sourceTargetAbN.getDerivation(), minBound));
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;

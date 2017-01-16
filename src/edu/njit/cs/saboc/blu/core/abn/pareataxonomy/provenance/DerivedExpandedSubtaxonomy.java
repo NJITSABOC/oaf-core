@@ -28,7 +28,8 @@ public class DerivedExpandedSubtaxonomy extends DerivedPAreaTaxonomy
     }
     
     public DerivedExpandedSubtaxonomy(DerivedExpandedSubtaxonomy derivedTaxonomy) {
-        this(derivedTaxonomy.getSuperAbNDerivation(), derivedTaxonomy.getExpandedAggregatePAreaRoot());
+        this(derivedTaxonomy.getSuperAbNDerivation(), 
+                derivedTaxonomy.getExpandedAggregatePAreaRoot());
     }
     
     public Concept getExpandedAggregatePAreaRoot() {

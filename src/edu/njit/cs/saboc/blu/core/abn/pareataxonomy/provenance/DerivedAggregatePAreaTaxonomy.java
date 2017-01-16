@@ -37,7 +37,7 @@ public class DerivedAggregatePAreaTaxonomy extends DerivedPAreaTaxonomy
 
     @Override
     public String getDescription() {
-        return String.format("%s (aggregated: %d)", super.getDescription(), bound);
+        return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), bound);
     }
 
     @Override

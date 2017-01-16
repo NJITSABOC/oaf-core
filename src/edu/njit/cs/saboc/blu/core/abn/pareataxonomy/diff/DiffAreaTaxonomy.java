@@ -26,7 +26,8 @@ public class DiffAreaTaxonomy extends AreaTaxonomy<DiffArea> implements DiffAbst
         
         super(toAreaTaxonomy.getPAreaTaxonomyFactory(), 
                 areaHierarchy, 
-                toAreaTaxonomy.getSourceHierarchy());
+                toAreaTaxonomy.getSourceHierarchy(), 
+                null);
         
         this.diffFactory = diffFactory;
         

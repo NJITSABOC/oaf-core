@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedAggregateAncestorTAN;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**
@@ -31,7 +32,8 @@ public class AggregateAncestorDisjointAbN<
         super(selectedRoot, 
                 aggregatedSuperAbN, 
                 subAbN.getNodeHierarchy(), 
-                nonAggregatedDisjointAbN.getSourceHierarchy());
+                nonAggregatedDisjointAbN.getSourceHierarchy(), 
+                new DerivedAggregateAncestorTAN(aggregatedSuperAbN.getDerivation(), aggregateBound, selectedRoot.getRoot()));
         
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
         this.aggregateBound = aggregateBound;

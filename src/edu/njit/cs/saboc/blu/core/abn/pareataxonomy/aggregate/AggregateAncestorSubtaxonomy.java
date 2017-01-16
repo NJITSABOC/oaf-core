@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AncestorSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedAggregateAncestorSubtaxonomy;
 
 /**
  *
@@ -21,7 +22,13 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
             AncestorSubtaxonomy nonAggregatedRootSubtaxonomy,
             PAreaTaxonomy subtaxonomy) {
         
-        super(aggregatedSuperAbN, selectedRoot, subtaxonomy);
+        super(aggregatedSuperAbN, 
+                selectedRoot, 
+                subtaxonomy, 
+                new DerivedAggregateAncestorSubtaxonomy(
+                        aggregatedSuperAbN.getDerivation(), 
+                        aggregateBound, 
+                        selectedRoot.getRoot()));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
         this.aggregateBound = aggregateBound;

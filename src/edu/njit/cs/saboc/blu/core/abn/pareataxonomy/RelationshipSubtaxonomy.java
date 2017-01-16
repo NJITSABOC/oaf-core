@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.SubAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedRelationshipSubtaxonomy;
 import java.util.Set;
 
 /**
@@ -17,11 +18,16 @@ public class RelationshipSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T> i
             Set<InheritableProperty> allowedProperties,
             PAreaTaxonomy subTaxonomy) {
 
-        super(subTaxonomy);
+        super(subTaxonomy, new DerivedRelationshipSubtaxonomy(superTaxonomy.getDerivation(), allowedProperties));
         
         this.superTaxonomy = superTaxonomy;
         
         this.allowedProperties = allowedProperties;
+    }
+    
+    @Override
+    public DerivedRelationshipSubtaxonomy getDerivation() {
+        return (DerivedRelationshipSubtaxonomy)super.getDerivation();
     }
     
     @Override

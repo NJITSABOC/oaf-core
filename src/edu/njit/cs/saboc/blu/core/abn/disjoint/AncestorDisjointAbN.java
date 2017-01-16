@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -22,21 +23,23 @@ public class AncestorDisjointAbN <
             T selectedRoot,
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
             Hierarchy<T> nodeAncestorSubhierarchy,
-            Hierarchy<Concept> sourceSubhierarchy) {
+            Hierarchy<Concept> sourceSubhierarchy,
+            DerivedDisjointAbN derivation) {
         
         super(sourceDisjointAbN.getParentAbstractionNetwork(), 
                 nodeAncestorSubhierarchy, 
                 sourceSubhierarchy, 
                 sourceDisjointAbN.getLevelCount(), 
                 sourceDisjointAbN.getAllSourceNodes(), 
-                sourceDisjointAbN.getOverlappingNodes());
+                sourceDisjointAbN.getOverlappingNodes(),
+                derivation);
         
         this.selectedRoot = selectedRoot;
         this.sourceDisjointAbN = sourceDisjointAbN;
         
         this.setAggregated(sourceDisjointAbN.isAggregated());
     }
-    
+        
     public T getSelectedRoot() {
         return selectedRoot;
     }

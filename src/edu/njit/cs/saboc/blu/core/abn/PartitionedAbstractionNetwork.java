@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Optional;
@@ -12,7 +13,8 @@ import java.util.Optional;
  * 
  * @author Chris O
  */
-public abstract class PartitionedAbstractionNetwork<NODE_T extends SinglyRootedNode, 
+public abstract class PartitionedAbstractionNetwork<
+        NODE_T extends SinglyRootedNode, 
         BASENODE_T extends PartitionedNode> extends AbstractionNetwork<NODE_T> {
     
     private final AbstractionNetwork<BASENODE_T> baseAbstractionNetwork;
@@ -20,9 +22,10 @@ public abstract class PartitionedAbstractionNetwork<NODE_T extends SinglyRootedN
     public PartitionedAbstractionNetwork(
         AbstractionNetwork<BASENODE_T> baseAbstractionNetwork,
         Hierarchy<NODE_T> partitionNodeHierarchy, 
-        Hierarchy<Concept> sourceHierarchy) {
+        Hierarchy<Concept> sourceHierarchy, 
+        AbNDerivation derivation) {
         
-        super(partitionNodeHierarchy, sourceHierarchy);
+        super(partitionNodeHierarchy, sourceHierarchy, derivation);
         
         this.baseAbstractionNetwork = baseAbstractionNetwork;
     }

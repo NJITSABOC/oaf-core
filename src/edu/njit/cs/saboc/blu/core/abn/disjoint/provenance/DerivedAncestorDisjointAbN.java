@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.DerivedRootedSubAbN;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class DerivedAncestorDisjointAbN extends DerivedDisjointAbN 
+public class DerivedAncestorDisjointAbN<T extends SinglyRootedNode> extends DerivedDisjointAbN<T> 
         implements DerivedRootedSubAbN<DerivedDisjointAbN> {
     
     private final DerivedDisjointAbN sourceDisjointAbNDerivation;
@@ -32,7 +33,7 @@ public class DerivedAncestorDisjointAbN extends DerivedDisjointAbN
     }
 
     @Override
-    public DerivedDisjointAbN getSuperAbNDerivation() {
+    public DerivedDisjointAbN<T> getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
@@ -48,6 +49,6 @@ public class DerivedAncestorDisjointAbN extends DerivedDisjointAbN
 
     @Override
     public String getDescription() {
-        return String.format("%s (subset)", super.getDescription());
+        return String.format("%s (subset)", sourceDisjointAbNDerivation.getDescription());
     }
 }

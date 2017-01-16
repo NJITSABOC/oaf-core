@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RootSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedAggregateRootSubtaxonomy;
 
 /**
  *
@@ -14,13 +15,19 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     private final RootSubtaxonomy nonAggregatedRootSubtaxonomy;
     private final int aggregateBound;
     
+    
     public AggregateRootSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
             int aggregateBound,
             RootSubtaxonomy nonAggregatedRootSubtaxonomy,
             PAreaTaxonomy subtaxonomy) {
         
-        super(aggregatedSuperAbN, subtaxonomy);
+        super(aggregatedSuperAbN, 
+                subtaxonomy, 
+                new DerivedAggregateRootSubtaxonomy(
+                        aggregatedSuperAbN.getDerivation(), 
+                        aggregateBound, 
+                        subtaxonomy.getRootPArea().getRoot()));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
         this.aggregateBound = aggregateBound;
@@ -32,7 +39,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
                 subtaxonomy.getNonAggregateSourceAbN(), 
                 subtaxonomy);
     }
-
+    
     @Override
     public RootSubtaxonomy getNonAggregateSourceAbN() {
         return nonAggregatedRootSubtaxonomy;

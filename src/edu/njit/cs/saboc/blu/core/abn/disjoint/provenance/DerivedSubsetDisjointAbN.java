@@ -9,16 +9,17 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class DerivedSubsetDisjointAbN extends DerivedDisjointAbN 
+public class DerivedSubsetDisjointAbN<T extends SinglyRootedNode> extends DerivedDisjointAbN<T> 
         implements DerivedSubAbN<DerivedDisjointAbN> {
     
     private final DerivedDisjointAbN sourceDisjointAbNDerivation;
-    private final Set<SinglyRootedNode> subset;
+    private final Set<T> subset;
     
     public DerivedSubsetDisjointAbN(
             DerivedDisjointAbN sourceDisjointAbNDerivation, 
-            Set<SinglyRootedNode> subset) {
+            Set<T> subset) {
         
         super(sourceDisjointAbNDerivation);
         
@@ -27,11 +28,11 @@ public class DerivedSubsetDisjointAbN extends DerivedDisjointAbN
     }
 
     @Override
-    public DerivedDisjointAbN getSuperAbNDerivation() {
+    public DerivedDisjointAbN<T> getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
-    public Set<SinglyRootedNode> getSubset() {
+    public Set<T> getSubset() {
         return subset;
     }
 
@@ -42,6 +43,6 @@ public class DerivedSubsetDisjointAbN extends DerivedDisjointAbN
 
     @Override
     public String getDescription() {
-        return String.format("%s (subset)", super.getDescription());
+        return String.format("%s (subset)", sourceDisjointAbNDerivation.getDescription());
     }
 }

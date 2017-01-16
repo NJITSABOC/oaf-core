@@ -40,7 +40,7 @@ public class DerivedRelationshipSubtaxonomy extends DerivedPAreaTaxonomy
 
     @Override
     public PAreaTaxonomy getAbstractionNetwork() {
-        return super.getAbstractionNetwork().getRelationshipSubtaxonomy(selectedProperties);
+        return base.getAbstractionNetwork().getRelationshipSubtaxonomy(selectedProperties);
     }
 
     @Override

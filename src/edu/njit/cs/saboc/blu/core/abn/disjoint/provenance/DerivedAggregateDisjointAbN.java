@@ -1,16 +1,17 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.DerivedAggregateAbN;
 
 /**
  *
  * @author Chris O
  */
-public class DerivedAggregateDisjointAbN extends DerivedDisjointAbN 
+public class DerivedAggregateDisjointAbN<T extends SinglyRootedNode> extends DerivedDisjointAbN<T> 
         implements DerivedAggregateAbN<DerivedDisjointAbN> {
     
-    private final DerivedDisjointAbN nonAggregateDerivation;
+    private final DerivedDisjointAbN<T> nonAggregateDerivation;
     private final int aggregateBound;
     
     public DerivedAggregateDisjointAbN(
@@ -40,6 +41,6 @@ public class DerivedAggregateDisjointAbN extends DerivedDisjointAbN
 
     @Override
     public String getDescription() {
-        return String.format("%s (aggregate: %d)", super.getDescription(), aggregateBound);
+        return String.format("%s (aggregate: %d)", nonAggregateDerivation.getDescription(), aggregateBound);
     }
 }

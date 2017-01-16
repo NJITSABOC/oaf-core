@@ -1,7 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 
 /**
@@ -10,11 +12,24 @@ import java.util.Set;
  */
 public abstract class PAreaTaxonomyFactory {
     
+    private final Ontology sourceOntology;
+    
+    public PAreaTaxonomyFactory(Ontology sourceOntology) {
+        this.sourceOntology = sourceOntology;
+    }
+    
+    public Ontology getSourceOntology() {
+        return sourceOntology;
+    }
+    
     public AreaTaxonomy createAreaTaxonomy(
             Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
         
-        return new AreaTaxonomy(this, areaHierarchy, sourceHierarchy);
+        return new AreaTaxonomy(
+                this, 
+                areaHierarchy, 
+                sourceHierarchy);
     }
     
     public <T extends PArea> PAreaTaxonomy createPAreaTaxonomy(
@@ -22,7 +37,10 @@ public abstract class PAreaTaxonomyFactory {
             Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
         
-        return new PAreaTaxonomy(areaTaxonomy, pareaHierarchy, conceptHierarchy);
+        return new PAreaTaxonomy(
+                areaTaxonomy, 
+                pareaHierarchy, 
+                conceptHierarchy);
     }
     
     public abstract Set<InheritableProperty> getRelationships(Concept c);

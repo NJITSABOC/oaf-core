@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedSimplePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
@@ -23,11 +25,31 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
     public AreaTaxonomy(
             PAreaTaxonomyFactory factory,
             Hierarchy<T> areaHierarchy, 
-            Hierarchy<Concept> sourceHierarchy) {
+            Hierarchy<Concept> sourceHierarchy,
+            DerivedPAreaTaxonomy derivation) {
         
-        super(areaHierarchy, sourceHierarchy);
+        super(areaHierarchy, sourceHierarchy, derivation);
         
         this.factory = factory;
+    }
+    
+    public AreaTaxonomy(
+            PAreaTaxonomyFactory factory,
+            Hierarchy<T> areaHierarchy, 
+            Hierarchy<Concept> sourceHierarchy) {
+        
+        this(factory,
+                areaHierarchy, 
+                sourceHierarchy, 
+                new DerivedSimplePAreaTaxonomy(
+                        factory.getSourceOntology(), 
+                        sourceHierarchy.getRoot(), 
+                        factory));
+    }
+    
+    @Override
+    public DerivedPAreaTaxonomy getDerivation() {
+        return (DerivedPAreaTaxonomy)super.getDerivation();
     }
     
     public PAreaTaxonomyFactory getPAreaTaxonomyFactory() {

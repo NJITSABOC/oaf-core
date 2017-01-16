@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedSimplePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -12,6 +14,7 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwork<T, Area> 
     implements AggregateableAbstractionNetwork<PAreaTaxonomy<T>> {
@@ -19,13 +22,45 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     public PAreaTaxonomy(
             AreaTaxonomy areaTaxonomy,
             Hierarchy<T> pareaHierarchy, 
+            Hierarchy<Concept> conceptHierarchy,
+            DerivedPAreaTaxonomy derivation) {
+
+        super(areaTaxonomy, pareaHierarchy, conceptHierarchy, derivation);
+    }
+    
+    public PAreaTaxonomy(
+            AreaTaxonomy areaTaxonomy,
+            Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy) {
 
-        super(areaTaxonomy, pareaHierarchy, conceptHierarchy);
+        this(areaTaxonomy, 
+                pareaHierarchy, 
+                conceptHierarchy, 
+                new DerivedSimplePAreaTaxonomy(
+                        areaTaxonomy.getPAreaTaxonomyFactory().getSourceOntology(), 
+                        conceptHierarchy.getRoot(), 
+                        areaTaxonomy.getPAreaTaxonomyFactory()));
     }
     
     public PAreaTaxonomy(PAreaTaxonomy taxonomy) {
-        this(taxonomy.getAreaTaxonomy(), taxonomy.getPAreaHierarchy(), taxonomy.getSourceHierarchy());
+        
+        this(taxonomy.getAreaTaxonomy(), 
+                taxonomy.getPAreaHierarchy(), 
+                taxonomy.getSourceHierarchy(),
+                taxonomy.getDerivation());
+    }
+    
+    public PAreaTaxonomy(PAreaTaxonomy taxonomy, DerivedPAreaTaxonomy derivation) {
+        
+        this(taxonomy.getAreaTaxonomy(), 
+                taxonomy.getPAreaHierarchy(), 
+                taxonomy.getSourceHierarchy(),
+                derivation);
+    }
+    
+    @Override
+    public DerivedPAreaTaxonomy getDerivation() {
+        return (DerivedPAreaTaxonomy)super.getDerivation();
     }
     
     public PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
@@ -111,9 +146,12 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
             return this;
         } else {
             PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
-            PAreaRelationshipSubtaxonomyFactory factory = new PAreaRelationshipSubtaxonomyFactory(
-                    this,
-                    allowedRelTypes);
+            
+            PAreaRelationshipSubtaxonomyFactory factory = 
+                    new PAreaRelationshipSubtaxonomyFactory(
+                        this.getPAreaTaxonomyFactory().getSourceOntology(),
+                        this,
+                        allowedRelTypes);
 
             return generator.derivePAreaTaxonomy(factory, getSourceHierarchy());
         }

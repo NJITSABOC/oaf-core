@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedClusterTAN;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedSimpleClusterTAN;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
@@ -21,11 +23,29 @@ public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
     public BandTribalAbstractionNetwork(
             TANFactory sourceFactory,
             Hierarchy<Band> bandHierarchy, 
-            Hierarchy<Concept> sourceHierarchy) {
+            Hierarchy<Concept> sourceHierarchy,
+            DerivedClusterTAN derivation) {
         
-        super(bandHierarchy, sourceHierarchy);
+        super(bandHierarchy, sourceHierarchy, derivation);
         
         this.sourceFactory = sourceFactory;
+    }
+    
+    public BandTribalAbstractionNetwork(
+            TANFactory sourceFactory,
+            Hierarchy<Band> bandHierarchy, 
+            Hierarchy<Concept> sourceHierarchy) {
+        
+        super(bandHierarchy, 
+                sourceHierarchy, 
+                new DerivedSimpleClusterTAN(sourceHierarchy.getRoots(), sourceFactory.getSourceOntology(), sourceFactory));
+        
+        this.sourceFactory = sourceFactory;
+    }
+    
+    @Override
+    public DerivedClusterTAN getDerivation() {
+        return (DerivedClusterTAN)super.getDerivation();
     }
     
     public TANFactory getSourceFactory() {

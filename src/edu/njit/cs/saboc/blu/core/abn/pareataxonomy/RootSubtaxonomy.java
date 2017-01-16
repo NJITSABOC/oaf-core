@@ -1,12 +1,13 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.RootedSubAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedRootSubtaxonomy;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class RootSubtaxonomy<T extends PArea> 
         extends PAreaTaxonomy<T> implements RootedSubAbstractionNetwork<T, PAreaTaxonomy> {
@@ -15,13 +16,25 @@ public class RootSubtaxonomy<T extends PArea>
     
     public RootSubtaxonomy(
             PAreaTaxonomy superTaxonomy,
-            PAreaTaxonomy subTaxonomy) {
+            PAreaTaxonomy subTaxonomy,
+            DerivedPAreaTaxonomy derivation) {
 
-        super(subTaxonomy);
+        super(subTaxonomy, derivation);
         
         this.superTaxonomy = superTaxonomy;
     }
+    
+    public RootSubtaxonomy(
+            PAreaTaxonomy superTaxonomy,
+            PAreaTaxonomy subTaxonomy) {
 
+        this(superTaxonomy, 
+                subTaxonomy, 
+                new DerivedRootSubtaxonomy(
+                        superTaxonomy.getDerivation(), 
+                        subTaxonomy.getRootPArea().getRoot()));
+    }
+    
     @Override
     public PAreaTaxonomy getSuperAbN() {
         return superTaxonomy;

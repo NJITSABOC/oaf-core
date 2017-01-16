@@ -44,7 +44,7 @@ public class DerivedRootSubTAN extends DerivedClusterTAN
 
     @Override
     public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        ClusterTribalAbstractionNetwork tan = super.getAbstractionNetwork();
+        ClusterTribalAbstractionNetwork tan = base.getAbstractionNetwork();
         
         Set<Cluster> clusters = tan.getNodesWith(clusterRootConcept);
         

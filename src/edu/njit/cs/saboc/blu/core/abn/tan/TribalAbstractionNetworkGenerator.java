@@ -1,5 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.tan;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Arrays;
@@ -305,5 +309,25 @@ public class TribalAbstractionNetworkGenerator {
         ClusterTribalAbstractionNetwork<T> tan = factory.createClusterTAN(bandTAN, clusterHierarchy, conceptHierarchy);
         
         return tan;
+    }
+    
+    public <T extends Cluster, V extends SinglyRootedNode, U extends AbstractionNetwork<V>> ClusterTribalAbstractionNetwork<T> createTANFromSinglyRootedNode(
+            U sourceAbN,
+            V sourceNode,
+            TANFactory factory) {
+        
+        ClusterTribalAbstractionNetwork<T> theTAN = this.deriveTANFromSingleRootedHierarchy(sourceNode.getHierarchy(), factory);
+        
+        return factory.createTANFromSinglyRootedNode(theTAN, sourceNode, sourceAbN);
+    }
+    
+    public <T extends Cluster, V extends PartitionedNode, U extends PartitionedAbstractionNetwork> ClusterTribalAbstractionNetwork<T> createTANFromPartitionedNode(
+            U sourceAbN,
+            V sourceNode,
+            TANFactory factory) {
+        
+        ClusterTribalAbstractionNetwork<T> theTAN = this.deriveTANFromMultiRootedHierarchy(sourceNode.getHierarchy(), factory);
+        
+        return factory.createTANFromPartitionedNode(theTAN, sourceNode, sourceAbN);
     }
 }

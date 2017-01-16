@@ -12,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> extends CreateTANButton<T> {
 

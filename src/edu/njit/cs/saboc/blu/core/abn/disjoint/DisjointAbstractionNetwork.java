@@ -7,6 +7,10 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedAncestorDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedOverlappingNodeDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedSubsetDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -41,9 +45,10 @@ public class DisjointAbstractionNetwork<
             Hierarchy<Concept> sourceHierarchy,
             int levels,
             Set<PARENTNODE_T> allNodes,
-            Set<PARENTNODE_T> overlappingNodes) {
+            Set<PARENTNODE_T> overlappingNodes,
+            DerivedDisjointAbN derivation) {
         
-        super(groupHierarchy, sourceHierarchy);
+        super(groupHierarchy, sourceHierarchy, derivation);
         
         this.parentAbN = parentAbN;
                 
@@ -54,6 +59,11 @@ public class DisjointAbstractionNetwork<
         this.levels = levels;
         
         this.isAggregated = false;
+    }
+    
+    @Override
+    public DerivedDisjointAbN getDerivation() {
+        return (DerivedDisjointAbN)super.getDerivation();
     }
     
     public PARENTABN_T getParentAbstractionNetwork() {
@@ -135,7 +145,12 @@ public class DisjointAbstractionNetwork<
         
         Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(ancestorSubhierarchy, this.getSourceHierarchy());
         
-        return new AncestorDisjointAbN<>(root, this, ancestorSubhierarchy, conceptSubhierarchy);
+        return new AncestorDisjointAbN<>(
+                root, 
+                this, 
+                ancestorSubhierarchy, 
+                conceptSubhierarchy, 
+                new DerivedAncestorDisjointAbN(this.getDerivation(), root.getRoot()));
     }
     
     
@@ -151,7 +166,12 @@ public class DisjointAbstractionNetwork<
         Hierarchy<T> subsetSubhierarchy = (Hierarchy<T>)visitor.getSubsetSubhierarchy();
         Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(subsetSubhierarchy, this.getSourceHierarchy());
         
-        return new SubsetDisjointAbstractionNetwork<>(overlaps, subsetSubhierarchy, conceptSubhierarchy, this);
+        return new SubsetDisjointAbstractionNetwork<>(
+                overlaps, 
+                subsetSubhierarchy, 
+                conceptSubhierarchy, 
+                this,
+                new DerivedSubsetDisjointAbN(getDerivation(), overlaps));
     }
     
     
@@ -168,6 +188,11 @@ public class DisjointAbstractionNetwork<
         Hierarchy<T> nodeSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(validNodes);
         Hierarchy<Concept> conceptSubhierarchy = AbstractionNetworkUtils.getConceptHierarchy(nodeSubhierarchy, this.getSourceHierarchy());
         
-        return new OverlappingNodeDisjointAbN<>(overlappingNode, nodeSubhierarchy, conceptSubhierarchy, this);
+        return new OverlappingNodeDisjointAbN<>(
+                overlappingNode, 
+                nodeSubhierarchy, 
+                conceptSubhierarchy, 
+                this, 
+                new DerivedOverlappingNodeDisjointAbN(this.getDerivation(), overlappingNode));
     }
 }

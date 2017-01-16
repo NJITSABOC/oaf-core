@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.provenance.DerivedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
@@ -13,7 +13,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
  * @param <V>
  */
 public class DerivedTANFromPartitionedNode<
-        T extends DerivedAbstractionNetwork, 
+        T extends AbNDerivation, 
         V extends PartitionedNode> extends DerivedClusterTAN {
     
     private final T parentAbNDerivation;
@@ -24,7 +24,7 @@ public class DerivedTANFromPartitionedNode<
             TANFactory factory,
             V node) {
         
-        super(parentAbNDerivation.getSourceOntology(), node.getRoots(), factory);
+        super(parentAbNDerivation.getSourceOntology(), factory);
         
         this.parentAbNDerivation = parentAbNDerivation;
         this.node = node;
@@ -51,6 +51,4 @@ public class DerivedTANFromPartitionedNode<
                 node.getHierarchy(),
                 super.getFactory());
     }
-    
-    
 }

@@ -20,7 +20,7 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
             PAreaTaxonomy toTaxonomy,
             Hierarchy<DiffPArea> pareaHierarchy) {
 
-        super(areaTaxonomy, pareaHierarchy, toTaxonomy.getSourceHierarchy());
+        super(areaTaxonomy, pareaHierarchy, toTaxonomy.getSourceHierarchy(), null);
         
         this.fromTaxonomy = fromTaxonomy;
         this.toTaxonomy = toTaxonomy;

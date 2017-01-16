@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +16,11 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
     private final Set<InheritableProperty> allowedRels;
     
     public PAreaRelationshipSubtaxonomyFactory(
+            Ontology sourceOntology,
             PAreaTaxonomy baseTaxonomy, 
             Set<InheritableProperty> allowedTypes) {
+        
+        super(sourceOntology);
 
         this.baseTaxonomy = baseTaxonomy;
         this.allowedRels = allowedTypes;
@@ -27,7 +31,9 @@ public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {
             Hierarchy<Area> areaHierarchy, 
             Hierarchy<Concept> sourceHierarchy) {
 
-        return baseTaxonomy.getPAreaTaxonomyFactory().createAreaTaxonomy(areaHierarchy, sourceHierarchy);
+        return baseTaxonomy.getPAreaTaxonomyFactory().createAreaTaxonomy(
+                areaHierarchy, 
+                sourceHierarchy);
     }
     
     @Override

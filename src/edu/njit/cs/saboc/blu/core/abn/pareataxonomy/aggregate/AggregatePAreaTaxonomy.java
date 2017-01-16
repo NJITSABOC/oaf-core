@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RootSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedAggregatePAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -105,10 +106,16 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
         super(aggregatedPAreaTaxonomy.getAreaTaxonomy(), 
                 aggregatedPAreaTaxonomy.getPAreaHierarchy(), 
-                nonAggregateBaseTaxonomy.getSourceHierarchy());
+                nonAggregateBaseTaxonomy.getSourceHierarchy(), 
+                new DerivedAggregatePAreaTaxonomy(nonAggregateBaseTaxonomy.getDerivation(), minBound));
         
         this.nonAggregateBaseTaxonomy = nonAggregateBaseTaxonomy;
         this.minBound = minBound;
+    }
+    
+    @Override
+    public DerivedAggregatePAreaTaxonomy getDerivation() {
+        return (DerivedAggregatePAreaTaxonomy)super.getDerivation();
     }
     
     @Override

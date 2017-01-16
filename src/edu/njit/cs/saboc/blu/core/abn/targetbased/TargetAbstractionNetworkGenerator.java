@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DerivedTargetAbN;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Collections;
@@ -156,7 +157,15 @@ public class TargetAbstractionNetworkGenerator {
             });
         });
         
-        return new TargetAbstractionNetwork(nodeHierarchy, targetHierarchy);
+        return new TargetAbstractionNetwork(
+                nodeHierarchy, 
+                targetHierarchy,
+                new DerivedTargetAbN(
+                        factory.getSourceOntology(), 
+                        factory, 
+                        sourceHierarchy.getRoot(), 
+                        relationshipTypes.iterator().next(), 
+                        targetHierarchy.getRoot()));
     }
     
     private Map<Concept, Set<Concept>> getLowestNonTargetAncestor(Set<Concept> targets, Hierarchy<Concept> hierarchy) {

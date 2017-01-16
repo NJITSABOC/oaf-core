@@ -4,65 +4,39 @@ import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPAreaTaxonomyFactory;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.provenance.DerivedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
+import java.util.Set;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class DerivedDisjointAbN extends DerivedAbstractionNetwork<DisjointAbstractionNetwork> {
+public abstract class DerivedDisjointAbN<T extends SinglyRootedNode> extends AbNDerivation<DisjointAbstractionNetwork> {
     
     private final DisjointAbNFactory factory;
-    private final DerivedAbstractionNetwork<PartitionedAbstractionNetwork> parentAbNDerivation;
-    private final PartitionedNode sourceNode;
+    private final AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation;
     
     public DerivedDisjointAbN(
             DisjointAbNFactory factory,
-            DerivedAbstractionNetwork<PartitionedAbstractionNetwork> parentAbNDerivation, 
-            PartitionedNode sourceNode) {
+            AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation) {
         
         super(parentAbNDerivation.getSourceOntology());
         
         this.factory = factory;
         this.parentAbNDerivation = parentAbNDerivation;
-        this.sourceNode = sourceNode;
     }
     
     public DerivedDisjointAbN(DerivedDisjointAbN derivedAbN) {
-        this(derivedAbN.getFactory(), derivedAbN.getParentAbNDerivation(), derivedAbN.getSourceNode());
+        this(derivedAbN.getFactory(), derivedAbN.getParentAbNDerivation());
     }
     
     public DisjointAbNFactory getFactory() {
         return factory;
     }
     
-    public DerivedAbstractionNetwork<PartitionedAbstractionNetwork> getParentAbNDerivation() {
+    public AbNDerivation<PartitionedAbstractionNetwork> getParentAbNDerivation() {
         return parentAbNDerivation;
-    }
-    
-    public PartitionedNode getSourceNode() {
-        return sourceNode;
-    }
-
-    @Override
-    public String getDescription() {
-        return String.format("Disjointed %s", sourceNode.getName());
-    }
-
-    @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        PartitionedAbstractionNetwork partitionedAbN = parentAbNDerivation.getAbstractionNetwork();
-
-        DisjointAbNGenerator generator = new DisjointAbNGenerator<>();
-
-        return generator.generateDisjointAbstractionNetwork(
-                factory,
-                partitionedAbN,
-                sourceNode.getInternalNodes());
     }
 }

@@ -13,6 +13,7 @@ public abstract class DiffPAreaTaxonomyConfiguration extends PAreaTaxonomyConfig
         super(taxonomy);
     }
     
+    @Override
     public DiffPAreaTaxonomy getPAreaTaxonomy() {
         return (DiffPAreaTaxonomy)super.getAbstractionNetwork();
     }

@@ -19,10 +19,10 @@ import javax.swing.SwingUtilities;
 public class AbNDashboardPanel extends JPanel {
     
     private final LoadingPanel loadingPanel;
-    private SimpleAbNDetailsPanel abnDetailsPanel;
+    private Optional<SimpleAbNDetailsPanel> abnDetailsPanel = Optional.empty();
     
-    private Optional<NodeDashboardPanel> groupDetailsPanel;
-    private Optional<NodeDashboardPanel> containerDetailsPanel;
+    private Optional<NodeDashboardPanel> groupDetailsPanel = Optional.empty();
+    private Optional<NodeDashboardPanel> containerDetailsPanel = Optional.empty();
     
     public AbNDashboardPanel() {
         super(new BorderLayout());
@@ -31,10 +31,10 @@ public class AbNDashboardPanel extends JPanel {
     }
     
     public void initialize(AbNConfiguration configuration) {
-        this.abnDetailsPanel = configuration.getUIConfiguration().createAbNDetailsPanel();
+        this.abnDetailsPanel = Optional.of(configuration.getUIConfiguration().createAbNDetailsPanel());
 
-        if (abnDetailsPanel != null) {
-            this.setDetailsPanelContents(abnDetailsPanel);
+        if (abnDetailsPanel.isPresent()) {
+            this.setDetailsPanelContents(abnDetailsPanel.get());
         }
 
         if (configuration.getUIConfiguration().hasGroupDetailsPanel()) {
@@ -109,7 +109,7 @@ public class AbNDashboardPanel extends JPanel {
         this.repaint();
     }
     
-    public void clearContents() {
+    public void reset() {
         if (groupDetailsPanel.isPresent()) {
             groupDetailsPanel.get().clearContents();
         }
@@ -118,6 +118,16 @@ public class AbNDashboardPanel extends JPanel {
             containerDetailsPanel.get().clearContents();
         }
 
-        setDetailsPanelContents(abnDetailsPanel);
+        if(abnDetailsPanel.isPresent()) {
+            setDetailsPanelContents(abnDetailsPanel.get());
+        }
+    }
+    
+    public void clear() {
+        abnDetailsPanel = Optional.empty();
+        containerDetailsPanel = Optional.empty();
+        groupDetailsPanel = Optional.empty();
+        
+        this.setDetailsPanelContents(loadingPanel);
     }
 }

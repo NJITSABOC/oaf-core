@@ -16,7 +16,6 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -88,7 +87,14 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
-        return new AggregateableAbNExplorationPanelInitializer((bound) -> {
+        
+        
+        System.out.println("Initializer Init: " + config.getPAreaTaxonomy().getClass());
+        
+        return new AggregateableAbNExplorationPanelInitializer( (bound) -> {
+            
+            System.out.println("Initializer Exec: " + config.getPAreaTaxonomy().getClass());
+            
             PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
             config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
         });

@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.gep;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
@@ -66,7 +65,7 @@ public class AbNExplorationPanel extends JPanel {
 
             @Override
             public void noEntriesSelected() {
-                dashboardPanel.clearContents();
+                dashboardPanel.reset();
             }
         });
 
@@ -100,6 +99,9 @@ public class AbNExplorationPanel extends JPanel {
             AbNExplorationPanelGUIInitializer initializer) {
         
         this.configuration = config;
+        
+        dashboardPanel.clear();
+        displayPanel.clearWidgets();
                 
         dashboardPanel.initialize(config);
         displayPanel.initialize(graph, painter, initializer.getInitialDisplayAction());
@@ -108,8 +110,8 @@ public class AbNExplorationPanel extends JPanel {
         initializer.initializeAbNDisplayPanel(displayPanel);
         initializer.initializeAbNDDashboardPanel(dashboardPanel);
         
-                
         displayPanel.resetUpdateables();
+        displayPanel.updateWidgetLocations();
         
         config.getUIConfiguration().setDisplayPanel(displayPanel);
     }

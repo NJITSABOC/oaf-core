@@ -133,7 +133,6 @@ public class AbNDisplayPanel extends JPanel {
     private final ArrayList<AbNEntitySelectionListener> selectionListeners = new ArrayList<>();
     private final ArrayList<ZoomFactorChangedListener> zoomFactorChangedListeners = new ArrayList<>();
     
-        
     private final ResetHighlightsPanel resetHighlightsPanel;
 
     public AbNDisplayPanel() {
@@ -183,7 +182,7 @@ public class AbNDisplayPanel extends JPanel {
         this.remove(widget);
     }
     
-    private void updateWidgetLocations() {
+    public void updateWidgetLocations() {
         widgets.forEach( (widget) -> {
             widget.displayPanelResized(this);
         });
@@ -239,6 +238,15 @@ public class AbNDisplayPanel extends JPanel {
         initialDisplayAction.doInitialDisplay(this);
     }
     
+    public void clearWidgets() {
+  
+        for(int c = widgets.size() - 1; c >= 0; c--) {
+            AbNDisplayWidget widget = widgets.get(c);
+            
+            this.removeWidget(widget);
+        }
+    }
+    
     public void setZoomFactor(int zoomLevel) {
         viewport.setZoomChecked(zoomLevel);
         
@@ -251,6 +259,7 @@ public class AbNDisplayPanel extends JPanel {
         });
     }
     
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -302,6 +311,8 @@ public class AbNDisplayPanel extends JPanel {
     private void initializeFixedListeners() {
 
         this.addMouseListener(new MouseAdapter() {
+            
+            @Override
             public void mousePressed(MouseEvent e) {
                 if (panelState == DisplayState.Alive) {
                     if (e.getButton() == MouseEvent.BUTTON1) {
@@ -318,6 +329,7 @@ public class AbNDisplayPanel extends JPanel {
                 }
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {
                 if (panelState == DisplayState.Alive) {
 
@@ -332,6 +344,7 @@ public class AbNDisplayPanel extends JPanel {
                 }
             }
 
+            @Override
             public void mouseClicked(MouseEvent e) {
 
                 AbNDisplayPanel.this.requestFocus();
@@ -381,6 +394,8 @@ public class AbNDisplayPanel extends JPanel {
         });
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
+            
+            @Override
             public void mouseDragged(MouseEvent e) {
                 if (panelState == DisplayState.Alive) {
                     if (mouseStateMonitor.mouseDragging()) {
@@ -418,6 +433,7 @@ public class AbNDisplayPanel extends JPanel {
                 }
             }
 
+            @Override
             public void mouseMoved(MouseEvent e) {
                 if (panelState == DisplayState.Alive) {
                     Point mouseLocation = viewport.getPointOnGraph(e.getPoint());
@@ -450,6 +466,7 @@ public class AbNDisplayPanel extends JPanel {
 
         this.addComponentListener(new ComponentAdapter() {
             
+            @Override
             public void componentResized(ComponentEvent e) {
                 if (panelState == DisplayState.Alive) {
                     viewport.setParentFrameSize(getSize());
@@ -477,6 +494,8 @@ public class AbNDisplayPanel extends JPanel {
         });
 
         this.addKeyListener(new KeyAdapter() {
+            
+            @Override
             public void keyPressed(KeyEvent e) {
 
                 if (panelState == DisplayState.Alive) {

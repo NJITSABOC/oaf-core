@@ -41,6 +41,6 @@ public class DerivedSimplePAreaTaxonomy extends DerivedPAreaTaxonomy {
 
     @Override
     public String getDescription() {
-        return String.format("Derived partial-area taxonomy (root: %s)" + root.getName());
+        return String.format("Derived Partial-area Taxonomy (Root: %s)", root.getName());
     }
 }

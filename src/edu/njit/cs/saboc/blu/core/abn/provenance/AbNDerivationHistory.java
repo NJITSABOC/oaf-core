@@ -24,4 +24,13 @@ public class AbNDerivationHistory {
     public ArrayList<AbNDerivation> getHistory() {
         return historyEntries;
     }
+    
+    public void dumpHistory() {
+        
+        System.out.println();
+        
+        historyEntries.forEach( (entry) -> {
+            System.out.println(entry.getDescription());
+        });
+    }
 }

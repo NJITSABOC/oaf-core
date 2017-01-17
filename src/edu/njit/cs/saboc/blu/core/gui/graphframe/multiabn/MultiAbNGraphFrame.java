@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationHistory;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -48,6 +49,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final AbNGraphFrameInitializers initializers;
     
     private final MultiAbNDisplayManager displayManager;
+    
+    private final AbNDerivationHistory abnDisplayHistory;
     
     public MultiAbNGraphFrame(JFrame parentFrame, AbNGraphFrameInitializers initializers) {
         
@@ -119,6 +122,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 }
             }
         });
+        
+        this.abnDisplayHistory = new AbNDerivationHistory();
 
         this.setSize(1200, 512);
         this.setVisible(true);
@@ -132,34 +137,99 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         return abnExplorationPanel;
     }
     
+    public AbNDerivationHistory getAbNDisplayHistory() {
+        return abnDisplayHistory;
+    }
+    
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
+        displayPAreaTaxonomy(taxonomy, true);
+    }
+    
+    public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(taxonomy.getDerivation());
+        }
     }
     
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
-        initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
+        displayAreaTaxonomy(taxonomy, true);
     }
     
+    public void displayAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
+        initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(taxonomy.getDerivation());
+        }
+    }
+
     public void displayDisjointPAreaTaxonomy(
         DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
         
+        displayDisjointPAreaTaxonomy(disjointTaxonomy, true);
+    }
+    
+    public void displayDisjointPAreaTaxonomy(
+        DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy, boolean createHistoryEntry) {
+        
         initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(disjointTaxonomy.getDerivation());
+        }
     }
     
     public void displayTAN(ClusterTribalAbstractionNetwork tan) {
+        displayTAN(tan, true);
+    }
+    
+    public void displayTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
         initialize(tan, initializers.getTANInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(tan.getDerivation());
+        }
     }
     
     public void displayBandTAN(ClusterTribalAbstractionNetwork tan) {
+        displayBandTAN(tan, true);
+    }
+    
+    public void displayBandTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
         initialize(tan, initializers.getBandTANInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(tan.getDerivation());
+        }
     }
     
     public void displayDisjointTAN(DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN) {
+        displayDisjointTAN(disjointTAN, true);
+    }
+    
+    public void displayDisjointTAN(
+            DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN, 
+            boolean createHistoryEntry) {
+        
         initialize(disjointTAN, initializers.getDisjointTANInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(disjointTAN.getDerivation());
+        }
     }
     
     public void displayTargetAbstractionNewtork(TargetAbstractionNetwork targetAbN) {
+        displayTargetAbstractionNewtork(targetAbN, true);
+    }
+    
+    public void displayTargetAbstractionNewtork(TargetAbstractionNetwork targetAbN, boolean createHistoryEntry) {
         initialize(targetAbN, initializers.getTargetAbNInitializer());
+        
+        if(createHistoryEntry) {
+            this.abnDisplayHistory.addHistoryEntry(targetAbN.getDerivation());
+        }
     }
     
     private void initialize(
@@ -202,6 +272,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
             this.abnExplorationPanel.initialize(graph, gepConfiguration, painter, initializer);
         });
+        
+        //this.abnDisplayHistory.dumpHistory();
     }
     
     public void saveCurrentView() {

@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -10,6 +11,7 @@ public class AbNDerivationHistoryTableModel extends OAFAbstractTableModel<AbNDer
     
     public AbNDerivationHistoryTableModel() {
         super(new String [] {
+            "Date/Time Created",
             "Abstraction Network Type",
             "Description"
         });
@@ -17,7 +19,10 @@ public class AbNDerivationHistoryTableModel extends OAFAbstractTableModel<AbNDer
 
     @Override
     protected Object[] createRow(AbNDerivationHistoryEntry item) {
+        SimpleDateFormat entryTimeFormat = new SimpleDateFormat ("MM/dd/yyyy hh:mm:ss a");
+        
         return new Object[] {
+            entryTimeFormat.format(item.getDate()),
             item.getAbNTypeName(),
             item.getDerivation().getDescription()
         };

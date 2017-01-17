@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
+import java.util.Date;
 
 /**
  *
@@ -20,6 +21,8 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
     
     private final DisplayDerivedAbNAction<T> displayAction;
     
+    private final Date entryDate;
+    
     public AbNDerivationHistoryEntry(
             AbNDerivation<T> derivation, 
             DisplayDerivedAbNAction<T> displayAction, 
@@ -28,6 +31,8 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
         this.derivation = derivation;
         this.displayAction = displayAction;
         this.abnTypeName = abnTypeName;
+        
+        this.entryDate = new Date();
     }
     
     public AbNDerivation<T> getDerivation() {
@@ -36,6 +41,10 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
     
     public String getAbNTypeName() {
         return abnTypeName;
+    }
+    
+    public Date getDate() {
+        return entryDate;
     }
     
     public void displayEntry() {

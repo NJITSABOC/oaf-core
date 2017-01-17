@@ -81,7 +81,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         
         this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
         
-        JButton showDerivationHistoryBtn = new JButton("History");
+        JButton showDerivationHistoryBtn = new JButton("Abstraction Network History");
         showDerivationHistoryBtn.addActionListener( (ae) -> {
             JDialog historyDialog = new JDialog();
             historyDialog.setSize(600, 800);
@@ -91,7 +91,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
             historyDialog.setVisible(true);
         });
         
-        northPanel.add(showDerivationHistoryBtn, BorderLayout.WEST);
+        JPanel historyButtonPanel = new JPanel();
+        historyButtonPanel.add(showDerivationHistoryBtn);
+        
+        northPanel.add(historyButtonPanel, BorderLayout.WEST);
         
         this.add(northPanel, BorderLayout.NORTH);
         this.add(abnExplorationPanel, BorderLayout.CENTER);

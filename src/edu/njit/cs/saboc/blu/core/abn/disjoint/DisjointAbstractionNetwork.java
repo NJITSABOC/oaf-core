@@ -145,8 +145,6 @@ public class DisjointAbstractionNetwork<
         return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode);
     }
     
-    
-    
     public AncestorDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(T root) {
         Hierarchy<T> ancestorSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(root);
         
@@ -159,7 +157,6 @@ public class DisjointAbstractionNetwork<
                 conceptSubhierarchy, 
                 new AncestorDisjointAbNDerivation(this.getDerivation(), root.getRoot()));
     }
-    
     
     public SubsetDisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSubsetDisjointAbN(Set<PARENTNODE_T> overlaps) {
         

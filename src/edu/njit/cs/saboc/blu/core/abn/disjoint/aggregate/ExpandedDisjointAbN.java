@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedExpandedDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.ExpandedDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
@@ -29,7 +29,7 @@ public class ExpandedDisjointAbN<
                 sourceAbN.getLevelCount(), 
                 sourceAbN.getAllSourceNodes(),
                 sourceAbN.getOverlappingNodes(), 
-                new DerivedExpandedDisjointAbN(
+                new ExpandedDisjointAbNDerivation(
                         sourceAbN.getDerivation(), 
                         aggregatedNode.getRoot()));
         
@@ -38,8 +38,8 @@ public class ExpandedDisjointAbN<
     }
     
     @Override
-    public DerivedExpandedDisjointAbN getDerivation() {
-        return (DerivedExpandedDisjointAbN)super.getDerivation();
+    public ExpandedDisjointAbNDerivation getDerivation() {
+        return (ExpandedDisjointAbNDerivation)super.getDerivation();
     }
     
     public  DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> getSourceAggregateDisjointAbN() {

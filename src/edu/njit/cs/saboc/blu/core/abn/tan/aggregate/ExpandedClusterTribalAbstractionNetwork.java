@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.SubAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.BandTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedExpandedSubTAN;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.ExpandedSubTANDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -28,7 +28,7 @@ public class ExpandedClusterTribalAbstractionNetwork extends ClusterTribalAbstra
         super(bandTAN, 
                 clusterHierarchy, 
                 conceptHierarchy, 
-                new DerivedExpandedSubTAN(
+                new ExpandedSubTANDerivation(
                         aggregateSourceTAN.getDerivation(), 
                         aggregateCluster.getRoot()));
         
@@ -45,8 +45,8 @@ public class ExpandedClusterTribalAbstractionNetwork extends ClusterTribalAbstra
     }
     
     @Override
-    public DerivedExpandedSubTAN getDerivation() {
-        return (DerivedExpandedSubTAN)super.getDerivation();
+    public ExpandedSubTANDerivation getDerivation() {
+        return (ExpandedSubTANDerivation)super.getDerivation();
     }
 
     @Override

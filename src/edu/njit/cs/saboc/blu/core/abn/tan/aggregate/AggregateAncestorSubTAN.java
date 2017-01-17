@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.AncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
-import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedAggregateAncestorSubTAN;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateAncestorSubTANDerivation;
 
 /**
  *
@@ -28,7 +28,7 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 subTAN.getBandTAN(), 
                 subTAN.getClusterHierarchy(), 
                 subTAN.getSourceHierarchy(), 
-                new DerivedAggregateAncestorSubTAN(
+                new AggregateAncestorSubTANDerivation(
                         aggregateSourceTAN.getDerivation(), 
                         aggregateBound, 
                         sourceCluster.getRoot()));

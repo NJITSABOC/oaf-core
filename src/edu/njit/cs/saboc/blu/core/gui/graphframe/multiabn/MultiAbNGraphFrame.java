@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationHistory;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -15,6 +14,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -22,6 +23,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -50,8 +53,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     
     private final MultiAbNDisplayManager displayManager;
     
-    private final AbNDerivationHistory abnDisplayHistory;
-    
+    private final AbNDerivationHistoryPanel derivationHistoryPanel;
+        
     public MultiAbNGraphFrame(JFrame parentFrame, AbNGraphFrameInitializers initializers) {
         
         super("Ontology Abstraction Framework (OAF) Display",
@@ -73,7 +76,24 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         
         this.setLayout(new BorderLayout());
         
-        this.add(taskPanel, BorderLayout.NORTH);
+        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.add(taskPanel, BorderLayout.CENTER);
+        
+        this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
+        
+        JButton showDerivationHistoryBtn = new JButton("History");
+        showDerivationHistoryBtn.addActionListener( (ae) -> {
+            JDialog historyDialog = new JDialog();
+            historyDialog.setSize(600, 800);
+            
+            historyDialog.add(derivationHistoryPanel);
+            
+            historyDialog.setVisible(true);
+        });
+        
+        northPanel.add(showDerivationHistoryBtn, BorderLayout.WEST);
+        
+        this.add(northPanel, BorderLayout.NORTH);
         this.add(abnExplorationPanel, BorderLayout.CENTER);
         
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -122,8 +142,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 }
             }
         });
-        
-        this.abnDisplayHistory = new AbNDerivationHistory();
 
         this.setSize(1200, 512);
         this.setVisible(true);
@@ -136,11 +154,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public AbNExplorationPanel getAbNExplorationPanel() {
         return abnExplorationPanel;
     }
-    
-    public AbNDerivationHistory getAbNDisplayHistory() {
-        return abnDisplayHistory;
-    }
-    
+        
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
         displayPAreaTaxonomy(taxonomy, true);
     }
@@ -148,8 +162,16 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
         
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(taxonomy.getDerivation());
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<PAreaTaxonomy> entry = new AbNDerivationHistoryEntry<>(
+                    taxonomy.getDerivation(),
+                    (abn) -> {
+                        this.displayPAreaTaxonomy(abn, false);
+                    },
+                    "Partial-area Taxonomy"
+            );
+            
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -159,9 +181,17 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
         initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
-        
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(taxonomy.getDerivation());
+
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<PAreaTaxonomy> entry = new AbNDerivationHistoryEntry<>(
+                    taxonomy.getDerivation(),
+                    (abn) -> {
+                        this.displayAreaTaxonomy(abn, false);
+                    },
+                    "Area Taxonomy"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
 
@@ -173,11 +203,19 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     
     public void displayDisjointPAreaTaxonomy(
         DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy, boolean createHistoryEntry) {
-        
+
         initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
-        
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(disjointTaxonomy.getDerivation());
+
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea>> entry = new AbNDerivationHistoryEntry<>(
+                    disjointTaxonomy.getDerivation(),
+                    (DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> abn) -> {
+                        this.displayDisjointPAreaTaxonomy(abn, false);
+                    },
+                    "Disjoint Partial-area Taxonomy"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -188,8 +226,16 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public void displayTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
         initialize(tan, initializers.getTANInitializer());
         
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(tan.getDerivation());
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<ClusterTribalAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
+                    tan.getDerivation(),
+                    (abn) -> {
+                        this.displayTAN(abn, false);
+                    },
+                    "Cluster Tribal Abstraction Network"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -200,8 +246,16 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public void displayBandTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
         initialize(tan, initializers.getBandTANInitializer());
         
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(tan.getDerivation());
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<ClusterTribalAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
+                    tan.getDerivation(),
+                    (abn) -> {
+                        this.displayBandTAN(abn, false);
+                    },
+                    "Band Tribal Abstraction Network"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -215,8 +269,18 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         
         initialize(disjointTAN, initializers.getDisjointTANInitializer());
         
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(disjointTAN.getDerivation());
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>> entry = new AbNDerivationHistoryEntry<>(
+                    disjointTAN.getDerivation(),
+                    
+                    (DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> abn) -> {
+                        this.displayDisjointTAN(abn, false);
+                    },
+                    
+                    "Disjoint Cluster Tribal Abstraction Network"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -227,8 +291,16 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public void displayTargetAbstractionNewtork(TargetAbstractionNetwork targetAbN, boolean createHistoryEntry) {
         initialize(targetAbN, initializers.getTargetAbNInitializer());
         
-        if(createHistoryEntry) {
-            this.abnDisplayHistory.addHistoryEntry(targetAbN.getDerivation());
+        if (createHistoryEntry) {
+            AbNDerivationHistoryEntry<TargetAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
+                    targetAbN.getDerivation(),
+                    (abn) -> {
+                        this.displayTargetAbstractionNewtork(abn, false);
+                    },
+                    "Target Abstraction Network"
+            );
+
+            this.derivationHistoryPanel.addEntry(entry);
         }
     }
     
@@ -272,8 +344,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
             this.abnExplorationPanel.initialize(graph, gepConfiguration, painter, initializer);
         });
-        
-        //this.abnDisplayHistory.dumpHistory();
     }
     
     public void saveCurrentView() {

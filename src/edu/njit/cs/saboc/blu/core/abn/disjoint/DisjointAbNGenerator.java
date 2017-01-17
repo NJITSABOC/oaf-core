@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedSimpleDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SimpleDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -311,6 +311,6 @@ public class DisjointAbNGenerator<
                 maxOverlap, 
                 parentNodes, 
                 overlappingNodes, 
-                new DerivedSimpleDisjointAbN(factory, parentAbN.getDerivation(), conceptHierarchy.getRoots()));
+                new SimpleDisjointAbNDerivation(factory, parentAbN.getDerivation(), conceptHierarchy.getRoots()));
     }
 }

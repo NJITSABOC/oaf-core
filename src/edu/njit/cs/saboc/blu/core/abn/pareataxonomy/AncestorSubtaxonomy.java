@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.RootedSubAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedAncestorSubtaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AncestorSubtaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 
 /**
  *
@@ -19,7 +19,7 @@ public class AncestorSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T>
             PAreaTaxonomy superTaxonomy,
             T sourcePArea,
             PAreaTaxonomy subTaxonomy,
-            DerivedPAreaTaxonomy derivation) {
+            PAreaTaxonomyDerivation derivation) {
 
         super(subTaxonomy, derivation);
         
@@ -35,7 +35,7 @@ public class AncestorSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T>
         this(superTaxonomy, 
                 sourcePArea, 
                 subTaxonomy, 
-                new DerivedAncestorSubtaxonomy(superTaxonomy.getDerivation(), sourcePArea.getRoot()));
+                new AncestorSubtaxonomyDerivation(superTaxonomy.getDerivation(), sourcePArea.getRoot()));
     }
     
     @Override

@@ -4,9 +4,10 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateClusterTribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedClusterTAN;
-import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedSimpleClusterTAN;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.ClusterTANDerivation;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.SimpleClusterTANDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
             BandTribalAbstractionNetwork bandTAN,
             Hierarchy<T> clusterHierarchy,
             Hierarchy<Concept> sourceHierarchy,
-            DerivedClusterTAN derivation) {
+            ClusterTANDerivation derivation) {
 
         super(bandTAN, 
                 clusterHierarchy, 
@@ -40,7 +41,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         this(bandTAN, 
                 clusterHierarchy, 
                 sourceHierarchy, 
-                new DerivedSimpleClusterTAN(sourceHierarchy.getRoots(), 
+                new SimpleClusterTANDerivation(sourceHierarchy.getRoots(), 
                         bandTAN.getSourceFactory().getSourceOntology(), 
                         bandTAN.getSourceFactory()));
     }
@@ -52,7 +53,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 tan.getDerivation());
     }
     
-    public ClusterTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan, DerivedClusterTAN derivation) {
+    public ClusterTribalAbstractionNetwork(ClusterTribalAbstractionNetwork tan, ClusterTANDerivation derivation) {
         this(tan.getBandTAN(), 
                 tan.getClusterHierarchy(), 
                 tan.getSourceHierarchy(), 
@@ -60,8 +61,13 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     }
     
     @Override
-    public DerivedClusterTAN getDerivation() {
-        return (DerivedClusterTAN) super.getDerivation();
+    public ClusterTANDerivation getDerivation() {
+        return (ClusterTANDerivation) super.getDerivation();
+    }
+    
+    @Override
+    public CachedAbNDerivation<ClusterTribalAbstractionNetwork> getCachedDerivation() {
+        return super.getCachedDerivation();
     }
     
     public BandTribalAbstractionNetwork getBandTAN() {

@@ -7,11 +7,13 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedAncestorDisjointAbN;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedDisjointAbN;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedOverlappingNodeDisjointAbN;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedSubsetDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AncestorDisjointAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.OverlappingNodeDisjointAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SubsetDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -46,7 +48,7 @@ public class DisjointAbstractionNetwork<
             int levels,
             Set<PARENTNODE_T> allNodes,
             Set<PARENTNODE_T> overlappingNodes,
-            DerivedDisjointAbN derivation) {
+            DisjointAbNDerivation derivation) {
         
         super(groupHierarchy, sourceHierarchy, derivation);
         
@@ -62,8 +64,13 @@ public class DisjointAbstractionNetwork<
     }
     
     @Override
-    public DerivedDisjointAbN getDerivation() {
-        return (DerivedDisjointAbN)super.getDerivation();
+    public DisjointAbNDerivation getDerivation() {
+        return (DisjointAbNDerivation)super.getDerivation();
+    }
+    
+    @Override
+    public CachedAbNDerivation<DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T>> getCachedDerivation() {
+        return super.getCachedDerivation();
     }
     
     public PARENTABN_T getParentAbstractionNetwork() {
@@ -150,7 +157,7 @@ public class DisjointAbstractionNetwork<
                 this, 
                 ancestorSubhierarchy, 
                 conceptSubhierarchy, 
-                new DerivedAncestorDisjointAbN(this.getDerivation(), root.getRoot()));
+                new AncestorDisjointAbNDerivation(this.getDerivation(), root.getRoot()));
     }
     
     
@@ -171,7 +178,7 @@ public class DisjointAbstractionNetwork<
                 subsetSubhierarchy, 
                 conceptSubhierarchy, 
                 this,
-                new DerivedSubsetDisjointAbN(getDerivation(), overlaps));
+                new SubsetDisjointAbNDerivation(getDerivation(), overlaps));
     }
     
     
@@ -193,6 +200,6 @@ public class DisjointAbstractionNetwork<
                 nodeSubhierarchy, 
                 conceptSubhierarchy, 
                 this, 
-                new DerivedOverlappingNodeDisjointAbN(this.getDerivation(), overlappingNode));
+                new OverlappingNodeDisjointAbNDerivation(this.getDerivation(), overlappingNode));
     }
 }

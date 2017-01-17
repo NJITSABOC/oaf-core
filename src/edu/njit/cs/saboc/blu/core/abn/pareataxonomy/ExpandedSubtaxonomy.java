@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.SubAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedExpandedSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.ExpandedSubtaxonomyDerivation;
 
 /**
  *
@@ -21,15 +21,15 @@ public class ExpandedSubtaxonomy<T extends PAreaTaxonomy & AggregateAbstractionN
             AggregatePArea aggregatePArea,
             PAreaTaxonomy expandedSubtaxonomy) {
 
-        super(expandedSubtaxonomy, new DerivedExpandedSubtaxonomy(superTaxonomy.getDerivation(), aggregatePArea.getRoot()));
+        super(expandedSubtaxonomy, new ExpandedSubtaxonomyDerivation(superTaxonomy.getDerivation(), aggregatePArea.getRoot()));
         
         this.superTaxonomy = superTaxonomy;
         this.aggregatePArea = aggregatePArea;
     }
     
     @Override
-    public DerivedExpandedSubtaxonomy getDerivation() {
-        return (DerivedExpandedSubtaxonomy)super.getDerivation();
+    public ExpandedSubtaxonomyDerivation getDerivation() {
+        return (ExpandedSubtaxonomyDerivation)super.getDerivation();
     }
 
     @Override

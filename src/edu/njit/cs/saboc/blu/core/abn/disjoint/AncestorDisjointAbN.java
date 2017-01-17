@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -24,7 +24,7 @@ public class AncestorDisjointAbN <
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
             Hierarchy<T> nodeAncestorSubhierarchy,
             Hierarchy<Concept> sourceSubhierarchy,
-            DerivedDisjointAbN derivation) {
+            DisjointAbNDerivation derivation) {
         
         super(sourceDisjointAbN.getParentAbstractionNetwork(), 
                 nodeAncestorSubhierarchy, 

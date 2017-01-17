@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
-import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DerivedTargetAbN;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Collections;
@@ -160,7 +160,7 @@ public class TargetAbstractionNetworkGenerator {
         return new TargetAbstractionNetwork(
                 nodeHierarchy, 
                 targetHierarchy,
-                new DerivedTargetAbN(
+                new TargetAbNDerivation(
                         factory.getSourceOntology(), 
                         factory, 
                         sourceHierarchy.getRoot(), 

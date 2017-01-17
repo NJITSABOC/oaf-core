@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
 import edu.njit.cs.saboc.blu.core.abn.RootedSubAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedRootSubtaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RootSubtaxonomyDerivation;
 
 /**
  *
@@ -17,7 +17,7 @@ public class RootSubtaxonomy<T extends PArea>
     public RootSubtaxonomy(
             PAreaTaxonomy superTaxonomy,
             PAreaTaxonomy subTaxonomy,
-            DerivedPAreaTaxonomy derivation) {
+            PAreaTaxonomyDerivation derivation) {
 
         super(subTaxonomy, derivation);
         
@@ -30,7 +30,7 @@ public class RootSubtaxonomy<T extends PArea>
 
         this(superTaxonomy, 
                 subTaxonomy, 
-                new DerivedRootSubtaxonomy(
+                new RootSubtaxonomyDerivation(
                         superTaxonomy.getDerivation(), 
                         subTaxonomy.getRootPArea().getRoot()));
     }

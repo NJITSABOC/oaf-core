@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DerivedTargetAbN;
+import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -23,14 +25,19 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     public TargetAbstractionNetwork(
             Hierarchy<T> groupHierarchy, 
             Hierarchy<Concept> sourceHierarchy,
-            DerivedTargetAbN derivation) {
+            TargetAbNDerivation derivation) {
         
         super(groupHierarchy, sourceHierarchy, derivation);
     }
     
     @Override
-    public DerivedTargetAbN getDerivation() {
-        return (DerivedTargetAbN)super.getDerivation();
+    public TargetAbNDerivation getDerivation() {
+        return (TargetAbNDerivation)super.getDerivation();
+    }
+    
+    @Override
+    public CachedAbNDerivation<TargetAbstractionNetwork> getCachedDerivation() {
+        return super.getCachedDerivation();
     }
     
     public Set<T> getTargetGroups() {

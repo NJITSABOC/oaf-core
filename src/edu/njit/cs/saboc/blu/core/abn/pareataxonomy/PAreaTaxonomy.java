@@ -5,8 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedPAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.DerivedSimplePAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.SimplePAreaTaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
             AreaTaxonomy areaTaxonomy,
             Hierarchy<T> pareaHierarchy, 
             Hierarchy<Concept> conceptHierarchy,
-            DerivedPAreaTaxonomy derivation) {
+            PAreaTaxonomyDerivation derivation) {
 
         super(areaTaxonomy, pareaHierarchy, conceptHierarchy, derivation);
     }
@@ -36,7 +37,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
         this(areaTaxonomy, 
                 pareaHierarchy, 
                 conceptHierarchy, 
-                new DerivedSimplePAreaTaxonomy(
+                new SimplePAreaTaxonomyDerivation(
                         areaTaxonomy.getPAreaTaxonomyFactory().getSourceOntology(), 
                         conceptHierarchy.getRoot(), 
                         areaTaxonomy.getPAreaTaxonomyFactory()));
@@ -50,7 +51,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 taxonomy.getDerivation());
     }
     
-    public PAreaTaxonomy(PAreaTaxonomy taxonomy, DerivedPAreaTaxonomy derivation) {
+    public PAreaTaxonomy(PAreaTaxonomy taxonomy, PAreaTaxonomyDerivation derivation) {
         
         this(taxonomy.getAreaTaxonomy(), 
                 taxonomy.getPAreaHierarchy(), 
@@ -59,10 +60,15 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
     }
     
     @Override
-    public DerivedPAreaTaxonomy getDerivation() {
-        return (DerivedPAreaTaxonomy)super.getDerivation();
+    public PAreaTaxonomyDerivation getDerivation() {
+        return (PAreaTaxonomyDerivation)super.getDerivation();
     }
-    
+
+    @Override
+    public CachedAbNDerivation<PAreaTaxonomy> getCachedDerivation() {
+        return super.getCachedDerivation();
+    }
+
     public PAreaTaxonomyFactory getPAreaTaxonomyFactory() {
         return getAreaTaxonomy().getPAreaTaxonomyFactory();
     }

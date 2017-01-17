@@ -87,14 +87,7 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
-        
-        
-        System.out.println("Initializer Init: " + config.getPAreaTaxonomy().getClass());
-        
         return new AggregateableAbNExplorationPanelInitializer( (bound) -> {
-            
-            System.out.println("Initializer Exec: " + config.getPAreaTaxonomy().getClass());
-            
             PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
             config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
         });

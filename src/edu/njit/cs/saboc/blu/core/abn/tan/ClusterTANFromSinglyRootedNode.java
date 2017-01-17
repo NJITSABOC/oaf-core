@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.abn.tan.provenance.DerivedTANFromSinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDerivation;
 
 /**
  *
@@ -22,7 +22,7 @@ public class ClusterTANFromSinglyRootedNode<
             T sourceNode) {
         
         super(tan, 
-                new DerivedTANFromSinglyRootedNode(
+                new TANFromSinglyRootedNodeDerivation(
                         parentAbN.getDerivation(), 
                         tan.getSourceFactory(), 
                         sourceNode.getRoot()));
@@ -36,8 +36,8 @@ public class ClusterTANFromSinglyRootedNode<
     }
     
     @Override
-    public DerivedTANFromSinglyRootedNode getDerivation() {
-        return (DerivedTANFromSinglyRootedNode)super.getDerivation();
+    public TANFromSinglyRootedNodeDerivation getDerivation() {
+        return (TANFromSinglyRootedNodeDerivation)super.getDerivation();
     }
     
     public V getParentAbN() {

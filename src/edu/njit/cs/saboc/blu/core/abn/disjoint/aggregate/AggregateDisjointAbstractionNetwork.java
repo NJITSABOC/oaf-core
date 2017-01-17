@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DerivedAggregateDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -85,7 +85,7 @@ public class AggregateDisjointAbstractionNetwork<
                 levels, 
                 allNodes, 
                 overlappingNodes,
-                new DerivedAggregateDisjointAbN(sourceAbN.getDerivation(), aggregateBound));
+                new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregateBound));
         
         this.sourceAbN = sourceAbN;
         this.aggregateBound = aggregateBound;

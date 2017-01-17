@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
@@ -34,6 +35,10 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
     
     public AbNDerivation getDerivation() {
         return derivation;
+    }
+    
+    public CachedAbNDerivation getCachedDerivation() {
+        return new CachedAbNDerivation(this);
     }
 
     public int getNodeCount() {

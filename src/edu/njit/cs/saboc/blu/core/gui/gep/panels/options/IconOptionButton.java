@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.options;
 
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Optional;
@@ -19,7 +19,7 @@ public abstract class IconOptionButton<T> extends JButton {
             String iconFileName, 
             String toolTipText) {
         
-        ImageIcon icon = IconManager.getIconManager().getIcon(iconFileName);
+        ImageIcon icon = ImageManager.getImageManager().getIcon(iconFileName);
 
         this.setIcon(icon);
         

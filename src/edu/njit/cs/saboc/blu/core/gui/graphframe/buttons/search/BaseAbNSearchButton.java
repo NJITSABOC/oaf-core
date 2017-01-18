@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
@@ -78,9 +78,9 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
 
         popupPanel.setBorder(BorderFactory.createEtchedBorder());
         
-        final JButton searchButton = new JButton(IconManager.getIconManager().getIcon("search.png"));
+        final JButton searchButton = new JButton(ImageManager.getImageManager().getIcon("search.png"));
         
-        final JButton filterButton = new JButton(IconManager.getIconManager().getIcon("filter.png"));
+        final JButton filterButton = new JButton(ImageManager.getImageManager().getIcon("filter.png"));
 
         final JPanel resultsPanel = new JPanel(new BorderLayout());
         resultsPanel.setBorder(new TitledBorder("Search Results"));

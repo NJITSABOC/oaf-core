@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons;
 
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -142,7 +142,7 @@ public class PopupToggleButton extends JToggleButton {
     }
         
     public void doSelected() {
-        setIcon(IconManager.getIconManager().getIcon("cancel.png"));
+        setIcon(ImageManager.getImageManager().getIcon("cancel.png"));
         
         setSelected(true);
         

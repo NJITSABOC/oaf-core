@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -94,7 +94,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.add(new JScrollPane(entityTable), BorderLayout.CENTER);
 
 
-        closeButton.setIcon(IconManager.getIconManager().getIcon("cross.png"));
+        closeButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
         closeButton.setToolTipText("Close");
 
         filterPanel = new JPanel();

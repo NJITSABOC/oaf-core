@@ -15,6 +15,10 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.AbNDerivationExplanationPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.PAreaTaxonomyDerivationExplanation;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 /**
@@ -63,6 +67,21 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
         abnTypeSelectionPanel.initialize(config, getInitializerType().equals(PAreaInitializerType.PAreaTaxonomy));
         
         taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
+        
+        
+        JButton derivationHelpBtn = new JButton("Help!");
+        derivationHelpBtn.addActionListener( (ae) -> {
+            JDialog derivationExplanationDialog = new JDialog();
+            derivationExplanationDialog.setModal(true);
+            
+            AbNDerivationExplanationPanel explanationPanel = new AbNDerivationExplanationPanel(new PAreaTaxonomyDerivationExplanation(config));
+            derivationExplanationDialog.add(explanationPanel);
+            derivationExplanationDialog.setSize(1200, 600);
+            
+            derivationExplanationDialog.setVisible(true);
+        });
+        
+        taskBar.addReportButtonToMenu(derivationHelpBtn);
         
         return taskBar;
     }

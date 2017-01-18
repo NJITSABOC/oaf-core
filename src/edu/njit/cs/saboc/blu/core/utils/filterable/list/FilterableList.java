@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
@@ -132,7 +132,7 @@ public class FilterableList extends JPanel {
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
 
-        closeButton.setIcon(IconManager.getIconManager().getIcon("cross.png"));
+        closeButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
         closeButton.setToolTipText("Close");
 
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));

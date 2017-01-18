@@ -4,7 +4,7 @@ package edu.njit.cs.saboc.blu.core.gui.panels;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -44,7 +44,7 @@ public class ConceptSearchPanel extends JPanel {
             super(new BorderLayout());
             
             textField = new JTextField();
-            spinner = new JLabel(IconManager.getIconManager().getIcon("spinner.gif"));
+            spinner = new JLabel(ImageManager.getImageManager().getIcon("spinner.gif"));
             spinner.setOpaque(true);
             spinner.setBackground(textField.getBackground());
             
@@ -156,14 +156,14 @@ public class ConceptSearchPanel extends JPanel {
 
         c.gridx = 1;
         c.weightx = 0;
-        btnDoSearch = new JButton(IconManager.getIconManager().getIcon("search.png"));
+        btnDoSearch = new JButton(ImageManager.getImageManager().getIcon("search.png"));
         btnDoSearch.addActionListener( (ae) -> {
             doSearch();
         });
 
         pnlSearch.add(btnDoSearch, c);
 
-        btnCancelSearch = new JButton(IconManager.getIconManager().getIcon("cancel.png"));
+        btnCancelSearch = new JButton(ImageManager.getImageManager().getIcon("cancel.png"));
         btnCancelSearch.setToolTipText("Cancel serach");
 
         pnlSearch.add(btnCancelSearch, c);

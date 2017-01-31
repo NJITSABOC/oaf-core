@@ -163,8 +163,14 @@ public class OAFMainFrame extends JFrame {
             
             desktopPane.add(abnSelectionFrame);
             
-            abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
-                    getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
+            //getContentPane()-->content pane layer, it excludes the menubar so that we can fit the abnSelectionFrame fully.
+            
+            abnSelectionFrame.setLocation(0, 0);
+            
+            Dimension contentSize = getContentPane().getSize();
+            int contentWidth = contentSize.width;
+            int contentHeight = contentSize.height;
+            abnSelectionFrame.setSize(contentWidth, contentHeight);
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {

@@ -37,6 +37,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private int currentBound = 1;
     
+    private boolean initialized = false;
+    
     public AggregatationSliderPanel(AbNDisplayPanel displayPanel, AggregationAction aggregationAction) {
         super(displayPanel);
         
@@ -53,13 +55,17 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             
             int newValue = aggregationSlider.getValue();
             
-            if (!aggregationSlider.getValueIsAdjusting()) {
+            if (initialized && !aggregationSlider.getValueIsAdjusting()) {
                 setBound(newValue);
                 
                 displayCurrentBound();
             } else {
                 displayBound(newValue);
             }
+            
+            // Hack solution to preventing slider listeners from triggering when programmatically setting 
+            // bound value on initialization
+            initialized = true;
         });
         
         this.txtCurrentBound = new JTextField();
@@ -104,6 +110,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     @Override
     public void initialize(AbNDisplayPanel displayPanel) {
+        this.initialized = false;
         
         AggregateableAbstractionNetwork abn = (AggregateableAbstractionNetwork)displayPanel.getGraph().getAbstractionNetwork();
         
@@ -155,6 +162,16 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         bound = Math.min(bound, 100);
         
         aggregationSlider.setMaximum(bound);
+        
+         this.initialized = false;
+        
+        if(abn instanceof AggregateAbstractionNetwork) {
+            int abnBound = ((AggregateAbstractionNetwork)abn).getAggregateBound();
+            
+            aggregationSlider.setValue(abnBound);
+        } else {
+            this.initialized = true;
+        }
     }
 
     @Override

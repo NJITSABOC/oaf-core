@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -163,8 +164,23 @@ public class OAFMainFrame extends JFrame {
             
             desktopPane.add(abnSelectionFrame);
             
-            abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
-                    getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
+            //gets the native resoltuion of the screen
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+            
+            if (screenSize.getWidth() < 1400 && screenSize.getHeight() < 900){
+                //getContentPane()-->content pane layer, it excludes the menubar so that we can fit the abnSelectionFrame fully  
+                Dimension contentSize = getContentPane().getSize();
+                int contentWidth = contentSize.width;
+                int contentHeight = contentSize.height;
+                abnSelectionFrame.setLocation(0, 0);
+                abnSelectionFrame.setSize(contentWidth, contentHeight);
+            } else {    
+                abnSelectionFrame.setSize(1400, 900);
+                //below is the original code for centering the inner panel
+                abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2, getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
+            }
+            
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {
@@ -205,7 +221,8 @@ public class OAFMainFrame extends JFrame {
         ArrayList<JInternalFrame> graphFrames = new ArrayList<>();
 
         for (JInternalFrame frame : frames) {
-            if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
+//            if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
+            if (frame instanceof JInternalFrame && !frame.isIcon()) {   //it also includes the main frame but fixes "cascade"
                 graphFrames.add(frame);
             }
         }

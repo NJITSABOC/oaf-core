@@ -21,6 +21,10 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
         
         this.patriarchs = patriarchs;
     }
+    
+    public SimpleClusterTANDerivation(SimpleClusterTANDerivation base) {
+        this(base.getPatriarchs(), base.getSourceOntology(), base.getFactory());
+    }
             
     public Set<Concept> getPatriarchs() {
         return patriarchs;

@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.frame;
 
-import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -163,22 +163,41 @@ public class OAFMainFrame extends JFrame {
             
             desktopPane.add(abnSelectionFrame);
             
-            abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
-                    getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
-            abnSelectionFrame.setBounds(0,0,desktopPane.getWidth(),desktopPane.getHeight());
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+            if (screenSize.getWidth() < abnSelectionFrame.getWidth() || 
+                    screenSize.getHeight() < abnSelectionFrame.getHeight()) {
+                
+                Dimension contentSize = getContentPane().getSize();
+                
+                int contentWidth = contentSize.width;
+                int contentHeight = contentSize.height;
+                
+                abnSelectionFrame.setLocation(0, 0);
+                abnSelectionFrame.setSize(contentWidth, contentHeight);
+                
+            } else {
+                abnSelectionFrame.setLocation(
+                        getWidth() / 2 - abnSelectionFrame.getWidth() / 2, 
+                        getHeight() / 2 - abnSelectionFrame.getHeight() + 300);
+            }
+
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {
+            
+            @Override
             public boolean accept(File f) {
                 if (f.isDirectory()) {
                     return true;
                 }
 
-                return f.getName().endsWith(".png");
+                return f.getName().toLowerCase().endsWith(".png");
             }
 
+            @Override
             public String getDescription() {
-                return "Portal Network Graphs (PNG) Images";
+                return "Portal Network Graphs (.png) Images";
             }
         });
 

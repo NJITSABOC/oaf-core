@@ -23,6 +23,10 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
 
         this.root = root;
     }
+    
+    public SimplePAreaTaxonomyDerivation(SimplePAreaTaxonomyDerivation derivation) {
+        this(derivation.getSourceOntology(), derivation.getRoot(), derivation.getFactory());
+    }
 
     public Concept getRoot() {
         return root;

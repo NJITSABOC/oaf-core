@@ -113,10 +113,10 @@ public class OAFMainFrame extends JFrame {
         JMenuItem cascade = new JMenuItem("Cascade");
         windows.add(cascade);
 
-        JMenuItem horizontalcomp = new JMenuItem("Compare Side-By-Side");
+        JMenuItem horizontalcomp = new JMenuItem("Side-By-Side");
         windows.add(horizontalcomp);
 
-        JMenuItem verticalcomp = new JMenuItem("Compare Vertically");
+        JMenuItem verticalcomp = new JMenuItem("Tile");
         windows.add(verticalcomp);
 
         /**

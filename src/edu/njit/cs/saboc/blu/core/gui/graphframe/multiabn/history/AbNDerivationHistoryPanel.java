@@ -43,6 +43,9 @@ public class AbNDerivationHistoryPanel extends JPanel {
     
     public void addEntry(AbNDerivationHistoryEntry entry) {
         entries.add(entry);
+        System.out.println("New Derivation:");
+
+        System.out.println(entry.getDerivation().serializeToJSON().toJSONString());
         
         derivationList.setContents(entries);
     }

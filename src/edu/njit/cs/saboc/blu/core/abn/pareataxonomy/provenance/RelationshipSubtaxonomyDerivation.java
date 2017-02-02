@@ -4,6 +4,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import java.util.Set;
+import jdk.internal.util.xml.impl.XMLStreamWriterImpl;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -46,5 +49,28 @@ public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public String getDescription() {
         return "Created relationship subtaxonomy";
+    }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("RelationshipSubtaxonomyDerivation");
+        
+        //serialzie base
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", base.serializeToJSON());   
+        result.add(obj_base);
+
+        //serialize selectedProperties
+        JSONObject obj_selectedProperties = new JSONObject();
+        JSONArray propertyids = new JSONArray();
+        selectedProperties.forEach(sp -> {
+            propertyids.add(sp.getID());
+        }
+        );
+        obj_selectedProperties.put("PropertyIDs", propertyids);
+        result.add(obj_selectedProperties);
+        
+        return result;
     }
 }

@@ -10,6 +10,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -63,4 +65,28 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
                 partitionedAbN,
                 overlappingNodes);
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("SimpleDisjointAbNDerivation");
+        
+        //serialzie parentAbNDerivation
+        JSONObject obj_parentAbNDerivation = new JSONObject();
+        obj_parentAbNDerivation.put("BaseDerivation", parentAbNDerivation.serializeToJSON());   
+        result.add(obj_parentAbNDerivation);
+
+        //serialize sourceNodeRoots
+        JSONObject obj_sourceNodeRoots = new JSONObject();
+        JSONArray arr = new JSONArray();
+        sourceNodeRoots.forEach(root ->{
+            arr.add(root.getID());
+        });        
+        obj_sourceNodeRoots.put("RootIDs", arr);
+        result.add(obj_sourceNodeRoots);
+        
+        return result;
+        
+    }
+    
 }

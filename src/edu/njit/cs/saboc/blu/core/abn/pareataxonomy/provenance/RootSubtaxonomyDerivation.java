@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -50,4 +52,25 @@ public class RootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         return taxonomy.createRootSubtaxonomy(pareas.iterator().next());
     }
+    
+    
+    @Override
+    public JSONArray serializeToJSON() {        
+        JSONArray result = new JSONArray();
+        result.add("RootSubtaxonomyDerivation");
+        
+        //serialzie base
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", base.serializeToJSON());   
+        result.add(obj_base);
+        
+        //serialzie pareaRootConcept
+        JSONObject obj_pareaRootConcept = new JSONObject();
+        obj_pareaRootConcept.put("ConceptID", pareaRootConcept.getID());   
+        result.add(obj_pareaRootConcept);
+        
+        return result;
+    }
+    
+    
 }

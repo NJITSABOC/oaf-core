@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -57,4 +59,23 @@ public class TANFromSinglyRootedNodeDerivation <
 
         return generator.createTANFromSinglyRootedNode(sourceAbN, nodes.iterator().next(), super.getFactory());
     }
+
+    @Override
+    public JSONArray serializeToJSON() {        
+        JSONArray result = new JSONArray();
+        result.add("TANFromSinglyRootedNodeDerivation");
+        
+        //serialzie parentAbNDerivation
+        JSONObject obj_parentAbNDerivation = new JSONObject();
+        obj_parentAbNDerivation.put("ParentDerivation", parentAbNDerivation.serializeToJSON());   
+        result.add(obj_parentAbNDerivation);
+        
+        //serialzie nodeRoot
+        JSONObject obj_nodeRoot = new JSONObject();
+        obj_nodeRoot.put("RootID", nodeRoot.getID());   
+        result.add(obj_nodeRoot);
+        
+        return result;
+    }    
+    
 }

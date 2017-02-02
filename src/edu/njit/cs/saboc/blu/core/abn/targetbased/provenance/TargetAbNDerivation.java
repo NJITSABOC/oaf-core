@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenera
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -76,5 +78,30 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
                 getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot));
         
         return targetAbN;
+    }
+
+    @Override
+    public JSONArray serializeToJSON() {
+        //InheritableProperty 
+    JSONArray result = new JSONArray();
+        result.add("TargetAbNDerivation");
+        
+        //serialzie sourceHierarchyRoot
+        JSONObject obj_sourceHierarchyRoot = new JSONObject();
+        obj_sourceHierarchyRoot.put("SourceID", sourceHierarchyRoot.getID());   
+        result.add(obj_sourceHierarchyRoot);
+
+        //serialize propertyType
+        JSONObject obj_propertyType = new JSONObject();
+        obj_propertyType.put("PropertyType", propertyType.getID());
+        result.add(obj_propertyType);
+        
+        //serialize targetHierarchyRoot
+        JSONObject obj_targetHierarchyRoot = new JSONObject();
+        obj_targetHierarchyRoot.put("TargetID", targetHierarchyRoot.getID());
+        result.add(obj_targetHierarchyRoot);
+        
+        return result;
+        
     }
 }

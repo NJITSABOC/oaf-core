@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -43,4 +45,22 @@ public class AggregateDisjointAbNDerivation<T extends SinglyRootedNode> extends 
     public String getDescription() {
         return String.format("%s (aggregate: %d)", nonAggregateDerivation.getDescription(), aggregateBound);
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("AggregateDisjointAbNDerivation");
+        
+        //serialzie nonAggregateDerivation
+        JSONObject obj_nonAggregateDerivation = new JSONObject();
+        obj_nonAggregateDerivation.put("BaseDerivation", nonAggregateDerivation.serializeToJSON());   
+        result.add(obj_nonAggregateDerivation);
+
+        //serialize aggregateBound
+        JSONObject obj_aggregateBound = new JSONObject();
+        obj_aggregateBound.put("Bound", aggregateBound);
+        result.add(obj_aggregateBound);
+        
+        return result;
+    }    
 }

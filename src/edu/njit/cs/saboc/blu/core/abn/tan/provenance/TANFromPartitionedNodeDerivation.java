@@ -5,6 +5,10 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -51,4 +55,28 @@ public class TANFromPartitionedNodeDerivation<
                 node.getHierarchy(),
                 super.getFactory());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("TANFromPartitionedNodeDerivation");
+
+        //serialzie parentAbNDerivation
+        JSONObject obj_parentAbNDerivation = new JSONObject();
+        obj_parentAbNDerivation.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
+        result.add(obj_parentAbNDerivation);
+
+        //serialize node
+        JSONObject obj_node = new JSONObject();
+        JSONArray arr = new JSONArray();
+        Set<Concept> set = node.getRoots();
+        set.forEach(root -> {
+            arr.add(root.getID());
+        });
+        obj_node.put("RootIDs", arr);
+        result.add(obj_node);
+
+        return result;
+    }  
+    
 }

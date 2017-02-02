@@ -10,6 +10,7 @@ public class AbNDerivationHistory {
     private final ArrayList<AbNDerivation> historyEntries = new ArrayList<>();
     
     public AbNDerivationHistory() {
+        System.out.println("New History:");
         
     }
     
@@ -18,10 +19,13 @@ public class AbNDerivationHistory {
     }
     
     public void addHistoryEntry(AbNDerivation entry) {
+        System.out.println("New Derivation:");
         historyEntries.add(entry);
+        System.out.println(entry.serializeToJSON().toJSONString());
     }
    
     public ArrayList<AbNDerivation> getHistory() {
+        System.out.println("get history");
         return historyEntries;
     }
     

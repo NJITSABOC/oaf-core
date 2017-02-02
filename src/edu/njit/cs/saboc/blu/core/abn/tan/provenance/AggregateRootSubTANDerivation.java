@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -69,4 +71,28 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         
         return sourceTAN.createRootSubTAN(clusters.iterator().next());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("AggregateRootSubTANDerivation");
+        
+        //serialzie aggregateBase
+        JSONObject obj_aggregateBase = new JSONObject();
+        obj_aggregateBase.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.add(obj_aggregateBase);
+
+        //serialize minBound
+        JSONObject obj_minBound = new JSONObject();
+        obj_minBound.put("Bound", minBound);
+        result.add(obj_minBound);
+        
+        //serialize selectedAggregateClusterRoot
+        JSONObject obj_selectedAggregateClusterRoot = new JSONObject();
+        obj_selectedAggregateClusterRoot.put("ConceptID", selectedAggregateClusterRoot.getID());
+        result.add(obj_selectedAggregateClusterRoot);
+        
+        return result;
+    }
+    
 }

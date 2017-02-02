@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -56,6 +58,24 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public String getDescription() {
         return String.format("Expanded aggregate partial-area (%s)", aggregatePAreaRoot.getName());
+    }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("ExpandedSubtaxonomyDerivation");
+        
+        //serialzie base
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", base.serializeToJSON());   
+        result.add(obj_base);
+
+        //serialize aggregatePAreaRoot
+        JSONObject obj_aggregatePAreaRoot = new JSONObject();
+        obj_aggregatePAreaRoot.put("ConceptID", aggregatePAreaRoot.getID());
+        result.add(obj_aggregatePAreaRoot);
+        
+        return result;
     }
     
 }

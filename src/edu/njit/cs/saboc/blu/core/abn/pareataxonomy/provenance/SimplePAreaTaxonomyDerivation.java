@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -46,5 +48,18 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     @Override
     public String getDescription() {
         return String.format("Derived Partial-area Taxonomy (Root: %s)", root.getName());
+    }
+    
+    @Override
+    public JSONArray serializeToJSON() {        
+        JSONArray result = new JSONArray();
+        result.add("SimplePAreaTaxonomyDerivation");
+        
+        //serialzie root
+        JSONObject obj_root = new JSONObject();
+        obj_root.put("ConceptID", root.getID());   
+        result.add(obj_root);
+        
+        return result;
     }
 }

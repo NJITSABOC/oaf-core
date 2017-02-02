@@ -7,6 +7,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -44,4 +46,23 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
     public String getDescription() {
         return String.format("Derived tribal abstraction network");
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("SimpleClusterTANDerivation");
+
+        //serialize patriarchs
+        JSONObject obj_patriarchs = new JSONObject();
+        JSONArray arr = new JSONArray();
+        patriarchs.forEach(node ->{
+            arr.add(node.getID());
+        });        
+        obj_patriarchs.put("ConceptIDs", arr);
+        result.add(obj_patriarchs);
+        
+        return result;
+        
+    }    
+    
 }

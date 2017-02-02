@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -55,4 +57,22 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
     public String getDescription() {
         return String.format("Expanded %s", expandedAggregateNodeRoot.getName());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("ExpandedDisjointAbNDerivation");
+        
+        //serialzie sourceDisjointAbNDerivation
+        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
+        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.add(obj_sourceDisjointAbNDerivation);
+
+        //serialize expandedAggregateNodeRoot
+        JSONObject obj_expandedAggregateNodeRoot = new JSONObject();    
+        obj_expandedAggregateNodeRoot.put("ConceptID", expandedAggregateNodeRoot.getID());
+        result.add(obj_expandedAggregateNodeRoot);
+        
+        return result;       
+    }      
 }

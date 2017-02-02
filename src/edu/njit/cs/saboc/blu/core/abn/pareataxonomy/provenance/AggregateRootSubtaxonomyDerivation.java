@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -69,4 +71,28 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         return sourceTaxonomy.createRootSubtaxonomy(pareas.iterator().next());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("AggregateRootSubtaxonomyDerivation");
+        
+        //serialzie aggregateBase
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.add(obj_base);
+
+        //serialize minBound
+        JSONObject obj_minBound = new JSONObject();
+        obj_minBound.put("Bound", minBound);
+        result.add(obj_minBound);
+        
+        //serialize selectedAggregatePAreaRoot
+        JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
+        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getID());
+        result.add(obj_minBound);
+        
+        return result;
+    }
+    
 }

@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -45,4 +47,23 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     public String getDescription() {
         return String.format("%s (overlapping node)", sourceDisjointAbNDerivation.getDescription());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        result.add("OverlappingNodeDisjointAbNDerivation");
+        
+        //serialzie sourceDisjointAbNDerivation
+        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
+        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.add(obj_sourceDisjointAbNDerivation);
+
+        //serialize overlappingNode
+        JSONObject obj_overlappingNode = new JSONObject();    
+        obj_overlappingNode.put("RootID", overlappingNode.getRoot().getID());
+        result.add(obj_overlappingNode);
+        
+        return result;       
+    }    
+    
 }

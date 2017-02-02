@@ -2,6 +2,8 @@
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -26,4 +28,12 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
     public T getAbstractionNetwork() {
         return abn;
     }
+
+    @Override
+    public JSONArray serializeToJSON() {        
+        JSONArray result = new JSONArray();
+        return result;
+    }
+    
+    
 }

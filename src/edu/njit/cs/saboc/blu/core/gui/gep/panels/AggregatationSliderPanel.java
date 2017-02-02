@@ -78,9 +78,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             try {
                 int x = Integer.parseInt(txt);
                 
-                aggregationSlider.setValue(Integer.min(x, aggregationSlider.getMaximum()));
-
-                setBound(x);
+                setBound(Math.max(1, x));
             } catch (NumberFormatException nfe) {
 
             }
@@ -95,8 +93,6 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     private void setBound(int bound) {
         if (currentBound != bound) {
             aggregationAction.createAndDisplayAggregateAbN(bound);
-            
-            this.currentBound = bound;
         }
     }
     
@@ -169,6 +165,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             int abnBound = ((AggregateAbstractionNetwork)abn).getAggregateBound();
             
             aggregationSlider.setValue(abnBound);
+            
+            this.currentBound = abnBound;
         } else {
             this.initialized = true;
         }

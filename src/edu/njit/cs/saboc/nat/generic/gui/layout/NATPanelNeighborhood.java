@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
+import edu.njit.cs.saboc.nat.generic.gui.layout.NATAdjustableLayout.PanelSide;
 import java.util.HashMap;
 import javax.swing.JSplitPane;
 
@@ -9,7 +10,7 @@ import javax.swing.JSplitPane;
  */
 public class NATPanelNeighborhood {
 
-    private HashMap<NATAdjustableLayout.PanelSide, JSplitPane> paneMap;
+    private final HashMap<PanelSide, JSplitPane> paneMap;
 
     public NATPanelNeighborhood() {
         this.paneMap = new HashMap<>();

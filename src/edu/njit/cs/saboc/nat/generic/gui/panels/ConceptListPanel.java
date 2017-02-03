@@ -3,31 +3,48 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.fields.NATDataField;
-import edu.njit.cs.saboc.nat.generic.gui.filterablelist.BrowserNavigableFilterableList;
+import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableConceptEntry;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.ConceptListNavigateSelectionAction;
+import edu.njit.cs.saboc.nat.generic.gui.filterablelist.renderer.SimpleConceptRenderer;
 import java.util.ArrayList;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class ConceptListPanel extends GenericResultListPanel<Concept> {
+public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
 
     public ConceptListPanel(
-            GenericNATBrowser mainPanel, 
-            NATDataField<ArrayList<Concept>> field, 
-            ConceptBrowserDataSource dataSource,
-            boolean showFilter) {
+            GenericNATBrowserPanel<T> mainPanel, 
+            ConceptBrowserDataSource<T> dataSource,
+            DataRetriever<T, ArrayList<T>> dataRetriever,
+            boolean showFilter,
+            boolean showBorder) {
         
         super(mainPanel, 
-                new BrowserNavigableFilterableList(mainPanel,  new ConceptListNavigateSelectionAction(mainPanel.getFocusConcept())), 
-                field, dataSource,showFilter);
+                dataSource,
+                dataRetriever,
+                new SimpleConceptRenderer<>(),
+                showFilter,
+                showBorder);
+        
+        super.addResultSelectedListener(new ResultSelectedListener<T>() {
+
+            @Override
+            public void resultSelected(T result) {
+                mainPanel.getFocusConceptManager().navigateTo(result);
+            }
+
+            @Override
+            public void noResultSelected() {
+                
+            }
+        });
     }
-    
-    protected Filterable<Concept> createFilterableEntry(Concept item) {
-        return new FilterableConceptEntry(item, dataSource);
+
+    @Override
+    protected Filterable<T> createFilterableEntry(T entry) {
+        return new FilterableConceptEntry(entry, this.getDataSource());
     }
 }

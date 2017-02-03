@@ -16,23 +16,19 @@ import javax.swing.event.EventListenerList;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
-/**
- * A UI for {@link JTabbedPane} that allows a button to be placed on each tab.
- * @author Paul Accisano
- */
 public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
-    private ButtonTabbedPaneUI thisUI = this;
-    private EventListenerList listenerList = new EventListenerList();
+    
+    private final ButtonTabbedPaneUI thisUI = this;
+    private final EventListenerList listenerList = new EventListenerList();
+    
     private boolean recursing = false;
 
-    // A list of our close buttons
-    private ArrayList<TabButton> filterButtons = new ArrayList<TabButton>();
+    private final ArrayList<TabButton> tabButtons = new ArrayList<>();
 
     public void addActionListener(ActionListener l) {
         listenerList.add(ActionListener.class, l);
     }
 
-    // Override to return our LayoutManager
     @Override
     protected LayoutManager createLayoutManager() {
         return new ButtonTabbedPaneLayout();
@@ -42,9 +38,9 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
         return super.getTabInsets(0, tabIndex);
     }
 
-    // Make room for the buttons
     @Override
     protected Insets getTabInsets(int tabPlacement, int tabIndex) {
+        
         if(recursing) {
             return super.getTabInsets(tabPlacement, tabIndex);
         }
@@ -55,7 +51,7 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
 
         ensureFilterButtonsExist();
 
-        TabButton thisFilterButton = filterButtons.get(tabIndex);
+        TabButton thisFilterButton = tabButtons.get(tabIndex);
 
         int bufferX = (thisFilterButton.getPreferredSize().width
                 + thisFilterButton.getPadding().left
@@ -83,7 +79,7 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
             int tabIndex, String title, Icon icon, Rectangle tabRect,
             Rectangle iconRect, Rectangle textRect, boolean isSelected) {
 
-        TabButton thisFilterButton = filterButtons.get(tabIndex);
+        TabButton thisFilterButton = tabButtons.get(tabIndex);
 
         int bufferX = (thisFilterButton.getPreferredSize().width
                 + thisFilterButton.getPadding().left
@@ -108,34 +104,38 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
 
     public JButton getTabFilterButton(int index) {
         ensureFilterButtonsExist();
-        return filterButtons.get(index);
+        return tabButtons.get(index);
     }
 
     void ensureFilterButtonsExist() {
-        // Ensure that there are at least as many filter buttons as tabs
-        while(tabPane.getTabCount() > filterButtons.size()) {
-            filterButtons.add(createFilterTabButton(filterButtons.size()));
+        while(tabPane.getTabCount() > tabButtons.size()) {
+            tabButtons.add(createFilterTabButton(tabButtons.size()));
         }
     }
 
     public JButton [] getFilterTabButtons() {
         ensureFilterButtonsExist();
+        
         JButton [] ret = new JButton[1];
-        ret = filterButtons.toArray(ret);
+        ret = tabButtons.toArray(ret);
+        
         return ret;
     }
 
     private class ButtonTabbedPaneLayout extends TabbedPaneLayout {
+        
         @Override
         public void layoutContainer(Container parent) {
             super.layoutContainer(parent);
 
             Rectangle rect = new Rectangle();
+            
             int i;
+            
             for(i = 0; i < tabPane.getTabCount(); i++) {
                 rect = getTabBounds(i, rect);
 
-                TabButton filterButton = filterButtons.get(i);
+                TabButton filterButton = tabButtons.get(i);
                 Dimension d = filterButton.getPreferredSize();
                 Insets padding = filterButton.getPadding();
 
@@ -144,17 +144,16 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
                 tabPane.add(filterButton);
             }
 
-            for(; i < filterButtons.size(); i++) {
+            for(; i < tabButtons.size(); i++) {
                 //remove any extra close buttons
-                tabPane.remove(filterButtons.get(i));
+                tabPane.remove(tabButtons.get(i));
             }
         }
     }
 
-    // Implement UIResource so that when we add this button to the
-    // JTabbedPane, it doesn't try to make a tab for it!
     protected class TabButton extends JButton implements UIResource {
-        private int index;
+        
+        private final int index;
         private Insets padding = new Insets(0, 0, 0, 0);
 
         public TabButton(int index) {
@@ -192,6 +191,7 @@ public class ButtonTabbedPaneUI extends MetalTabbedPaneUI {
                     (listenerList.getListeners(ActionListener.class));
 
             ActionEvent e2 = new ActionEvent(thisUI, index, e.getActionCommand());
+            
             for(ActionListener l : listeners) {
                 l.actionPerformed(e2);
             }

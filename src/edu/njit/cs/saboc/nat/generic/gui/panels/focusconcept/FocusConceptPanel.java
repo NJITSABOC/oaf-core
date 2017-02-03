@@ -1,20 +1,18 @@
-package edu.njit.cs.saboc.nat.generic.gui.panels;
+package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.IconManager;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.nat.generic.data.BrowserSearchResult;
+import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.History;
-import edu.njit.cs.saboc.nat.generic.NATOptions;
+import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
+import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
+import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
@@ -42,14 +40,14 @@ import javax.swing.undo.UndoManager;
 /**
  * The center panel, which displays the information about the Focus
  * Concept.
+ * @param <T>
  */
-public class FocusConceptPanel extends BaseNavPanel {
+public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
+    
     private UndoManager undoManager;
     private Document document;
     private JEditorPane jtf;
     
-    private boolean pending = false;
-
     private JButton backButton;
     private JButton forwardButton;
     
@@ -59,97 +57,80 @@ public class FocusConceptPanel extends BaseNavPanel {
     private JButton acceptButton;
     private JButton cancelButton;
 
-    private History history;
+    private FocusConceptHistory<T> history;
     
     private JPanel optionsPanel;
     
     private JPanel focusConceptPanel;
     
     private ArrayList<JButton> optionButtons = new ArrayList<>();
+    
+    private boolean pending = false;
 
     public FocusConceptPanel(
-            GenericNATBrowser mainPanel, 
-            ConceptBrowserDataSource dataSource) {
+            GenericNATBrowserPanel<T> mainPanel, 
+            ConceptBrowserDataSource<T> dataSource) {
         
         super(mainPanel, dataSource);
-        
-        NATOptions options = mainPanel.getOptions();
 
-        Color bgColor = mainPanel.getNeighborhoodBGColor();
         setLayout(new BorderLayout());
-        setBackground(bgColor);
-        focusConcept.addDisplayPanel(mainPanel.getFocusConcept().COMMON_DATA_FIELDS.CONCEPT, this);
-
-        history = focusConcept.getHistory();
+        
+        history = mainPanel.getFocusConceptManager().getHistory();
 
         undoButton = new JButton();
-        undoButton.setBackground(bgColor);
         undoButton.setPreferredSize(new Dimension(24, 24));
         undoButton.setMaximumSize(new Dimension(24, 24));
         undoButton.setAlignmentY(1);
         undoButton.setToolTipText("Undo Text");
-        undoButton.setIcon(IconManager.getIconManager().getIcon("undo.png"));
-        undoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae){
-                try{
-                    if(jtf.isEditable()){
-                        undoManager.undo();
-                    }
+        undoButton.setIcon(ImageManager.getImageManager().getIcon("undo.png"));
+        
+        undoButton.addActionListener( (ae) -> {
+            try{
+                if(jtf.isEditable()){
+                    undoManager.undo();
                 }
-                catch(CannotUndoException cue){
-
-                }
+            }
+            catch(CannotUndoException cue){
+                
             }
         });
 
         redoButton = new JButton();
-        redoButton.setBackground(bgColor);
         redoButton.setPreferredSize(new Dimension(24, 24));
         redoButton.setMaximumSize(new Dimension(24, 24));
         redoButton.setAlignmentY(1);
         redoButton.setToolTipText("Redo Text");
-        redoButton.setIcon(IconManager.getIconManager().getIcon("redo.png"));
-        redoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae){
-                try{
-                    undoManager.redo();
-                }
-                catch(CannotRedoException cre){
-
-                }
+        redoButton.setIcon(ImageManager.getImageManager().getIcon("redo.png"));
+        redoButton.addActionListener( (ae) -> {
+            try{
+                undoManager.redo();
+            }
+            catch(CannotRedoException cre){
+                
             }
         });
 
         acceptButton = new JButton();
-        acceptButton.setBackground(bgColor);
         acceptButton.setPreferredSize(new Dimension(24, 24));
         acceptButton.setMaximumSize(new Dimension(24, 24));
         acceptButton.setAlignmentY(1);
         acceptButton.setToolTipText("Accept Change");
-        acceptButton.setIcon(IconManager.getIconManager().getIcon("check.png"));
-        acceptButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae){
-                setConcept();
-            }
+        acceptButton.setIcon(ImageManager.getImageManager().getIcon("check.png"));
+        acceptButton.addActionListener( (ae) -> {
+            setConcept();
         });
 
         cancelButton = new JButton();
-        cancelButton.setBackground(bgColor);
         cancelButton.setPreferredSize(new Dimension(24, 24));
         cancelButton.setMaximumSize(new Dimension(24, 24));
         cancelButton.setAlignmentY(1);
         cancelButton.setToolTipText("Cancel Change");
-        cancelButton.setIcon(IconManager.getIconManager().getIcon("cross.png"));
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae){
-                if(!pending) {
-                    editPanel.setVisible(false);
-                    display();
-                }
+        cancelButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
+        cancelButton.addActionListener((ae) -> {
+            
+            if (!pending) {
+                editPanel.setVisible(false);
+                display();
             }
         });
 
@@ -158,74 +139,73 @@ public class FocusConceptPanel extends BaseNavPanel {
         JPanel tempPanel = new JPanel();
 
         editPanel.setVisible(false);
-        editPanel.setBackground(bgColor);
-        tempPanel.setBackground(bgColor);
+        
         tempPanel.add(undoButton);
         tempPanel.add(redoButton);
         tempPanel.add(acceptButton);
         tempPanel.add(cancelButton);
 
-        editPanel.add(new JLabel("     Enter Concept Name (exactly) or Unique ID:"),
-                BorderLayout.WEST);
+        editPanel.add(new JLabel("Search by Name (exact) or ID:"), BorderLayout.WEST);
         editPanel.add(tempPanel, BorderLayout.EAST);
 
         focusConceptPanel = new JPanel();
         focusConceptPanel.setLayout(new BorderLayout());
-        focusConceptPanel.setBackground(bgColor);
-        
-        focusConceptPanel.setBorder(BaseNavPanel.createTitledLineBorder("Focus Concept", options.getFontSize()));
-       
+
         backButton = new JButton("Back");
         forwardButton = new JButton("Forward");
 
         this.optionsPanel = new JPanel();
         this.optionsPanel.setOpaque(false);
         
-        backButton.setIcon(IconManager.getIconManager().getIcon("left-arrow.png"));
-        backButton.setBackground(mainPanel.getNeighborhoodBGColor());
-        backButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(history.getPosition() > 0) {
-                    history.minusPosition();
-                    focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
-
-                    forwardButton.setEnabled(true);
-
-                    if(history.getPosition() == 0) {
-                        backButton.setEnabled(false);
-                    }
+        backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
+        backButton.addActionListener((ae) -> {
+            if(history.getPosition() > 0) {
+                history.minusPosition();
+                
+                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept());
+                
+                forwardButton.setEnabled(true);
+                
+                if(history.getPosition() == 0) {
+                    backButton.setEnabled(false);
                 }
             }
         });
 
-        forwardButton.setIcon(IconManager.getIconManager().getIcon("right-arrow.png"));
-        forwardButton.setBackground(mainPanel.getNeighborhoodBGColor());
-        forwardButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(history.getPosition() < (history.getHistoryList().size() - 1)) {
-                    history.plusPosition();
-                    focusConcept.navigate(history.getHistoryList().get(history.getPosition()));
-
-                    backButton.setEnabled(true);
-
-                    if(history.getPosition() == history.getHistoryList().size() - 1) {
-                        forwardButton.setEnabled(false);
-                    }
+        forwardButton.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
+        forwardButton.addActionListener((ae) -> {
+            
+            if(history.getPosition() < (history.getHistory().size() - 1)) {
+                history.plusPosition();
+                
+                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept());
+                
+                backButton.setEnabled(true);
+                
+                if(history.getPosition() == history.getHistory().size() - 1) {
+                    forwardButton.setEnabled(false);
                 }
             }
         });
 
         jtf = new JEditorPane() {
+            
             @Override
             public String getToolTipText(MouseEvent evt) {
+                
                 if(!editPanel.isVisible()) {
-                    Rectangle conceptRect = new Rectangle(jtf.getX(),
-                            jtf.getY(),jtf.getWidth(),jtf.getPreferredSize().height);
+                    
+                    Rectangle conceptRect = new Rectangle(
+                            jtf.getX(),
+                            jtf.getY(),
+                            jtf.getWidth(),
+                            jtf.getPreferredSize().height);
+                    
                     if(!conceptRect.contains(evt.getPoint())) {
                         return null;
                     }
 
-                    return focusConcept.getActiveFocusConcept().getName();
+                    return mainPanel.getFocusConceptManager().getActiveFocusConcept().getName();
                 }
 
                 return null;
@@ -233,9 +213,11 @@ public class FocusConceptPanel extends BaseNavPanel {
 
             @Override
             public Point getToolTipLocation(MouseEvent evt) {
+                
                 if(getToolTipText(evt) == null) {
                     return null;
                 }
+                
                 return new Point(evt.getX(), evt.getY() + 21);
             }
         };
@@ -269,11 +251,8 @@ public class FocusConceptPanel extends BaseNavPanel {
         pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         JPanel alignmentPanel = new JPanel(new BorderLayout());
-        alignmentPanel.setBackground(mainPanel.getNeighborhoodBGColor());
         alignmentPanel.add(backButton, BorderLayout.WEST);
         alignmentPanel.add(forwardButton, BorderLayout.EAST);
-        ImageIcon arrow = IconManager.getIconManager().getIcon("arrow.gif");        
-        
         alignmentPanel.add(optionsPanel, BorderLayout.CENTER);
 
         focusConceptPanel.add(editPanel, BorderLayout.NORTH);
@@ -285,24 +264,20 @@ public class FocusConceptPanel extends BaseNavPanel {
         jtf.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                
                 if(!pending) {
                     if(e.getKeyCode() == KeyEvent.VK_ENTER) {
                         setConcept();
                         e.consume();
-                    }
-                    else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != InputEvent.CTRL_DOWN_MASK
+                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != InputEvent.CTRL_DOWN_MASK
                             && !e.isActionKey() && !jtf.isEditable()) {
                         openEditorPane();
-                    }
-                    //this happens before the default paste behavior, so the paste
-                    //will occur into an editable area on its own
-                    else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
+                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
                             && e.getKeyCode() == KeyEvent.VK_V
                             && !jtf.isEditable()) {
                         
                         openEditorPane();
-                    }
-                    else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
+                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
                             && e.getKeyCode() == KeyEvent.VK_Z
                             && jtf.isEditable()) {
                         try{
@@ -311,8 +286,7 @@ public class FocusConceptPanel extends BaseNavPanel {
                         catch(CannotUndoException cue){
 
                         }
-                    }
-                    else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
+                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
                             && e.getKeyCode() == KeyEvent.VK_Y
                             && jtf.isEditable()) {
                         try{
@@ -321,9 +295,9 @@ public class FocusConceptPanel extends BaseNavPanel {
                         catch(CannotRedoException cre){
 
                         }
-                    }
-                    else if(e.getKeyCode() == KeyEvent.VK_ESCAPE
+                    } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE
                             && jtf.isEditable()) {
+                        
                         if(!pending) {
                             editPanel.setVisible(false);
                             display();
@@ -334,13 +308,13 @@ public class FocusConceptPanel extends BaseNavPanel {
         });
 
         jtf.addMouseListener(new MouseAdapter() {
+            
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(!pending && e.getClickCount() == 2) {
                     if( !jtf.isEditable() ){
                         openEditorPane();
-                    }
-                    else{
+                    } else{
                         editPanel.setVisible(false);
                         display();
                     }
@@ -349,17 +323,23 @@ public class FocusConceptPanel extends BaseNavPanel {
         });
         
         jtf.addFocusListener(new FocusAdapter() {
-        	@Override
-        	public void focusLost(FocusEvent e) {
-        		if (jtf.isEditable()) {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (jtf.isEditable()) {
                     editPanel.setVisible(false);
+                    
                     display();
-        		}
-        	}
-		});
+                }
+            }
+        });
+        
+        
+        mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
+            this.display();
+        });
     }
 
-    private void setConcept(){
+    private void setConcept() {
         document = null;
         if(jtf.isEditable()) {
             doConceptChange(jtf.getText());
@@ -369,22 +349,17 @@ public class FocusConceptPanel extends BaseNavPanel {
         display();
     }
     
-    public void addOptionButton(JButton button) {
-        button.setBackground(getMainPanel().getNeighborhoodBGColor());
-        
-        button.setFont(button.getFont().deriveFont(Font.BOLD, getMainPanel().getOptions().getFontSize()));
+    public void addOptionButton(JButton button) {        
         optionsPanel.add(button);
         optionButtons.add(button);
     }
 
     public void display() {
-        NATOptions options = getMainPanel().getOptions();
-        
-        // When the focus concept is changed, hide the edit panel.
         editPanel.setVisible(false);
+        
         document = null;
 
-        Concept fc = focusConcept.getActiveFocusConcept();
+        T fc = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
         String conceptString = String.format("%s\n%s", 
                 fc.getName(), 
@@ -396,57 +371,59 @@ public class FocusConceptPanel extends BaseNavPanel {
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);
         jtf.setEditable(false);
+        
         undoManager.discardAllEdits();
     }
 
     private void doConceptChange(String str) {
         
-        Optional<Concept> c = dataSource.getConceptFromId(str);
+        FocusConceptManager<T> focusConceptManager = getMainPanel().getFocusConceptManager();
+        
+        Optional<T> concept = getMainPanel().getDataSource().getOntology().getConceptFromID(str);
 
-        if (c.isPresent()) {
-            focusConcept.navigate(c.get());
+        if (concept.isPresent()) {
+            getMainPanel().getFocusConceptManager().navigateTo(concept.get());
         }
 
-        ArrayList<BrowserSearchResult> results = dataSource.searchExact(str);
+        ArrayList<NATConceptSearchResult<T>> results = getMainPanel().getDataSource().searchExact(str);
 
         if(results.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this, "The concept '" + str + "' was not found.\n" +
                     "You may want to try the Search Panel.",
                     "Concept Not Found", JOptionPane.ERROR_MESSAGE);
-        }
-        else if(results.size() == 1) {
-            focusConcept.navigate(results.get(0).getConcept());
-        }
-        else {
+        } else if(results.size() == 1) {
+            focusConceptManager.navigateTo(results.get(0).getConcept());
+        } else {
             Object sel = JOptionPane.showInputDialog(this,
                     "'" + str + "' is a synonym of more than one Concept.\n" +
                     "Which concept did you mean?", "Search Ambiguity",
-                    JOptionPane.QUESTION_MESSAGE, null, results.toArray(), null);
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, 
+                    results.toArray(), 
+                    null);
 
             if(sel != null) {
-                focusConcept.navigate(((BrowserSearchResult)sel).getConcept());
+                focusConceptManager.navigateTo(((NATConceptSearchResult<T>)sel).getConcept());
             }
         }
     }
 
-    @Override
-    public void dataPending() {
-        editPanel.setEnabled(false);
-    }
-
     public void openEditorPane() {
-        Concept activeFC = focusConcept.getActiveFocusConcept();
+        T activeFC = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
         jtf.setContentType("text/plain");
         jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
         jtf.setText(activeFC.getName());
         jtf.selectAll();
         jtf.setEditable(true);
-        editPanel.setVisible(true);
         jtf.getCaret().setVisible(true);
+        
+        editPanel.setVisible(true);
+        
         document = jtf.getDocument();
         document.addUndoableEditListener(undoManager);
+        
         updateUndoButtons();
     }
 
@@ -456,7 +433,7 @@ public class FocusConceptPanel extends BaseNavPanel {
         if(history.getPosition() > 0) {
             backButton.setEnabled(true);
             
-            Concept prev = history.getHistoryList().get(history.getPosition() - 1);
+            T prev = history.getHistory().get(history.getPosition() - 1).getConcept();
             
             backButton.setToolTipText(prev.getName());
         } else {
@@ -464,23 +441,21 @@ public class FocusConceptPanel extends BaseNavPanel {
             backButton.setToolTipText(null);
         }
         
-        if(history.getPosition() < (history.getHistoryList().size() - 1)) {
+        if(history.getPosition() < (history.getHistory().size() - 1)) {
             forwardButton.setEnabled(true);
             
-            Concept prev = history.getHistoryList().get(history.getPosition() + 1);
+            T next = history.getHistory().get(history.getPosition() + 1).getConcept();
             
-            
-            forwardButton.setToolTipText(prev.getName());
+            forwardButton.setToolTipText(next.getName());
         } else {
             forwardButton.setEnabled(false);
             forwardButton.setToolTipText(null);
         }
     }
     
+    @Override
     protected void setFontSize(int fontSize) {
         
-        focusConceptPanel.setBorder(BaseNavPanel.createTitledLineBorder("Focus Concept", fontSize));
-
         if (editPanel.isEnabled()) {
             jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
         } else {
@@ -495,25 +470,16 @@ public class FocusConceptPanel extends BaseNavPanel {
         });
     }
 
-    @Override
-    public void dataReady() {
-        display();
-        validateHistoryButtons();
-    }
-
-    public void dataEmpty() {
-        jtf.setContentType("text/plain");
-        editPanel.setVisible(false);
-        jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
-        jtf.setText("Please enter a valid concept.");
-    }
-    
-    public void focusConceptChanged() {
-
-    }
-
     public void updateUndoButtons() {
         undoButton.setEnabled(undoManager.canUndo());
         redoButton.setEnabled(undoManager.canRedo());
+    }
+    
+    public void dataEmpty() {
+        jtf.setContentType("text/plain");
+        
+        editPanel.setVisible(false);
+        jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
+        jtf.setText("Please enter a valid concept.");
     }
 }

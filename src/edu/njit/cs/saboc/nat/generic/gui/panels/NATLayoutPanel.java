@@ -1,31 +1,23 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowser;
-import edu.njit.cs.saboc.nat.generic.NATOptions;
-import edu.njit.cs.saboc.nat.generic.gui.listeners.NATOptionsAdapter;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public abstract class NATLayoutPanel extends JPanel {
+public abstract class NATLayoutPanel<T extends Concept> extends JPanel {
     
-    private final GenericNATBrowser mainPanel;
+    private final GenericNATBrowserPanel<T> mainPanel;
     
-    public NATLayoutPanel(GenericNATBrowser mainPanel) {
+    public NATLayoutPanel(GenericNATBrowserPanel<T> mainPanel) {
         this.mainPanel = mainPanel;
-        
-        NATOptions options = mainPanel.getOptions();
-        
-        options.addOptionsListener(new NATOptionsAdapter() {
-            public void fontSizeChanged(int fontSize) {
-                setFontSize(fontSize);
-            }
-        });
     }
     
-    public GenericNATBrowser getMainPanel() {
+    public GenericNATBrowserPanel<T> getMainPanel() {
         return mainPanel;
     }
     

@@ -60,7 +60,7 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
 
         //serialize overlappingNode
         JSONObject obj_overlappingNode = new JSONObject();    
-        obj_overlappingNode.put("RootID", overlappingNode.getRoot().getID());
+        obj_overlappingNode.put("RootID", overlappingNode.getRoot().getIDAsString());
         result.add(obj_overlappingNode);
         
         return result;       

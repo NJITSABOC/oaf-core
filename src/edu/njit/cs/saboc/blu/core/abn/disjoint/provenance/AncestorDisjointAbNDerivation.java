@@ -66,7 +66,7 @@ public class AncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends D
 
         //serialize disjointNodeRoot
         JSONObject obj_disjointNodeRoot = new JSONObject();    
-        obj_disjointNodeRoot.put("ConceptID", disjointNodeRoot.getID());
+        obj_disjointNodeRoot.put("ConceptID", disjointNodeRoot.getIDAsString());
         result.add(obj_disjointNodeRoot);
         
         return result;       

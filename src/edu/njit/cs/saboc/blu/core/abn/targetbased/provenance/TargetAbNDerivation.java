@@ -88,17 +88,17 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
         
         //serialzie sourceHierarchyRoot
         JSONObject obj_sourceHierarchyRoot = new JSONObject();
-        obj_sourceHierarchyRoot.put("SourceID", sourceHierarchyRoot.getID());   
+        obj_sourceHierarchyRoot.put("SourceID", sourceHierarchyRoot.getIDAsString());   
         result.add(obj_sourceHierarchyRoot);
 
         //serialize propertyType
         JSONObject obj_propertyType = new JSONObject();
-        obj_propertyType.put("PropertyType", propertyType.getID());
+        obj_propertyType.put("PropertyType", propertyType.getIDAsString());
         result.add(obj_propertyType);
         
         //serialize targetHierarchyRoot
         JSONObject obj_targetHierarchyRoot = new JSONObject();
-        obj_targetHierarchyRoot.put("TargetID", targetHierarchyRoot.getID());
+        obj_targetHierarchyRoot.put("TargetID", targetHierarchyRoot.getIDAsString());
         result.add(obj_targetHierarchyRoot);
         
         return result;

@@ -71,7 +71,7 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
         
         //serialzie aggregateClusterRoot
         JSONObject obj_aggregateClusterRoot = new JSONObject();
-        obj_aggregateClusterRoot.put("ConceptID", aggregateClusterRoot.getID());   
+        obj_aggregateClusterRoot.put("ConceptID", aggregateClusterRoot.getIDAsString());   
         result.add(obj_aggregateClusterRoot);
         
         return result;

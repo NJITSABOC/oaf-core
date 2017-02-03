@@ -67,7 +67,7 @@ public class AncestorSubTANDerivation extends ClusterTANDerivation
         
         //serialzie clusterRootConcept
         JSONObject obj_clusterRootConcept = new JSONObject();
-        obj_clusterRootConcept.put("ConceptID", clusterRootConcept.getID());   
+        obj_clusterRootConcept.put("ConceptID", clusterRootConcept.getIDAsString());   
         result.add(obj_clusterRootConcept);
         
         return result;

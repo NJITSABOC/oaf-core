@@ -65,7 +65,7 @@ public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         JSONObject obj_selectedProperties = new JSONObject();
         JSONArray propertyids = new JSONArray();
         selectedProperties.forEach(sp -> {
-            propertyids.add(sp.getID());
+            propertyids.add(sp.getIDAsString());
         }
         );
         obj_selectedProperties.put("PropertyIDs", propertyids);

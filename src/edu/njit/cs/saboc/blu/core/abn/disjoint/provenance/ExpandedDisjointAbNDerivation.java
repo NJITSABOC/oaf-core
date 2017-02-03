@@ -70,7 +70,7 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
 
         //serialize expandedAggregateNodeRoot
         JSONObject obj_expandedAggregateNodeRoot = new JSONObject();    
-        obj_expandedAggregateNodeRoot.put("ConceptID", expandedAggregateNodeRoot.getID());
+        obj_expandedAggregateNodeRoot.put("ConceptID", expandedAggregateNodeRoot.getIDAsString());
         result.add(obj_expandedAggregateNodeRoot);
         
         return result;       

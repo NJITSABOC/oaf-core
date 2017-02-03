@@ -80,7 +80,7 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
         JSONObject obj_sourceNodeRoots = new JSONObject();
         JSONArray arr = new JSONArray();
         sourceNodeRoots.forEach(root ->{
-            arr.add(root.getID());
+            arr.add(root.getIDAsString());
         });        
         obj_sourceNodeRoots.put("RootIDs", arr);
         result.add(obj_sourceNodeRoots);

@@ -62,7 +62,7 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
         JSONObject obj_subset = new JSONObject();
         JSONArray arr = new JSONArray();
         subset.forEach(node ->{
-            arr.add(node.getRoot().getID());
+            arr.add(node.getRoot().getIDAsString());
         });        
         obj_subset.put("RootIDs", arr);
         result.add(obj_subset);

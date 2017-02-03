@@ -56,7 +56,7 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
         JSONObject obj_patriarchs = new JSONObject();
         JSONArray arr = new JSONArray();
         patriarchs.forEach(node ->{
-            arr.add(node.getID());
+            arr.add(node.getIDAsString());
         });        
         obj_patriarchs.put("ConceptIDs", arr);
         result.add(obj_patriarchs);

@@ -72,7 +72,7 @@ public class TANFromSinglyRootedNodeDerivation <
         
         //serialzie nodeRoot
         JSONObject obj_nodeRoot = new JSONObject();
-        obj_nodeRoot.put("RootID", nodeRoot.getID());   
+        obj_nodeRoot.put("RootID", nodeRoot.getIDAsString());   
         result.add(obj_nodeRoot);
         
         return result;

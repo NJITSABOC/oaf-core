@@ -72,7 +72,7 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
 
         //serialize aggregatePAreaRoot
         JSONObject obj_aggregatePAreaRoot = new JSONObject();
-        obj_aggregatePAreaRoot.put("ConceptID", aggregatePAreaRoot.getID());
+        obj_aggregatePAreaRoot.put("ConceptID", aggregatePAreaRoot.getIDAsString());
         result.add(obj_aggregatePAreaRoot);
         
         return result;

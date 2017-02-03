@@ -66,7 +66,7 @@ public class RootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         //serialzie pareaRootConcept
         JSONObject obj_pareaRootConcept = new JSONObject();
-        obj_pareaRootConcept.put("ConceptID", pareaRootConcept.getID());   
+        obj_pareaRootConcept.put("ConceptID", pareaRootConcept.getIDAsString());   
         result.add(obj_pareaRootConcept);
         
         return result;

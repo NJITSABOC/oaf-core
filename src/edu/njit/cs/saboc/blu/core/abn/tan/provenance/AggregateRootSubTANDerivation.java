@@ -89,7 +89,7 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         
         //serialize selectedAggregateClusterRoot
         JSONObject obj_selectedAggregateClusterRoot = new JSONObject();
-        obj_selectedAggregateClusterRoot.put("ConceptID", selectedAggregateClusterRoot.getID());
+        obj_selectedAggregateClusterRoot.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
         result.add(obj_selectedAggregateClusterRoot);
         
         return result;

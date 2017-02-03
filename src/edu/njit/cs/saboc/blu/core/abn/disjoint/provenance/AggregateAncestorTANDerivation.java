@@ -93,7 +93,7 @@ public class AggregateAncestorTANDerivation<T extends SinglyRootedNode> extends 
         
         //serialize selectedAggregatePAreaRoot
         JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
-        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getID());
+        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
         result.add(obj_selectedAggregatePAreaRoot);
         
         return result;

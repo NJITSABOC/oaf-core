@@ -54,12 +54,12 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     public JSONArray serializeToJSON() {        
         JSONArray result = new JSONArray();
         result.add("SimplePAreaTaxonomyDerivation");
-        
         //serialzie root
         JSONObject obj_root = new JSONObject();
-        obj_root.put("ConceptID", root.getID());   
+        obj_root.put("ConceptID", root.getIDAsString());   
         result.add(obj_root);
         
         return result;
     }
+    
 }

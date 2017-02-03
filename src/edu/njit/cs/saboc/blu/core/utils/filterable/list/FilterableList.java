@@ -15,7 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -23,7 +22,6 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
 import javax.swing.ToolTipManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -39,32 +38,25 @@ import javax.swing.event.DocumentListener;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class FilterableList extends JPanel {
+public class FilterableList<T> extends JPanel {
     
     private final JTextField filterField = new JTextField();
     private final JButton closeButton = new JButton();
     
-    private final DefaultListModel pleaseWaitModel = new DefaultListModel();
-    
-    private final DefaultListModel dataEmptyModel = new DefaultListModel();
-    
-    private final DefaultListModel noResultModel = new DefaultListModel();
-    
-    
-    
-    
     private final FilterableListModel entryModel = new FilterableListModel();
     
-    private final JList list;
+    private final JList<Filterable<T>> list;
+    
     private final JPanel filterPanel = new JPanel();
 
     public FilterableList() {
 
         setLayout(new BorderLayout());
 
-        list = new JList() {
-            // This method is called as the cursor moves within the list.
+        this.list = new JList<Filterable<T>>() {
+            
             @Override
             public String getToolTipText(MouseEvent evt) {
                 if(getModel() != entryModel) {
@@ -75,13 +67,14 @@ public class FilterableList extends JPanel {
 
                 if(getCellBounds(index, index) == null
                         || !getCellBounds(index, index).contains(evt.getPoint())) {
+                    
                     return null;
                 }
 
                 if(index > -1) {
                     Filterable obj = entryModel.get(index);
                     
-                    return obj.getToolTipText();
+                    return obj.getToolTipText(); 
                 }
 
                 return null;
@@ -96,7 +89,7 @@ public class FilterableList extends JPanel {
             }
         };
         
-        list.setModel(entryModel);
+        this.list.setModel(entryModel);
         
         Action copyAction = new AbstractAction() {
 
@@ -124,11 +117,6 @@ public class FilterableList extends JPanel {
         InputMap inputMap = list.getInputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), "Copy");
 
-
-        pleaseWaitModel.addElement("Please wait...");
-        dataEmptyModel.addElement(" ");
-        noResultModel.addElement("No results found...");
-        
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
 
@@ -173,7 +161,8 @@ public class FilterableList extends JPanel {
             }
         });
         
-        list.addKeyListener(new KeyAdapter() {
+        this.list.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!e.isControlDown() && !e.isAltDown()) {
@@ -182,39 +171,44 @@ public class FilterableList extends JPanel {
             }
         });
 
-        list.addMouseListener(new MouseAdapter() {
+        this.list.addMouseListener(new MouseAdapter() {
             private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
 
+            @Override
             public void mouseEntered(MouseEvent me) {
+                
                 ToolTipManager.sharedInstance().setDismissDelay(60000);
             }
 
+            @Override
             public void mouseExited(MouseEvent me) {
                 ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
             }
         });
 
+        this.toggleFilterPanel();
     }
-
+    
+    public void setListCellRenderer(ListCellRenderer<Filterable<T>> renderer) {
+        this.list.setCellRenderer(renderer);
+    }
+    
     public void showPleaseWait() {
-        list.setModel(pleaseWaitModel);
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
 
     public void showDataEmpty() {
-        list.setModel(dataEmptyModel);
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
     
     public void showNoResults() {
-        list.setModel(noResultModel);
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
     }
 
-    public void setContents(Collection<? extends Filterable> content) {
+    public void setContents(ArrayList<? extends Filterable> content) {
         entryModel.changeFilter("");
         
         filterPanel.setVisible(false);
@@ -236,7 +230,7 @@ public class FilterableList extends JPanel {
     }
 
     /*opens the filter panell and uses a KeyEvent if openned by typing */
-    public void setFilterPanelOpen(boolean open, KeyEvent e) {
+    public final void setFilterPanelOpen(boolean open, KeyEvent e) {
         if(open) {
             if(!filterPanel.isVisible()) {
                 filterPanel.setVisible(true);
@@ -264,13 +258,13 @@ public class FilterableList extends JPanel {
         list.removeMouseListener(listener);
     }
     
-    public List<Filterable> getSelectedValues() {
+    public List<Filterable<T>> getSelectedValues() {
         
         if(list.getSelectedIndices().length == 0) {
-            return (List<Filterable>)Collections.EMPTY_LIST;
+            return Collections.EMPTY_LIST;
         }
         
-        ArrayList<Filterable> selectedItems = new ArrayList<>();
+        ArrayList<Filterable<T>> selectedItems = new ArrayList<>();
         
         int [] selectedIndices = list.getSelectedIndices();
         

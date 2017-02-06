@@ -27,8 +27,9 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
         
         
         MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
-        
-        displayPanel.addWidget(minimapPanel);
+        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2 || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2){
+            displayPanel.addWidget(minimapPanel);
+        }
     }
 
     @Override

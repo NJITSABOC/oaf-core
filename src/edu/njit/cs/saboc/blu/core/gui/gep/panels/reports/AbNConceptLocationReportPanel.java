@@ -22,6 +22,10 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+//import javax.swing.JEditorPane;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -65,18 +69,24 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
             }
         };
         
-        JPanel loadPanel = new JPanel(new BorderLayout());
+        JPanel loadPanel = new JPanel(new BorderLayout(20,10));
         
-        JLabel loadLabel = new JLabel(String.format("<html>Select a file that contains %s IDs to find where the %s are summarized in the %s.", 
+        JLabel loadLabel = new JLabel(String.format("<html>Copy and paste %s IDs in the box to find where the %s are summarized in the %s.", 
                 config.getTextConfiguration().getConceptTypeName(false).toLowerCase(),
                 config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
                 config.getTextConfiguration().getAbNTypeName(false)));
         
         loadPanel.add(loadLabel, BorderLayout.CENTER);
         
-        JButton loadBtn = new JButton(String.format("Load %s IDs from File", config.getTextConfiguration().getConceptTypeName(false)));
+        //NEW ADDITIONS -------------------------
+        JTextArea textArea = new JTextArea(4,3);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        
+        //---------------------------------------
+        
+        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getConceptTypeName(false)));
         loadBtn.addActionListener( (ae) -> {
-            ArrayList<String> loadedIds = loadConceptIdentifiers();
+            ArrayList<String> loadedIds = loadConceptIdentifiers(textArea.getText());
 
             if(!loadedIds.isEmpty()) {
                 Set<Concept> concepts = factory.getConceptsFromIds(loadedIds);
@@ -114,10 +124,20 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         loadPanel.add(loadBtn, BorderLayout.EAST);
         
         this.add(loadPanel, BorderLayout.NORTH);
-        this.add(conceptReportList, BorderLayout.SOUTH);
+        
+        //NEW ADDITIONS -------------------------
+        JPanel twoPanel = new JPanel(new BorderLayout(5,5));
+        
+        twoPanel.add(scrollPane, BorderLayout.CENTER);
+        twoPanel.add(conceptReportList, BorderLayout.SOUTH);
+        
+        loadPanel.add(twoPanel, BorderLayout.SOUTH);
+        
+        //---------------------------------------
+        
     }
     
-    private ArrayList<String> loadConceptIdentifiers() {
+    /*private ArrayList<String> loadConceptIdentifiers() {
         Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
         
         if(idFile.isPresent()) {
@@ -139,6 +159,16 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         }
         
         return new ArrayList<>();
+    }*/
+    private ArrayList<String> loadConceptIdentifiers(String text) {
+        String[] lines = text.split("\n");
+        ArrayList<String> conceptIds = new ArrayList<>();
+        
+        for(int i = 0; i < lines.length; i++)
+            conceptIds.add(lines[i].trim().toLowerCase());
+        
+        return conceptIds;
+        
     }
     
     public void displayAbNReport(AbstractionNetwork abn) {

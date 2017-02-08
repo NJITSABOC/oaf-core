@@ -6,6 +6,7 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public interface OntologySearcher<T extends Concept> {
     public Set<T> searchStarting(String query);

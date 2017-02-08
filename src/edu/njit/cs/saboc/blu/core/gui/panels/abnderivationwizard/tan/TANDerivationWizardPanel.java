@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.GenericRootSelectionOptionsPanel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.BorderLayout;
@@ -27,7 +28,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         public void deriveTribalAbstractionNetwork(Set<Concept> patriarchs);
     }
     
-    private final RootSelectionPanel<ClusterTribalAbstractionNetwork> rootSelectionPanel;
+    private final BaseRootSelectionOptionsPanel<ClusterTribalAbstractionNetwork> rootSelectionPanel;
     
     private final TANPatriarchListPanel selectedPatriarchPanel;
     
@@ -37,7 +38,9 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     
     private final JPanel optionsPanel;
         
-    public TANDerivationWizardPanel(TANConfiguration config, DeriveTANAction derivationAction) {
+    public TANDerivationWizardPanel(
+            TANConfiguration config, 
+            DeriveTANAction derivationAction) {
         
         this.setLayout(new BorderLayout());
         
@@ -46,7 +49,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
                 
-        this.rootSelectionPanel = new RootSelectionPanel<>(config);
+        this.rootSelectionPanel = new GenericRootSelectionOptionsPanel(config);
         
         this.rootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("Select Tribal Abstraction Network Root %s", 

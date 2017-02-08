@@ -6,11 +6,12 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel.RootSelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.SubhierarchySearcher;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.InheritablePropertySelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.InheritablePropertySelectionPanel.SelectionType;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.GenericRootSelectionOptionsPanel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.BorderLayout;
@@ -45,7 +46,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
                 Hierarchy<Concept> targetHierarchy);
     }
     
-    private final RootSelectionPanel<TargetAbstractionNetwork> sourceRootSelectionPanel;
+    private final BaseRootSelectionOptionsPanel<TargetAbstractionNetwork> sourceRootSelectionPanel;
     
     private final InheritablePropertySelectionPanel propertyListPanel;
     
@@ -69,7 +70,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
         
-        this.sourceRootSelectionPanel = new RootSelectionPanel(config);
+        this.sourceRootSelectionPanel = new GenericRootSelectionOptionsPanel(config);
         this.sourceRootSelectionPanel.addRootSelectionListener(new RootSelectionListener() {
 
             @Override

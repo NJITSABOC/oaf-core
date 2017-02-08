@@ -21,8 +21,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -41,6 +39,7 @@ import javax.swing.JPopupMenu;
  * layout. It also handles edge drawing within the graph.
  *
  * @author David Daudelin and Chris Ochs
+ * @param <T>
  */
 public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLayeredPane {
     
@@ -107,11 +106,11 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
     /*
      * Used to map each JPanel segment of a line to the data structure for it's entire line.
      */
-    private HashMap<JPanel, GraphEdge> segmentToEdge = new HashMap<>();
+    private final HashMap<JPanel, GraphEdge> segmentToEdge = new HashMap<>();
     /**
      * Used to keep track of the currently visible handles
      */
-    private ArrayList<GraphEdgeHandle> activeHandles = new ArrayList<>();
+    private final ArrayList<GraphEdgeHandle> activeHandles = new ArrayList<>();
 
     /**
      * Popup menu displayed when a pArea is right-clicked
@@ -121,7 +120,7 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
     /**
      * Popup menu displayed when an edge is right-clicked
      */
-    private JPopupMenu edgeMenu = new JPopupMenu();
+    private final JPopupMenu edgeMenu = new JPopupMenu();
     
     /**
      * Popup menu displayed when a region is right-clicked
@@ -161,6 +160,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
         this.labelManager = new AbNLabelManager(abstractionNetwork, labelCreator);
         
         this.addMouseListener(new MouseAdapter() {
+            
+            @Override
             public void mouseClicked(MouseEvent me) {
                 partitionMenu.setVisible(false);
                 groupMenu.setVisible(false);
@@ -178,7 +179,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
         JMenuItem resizeMenuItem = new JMenuItem("Resize Container");
 
         resizeMenuItem.addActionListener((ae) -> {
-            new ContainerResize(currentPartition, AbstractionNetworkGraph.this);
+            
+            ContainerResize containerResize = new ContainerResize(currentPartition, this);
             
             partitionMenu.setVisible(false);
         });
@@ -198,6 +200,14 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
     
     
     public void setAbstractionNetworkLayout(AbstractionNetworkGraphLayout<T> layout) {
+        this.removeAll();
+        
+        this.edges.clear();
+        this.manualEdges.clear();
+        this.occupiedLanes.clear();
+        
+        this.labelManager.clearLabelImages();
+        
         this.layout = layout;
         
         this.layout.doLayout();
@@ -363,7 +373,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
         }
 
         l.setEmpty(false);
+        
         occupiedLanes.add(l);
+        
         tempX = to.getAbsoluteX() + l.getPosX();
         pList.add(new Point(tempX, tempY));
 
@@ -413,22 +425,21 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
      * Redraws all automatically routed edges and updates those which have been manually adjusted.
      */
     public void redrawEdges() {
-
-        for (GraphLane l2 : occupiedLanes) {
+        occupiedLanes.forEach((l2) -> {
             l2.setEmpty(true);
-        }
+        });
 
         ArrayList<GraphEdge> edgesCopy = (ArrayList<GraphEdge>) edges.clone();
         removeEdges(edgesCopy);
         edges.clear();
         
-        for (GraphEdge e : edgesCopy) {
+        edgesCopy.forEach((e) -> {
             if (manualEdges.contains(e)) {
                 updateManualEdge(e);
             } else {
                 drawRoutedEdge(e.getSource(), e.getTarget());
             }
-        }
+        });
 
         repaint();
     }
@@ -468,7 +479,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
             JPanel s = new JPanel();
 
             int width = (int) (points.get(i + 1).getX() - points.get(i).getX());
-            int x = 0;
+            
+            int x;
 
             if (width == 0) {
                 s.setName("Vertical");
@@ -523,7 +535,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
 
                     if (selectedEdge == null && hoveredEdge != edge) {
                         if (hoveredEdge != null) {
-                            for (JPanel s : hoveredEdge.getSegments()) {
+                            hoveredEdge.getSegments().forEach((s) -> {
+                                
                                 if (s.getName().equals("Vertical")) {
                                     s.setBounds(s.getX(), s.getY(), EDGE_WIDTH, s.getHeight());
                                 } else if (s.getName().equals("Horizontal")) {
@@ -531,7 +544,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
                                 } else {
                                     System.out.println("**ERROR - Edge layout not specified**");
                                 }
-                            }
+                                
+                            });
                         }
 
 
@@ -553,7 +567,8 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
 
                 public void mouseExited(MouseEvent e) {
                     if (selectedEdge == null && hoveredEdge != null && hoveredEdge == segmentToEdge.get((JPanel) e.getComponent())) {
-                        for (JPanel s : hoveredEdge.getSegments()) {
+                        hoveredEdge.getSegments().forEach((s) -> {
+                            
                             if (s.getName().equals("Vertical")) {
                                 s.setBounds(s.getX(), s.getY(), EDGE_WIDTH, s.getHeight());
                             } else if (s.getName().equals("Horizontal")) {
@@ -561,7 +576,7 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
                             } else {
                                 System.out.println("**ERROR - Edge layout not specified**");
                             }
-                        }
+                        });
 
                         hoveredEdge = null;
                     }
@@ -575,9 +590,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
                         if (selectedEdge != null) {
                             deactivateSelectedEdge();
 
-                            for (GraphEdgeHandle h : activeHandles) {
+                            activeHandles.forEach((h) -> {
                                 remove(h);
-                            }
+                            });
 
                             activeHandles.clear();
                         }
@@ -683,14 +698,14 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
             e.getSource().removeIncidentEdge(e);
             e.getTarget().removeIncidentEdge(e);
             
-            for (JPanel s : e.getSegments()) {
+            e.getSegments().forEach((s) -> {
                 remove(s);
-            }
+            });
 
             if (selectedEdge != null && selectedEdge.equals(e)) {
-                for (GraphEdgeHandle h : activeHandles) {
+                activeHandles.forEach((h) -> {
                     remove(h);
-                }
+                });
 
                 activeHandles.clear();
                 selectedEdge = null;
@@ -703,9 +718,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
 
         ArrayList<GraphEdge> removeEdges = new ArrayList<>();
 
-        for (GraphEdge temp : edges) {
+        edges.forEach((temp) -> {
             removeEdges.add(temp);
-        }
+        });
 
         removeEdges(removeEdges);
         edges.removeAll(removeEdges);
@@ -718,11 +733,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
      * @param objects The edges to be deleted.
      */
     public void removeEdges(ArrayList<GraphEdge> objects) {
-        for (GraphEdge e : objects) {
-            if (e != null) {
-                removeEdge(e);
-            }
-        }
+        objects.forEach((e) -> {
+            removeEdge(e);
+        });
 
         repaint();
     }
@@ -734,9 +747,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
      * @param objects The objects to recolor.
      */
     public void setColors(Color c, Color t, ArrayList<JPanel> objects) {
-        for (JPanel o : objects) {
+        objects.forEach((o) -> {
             setColor(c, t, o);
-        }
+        });
     }
 
     /**
@@ -748,6 +761,7 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
     public void setColor(Color c, Color t, JPanel o) {
         JPanel j = o;
         j.setBackground(c);
+        
         JLabel l = (JLabel) j.getComponent(0);
         l.setForeground(t);
     }
@@ -768,7 +782,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
      */
     public void deactivateSelectedEdge() {
         if (selectedEdge != null) {
-            for (JPanel s : selectedEdge.getSegments()) {
+            
+            selectedEdge.getSegments().forEach((s) -> {
+                
                 if (s.getName().equals("Vertical")) {
                     s.setBounds(s.getX(), s.getY(), EDGE_WIDTH, s.getHeight());
                 } else if (s.getName().equals("Horizontal")) {
@@ -776,11 +792,12 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
                 } else {
                     System.err.println("**ERROR - Edge layout not specified**");
                 }
-            }
+                
+            });
 
-            for (GraphEdgeHandle h : activeHandles) {
+            activeHandles.forEach((h) -> {
                 remove(h);
-            }
+            });
 
             activeHandles.clear();
             repaint();
@@ -911,30 +928,24 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
     private void initializeEdgeMenu() {
 
         JMenuItem goToParentMenuItem = new JMenuItem("Go To Parent");
-        goToParentMenuItem.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getNodeEntries().get(selectedEdge.getTarget()));
-                } catch (Exception exception) {
-                    System.err.println(exception);
-                }
+        goToParentMenuItem.addActionListener((e) -> {
+            try {
+                GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
+                igf.focusOnComponent(getNodeEntries().get(selectedEdge.getTarget()));
+            } catch (Exception exception) {
+                System.err.println(exception);
             }
         });
 
         edgeMenu.add(goToParentMenuItem);
 
         JMenuItem goToChildMenuItem = new JMenuItem("Go To Child");
-        goToChildMenuItem.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
-                    igf.focusOnComponent(getNodeEntries().get(selectedEdge.getSource()));
-                } catch (Exception exception) {
-                    System.err.println(exception);
-                }
+        goToChildMenuItem.addActionListener((e) -> {
+            try {
+                GenericInternalGraphFrame igf = AbstractionNetworkGraph.this.getParentInternalFrame();
+                igf.focusOnComponent(getNodeEntries().get(selectedEdge.getSource()));
+            } catch (Exception exception) {
+                System.err.println(exception);
             }
         });
 
@@ -944,12 +955,9 @@ public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLaye
 
         JMenuItem removeEdgeMenuItem = new JMenuItem("Delete Edge");
 
-        removeEdgeMenuItem.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                removeEdge(selectedEdge);
-                redrawEdges();
-            }
+        removeEdgeMenuItem.addActionListener((e) -> {
+            removeEdge(selectedEdge);
+            redrawEdges();
         });
 
         edgeMenu.add(removeEdgeMenuItem);

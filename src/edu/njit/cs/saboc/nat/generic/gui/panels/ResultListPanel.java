@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultPanel.DataRetriever;
@@ -47,7 +47,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     private final boolean showBorder;
     
     public ResultListPanel(
-            GenericNATBrowserPanel<T> mainPanel,
+            NATBrowserPanel<T> mainPanel,
             ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<V>> dataRetriever,
             ListCellRenderer<Filterable<V>> renderer,

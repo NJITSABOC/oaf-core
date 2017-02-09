@@ -6,52 +6,51 @@ import edu.njit.cs.saboc.nat.generic.gui.layout.basic.SearchAndHistoryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ChildrenPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.FocusConceptPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ParentPanel;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 /**
  *
  * @author Chris O
  */
-public class NATBasicLayout extends NATLayout {
+public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
     
     private SearchAndHistoryPanel searchAndHistoryPanel;
 
     private FocusConceptPanel focusConceptPanel;
-    
+
     private ParentPanel parentPanel;
     private ChildrenPanel childrenPanel;
     
-    public NATBasicLayout(ConceptBrowserDataSource dataSource) {
+    public BasicNATAdjustableLayout(ConceptBrowserDataSource dataSource) {
         super(dataSource);
     }
 
     @Override
     public void createLayout(NATBrowserPanel mainPanel) {
         
+        super.createLayout(mainPanel);
+        
         searchAndHistoryPanel = new SearchAndHistoryPanel(mainPanel, getDataSource());
-        
         focusConceptPanel = new FocusConceptPanel(mainPanel, getDataSource());
-       
         parentPanel = new ParentPanel(mainPanel, getDataSource(), true);
-
         childrenPanel = new ChildrenPanel(mainPanel, getDataSource(), true);
-
-        JPanel centerPanel = new JPanel(new GridLayout(3, 1));
         
-        centerPanel.add(parentPanel);
-        centerPanel.add(focusConceptPanel);
-        centerPanel.add(childrenPanel);
+        super.setLeftPanelContents(searchAndHistoryPanel);
         
-        this.setLayout(new BorderLayout());
+        JSplitPane topPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        topPane.setDividerLocation(250);
         
-        JPanel leftPanel = new JPanel(new BorderLayout());
+        topPane.setTopComponent(parentPanel);
         
-        leftPanel.add(searchAndHistoryPanel, BorderLayout.CENTER);
         
-        this.add(leftPanel, BorderLayout.WEST);
+        JSplitPane bottomPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        bottomPane.setDividerLocation(150);
         
-        this.add(centerPanel, BorderLayout.CENTER);
+        bottomPane.setTopComponent(focusConceptPanel);
+        bottomPane.setBottomComponent(childrenPanel);
+        
+        topPane.setBottomComponent(bottomPane);
+        
+        super.setMiddlePanelContents(topPane);
     }
 }

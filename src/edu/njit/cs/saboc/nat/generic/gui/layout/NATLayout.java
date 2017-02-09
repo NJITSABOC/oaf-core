@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import javax.swing.JPanel;
 
@@ -20,7 +20,7 @@ public abstract class NATLayout extends JPanel {
         return dataSource;
     }
     
-    public abstract void createLayout(GenericNATBrowserPanel mainPanel);
+    public abstract void createLayout(NATBrowserPanel mainPanel);
     
     public void resized(int newWidth, int newHeight) {
         

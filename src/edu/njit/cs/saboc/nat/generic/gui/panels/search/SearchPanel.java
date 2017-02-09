@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.search;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableSearchResultEntry;
@@ -34,11 +34,11 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
     
     private class SearchResultsList<T extends Concept> extends FilterableList<NATConceptSearchResult<T>> {
         
-        private final GenericNATBrowserPanel<T> mainPanel;
+        private final NATBrowserPanel<T> mainPanel;
         private final ConceptBrowserDataSource<T> dataSource;
         
         public SearchResultsList(
-            GenericNATBrowserPanel<T> mainPanel, 
+            NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
             
             this.mainPanel = mainPanel;
@@ -83,14 +83,14 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
 
     private final SearchResultsList<T> searchResultList;
     
-    private final GenericNATBrowserPanel<T> mainPanel;
+    private final NATBrowserPanel<T> mainPanel;
     private final ConceptBrowserDataSource<T> dataSource;
     
     private volatile int searchID = 0;
     private Thread searchThread = null;
 
     public SearchPanel(
-            GenericNATBrowserPanel<T> mainPanel, 
+            NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
         
         super(mainPanel);

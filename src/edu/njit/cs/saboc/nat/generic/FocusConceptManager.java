@@ -15,7 +15,7 @@ public class FocusConceptManager<T extends Concept> {
     }
     
     private final ConceptBrowserDataSource<T> dataSource;
-    private final GenericNATBrowserPanel<T> browser;
+    private final NATBrowserPanel<T> browser;
     
     
     private final ArrayList<FocusConceptChangedListener<T>> listeners = new ArrayList<>();
@@ -25,7 +25,7 @@ public class FocusConceptManager<T extends Concept> {
     private Optional<T> activeFocusConcept = Optional.empty();
    
     public FocusConceptManager(
-            GenericNATBrowserPanel<T> browser, 
+            NATBrowserPanel<T> browser, 
             ConceptBrowserDataSource<T> dataSource) {
         
         this.browser = browser;
@@ -40,21 +40,27 @@ public class FocusConceptManager<T extends Concept> {
         listeners.add(fcl);
     }
 
-    public void navigateRoot() {
+    public void navigateToRoot() {
         navigateTo(dataSource.getOntology().getConceptHierarchy().getRoot());
     }
 
     public void navigateTo(T concept) {
+        navigateTo(concept, true);
+    }
+    
+    public void navigateTo(T concept, boolean addHistoryEntry) {
         activeFocusConcept = Optional.of(concept);
-
-        history.addHistoryEntry(concept);
 
         listeners.forEach( (listener) -> {
             listener.focusConceptChanged(concept);
         });
+        
+        if(addHistoryEntry) {
+            history.addHistoryEntry(concept);
+        }
     }
     
-    public GenericNATBrowserPanel<T> getNATBrowserPanel() {
+    public NATBrowserPanel<T> getNATBrowserPanel() {
         return browser;
     }
 

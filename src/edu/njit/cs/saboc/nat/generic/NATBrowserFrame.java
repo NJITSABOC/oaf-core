@@ -14,7 +14,7 @@ import javax.swing.JInternalFrame;
  */
 public class NATBrowserFrame<T extends Concept> extends JInternalFrame {
 
-    private final GenericNATBrowserPanel<T> browser;
+    private final NATBrowserPanel<T> browser;
     
     public NATBrowserFrame(
             JFrame parentFrame, 
@@ -26,7 +26,7 @@ public class NATBrowserFrame<T extends Concept> extends JInternalFrame {
                 true, 
                 true);
         
-        this.browser = new GenericNATBrowserPanel<>(parentFrame, dataSource, layout);
+        this.browser = new NATBrowserPanel<>(parentFrame, dataSource, layout);
         
         this.setSize(1400, 600);
         

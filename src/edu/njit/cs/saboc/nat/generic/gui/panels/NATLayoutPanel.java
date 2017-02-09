@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import javax.swing.JPanel;
 
 /**
@@ -11,13 +11,13 @@ import javax.swing.JPanel;
  */
 public abstract class NATLayoutPanel<T extends Concept> extends JPanel {
     
-    private final GenericNATBrowserPanel<T> mainPanel;
+    private final NATBrowserPanel<T> mainPanel;
     
-    public NATLayoutPanel(GenericNATBrowserPanel<T> mainPanel) {
+    public NATLayoutPanel(NATBrowserPanel<T> mainPanel) {
         this.mainPanel = mainPanel;
     }
     
-    public GenericNATBrowserPanel<T> getMainPanel() {
+    public NATBrowserPanel<T> getMainPanel() {
         return mainPanel;
     }
     

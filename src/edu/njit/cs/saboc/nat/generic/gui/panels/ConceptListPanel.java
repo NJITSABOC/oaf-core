@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.FilterableConceptEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterablelist.renderer.SimpleConceptRenderer;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
 
     public ConceptListPanel(
-            GenericNATBrowserPanel<T> mainPanel, 
+            NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<T>> dataRetriever,
             boolean showFilter,

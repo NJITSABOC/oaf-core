@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import javax.swing.SwingUtilities;
 
@@ -22,7 +22,7 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
     private final DataRetriever<T, V> dataRetriever;
     
     public ResultPanel(
-            GenericNATBrowserPanel<T> mainPanel,
+            NATBrowserPanel<T> mainPanel,
             ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, V> dataRetriever) {
         

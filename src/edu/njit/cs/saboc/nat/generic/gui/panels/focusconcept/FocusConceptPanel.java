@@ -4,11 +4,12 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
 import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -22,8 +23,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Optional;
+import javax.swing.BorderFactory;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -68,12 +69,17 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     private boolean pending = false;
 
     public FocusConceptPanel(
-            GenericNATBrowserPanel<T> mainPanel, 
+            NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
         
         super(mainPanel, dataSource);
 
         setLayout(new BorderLayout());
+        
+        this.setBorder(
+                BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(Color.BLACK), 
+                    "Focus Concept"));
         
         history = mainPanel.getFocusConceptManager().getHistory();
 
@@ -162,7 +168,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             if(history.getPosition() > 0) {
                 history.minusPosition();
                 
-                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept());
+                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
                 
                 forwardButton.setEnabled(true);
                 
@@ -178,7 +184,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             if(history.getPosition() < (history.getHistory().size() - 1)) {
                 history.plusPosition();
                 
-                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept());
+                mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
                 
                 backButton.setEnabled(true);
                 

@@ -2,15 +2,15 @@ package edu.njit.cs.saboc.nat.generic.gui.filterablelist.renderer;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistoryEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,32 +21,32 @@ import javax.swing.JPanel;
  * @author Chris O
  * @param <T>
  */
-public class SearchResultRenderer<T extends Concept> extends BaseFilterableRenderer<NATConceptSearchResult<T>> {
+public class HistoryEntryRenderer<T extends Concept> extends BaseFilterableRenderer<FocusConceptHistoryEntry<T>> {
     
     private final JLabel conceptNameLabel;
     private final JLabel conceptIdLabel;
-    private final JLabel matchedTermsLabel;
+    private final JLabel timeViewedLabel;
     
-    public SearchResultRenderer() {
+    private final NATBrowserPanel<T> mainPanel;
+    
+    public HistoryEntryRenderer(NATBrowserPanel<T> mainPanel) {
+        this.mainPanel = mainPanel;
         
         this.setLayout(new BorderLayout());
         
         this.conceptNameLabel = new JLabel();
         this.conceptIdLabel = new JLabel();
-        this.matchedTermsLabel = new JLabel();
+        this.timeViewedLabel = new JLabel();
         
         this.conceptNameLabel.setFont(this.conceptNameLabel.getFont().deriveFont(Font.PLAIN, 16));
         this.conceptIdLabel.setFont(this.conceptIdLabel.getFont().deriveFont(Font.PLAIN, 10));
-        this.matchedTermsLabel.setFont(this.matchedTermsLabel.getFont().deriveFont(Font.ITALIC, 12));
+        this.timeViewedLabel.setFont(this.timeViewedLabel.getFont().deriveFont(Font.ITALIC, 12));
         
         this.conceptIdLabel.setForeground(Color.BLUE);
-        this.matchedTermsLabel.setForeground(Color.RED);
         
         this.conceptNameLabel.setOpaque(false);
         this.conceptIdLabel.setOpaque(false);
-        this.matchedTermsLabel.setOpaque(false);
-        
-        this.matchedTermsLabel.setMinimumSize(new Dimension(300, -1));
+        this.timeViewedLabel.setOpaque(false);
         
         JPanel conceptPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         conceptPanel.setOpaque(false);
@@ -54,25 +54,23 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         conceptPanel.add(conceptNameLabel);
         conceptPanel.add(Box.createHorizontalStrut(8));
         conceptPanel.add(conceptIdLabel);
-
         
         JPanel matchedTermsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         matchedTermsPanel.setOpaque(false);
         
-        JLabel matchedTermsTitleLabel = new JLabel("Matched terms: ");
-        matchedTermsTitleLabel.setFont(this.matchedTermsLabel.getFont().deriveFont(Font.BOLD, 12));
+        JLabel matchedTermsTitleLabel = new JLabel("Viewed at: ");
+        matchedTermsTitleLabel.setFont(this.timeViewedLabel.getFont().deriveFont(Font.BOLD, 12));
         matchedTermsTitleLabel.setOpaque(false);
         
         matchedTermsPanel.add(matchedTermsTitleLabel);
         matchedTermsPanel.add(Box.createHorizontalStrut(4));
-        matchedTermsPanel.add(matchedTermsLabel);
-       
+        matchedTermsPanel.add(timeViewedLabel);
         
-        JPanel leftPanel = new JPanel(new BorderLayout());
+        JPanel leftPanel = new JPanel(new GridLayout(2, 1));
         leftPanel.setOpaque(false);
         
-        leftPanel.add(conceptPanel, BorderLayout.NORTH);
-        leftPanel.add(matchedTermsPanel, BorderLayout.CENTER);
+        leftPanel.add(conceptPanel);
+        leftPanel.add(matchedTermsPanel);
         
         JPanel spacerPanel = new JPanel();
         spacerPanel.setOpaque(false);
@@ -87,8 +85,8 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
 
     @Override
     public Component getListCellRendererComponent(
-            JList<? extends Filterable<NATConceptSearchResult<T>>> list, 
-            Filterable<NATConceptSearchResult<T>> value, 
+            JList<? extends Filterable<FocusConceptHistoryEntry<T>>> list, 
+            Filterable<FocusConceptHistoryEntry<T>> value, 
             int index, 
             boolean isSelected, 
             boolean cellHasFocus) {
@@ -100,32 +98,34 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
                 isSelected, 
                 cellHasFocus);
 
-        NATConceptSearchResult<T> searchResult = value.getObject();
+        FocusConceptHistoryEntry<T> historyEntry = value.getObject();
         
-        String conceptNameStr = searchResult.getConcept().getName();
-        String conceptIdStr = searchResult.getConcept().getIDAsString();
-        
-        ArrayList<String> matchedTerms = new ArrayList<>(searchResult.getMatchedTerms());
-        Collections.sort(matchedTerms);
-        
-        String matchedTermsStr = matchedTerms.toString();
-        matchedTermsStr = matchedTermsStr.substring(1, matchedTermsStr.length() - 1);
+        String conceptNameStr = historyEntry.getConcept().getName();
+        String conceptIdStr = historyEntry.getConcept().getIDAsString();
         
         if(value.getCurrentFilter().isPresent()) {
             String filter = value.getCurrentFilter().get();
             
             conceptNameStr = Filterable.filter(conceptNameStr, filter);
             conceptIdStr = Filterable.filter(conceptIdStr, filter);
-            matchedTermsStr = Filterable.filter(matchedTermsStr, filter);
         }
         
-        matchedTermsStr = matchedTermsStr.replaceAll(", ", "<br>");
-        matchedTermsStr = String.format("<html>%s", matchedTermsStr);
+        SimpleDateFormat entryTimeFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
         
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
-        this.matchedTermsLabel.setText(matchedTermsStr);
+        this.timeViewedLabel.setText(entryTimeFormat.format(historyEntry.getTimeViewed()));
         
+        int fontStyle = Font.PLAIN;
+        
+        if (historyEntry.getPosition() == mainPanel.getFocusConceptManager().getHistory().getPosition()) {
+            fontStyle = Font.BOLD;
+        }
+        
+        this.conceptNameLabel.setFont(conceptNameLabel.getFont().deriveFont(fontStyle));
+        this.conceptIdLabel.setFont(conceptIdLabel.getFont().deriveFont(fontStyle));
+        this.timeViewedLabel.setFont(timeViewedLabel.getFont().deriveFont(fontStyle));
+
         return this;
     }
 }

@@ -6,14 +6,13 @@ import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 /**
  * The main panel (and top-level container of functionality) of the NAT
  * 
  * @param <T> The type of concept used in this NAT (e.g., OWL Class or SNOMED CT concept)
  */
-public class GenericNATBrowserPanel<T extends Concept> extends JPanel {
+public class NATBrowserPanel<T extends Concept> extends JPanel {
 
     private final ConceptBrowserDataSource<T> dataSource;
 
@@ -31,7 +30,7 @@ public class GenericNATBrowserPanel<T extends Concept> extends JPanel {
      * @param layout 
      * @param options
      */
-    public GenericNATBrowserPanel(
+    public NATBrowserPanel(
             JFrame parentFrame, 
             ConceptBrowserDataSource<T> dataSource, 
             NATLayout layout) {

@@ -4,7 +4,7 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
-import edu.njit.cs.saboc.nat.generic.GenericNATBrowserPanel;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -18,7 +18,7 @@ public abstract class BaseNATPanel<T extends Concept> extends NATLayoutPanel<T> 
     private final FocusConceptManager<T> focusConceptManager;
 
     public BaseNATPanel(
-            GenericNATBrowserPanel<T> mainPanel, 
+            NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
         
         super(mainPanel);

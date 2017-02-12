@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterPanel.FilterPanelListener;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
@@ -20,20 +20,13 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ToolTipManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -42,15 +35,12 @@ import javax.swing.event.DocumentListener;
  */
 public class FilterableList<T> extends JPanel {
     
-    private final JTextField filterField = new JTextField();
-    private final JButton closeButton = new JButton();
-    
     private final FilterableListModel entryModel = new FilterableListModel();
     
     private final JList<Filterable<T>> list;
     
-    private final JPanel filterPanel = new JPanel();
-
+    private final FilterPanel filterPanel;
+    
     public FilterableList() {
 
         setLayout(new BorderLayout());
@@ -119,45 +109,21 @@ public class FilterableList<T> extends JPanel {
 
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
-
-        closeButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
-        closeButton.setToolTipText("Close");
-
-        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
-        filterPanel.add(closeButton);
-        filterPanel.add(Box.createHorizontalStrut(10));
-        filterPanel.add(new JLabel("Filter:  "));
-        filterPanel.add(filterField);
+        
+        this.filterPanel = new FilterPanel();
 
         add(filterPanel, BorderLayout.SOUTH);
 
-        filterField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                if(ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    setFilterPanelOpen(false, null);
-                }
-            }
-        });
+        filterPanel.addFilterPanelListener(new FilterPanelListener() {
 
-        closeButton.addActionListener((e) -> {
-            setFilterPanelOpen(false, null);
-        });
-
-        filterField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
+            public void filterChanged(String filter) {
+                entryModel.changeFilter(filter);
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
+            public void filterClosed() {
+                setFilterPanelOpen(false);
             }
         });
         
@@ -166,17 +132,17 @@ public class FilterableList<T> extends JPanel {
             public void keyPressed(KeyEvent e) {
 
                 if (!e.isControlDown() && !e.isAltDown()) {
-                    setFilterPanelOpen(true, e);
+                    initializeFilter(true, e);
                 }
             }
         });
 
         this.list.addMouseListener(new MouseAdapter() {
+            
             private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
 
             @Override
             public void mouseEntered(MouseEvent me) {
-                
                 ToolTipManager.sharedInstance().setDismissDelay(60000);
             }
 
@@ -186,7 +152,7 @@ public class FilterableList<T> extends JPanel {
             }
         });
 
-        this.toggleFilterPanel();
+        this.setFilterPanelOpen(false);
     }
     
     public void setListCellRenderer(ListCellRenderer<Filterable<T>> renderer) {
@@ -219,32 +185,31 @@ public class FilterableList<T> extends JPanel {
         list.setModel(entryModel);
     }
 
-    /* opens (open = true) or closes the filter panel */
-    public void toggleFilterPanel() {
-        if(!filterPanel.isVisible()) {
-            setFilterPanelOpen(true, null);
+    public void setFilterPanelOpen(boolean value) {
+        
+        if(value) {
+            initializeFilter(true, null);
+        } else {
+            initializeFilter(false, null);
         }
-        else {
-            setFilterPanelOpen(false, null);
-        }
+        
     }
 
-    /*opens the filter panell and uses a KeyEvent if openned by typing */
-    public final void setFilterPanelOpen(boolean open, KeyEvent e) {
+    public final void initializeFilter(boolean open, KeyEvent e) {
+        
         if(open) {
             if(!filterPanel.isVisible()) {
                 filterPanel.setVisible(true);
                 
-                if(e != null) {
-                    filterField.setText(Character.toString(e.getKeyChar()));
+                if(e == null) {
+                    filterPanel.reset();
                 } else {
-                    filterField.setText("");
+                    filterPanel.filteringStarted(Character.toString(e.getKeyChar()));
                 }
-                
-                filterField.requestFocus();
             }
         } else {
             entryModel.changeFilter("");
+            
             filterPanel.setVisible(false);
             list.grabFocus();
         }
@@ -283,5 +248,9 @@ public class FilterableList<T> extends JPanel {
         if(size > 0) {
             list.setFont(list.getFont().deriveFont(Font.PLAIN, (float)size));
         }
+    }
+    
+    public boolean filterShowing() {
+        return filterPanel.isVisible();
     }
 }

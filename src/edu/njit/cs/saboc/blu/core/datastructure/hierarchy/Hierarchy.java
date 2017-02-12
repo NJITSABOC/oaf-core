@@ -647,6 +647,8 @@ public class Hierarchy<T> {
             });
         });
         
+        strictSiblings.remove(node);
+        
         return strictSiblings;
     }
     

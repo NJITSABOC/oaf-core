@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserData
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class ParentPanel<T extends Concept> extends ConceptListPanel<T> {
     

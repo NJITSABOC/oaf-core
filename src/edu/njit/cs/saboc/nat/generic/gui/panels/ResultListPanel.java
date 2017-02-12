@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.TitledBorder;
@@ -59,6 +60,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         this.showBorder = showBorder;
 
         this.list = new FilterableList<>();
+        
         this.list.setListCellRenderer(renderer);
         
         this.list.addListMouseListener(new MouseAdapter() {
@@ -85,7 +87,6 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         setLayout(new BorderLayout());
         
         this.add(optionsPanel, BorderLayout.NORTH);
-        
         this.add(list, BorderLayout.CENTER);
         
         FlowLayout buttonLayout = new FlowLayout(FlowLayout.TRAILING);
@@ -98,19 +99,19 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
             filterButton.setIcon(ImageManager.getImageManager().getIcon("filter.png"));
             filterButton.setToolTipText("Filter these entries");
             filterButton.addActionListener( (ae) -> {
-                list.toggleFilterPanel();
+                list.setFilterPanelOpen(!list.filterShowing());
             });
             
-            this.addOptionsButton(filterButton);
+            this.addOptionsComponent(filterButton);
         }
         
         updateBorder("Initializing...");
     }
     
-    public void addOptionsButton(JButton button) {
+    public final void addOptionsComponent(JComponent component) {
         optionsPanel.setVisible(true);
-        optionsPanel.add(button);
-        optionsPanel.add(Box.createHorizontalStrut(16));
+        optionsPanel.add(component, 0);
+        optionsPanel.add(Box.createHorizontalStrut(16), 0);
     }
 
     public void addDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {

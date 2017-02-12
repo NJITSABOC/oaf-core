@@ -107,21 +107,32 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         
         ArrayList<String> matchedTerms = new ArrayList<>(searchResult.getMatchedTerms());
         Collections.sort(matchedTerms);
-        
-        String matchedTermsStr = matchedTerms.toString();
-        matchedTermsStr = matchedTermsStr.substring(1, matchedTermsStr.length() - 1);
+
+        String matchedTermsStr;
         
         if(value.getCurrentFilter().isPresent()) {
             String filter = value.getCurrentFilter().get();
             
             conceptNameStr = Filterable.filter(conceptNameStr, filter);
             conceptIdStr = Filterable.filter(conceptIdStr, filter);
-            matchedTermsStr = Filterable.filter(matchedTermsStr, filter);
+            
+            matchedTermsStr = "<html>";
+            
+            for(String term : matchedTerms) {
+                String filtered = Filterable.filter(term, filter);
+                
+                matchedTermsStr += filtered + "<br>";
+            }
+        } else {
+            matchedTermsStr = "<html>";
+
+            for (String term : matchedTerms) {
+                matchedTermsStr += term + "<br>";
+            }
         }
         
-        matchedTermsStr = matchedTermsStr.replaceAll(", ", "<br>");
-        matchedTermsStr = String.format("<html>%s", matchedTermsStr);
-        
+        matchedTermsStr = matchedTermsStr.substring(0, matchedTermsStr.length() - 4);
+
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
         this.matchedTermsLabel.setText(matchedTermsStr);

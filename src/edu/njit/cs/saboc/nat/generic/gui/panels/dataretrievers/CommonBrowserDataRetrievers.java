@@ -78,6 +78,59 @@ public class CommonBrowserDataRetrievers {
         };
     }
     
+    public static <T extends Concept> DataRetriever<T, ArrayList<GrandparentResult<T>>> getGrandparentsRetriever(
+            ConceptBrowserDataSource<T> dataSource) {
+        
+        return new DataRetriever<T, ArrayList<GrandparentResult<T>>>() {
+
+            @Override
+            public ArrayList<GrandparentResult<T>> getData(T concept) {
+                
+                ArrayList<T> parents = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(concept));
+                
+                ArrayList<GrandparentResult<T>> grandParentResults = new ArrayList<>();
+                
+                parents.forEach( (parent) -> {
+                    grandParentResults.add(new GrandparentResult<>(parent, 
+                            getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(parent))));
+                });
+                
+                return grandParentResults;
+            }
+
+            @Override
+            public String getDataType() {
+                return "Parents and Grandparents";
+            }
+        };
+    }
+    
+    public static <T extends Concept> DataRetriever<T, ArrayList<GrandchildResult<T>>> getGrandchildrenRetriever(
+            ConceptBrowserDataSource<T> dataSource) {
+        
+        return new DataRetriever<T, ArrayList<GrandchildResult<T>>>() {
+
+            @Override
+            public ArrayList<GrandchildResult<T>> getData(T concept) {
+                ArrayList<T> children = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(concept));
+                
+                ArrayList<GrandchildResult<T>> grandParentResults = new ArrayList<>();
+                
+                children.forEach( (child) -> {
+                    grandParentResults.add(new GrandchildResult<>(child, 
+                            getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(child))));
+                });
+                
+                return grandParentResults;
+            }
+
+            @Override
+            public String getDataType() {
+                return "Parents and Grandparents";
+            }
+        };
+    }
+    
     private static <T extends Concept> ArrayList<T> getSortedConceptList(Set<T> conceptSet) {
         ArrayList<T> concepts = new ArrayList<>(conceptSet);
 

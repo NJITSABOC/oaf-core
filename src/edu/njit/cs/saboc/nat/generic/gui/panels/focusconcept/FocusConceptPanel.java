@@ -81,6 +81,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                     BorderFactory.createLineBorder(Color.BLACK), 
                     "Focus Concept"));
         
+        this.setMinimumSize(new Dimension(-1, 150));
+        
         history = mainPanel.getFocusConceptManager().getHistory();
 
         undoButton = new JButton();

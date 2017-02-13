@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -92,13 +91,17 @@ public class MinimapPanel extends AbNDisplayWidget {
         
         //draw the space (in white) and its components
         g2d.setColor(Color.white);
+        
         if (abnRelativeWidth < this.getWidth()) {
             xOffset = (image.getWidth() - abnRelativeWidth) / 2;
         }
+        
         if (abnRelativeHeight < this.getHeight()) {
             
         }
+        
         final int xDrawOffset = xOffset;
+        
         g2d.fillRect(xOffset, 0, abnRelativeWidth, abnRelativeHeight);
         getDisplayPanel().getGraph().getContainerEntries().values().forEach((c) -> {
 
@@ -115,9 +118,11 @@ public class MinimapPanel extends AbNDisplayWidget {
         
         //draw viewport
         Rectangle viewportDrawBounds = viewportBoxBounds.getBounds();
+        
         viewportDrawBounds.translate(xDrawOffset + 4, 4);
         viewportDrawBounds.width = viewportDrawBounds.width - 8;
         viewportDrawBounds.height = viewportDrawBounds.height - 8;
+        
         g2d.setStroke(new BasicStroke(4));
         g2d.setColor(Color.ORANGE);
         g2d.draw(viewportDrawBounds);
@@ -126,6 +131,7 @@ public class MinimapPanel extends AbNDisplayWidget {
         g2d.setStroke(new BasicStroke(4));
         g2d.setColor(new Color(100, 100, 255));
         g2d.drawRect(0, 0, image.getWidth(), image.getHeight()); 
+        
         g.drawImage(image, 0, 0, null);
     }
     

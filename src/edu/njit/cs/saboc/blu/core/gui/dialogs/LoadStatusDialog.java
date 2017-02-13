@@ -20,13 +20,21 @@ public class LoadStatusDialog extends JDialog {
         public void dialogClosed();
     }
     
-    public static LoadStatusDialog display(final JFrame parentFrame, String message, LoadingDialogClosedListener closeAction) {
+    public static LoadStatusDialog display(
+            JFrame parentFrame, 
+            String message, 
+            LoadingDialogClosedListener closeAction) {
+        
         return new LoadStatusDialog(parentFrame, message, closeAction);
     }
     
-    private JProgressBar loadProgressBar;
+    private final JProgressBar loadProgressBar;
     
-    private LoadStatusDialog(JFrame parentFrame, String message, LoadingDialogClosedListener closeAction) {
+    private LoadStatusDialog(
+            JFrame parentFrame, 
+            String message, 
+            LoadingDialogClosedListener closeAction) {
+        
         super(parentFrame, false);
         
         this.setAlwaysOnTop(true);
@@ -54,6 +62,8 @@ public class LoadStatusDialog extends JDialog {
         this.setResizable(false);
          
         this.addWindowListener(new WindowAdapter() {
+            
+            @Override
             public void windowClosed(WindowEvent e) {
                 closeAction.dialogClosed();
             }

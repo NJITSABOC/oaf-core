@@ -9,10 +9,12 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
@@ -32,6 +34,8 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     private final JButton deriveButton;
     
     private final DeriveTANAction derivationAction;
+    
+    private final JPanel optionsPanel;
         
     public TANDerivationWizardPanel(TANConfiguration config, DeriveTANAction derivationAction) {
         
@@ -45,12 +49,12 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         this.rootSelectionPanel = new RootSelectionPanel<>(config);
         
         this.rootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
-                String.format("1. Select Tribal Abstraction Network Root %s", 
+                String.format("Select Tribal Abstraction Network Root %s", 
                         config.getTextConfiguration().getConceptTypeName(true))));
                 
         this.selectedPatriarchPanel = new TANPatriarchListPanel(config, rootSelectionPanel);
         this.selectedPatriarchPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
-                "2. Selected Patriarchs"));
+                "Selected Patriarchs"));
         
         derivationOptionsPanel.add(rootSelectionPanel);
         derivationOptionsPanel.add(selectedPatriarchPanel);
@@ -65,11 +69,20 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.add(deriveButton, BorderLayout.EAST);
         
+        this.optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        
+        southPanel.add(optionsPanel, BorderLayout.CENTER);
+        
         this.add(southPanel, BorderLayout.SOUTH);
         
         resetView();
     }
     
+    public void addOptionsPanelItem(JComponent component) {
+        this.optionsPanel.add(component);
+    }
+    
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
 
@@ -89,24 +102,22 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         rootSelectionPanel.resetView();
     }
     
-    public final void resetView() {
+    @Override
+    public void resetView() {
         rootSelectionPanel.resetView();
         selectedPatriarchPanel.resetView();
     }
     
-    private void deriveTribalAbstractionNetwork() {
+    protected void deriveTribalAbstractionNetwork() {
         if(!super.getCurrentOntology().isPresent()) {
-            
            return;
         }
         
         if(!rootSelectionPanel.getSelectedRoot().isPresent()) {
-            
             return;
         }
         
         if(selectedPatriarchPanel.getSelectedPatriarchs().size() < 2) {
-            
             return;
         }
         

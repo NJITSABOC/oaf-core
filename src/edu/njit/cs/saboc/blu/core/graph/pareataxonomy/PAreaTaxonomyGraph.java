@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class PAreaTaxonomyGraph<T extends PAreaTaxonomy> extends AbstractionNetworkGraph<T> {
 

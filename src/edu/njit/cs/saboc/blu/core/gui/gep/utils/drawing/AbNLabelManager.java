@@ -117,9 +117,9 @@ public class AbNLabelManager {
             
             labelSheets.add(mipmap);
             
-            for(SinglyRootedNode group : processedGroups) {
+            processedGroups.forEach((group) -> {
                 groupLabelMap.get(group).setLabelSheet(mipmap);
-            }
+            });
         }
     }
    
@@ -298,6 +298,10 @@ public class AbNLabelManager {
     
     public void removeLabel(JLabel label) {
         labelImages.remove(label);
+    }
+    
+    public void clearLabelImages() {
+        labelImages.clear();
     }
     
     private void createLabelImage(JLabel label) {

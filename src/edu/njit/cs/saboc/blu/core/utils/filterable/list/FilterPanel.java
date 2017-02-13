@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -28,6 +31,23 @@ public class FilterPanel extends JPanel {
     private final JButton closeButton;
     
     private final ArrayList<FilterPanelListener> filterPanelListeners = new ArrayList<>();
+    
+    private String currentFilter = "";
+
+    private final Timer updateTimer = new Timer(200, (ae) -> {
+
+        if (canUpdate()) {
+            filterPanelListeners.forEach((listener) -> {
+                listener.filterChanged(currentFilter);
+            });
+        }
+
+        stopTimer();
+    });
+    
+    private boolean canUpdate() {
+        return currentFilter.equals(filterField.getText());
+    }
 
     public FilterPanel() {
         this.filterField = new JTextField();
@@ -59,9 +79,9 @@ public class FilterPanel extends JPanel {
         filterField.getDocument().addDocumentListener(new DocumentListener() {
             
             private void updateFilter(String filter) {
-                filterPanelListeners.forEach( (listener) -> {
-                    listener.filterChanged(filter);
-                });
+                currentFilter = filter;
+                
+                updateTimer.restart();
             }
             
             @Override
@@ -79,6 +99,18 @@ public class FilterPanel extends JPanel {
                 updateFilter(filterField.getText());
             }
         });
+        
+        
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                filterField.requestFocus();
+            }
+        });
+    }
+    
+    private void stopTimer() {
+        updateTimer.stop();
     }
     
     private void firePanelClosed() {
@@ -103,7 +135,7 @@ public class FilterPanel extends JPanel {
     
     public void reset() {
         filterField.setText("");
-        
+
         filterField.requestFocus();
     }
 }

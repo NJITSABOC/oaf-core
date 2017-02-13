@@ -225,8 +225,7 @@ public class OAFMainFrame extends JFrame {
         ArrayList<JInternalFrame> graphFrames = new ArrayList<>();
 
         for (JInternalFrame frame : frames) {
-//            if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
-            if (frame instanceof JInternalFrame && !frame.isIcon() && !frame.equals(abnSelectionFrame)) {   //it also includes the main frame but fixes "cascade"
+            if (frame instanceof JInternalFrame && !frame.isIcon() && !frame.equals(abnSelectionFrame)) {
                 graphFrames.add(frame);
             }
             else {

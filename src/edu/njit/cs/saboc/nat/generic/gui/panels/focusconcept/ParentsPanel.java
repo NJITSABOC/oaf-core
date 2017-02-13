@@ -11,9 +11,9 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserData
  * @author Chris O
  * @param <T>
  */
-public class ParentPanel<T extends Concept> extends ConceptListPanel<T> {
+public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
     
-    public ParentPanel(
+    public ParentsPanel(
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource,
             boolean showFilter) {

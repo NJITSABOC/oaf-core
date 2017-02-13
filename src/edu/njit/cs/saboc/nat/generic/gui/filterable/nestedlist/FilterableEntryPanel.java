@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.filterable;
+package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist;
 
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import java.awt.Color;

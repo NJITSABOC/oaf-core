@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.filterable;
+package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist;
 
 import java.util.ArrayList;
 import javax.swing.JPanel;

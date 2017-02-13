@@ -3,9 +3,11 @@ package edu.njit.cs.saboc.nat.generic.gui.layout;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.basic.SearchAndHistoryPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.AncestorPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ChildrenPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.DescendantsPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.FocusConceptPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ParentPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.GrandchildrenPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.SiblingPanel;
 import javax.swing.JSplitPane;
 
@@ -21,9 +23,9 @@ public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
 
     private FocusConceptPanel focusConceptPanel;
 
-    private ParentPanel parentPanel;
-    private ChildrenPanel childrenPanel;
-    
+    private AncestorPanel ancestorPanel;
+    private DescendantsPanel descendantPanel;
+
     public BasicNATAdjustableLayout(ConceptBrowserDataSource dataSource) {
         super(dataSource);
     }
@@ -37,32 +39,30 @@ public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
         siblingPanel = new SiblingPanel(mainPanel, getDataSource());
         
         focusConceptPanel = new FocusConceptPanel(mainPanel, getDataSource());
-        parentPanel = new ParentPanel(mainPanel, getDataSource(), true);
-        childrenPanel = new ChildrenPanel(mainPanel, getDataSource(), true);
+        
+        ancestorPanel = new AncestorPanel(mainPanel, getDataSource());
+        descendantPanel = new DescendantsPanel(mainPanel, getDataSource());
         
         
         JSplitPane leftPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
-        leftPane.setDividerLocation(400);
+        leftPane.setDividerLocation(800);
         
         leftPane.setTopComponent(searchAndHistoryPanel);
         leftPane.setBottomComponent(siblingPanel);
         
-
         super.setLeftPanelContents(leftPane);
-        
-        
         
         JSplitPane topPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         topPane.setDividerLocation(250);
         
-        topPane.setTopComponent(parentPanel);
+        topPane.setTopComponent(ancestorPanel);
         
         
         JSplitPane bottomPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         bottomPane.setDividerLocation(150);
         
         bottomPane.setTopComponent(focusConceptPanel);
-        bottomPane.setBottomComponent(childrenPanel);
+        bottomPane.setBottomComponent(descendantPanel);
         
         topPane.setBottomComponent(bottomPane);
         

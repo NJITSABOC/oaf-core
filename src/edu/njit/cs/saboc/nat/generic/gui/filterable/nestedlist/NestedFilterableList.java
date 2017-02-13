@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.filterable;
+package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterPanel;
@@ -7,6 +7,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -25,6 +29,12 @@ import javax.swing.JScrollPane;
  */
 public abstract class NestedFilterableList<T, V> extends JPanel {
     
+    public interface EntrySelectionListener<V> {
+        public void entryClicked(V entry);
+        public void entryDoubleClicked(V entry);
+        public void noEntrySelected();
+    }
+    
     private final JPanel contentPanel;
     
     private final FilterPanel filterPanel;
@@ -32,6 +42,8 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     private final ArrayList<FilterableNestedEntry<T, V>> entries = new ArrayList<>();
     private final ArrayList<FilterableNestedEntryPanel<FilterableNestedEntry<T, V>>> entryPanels = new ArrayList<>();
     
+    private final ArrayList<EntrySelectionListener<V>> selectionListeners = new ArrayList<>();
+
     public NestedFilterableList() {
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
@@ -83,12 +95,29 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         this.showFilterPanel(false);
     }
     
+    public void addEntrySelectionListener(EntrySelectionListener<V> listener) {
+        this.selectionListeners.add(listener);
+    }
+    
+    public void removeEntrySelectionListener(EntrySelectionListener<V> listener) {
+        this.selectionListeners.remove(listener);
+    }
+    
     public final void showFilterPanel(boolean value) {
+        
+        if(value) {
+            filterPanel.reset();
+        } else {
+            filter("");
+        }
+        
         filterPanel.setVisible(value);
     }
 
     public void displayContents(ArrayList<FilterableNestedEntry<T, V>> contents) {
         displayContents(contents, Optional.empty());
+
+        filterPanel.reset();
     }
     
     public void clearContents() {
@@ -135,23 +164,78 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
             this.contentPanel.add(entryPanel);
             
             entryPanel.getSubPanels().forEach( (panel) -> {
+                
                 panel.addMouseListener(new MouseAdapter() {
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (e.getButton() == MouseEvent.BUTTON1) {
                             
-                            if(e.isControlDown()) {
-                                if(panel.isSelected()) {
-                                    clearSelection();
-                                } else {
-                                    entrySelected(panel);
-                                }
+                            if(e.getClickCount() > 1) {
+                                selectionListeners.forEach((listener) -> {
+                                    listener.entryDoubleClicked((V)panel.getEntry().getObject());
+                                });
                             } else {
+                                if (e.isControlDown()) {
+                                    if (panel.isSelected()) {
+                                        clearSelection();
+
+                                        selectionListeners.forEach((listener) -> {
+                                            listener.noEntrySelected();
+                                        });
+
+                                        return;
+                                    }
+                                }
+                                
                                 entrySelected(panel);
+                                
+                                selectionListeners.forEach( (listener) -> {
+                                    listener.entryClicked((V)panel.getEntry().getObject());
+                                });
                             }
                         }
-                    } 
+                        
+                        panel.requestFocusInWindow();
+                    }
+                });
+                
+                panel.setFocusable(true);
+                
+                panel.addFocusListener(new FocusListener() {
+
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        System.out.println("FOCUS GAINED...");
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        System.out.println("FOCUS LOST...");
+                    }
+                    
+                });
+                
+                panel.addKeyListener(new KeyAdapter() {
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        System.out.println("KEY RELEASED!");
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        System.out.println("KEY PRESSED!");
+                    }
+                    
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (panel.isSelected()) {
+                            showFilterPanel(true);
+                            
+                            filterPanel.filteringStarted(Character.toString(e.getKeyChar()));
+                        }
+                    }
                 });
             });
         });

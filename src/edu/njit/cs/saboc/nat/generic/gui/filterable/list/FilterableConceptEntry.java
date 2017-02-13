@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
+package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;

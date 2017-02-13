@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.filterablelist;
+package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 /**
  *

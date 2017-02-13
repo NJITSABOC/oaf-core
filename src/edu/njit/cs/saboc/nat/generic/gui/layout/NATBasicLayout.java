@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.basic.SearchAndHistoryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ChildrenPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.FocusConceptPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ParentPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ParentsPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
@@ -20,7 +20,7 @@ public class NATBasicLayout extends NATLayout {
 
     private FocusConceptPanel focusConceptPanel;
     
-    private ParentPanel parentPanel;
+    private ParentsPanel parentPanel;
     private ChildrenPanel childrenPanel;
     
     public NATBasicLayout(ConceptBrowserDataSource dataSource) {
@@ -34,7 +34,7 @@ public class NATBasicLayout extends NATLayout {
         
         focusConceptPanel = new FocusConceptPanel(mainPanel, getDataSource());
        
-        parentPanel = new ParentPanel(mainPanel, getDataSource(), true);
+        parentPanel = new ParentsPanel(mainPanel, getDataSource(), true);
 
         childrenPanel = new ChildrenPanel(mainPanel, getDataSource(), true);
 

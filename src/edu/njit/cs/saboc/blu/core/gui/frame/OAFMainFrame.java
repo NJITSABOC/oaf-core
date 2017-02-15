@@ -32,7 +32,7 @@ public class OAFMainFrame extends JFrame {
      */
     private final JFileChooser pngFileChooser = new JFileChooser();
 
-
+    private JInternalFrame abnSelectionFrame;
     /**
      * *
      * The main pane of the tool. All internal frames are added to this desktop
@@ -159,7 +159,7 @@ public class OAFMainFrame extends JFrame {
         add(desktopPane);
 
         SwingUtilities.invokeLater(() -> {
-            JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
+            abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
             
             desktopPane.add(abnSelectionFrame);
             
@@ -181,7 +181,7 @@ public class OAFMainFrame extends JFrame {
                         getWidth() / 2 - abnSelectionFrame.getWidth() / 2, 
                         getHeight() / 2 - abnSelectionFrame.getHeight() + 300);
             }
-            
+
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {
@@ -225,9 +225,11 @@ public class OAFMainFrame extends JFrame {
         ArrayList<JInternalFrame> graphFrames = new ArrayList<>();
 
         for (JInternalFrame frame : frames) {
-//            if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
-            if (frame instanceof JInternalFrame && !frame.isIcon()) {   //it also includes the main frame but fixes "cascade"
+            if (frame instanceof JInternalFrame && !frame.isIcon() && !frame.equals(abnSelectionFrame)) {
                 graphFrames.add(frame);
+            }
+            else {
+                frame.moveToBack();
             }
         }
 

@@ -61,7 +61,8 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     
     public TargetAbNDerivationWizardPanel(
             AbNConfiguration config,
-            DeriveTargetAbNAction derivationAction) {
+            DeriveTargetAbNAction derivationAction,
+            BaseRootSelectionOptionsPanel<TargetAbstractionNetwork> sourceRootSelectionPanel) {
         
         this.derivationAction = derivationAction;
         
@@ -70,7 +71,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
         
-        this.sourceRootSelectionPanel = new GenericRootSelectionOptionsPanel(config);
+        this.sourceRootSelectionPanel = sourceRootSelectionPanel;
         this.sourceRootSelectionPanel.addRootSelectionListener(new RootSelectionListener() {
 
             @Override
@@ -167,6 +168,13 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         southPanel.add(deriveButton, BorderLayout.EAST);
         
         this.add(southPanel, BorderLayout.SOUTH);
+    }
+    
+     public TargetAbNDerivationWizardPanel(
+            AbNConfiguration config,
+            DeriveTargetAbNAction derivationAction) {
+         
+         this(config, derivationAction, new GenericRootSelectionOptionsPanel(config));
     }
 
     public void initialize(

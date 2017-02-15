@@ -37,10 +37,11 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     private final DeriveTANAction derivationAction;
     
     private final JPanel optionsPanel;
-        
+
     public TANDerivationWizardPanel(
             TANConfiguration config, 
-            DeriveTANAction derivationAction) {
+            DeriveTANAction derivationAction, 
+            BaseRootSelectionOptionsPanel<ClusterTribalAbstractionNetwork> rootSelectionMenu) {
         
         this.setLayout(new BorderLayout());
         
@@ -49,7 +50,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
                 
-        this.rootSelectionPanel = new GenericRootSelectionOptionsPanel(config);
+        this.rootSelectionPanel = rootSelectionMenu;
         
         this.rootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("Select Tribal Abstraction Network Root %s", 
@@ -79,6 +80,15 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         this.add(southPanel, BorderLayout.SOUTH);
         
         resetView();
+    }
+    
+    public TANDerivationWizardPanel(
+            TANConfiguration config, 
+            DeriveTANAction derivationAction) {
+
+        this(config, 
+                derivationAction, 
+                new GenericRootSelectionOptionsPanel(config));
     }
     
     public void addOptionsPanelItem(JComponent component) {

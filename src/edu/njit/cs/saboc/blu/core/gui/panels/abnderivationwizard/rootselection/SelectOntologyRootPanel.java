@@ -59,6 +59,10 @@ public class SelectOntologyRootPanel<T extends Concept> extends RootSelectionPan
         this("Select Ontology Root", dummyConfig);
     }
     
+    protected void setRootList(ArrayList<Concept> roots) {
+        this.ontologyRootList.setContents(roots);
+    }
+            
     @Override
     public void initialize(Ontology<T> ontology, OntologySearcher searcher) {
         

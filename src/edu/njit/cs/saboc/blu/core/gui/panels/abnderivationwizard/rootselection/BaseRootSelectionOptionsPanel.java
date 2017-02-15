@@ -77,7 +77,6 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
                         currentRootSelectionPanel, 
                         panel.getSelectionType());
             }
-            
         });
         
         panel.addRootSelectionListener(new RootSelectionListener() {

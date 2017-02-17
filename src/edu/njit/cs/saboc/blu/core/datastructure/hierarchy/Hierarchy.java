@@ -379,18 +379,20 @@ public class Hierarchy<T> {
     }
     
     public void topologicalUp(Set<T> startingPoints, TopologicalVisitor<T> visitor) {
-        Set<T> ancestors = this.getAncestors(startingPoints);
-        ancestors.addAll(startingPoints);
+        
+        Set<T> subhierarchyNodes = this.getAncestors(startingPoints);
+        
+        subhierarchyNodes.addAll(startingPoints);
 
         HashMap<T, Integer> childCountInSubhierarchy = new HashMap<>();
 
-        ancestors.forEach((node) -> {
+        subhierarchyNodes.forEach((node) -> {
             int childCount = 0;
 
-            Set<T> children = this.getParents(node);
+            Set<T> children = this.getChildren(node);
 
             for (T child : children) {
-                if (ancestors.contains(child)) {
+                if (subhierarchyNodes.contains(child)) {
                     childCount++;
                 }
             }

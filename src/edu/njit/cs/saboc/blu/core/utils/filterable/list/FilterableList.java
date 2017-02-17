@@ -159,19 +159,23 @@ public class FilterableList<T> extends JPanel {
         this.list.setCellRenderer(renderer);
     }
     
-    public void showPleaseWait() {
+    private void clearContents() {
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
+        
+        this.setContents(new ArrayList<>());
+    }
+
+    public void showPleaseWait() {
+        clearContents();
     }
 
     public void showDataEmpty() {
-        entryModel.changeFilter("");
-        filterPanel.setVisible(false);
+        clearContents();
     }
-    
+
     public void showNoResults() {
-        entryModel.changeFilter("");
-        filterPanel.setVisible(false);
+        clearContents();
     }
 
     public void setContents(ArrayList<? extends Filterable> content) {

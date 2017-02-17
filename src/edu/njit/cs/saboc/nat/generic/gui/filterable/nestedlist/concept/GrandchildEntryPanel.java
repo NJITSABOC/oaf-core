@@ -2,10 +2,11 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.concept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
+import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableNestedEntryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.ExtendedNeighborhoodResult;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,7 +21,7 @@ import javax.swing.JPanel;
 public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborhoodResult<T>> 
             extends FilterableNestedEntryPanel<FilterableExtendedNeighborhoodEntry<T, V>> {
     
-    public GrandchildEntryPanel(FilterableExtendedNeighborhoodEntry<T, V> entry) {
+    public GrandchildEntryPanel(FilterableExtendedNeighborhoodEntry<T, V> entry, ConceptBrowserDataSource<T> dataSource) {
         super(entry);
         
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -31,7 +32,11 @@ public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborh
 
         Filterable<T> childEntry = entry.getDirectNeighborhoodEntry();
         
-        ConceptEntryPanel childEntryPanel = new ConceptEntryPanel(childEntry, entry.getCurrentFilter());
+        ConceptEntryPanel childEntryPanel = new ConceptEntryPanel(
+                childEntry, 
+                entry.getCurrentFilter(), 
+                dataSource, 
+                HierarchyDisplayInfo.Descendants);
         
         this.add(childEntryPanel);
         super.addSubEntryPanel(childEntryPanel);
@@ -41,7 +46,10 @@ public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborh
             if (!grandChildEntry.getCurrentFilter().isPresent() || 
                     grandChildEntry.containsFilter(grandChildEntry.getCurrentFilter().get())) {
                 
-                ConceptEntryPanel grandChildEntryPanel = new ConceptEntryPanel(grandChildEntry, entry.getCurrentFilter());
+                ConceptEntryPanel grandChildEntryPanel = new ConceptEntryPanel(
+                        grandChildEntry, 
+                        entry.getCurrentFilter(), 
+                        dataSource, HierarchyDisplayInfo.Descendants);
 
                 JPanel indentPanel = new JPanel(new BorderLayout());
                 indentPanel.add(Box.createHorizontalStrut(32), BorderLayout.WEST);

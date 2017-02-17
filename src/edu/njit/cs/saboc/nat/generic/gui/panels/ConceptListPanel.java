@@ -19,13 +19,14 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<T>> dataRetriever,
+            SimpleConceptRenderer<T> renderer,
             boolean showFilter,
             boolean showBorder) {
         
         super(mainPanel, 
                 dataSource,
                 dataRetriever,
-                new SimpleConceptRenderer<>(),
+                renderer,
                 showFilter,
                 showBorder);
         

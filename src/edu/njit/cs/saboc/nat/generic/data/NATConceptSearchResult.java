@@ -8,15 +8,19 @@ public class NATConceptSearchResult<T extends Concept> {
     private final T concept;
     
     private final Set<String> matchedTerms;
+    
+    private final String query;
 
     /**
      * 
      * @param concept
      * @param matchedTerms
+     * @param query
      */
-    public NATConceptSearchResult(T concept, Set<String> matchedTerms) {
+    public NATConceptSearchResult(T concept, Set<String> matchedTerms, String query) {
         this.concept = concept;
         this.matchedTerms = matchedTerms;
+        this.query = query;
     }
 
     public T getConcept() {
@@ -25,6 +29,10 @@ public class NATConceptSearchResult<T extends Concept> {
     
     public Set<String> getMatchedTerms() {
         return matchedTerms;
+    }
+    
+    public String getQuery() {
+        return query;
     }
     
     @Override

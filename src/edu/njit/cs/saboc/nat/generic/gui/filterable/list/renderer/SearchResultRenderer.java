@@ -6,11 +6,8 @@ import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.Collections;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -25,7 +22,6 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
     
     private final JLabel conceptNameLabel;
     private final JLabel conceptIdLabel;
-    private final JLabel matchedTermsLabel;
     
     public SearchResultRenderer() {
         
@@ -33,20 +29,14 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         
         this.conceptNameLabel = new JLabel();
         this.conceptIdLabel = new JLabel();
-        this.matchedTermsLabel = new JLabel();
         
         this.conceptNameLabel.setFont(this.conceptNameLabel.getFont().deriveFont(Font.PLAIN, 16));
         this.conceptIdLabel.setFont(this.conceptIdLabel.getFont().deriveFont(Font.PLAIN, 10));
-        this.matchedTermsLabel.setFont(this.matchedTermsLabel.getFont().deriveFont(Font.ITALIC, 12));
         
         this.conceptIdLabel.setForeground(Color.BLUE);
-        this.matchedTermsLabel.setForeground(Color.RED);
         
         this.conceptNameLabel.setOpaque(false);
         this.conceptIdLabel.setOpaque(false);
-        this.matchedTermsLabel.setOpaque(false);
-        
-        this.matchedTermsLabel.setMinimumSize(new Dimension(300, -1));
         
         JPanel conceptPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         conceptPanel.setOpaque(false);
@@ -55,24 +45,10 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         conceptPanel.add(Box.createHorizontalStrut(8));
         conceptPanel.add(conceptIdLabel);
 
-        
-        JPanel matchedTermsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        matchedTermsPanel.setOpaque(false);
-        
-        JLabel matchedTermsTitleLabel = new JLabel("Matched terms: ");
-        matchedTermsTitleLabel.setFont(this.matchedTermsLabel.getFont().deriveFont(Font.BOLD, 12));
-        matchedTermsTitleLabel.setOpaque(false);
-        
-        matchedTermsPanel.add(matchedTermsTitleLabel);
-        matchedTermsPanel.add(Box.createHorizontalStrut(4));
-        matchedTermsPanel.add(matchedTermsLabel);
-       
-        
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setOpaque(false);
         
-        leftPanel.add(conceptPanel, BorderLayout.NORTH);
-        leftPanel.add(matchedTermsPanel, BorderLayout.CENTER);
+        leftPanel.add(conceptPanel, BorderLayout.CENTER);
         
         JPanel spacerPanel = new JPanel();
         spacerPanel.setOpaque(false);
@@ -104,38 +80,10 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         
         String conceptNameStr = searchResult.getConcept().getName();
         String conceptIdStr = searchResult.getConcept().getIDAsString();
-        
-        ArrayList<String> matchedTerms = new ArrayList<>(searchResult.getMatchedTerms());
-        Collections.sort(matchedTerms);
 
-        String matchedTermsStr;
-        
-        if(value.getCurrentFilter().isPresent()) {
-            String filter = value.getCurrentFilter().get();
-            
-            conceptNameStr = Filterable.filter(conceptNameStr, filter);
-            conceptIdStr = Filterable.filter(conceptIdStr, filter);
-            
-            matchedTermsStr = "<html>";
-            
-            for(String term : matchedTerms) {
-                String filtered = Filterable.filter(term, filter);
-                
-                matchedTermsStr += filtered + "<br>";
-            }
-        } else {
-            matchedTermsStr = "<html>";
-
-            for (String term : matchedTerms) {
-                matchedTermsStr += term + "<br>";
-            }
-        }
-        
-        matchedTermsStr = matchedTermsStr.substring(0, matchedTermsStr.length() - 4);
 
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
-        this.matchedTermsLabel.setText(matchedTermsStr);
         
         return this;
     }

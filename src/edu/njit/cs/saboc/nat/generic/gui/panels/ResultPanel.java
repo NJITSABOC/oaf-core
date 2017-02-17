@@ -31,6 +31,8 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         this.dataRetriever = dataRetriever;
         
         mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
+            
+            
             dataPending();
             
             Thread loadThread = new Thread( () -> {

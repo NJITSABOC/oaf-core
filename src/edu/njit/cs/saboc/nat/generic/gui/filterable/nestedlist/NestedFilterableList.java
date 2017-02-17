@@ -202,30 +202,16 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
                 
                 panel.setFocusable(true);
                 
-                panel.addFocusListener(new FocusListener() {
-
-                    @Override
-                    public void focusGained(FocusEvent e) {
-                        System.out.println("FOCUS GAINED...");
-                    }
-
-                    @Override
-                    public void focusLost(FocusEvent e) {
-                        System.out.println("FOCUS LOST...");
-                    }
-                    
-                });
-                
                 panel.addKeyListener(new KeyAdapter() {
 
                     @Override
                     public void keyReleased(KeyEvent e) {
-                        System.out.println("KEY RELEASED!");
+                        
                     }
 
                     @Override
                     public void keyPressed(KeyEvent e) {
-                        System.out.println("KEY PRESSED!");
+                        
                     }
                     
                     @Override

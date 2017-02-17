@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
@@ -37,6 +38,7 @@ public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
                 mainPanel,
                 dataSource,
                 CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource),
+                new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
                 true,
                 true);
 
@@ -44,6 +46,7 @@ public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
                 mainPanel,
                 dataSource,
                 CommonBrowserDataRetrievers.getStrictSiblingsRetriever(dataSource),
+                new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
                 true,
                 true);
         

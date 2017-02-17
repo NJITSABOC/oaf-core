@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -52,13 +54,27 @@ public class FilterableSearchResultEntry<T extends Concept> extends Filterable<N
     
     @Override
     public String getClipboardText() {
-        return String.format("%s\t%s", 
-                searchResult.getConcept().getID(), 
-                searchResult.getConcept().getName());
+        
+       return "";
     }
 
     @Override
     public String getToolTipText() {
-        return searchResult.getConcept().getName();
+        String filter = searchResult.getQuery().toLowerCase();
+        
+        ArrayList<String> matchedTerms = new ArrayList<>(searchResult.getMatchedTerms());
+        Collections.sort(matchedTerms);
+
+        String matchedTermsStr = "";
+
+        for (String term : matchedTerms) {
+            String filtered = Filterable.filter(term, filter);
+
+            matchedTermsStr += filtered + "<br>";
+        }
+                
+        matchedTermsStr = matchedTermsStr.substring(0, matchedTermsStr.length() - 4);
+        
+        return String.format("<html><font size = 5><b>Matched Terms</b><br>%s", matchedTermsStr);
     }
 }

@@ -4,6 +4,8 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 
@@ -21,6 +23,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
         super(mainPanel, 
                 dataSource, 
                 CommonBrowserDataRetrievers.getChildrenRetriever(dataSource), 
+                new SimpleConceptRenderer<>(dataSource, HierarchyDisplayInfo.Descendants),
                 showFilter,
                 true);
     }

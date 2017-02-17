@@ -49,7 +49,7 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
                 
                 FilterableExtendedNeighborhoodEntry<T, GrandparentResult<T>> groupEntry = (FilterableExtendedNeighborhoodEntry<T, GrandparentResult<T>>)entry;
                 
-                GrandparentEntryPanel<T, GrandparentResult<T>> relGroupPanel = new GrandparentEntryPanel<>(groupEntry);
+                GrandparentEntryPanel<T, GrandparentResult<T>> relGroupPanel = new GrandparentEntryPanel<>(groupEntry, dataSource);
                 
                 return(FilterableNestedEntryPanel<FilterableNestedEntry<GrandparentResult<T>, T>>)
                         (FilterableNestedEntryPanel<?>)relGroupPanel;

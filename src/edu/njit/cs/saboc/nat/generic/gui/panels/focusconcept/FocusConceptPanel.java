@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
 import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.EditFocusConceptPanel.EditFocusConceptListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,19 +25,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.BorderFactory;
-import javax.swing.event.UndoableEditEvent;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.text.Document;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
 
 /**
  * The center panel, which displays the information about the Focus
@@ -45,18 +41,12 @@ import javax.swing.undo.UndoManager;
  */
 public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
-    private UndoManager undoManager;
-    private Document document;
     private JEditorPane jtf;
     
     private JButton backButton;
     private JButton forwardButton;
-    
-    private JPanel editPanel;
-    private JButton undoButton;
-    private JButton redoButton;
-    private JButton acceptButton;
-    private JButton cancelButton;
+       
+    private EditFocusConceptPanel editFocusConceptPanel;
 
     private FocusConceptHistory<T> history;
     
@@ -85,76 +75,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         history = mainPanel.getFocusConceptManager().getHistory();
 
-        undoButton = new JButton();
-        undoButton.setPreferredSize(new Dimension(24, 24));
-        undoButton.setMaximumSize(new Dimension(24, 24));
-        undoButton.setAlignmentY(1);
-        undoButton.setToolTipText("Undo Text");
-        undoButton.setIcon(ImageManager.getImageManager().getIcon("undo.png"));
-        
-        undoButton.addActionListener( (ae) -> {
-            try{
-                if(jtf.isEditable()){
-                    undoManager.undo();
-                }
-            }
-            catch(CannotUndoException cue){
-                
-            }
-        });
-
-        redoButton = new JButton();
-        redoButton.setPreferredSize(new Dimension(24, 24));
-        redoButton.setMaximumSize(new Dimension(24, 24));
-        redoButton.setAlignmentY(1);
-        redoButton.setToolTipText("Redo Text");
-        redoButton.setIcon(ImageManager.getImageManager().getIcon("redo.png"));
-        redoButton.addActionListener( (ae) -> {
-            try{
-                undoManager.redo();
-            }
-            catch(CannotRedoException cre){
-                
-            }
-        });
-
-        acceptButton = new JButton();
-        acceptButton.setPreferredSize(new Dimension(24, 24));
-        acceptButton.setMaximumSize(new Dimension(24, 24));
-        acceptButton.setAlignmentY(1);
-        acceptButton.setToolTipText("Accept Change");
-        acceptButton.setIcon(ImageManager.getImageManager().getIcon("check.png"));
-        acceptButton.addActionListener( (ae) -> {
-            setConcept();
-        });
-
-        cancelButton = new JButton();
-        cancelButton.setPreferredSize(new Dimension(24, 24));
-        cancelButton.setMaximumSize(new Dimension(24, 24));
-        cancelButton.setAlignmentY(1);
-        cancelButton.setToolTipText("Cancel Change");
-        cancelButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
-        cancelButton.addActionListener((ae) -> {
-            
-            if (!pending) {
-                editPanel.setVisible(false);
-                display();
-            }
-        });
-
-        editPanel = new JPanel( new BorderLayout() );
-
-        JPanel tempPanel = new JPanel();
-
-        editPanel.setVisible(false);
-        
-        tempPanel.add(undoButton);
-        tempPanel.add(redoButton);
-        tempPanel.add(acceptButton);
-        tempPanel.add(cancelButton);
-
-        editPanel.add(new JLabel("Search by Name (exact) or ID:"), BorderLayout.WEST);
-        editPanel.add(tempPanel, BorderLayout.EAST);
 
         focusConceptPanel = new JPanel();
         focusConceptPanel.setLayout(new BorderLayout());
@@ -201,7 +121,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             @Override
             public String getToolTipText(MouseEvent evt) {
                 
-                if(!editPanel.isVisible()) {
+                if(!editFocusConceptPanel.isVisible()) {
                     
                     Rectangle conceptRect = new Rectangle(
                             jtf.getX(),
@@ -228,31 +148,27 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 
                 return new Point(evt.getX(), evt.getY() + 21);
             }
+            
         };
         
+        editFocusConceptPanel = new EditFocusConceptPanel(this, jtf);
+        editFocusConceptPanel.addEditFocusConceptListener(new EditFocusConceptListener() {
+
+            @Override
+            public void acceptClicked() {
+                 setConcept();
+            }
+
+            @Override
+            public void cancelClicked() {
+                if (!pending) {
+                    setVisible(false);
+                    display();
+                }
+            }
+        });
+
         jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, 14f));
-        
-        undoManager = new UndoManager() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                super.undoableEditHappened(e);
-                updateUndoButtons();
-            }
-
-            @Override
-            public void undo() {
-                super.undo();
-                updateUndoButtons();
-                jtf.grabFocus();
-            }
-
-            @Override
-            public void redo() {
-                super.redo();
-                updateUndoButtons();
-                jtf.grabFocus();
-            }
-        };
         
         JScrollPane pane = new JScrollPane(jtf);
         ToolTipManager.sharedInstance().registerComponent(jtf);
@@ -263,7 +179,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         alignmentPanel.add(forwardButton, BorderLayout.EAST);
         alignmentPanel.add(optionsPanel, BorderLayout.CENTER);
 
-        focusConceptPanel.add(editPanel, BorderLayout.NORTH);
+        focusConceptPanel.add(editFocusConceptPanel, BorderLayout.NORTH);
         focusConceptPanel.add(pane, BorderLayout.CENTER);
 
         add(alignmentPanel, BorderLayout.NORTH);
@@ -279,35 +195,20 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                         e.consume();
                     } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != InputEvent.CTRL_DOWN_MASK
                             && !e.isActionKey() && !jtf.isEditable()) {
+                        
                         openEditorPane();
+                        
                     } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
                             && e.getKeyCode() == KeyEvent.VK_V
                             && !jtf.isEditable()) {
                         
                         openEditorPane();
-                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
-                            && e.getKeyCode() == KeyEvent.VK_Z
-                            && jtf.isEditable()) {
-                        try{
-                            undoManager.undo();
-                        }
-                        catch(CannotUndoException cue){
-
-                        }
-                    } else if((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK
-                            && e.getKeyCode() == KeyEvent.VK_Y
-                            && jtf.isEditable()) {
-                        try{
-                            undoManager.redo();
-                        }
-                        catch(CannotRedoException cre){
-
-                        }
+                        
                     } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE
                             && jtf.isEditable()) {
                         
                         if(!pending) {
-                            editPanel.setVisible(false);
+                            editFocusConceptPanel.setVisible(false);
                             display();
                         }
                     }
@@ -320,40 +221,32 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(!pending && e.getClickCount() == 2) {
-                    if( !jtf.isEditable() ){
+                    
+                    if(!jtf.isEditable() ){
                         openEditorPane();
                     } else{
-                        editPanel.setVisible(false);
+                        editFocusConceptPanel.setVisible(false);
+                        
                         display();
                     }
                 }
             }
         });
         
-        jtf.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (jtf.isEditable()) {
-                    editPanel.setVisible(false);
-                    
-                    display();
-                }
-            }
-        });
-        
+        jtf.setContentType("text/html");
         
         mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
-            this.display();
+            display();
         });
     }
 
     private void setConcept() {
-        document = null;
+
         if(jtf.isEditable()) {
             doConceptChange(jtf.getText());
         }
 
-        editPanel.setVisible(false);
+        editFocusConceptPanel.setVisible(false);
         display();
     }
     
@@ -363,24 +256,24 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     }
 
     public void display() {
-        editPanel.setVisible(false);
+        jtf.setContentType("text/html");
         
-        document = null;
+        editFocusConceptPanel.setVisible(false);
 
         T fc = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
-        String conceptString = String.format("%s\n%s", 
-                fc.getName(), 
-                fc.getIDAsString());
-
+        String conceptString = getDataSource().getFocusConceptText(fc);
+                
         jtf.setText(conceptString);
+        
         jtf.setToolTipText(conceptString);
 
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);
         jtf.setEditable(false);
+
         
-        undoManager.discardAllEdits();
+        editFocusConceptPanel.clearEdits();
     }
 
     private void doConceptChange(String str) {
@@ -423,16 +316,14 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         jtf.setContentType("text/plain");
         jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
         jtf.setText(activeFC.getName());
+        
         jtf.selectAll();
         jtf.setEditable(true);
         jtf.getCaret().setVisible(true);
         
-        editPanel.setVisible(true);
-        
-        document = jtf.getDocument();
-        document.addUndoableEditListener(undoManager);
-        
-        updateUndoButtons();
+        editFocusConceptPanel.setVisible(true);
+        editFocusConceptPanel.update();
+        editFocusConceptPanel.updateUndoButtons();
     }
 
     private void validateHistoryButtons() {
@@ -464,7 +355,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     @Override
     protected void setFontSize(int fontSize) {
         
-        if (editPanel.isEnabled()) {
+        if (editFocusConceptPanel.isEnabled()) {
             jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
         } else {
             jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, fontSize));
@@ -477,16 +368,11 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             btn.setFont(btn.getFont().deriveFont(Font.BOLD, fontSize));
         });
     }
-
-    public void updateUndoButtons() {
-        undoButton.setEnabled(undoManager.canUndo());
-        redoButton.setEnabled(undoManager.canRedo());
-    }
     
     public void dataEmpty() {
-        jtf.setContentType("text/plain");
+        jtf.setContentType("text/html");
         
-        editPanel.setVisible(false);
+        editFocusConceptPanel.setVisible(false);
         jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
         jtf.setText("Please enter a valid concept.");
     }

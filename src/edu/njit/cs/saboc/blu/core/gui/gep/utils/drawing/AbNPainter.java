@@ -22,7 +22,7 @@ public class AbNPainter {
     private final Set<SinglyRootedNodeEntry> highlightedSinglyRootedNodes = new HashSet<>();
     private final Set<PartitionedNodeEntry> highlightedPartitionNodes = new HashSet<>();
     
-    private boolean showingHighlights = false;
+    protected boolean showingHighlights = false;
     
     public void clearHighlights() {
         highlightedSinglyRootedNodes.clear();

@@ -77,7 +77,7 @@ public class AbNDisplayPanel extends JPanel {
     private int currentTick = 0;
     
     private final Timer updateTimer = new Timer(50, (ae) -> {
-        
+
         if (panelState == DisplayState.Alive) {
             updateableEntities.forEach((entity) -> {
                entity.update(currentTick);
@@ -134,18 +134,18 @@ public class AbNDisplayPanel extends JPanel {
     private final ArrayList<ZoomFactorChangedListener> zoomFactorChangedListeners = new ArrayList<>();
     
     private final ResetHighlightsPanel resetHighlightsPanel;
-
+        
     public AbNDisplayPanel() {
         this.setLayout(null);
-        
+
         addUpdateableEntity(selectionStateMonitor);
         addUpdateableEntity(scrollBarManager);
         addUpdateableEntity(autoScroller);
         
         this.resetHighlightsPanel = new ResetHighlightsPanel(this);
-        
+
         addWidget(resetHighlightsPanel);
-        
+
         initializeFixedListeners();
 
         setFocusable(true);
@@ -153,7 +153,7 @@ public class AbNDisplayPanel extends JPanel {
         drawThread.start();
         updateTimer.start();
     }
-    
+   
     public ViewportAutoScroller getAutoScroller() {
         return autoScroller;
     }
@@ -272,7 +272,8 @@ public class AbNDisplayPanel extends JPanel {
             drawAbstractionNetwork(g2d, viewport);
 
             drawLocationIndicators(g2d);
-
+            
+            resetHighlightsPanel.draw(this);
             if (mouseStateMonitor.mouseDragging()) {
                 if (!scrollBarManager.xScrollerPressed() && !scrollBarManager.yScrollerPressed()) {
                     drawNavigationPipper(g2d);
@@ -281,7 +282,7 @@ public class AbNDisplayPanel extends JPanel {
         } else if (panelState == DisplayState.Loading || panelState == DisplayState.Initializing || panelState == DisplayState.Uninitialized) {
 
             if (graph != null) {
-                drawAbstractionNetwork(g2d, viewport);
+                    drawAbstractionNetwork(g2d, viewport);
             }
 
             Color fadeOutColor = new Color(0, 0, 0, 200);
@@ -308,7 +309,7 @@ public class AbNDisplayPanel extends JPanel {
         });
     }
     
-    private void initializeFixedListeners() {
+   private void initializeFixedListeners() {
 
         this.addMouseListener(new MouseAdapter() {
             

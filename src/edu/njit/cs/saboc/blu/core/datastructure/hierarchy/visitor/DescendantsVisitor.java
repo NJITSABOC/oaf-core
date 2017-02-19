@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class DescendantsVisitor<T> extends TopologicalVisitor<T> {
                 System.out.println("Null descendants: " + child);
             }
 
-            nodeDescendants.addAll(descendants.get(child));
+            nodeDescendants.addAll(descendants.getOrDefault(child, Collections.emptySet()));
         });
         
         descendants.put(node, nodeDescendants);

@@ -697,4 +697,13 @@ public class Hierarchy<T> {
 
         return visitor.getLowestCommonAncestors();
     }
+    
+    public boolean isAncestorOf(T potentialAncestor, T node) {
+        return this.getAncestors(node).contains(potentialAncestor);
+    }
+    
+    public boolean isDescendantOf(T potentialDescendant, T node) {
+        return this.getDescendants(node).contains(potentialDescendant);
+    }
+    
 }

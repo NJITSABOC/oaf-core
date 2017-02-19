@@ -7,8 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -18,6 +16,7 @@ import java.util.Optional;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -43,6 +42,8 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     private final ArrayList<FilterableNestedEntryPanel<FilterableNestedEntry<T, V>>> entryPanels = new ArrayList<>();
     
     private final ArrayList<EntrySelectionListener<V>> selectionListeners = new ArrayList<>();
+    
+    private final JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
     public NestedFilterableList() {
         this.setLayout(new BorderLayout());
@@ -71,8 +72,10 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
             showFilterPanel(!filterPanel.isShowing());
         });
 
-        JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        northPanel.add(filterButton);
+        JPanel northPanel = new JPanel(new BorderLayout());
+        
+        northPanel.add(optionsPanel, BorderLayout.CENTER);
+        northPanel.add(filterButton, BorderLayout.EAST);
         
         this.filterPanel.addFilterPanelListener(new FilterPanelListener() {
 
@@ -101,6 +104,10 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     
     public void removeEntrySelectionListener(EntrySelectionListener<V> listener) {
         this.selectionListeners.remove(listener);
+    }
+    
+    public void addOptionPanelComponent(JComponent component) {
+        this.optionsPanel.add(component);
     }
     
     public final void showFilterPanel(boolean value) {

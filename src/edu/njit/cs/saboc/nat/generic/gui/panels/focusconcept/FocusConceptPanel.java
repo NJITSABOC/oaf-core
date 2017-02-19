@@ -9,14 +9,17 @@ import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.EditFocusConceptPanel.EditFocusConceptListener;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSearchConfig;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -32,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
-import javax.swing.text.Document;
 
 /**
  * The center panel, which displays the information about the Focus
@@ -79,10 +81,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         focusConceptPanel = new JPanel();
         focusConceptPanel.setLayout(new BorderLayout());
 
-        backButton = new JButton("Back");
-        forwardButton = new JButton("Forward");
+        backButton = new JButton();
+        forwardButton = new JButton();
 
-        this.optionsPanel = new JPanel();
+        this.optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.optionsPanel.setOpaque(false);
         
         backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
@@ -115,6 +117,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             }
         });
+        
 
         jtf = new JEditorPane() {
             
@@ -238,6 +241,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
             display();
         });
+        
+        this.addOptionButton(new OpenBrowserButton(mainPanel, new GoogleSearchConfig()));
+        this.addOptionButton(new OpenBrowserButton(mainPanel, new WikipediaSearchConfig()));
+        this.addOptionButton(new OpenBrowserButton(mainPanel, new PubMedSearchConfig()));
     }
 
     private void setConcept() {
@@ -250,7 +257,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         display();
     }
     
-    public void addOptionButton(JButton button) {        
+    public final void addOptionButton(JButton button) {        
         optionsPanel.add(button);
         optionButtons.add(button);
     }

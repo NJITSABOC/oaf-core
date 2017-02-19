@@ -19,7 +19,7 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         public String getDataType();
     }
        
-    private final DataRetriever<T, V> dataRetriever;
+    private DataRetriever<T, V> dataRetriever;
     
     public ResultPanel(
             NATBrowserPanel<T> mainPanel,
@@ -31,23 +31,35 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         this.dataRetriever = dataRetriever;
         
         mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
-            
-            
-            dataPending();
-            
-            Thread loadThread = new Thread( () -> {
-                V result = dataRetriever.getData(concept);
-                
-                SwingUtilities.invokeLater( () -> {
-                    displayResults(result);
-                });
-            });
-            
-            loadThread.start();
+            doLoad(concept);
         });
     }
     
-    protected DataRetriever<T, V> getDataRetriever() {
+    protected void doLoad(T concept) {
+        dataPending();
+
+        Thread loadThread = new Thread(() -> {
+            V result = dataRetriever.getData(concept);
+
+            SwingUtilities.invokeLater(() -> {
+                displayResults(result);
+            });
+        });
+
+        loadThread.start();
+    }
+    
+    protected void reload() {
+        doLoad(getMainPanel().getFocusConceptManager().getActiveFocusConcept());
+    }
+    
+    public void setDataRetriever(DataRetriever<T, V> dataRetriever) {
+        this.dataRetriever = dataRetriever;
+        
+        reload();
+    }
+    
+    public DataRetriever<T, V> getCurrentDataRetriever() {
         return dataRetriever;
     }
     

@@ -131,6 +131,28 @@ public class CommonBrowserDataRetrievers {
         };
     }
     
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getTopologicalAncestors(
+        ConceptBrowserDataSource<T> dataSource) {
+        
+        return new DataRetriever<T, ArrayList<T>>() {
+
+            @Override
+            public ArrayList<T> getData(T concept) {
+                ArrayList<T> topologicalAncestors = dataSource.getOntology().getConceptHierarchy().getAncestorHierarchy(concept).getTopologicalOrdering();
+                topologicalAncestors.remove(concept);
+                topologicalAncestors.remove(topologicalAncestors.get(0));
+                
+                return topologicalAncestors;
+            }
+
+            @Override
+            public String getDataType() {
+                return "Ancestors (Topological order)";
+            }
+        };
+        
+    }
+    
     private static <T extends Concept> ArrayList<T> getSortedConceptList(Set<T> conceptSet) {
         ArrayList<T> concepts = new ArrayList<>(conceptSet);
 

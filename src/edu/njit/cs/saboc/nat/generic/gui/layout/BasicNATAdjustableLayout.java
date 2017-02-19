@@ -59,7 +59,7 @@ public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
         
         
         JSplitPane bottomPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
-        bottomPane.setDividerLocation(150);
+        bottomPane.setDividerLocation(170);
         
         bottomPane.setTopComponent(focusConceptPanel);
         bottomPane.setBottomComponent(descendantPanel);

@@ -165,7 +165,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     
     private void updateBorder(String status) {
         if(showBorder) {
-            this.setBorder(this.createTitltedBorder(getDataRetriever().getDataType(), status));
+            this.setBorder(this.createTitltedBorder(getCurrentDataRetriever().getDataType(), status));
         }
     }
     

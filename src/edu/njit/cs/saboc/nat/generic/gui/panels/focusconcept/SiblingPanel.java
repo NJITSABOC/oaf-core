@@ -20,13 +20,8 @@ import javax.swing.JPanel;
 public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
     
     private final ConceptListPanel<T> siblingPanel;
-    private final ConceptListPanel<T> strictSiblingPanel;
-    
-    private final CardLayout contentPanelLayout;
-    private final JPanel contentPanel;
-    
-    private final JCheckBox chkSiblingShowStrictOnly;
-    private final JCheckBox chkStrictSiblingShowStrictOnly;
+        
+    private final JCheckBox chkShowStrictOnly;
     
     public SiblingPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         
@@ -42,50 +37,20 @@ public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
                 true,
                 true);
 
-        this.strictSiblingPanel = new ConceptListPanel<>(
-                mainPanel,
-                dataSource,
-                CommonBrowserDataRetrievers.getStrictSiblingsRetriever(dataSource),
-                new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
-                true,
-                true);
+        this.chkShowStrictOnly = new JCheckBox("Show Strict Siblings Only");
         
-        this.contentPanelLayout = new CardLayout();
-        this.contentPanel = new JPanel(contentPanelLayout);
-                
-        this.chkSiblingShowStrictOnly = new JCheckBox("Show Strict Siblings Only");
-        this.chkStrictSiblingShowStrictOnly = new JCheckBox("Show Strict Siblings Only");
-        
-        this.chkSiblingShowStrictOnly.addActionListener((ae) -> {
+        this.chkShowStrictOnly.addActionListener((ae) -> {
             
-            if(chkSiblingShowStrictOnly.isSelected()) {
-                contentPanelLayout.show(contentPanel, "StrictSiblings");
-            } else {
-                contentPanelLayout.show(contentPanel, "Siblings");
-            }
-            
-            chkStrictSiblingShowStrictOnly.setSelected(chkSiblingShowStrictOnly.isSelected());
+           if(chkShowStrictOnly.isSelected()) {
+               siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getStrictSiblingsRetriever(dataSource));
+           } else {
+                siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource));
+           }
         });
 
-        this.chkStrictSiblingShowStrictOnly.addActionListener((ae) -> {
-            
-            if(chkStrictSiblingShowStrictOnly.isSelected()) {
-                contentPanelLayout.show(contentPanel, "StrictSiblings");
-            } else {
-                contentPanelLayout.show(contentPanel, "Siblings");
-            }
-            
-            chkSiblingShowStrictOnly.setSelected(chkStrictSiblingShowStrictOnly.isSelected());
-        });
-        
-        this.siblingPanel.addOptionsComponent(chkSiblingShowStrictOnly);
-        this.strictSiblingPanel.addOptionsComponent(chkStrictSiblingShowStrictOnly);
-        
+        this.siblingPanel.addOptionsComponent(chkShowStrictOnly);
 
-        this.contentPanel.add(siblingPanel, "Siblings");
-        this.contentPanel.add(strictSiblingPanel, "StrictSiblings");
-        
-        this.add(contentPanel, BorderLayout.CENTER);
+        this.add(siblingPanel, BorderLayout.CENTER);
     }
 
     @Override

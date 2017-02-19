@@ -140,7 +140,10 @@ public class CommonBrowserDataRetrievers {
             public ArrayList<T> getData(T concept) {
                 ArrayList<T> topologicalAncestors = dataSource.getOntology().getConceptHierarchy().getAncestorHierarchy(concept).getTopologicalOrdering();
                 topologicalAncestors.remove(concept);
-                topologicalAncestors.remove(topologicalAncestors.get(0));
+                
+                if(!topologicalAncestors.isEmpty()) {
+                    topologicalAncestors.remove(topologicalAncestors.get(0));
+                }
                 
                 return topologicalAncestors;
             }

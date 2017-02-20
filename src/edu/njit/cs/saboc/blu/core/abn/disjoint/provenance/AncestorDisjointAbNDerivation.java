@@ -57,7 +57,11 @@ public class AncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends D
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("AncestorDisjointAbNDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AncestorDisjointAbNDerivation");       
+        result.add(obj_class);
         
         //serialzie sourceDisjointAbNDerivation
         JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();

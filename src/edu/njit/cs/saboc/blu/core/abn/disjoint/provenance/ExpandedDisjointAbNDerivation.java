@@ -58,10 +58,14 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
         return String.format("Expanded %s", expandedAggregateNodeRoot.getName());
     }
     
-    @Override
+@Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("ExpandedDisjointAbNDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","ExpandedDisjointAbNDerivation");       
+        result.add(obj_class);
         
         //serialzie sourceDisjointAbNDerivation
         JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
@@ -74,5 +78,5 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
         result.add(obj_expandedAggregateNodeRoot);
         
         return result;       
-    }      
+    }           
 }

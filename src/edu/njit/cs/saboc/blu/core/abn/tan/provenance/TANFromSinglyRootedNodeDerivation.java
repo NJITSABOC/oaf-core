@@ -63,7 +63,11 @@ public class TANFromSinglyRootedNodeDerivation <
     @Override
     public JSONArray serializeToJSON() {        
         JSONArray result = new JSONArray();
-        result.add("TANFromSinglyRootedNodeDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","TANFromSinglyRootedNodeDerivation");       
+        result.add(obj_class);
         
         //serialzie parentAbNDerivation
         JSONObject obj_parentAbNDerivation = new JSONObject();
@@ -76,6 +80,6 @@ public class TANFromSinglyRootedNodeDerivation <
         result.add(obj_nodeRoot);
         
         return result;
-    }    
+    }   
     
 }

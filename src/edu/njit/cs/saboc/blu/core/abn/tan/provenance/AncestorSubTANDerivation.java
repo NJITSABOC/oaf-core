@@ -58,7 +58,11 @@ public class AncestorSubTANDerivation extends ClusterTANDerivation
     @Override
     public JSONArray serializeToJSON() {        
         JSONArray result = new JSONArray();
-        result.add("AncestorSubTANDerivation");
+
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AncestorSubTANDerivation");       
+        result.add(obj_class);
         
         //serialzie base
         JSONObject obj_base = new JSONObject();
@@ -71,6 +75,6 @@ public class AncestorSubTANDerivation extends ClusterTANDerivation
         result.add(obj_clusterRootConcept);
         
         return result;
-    }    
+    }  
     
 }

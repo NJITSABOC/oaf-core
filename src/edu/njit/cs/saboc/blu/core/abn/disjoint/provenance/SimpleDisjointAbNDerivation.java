@@ -69,7 +69,11 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("SimpleDisjointAbNDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","SimpleDisjointAbNDerivation");       
+        result.add(obj_class);
         
         //serialzie parentAbNDerivation
         JSONObject obj_parentAbNDerivation = new JSONObject();

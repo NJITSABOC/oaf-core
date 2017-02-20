@@ -59,10 +59,15 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
         return String.format("Expanded aggregate cluster (%s)", aggregateClusterRoot.getName());
     }
 
+
     @Override
     public JSONArray serializeToJSON() {        
         JSONArray result = new JSONArray();
-        result.add("ExpandedSubTANDerivation");
+
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","ExpandedSubTANDerivation");       
+        result.add(obj_class);
         
         //serialzie base
         JSONObject obj_base = new JSONObject();
@@ -76,5 +81,6 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
         
         return result;
     }   
+     
     
 }

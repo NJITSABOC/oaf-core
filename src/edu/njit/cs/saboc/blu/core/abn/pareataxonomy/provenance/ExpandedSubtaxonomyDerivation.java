@@ -63,7 +63,11 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("ExpandedSubtaxonomyDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","ExpandedSubtaxonomyDerivation");       
+        result.add(obj_class);
         
         //serialzie base
         JSONObject obj_base = new JSONObject();

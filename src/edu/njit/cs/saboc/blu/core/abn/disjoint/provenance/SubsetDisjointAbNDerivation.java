@@ -51,7 +51,12 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("SubsetDisjointAbNDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","SubsetDisjointAbNDerivation");       
+        result.add(obj_class);
+
         
         //serialzie sourceDisjointAbNDerivation
         JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();

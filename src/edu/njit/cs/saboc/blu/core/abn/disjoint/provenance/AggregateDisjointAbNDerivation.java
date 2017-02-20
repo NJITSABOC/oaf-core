@@ -49,7 +49,11 @@ public class AggregateDisjointAbNDerivation<T extends SinglyRootedNode> extends 
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("AggregateDisjointAbNDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateDisjointAbNDerivation");       
+        result.add(obj_class);
         
         //serialzie nonAggregateDerivation
         JSONObject obj_nonAggregateDerivation = new JSONObject();

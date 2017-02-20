@@ -59,7 +59,11 @@ public class TANFromPartitionedNodeDerivation<
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("TANFromPartitionedNodeDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","TANFromPartitionedNodeDerivation");       
+        result.add(obj_class);
 
         //serialzie parentAbNDerivation
         JSONObject obj_parentAbNDerivation = new JSONObject();
@@ -77,6 +81,6 @@ public class TANFromPartitionedNodeDerivation<
         result.add(obj_node);
 
         return result;
-    }  
+    } 
     
 }

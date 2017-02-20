@@ -77,7 +77,11 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("AggregateAncestorSubtaxonomyDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateAncestorSubtaxonomyDerivation");       
+        result.add(obj_class);
         
         //serialzie aggregateBase
         JSONObject obj_aggregateBase = new JSONObject();

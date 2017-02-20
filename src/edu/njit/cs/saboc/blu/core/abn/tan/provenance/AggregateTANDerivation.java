@@ -50,7 +50,11 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     @Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("AggregateTANDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateTANDerivation");       
+        result.add(obj_class);
         
         //serialzie nonAggregateSourceDerivation
         JSONObject obj_nonAggregateSourceDerivation = new JSONObject();

@@ -72,10 +72,14 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         return sourceTaxonomy.createRootSubtaxonomy(pareas.iterator().next());
     }
     
-    @Override
+@Override
     public JSONArray serializeToJSON() {
         JSONArray result = new JSONArray();
-        result.add("AggregateRootSubtaxonomyDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateRootSubtaxonomyDerivation");       
+        result.add(obj_class);
         
         //serialzie aggregateBase
         JSONObject obj_base = new JSONObject();

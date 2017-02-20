@@ -56,7 +56,11 @@ public class RootSubTANDerivation extends ClusterTANDerivation
     @Override
     public JSONArray serializeToJSON() {        
         JSONArray result = new JSONArray();
-        result.add("RootSubTANDerivation");
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","RootSubTANDerivation");       
+        result.add(obj_class);
         
         //serialzie base
         JSONObject obj_base = new JSONObject();
@@ -69,5 +73,5 @@ public class RootSubTANDerivation extends ClusterTANDerivation
         result.add(obj_clusterRootConcept);
         
         return result;
-    }    
+    }   
 }

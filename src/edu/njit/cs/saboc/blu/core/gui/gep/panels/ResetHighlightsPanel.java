@@ -38,6 +38,18 @@ public class ResetHighlightsPanel extends AbNDisplayWidget {
         }
     }
     
+    public void draw(AbNDisplayPanel display_panel){
+        
+        this.setBounds(display_panel.getWidth() / 2 - panelSize.width / 2, display_panel.getHeight() - panelSize.height - 20, panelSize.width, panelSize.height);
+        display_panel.add(this);
+        if(display_panel.getAbNPainter().showingHighlights()) {
+            this.setVisible(true);
+        } else {
+            this.setVisible(false);
+            display_panel.remove(this);
+        }        
+    }
+    
     public void displayPanelResized(AbNDisplayPanel displayPanel) {
         this.setBounds(
                 displayPanel.getWidth() - 400, 

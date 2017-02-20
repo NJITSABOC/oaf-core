@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import edu.njit.cs.saboc.blu.core.gui.gep.Viewport;
-import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -83,37 +82,27 @@ public class MinimapPanel extends AbNDisplayWidget {
         
         Graphics2D g2d = (Graphics2D)image.getGraphics();
         
-        g2d.setColor(Color.WHITE);
+
+        //fill the minipanel with blue background with 50% transparency.
+        g2d.setColor(new Color(100, 100, 255, 32));
         g2d.fillRect(0, 0, image.getWidth(), image.getHeight());
         
-        int xOffset = 0;
+        int xOffset = 0;  //centering the x-coordinate
         
-        int insideWidth = this.getWidth();
-
-        if(abnRelativeWidth < this.getWidth()) {
-            g2d.setColor(new Color(100, 100, 255, 32));
-            
-            int borderWidth = image.getWidth() - abnRelativeWidth;
-            
-            insideWidth = this.getWidth() - borderWidth + 1;
-            
-            borderWidth /= 2;
-            
-            g2d.fillRect(0, 0, borderWidth, image.getHeight());
-            g2d.fillRect(image.getWidth() - borderWidth, 0, borderWidth, image.getHeight());
-            
-            xOffset = borderWidth;
+        //draw the space (in white) and its components
+        g2d.setColor(Color.white);
+        
+        if (abnRelativeWidth < this.getWidth()) {
+            xOffset = (image.getWidth() - abnRelativeWidth) / 2;
         }
         
-        if(abnRelativeHeight < this.getHeight()) {
-            g2d.setColor(new Color(100, 100, 255, 32));
+        if (abnRelativeHeight < this.getHeight()) {
             
-            int borderHeight = image.getHeight()- abnRelativeHeight;
-            g2d.fillRect(xOffset, image.getHeight() - borderHeight, insideWidth, borderHeight);
         }
         
         final int xDrawOffset = xOffset;
         
+        g2d.fillRect(xOffset, 0, abnRelativeWidth, abnRelativeHeight);
         getDisplayPanel().getGraph().getContainerEntries().values().forEach((c) -> {
 
             if(miniMapViewport.getViewRegion().intersects(c.getBounds())) {
@@ -124,21 +113,24 @@ public class MinimapPanel extends AbNDisplayWidget {
                 
                 getDisplayPanel().getAbNPainter().paintMiniMapContainer(g2d, c, p, miniMapZoomFactor);
             }
-            
+       
         });
         
+        //draw viewport
         Rectangle viewportDrawBounds = viewportBoxBounds.getBounds();
+        
         viewportDrawBounds.translate(xDrawOffset + 4, 4);
         viewportDrawBounds.width = viewportDrawBounds.width - 8;
         viewportDrawBounds.height = viewportDrawBounds.height - 8;
-
+        
         g2d.setStroke(new BasicStroke(4));
         g2d.setColor(Color.ORANGE);
         g2d.draw(viewportDrawBounds);
         
+        //draw border
         g2d.setStroke(new BasicStroke(4));
         g2d.setColor(new Color(100, 100, 255));
-        g2d.drawRect(0, 0, image.getWidth(), image.getHeight());
+        g2d.drawRect(0, 0, image.getWidth(), image.getHeight()); 
         
         g.drawImage(image, 0, 0, null);
     }

@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.frame;
 
-import edu.njit.cs.saboc.blu.core.gui.graphframe.GenericInternalGraphFrame;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -32,7 +32,7 @@ public class OAFMainFrame extends JFrame {
      */
     private final JFileChooser pngFileChooser = new JFileChooser();
 
-
+    private JInternalFrame abnSelectionFrame;
     /**
      * *
      * The main pane of the tool. All internal frames are added to this desktop
@@ -113,10 +113,10 @@ public class OAFMainFrame extends JFrame {
         JMenuItem cascade = new JMenuItem("Cascade");
         windows.add(cascade);
 
-        JMenuItem horizontalcomp = new JMenuItem("Compare Side-By-Side");
+        JMenuItem horizontalcomp = new JMenuItem("Side-By-Side");
         windows.add(horizontalcomp);
 
-        JMenuItem verticalcomp = new JMenuItem("Compare Vertically");
+        JMenuItem verticalcomp = new JMenuItem("Tile");
         windows.add(verticalcomp);
 
         /**
@@ -159,25 +159,45 @@ public class OAFMainFrame extends JFrame {
         add(desktopPane);
 
         SwingUtilities.invokeLater(() -> {
-            JInternalFrame abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
+            abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
             
             desktopPane.add(abnSelectionFrame);
             
-            abnSelectionFrame.setLocation(getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
-                    getHeight() / 2 - abnSelectionFrame.getHeight() + 200);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+            if (screenSize.getWidth() < abnSelectionFrame.getWidth() || 
+                    screenSize.getHeight() < abnSelectionFrame.getHeight()) {
+                
+                Dimension contentSize = getContentPane().getSize();
+                
+                int contentWidth = contentSize.width;
+                int contentHeight = contentSize.height;
+                
+                abnSelectionFrame.setLocation(0, 0);
+                abnSelectionFrame.setSize(contentWidth, contentHeight);
+                
+            } else {
+                abnSelectionFrame.setLocation(
+                        getWidth() / 2 - abnSelectionFrame.getWidth() / 2, 
+                        getHeight() / 2 - abnSelectionFrame.getHeight() + 300);
+            }
+
         });
 
         pngFileChooser.setFileFilter(new FileFilter() {
+            
+            @Override
             public boolean accept(File f) {
                 if (f.isDirectory()) {
                     return true;
                 }
 
-                return f.getName().endsWith(".png");
+                return f.getName().toLowerCase().endsWith(".png");
             }
 
+            @Override
             public String getDescription() {
-                return "Portal Network Graphs (PNG) Images";
+                return "Portal Network Graphs (.png) Images";
             }
         });
 
@@ -205,8 +225,11 @@ public class OAFMainFrame extends JFrame {
         ArrayList<JInternalFrame> graphFrames = new ArrayList<>();
 
         for (JInternalFrame frame : frames) {
-            if (frame instanceof GenericInternalGraphFrame && !frame.isIcon()) {
+            if (frame instanceof JInternalFrame && !frame.isIcon() && !frame.equals(abnSelectionFrame)) {
                 graphFrames.add(frame);
+            }
+            else {
+                frame.moveToBack();
             }
         }
 

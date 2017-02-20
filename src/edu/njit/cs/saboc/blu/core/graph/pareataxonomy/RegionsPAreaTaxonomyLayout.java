@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
     
@@ -41,6 +42,7 @@ public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAr
         this.config = config;
     }
 
+    @Override
     public void doLayout() {
         super.doLayout();
 
@@ -51,7 +53,7 @@ public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAr
         GraphGroupLevel currentPAreaLevel = null; // Used for generating the graph
 
         // These are a set of styles such that each new row is given a different color.
-        ArrayList<Color> backgrounds = super.getTaxonomyLevelColors();
+        ArrayList<Color> backgrounds = BasePAreaTaxonomyLayout.getTaxonomyLevelColors();
 
         int areaX = 0;  // The first area on each line is given an areaX value of 0.
         int areaY = 0;  // The first row of areas is given an areaY value of 0.

@@ -44,6 +44,6 @@ public class FilterableConceptEntry<T extends Concept> extends Filterable<T>
 
     @Override
     public String getToolTipText() {
-        return concept.getName();
+        return String.format("<html><font size = '5'>%s</font>", concept.getName());
     }
 }

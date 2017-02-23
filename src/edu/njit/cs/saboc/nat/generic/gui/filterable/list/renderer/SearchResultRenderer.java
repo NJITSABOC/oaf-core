@@ -80,7 +80,10 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
         
         String conceptNameStr = searchResult.getConcept().getName();
         String conceptIdStr = searchResult.getConcept().getIDAsString();
-
+        
+        if(value.getCurrentFilter().isPresent()) {
+            conceptNameStr = Filterable.filter(conceptNameStr, value.getCurrentFilter().get());
+        }
 
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);

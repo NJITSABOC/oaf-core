@@ -107,6 +107,7 @@ public class PAreaTaxonomyDerivationParser {
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
         PAreaTaxonomyDerivation base = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
         
+        //need implement getSelectedProperties by id or sth similar
         Set<InheritableProperty> selectedProperties = null;
         RelationshipSubtaxonomyDerivation result = new RelationshipSubtaxonomyDerivation(base, selectedProperties);
 

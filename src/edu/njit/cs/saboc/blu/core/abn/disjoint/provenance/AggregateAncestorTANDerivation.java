@@ -82,7 +82,7 @@ public class AggregateAncestorTANDerivation<T extends SinglyRootedNode> extends 
 
         //serialize class
         JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateAncestorTANDerivatio");       
+        obj_class.put("ClassName","AggregateAncestorTANDerivation");       
         result.add(obj_class);
         
         //serialzie aggregateBase

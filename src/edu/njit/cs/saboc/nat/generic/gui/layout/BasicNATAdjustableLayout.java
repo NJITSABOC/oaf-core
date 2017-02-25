@@ -1,32 +1,32 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.layout.basic.SearchAndHistoryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.AncestorPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.ChildrenPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.DescendantsPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.FocusConceptPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.GrandchildrenPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.SiblingPanel;
 import javax.swing.JSplitPane;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
+public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustableLayout {
     
-    private SearchAndHistoryPanel searchAndHistoryPanel;
+    private SearchAndHistoryPanel<T> searchAndHistoryPanel;
     
-    private SiblingPanel siblingPanel;
+    private SiblingPanel<T> siblingPanel;
 
-    private FocusConceptPanel focusConceptPanel;
+    private FocusConceptPanel<T> focusConceptPanel;
 
-    private AncestorPanel ancestorPanel;
-    private DescendantsPanel descendantPanel;
+    private AncestorPanel<T> ancestorPanel;
+    private DescendantsPanel<T> descendantPanel;
 
-    public BasicNATAdjustableLayout(ConceptBrowserDataSource dataSource) {
+    public BasicNATAdjustableLayout(ConceptBrowserDataSource<T> dataSource) {
         super(dataSource);
     }
 
@@ -35,13 +35,13 @@ public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
         
         super.createLayout(mainPanel);
         
-        searchAndHistoryPanel = new SearchAndHistoryPanel(mainPanel, getDataSource());
-        siblingPanel = new SiblingPanel(mainPanel, getDataSource());
+        searchAndHistoryPanel = new SearchAndHistoryPanel<>(mainPanel, getDataSource());
+        siblingPanel = new SiblingPanel<>(mainPanel, getDataSource());
         
-        focusConceptPanel = new FocusConceptPanel(mainPanel, getDataSource());
+        focusConceptPanel = new FocusConceptPanel<>(mainPanel, getDataSource());
         
-        ancestorPanel = new AncestorPanel(mainPanel, getDataSource());
-        descendantPanel = new DescendantsPanel(mainPanel, getDataSource());
+        ancestorPanel = new AncestorPanel<>(mainPanel, getDataSource());
+        descendantPanel = new DescendantsPanel<>(mainPanel, getDataSource());
         
         
         JSplitPane leftPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -67,5 +67,13 @@ public class BasicNATAdjustableLayout extends BaseNATAdjustableLayout {
         topPane.setBottomComponent(bottomPane);
         
         super.setMiddlePanelContents(topPane);
+    }
+    
+    public AncestorPanel<T> getAncestorPanel() {
+        return ancestorPanel;
+    }
+    
+    public DescendantsPanel<T> getDescendantsPanel() {
+        return descendantPanel;
     }
 }

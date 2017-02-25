@@ -156,7 +156,7 @@ public class CommonBrowserDataRetrievers {
         
     }
     
-    private static <T extends Concept> ArrayList<T> getSortedConceptList(Set<T> conceptSet) {
+    public static <T extends Concept> ArrayList<T> getSortedConceptList(Set<T> conceptSet) {
         ArrayList<T> concepts = new ArrayList<>(conceptSet);
 
         concepts.sort(new ConceptNameComparator());

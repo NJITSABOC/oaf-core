@@ -21,6 +21,9 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
        
     private DataRetriever<T, V> dataRetriever;
     
+    private boolean isActive;
+    private boolean loaded;
+    
     public ResultPanel(
             NATBrowserPanel<T> mainPanel,
             ConceptBrowserDataSource<T> dataSource,
@@ -31,11 +34,36 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         this.dataRetriever = dataRetriever;
         
         mainPanel.getFocusConceptManager().addFocusConceptListener( (concept) -> {
-            doLoad(concept);
+            this.loaded = false;
+            
+            if(isActive) {                
+                doLoad(concept);
+            }
         });
+        
+        this.isActive = true;
+        this.loaded = false;
     }
     
-    protected void doLoad(T concept) {
+    public void setActive(boolean value) {
+        this.isActive = value;
+    }
+    
+    public boolean isActive() {
+        return isActive;
+    }
+    
+    private void doLoad(T concept) {
+        if(!isActive) {
+            return;
+        }
+        
+        if(loaded) {
+            return;
+        }
+        
+        this.loaded = true;
+        
         dataPending();
 
         Thread loadThread = new Thread(() -> {
@@ -53,10 +81,18 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         doLoad(getMainPanel().getFocusConceptManager().getActiveFocusConcept());
     }
     
+    protected void forceReload() {
+        this.loaded = false;
+        
+        reload();
+    }
+    
     public void setDataRetriever(DataRetriever<T, V> dataRetriever) {
         this.dataRetriever = dataRetriever;
         
-        reload();
+        if(isActive) {
+            forceReload();
+        }
     }
     
     public DataRetriever<T, V> getCurrentDataRetriever() {

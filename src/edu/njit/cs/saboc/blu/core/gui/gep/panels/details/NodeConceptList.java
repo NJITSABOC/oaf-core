@@ -11,6 +11,7 @@ import java.util.Optional;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NodeConceptList<T extends Node> extends NodeEntityList<T, Concept> {
     

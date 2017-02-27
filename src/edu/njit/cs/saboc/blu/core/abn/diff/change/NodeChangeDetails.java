@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import java.util.Set;
 
 /**
- *
+ * The details of how a node changed between the FROM and TO versions of
+ * an abstraction network, if any changes exist.
+ * 
  * @author Chris O
  */
 public abstract class NodeChangeDetails {
@@ -19,7 +21,9 @@ public abstract class NodeChangeDetails {
     
     private final Set<ChildOfChange> childOfChanges;
     
-    protected NodeChangeDetails(ChangeState changeState, Node changedNode, 
+    protected NodeChangeDetails(
+            ChangeState changeState, 
+            Node changedNode, 
             Set<NodeConceptChange> conceptChanges,
             Set<ChildOfChange> childOfChanges) {
         

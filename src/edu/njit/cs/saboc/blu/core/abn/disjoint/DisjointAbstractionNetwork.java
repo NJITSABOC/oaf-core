@@ -12,7 +12,6 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.OverlappingNodeDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SubsetDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -21,8 +20,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- *
+ * An abstraction network where each concept is summarized by exactly one node.
+ * Disjoint abstraction networks are created from the partition nodes of
+ * other abstraction networks and summarize the intersections between the 
+ * subhierarchies of concepts in partitioned nodes.
+ * 
  * @author Chris
+ * 
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class DisjointAbstractionNetwork<
         T extends DisjointNode<PARENTNODE_T>,
@@ -177,7 +184,6 @@ public class DisjointAbstractionNetwork<
                 this,
                 new SubsetDisjointAbNDerivation(getDerivation(), overlaps));
     }
-    
     
     public OverlappingNodeDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getOverlappingNodeDisjointAbN(PARENTNODE_T overlappingNode) {
         

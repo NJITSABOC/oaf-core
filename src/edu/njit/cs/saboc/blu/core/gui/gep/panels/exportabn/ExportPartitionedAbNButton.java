@@ -38,16 +38,16 @@ public class ExportPartitionedAbNButton extends ExportAbNButton {
             String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)", 
                     config.getTextConfiguration().getContainerTypeName(true), 
                     config.getTextConfiguration().getNodeTypeName(true), 
-                    config.getTextConfiguration().getConceptTypeName(true),
-                    config.getTextConfiguration().getConceptTypeName(false));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
             
             String containerChoice = String.format("%s and %s Only", 
                     config.getTextConfiguration().getContainerTypeName(true), 
-                    config.getTextConfiguration().getConceptTypeName(true));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
             
             String groupChoice = String.format("%s and %s Only",
                     config.getTextConfiguration().getNodeTypeName(true),
-                    config.getTextConfiguration().getConceptTypeName(true));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
 
             String[] choices = {fullChoice, containerChoice, groupChoice};
 

@@ -3,17 +3,23 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configur
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public abstract class PAreaTaxonomyTextConfiguration implements PartitionedAbNTextConfiguration<PArea, Area> {
+public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextConfiguration<PArea, Area> {
     
     private final PAreaTaxonomy taxonomy;
     
-    public PAreaTaxonomyTextConfiguration(PAreaTaxonomy taxonomy) {
+    public PAreaTaxonomyTextConfiguration(
+            OntologyEntityNameConfiguration ontologyEntityNameConfig, 
+            PAreaTaxonomy taxonomy) {
+        
+        super(ontologyEntityNameConfig);
+        
         this.taxonomy = taxonomy;
     }
     

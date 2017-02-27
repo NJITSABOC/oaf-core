@@ -18,9 +18,9 @@ public class DiffParentPAreaTableModel extends OAFAbstractTableModel<ParentNodeD
     
     public DiffParentPAreaTableModel(DiffPAreaTaxonomyConfiguration config) {
         super(new String [] {
-            config.getTextConfiguration().getParentConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false),
             "Parent Partial-area",
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Area",
             "Diff State"
         });

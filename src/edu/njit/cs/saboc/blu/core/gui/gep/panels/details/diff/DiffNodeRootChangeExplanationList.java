@@ -27,7 +27,7 @@ public class DiffNodeRootChangeExplanationList extends AbstractEntityList<DiffAb
     protected String getBorderText(Optional<ArrayList<DiffAbNConceptChange>> entities) {
         
         String base = String.format("Structural Changes that Affected Root %s", 
-                config.getTextConfiguration().getConceptTypeName(false));
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
         
         int count = 0;
         

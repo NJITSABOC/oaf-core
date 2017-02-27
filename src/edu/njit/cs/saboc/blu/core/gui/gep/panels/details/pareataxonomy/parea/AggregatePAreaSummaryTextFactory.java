@@ -36,7 +36,7 @@ public class AggregatePAreaSummaryTextFactory extends PAreaSummaryTextFactory {
             
             typeDesc = String.format("<b>%s</b> is a regular partial-area that summarizes %d %s.",
                     rootName, rootPArea.getConceptCount(), 
-                    config.getTextConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
             
         } else {
             int aggregatedGroupCount = aggregatePArea.getAggregatedNodes().size();
@@ -45,7 +45,7 @@ public class AggregatePAreaSummaryTextFactory extends PAreaSummaryTextFactory {
             typeDesc = String.format("<b>%s</b> is an aggregate partial-area that summarizes %d %s and %d %s.",
                     rootName, 
                     totalConceptCount, 
-                    config.getTextConfiguration().getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
                     aggregatedGroupCount,
                     config.getTextConfiguration().getNodeTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
         }

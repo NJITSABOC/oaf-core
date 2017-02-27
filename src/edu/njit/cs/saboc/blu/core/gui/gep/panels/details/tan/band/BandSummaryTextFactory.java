@@ -39,7 +39,7 @@ public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
         String result = String.format("<html><b>%s</b> is a tribal band that summarizes %d %s in %d clusters.",
                 bandName,
                 allConcepts.size(),
-                config.getTextConfiguration().getConceptTypeName(allConcepts.size() != 1).toLowerCase(),
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(allConcepts.size() != 1).toLowerCase(),
                 clusters.size());
 
         result += "<p><b>Help / Description:</b><br>";

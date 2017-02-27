@@ -5,8 +5,13 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 /**
  *
  * @author Chris
+ * @param <T>
  */
-public interface DisjointAbNTextConfiguration<T extends DisjointNode> extends AbNTextConfiguration<T> {
+public abstract class DisjointAbNTextConfiguration<T extends DisjointNode> extends AbNTextConfiguration<T> {
     
-     public String getOverlappingNodeTypeName(boolean plural);
+    public DisjointAbNTextConfiguration(OntologyEntityNameConfiguration ontologyEntityNameConfig) {
+        super(ontologyEntityNameConfig);
+    }
+    
+     public abstract String getOverlappingNodeTypeName(boolean plural);
 }

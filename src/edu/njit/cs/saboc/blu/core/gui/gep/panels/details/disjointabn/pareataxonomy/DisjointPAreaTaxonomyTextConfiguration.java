@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,11 +16,16 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class DisjointPAreaTaxonomyTextConfiguration implements DisjointAbNTextConfiguration<DisjointNode<PArea>> {
+public abstract class DisjointPAreaTaxonomyTextConfiguration extends DisjointAbNTextConfiguration<DisjointNode<PArea>> {
 
     private final DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy;
 
-    public DisjointPAreaTaxonomyTextConfiguration(DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
+    public DisjointPAreaTaxonomyTextConfiguration(
+            OntologyEntityNameConfiguration ontologyEntityNameConfig, 
+            DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
+        
+        super(ontologyEntityNameConfig);
+        
         this.disjointTaxonomy = disjointTaxonomy;
     }
 

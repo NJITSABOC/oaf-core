@@ -54,7 +54,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         
         this.rootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("Select Tribal Abstraction Network Root %s", 
-                        config.getTextConfiguration().getConceptTypeName(true))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))));
                 
         this.selectedPatriarchPanel = new TANPatriarchListPanel(config, rootSelectionPanel);
         this.selectedPatriarchPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),

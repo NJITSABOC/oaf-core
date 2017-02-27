@@ -5,27 +5,21 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ImportedConceptNodeReport;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.ImportReportTableModel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-//import javax.swing.JEditorPane;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -56,13 +50,13 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
             @Override
             protected String getBorderText(Optional<ArrayList<ImportedConceptNodeReport>> entities) {
                 String base = String.format("Imported %s' %s", 
-                        config.getTextConfiguration().getConceptTypeName(true), 
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), 
                         config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entities.isPresent()) {
                     return String.format("%s (%d %s found)", base, 
                             entities.get().size(),
-                            config.getTextConfiguration().getConceptTypeName(entities.get().size() != 1).toLowerCase());
+                            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(entities.get().size() != 1).toLowerCase());
                 } else {
                     return base;
                 }
@@ -72,8 +66,8 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         JPanel loadPanel = new JPanel(new BorderLayout(20,10));
         
         JLabel loadLabel = new JLabel(String.format("<html>Copy and paste %s IDs in the box to find where the %s are summarized in the %s.", 
-                config.getTextConfiguration().getConceptTypeName(false).toLowerCase(),
-                config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false).toLowerCase(),
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                 config.getTextConfiguration().getAbNTypeName(false)));
         
         loadPanel.add(loadLabel, BorderLayout.CENTER);
@@ -84,7 +78,7 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         
         //---------------------------------------
         
-        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getConceptTypeName(false)));
+        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)));
         loadBtn.addActionListener( (ae) -> {
             ArrayList<String> loadedIds = loadConceptIdentifiers(textArea.getText());
 

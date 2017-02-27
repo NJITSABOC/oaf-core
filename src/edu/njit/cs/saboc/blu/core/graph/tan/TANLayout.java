@@ -95,7 +95,7 @@ public class TANLayout<T extends ClusterTribalAbstractionNetwork> extends BaseTr
             int conceptCount = concepts.size();
             int clustersInBand = clusters.size();
             
-            String conceptTypeName = super.getConfiguration().getTextConfiguration().getConceptTypeName(conceptCount != 1);
+            String conceptTypeName = super.getConfiguration().getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount != 1);
             String clusterName = super.getConfiguration().getTextConfiguration().getNodeTypeName(clustersInBand != 1);
             
             String countString = String.format("(%d %s, %d %s)", conceptCount, conceptTypeName, clustersInBand, clusterName);

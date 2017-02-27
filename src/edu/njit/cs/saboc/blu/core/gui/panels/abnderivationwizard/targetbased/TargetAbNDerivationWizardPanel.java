@@ -104,7 +104,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         this.sourceRootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("1. Select Source Hierarchy Root %s", 
-                        config.getTextConfiguration().getConceptTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false))));
         
         derivationOptionsPanel.add(sourceRootSelectionPanel);
         
@@ -145,13 +145,13 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         this.propertyListPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
                 String.format("2. Select %s Type",
-                        config.getTextConfiguration().getPropertyTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(false))));
         
         this.propertyListPanel.setPreferredSize(new Dimension(250, -1));
         
         this.targetRootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
                 String.format("3. Select Target Hierarchy Root %s",
-                        config.getTextConfiguration().getConceptTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false))));
 
         derivationOptionsPanel.add(propertyListPanel);
         

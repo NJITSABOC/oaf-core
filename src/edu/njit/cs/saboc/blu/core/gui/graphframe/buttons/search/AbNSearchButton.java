@@ -21,7 +21,7 @@ public class AbNSearchButton extends BaseAbNSearchButton {
     public AbNSearchButton(JFrame parent, AbNTextConfiguration textConfig) {
         super(parent);
         
-        String conceptTypeName = textConfig.getConceptTypeName(true);
+        String conceptTypeName = textConfig.getOntologyEntityNameConfiguration().getConceptTypeName(true);
         String nodeTypeName = textConfig.getNodeTypeName(true);
         
         this.addSearchAction(new BluGraphSearchAction<ConceptNodeDetails<SinglyRootedNode>>(conceptTypeName) {

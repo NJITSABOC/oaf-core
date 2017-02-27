@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.reports;
 
-import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.OverlappingConceptDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
@@ -31,9 +30,11 @@ public class OverlappingConceptReportPanel extends AbNReportPanel<PartitionedAbs
                     
             public String getBorderText(Optional<ArrayList<OverlappingConceptDetails>> reports) {
                 if(reports.isPresent()) {
-                    return String.format("Overlapping %s (%d total)", config.getTextConfiguration().getConceptTypeName(true), reports.get().size());
+                    return String.format("Overlapping %s (%d total)", 
+                            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), reports.get().size());
                 } else {
-                    return String.format("Overlapping %s", config.getTextConfiguration().getConceptTypeName(true));
+                    return String.format("Overlapping %s", 
+                            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
                 }
             }
         };

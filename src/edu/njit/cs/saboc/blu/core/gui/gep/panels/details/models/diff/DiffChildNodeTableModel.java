@@ -19,7 +19,7 @@ public class DiffChildNodeTableModel<T extends Node> extends OAFAbstractTableMod
     public DiffChildNodeTableModel(AbNConfiguration config) {
         this(new String [] {
             String.format("Child %s", config.getTextConfiguration().getNodeTypeName(false)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Diff State"
         });
     }

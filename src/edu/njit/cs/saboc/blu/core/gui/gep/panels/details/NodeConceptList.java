@@ -33,7 +33,7 @@ public class NodeConceptList<T extends Node> extends NodeEntityList<T, Concept> 
     protected String getBorderText(Optional<ArrayList<Concept>> entities) {
         if(entities.isPresent()) {            
             return String.format("%s (%d)", 
-                    config.getTextConfiguration().getConceptTypeName(true),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                     entities.get().size());
         } else {
             return "Concepts";

@@ -25,7 +25,7 @@ public class SourceConceptList extends NodeConceptList<TargetGroup> {
     protected String getBorderText(Optional<ArrayList<Concept>> entities) {
         if(entities.isPresent()) {
             return String.format("Source %s (%d)", 
-                    config.getTextConfiguration().getConceptTypeName(true),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                     entities.get().size());
             
         } else {

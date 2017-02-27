@@ -24,6 +24,6 @@ public class TargetGroupPanel extends SinglyRootedNodePanel<TargetGroup> {
         this.sourceConceptList = new SourceConceptListPanel(configuration);
         
         super.addInformationTab(sourceConceptList, 
-                String.format("Source %s", configuration.getTextConfiguration().getConceptTypeName(true)));
+                String.format("Source %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)));
     }
 }

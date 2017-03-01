@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultPanel.DataRetriever;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class CommonBrowserDataRetrievers {
             public String getDataType() {
                 return "Siblings";
             }
+            
         };
     }
     
@@ -75,6 +77,7 @@ public class CommonBrowserDataRetrievers {
             public String getDataType() {
                 return "Strict Siblings";
             }
+            
         };
     }
     
@@ -131,7 +134,7 @@ public class CommonBrowserDataRetrievers {
         };
     }
     
-    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getTopologicalAncestors(
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getTopologicalAncestorsRetriever(
         ConceptBrowserDataSource<T> dataSource) {
         
         return new DataRetriever<T, ArrayList<T>>() {
@@ -153,7 +156,47 @@ public class CommonBrowserDataRetrievers {
                 return "Ancestors (Topological order)";
             }
         };
+    }
+    
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getCurrentAuditSet(NATBrowserPanel<T> mainPanel) {
         
+        return new DataRetriever<T, ArrayList<T>>() {
+
+            @Override
+            public ArrayList<T> getData(T concept) {
+                if(mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+                    
+                    ArrayList<T> concepts = new ArrayList<>(mainPanel.getAuditDatabase().getLoadedAuditSet().get().getConcepts());
+                    concepts.sort(new ConceptNameComparator());
+                    
+                    return concepts;
+                    
+                } else {
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            public String getDataType() {
+                return "Current Audit Set";
+            }
+        };
+    }
+    
+    public static <T extends Concept> DataRetriever<T, ArrayList<?>> getDoNothingRetriever() {
+        
+        return new DataRetriever<T, ArrayList<?>>() {
+
+            @Override
+            public ArrayList<?> getData(T concept) {                
+                return new ArrayList<>();
+            }
+
+            @Override
+            public String getDataType() {
+                return "";
+            }
+        };
     }
     
     public static <T extends Concept> ArrayList<T> getSortedConceptList(Set<T> conceptSet) {

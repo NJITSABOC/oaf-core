@@ -2,13 +2,14 @@ package edu.njit.cs.saboc.nat.generic;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.errorreport.AuditDatabase;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * The main panel (and top-level container of functionality) of the NAT
+ * The main panel  of the NAT
  * 
  * @param <T> The type of concept used in this NAT (e.g., OWL Class or SNOMED CT concept)
  */
@@ -16,20 +17,14 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
 
     private final ConceptBrowserDataSource<T> dataSource;
 
-    private final FocusConceptManager<T> focusConcept;
+    private final FocusConceptManager<T> focusConceptManager;
     
     private final JFrame parentFrame;
      
-    private final NATLayout layout;
+    private final NATLayout<T> layout;
     
-    /**
-     * 
-     * @param parentFrame The top-level JFrame that this NAT belongs to
-     * 
-     * @param dataSource
-     * @param layout 
-     * @param options
-     */
+    private final AuditDatabase<T> auditDatabase;
+    
     public NATBrowserPanel(
             JFrame parentFrame, 
             ConceptBrowserDataSource<T> dataSource, 
@@ -45,7 +40,9 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         this.add(layout, BorderLayout.CENTER);    
         
-        focusConcept = new FocusConceptManager<>(this, dataSource);
+        this.focusConceptManager = new FocusConceptManager<>(this, dataSource);
+        
+        this.auditDatabase = new AuditDatabase<>(this, dataSource);
         
         layout.createLayout(this);
         
@@ -56,24 +53,24 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     public ConceptBrowserDataSource<T> getDataSource() {
         return dataSource;
     }
+    
+    public FocusConceptManager<T> getFocusConceptManager() {
+        return focusConceptManager;
+    }
+    
+    public AuditDatabase<T> getAuditDatabase() {
+        return auditDatabase;
+    }
 
     public void navigateTo(T c) {
-        focusConcept.navigateTo(c);
-    }
-
-    public void initialize() {
-        
-    }
-
-    public FocusConceptManager<T> getFocusConceptManager() {
-        return focusConcept;
+        focusConceptManager.navigateTo(c);
     }
 
     public JFrame getParentFrame() {
         return parentFrame;
     }
     
-    public NATLayout getNATLayout() {
+    public NATLayout<T> getNATLayout() {
         return layout;
     }
 }

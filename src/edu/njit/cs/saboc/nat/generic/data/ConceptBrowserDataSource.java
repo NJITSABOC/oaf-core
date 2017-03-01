@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * An interface that defines high level functionality that must be implemented by every instance of a NAT
@@ -49,4 +50,6 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
     public abstract ArrayList<NATConceptSearchResult<T>> searchExact(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchAnywhere(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchID(String str);
+    
+    public abstract Set<T> getConceptsFromIds(Set<String> id);
 }

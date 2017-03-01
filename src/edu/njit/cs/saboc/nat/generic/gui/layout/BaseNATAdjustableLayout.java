@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.layout;
 
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.awt.BorderLayout;
@@ -15,14 +16,15 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
 /**
  *
  * @author Chris
+ * @param <T>
  */
-public abstract class BaseNATAdjustableLayout extends NATLayout {
+public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayout<T> {
     
     private final JPanel leftPanel;
     private final JPanel midPanel;
     private final JPanel rightPanel;
 
-    public BaseNATAdjustableLayout(ConceptBrowserDataSource dataSource) {
+    public BaseNATAdjustableLayout(ConceptBrowserDataSource<T> dataSource) {
         super(dataSource);
         
         this.leftPanel = new JPanel(new BorderLayout());
@@ -31,7 +33,7 @@ public abstract class BaseNATAdjustableLayout extends NATLayout {
     }
     
     @Override
-    public void createLayout(NATBrowserPanel mainPanel) {
+    public void createLayout(NATBrowserPanel<T> mainPanel) {
         
         JSplitPane leftPane = createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         leftPane.setDividerLocation(400);

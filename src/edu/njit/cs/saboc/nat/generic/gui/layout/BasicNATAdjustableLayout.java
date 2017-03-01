@@ -15,7 +15,7 @@ import javax.swing.JSplitPane;
  * @author Chris O
  * @param <T>
  */
-public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustableLayout {
+public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustableLayout<T> {
     
     private SearchAndHistoryPanel<T> searchAndHistoryPanel;
     

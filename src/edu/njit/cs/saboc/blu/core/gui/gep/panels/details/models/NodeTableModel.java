@@ -13,7 +13,7 @@ public class NodeTableModel<T extends Node> extends OAFAbstractTableModel<T> {
         super(
                 new String[] {
                     configuration.getTextConfiguration().getNodeTypeName(false),
-                    String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
+                    String.format("# %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
             });
     }
 

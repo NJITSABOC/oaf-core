@@ -3,7 +3,9 @@ package edu.njit.cs.saboc.blu.core.abn.diff.explain;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * Represents a structural change to a concept between the FROM and TO
+ * releases of an ontology or a structural chance to an ancestor (if inherited)
+ * 
  * @author Chris O
  */
 public class DiffAbNConceptChange {

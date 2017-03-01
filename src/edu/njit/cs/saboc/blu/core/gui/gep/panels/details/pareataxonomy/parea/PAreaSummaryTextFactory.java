@@ -47,7 +47,7 @@ public class PAreaSummaryTextFactory implements NodeSummaryTextFactory<PArea> {
         result.append(String.format("<html><b>%s</b> is a partial-area that summarizes %d %s. ", 
                 rootName, 
                 conceptCount,  
-                config.getTextConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0).toLowerCase()));
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0).toLowerCase()));
         
         if(parentCount > 0) {
             result.append(String.format("It has %d parent %s and ", 
@@ -69,7 +69,7 @@ public class PAreaSummaryTextFactory implements NodeSummaryTextFactory<PArea> {
                         descPAreaCount, 
                         config.getTextConfiguration().getNodeTypeName(descPAreaCount > 1).toLowerCase(),
                         descClassCount,
-                        config.getTextConfiguration().getConceptTypeName(descClassCount > 1).toLowerCase())
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(descClassCount > 1).toLowerCase())
                 );
             }
             

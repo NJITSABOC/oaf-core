@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 /**
  * @author Chris O
  * 
+ * Base class for all kinds of abstraction networks.
+ * 
+ * Abstraction networks are summaries of an ontology. An abstraction
+ * network consists of a hierarchy of nodes that summarizes
+ * a hierarchy of concepts.
+ * 
  * @param <NODE_T> The type of node in the abstraction network
  */
 public abstract class AbstractionNetwork<NODE_T extends Node> {

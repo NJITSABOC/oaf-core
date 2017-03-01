@@ -24,7 +24,7 @@ public class AggregatePAreaTaxonomyGenerator {
         }
         
         Hierarchy<AggregatePArea> reducedPAreaHierarchy = 
-                aggregateGenerator.createReducedAbN(
+                aggregateGenerator.createAggregateAbN(
                         new AggregatePAreaTaxonomyFactory(),
                         sourceTaxonomy.getPAreaHierarchy(), 
                         sourceTaxonomy.getSourceHierarchy(),

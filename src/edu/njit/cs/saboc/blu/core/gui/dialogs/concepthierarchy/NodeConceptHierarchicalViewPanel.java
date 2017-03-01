@@ -164,17 +164,17 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
                     if (l == 0) {
                         title = String.format("%s Root %s (NOTE: Longest path is shown)",
                                 config.getTextConfiguration().getNodeTypeName(false), 
-                                config.getTextConfiguration().getConceptTypeName(true));
+                                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
 
                     } else if (l == 1) {
                         title = String.format("Children of Root %s, # %s: %d", 
-                                config.getTextConfiguration().getConceptTypeName(false), 
-                                config.getTextConfiguration().getConceptTypeName(true),
+                                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false), 
+                                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                                 conceptEntries.get(l).size());
                     } else {
                         title = String.format("Depth: %d, # %s: %d", 
                                 l, 
-                                config.getTextConfiguration().getConceptTypeName(true),
+                                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                                 conceptEntries.get(l).size());
                     }
 

@@ -22,8 +22,8 @@ public class HierarchicalChangeExplanationFactory implements DiffNodeRootChangeE
 
     @Override
     public ChangeExplanationRowEntry getChangeEntry(DiffAbNConceptChange item) {
-        final String conceptTypeName = config.getTextConfiguration().getConceptTypeName(false).toLowerCase();
-        final String parentTypeName = config.getTextConfiguration().getParentConceptTypeName(false).toLowerCase();
+        final String conceptTypeName = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false).toLowerCase();
+        final String parentTypeName = config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false).toLowerCase();
         
         ChangeInheritanceType inheritance = item.getChangeInheritanceType();
        

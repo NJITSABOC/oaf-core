@@ -23,7 +23,7 @@ public class AggregateTANGenerator {
         }
 
         Hierarchy<AggregateCluster> aggregateClusterHierarchy = 
-                aggregateGenerator.createReducedAbN(
+                aggregateGenerator.createAggregateAbN(
                         new AggregateTANFactory(),
                         sourceTAN.getClusterHierarchy(),
                         sourceTAN.getSourceHierarchy(),

@@ -14,8 +14,16 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * Creates a disjoint abstraction network (composed of disjoint nodes). Each concept in the 
+ * summarized subhierarchy is summarized by exactly one disjoint node.
+ * 
+ * Creates disjoint nodes by identifying intersecting subhierarchies of concepts, 
+ * where the subhierarchies are defined by the singly rooted nodes of an abstraction newtork.
+ * 
+ * The concepts that exist a point of intersection will be summarized by a disjoint node.
+ * 
  * @author Chris O
+ * 
  * @param <PARENTABN_T> The type of abstraction network this disjoint abstraction 
  * network was created from (e.g., partial-area taxonomy for a disjoint partial-area taxonomy)
  * 
@@ -27,7 +35,7 @@ public class DisjointAbNGenerator<
         PARENTNODE_T extends SinglyRootedNode> {
     
     /**
-     * Generates a disjoint abstraction network.
+     * Generates a disjoint abstraction network from the given nodes.
      * 
      * This code is based on the original disjoint partial-area program 
      * developed in ~2009.
@@ -44,6 +52,10 @@ public class DisjointAbNGenerator<
             DisjointAbNFactory<PARENTNODE_T, ? extends DisjointNode<PARENTNODE_T>> factory,
             PARENTABN_T parentAbN, 
             Set<PARENTNODE_T> parentNodes) {
+        
+        // Step 1: Identify the root concepts and build the subhierachy of concepts,
+        // from the set of all singly rooted nodes, that will be summarized by a
+        // disjoint abstraction network
         
         Set<Concept> originalRoots = new HashSet<>();
         
@@ -62,7 +74,9 @@ public class DisjointAbNGenerator<
         
         Set<PARENTNODE_T> identifiedOverlappingGroups = new HashSet<>();
         
-        for (PARENTNODE_T node : parentNodes) {
+        // Step 2: DFS to identify concepts that are summarized by multiple nodes, 
+        // along with which node(s) each concept is summarized by
+        parentNodes.forEach((node) -> {
             Concept root = node.getRoot();
 
             Stack<Concept> stack = new Stack<>();
@@ -94,7 +108,7 @@ public class DisjointAbNGenerator<
                     }
                 }
             }
-        }
+        });
         
         int maxOverlap = 0;
 
@@ -104,10 +118,10 @@ public class DisjointAbNGenerator<
             }
         }
 
+        // Step 3: Identify the roots of the disjoint partial-area taxonomy
         Set<Concept> allArticulationPoints = new HashSet<>();
         
         for (int c = 2; c <= maxOverlap; c++) {
-            
             HashMap<Concept, Set<PARENTNODE_T>> overlappingConcepts = new HashMap<>();
 
             for (Map.Entry<Concept, Set<PARENTNODE_T>> entry : conceptGroupMap.entrySet()) {
@@ -166,6 +180,8 @@ public class DisjointAbNGenerator<
         
         Map<Concept, Set<Concept>> reachableFrom = new HashMap<>();
         
+        
+        // Step 4: Do a topological traversal to identify which concepts belong to which disjoint nodes
         while(!queue.isEmpty()) {
             Concept node = queue.remove();
             
@@ -209,6 +225,7 @@ public class DisjointAbNGenerator<
         
         Set<Concept> roots = new HashSet<>();
         
+        // Step 5: Initialize disjoint nodes and the disjoint node hierarchy
         HashMap<Concept, Hierarchy<Concept>> disjointGroupConceptHierarchy = new HashMap<>();
         HashMap<Concept, Set<Concept>> disjointGroupParents = new HashMap<>();
         
@@ -235,7 +252,7 @@ public class DisjointAbNGenerator<
             }
         }
 
-        // Add all concepts to their respective disjoint partial areas
+        // Step 6: Add all concepts to their respective disjoint partial areas
         roots.forEach((root) -> {
             Stack<Concept> stack = new Stack<>();
             stack.add(root);
@@ -265,6 +282,7 @@ public class DisjointAbNGenerator<
             }
         });
         
+        // Step 7: Build the disjoint node hierarchy
         HashMap<Concept, DisjointNode<PARENTNODE_T>> disjointGroups = new HashMap<>();
         
         Set<DisjointNode<PARENTNODE_T>> rootGroups = new HashSet<>();

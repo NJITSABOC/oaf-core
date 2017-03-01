@@ -16,7 +16,7 @@ public class ChildClusterTableModel extends OAFAbstractTableModel<Cluster> {
     public ChildClusterTableModel(TANConfiguration config) {
         super(new String [] {
             "Child Cluster",
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Band"
         });
         

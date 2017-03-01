@@ -8,8 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A visitor for extracting the subhierarchy of disjoint nodes that summarize concepts 
+ * that overlaps between a given subset of singly rooted nodes or a subset of the 
+ * singly rooted nodes.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class SubsetDisjointAbNSubhierarchyVisitor<T extends SinglyRootedNode> extends TopologicalVisitor<DisjointNode<T>>{
     

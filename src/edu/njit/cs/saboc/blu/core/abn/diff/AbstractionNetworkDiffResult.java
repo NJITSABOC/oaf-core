@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- *
+ * The results from generating a diff abstraction network. The output of 
+ * a DiffAbstractionNetwork generator.
+ * 
  * @author Chris O
  */
 public class AbstractionNetworkDiffResult {

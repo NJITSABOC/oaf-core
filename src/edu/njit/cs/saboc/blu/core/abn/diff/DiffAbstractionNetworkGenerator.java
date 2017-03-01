@@ -30,11 +30,10 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *
- * @author Chris O
+ * Class for creating diff abstraction networks. Takes as input
+ * two abstraction networks and computes the differences between their nodes.
  * 
- * @param <NODE_T>
- * @param <ABN_T>
+ * @author Chris O
  */
 public class DiffAbstractionNetworkGenerator {
 
@@ -45,6 +44,8 @@ public class DiffAbstractionNetworkGenerator {
             AbstractionNetwork<Node> toAbN, 
             DiffAbNConceptChangesFactory conceptChangeDetailsFactory) {
 
+        // Step 1: Identify the changes for individual concepts summarized by
+        // the diff abstraction network
         DiffAbNConceptChanges conceptModelingChanges = conceptChangeDetailsFactory.getConceptChanges(
                 new HierarchicalChanges(
                         fromOnt, 
@@ -54,6 +55,8 @@ public class DiffAbstractionNetworkGenerator {
         
         HierarchicalChanges hierarchicalChanges = conceptModelingChanges.getHierarchicalChanges();
         
+        // Step 2: Identify the differences between the set of nodes 
+        // summarizes by the abstraction networks
         Set<Node> fromNodes = fromAbN.getNodes();
         Set<Node> toNodes = toAbN.getNodes();
         
@@ -89,6 +92,8 @@ public class DiffAbstractionNetworkGenerator {
         
         Map<Node, Set<Node>> parentNodes = new HashMap<>();
 
+        // Step 3: For every removed node, figure out what happened to its concepts
+        // and log the change(s)
         removedNodes.forEach((removedNode) -> {
 
             Set<NodeConceptChange> changes = new HashSet<>();
@@ -131,6 +136,8 @@ public class DiffAbstractionNetworkGenerator {
             diffNodes.put(removedNode, new RemovedNode(removedNode, removedNodeDetails));
         });
 
+        // Step 4: For every introduced node, figure out what happened to its concepts
+        // and log the change(s)
         introducedNodes.forEach((introducedNode) -> {
             Set<NodeConceptChange> changes = new HashSet<>();
             
@@ -171,6 +178,8 @@ public class DiffAbstractionNetworkGenerator {
             diffNodes.put(introducedNode, new IntroducedNode(introducedNode, introducedNodeDetails));
         });
         
+        // Step 5: For every node that exists in both abstraction networks, 
+        // figure out what happened to its concepts and log the change(s)
         transferredNodes.forEach((transferredNode) -> {
             Node toNode = transferredNode;
             
@@ -277,12 +286,14 @@ public class DiffAbstractionNetworkGenerator {
             }
         });
         
+                
         Set<DiffNode> diffNodeSet = new HashSet<>(diffNodes.values());
         
         Set<DiffNode> removedRoots = new HashSet<>();
         Set<DiffNode> introducedRoots = new HashSet<>();
         Set<DiffNode> transferredRoots = new HashSet<>();
         
+        // Step 6: Build the diff node hierarchy
         fromAbN.getNodeHierarchy().getRoots().forEach( (root) -> {
             if(removedNodes.contains(root)) {
                 removedRoots.add(diffNodes.get(root));

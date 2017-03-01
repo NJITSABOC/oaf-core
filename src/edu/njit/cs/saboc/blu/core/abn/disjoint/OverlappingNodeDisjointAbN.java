@@ -9,8 +9,13 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A disjoint abstraction network created by selecting an overlapping 
+ * singly rooted node and viewing all of its descendants.
+ * 
  * @author Chris O
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class OverlappingNodeDisjointAbN<
         T extends DisjointNode<PARENTNODE_T>, 

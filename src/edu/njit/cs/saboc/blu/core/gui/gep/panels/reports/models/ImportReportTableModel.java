@@ -16,8 +16,8 @@ public class ImportReportTableModel extends OAFAbstractTableModel<ImportedConcep
 
     public ImportReportTableModel(AbNConfiguration config) {
         super(new String [] {
-            String.format("%s ID", config.getTextConfiguration().getConceptTypeName(false)),
-            String.format("%s Name", config.getTextConfiguration().getConceptTypeName(false)),
+            String.format("%s ID", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
+            String.format("%s Name", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
             String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)), 
             config.getTextConfiguration().getNodeTypeName(true)
         });

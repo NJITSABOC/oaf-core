@@ -18,7 +18,7 @@ public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends Ex
     private static final String getToolTipStr(AbNConfiguration config) {
         return String.format("Export %s's %s.", 
                 config.getTextConfiguration().getNodeTypeName(false).toLowerCase(),
-                config.getTextConfiguration().getConceptTypeName(true));
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
     }
     
     private final AbNConfiguration config;
@@ -36,13 +36,13 @@ public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends Ex
         if (exportFile.isPresent()) {
             
             String firstChoice = String.format("%s ID and Name", 
-                    config.getTextConfiguration().getConceptTypeName(false));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
             
             String secondChoice = String.format("%s Name Only", 
-                    config.getTextConfiguration().getConceptTypeName(false));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
             
             String thirdChoice = String.format("%s ID Only",
-                    config.getTextConfiguration().getConceptTypeName(false));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
             
             String[] choices = {firstChoice, secondChoice, thirdChoice};
 

@@ -93,7 +93,7 @@ public class ClusterInternalGraphFrame extends GenericInternalGraphFrame<Cluster
         setHierarchyInfoText(String.format("Bands: %d | Clusters: %d | %s: %d",
                 setCount, 
                 clusterCount, 
-                currentConfiguration.getTextConfiguration().getConceptTypeName(true),
+                currentConfiguration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                 conceptCount));
     }
 

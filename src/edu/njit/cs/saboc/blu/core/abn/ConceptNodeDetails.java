@@ -6,14 +6,17 @@ import java.util.Set;
 
 /**
  *
+ * Returns the set of nodes that summarize a given concept
+ * 
  * @author Chris O
+ * @param <T>
  */
-public class ConceptNodeDetails<NODE_T extends Node> {
+public class ConceptNodeDetails<T extends Node> {
     
     private final Concept concept;
-    private final Set<NODE_T> nodes;
+    private final Set<T> nodes;
     
-    public ConceptNodeDetails(Concept concept, Set<NODE_T> nodes) {
+    public ConceptNodeDetails(Concept concept, Set<T> nodes) {
         this.concept = concept;
         this.nodes = nodes;
     }
@@ -22,7 +25,7 @@ public class ConceptNodeDetails<NODE_T extends Node> {
         return concept;
     }
 
-    public Set<NODE_T> getNodes() {
+    public Set<T> getNodes() {
         return nodes;
     }
 }

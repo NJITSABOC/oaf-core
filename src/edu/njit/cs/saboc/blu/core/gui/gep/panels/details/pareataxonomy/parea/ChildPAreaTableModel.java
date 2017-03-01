@@ -18,7 +18,7 @@ public class ChildPAreaTableModel extends OAFAbstractTableModel<PArea> {
     public ChildPAreaTableModel(PAreaTaxonomyConfiguration config) {
         super(new String [] {
             "Child Partial-area",
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Area"
         });
         

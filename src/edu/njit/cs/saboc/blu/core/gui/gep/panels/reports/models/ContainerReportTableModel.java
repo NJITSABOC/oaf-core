@@ -18,8 +18,8 @@ public class ContainerReportTableModel extends OAFAbstractTableModel<ContainerRe
             config.getTextConfiguration().getContainerTypeName(false),
             "Level",
             String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
-            String.format("# Overlapping %s", config.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
+            String.format("# Overlapping %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
         this.config = config;

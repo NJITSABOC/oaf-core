@@ -23,7 +23,7 @@ public class AggregateContainerReportTableModel extends OAFAbstractTableModel<Co
             String.format("# Regular %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Aggregate %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Removed %s", config.getTextConfiguration().getNodeTypeName(true)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
         });
         
         this.config = config;

@@ -7,20 +7,24 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
  *
  * @author Chris O
  */
-public interface AbNTextConfiguration<T extends Node> {
+public abstract class AbNTextConfiguration<T extends Node> {
     
-    public String getAbNName();
-    public String getAbNSummary();
-    public String getAbNHelpDescription();
+    private final OntologyEntityNameConfiguration ontologyEntityNameConfig;
     
-    public String getAbNTypeName(boolean plural);
-    public String getNodeTypeName(boolean plural);
+    public AbNTextConfiguration(OntologyEntityNameConfiguration ontologyEntityNameConfig) {
+        this.ontologyEntityNameConfig = ontologyEntityNameConfig;
+    }
     
-    public String getConceptTypeName(boolean plural);
-    public String getPropertyTypeName(boolean plural);
+    public OntologyEntityNameConfiguration getOntologyEntityNameConfiguration() {
+        return ontologyEntityNameConfig;
+    }
     
-    public String getParentConceptTypeName(boolean plural);
-    public String getChildConceptTypeName(boolean plural);
+    public abstract String getAbNName();
+    public abstract String getAbNSummary();
+    public abstract String getAbNHelpDescription();
     
-    public String getNodeHelpDescription(T node);
+    public abstract String getAbNTypeName(boolean plural);
+    public abstract String getNodeTypeName(boolean plural);
+    
+    public abstract String getNodeHelpDescription(T node);
 }

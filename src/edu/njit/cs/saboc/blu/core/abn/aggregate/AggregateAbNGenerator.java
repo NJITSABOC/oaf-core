@@ -10,14 +10,29 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- *
+ * Generates aggregate abstraction networks. Takes as input a hierarchy of
+ * non-aggregate nodes from an abstraction network and returns a hierarchy of
+ * aggregated nodes that summarizes the input node hierarchy.
+ * 
  * @author Chris O
+ * 
+ * @param <NODE_T>
+ * @param <AGGREGATENODE_T>
  */
 public class AggregateAbNGenerator <
-        NODE_T extends Node, 
+        NODE_T extends Node,
         AGGREGATENODE_T extends Node & AggregateNode<NODE_T>> {
     
-    public Hierarchy<AGGREGATENODE_T> createReducedAbN(
+    /**
+     * Creates a subhierarchy of aggregated nodes from the given inputs
+     * 
+     * @param factory
+     * @param sourceHierarchy
+     * @param sourceConceptHierarchy
+     * @param minNodeSize The minimum size node that is preserved
+     * @return 
+     */
+    public Hierarchy<AGGREGATENODE_T> createAggregateAbN(
             AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
             Hierarchy<NODE_T> sourceHierarchy, 
             Hierarchy<Concept> sourceConceptHierarchy,
@@ -27,6 +42,7 @@ public class AggregateAbNGenerator <
 
         HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
         
+        // Step 1: Determine which nodes will be the roots of aggregate nodes
         Set<NODE_T> remainingNodes = new HashSet<>();
         remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
         
@@ -46,6 +62,8 @@ public class AggregateAbNGenerator <
             reducedGroupMembers.put(group, new Hierarchy<>(group));
         });
         
+        // Step 2: Do a topological tarversal of the nodes and determine 
+        // which nodes will be included in the given aggregate node
         Queue<NODE_T> queue = new LinkedList<>();
         queue.addAll(sourceHierarchy.getRoots());
         
@@ -58,7 +76,6 @@ public class AggregateAbNGenerator <
             if (remainingNodes.contains(group)) {
                 groupSet.get(group).add(group);
             } else {
-
                 for (NODE_T parentGroup : parentGroups) {
 
                     // Mark that this group belongs to the same reduced group as its parents
@@ -86,6 +103,7 @@ public class AggregateAbNGenerator <
             }
         }
         
+        // Step 3: Create the aggregate nodes
         HashMap<NODE_T, AGGREGATENODE_T> aggregateGroups = new HashMap<>();
         
         remainingNodes.forEach((aggregateGroup) -> {
@@ -99,6 +117,7 @@ public class AggregateAbNGenerator <
             rootAggregateNodes.add(aggregateGroups.get(root));
         });
         
+        // Step 4: Build the aggregate node hierarchy
         Hierarchy<AGGREGATENODE_T> aggregateNodeHierarchy = new Hierarchy<>(rootAggregateNodes);
         
         aggregateGroups.values().forEach((aggregateNode) -> {

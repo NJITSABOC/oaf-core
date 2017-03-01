@@ -16,7 +16,7 @@ public class OverlappingConceptReportTableModel extends OAFAbstractTableModel<Ov
     
     public OverlappingConceptReportTableModel(PartitionedAbNConfiguration config) {
         super(new String [] {
-            String.format("Overlapping %s", config.getTextConfiguration().getConceptTypeName(false)),
+            String.format("Overlapping %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
             "Degree of Overlap",
             String.format("Overlapping %s", config.getTextConfiguration().getNodeTypeName(true)), 
             String.format("%s", config.getTextConfiguration().getContainerTypeName(false))

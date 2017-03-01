@@ -11,12 +11,19 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurati
  * @author Chris O
  */
 public class TargetGroupPanel extends SinglyRootedNodePanel<TargetGroup> {
-
+    
+    private final SourceConceptListPanel sourceConceptList;
+    
     public TargetGroupPanel(TargetAbNConfiguration configuration) {
         
         super(new TargetGroupDetailsPanel(configuration),
                 new NodeHierarchyPanel(configuration), 
                 new ConceptHierarchyPanel(configuration), 
                 configuration);
+        
+        this.sourceConceptList = new SourceConceptListPanel(configuration);
+        
+        super.addInformationTab(sourceConceptList, 
+                String.format("Source %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)));
     }
 }

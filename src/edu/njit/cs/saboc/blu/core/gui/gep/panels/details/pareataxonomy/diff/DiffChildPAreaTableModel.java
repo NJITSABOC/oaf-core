@@ -18,7 +18,7 @@ public class DiffChildPAreaTableModel extends OAFAbstractTableModel<DiffPArea> {
     public DiffChildPAreaTableModel(DiffPAreaTaxonomyConfiguration config) {
         super(new String [] {
             "Child Partial-area",
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Area",
             "Diff State"
         });

@@ -20,7 +20,7 @@ public class ChildDisjointNodeTableModel<T extends DisjointNode> extends OAFAbst
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false), 
             String.format("Overlapping %s", configuration.getTextConfiguration().getOverlappingNodeTypeName(true)),
-            String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
         this.configuration = configuration;

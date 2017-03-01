@@ -41,7 +41,7 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         this.setLayout(new BorderLayout());
         
         this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", 
-                    config.getTextConfiguration().getChildConceptTypeName(true)));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getChildConceptTypeName(true)));
         this.useChildrenBtn.addActionListener( (ae) -> {
             useChildrenSelected();
         });

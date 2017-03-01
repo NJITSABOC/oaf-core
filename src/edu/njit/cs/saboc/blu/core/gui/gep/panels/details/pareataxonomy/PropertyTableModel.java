@@ -12,7 +12,7 @@ public class PropertyTableModel extends OAFAbstractTableModel<InheritablePropert
     
     private static String [] generateColumnNames(PAreaTaxonomyConfiguration config, boolean forArea) {
         
-        String propertyType = config.getTextConfiguration().getPropertyTypeName(false);
+        String propertyType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(false);
         
         if(forArea) {
             return new String[] {

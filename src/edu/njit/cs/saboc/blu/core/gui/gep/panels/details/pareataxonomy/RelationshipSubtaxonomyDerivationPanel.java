@@ -55,7 +55,7 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.BLACK),
                 String.format("Select %s to Use in Derivation",
-                        config.getTextConfiguration().getPropertyTypeName(true))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(true))));
         
         ArrayList<InheritableProperty> taxonomyAvailableProperties = new ArrayList<>(
                 taxonomy.getPropertiesInTaxonomy());

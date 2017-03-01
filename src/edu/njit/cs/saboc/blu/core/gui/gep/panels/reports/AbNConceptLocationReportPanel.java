@@ -5,15 +5,19 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.entry.ImportedConceptNodeReport;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.models.ImportReportTableModel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.awt.BorderLayout;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -75,12 +79,12 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         JTextArea textArea = new JTextArea(4,3);
         JScrollPane scrollPane = new JScrollPane(textArea);
         
-        JButton openFromFileBtn = new JButton(String.format("Load %s from File", config.getTextConfiguration().getConceptTypeName(true)));
+        JButton openFromFileBtn = new JButton(String.format("Load %s from File", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)));
         openFromFileBtn.addActionListener( (ae) -> {
             createAndDisplayReport(config, factory, loadConceptIdentifiersFromFile());
         });
         
-        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getConceptTypeName(false)));
+        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)));
         loadBtn.addActionListener((ae) -> {
             createAndDisplayReport(config, factory, parseConceptIdentifiers(textArea.getText()));
         });

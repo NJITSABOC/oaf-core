@@ -7,7 +7,8 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public interface ConceptLocationDataFactory {
-    public Set<Concept> getConceptsFromIds(ArrayList<String> ids);
+public interface ConceptLocationDataFactory<T extends Concept> {
+    public Set<T> getConceptsFromIds(ArrayList<String> ids);
 }

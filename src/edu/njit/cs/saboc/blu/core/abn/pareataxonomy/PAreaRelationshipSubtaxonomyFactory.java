@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A factory class for generating relationship subtaxonomies, which are partial-area
+ * taxonomies created using a subset of the inheritable properties used to define
+ * the concepts
+ * 
  * @author cro3
  */
 public class PAreaRelationshipSubtaxonomyFactory extends PAreaTaxonomyFactory {

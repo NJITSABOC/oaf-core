@@ -4,8 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- * Represents a concept that is summarized by multiple singly rooted nodes 
- * within a partitioned node (e.g., a concept summarized by multiple partial-areas)
+ * Details about which singly rooted node(s) a concept is summarized by
+ * within a partitioned node (e.g., an overlapping concept summarized by multiple partial-areas)
  * 
  * @author Chris O
  */

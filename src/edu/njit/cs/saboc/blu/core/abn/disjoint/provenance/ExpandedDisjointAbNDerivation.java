@@ -10,7 +10,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create an expanded disjoint abstraction network
+ * 
  * @author Chris O
  * @param <T>
  */

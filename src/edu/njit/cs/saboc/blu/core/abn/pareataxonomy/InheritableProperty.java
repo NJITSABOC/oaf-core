@@ -7,13 +7,13 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
  * 
  * @author Chris O
  * 
- * @param <ID_T> The type of the id (e.g., an integer or an iri)
+ * @param <ID_T> The type of the id (e.g., a long or an iri)
  * @param <TYPE_T> The type of the inheritable property (e.g., a kind of attribute relationship or object property)
  */
 public abstract class InheritableProperty<ID_T, TYPE_T> {
     
     /**
-     * Represents a property being inherited or introduced
+     * Represents an inheritable property being inherited or introduced
      */
     public static enum InheritanceType {
         Inherited,
@@ -47,6 +47,7 @@ public abstract class InheritableProperty<ID_T, TYPE_T> {
      * @param o
      * @return 
      */
+    @Override
     public boolean equals(Object o) {
         if(o instanceof InheritableProperty) {
             InheritableProperty other = (InheritableProperty)o;
@@ -57,6 +58,7 @@ public abstract class InheritableProperty<ID_T, TYPE_T> {
         return false;
     }
     
+    @Override
     public int hashCode() {
         return id.hashCode();
     }
@@ -72,6 +74,5 @@ public abstract class InheritableProperty<ID_T, TYPE_T> {
     }
     
     public abstract String getName();
-    
     public abstract String getIDAsString();
 }

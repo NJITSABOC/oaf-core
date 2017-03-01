@@ -6,19 +6,34 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * Represents an abstraction network node that can be partitioned into one or more single rooted nodes
+ * Represents a multi-rooted node that can be partitioned into one or more singly rooted nodes
  * 
  * @author Chris O
  * @param <T>
  */
-public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
+public abstract class PartitionedNode<T extends SinglyRootedNode> extends MultiRootedNode {
     
     private final Set<T> internalNodes;
     private final Map<Concept, Set<T>> conceptNodes;
     
+    private static <T extends SinglyRootedNode> Hierarchy<Concept> createInternalHierarchy(Set<T> nodes) {
+        Set<Concept> roots = nodes.stream().map( (node) -> node.getRoot()).collect(Collectors.toSet());
+
+        Hierarchy<Concept> hierarchy = new Hierarchy<>(roots);
+        
+        nodes.forEach( (node) -> {
+            hierarchy.addAllHierarchicalRelationships(node.getHierarchy());
+        });
+        
+        return hierarchy;
+    }
+    
     public PartitionedNode(Set<T> internalNodes) {
+        super(PartitionedNode.createInternalHierarchy(internalNodes));
+        
         this.internalNodes = internalNodes;
         
         this.conceptNodes = new HashMap<>();
@@ -36,16 +51,6 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
         });
     }
     
-    public Set<Concept> getRoots() {
-        Set<Concept> roots = new HashSet<>();
-        
-        getInternalNodes().forEach( (node) -> {
-            roots.add(node.getRoot());
-        });
-        
-        return roots;
-    }
-
     public Set<T> getInternalNodes() {
         return internalNodes;
     }
@@ -62,16 +67,6 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends Node {
     
     public Map<Concept, Set<T>> getConceptNodes() {
         return conceptNodes;
-    }
-    
-    public Hierarchy<Concept> getHierarchy() {
-        Hierarchy<Concept> hierarchy = new Hierarchy<>(getRoots());
-        
-        internalNodes.forEach( (node) -> {
-            hierarchy.addAllHierarchicalRelationships(node.getHierarchy());
-        });
-        
-        return hierarchy;
     }
     
     public boolean hasOverlappingConcepts() {

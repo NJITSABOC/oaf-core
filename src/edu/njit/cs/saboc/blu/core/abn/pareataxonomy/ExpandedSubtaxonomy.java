@@ -6,7 +6,10 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.ExpandedSubtaxonomyDerivation;
 
 /**
- *
+ * A partial-area taxonomy created by expanding the subhierarchy of partial-areas 
+ * summarized by a selected aggregate partial-area from an aggregate partial-area 
+ * taxonomy.
+ * 
  * @author Chris O
  * @param <T>
  */

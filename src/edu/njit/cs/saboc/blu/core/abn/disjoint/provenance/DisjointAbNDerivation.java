@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 
 /**
- *
+ * Stores the arguments needed to create a disjoint abstraction network.
+ * 
  * @author Chris O
  * @param <T>
  */

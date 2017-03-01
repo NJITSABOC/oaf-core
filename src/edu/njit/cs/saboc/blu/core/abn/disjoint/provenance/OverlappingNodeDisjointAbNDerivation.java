@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 
 /**
- *
+ * Stores the arguments needed to create a disjoint abstraction network based 
+ * on the selection of an overlapping singly rooted node.
+ * 
  * @author Chris O
  * @param <T>
  */

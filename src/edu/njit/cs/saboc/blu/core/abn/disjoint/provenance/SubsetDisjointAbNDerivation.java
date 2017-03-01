@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create a subset disjoint abstraction network
+ * 
  * @author Chris O
  * @param <T>
  */

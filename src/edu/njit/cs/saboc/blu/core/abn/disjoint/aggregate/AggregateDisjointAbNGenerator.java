@@ -8,8 +8,13 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A generator class for creating aggregate disjoint abstraction networks
+ * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class AggregateDisjointAbNGenerator<
         T extends DisjointNode<PARENTNODE_T>, 

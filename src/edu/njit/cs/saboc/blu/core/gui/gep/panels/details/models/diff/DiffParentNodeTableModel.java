@@ -20,9 +20,9 @@ public class DiffParentNodeTableModel<T extends Node> extends OAFAbstractTableMo
 
     public DiffParentNodeTableModel(AbNConfiguration<T> config) {
         this(new String [] {
-            config.getTextConfiguration().getParentConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false),
             String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Diff State"
         });
     }

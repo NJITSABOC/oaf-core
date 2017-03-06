@@ -22,10 +22,8 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-//import javax.swing.JEditorPane;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -56,13 +54,13 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
             @Override
             protected String getBorderText(Optional<ArrayList<ImportedConceptNodeReport>> entities) {
                 String base = String.format("Imported %s' %s", 
-                        config.getTextConfiguration().getConceptTypeName(true), 
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), 
                         config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entities.isPresent()) {
                     return String.format("%s (%d %s found)", base, 
                             entities.get().size(),
-                            config.getTextConfiguration().getConceptTypeName(entities.get().size() != 1).toLowerCase());
+                            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(entities.get().size() != 1).toLowerCase());
                 } else {
                     return base;
                 }
@@ -72,72 +70,42 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         JPanel loadPanel = new JPanel(new BorderLayout(20,10));
         
         JLabel loadLabel = new JLabel(String.format("<html>Copy and paste %s IDs in the box to find where the %s are summarized in the %s.", 
-                config.getTextConfiguration().getConceptTypeName(false).toLowerCase(),
-                config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false).toLowerCase(),
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                 config.getTextConfiguration().getAbNTypeName(false)));
         
         loadPanel.add(loadLabel, BorderLayout.CENTER);
         
-        //NEW ADDITIONS -------------------------
         JTextArea textArea = new JTextArea(4,3);
         JScrollPane scrollPane = new JScrollPane(textArea);
         
-        //---------------------------------------
-        
-        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getConceptTypeName(false)));
-        loadBtn.addActionListener( (ae) -> {
-            ArrayList<String> loadedIds = loadConceptIdentifiers(textArea.getText());
-
-            if(!loadedIds.isEmpty()) {
-                Set<Concept> concepts = factory.getConceptsFromIds(loadedIds);
-
-                ArrayList<ImportedConceptNodeReport> reports = new ArrayList<>();
-                
-                AbstractionNetwork<? extends Node> abn = config.getAbstractionNetwork();
-                
-                Map<Concept, Set<Node>> conceptNodes = new HashMap<>();
-                
-                abn.getNodes().forEach((node) -> {
-                    node.getConcepts().forEach( (concept) -> { 
-                        if(!conceptNodes.containsKey(concept)) {
-                            conceptNodes.put(concept, new HashSet<>());
-                        }
-                        
-                        conceptNodes.get(concept).add(node);
-                    });
-                });
-                
-                concepts.forEach((concept) -> {
-                    if(conceptNodes.containsKey(concept)) {
-                        reports.add(new ImportedConceptNodeReport(concept, conceptNodes.get(concept)));
-                    }
-                });
-
-                reports.sort( (a, b) -> {
-                    return a.getConcept().getName().compareToIgnoreCase(b.getConcept().getName());
-                });
-                
-                conceptReportList.setContents(reports);
-            }
+        JButton openFromFileBtn = new JButton(String.format("Load %s from File", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)));
+        openFromFileBtn.addActionListener( (ae) -> {
+            createAndDisplayReport(config, factory, loadConceptIdentifiersFromFile());
         });
         
-        loadPanel.add(loadBtn, BorderLayout.EAST);
+        JButton loadBtn = new JButton(String.format("Load %s IDs", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)));
+        loadBtn.addActionListener((ae) -> {
+            createAndDisplayReport(config, factory, parseConceptIdentifiers(textArea.getText()));
+        });
+        
+        JPanel eastPanel = new JPanel();
+        eastPanel.add(openFromFileBtn);
+        eastPanel.add(loadBtn);
+        
+        loadPanel.add(eastPanel, BorderLayout.EAST);
         
         this.add(loadPanel, BorderLayout.NORTH);
         
-        //NEW ADDITIONS -------------------------
         JPanel twoPanel = new JPanel(new BorderLayout(5,5));
         
         twoPanel.add(scrollPane, BorderLayout.CENTER);
         twoPanel.add(conceptReportList, BorderLayout.SOUTH);
         
         loadPanel.add(twoPanel, BorderLayout.SOUTH);
-        
-        //---------------------------------------
-        
     }
     
-    /*private ArrayList<String> loadConceptIdentifiers() {
+    private ArrayList<String> loadConceptIdentifiersFromFile() {
         Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
         
         if(idFile.isPresent()) {
@@ -159,17 +127,59 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
         }
         
         return new ArrayList<>();
-    }*/
-    private ArrayList<String> loadConceptIdentifiers(String text) {
+    }
+    
+    private ArrayList<String> parseConceptIdentifiers(String text) {
         String[] lines = text.split("\n");
+        
         ArrayList<String> conceptIds = new ArrayList<>();
         
-        for(int i = 0; i < lines.length; i++)
-            conceptIds.add(lines[i].trim().toLowerCase());
+        for (String line : lines) {
+            conceptIds.add(line.trim().toLowerCase());
+        }
         
         return conceptIds;
-        
     }
+    
+    private void createAndDisplayReport(
+            AbNConfiguration config, 
+            ConceptLocationDataFactory factory, 
+            ArrayList<String> idStrs) {
+
+        if (!idStrs.isEmpty()) {
+            Set<Concept> concepts = factory.getConceptsFromIds(idStrs);
+
+            ArrayList<ImportedConceptNodeReport> reports = new ArrayList<>();
+
+            AbstractionNetwork<? extends Node> abn = config.getAbstractionNetwork();
+
+            Map<Concept, Set<Node>> conceptNodes = new HashMap<>();
+
+            abn.getNodes().forEach((node) -> {
+                node.getConcepts().forEach((concept) -> {
+                    if (!conceptNodes.containsKey(concept)) {
+                        conceptNodes.put(concept, new HashSet<>());
+                    }
+
+                    conceptNodes.get(concept).add(node);
+                });
+            });
+
+            concepts.forEach((concept) -> {
+                if (conceptNodes.containsKey(concept)) {
+                    reports.add(new ImportedConceptNodeReport(concept, conceptNodes.get(concept)));
+                }
+            });
+
+            reports.sort((a, b) -> {
+                return a.getConcept().getName().compareToIgnoreCase(b.getConcept().getName());
+            });
+
+            conceptReportList.setContents(reports);
+        }
+    }
+
+    
     
     public void displayAbNReport(AbstractionNetwork abn) {
         

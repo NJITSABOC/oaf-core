@@ -5,7 +5,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Represents a concept now being summarized by a node in the "TO" version
+ * of an abstraction network while also still being summarized by at least one
+ * node is summarized by in the "FROM" release
+ * 
  * @author Chris O
  */
 public class ConceptAddedToNode extends NodeConceptChange {

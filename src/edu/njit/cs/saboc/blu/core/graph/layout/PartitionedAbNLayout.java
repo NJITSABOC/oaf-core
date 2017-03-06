@@ -244,7 +244,7 @@ public abstract class PartitionedAbNLayout<T extends PartitionedAbstractionNetwo
         
         String internalNodeCountStr;
         
-        String conceptTypeName = config.getTextConfiguration().getConceptTypeName(conceptCount > 1);
+        String conceptTypeName = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount > 1);
         String conceptCountStr = String.format("%d %s", conceptCount, conceptTypeName);
         
         String internalNodeTypeName = config.getTextConfiguration().getNodeTypeName(internalNodeCount > 1);

@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
 
@@ -40,6 +41,7 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
         this.config = config;
     }
 
+    @Override
     public void doLayout() {
         super.doLayout();
 
@@ -269,9 +271,11 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
         String conceptStr;
 
         if (concepts.size() == 1) {
-            conceptStr = String.format("1 %s", config.getTextConfiguration().getConceptTypeName(false));
+            conceptStr = String.format("1 %s", 
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
         } else {
-            conceptStr = String.format("%d %s", concepts.size(), config.getTextConfiguration().getConceptTypeName(true));
+            conceptStr = String.format("%d %s", concepts.size(), 
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
         }
 
         countStr = String.format("(%s, %s)", conceptStr, pareaStr);

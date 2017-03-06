@@ -28,7 +28,7 @@ public class ConceptList extends AbstractEntityList<Concept> {
 
     @Override
     protected String getBorderText(Optional<ArrayList<Concept>> entities) {
-        String base = config.getTextConfiguration().getConceptTypeName(true);
+        String base = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true);
 
         if(entities.isPresent()) {
             return String.format("%s (%d)", base, entities.get().size());

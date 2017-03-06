@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,12 +17,15 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class DisjointTANTextConfiguration implements DisjointAbNTextConfiguration<DisjointNode<Cluster>> {
+public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfiguration<DisjointNode<Cluster>> {
 
     private final DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTaxonomy;
 
     public DisjointTANTextConfiguration(
+            OntologyEntityNameConfiguration ontologyEntityNameConfig, 
             DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTaxonomy) {
+        
+        super(ontologyEntityNameConfig);
         
         this.disjointTaxonomy = disjointTaxonomy;
     }
@@ -142,7 +146,7 @@ public abstract class DisjointTANTextConfiguration implements DisjointAbNTextCon
                     level, 
                     levelDisjointPAreas.size(), 
                     levelClassCount, 
-                    getConceptTypeName(true));
+                    this.getOntologyEntityNameConfiguration().getConceptTypeName(true));
         }
 
         summary += "<p><b>Help / Description:</b><br>";

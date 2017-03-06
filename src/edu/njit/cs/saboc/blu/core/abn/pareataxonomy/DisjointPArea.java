@@ -6,13 +6,12 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A disjoint partial-area
+ * 
  * @author Chris O
  */
 public class DisjointPArea extends DisjointNode<PArea> {
-    
     public DisjointPArea(Hierarchy<Concept> concepts, Set<PArea> overlaps) {
         super(concepts, overlaps);
     }
-    
 }

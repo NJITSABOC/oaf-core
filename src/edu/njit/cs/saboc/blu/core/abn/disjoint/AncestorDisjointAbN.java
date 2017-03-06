@@ -7,8 +7,13 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A disjoint abstraction network that consists of a selected disjoint node
+ * and all of its ancestor disjoint nodes.
+ * 
  * @author Chris O
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class AncestorDisjointAbN <
         T extends DisjointNode<PARENTNODE_T>,

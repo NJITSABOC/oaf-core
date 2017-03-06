@@ -5,8 +5,11 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate disjoint abstraction 
+ * network
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AggregateDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> 
         implements AggregateAbNDerivation<DisjointAbNDerivation> {

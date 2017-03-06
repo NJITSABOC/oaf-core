@@ -72,7 +72,7 @@ public class DiffNodeStatusTableModel extends OAFAbstractTableModel<DiffNodeStat
                 
             case IntroducedFromNew:
                 return String.format("All new %s", 
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase());
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase());
                 
             case IntroducedFromOneNode:
                 return String.format("From one %s", 
@@ -84,7 +84,7 @@ public class DiffNodeStatusTableModel extends OAFAbstractTableModel<DiffNodeStat
                 
             case RemovedFromOnt:
                     return String.format("All %s removed", 
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase());
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase());
                 
             case RemovedToOneNode:
                     return String.format("To one %s", 

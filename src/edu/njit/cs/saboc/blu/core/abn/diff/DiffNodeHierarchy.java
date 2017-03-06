@@ -1,15 +1,16 @@
 package edu.njit.cs.saboc.blu.core.abn.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffEdge.EdgeState;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Edge;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Represents a Directed Acyclic Graph (DAG) of Diff Nodes.
+ * 
+ * Based on, but does not currently extend, the Hierarchy class.
+ * 
  * @author Chris O
  */
-
 public class DiffNodeHierarchy {
 
     private final Set<DiffNode> addedRoots;
@@ -18,7 +19,11 @@ public class DiffNodeHierarchy {
     
     private final DiffNodeGraph diffGraph = new DiffNodeGraph();
     
-    public DiffNodeHierarchy(Set<DiffNode> removedRoots, Set<DiffNode> introducedRoots, Set<DiffNode> transferredRoots) {
+    public DiffNodeHierarchy(
+            Set<DiffNode> removedRoots, 
+            Set<DiffNode> introducedRoots, 
+            Set<DiffNode> transferredRoots) {
+        
         this.removedRoots = removedRoots;
         this.addedRoots = introducedRoots;
         this.transferredRoots = transferredRoots;

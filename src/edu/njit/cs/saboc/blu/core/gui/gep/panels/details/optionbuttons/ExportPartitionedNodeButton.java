@@ -20,7 +20,7 @@ public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedN
     private static final String getToolTipStr(PartitionedAbNConfiguration config) {
         return String.format("Export %s's %s.",
                 config.getTextConfiguration().getContainerTypeName(false),
-                config.getTextConfiguration().getConceptTypeName(true));
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
     }
     
     private final PartitionedAbNConfiguration config;
@@ -38,11 +38,11 @@ public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedN
         if (exportFile.isPresent()) {
             
             String firstChoice = String.format("%s ID and Name", 
-                    config.getTextConfiguration().getConceptTypeName(false));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
             
             String secondChoice = String.format("%s ID, %s Name, and %s", 
-                    config.getTextConfiguration().getConceptTypeName(false),
-                    config.getTextConfiguration().getConceptTypeName(false),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
                     config.getTextConfiguration().getNodeTypeName(false));
             
             

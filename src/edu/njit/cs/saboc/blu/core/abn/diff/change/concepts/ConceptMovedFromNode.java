@@ -4,7 +4,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- * Represents a concept moving FROM a different node TO the node
+ * Represents a concept moving FROM one node TO another node between the
+ * "FROM" and "TO" versions of the abstraction network.
+ * 
  * @author Chris
  */
 public class ConceptMovedFromNode extends NodeConceptChange {

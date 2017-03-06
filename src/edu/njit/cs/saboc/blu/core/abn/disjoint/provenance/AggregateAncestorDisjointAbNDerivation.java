@@ -9,18 +9,20 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to derive a given aggregate ancestor disjoint
+ * abstraction network.
+ * 
  * @author Chris O
  * @param <T>
  */
-public class AggregateAncestorTANDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T>
+public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T>
     implements RootedSubAbNDerivation<DisjointAbNDerivation>, AggregateAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation aggregateBase;
     private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
     
-    public AggregateAncestorTANDerivation(
+    public AggregateAncestorDisjointAbNDerivation(
             DisjointAbNDerivation aggregateBase, 
             int minBound,
             Concept selectedAggregatePAreaRoot) {
@@ -32,7 +34,7 @@ public class AggregateAncestorTANDerivation<T extends SinglyRootedNode> extends 
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
     }
     
-    public AggregateAncestorTANDerivation(AggregateAncestorTANDerivation deriveTaxonomy) {
+    public AggregateAncestorDisjointAbNDerivation(AggregateAncestorDisjointAbNDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
                 deriveTaxonomy.getBound(), 
                 deriveTaxonomy.getSelectedRoot());

@@ -56,11 +56,11 @@ public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implemen
                     rootName, 
                     config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), 
                     classCount, 
-                    config.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
                     descendantGroupCount, 
                     config.getTextConfiguration().getNodeTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    config.getTextConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         } else {
             
             ArrayList<String> overlappingGroupNames = new ArrayList<>();
@@ -82,13 +82,13 @@ public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implemen
                     rootName, 
                     config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), 
                     classCount, 
-                    config.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase(),
                     config.getTextConfiguration().getOverlappingNodeTypeName(true).toLowerCase(),
                     overlapsStr,
                     descendantGroupCount, 
                     config.getTextConfiguration().getNodeTypeName(descendantGroupCount > 1 || descendantGroupCount == 0).toLowerCase(),
                     descendantConceptCount,
-                    config.getTextConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         }
         
         result += "<p><b>Help / Description:</b><br>";

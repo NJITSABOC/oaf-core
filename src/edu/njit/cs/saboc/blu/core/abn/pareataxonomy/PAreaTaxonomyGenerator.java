@@ -10,7 +10,8 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * A generator class for creating partial-area taxonomies
+ * 
  * @author Chris O
  */
 public class PAreaTaxonomyGenerator {
@@ -58,8 +59,7 @@ public class PAreaTaxonomyGenerator {
             final PAreaTaxonomyFactory factory, 
             final Hierarchy<? extends Concept> sourceHierarchy) {
         
-        // TODO: This whole process can be replaced by one topological traversal
-        
+        // TODO: This whole process can be replaced by a topological traversal.
         Map<Concept, Set<InheritableProperty>> conceptRelationships = new HashMap<>();
         
         Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
@@ -77,7 +77,7 @@ public class PAreaTaxonomyGenerator {
         Map<Concept, Set<Concept>> parentPAreaRoots = new HashMap<>();
         Map<Concept, Set<Concept>> childPAreaRoots = new HashMap<>();
 
-        // Initialize the partial-area data structures
+        // Step 1: Initialize the partial-area data structures
         pareaRoots.forEach( (root) -> {
             pareaConceptHierarchy.put(root, new Hierarchy<>(root));
             
@@ -89,11 +89,11 @@ public class PAreaTaxonomyGenerator {
 
         Stack<Concept> stack = new Stack<>();
         
-        // For all of the roots, find the concepts in the associated partial area. Establish CHILD OF links.
+        // Step 2: For all of the roots, add appropriate concepts to the  partial-area. Establish CHILD OF links.
         pareaRoots.forEach( (root) -> {
             stack.add(root);
             
-            HashSet<Concept> processedConcepts = new HashSet<>();
+            Set<Concept> processedConcepts = new HashSet<>();
             processedConcepts.add(root);
             
             while (!stack.isEmpty()) {
@@ -152,6 +152,7 @@ public class PAreaTaxonomyGenerator {
             pareas.add(parea);
         }
                 
+        // Step 3: Build the hierarchy of partial-areas
         Hierarchy<PArea> pareaHierarchy = new Hierarchy<>(rootPArea);
         
         pareas.forEach((parea) -> {
@@ -168,6 +169,8 @@ public class PAreaTaxonomyGenerator {
             });
         });
         
+        // Step 4: Create the areas from the sets of partial-areas with the 
+        // same types of inheritable properties
         Set<Area> areas = new HashSet<>();
         
         Area rootArea = null;
@@ -186,6 +189,7 @@ public class PAreaTaxonomyGenerator {
             areasByRelationships.put(area.getRelationships(), area);
         }
         
+        // Step 5: Build the area hierarchy
         Hierarchy<Area> areaHierarchy = new Hierarchy<>(rootArea);
         
         areas.forEach((area) -> {
@@ -206,6 +210,15 @@ public class PAreaTaxonomyGenerator {
         return pareaTaxonomy;
     }
     
+    /**
+     * Creates a partial-area taxonomy from a hierarchy of partial-areas
+     * 
+     * @param <T>
+     * @param factory
+     * @param pareaHierarchy
+     * @param sourceHierarchy
+     * @return 
+     */
     public <T extends PArea> PAreaTaxonomy<T> createTaxonomyFromPAreas(
             PAreaTaxonomyFactory factory, 
             Hierarchy<T> pareaHierarchy,

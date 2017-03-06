@@ -12,8 +12,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create a disjoint abstraction network 
+ * from a partitioned node in a partitioned abstraction network.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> {
     

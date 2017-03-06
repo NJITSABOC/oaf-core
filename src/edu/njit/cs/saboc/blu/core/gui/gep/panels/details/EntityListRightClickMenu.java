@@ -30,19 +30,17 @@ public class EntityListRightClickMenu<T> {
             int row = entityList.getEntityTable().rowAtPoint(e.getPoint());
 
             if (row >= 0) {
-                if (e.isPopupTrigger()) {
-                    T selectedValue = entityList.getTableModel().getItemAtRow(row);
-                    
-                    rightClickedItem = Optional.of(selectedValue);
-                    
-                    menuItems.forEach((action, menuItem) -> {
-                        menuItem.setEnabled(action.isEnabledFor(selectedValue));
-                    });
-                    
-                    popup.show(e.getComponent(), e.getX(), e.getY());
-                    
-                    return;
-                }
+                T selectedValue = entityList.getTableModel().getItemAtRow(row);
+
+                rightClickedItem = Optional.of(selectedValue);
+
+                menuItems.forEach((action, menuItem) -> {
+                    menuItem.setEnabled(action.isEnabledFor(selectedValue));
+                });
+
+                popup.show(e.getComponent(), e.getX(), e.getY());
+
+                return;
             }
             
             menuItems.values().forEach((menuItem) -> {
@@ -52,50 +50,7 @@ public class EntityListRightClickMenu<T> {
             rightClickedItem = Optional.empty();
         }
     }
-    
-    public abstract class EntityListRightClickMenuItem {
-        private final String itemName;
-        
-        public EntityListRightClickMenuItem(String itemName) {
-            this.itemName = itemName;
-        }
-        
-        public String getItemName() {
-            return itemName;
-        }
-        
-        public abstract boolean isEnabledFor(T item);
-        
-        public abstract void doActionFor(T item);
 
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 53 * hash + Objects.hashCode(this.itemName);
-            
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            
-            final EntityListRightClickMenuItem other = (EntityListRightClickMenuItem) obj;
-            
-            if (!Objects.equals(this.itemName, other.itemName)) {
-                return false;
-            }
-            
-            return true;
-        }
-    }
-    
     private Optional<T> rightClickedItem = Optional.empty();
     
     private final AbstractEntityList<T> entityList;

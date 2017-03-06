@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyTextConfiguration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,10 +17,14 @@ import java.util.Set;
  */
 public abstract class DiffPAreaTaxonomyTextConfiguration extends PAreaTaxonomyTextConfiguration {
     
-    public DiffPAreaTaxonomyTextConfiguration(DiffPAreaTaxonomy taxonomy) {
-        super(taxonomy);
+    public DiffPAreaTaxonomyTextConfiguration(
+            OntologyEntityNameConfiguration ontologyEntityNameConfig, 
+            DiffPAreaTaxonomy taxonomy) {
+        
+        super(ontologyEntityNameConfig, taxonomy);
     }
     
+    @Override
     public DiffPAreaTaxonomy getPAreaTaxonomy() {
         return (DiffPAreaTaxonomy)super.getPAreaTaxonomy();
     }

@@ -5,12 +5,15 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateAncestorTANDerivation;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateAncestorDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**
- *
+ * Represents an ancestor disjoint abstraction network that has been aggregated.
+ * 
  * @author Chris O
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class AggregateAncestorDisjointAbN<
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
@@ -33,7 +36,7 @@ public class AggregateAncestorDisjointAbN<
                 aggregatedSuperAbN, 
                 subAbN.getNodeHierarchy(), 
                 nonAggregatedDisjointAbN.getSourceHierarchy(), 
-                new AggregateAncestorTANDerivation(aggregatedSuperAbN.getDerivation(), aggregateBound, selectedRoot.getRoot()));
+                new AggregateAncestorDisjointAbNDerivation(aggregatedSuperAbN.getDerivation(), aggregateBound, selectedRoot.getRoot()));
         
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
         this.aggregateBound = aggregateBound;

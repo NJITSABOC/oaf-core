@@ -3,16 +3,22 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurat
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 
 /**
  *
  * @author Chris O
  */
-public abstract class TargetAbNTextConfiguration implements AbNTextConfiguration<TargetGroup> {
+public abstract class TargetAbNTextConfiguration extends AbNTextConfiguration<TargetGroup> {
     
     private final TargetAbstractionNetwork targetAbN;
     
-    public TargetAbNTextConfiguration(TargetAbstractionNetwork taxonomy) {
+    public TargetAbNTextConfiguration(
+            OntologyEntityNameConfiguration ontologyEntityNameConfig, 
+            TargetAbstractionNetwork taxonomy) {
+        
+        super(ontologyEntityNameConfig);
+        
         this.targetAbN = taxonomy;
     }
     

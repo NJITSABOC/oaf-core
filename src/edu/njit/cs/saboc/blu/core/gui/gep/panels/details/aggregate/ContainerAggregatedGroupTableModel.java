@@ -19,7 +19,7 @@ public class ContainerAggregatedGroupTableModel<T extends Node> extends OAFAbstr
     public ContainerAggregatedGroupTableModel(PartitionedAbNConfiguration config) {
         super(new String[] {
            String.format("Aggregated %s",config.getTextConfiguration().getNodeTypeName(false)),
-           String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+           String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
            "Aggregated Into"
         });
         

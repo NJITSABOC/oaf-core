@@ -25,10 +25,10 @@ public class PropertyPanel extends AbstractEntityList<InheritableProperty>  {
         
         if(entities.isPresent()) {
             return String.format("%s (%d)", 
-                    config.getTextConfiguration().getPropertyTypeName(true),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(true),
                     entities.get().size());
         } else {
-            return String.format("%s (0)", config.getTextConfiguration().getPropertyTypeName(true));
+            return String.format("%s (0)", config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(true));
         }
     }
 }

@@ -16,8 +16,8 @@ public class OverlappingNodeTableModel<T extends Node> extends OAFAbstractTableM
         
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false),
-            String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true)),
-            String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
+            String.format("# Overlapping %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
         });
         
         this.configuration = configuration;

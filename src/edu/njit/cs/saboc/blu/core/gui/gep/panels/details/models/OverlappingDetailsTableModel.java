@@ -21,7 +21,7 @@ public class OverlappingDetailsTableModel extends OAFAbstractTableModel<Overlapp
         super(new String[] {
             String.format("Other %s", configuration.getTextConfiguration().getNodeTypeName(false)),
             String.format("# Common %s", configuration.getTextConfiguration().getDisjointNodeTypeName(true),
-            String.format("# Overlapping %s", configuration.getTextConfiguration().getConceptTypeName(true)))
+            String.format("# Overlapping %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)))
         });
 
         this.configuration = configuration;

@@ -19,7 +19,7 @@ public class AggregateTargetAbNGenerator {
             return sourceTargetAbN;
         }
         
-        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
+        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(
                         new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),

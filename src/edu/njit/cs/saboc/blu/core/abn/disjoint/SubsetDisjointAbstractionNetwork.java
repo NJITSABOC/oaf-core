@@ -9,8 +9,16 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A disjoint abstraction network created by selecting a set of overlapping singly rooted nodes.
+ * 
+ * The disjoint abstraction network consists of all of the disjoint nodes that overlap between 
+ * the selected singly rooted nodes or a subset of the singly rooted nodes.
+ * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class SubsetDisjointAbstractionNetwork<
         T extends DisjointNode<PARENTNODE_T>,

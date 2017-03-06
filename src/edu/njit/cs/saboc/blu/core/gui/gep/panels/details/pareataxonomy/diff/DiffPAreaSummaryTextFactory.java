@@ -23,6 +23,7 @@ public class DiffPAreaSummaryTextFactory extends PAreaSummaryTextFactory {
         super(config);
     }
     
+    @Override
     public DiffPAreaTaxonomyConfiguration getConfiguration() {
         return (DiffPAreaTaxonomyConfiguration)super.getConfiguration();
     }

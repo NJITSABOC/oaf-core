@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating disjoint partial-area taxonomies
+ * 
  * @author Chris O
  */
 public class DisjointPAreaTaxonomyFactory implements DisjointAbNFactory<PArea, DisjointPArea> {

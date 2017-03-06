@@ -9,14 +9,19 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- *  Represents an area in a partial-area taxonomy
+ * Represents an area in a partial-area taxonomy. All of the concepts in an area 
+ * are modeled with the same types of semantic relationships.
  * 
  * @author Chris O
  */
 public class Area extends SimilarityNode<PArea> {
 
+    // The set of inheritable properties that all concepts in this area
+    // share
     private final Set<InheritableProperty> relationships;
     
+    // Partial-areas are separated into regions based on the inheritance of
+    // their inheritable properties
     private final Set<Region> regions;
     
     public Area(Set<PArea> pareas, Set<InheritableProperty> relationships) {
@@ -65,10 +70,12 @@ public class Area extends SimilarityNode<PArea> {
         return super.getInternalNodes();
     }
 
+    @Override
     public String getName() {
         return getName(", ");
     }
     
+    @Override
     public String getName(String separator) {
         
         if(relationships.isEmpty()) {
@@ -93,10 +100,12 @@ public class Area extends SimilarityNode<PArea> {
         }
     }
     
+    @Override
     public int hashCode() {
         return relationships.hashCode();
     }
     
+    @Override
     public boolean equals(Object o) {
         if(o instanceof Area) {
             Area otherArea = (Area)o;
@@ -106,5 +115,4 @@ public class Area extends SimilarityNode<PArea> {
         
         return false;
     }
-
 }

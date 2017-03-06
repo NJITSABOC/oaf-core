@@ -28,7 +28,7 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory<Cluster
     public String createNodeSummaryText(Cluster cluster) {
         ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         
-        String conceptType = config.getTextConfiguration().getConceptTypeName(true).toLowerCase();
+        String conceptType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
         
         String rootName = cluster.getName();
         int classCount = cluster.getConceptCount();

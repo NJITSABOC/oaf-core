@@ -4,7 +4,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- * Represents a concept that was removed from an ontology and thus a node's concept set.
+ * Represents a concept that was removed from an ontology and is no longer
+ * summarized by the given node
+ * 
  * @author Chris
  */
 public class ConceptRemovedFromOntology extends NodeConceptChange {

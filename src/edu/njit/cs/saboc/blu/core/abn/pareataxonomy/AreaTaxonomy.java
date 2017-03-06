@@ -15,11 +15,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * An abstraction network that consists of a hierarchy of areas
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
     
+    // The factory that was used to create this area taxonomy
     private final PAreaTaxonomyFactory factory;
     
     public AreaTaxonomy(
@@ -69,6 +72,13 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
         return findAreas(query);
     }
         
+    /**
+     * Returns the set of areas that have inheritable properties 
+     * with names that match the given comma-delimited query
+     * 
+     * @param query
+     * @return 
+     */
     public Set<T> findAreas(String query) {
         
         query = query.toLowerCase();
@@ -127,6 +137,12 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
                 (Set<PartitionedNode>)(Set<?>)this.getAreas());
     }
     
+    /**
+     * Returns the set of inheritable properties that exist for concepts summarized by 
+     * this area taxonomy
+     * 
+     * @return 
+     */
     public Set<InheritableProperty> getPropertiesInTaxonomy() {
         Set<InheritableProperty> allProperties = new HashSet<>();
         
@@ -137,6 +153,10 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
         return allProperties;
     }
     
+    /**
+     * Returns which area each concept is summarized by
+     * @return 
+     */
     public Map<Concept, Area> getConceptAreas() {
         Map<Concept, Area> conceptAreas = new HashMap<>();
         

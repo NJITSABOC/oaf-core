@@ -28,6 +28,7 @@ public abstract class Node {
      * @param o
      * @return 
      */
+    @Override
     public abstract boolean equals(Object o);
     
     /**
@@ -39,8 +40,10 @@ public abstract class Node {
         return this.equals(o) && this.getConcepts().equals(o.getConcepts());
     }
     
+    @Override
     public abstract int hashCode();
     
+    @Override
     public String toString() {
         return getName();
     }

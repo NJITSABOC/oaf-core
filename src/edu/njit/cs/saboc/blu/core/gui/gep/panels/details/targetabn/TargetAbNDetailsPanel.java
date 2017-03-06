@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurati
  * @author Chris O
  */
 public class TargetAbNDetailsPanel extends SimpleAbNDetailsPanel<TargetAbstractionNetwork> {
-    
     public TargetAbNDetailsPanel(TargetAbNConfiguration config) {
         super(config);
     }

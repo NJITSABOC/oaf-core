@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- * Represents a partial-area in a partial-area taxonomy
+ * Represents a partial-area, a subhierarchy of concepts that are modeled
+ * with the same types of inheritable properties
+ * 
  * @author Chris O
  */
 public class PArea extends SinglyRootedNode {
@@ -22,6 +24,7 @@ public class PArea extends SinglyRootedNode {
         this.relationships = relationships;
     }
     
+    @Override
     public boolean equals(Object o) {
         if(o instanceof PArea) {
             PArea other = (PArea)o;

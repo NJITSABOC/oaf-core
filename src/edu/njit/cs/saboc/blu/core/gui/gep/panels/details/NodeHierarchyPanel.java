@@ -43,7 +43,7 @@ public class NodeHierarchyPanel<T extends Node> extends BaseNodeInformationPanel
         parentNodeList = new AbstractEntityList<ParentNodeDetails<T>>(parentModel) {
             public String getBorderText(Optional<ArrayList<ParentNodeDetails<T>>> entries) {
                 String baseStr = String.format("Root's %s's %s", 
-                        config.getTextConfiguration().getParentConceptTypeName(false), 
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false), 
                         config.getTextConfiguration().getNodeTypeName(true));
                 
                 if(entries.isPresent()) {

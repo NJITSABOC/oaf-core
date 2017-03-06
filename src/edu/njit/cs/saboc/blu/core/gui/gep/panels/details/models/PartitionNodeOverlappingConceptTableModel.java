@@ -20,7 +20,7 @@ public class PartitionNodeOverlappingConceptTableModel<T extends PartitionedNode
     
     public PartitionNodeOverlappingConceptTableModel(PartitionedAbNConfiguration config) {
         super(new String [] { 
-            config.getTextConfiguration().getConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
             "ID",
             String.format("In # %s", config.getTextConfiguration().getNodeTypeName(true))
         });

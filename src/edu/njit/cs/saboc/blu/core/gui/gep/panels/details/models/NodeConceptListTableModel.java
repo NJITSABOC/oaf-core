@@ -14,7 +14,7 @@ public class NodeConceptListTableModel<T extends Node> extends AbstractNodeEntit
     
     public NodeConceptListTableModel(AbNConfiguration config) {
         super(new String[] {
-            config.getTextConfiguration().getConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
             "ID"
         });
         

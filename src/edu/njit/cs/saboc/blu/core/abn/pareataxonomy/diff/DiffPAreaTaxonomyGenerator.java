@@ -3,12 +3,18 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff;
 import edu.njit.cs.saboc.blu.core.abn.diff.AbstractionNetworkDiffResult;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
+import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVisitor;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -130,5 +136,139 @@ public class DiffPAreaTaxonomyGenerator {
         return diffPAreaTaxonomy;
     }
     
+    public DiffPAreaTaxonomy getChangeStateDiffPAreaTaxonomy(DiffPAreaTaxonomy diffPAreaTaxonomy, Set<ChangeState> changeTypes) {
+        
+        if(changeTypes.size() == ChangeState.values().length) {
+            return diffPAreaTaxonomy;
+        }
+        
+        Hierarchy<DiffPArea> diffPAreaHierarchy = diffPAreaTaxonomy.getPAreaHierarchy();
+        ChangeStateHierarchyBuilderVisitor visitor = new ChangeStateHierarchyBuilderVisitor(diffPAreaHierarchy, changeTypes);
+        diffPAreaHierarchy.topologicalDown(visitor);
+        
+        Hierarchy<DiffPArea> diffPAreaSubset = visitor.getResultHierarchy();
+        
+        return createDiffPAreaTaxonomyFromDiffPAreaHierarchy(
+                diffPAreaTaxonomy.getAreaTaxonomy().getDiffFactory(),
+                diffPAreaSubset,
+                diffPAreaTaxonomy);
+    }
     
+    public DiffPAreaTaxonomy createDiffPAreaTaxonomyFromDiffPAreaHierarchy(
+            DiffPAreaTaxonomyFactory factory, 
+            Hierarchy<DiffPArea> diffPAreaHierarchy,
+            DiffPAreaTaxonomy sourceDiffTaxonomy) {
+        
+        Map<Set<InheritableProperty>, Set<DiffPArea>> pareasByRelationships = new HashMap<>();
+        
+        diffPAreaHierarchy.getNodes().forEach( (parea) -> {
+            Set<InheritableProperty> properties = parea.getRelationships();
+            
+            if(!pareasByRelationships.containsKey(properties)) {
+                pareasByRelationships.put(properties, new HashSet<>());
+            }
+            
+            pareasByRelationships.get(properties).add(parea);
+        });
+
+        HashMap<Set<InheritableProperty>, DiffArea> areasByRelationships = new HashMap<>();
+        
+        DiffArea rootArea = null;
+        
+        for (Map.Entry<Set<InheritableProperty>, Set<DiffPArea>> entry : pareasByRelationships.entrySet()) {
+            Set<DiffPArea> diffPAreas = entry.getValue();
+            
+            DiffArea area = new DiffArea(
+                    // TODO: Is this right? Will it match both added/removed?
+                    sourceDiffTaxonomy.getAreaFor(diffPAreas.iterator().next()).getDiffNode(), 
+                    entry.getKey(), 
+                    diffPAreas);
+
+            if (area.getDiffPAreas().contains(diffPAreaHierarchy.getRoot())) {
+                rootArea = area;
+            }
+
+            areasByRelationships.put(area.getRelationships(), area);
+        }
+        
+        Hierarchy<DiffArea> areaHierarchy = new Hierarchy<>(rootArea);
+ 
+        areasByRelationships.values().forEach((area) -> {
+            if (!area.equals(areaHierarchy.getRoot())) {
+                Set<DiffPArea> areaPAreas = area.getDiffPAreas();
+
+                areaPAreas.forEach((parea) -> {
+                    DiffArea parentArea = areasByRelationships.get(parea.getRelationships());
+                    
+                    areaHierarchy.addEdge(area, parentArea);
+                });
+            }
+        });
+
+        DiffAreaTaxonomy diffAreaTaxonomy = factory.createDiffAreaTaxonomy(
+                sourceDiffTaxonomy.getOntologyStructuralChanges(), 
+                sourceDiffTaxonomy.getAreaTaxonomy().getFrom(), 
+                sourceDiffTaxonomy.getAreaTaxonomy().getTo(), 
+                areaHierarchy);
+        
+        DiffPAreaTaxonomy diffPAreaTaxonomy = factory.createDiffPAreaTaxonomy(
+                diffAreaTaxonomy,
+                sourceDiffTaxonomy.getFrom(), 
+                sourceDiffTaxonomy.getTo(), 
+                diffPAreaHierarchy);
+
+        return diffPAreaTaxonomy;
+    }
+}
+
+class ChangeStateHierarchyBuilderVisitor extends TopologicalVisitor<DiffPArea> {
+    
+    private final Set<ChangeState> allowedChangeStates;
+    private final Hierarchy<DiffPArea> resultHierarchy;
+    
+    private final Map<DiffPArea, Set<DiffPArea>> closestAllowedAncestors;
+    
+    public ChangeStateHierarchyBuilderVisitor(Hierarchy<DiffPArea> theHierarchy, Set<ChangeState> allowedChangeStates) {
+        super(theHierarchy);
+        
+        this.allowedChangeStates = allowedChangeStates;
+        this.resultHierarchy = new Hierarchy<>(theHierarchy.getRoot());
+        
+        this.closestAllowedAncestors = new HashMap<>();
+    }
+
+    @Override
+    public void visit(DiffPArea node) {
+        Hierarchy<DiffPArea> theHierarchy = super.getHierarchy();
+        
+        if(node.equals(theHierarchy.getRoot())) { // The root is always displayed
+            this.closestAllowedAncestors.put(node, Collections.singleton(node));
+            
+            return;
+        }
+        
+        Set<DiffPArea> parents = theHierarchy.getParents(node);
+        
+        if(allowedChangeStates.contains(node.getPAreaState())) {
+            parents.forEach( (parent) -> {
+                closestAllowedAncestors.get(parent).forEach( (ancestor) -> {
+                    resultHierarchy.addEdge(node, ancestor);
+                });
+            });
+            
+            closestAllowedAncestors.put(node, Collections.singleton(node));
+        } else {
+            Set<DiffPArea> nodeAllowedAncestors = new HashSet<>();
+            
+            parents.forEach( (parent) -> {
+                nodeAllowedAncestors.addAll(closestAllowedAncestors.get(parent));
+            });
+            
+            closestAllowedAncestors.put(node, nodeAllowedAncestors);
+        }
+    }
+    
+    public Hierarchy<DiffPArea> getResultHierarchy() {
+        return resultHierarchy;
+    }
 }

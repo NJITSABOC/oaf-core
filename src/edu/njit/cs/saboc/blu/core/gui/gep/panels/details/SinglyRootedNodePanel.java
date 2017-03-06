@@ -31,6 +31,6 @@ public class SinglyRootedNodePanel<T extends SinglyRootedNode> extends NodeDashb
         
         addInformationTab(conceptHierarchyPanel, String.format("%s's %s Hierarchy", 
                 configuration.getTextConfiguration().getNodeTypeName(false),
-                configuration.getTextConfiguration().getConceptTypeName(false)));
+                configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)));
     }
 }

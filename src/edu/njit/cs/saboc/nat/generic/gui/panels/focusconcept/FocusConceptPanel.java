@@ -93,6 +93,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.minusPosition();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
+                //add nagvigationhistory to the top of history list
+                history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
                 forwardButton.setEnabled(true);
                 
@@ -109,6 +111,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.plusPosition();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
+                history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
                 backButton.setEnabled(true);
                 

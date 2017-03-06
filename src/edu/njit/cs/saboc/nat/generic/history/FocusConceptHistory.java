@@ -37,7 +37,7 @@ public class FocusConceptHistory<T extends Concept> {
     public void addHistoryEntry(T concept) {
         if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
             conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
-
+            
             setPosition(conceptHistory.size() - 1);
 
             listeners.forEach((listener) -> {
@@ -45,10 +45,20 @@ public class FocusConceptHistory<T extends Concept> {
             });
         }
     }
+    
+    public void addNavigationHistory(T concept){
+        if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
+            conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
+
+            listeners.forEach((listener) -> {
+                listener.historyEntryAdded();
+            });
+        }    
+    }
 
     public void minusPosition() {
         setPosition(position - 1);
-        
+
         listeners.forEach( (listener) -> {
             listener.historyBack();
         });

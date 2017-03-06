@@ -18,7 +18,7 @@ public class DiffArea extends Area implements DiffNodeInstance {
 
     public DiffArea(DiffNode diffNode, Set<InheritableProperty> rels, Set<DiffPArea> diffPAreas) {
 
-        super( (Set<PArea>)(Set<?>) diffPAreas, rels);
+        super((Set<PArea>)(Set<?>) diffPAreas, rels);
 
         this.diffNode = diffNode;
     }
@@ -27,6 +27,7 @@ public class DiffArea extends Area implements DiffNodeInstance {
         return (Set<DiffPArea>)(Set<?>)super.getPAreas();
     }
     
+    @Override
     public DiffNode getDiffNode() {
         return diffNode;
     }

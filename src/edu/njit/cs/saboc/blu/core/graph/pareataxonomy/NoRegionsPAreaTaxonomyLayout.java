@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
 
@@ -40,6 +41,7 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
         this.config = config;
     }
 
+    @Override
     public void doLayout() {
         super.doLayout();
 

@@ -26,6 +26,15 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
         this.toTaxonomy = toTaxonomy;
     }
     
+    public DiffPAreaTaxonomy(DiffPAreaTaxonomy diffTaxonomy) {
+        
+        this(   diffTaxonomy.getAreaTaxonomy(), 
+                diffTaxonomy.getFrom(), 
+                diffTaxonomy.getTo(), 
+                diffTaxonomy.getPAreaHierarchy());
+    }
+    
+    @Override
     public DiffAreaTaxonomy getAreaTaxonomy() {
         return (DiffAreaTaxonomy)super.getAreaTaxonomy();
     }

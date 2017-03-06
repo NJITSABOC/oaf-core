@@ -48,11 +48,9 @@ public class AggregateTargetGroupSummaryTextFactory extends TargetGroupSummaryTe
                     config.getTextConfiguration().getNodeTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
         }
 
-        return String.format("%s"
-                + "<p>"
-                + "<b>Help / Description:</b><br>%s",
-                typeDesc,  
-                config.getTextConfiguration().getNodeHelpDescription(aggregatePArea));
+        return String.format("%s",
+                typeDesc
+        );
     }
     
 }

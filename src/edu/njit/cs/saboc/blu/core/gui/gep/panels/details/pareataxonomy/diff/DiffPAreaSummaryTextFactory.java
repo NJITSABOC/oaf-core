@@ -68,11 +68,6 @@ public class DiffPAreaSummaryTextFactory extends PAreaSummaryTextFactory {
         });
         
         result.append(String.format("TOTAL: %d", diffPArea.getDiffNode().getChangeDetails().getConceptChanges().size()));
-        
-        
-        result.append("<p>");
-        result.append("<b>Help / Description</b><p>");
-        result.append(config.getTextConfiguration().getNodeHelpDescription(parea));
 
         return result.toString();
     }

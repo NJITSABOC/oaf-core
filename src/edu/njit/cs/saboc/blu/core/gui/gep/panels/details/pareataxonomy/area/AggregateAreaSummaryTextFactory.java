@@ -69,11 +69,10 @@ public class AggregateAreaSummaryTextFactory extends AreaSummaryTextFactory {
 
         String areaName = area.getName();
 
-        return String.format("<html><b>%s</b> is an area that summarizes %s"
-                + "<p><b>Help / Description:</b><br>%s",
+        return String.format("<html><b>%s</b> is an area that summarizes %s",
                 areaName,
-                pareaStr,
-                config.getTextConfiguration().getContainerHelpDescription(area));
+                pareaStr
+        );
 
     }
     

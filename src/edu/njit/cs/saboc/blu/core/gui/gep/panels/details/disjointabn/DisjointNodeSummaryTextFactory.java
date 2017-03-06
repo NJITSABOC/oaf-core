@@ -90,11 +90,7 @@ public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implemen
                     descendantConceptCount,
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(descendantConceptCount > 1 || descendantConceptCount == 0).toLowerCase());
         }
-        
-        result += "<p><b>Help / Description:</b><br>";
-        
-        result += config.getTextConfiguration().getNodeHelpDescription(node);
-        
+
         return result;
     }
     

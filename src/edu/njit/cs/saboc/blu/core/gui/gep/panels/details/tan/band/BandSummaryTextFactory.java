@@ -42,9 +42,6 @@ public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
                 config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(allConcepts.size() != 1).toLowerCase(),
                 clusters.size());
 
-        result += "<p><b>Help / Description:</b><br>";
-        result += config.getTextConfiguration().getContainerHelpDescription(band);
-
         return result;
     }
 

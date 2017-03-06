@@ -76,10 +76,6 @@ public class PAreaSummaryTextFactory implements NodeSummaryTextFactory<PArea> {
         } else {
             result.append("no child partial-areas.");
         }
-        
-        result.append("<p>");
-        result.append("<b>Help / Description</b><p>");
-        result.append(config.getTextConfiguration().getNodeHelpDescription(parea));
 
         return result.toString();
     }

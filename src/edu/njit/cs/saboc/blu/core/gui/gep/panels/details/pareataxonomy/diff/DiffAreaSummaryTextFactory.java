@@ -57,11 +57,6 @@ public class DiffAreaSummaryTextFactory extends AreaSummaryTextFactory {
         diffPAreasByType.forEach( (type, diffPAreasOfType) -> {
             builder.append(String.format("%s: %d<br>", type, diffPAreasOfType.size()));
         });
-        
-
-        builder.append("<br>");
-        builder.append("<b>Help / Description</b><p>");
-        builder.append(config.getTextConfiguration().getContainerHelpDescription(area));
 
         return builder.toString();
     }

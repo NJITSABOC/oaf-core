@@ -14,7 +14,9 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A partial-area taxonomy where all of the partial-areas smaller than a given 
+ * bound are summarized by aggregate partial-areas
+ * 
  * @author Chris O
  */
 public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> 

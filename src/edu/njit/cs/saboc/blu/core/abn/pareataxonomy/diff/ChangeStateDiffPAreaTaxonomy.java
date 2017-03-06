@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import java.util.Set;
 
 /**
- *
+ * A diff partial-area taxonomy that consists of only a chosen subhierarchy of 
+ * diff partial-areas based on their state (e.g., only introduced partial-areas)
+ * 
  * @author Chris O
  */
 public class ChangeStateDiffPAreaTaxonomy extends DiffPAreaTaxonomy implements SubAbstractionNetwork<DiffPAreaTaxonomy> {

@@ -11,7 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A diff node that 
+ * 
  * @author Chris O
  */
 public class DiffPArea extends PArea implements DiffNodeInstance {

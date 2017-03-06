@@ -9,7 +9,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import java.util.Set;
 
 /**
- *
+ * A diff area captures the differences, for a set of property types, in 
+ * the set of concepts that are modeled with that set of property types
+ * 
  * @author Chris O
  */
 public class DiffArea extends Area implements DiffNodeInstance {

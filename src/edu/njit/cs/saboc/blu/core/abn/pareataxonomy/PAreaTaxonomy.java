@@ -13,7 +13,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- * Represents a partial-area taxonomy abstraction network.
+ * Represents a partial-area taxonomy abstraction network, which consists of
+ * a hierarchy of partial-areas embedded within an area taxonomy
  * 
  * @author Chris O
  * @param <T>

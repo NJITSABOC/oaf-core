@@ -6,11 +6,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * An interface for defining factory classes that create or retrieve
+ * implementation-specific property change information 
+ * 
  * @author Chris O
  */
 public interface PropertyChangeDetailsFactory {
-    
     public Set<InheritableProperty> getFromOntProperties();
     public Set<InheritableProperty> getToOntProperties();
 

@@ -8,7 +8,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create an ancestor subtaxonomy
+ * 
  * @author Chris O
  */
 public class AncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation 

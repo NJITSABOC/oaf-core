@@ -8,7 +8,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments for creating aggregate an ancestor subtaxonomy
+ * 
  * @author Chris O
  */
 public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation 
@@ -53,7 +54,8 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
 
     @Override
     public PAreaTaxonomyDerivation getNonAggregateSourceDerivation() {
-        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
+        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = 
+                (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
         
         return derivedAggregate.getNonAggregateSourceDerivation();
     }

@@ -9,8 +9,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
- * @author Den
+ * A partial-area that summarizes a subhierarchy of partial-areas that are smaller
+ * than a given threshold value
+ * 
+ * @author Chris O
  */
 public class AggregatePArea extends PArea implements AggregateNode<PArea> {
     

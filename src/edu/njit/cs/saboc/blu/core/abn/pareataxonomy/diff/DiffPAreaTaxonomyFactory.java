@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.PropertyChangeD
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A factory class for creating implementation-specific diff partial-area
+ * taxonomy objects.
+ * 
  * @author Chris O
  */
 public abstract class DiffPAreaTaxonomyFactory {

@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A diff abstraction network that summarizes changes to the sets of property types
+ * that are used to model sets of concepts between two ontology releases
+ * 
  * @author Chris O
  */
 public class DiffAreaTaxonomy extends AreaTaxonomy<DiffArea> implements DiffAbstractionNetworkInstance<AreaTaxonomy> {

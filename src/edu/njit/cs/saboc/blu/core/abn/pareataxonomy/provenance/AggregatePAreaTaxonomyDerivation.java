@@ -5,7 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate partial-area taxonomy 
+ * 
  * @author Chris O
  */
 public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation 

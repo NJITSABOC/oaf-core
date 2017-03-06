@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
- *
+ * Stores the arguments needed to create a regular partial-area taxonomy for an ontology
+ * or a subhierarchy of an ontology 
+ * 
  * @author Chris O
  */
 public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {

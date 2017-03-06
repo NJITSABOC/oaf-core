@@ -5,32 +5,37 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Objects;
 
 /**
- *
+ * Captures a hierarchical change that affected the inheritance of an 
+ * inheritable property.
+ * 
  * @author Chris O
  */
 public class InheritablePropertyHierarchyChange extends InheritablePropertyChange {
 
-    public static enum SubclassState {
+    /**
+     * The state of a hierarchical connection (i.e., Is a or subclassOf) between
+     * two concepts
+     */
+    public static enum HierarchicalConnectionState {
         Added,
         Removed
     }
     
     private final Concept parent;
     
-    
-    private final SubclassState subclassState;
+    private final HierarchicalConnectionState hierarchicalConnectionState;
 
     public InheritablePropertyHierarchyChange(
             Concept child,
             Concept parent,
             InheritableProperty property,
-            SubclassState subclassState,
+            HierarchicalConnectionState hierarchicalConnectionState,
             ChangeInheritanceType inheritanceType) {
 
         super(child, property, inheritanceType);
         
         this.parent = parent;
-        this.subclassState = subclassState;
+        this.hierarchicalConnectionState = hierarchicalConnectionState;
     }
 
     public Concept getParent() {
@@ -41,8 +46,8 @@ public class InheritablePropertyHierarchyChange extends InheritablePropertyChang
         return super.getAffectedConcept();
     }
 
-    public SubclassState getSubclassState() {
-        return subclassState;
+    public HierarchicalConnectionState getHierarchicalConnectionState() {
+        return hierarchicalConnectionState;
     }
 
     @Override
@@ -51,7 +56,7 @@ public class InheritablePropertyHierarchyChange extends InheritablePropertyChang
         
         hash = 97 * hash + Objects.hashCode(this.parent);
         hash = 97 * hash + Objects.hashCode(this.getParent());
-        hash = 97 * hash + Objects.hashCode(this.subclassState);
+        hash = 97 * hash + Objects.hashCode(this.hierarchicalConnectionState);
         
         return hash;
     }
@@ -80,7 +85,7 @@ public class InheritablePropertyHierarchyChange extends InheritablePropertyChang
             return false;
         }
         
-        if (this.subclassState != other.subclassState) {
+        if (this.hierarchicalConnectionState != other.hierarchicalConnectionState) {
             return false;
         }
         

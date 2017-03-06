@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating aggregate partial-area taxonomy objects
+ * 
  * @author Chris O
  */
 public class AggregatePAreaTaxonomyFactory implements AggregateAbNFactory<PArea, AggregatePArea> {

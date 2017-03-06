@@ -5,14 +5,11 @@ import edu.njit.cs.saboc.blu.core.abn.diff.DiffAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.diff.DiffNode;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopologicalVisitor;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A generator class for creating diff partial-area taxonomies
+ * 
  * @author Chris O
  */
 public class DiffPAreaTaxonomyGenerator {
@@ -221,6 +219,15 @@ public class DiffPAreaTaxonomyGenerator {
     }
 }
 
+/**
+ * A visitor for creating a subhierarchy of diff partial-areas that have 
+ * a specific change state.
+ * 
+ * Diff partial-areas that do not have a change state that matches the 
+ * set of allowed change states are by-passed.
+ * 
+ * @author Chris O
+ */
 class ChangeStateHierarchyBuilderVisitor extends TopologicalVisitor<DiffPArea> {
     
     private final Set<ChangeState> allowedChangeStates;

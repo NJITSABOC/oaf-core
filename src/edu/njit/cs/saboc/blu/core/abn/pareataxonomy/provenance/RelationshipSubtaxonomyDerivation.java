@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments for creating a relationship subtaxonomy
+ * 
  * @author Chris O
  */
 public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation 

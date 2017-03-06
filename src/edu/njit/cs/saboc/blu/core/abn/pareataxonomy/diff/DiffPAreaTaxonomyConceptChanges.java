@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * The set of structural changes that affected the concepts in a subhierarchy
+ * between two versions of an ontology.
+ * 
  * @author Chris O
  */
 public class DiffPAreaTaxonomyConceptChanges extends DiffAbNConceptChanges {
@@ -37,6 +39,4 @@ public class DiffPAreaTaxonomyConceptChanges extends DiffAbNConceptChanges {
         
         return changes;
     }
-    
-    
 }

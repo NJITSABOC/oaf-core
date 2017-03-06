@@ -11,7 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A diff partial-area summarizes the changes to subhierarchies of
+ * concepts that are modeled with the same types of inheritable
+ * properties.
+ * 
  * @author Chris O
  */
 public class DiffPArea extends PArea implements DiffNodeInstance {
@@ -20,7 +23,8 @@ public class DiffPArea extends PArea implements DiffNodeInstance {
     
     public DiffPArea(DiffNode diffNode, PArea changedPArea) {
 
-        super(changedPArea.getHierarchy(), changedPArea.getRelationships());
+        super(changedPArea.getHierarchy(), 
+                changedPArea.getRelationships());
         
         this.diffNode = diffNode;
     }
@@ -29,13 +33,14 @@ public class DiffPArea extends PArea implements DiffNodeInstance {
         return diffNode.getChangeDetails().getNodeState();
     }
     
+    @Override
     public DiffNode getDiffNode() {
         return diffNode;
     }
     
+    @Override
     public Set<Concept> getConcepts() {
         Set<Concept> concepts = new HashSet<>(super.getConcepts());
-        
 
         if(getPAreaState() == ChangeState.Modified) {
             ModifiedNode modifiedNode = (ModifiedNode)getDiffNode();

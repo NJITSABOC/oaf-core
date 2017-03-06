@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RootSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateRootSubtaxonomyDerivation;
 
 /**
- *
+ * An aggregate partial-area taxonomy that consists of a chosen 
+ * aggregate partial-area and all of its descendant aggregate partial-areas
+ * 
  * @author Chris O
  */
 public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea> 

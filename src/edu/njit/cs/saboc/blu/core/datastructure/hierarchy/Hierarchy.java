@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierar
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.LowestCommonAncestorVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderListener;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
@@ -82,7 +82,7 @@ public class Hierarchy<T> {
     public Hierarchy(Set<T> roots, Hierarchy<T> sourceHierarchy) {
         this(roots);
         
-        SubhierarchyBuilderListener<T> subhierarchyBuilderVisitor = new SubhierarchyBuilderListener<>(sourceHierarchy, roots);
+        SubhierarchyBuilderVisitor<T> subhierarchyBuilderVisitor = new SubhierarchyBuilderVisitor<>(sourceHierarchy, roots);
         sourceHierarchy.topologicalDownInSubhierarchy(roots, subhierarchyBuilderVisitor);
         
         subhierarchyBuilderVisitor.getResult().getEdges().forEach( (edge) -> {

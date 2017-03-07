@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A visitor for finding the longest path hierarchical depth for each node in
+ * theHierarchy
+ * 
  * @author Chris O
  */
 public class HierarchyDepthVisitor<T> extends TopologicalVisitor<T> {
     
-    private final HashMap<T, Integer> depth = new HashMap<>();
+    private final Map<T, Integer> depth = new HashMap<>();
     
     private final ArrayList<AncestorDepthResult<T>> result = new ArrayList<>();
        

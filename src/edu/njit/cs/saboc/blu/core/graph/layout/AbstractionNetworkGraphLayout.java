@@ -20,8 +20,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
- * @author Chris
+ * The base class that all abstraction network graph layouts extend. Manages the 
+ * location of different elements within the abstraction network view.
+ * 
+ * @author David Daudelin
+ * @author Chris O
+ * 
+ * @param <T>
  */
 public abstract class AbstractionNetworkGraphLayout<T extends AbstractionNetwork> {
 

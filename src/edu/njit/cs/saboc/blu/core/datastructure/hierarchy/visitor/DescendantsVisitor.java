@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A visitor for getting all of the descendants of a given DAG node
+ * 
  * @author Chris O
  * @param <T>
  */
@@ -27,16 +28,8 @@ public class DescendantsVisitor<T> extends TopologicalVisitor<T> {
         Set<T> children = super.getHierarchy().getChildren(node);
         
         nodeDescendants.addAll(children);
-        
-        if(children == null) {
-            System.out.println("Null children: " + node);
-        }
-        
+                
         children.forEach((child) -> {
-            if (descendants.get(child) == null) {
-                System.out.println("Null descendants: " + child);
-            }
-
             nodeDescendants.addAll(descendants.getOrDefault(child, Collections.emptySet()));
         });
         

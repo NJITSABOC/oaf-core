@@ -2,13 +2,10 @@ package edu.njit.cs.saboc.blu.core.graph.layout;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Region;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.PartitionedNodeEntry;
-import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.AreaEntry;
-import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.RegionEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -24,8 +21,11 @@ import java.util.Set;
 import javax.swing.JLabel;
 
 /**
- *
+ * The base layout for all partitioned abstraction networks. Pre-sorts the 
+ * partitioned nodes to display the largest nodes in the center of the graph.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public abstract class PartitionedAbNLayout<T extends PartitionedAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
     
@@ -224,7 +224,7 @@ public abstract class PartitionedAbNLayout<T extends PartitionedAbstractionNetwo
         return result;
     }
     
-    private final JLabel createEntryLabel(
+    private JLabel createEntryLabel(
             PartitionedAbstractionNetwork abstractionNetwork, 
             PartitionedNode node, 
             int boundingWidth) {

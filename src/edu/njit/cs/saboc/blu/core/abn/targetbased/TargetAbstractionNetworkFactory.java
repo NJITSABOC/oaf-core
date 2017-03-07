@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating/obtaining implementation-specific target
+ * abstraction network objects
+ * 
  * @author Chris O
  */
 public abstract class TargetAbstractionNetworkFactory {

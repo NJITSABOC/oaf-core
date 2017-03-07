@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 /**
  * A data class to represent a visual edge in the graph
+ * 
  * @author David Daudelin
  */
 public class GraphEdge {

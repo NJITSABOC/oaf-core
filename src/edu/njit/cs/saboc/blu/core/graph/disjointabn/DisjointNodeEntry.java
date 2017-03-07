@@ -10,8 +10,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 /**
- *
- * @author cro3
+ * The view of a disjoint node.
+ * 
+ * @author Chris O
  */
 public class DisjointNodeEntry extends SinglyRootedNodeEntry {
     

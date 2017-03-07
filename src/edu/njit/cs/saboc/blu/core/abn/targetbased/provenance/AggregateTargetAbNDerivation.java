@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate target abstraction network
+ * 
  * @author Chris O
  */
 public class AggregateTargetAbNDerivation extends TargetAbNDerivation 

@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.core.graph.layout;
 
 /**
- *
+ * A set of constants used when defining abstraction network graph layouts
+ * 
  * @author Chris
  */
 public abstract class GraphLayoutConstants {

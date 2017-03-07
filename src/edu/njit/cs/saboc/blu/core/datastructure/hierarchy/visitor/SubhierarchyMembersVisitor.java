@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A visitor for obtaining all of the nodes in theHierarchy
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class SubhierarchyMembersVisitor<T> extends HierarchyVisitor<T> {
     
@@ -16,6 +18,7 @@ public class SubhierarchyMembersVisitor<T> extends HierarchyVisitor<T> {
         super(theHierarchy);
     }
     
+    @Override
     public void visit(T node) {
         members.add(node);
     }

@@ -6,8 +6,10 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCre
 import javax.swing.JFrame;
 
 /**
- *
+ * The view of some type of disjoint abstraction network.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class DisjointAbNGraph<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraph<T> {
 

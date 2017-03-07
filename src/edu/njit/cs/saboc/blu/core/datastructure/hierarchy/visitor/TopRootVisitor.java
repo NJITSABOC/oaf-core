@@ -5,8 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
- * @author Den
+ * For a multirooted hierarchy, returns the roots for the set of subhierarchies a given
+ * DAG node belongs to
+ * 
+ * 
+ * @author Chris O
+ * @param <T>
  */
 public class TopRootVisitor<T> extends HierarchyVisitor<T> {
     private final Set<T> roots = new HashSet<>();
@@ -15,6 +19,7 @@ public class TopRootVisitor<T> extends HierarchyVisitor<T> {
         super(theHierarchy);
     }
     
+    @Override
     public void visit(T node) {
         Hierarchy<T> theHierarchy = super.getHierarchy();
         

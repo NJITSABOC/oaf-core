@@ -3,8 +3,10 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A visitor for determining the number of nodes in theHierarchy
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class SubhierarchySizeVisitor<T> extends HierarchyVisitor<T> {
     
@@ -14,6 +16,7 @@ public class SubhierarchySizeVisitor<T> extends HierarchyVisitor<T> {
         super(theHierarchy);
     }
     
+    @Override
     public void visit(T node) {
         count++;
     }

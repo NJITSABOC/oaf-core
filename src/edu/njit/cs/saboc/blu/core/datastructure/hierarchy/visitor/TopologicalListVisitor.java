@@ -5,8 +5,10 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.ArrayList;
 
 /**
- *
- * @author cro3
+ * A visitor for obtaining a list of DAG nodes in topological order
+ * 
+ * @author Chris O
+ * @param <T>
  */
 public class TopologicalListVisitor<T> extends TopologicalVisitor<T> {
     
@@ -14,9 +16,9 @@ public class TopologicalListVisitor<T> extends TopologicalVisitor<T> {
     
     public TopologicalListVisitor(Hierarchy<T> theHierarchy) {
         super(theHierarchy);
-        
     }
     
+    @Override
     public void visit(T element) {
         result.add(element);
     }

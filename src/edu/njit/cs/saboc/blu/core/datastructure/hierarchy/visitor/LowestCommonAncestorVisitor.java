@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A visitor for finding the lowest common ancestor(s) for a set of starting points
+ * 
  * @author Chris O
  */
 public class LowestCommonAncestorVisitor<T> extends TopologicalVisitor<T> {

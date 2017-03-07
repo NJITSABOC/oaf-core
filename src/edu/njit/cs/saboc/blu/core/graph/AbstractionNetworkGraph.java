@@ -34,11 +34,12 @@ import javax.swing.JPopupMenu;
 
 
 /**
- * This is the panel on which the graph is drawn. It takes as a parameter the
- * information for the desired hierarchy and generates the corresponding graph
- * layout. It also handles edge drawing within the graph.
+ * The view of an abstraction network. 
+ * 
+ * TODO: Remove use of Swing
  *
- * @author David Daudelin and Chris Ochs
+ * @author David Daudelin 
+ * @author Chris O
  * @param <T>
  */
 public class AbstractionNetworkGraph<T extends AbstractionNetwork> extends JLayeredPane {

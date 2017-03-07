@@ -12,7 +12,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- * An abstraction network that summarizes subhierarchies of concepts 
+ * An abstraction network that summarizes subhierarchies of concepts that are 
+ * targets of a certain kind of relationship
  * 
  * @author Chris O
  * @param <T>

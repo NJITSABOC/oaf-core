@@ -26,7 +26,7 @@ public class DiffEdge extends Edge<DiffNode> {
     }
     
     public DiffEdge(Edge<DiffNode> edge, EdgeState state) {
-        this(edge.getFrom(), edge.getTo(), state);
+        this(edge.getSource(), edge.getTarget(), state);
     }
     
     public EdgeState getState() {

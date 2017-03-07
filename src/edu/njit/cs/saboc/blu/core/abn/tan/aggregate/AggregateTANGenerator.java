@@ -7,11 +7,21 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A generator for creating aggregate tribal abstraction networks
+ * 
  * @author Chris O
  */
 public class AggregateTANGenerator {
 
+    /**
+     * Creates an aggregate TAN with the given bound
+     * 
+     * @param sourceTAN
+     * @param generator
+     * @param aggregateGenerator
+     * @param min
+     * @return 
+     */
     public ClusterTribalAbstractionNetwork createAggregateTAN(
             final ClusterTribalAbstractionNetwork sourceTAN,
             final TribalAbstractionNetworkGenerator generator,
@@ -45,6 +55,15 @@ public class AggregateTANGenerator {
     }
     
     
+    /**
+     * Creates an expanded TAN from a given aggregate cluster. The expanded TAN
+     * consists of the subhierarchy of clusters summarized by an aggregate cluster
+     * 
+     * @param sourceAggregateTAN
+     * @param aggregateCluster
+     * @param generator
+     * @return 
+     */
 
     public ExpandedClusterTribalAbstractionNetwork createExpandedTAN(
             ClusterTribalAbstractionNetwork sourceAggregateTAN,

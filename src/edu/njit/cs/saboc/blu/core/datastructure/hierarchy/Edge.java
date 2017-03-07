@@ -1,8 +1,10 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
 /**
- *
+ * Represents a directed edge between two graph nodes
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class Edge<T> {
     private final T from;
@@ -13,14 +15,15 @@ public class Edge<T> {
         this.to = to;
     }
     
-    public T getFrom() {
+    public T getSource() {
         return from;
     }
     
-    public T getTo() {
+    public T getTarget() {
         return to;
     }
     
+    @Override
     public boolean equals(Object o) {
         if(o instanceof Edge) {
             Edge<T> other = (Edge<T>)o;
@@ -31,6 +34,7 @@ public class Edge<T> {
         return false;
     }
     
+    @Override
     public int hashCode() {
         return Integer.hashCode(from.hashCode() + to.hashCode());
     }

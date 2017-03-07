@@ -125,7 +125,7 @@ public class AbstractionNetworkUtils {
                 });
 
                 potentialHierarchy.getEdges().forEach((edge) -> {
-                    if (allAggregatedNodes.contains(edge.getFrom()) && allAggregatedNodes.contains(edge.getTo())) {
+                    if (allAggregatedNodes.contains(edge.getSource()) && allAggregatedNodes.contains(edge.getTarget())) {
                         resultHierarchy.addEdge(edge);
                     }
                 });

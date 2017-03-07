@@ -5,8 +5,15 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDerivation;
 
 /**
- *
+ * A TAN created from a singly rooted node in another abstraction network 
+ * (e.g., a TAN created from a partial-area in a partial-area taxonomy,, or a 
+ * TAN created from a disjoint partial-area in a disjoint partial-area 
+ * taxonomy)
+ * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <V>
  */
 public class ClusterTANFromSinglyRootedNode<
         T extends SinglyRootedNode, 

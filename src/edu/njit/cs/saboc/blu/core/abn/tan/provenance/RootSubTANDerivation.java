@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create a Root Sub TAN
+ * 
  * @author Chris O
  */
 public class RootSubTANDerivation extends ClusterTANDerivation 

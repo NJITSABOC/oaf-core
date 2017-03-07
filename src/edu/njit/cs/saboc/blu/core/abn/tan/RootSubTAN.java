@@ -7,8 +7,10 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A TAN created from a selected root cluster and all of its descendant clusters
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class RootSubTAN<T extends Cluster> extends ClusterTribalAbstractionNetwork<T> 
         implements RootedSubAbstractionNetwork<T, ClusterTribalAbstractionNetwork<T>> {

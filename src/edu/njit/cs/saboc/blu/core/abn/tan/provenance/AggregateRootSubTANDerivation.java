@@ -8,7 +8,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate root sub TAN
+ * 
  * @author Chris O
  */
 public class AggregateRootSubTANDerivation extends ClusterTANDerivation 

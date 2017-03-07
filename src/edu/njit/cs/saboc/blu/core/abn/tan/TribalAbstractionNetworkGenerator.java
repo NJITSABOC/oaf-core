@@ -14,11 +14,20 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * Generator for creating tribal abstraction networks from hierarchies of concepts
+ * 
  * @author Chris O
  */
 public class TribalAbstractionNetworkGenerator {
         
+    /**
+     * Creates a TAN from a singly rooted hierarchy of concepts. The 
+     * children of the root are used as the patriarchs
+     * 
+     * @param sourceHierarchy
+     * @param factory
+     * @return 
+     */
     public ClusterTribalAbstractionNetwork deriveTANFromSingleRootedHierarchy(
             Hierarchy<? extends Concept> sourceHierarchy,
             TANFactory factory) {
@@ -32,9 +41,20 @@ public class TribalAbstractionNetworkGenerator {
         return deriveTANFromMultiRootedHierarchy(hierarchy, factory);
     }
 
+    /**
+     * Creates a TAN from a multi-rooted hierarchy of concepts. The roots of the hierarch are 
+     * used as the patriarchs.
+     * 
+     * @param sourceHierarchy
+     * @param factory
+     * @return 
+     */
     public ClusterTribalAbstractionNetwork deriveTANFromMultiRootedHierarchy(
             Hierarchy<? extends Concept> sourceHierarchy,
             TANFactory factory) {
+        
+        // TODO: Combine all of this into a single topological traversal using
+        // a visitor for the hierarchy below.
         
         Hierarchy<Concept> hierarchy = (Hierarchy<Concept>)(Hierarchy<?>)sourceHierarchy;
 
@@ -57,6 +77,8 @@ public class TribalAbstractionNetworkGenerator {
             }
         });
 
+        // Step 1: Perform a topological traversal to identify which 
+        // tribes a given concept belongs to
         while (!pendingConcepts.isEmpty()) {
             Concept c = pendingConcepts.pop();
 
@@ -91,7 +113,7 @@ public class TribalAbstractionNetworkGenerator {
         HashSet<Concept> roots = new HashSet<>();
         roots.addAll(patriarchs);
 
-        // Based on the tribes a given concept's parent(s) belong to, 
+        // Step 2: Based on the tribes a given concept's parent(s) belong to, 
         // determine if the concept is a root
         for (Map.Entry<Concept, Set<Concept>> entry : conceptTribes.entrySet()) {
             if (roots.contains(entry.getKey())) {
@@ -125,6 +147,8 @@ public class TribalAbstractionNetworkGenerator {
         final HashMap<Concept, Set<Concept>> conceptClusters = new HashMap<>();
 
 
+        // Step 3: Establish the hierarchy of concepts in each cluster
+        
         for (Concept root : roots) { // For each root
             clusterConceptHierarchy.put(root, new Hierarchy<>(root)); // Create a new cluster
 
@@ -185,7 +209,7 @@ public class TribalAbstractionNetworkGenerator {
             clustersByRoot.put(root, cluster);
         });
         
-        // Build Cluster Hierarchy
+        // Step 4: Build the hierarchy of clusters
         
         Hierarchy<Cluster> clusterHierarchy = new Hierarchy<>(patriarchClusters);
         
@@ -206,8 +230,9 @@ public class TribalAbstractionNetworkGenerator {
             }
         });
 
-        // Build bands
-        
+ 
+        // Step 5: initialize the bands and build the hierarchy of Bands
+        // for the Band TAN
         Map<Set<Concept>, Band> bandsByPatriarchs = new HashMap<>();
         
         Set<Band> patriarchBands = new HashSet<>();
@@ -221,9 +246,7 @@ public class TribalAbstractionNetworkGenerator {
                 patriarchBands.add(band);
             }
         });
-        
-        // Build Band hierarchy
-        
+    
         Hierarchy<Band> bandHierarchy = new Hierarchy<>(patriarchBands);
         
         bandsByPatriarchs.values().forEach( (band) -> {
@@ -246,7 +269,15 @@ public class TribalAbstractionNetworkGenerator {
         return tan;
     }
     
-    
+    /**
+     * Creates a TAN from a hierarchy of clusters
+     * 
+     * @param <T>
+     * @param clusterHierarchy
+     * @param sourceHierarchy
+     * @param factory
+     * @return 
+     */
     public <T extends Cluster> ClusterTribalAbstractionNetwork<T> createTANFromClusters(
             Hierarchy<T> clusterHierarchy,
             Hierarchy<Concept> sourceHierarchy,
@@ -311,6 +342,18 @@ public class TribalAbstractionNetworkGenerator {
         return tan;
     }
     
+    /**
+     * Creates a TAN from the hierarchy of concepts summarized by a singly rooted node. 
+     * Uses the children of the root of the node as patriarchs.
+     * 
+     * @param <T>
+     * @param <V>
+     * @param <U>
+     * @param sourceAbN
+     * @param sourceNode
+     * @param factory
+     * @return 
+     */
     public <T extends Cluster, V extends SinglyRootedNode, U extends AbstractionNetwork<V>> ClusterTribalAbstractionNetwork<T> createTANFromSinglyRootedNode(
             U sourceAbN,
             V sourceNode,
@@ -321,10 +364,23 @@ public class TribalAbstractionNetworkGenerator {
         return factory.createTANFromSinglyRootedNode(theTAN, sourceNode, sourceAbN);
     }
     
+    /**
+     * Creates a TAN from a partitioned node (e.g., an area or another band)
+     * 
+     * @param <T>
+     * @param <V>
+     * @param <U>
+     * @param sourceAbN
+     * @param sourceNode
+     * @param factory
+     * @return 
+     */
     public <T extends Cluster, V extends PartitionedNode, U extends PartitionedAbstractionNetwork> ClusterTribalAbstractionNetwork<T> createTANFromPartitionedNode(
             U sourceAbN,
             V sourceNode,
             TANFactory factory) {
+        
+        // TODO: Make it more general for multirooted nodes instead? Maybe not.
         
         ClusterTribalAbstractionNetwork<T> theTAN = this.deriveTANFromMultiRootedHierarchy(sourceNode.getHierarchy(), factory);
         

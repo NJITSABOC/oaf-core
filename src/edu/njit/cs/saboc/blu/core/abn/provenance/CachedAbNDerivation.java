@@ -4,7 +4,10 @@ package edu.njit.cs.saboc.blu.core.abn.provenance;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 
 /**
- *
+ * A utility class for saving an abstraction network in-memory so it
+ * doesn't have to be rederived. Useful for when re-deriving takes 
+ * an annoying amount of time.
+ * 
  * @author Chris O
  * @param <T>
  */

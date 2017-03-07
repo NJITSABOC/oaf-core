@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Stores the details about the relationships that are pointing to a given 
+ * target group's concepts
+ * 
  * @author Chris O
  */
 public class IncomingRelationshipDetails {

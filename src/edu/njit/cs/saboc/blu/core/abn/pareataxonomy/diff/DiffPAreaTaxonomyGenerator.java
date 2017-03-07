@@ -98,8 +98,8 @@ public class DiffPAreaTaxonomyGenerator {
         Hierarchy<DiffArea> diffAreaHierarchy = new Hierarchy<>(rootAreas);
         
         areaDiffResult.getDiffNodeHierarchy().getEdges().forEach( (diffEdge) -> {
-            DiffArea from = diffAreas.get(diffEdge.getFrom());
-            DiffArea to = diffAreas.get(diffEdge.getTo());
+            DiffArea from = diffAreas.get(diffEdge.getSource());
+            DiffArea to = diffAreas.get(diffEdge.getTarget());
             
             diffAreaHierarchy.addEdge(from, to);
         });
@@ -113,8 +113,8 @@ public class DiffPAreaTaxonomyGenerator {
         Hierarchy<DiffPArea> diffPAreaHierarchy = new Hierarchy<>(rootPAreas);
         
         pareaDiffResult.getDiffNodeHierarchy().getEdges().forEach( (diffEdge) -> {
-            DiffPArea from = diffPAreas.get(diffEdge.getFrom());
-            DiffPArea to = diffPAreas.get(diffEdge.getTo());
+            DiffPArea from = diffPAreas.get(diffEdge.getSource());
+            DiffPArea to = diffPAreas.get(diffEdge.getTarget());
             
             diffPAreaHierarchy.addEdge(from, to);
         });

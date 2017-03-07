@@ -9,7 +9,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
- *
+ * A factory class for creating TAN objects. Can be overridden when 
+ * implementation-specific details need to be stored in the TAN or 
+ * used to derive the TAN
+ * 
  * @author Chris O
  */
 public class TANFactory {

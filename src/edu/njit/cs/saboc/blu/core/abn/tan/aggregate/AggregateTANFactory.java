@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating TAN objects
+ * 
  * @author Chris O
  */
 public class AggregateTANFactory implements AggregateAbNFactory<Cluster, AggregateCluster> {

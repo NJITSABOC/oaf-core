@@ -7,8 +7,11 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A target abstraction network that has been aggregated according to the given
+ * bound
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstractionNetwork<T> 
         implements AggregateAbstractionNetwork<AggregateTargetGroup, TargetAbstractionNetwork> {

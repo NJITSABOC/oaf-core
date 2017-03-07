@@ -13,8 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
- * @author Den
+ * A Band Tribal Abstraction Network summarizes the points of intersection among
+ * patriarch-defined subhierarchies. A Band TAN is a hierarchy of Bands.
+ * 
+ * @author Chris O
  */
 public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
     
@@ -73,6 +75,13 @@ public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
         return searchBands(query);
     }
     
+    /**
+     * Searches for the bands that contain the patriarchs in the 
+     * comma-delimited query
+     * 
+     * @param query
+     * @return 
+     */
     public Set<Band> searchBands(String query) {
         Set<Band> searchResults = new HashSet<>();
 

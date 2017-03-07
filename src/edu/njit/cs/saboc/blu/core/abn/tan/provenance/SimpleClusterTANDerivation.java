@@ -9,7 +9,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create a TAN for a selected set of ontology
+ * subhierarchies
+ * 
  * @author Chris O
  */
 public class SimpleClusterTANDerivation extends ClusterTANDerivation {

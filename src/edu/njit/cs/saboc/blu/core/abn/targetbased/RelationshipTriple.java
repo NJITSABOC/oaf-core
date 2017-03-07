@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Objects;
 
 /**
- *
+ * Represents a (source, relationship type, target) triple
+ * 
  * @author Chris O
  */
 public class RelationshipTriple {

@@ -8,8 +8,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
- * @author cro3
+ * Stores the arguments needed to create an expanded Sub TAN
+ * 
+ * @author Chris O
  */
 public class ExpandedSubTANDerivation extends ClusterTANDerivation 
         implements SubAbNDerivation<ClusterTANDerivation> {

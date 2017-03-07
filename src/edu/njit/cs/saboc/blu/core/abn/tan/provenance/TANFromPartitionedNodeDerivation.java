@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 
 /**
- *
+ * Stores the arguments needed to create a TAN from a partitioned node
+ * in another abstraction network
+ * 
  * @author Chris O
  * @param <T>
  * @param <V>

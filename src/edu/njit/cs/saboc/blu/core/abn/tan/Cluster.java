@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Represents a subhierarchy a concepts that exists at a specific point of intersection
+ * between two or more patriarch-rooted subhierarchies
+ * 
  * @author Chris O
  */
 public class Cluster extends SinglyRootedNode {

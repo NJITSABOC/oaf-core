@@ -24,9 +24,10 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Data type representing a rooted Directed Acylic Graph (DAG).
+ * A rooted Directed Acylic Graph (DAG).
  * 
- * @author Chris
+ * @author Chris O
+ * @param <T>
  */
 public class Hierarchy<T> {
     
@@ -43,7 +44,7 @@ public class Hierarchy<T> {
     }
     
     /**
-     * Initializes a multirooted hierarchyt
+     * Initializes a multirooted hierarchy
      * @param roots 
      */
     public Hierarchy(Set<T> roots) {
@@ -65,7 +66,7 @@ public class Hierarchy<T> {
     }
     
     /**
-     * Initializes a singlyrooted subhierarchy within the source hierarchy
+     * Initializes a singly rooted subhierarchy within the source hierarchy
      * @param root
      * @param sourceHierarchy 
      */
@@ -138,7 +139,7 @@ public class Hierarchy<T> {
      * @param edge The edge
      */
     public final void addEdge(Edge<T> edge) {
-        this.addEdge(edge.getFrom(), edge.getTo());
+        this.addEdge(edge.getSource(), edge.getTarget());
     }
     
     /**
@@ -705,5 +706,4 @@ public class Hierarchy<T> {
     public boolean isDescendantOf(T potentialDescendant, T node) {
         return this.getDescendants(node).contains(potentialDescendant);
     }
-    
 }

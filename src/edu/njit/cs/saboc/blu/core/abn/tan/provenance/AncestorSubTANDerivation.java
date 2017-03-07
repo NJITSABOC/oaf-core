@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
@@ -9,7 +8,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create an ancestor sub TAN
+ * 
  * @author Chris O
  */
 public class AncestorSubTANDerivation extends ClusterTANDerivation 

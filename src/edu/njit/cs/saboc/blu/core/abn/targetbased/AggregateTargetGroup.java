@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * 
  * @author Chris O
  */
 public class AggregateTargetGroup extends TargetGroup implements AggregateNode<TargetGroup>  {
@@ -23,10 +23,12 @@ public class AggregateTargetGroup extends TargetGroup implements AggregateNode<T
         this.aggregatedGroups = aggregatedGroups;
     }
     
+    @Override
     public Hierarchy<TargetGroup> getAggregatedHierarchy() {
         return aggregatedGroups;
     }
     
+    @Override
     public Set<TargetGroup> getAggregatedNodes() {
         Set<TargetGroup> nodes = new HashSet<>(aggregatedGroups.getNodes());
         nodes.remove(aggregatedGroups.getRoot());

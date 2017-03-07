@@ -5,7 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate cluster TAN
+ * 
  * @author Chris O
  */
 public class AggregateTANDerivation extends ClusterTANDerivation 

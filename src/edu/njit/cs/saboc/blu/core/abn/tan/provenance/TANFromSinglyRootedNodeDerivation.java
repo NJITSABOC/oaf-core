@@ -10,8 +10,11 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Stores the arguments needed to create a TAN from a singly rooted node 
+ * thats in a different abstraction network
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */

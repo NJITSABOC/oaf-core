@@ -69,10 +69,9 @@ public class AggregateBandSummaryTextFactory extends BandSummaryTextFactory {
 
         String bandName = band.getName();
 
-        return String.format("<html><b>%s</b> is a band that summarizes %s"
-                + "<p><b>Help / Description:</b><br>%s",
+        return String.format("<html><b>%s</b> is a band that summarizes %s",
                 bandName,
-                pareaStr,
-                config.getTextConfiguration().getContainerHelpDescription(band));
+                pareaStr
+        );
     }
 }

@@ -30,10 +30,6 @@ public class AreaSummaryTextFactory implements NodeSummaryTextFactory<Area> {
         builder.append(String.format("<html><b>%s</b> is an area that summarizes %d %s.",
                 areaName, classCount, conceptType));
 
-        builder.append("<p>");
-        builder.append("<b>Help / Description</b><p>");
-        builder.append(config.getTextConfiguration().getContainerHelpDescription(area));
-
         return builder.toString();
     }
 }

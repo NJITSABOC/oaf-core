@@ -56,14 +56,12 @@ public class AggregatePAreaSummaryTextFactory extends PAreaSummaryTextFactory {
         Set<PArea> descendantPAreas = taxonomy.getPAreaHierarchy().getDescendants(aggregatePArea);
 
         return String.format("<html>%s It has %d parent partial-area(s) and %d child partial-area(s). "
-                + "There are a total of %d descendant partial-area(s)."
-                + "<p>"
-                + "<b>Help / Description:</b><br>%s",
+                + "There are a total of %d descendant partial-area(s).",
                 typeDesc,  
                 parentCount, 
                 childCount, 
-                descendantPAreas.size(), 
-                config.getTextConfiguration().getNodeHelpDescription(aggregatePArea));
+                descendantPAreas.size()
+        );
     }
     
 }

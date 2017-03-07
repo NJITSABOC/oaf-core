@@ -55,14 +55,12 @@ public class AggregateClusterSummaryTextFactory extends ClusterSummaryTextFactor
         Set<Cluster> descendantClusters = tan.getClusterHierarchy().getDescendants(aggregateCluster);
 
         return String.format("<html>%s It has %d parent clusters(s) and %d child clusters(s). "
-                + "There are a total of %d descendant clusters(s)."
-                + "<p>"
-                + "<b>Help / Description:</b><br>%s",
+                + "There are a total of %d descendant clusters(s).",
                 typeDesc,  
                 parentCount, 
                 childCount, 
-                descendantClusters.size(), 
-                config.getTextConfiguration().getNodeHelpDescription(aggregateCluster));
+                descendantClusters.size()
+        );
     }
     
 }

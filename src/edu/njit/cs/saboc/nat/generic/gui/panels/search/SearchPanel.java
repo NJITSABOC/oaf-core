@@ -8,7 +8,7 @@ import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableSearchResultEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SearchResultRenderer;
-import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -26,12 +26,18 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
 /**
- *
+ * A panel that enables searching for concepts by name or id
+ * 
  * @author Chris O
  * @param <T>
  */
-public class SearchPanel<T extends Concept> extends NATLayoutPanel {
+public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
     
+    /**
+     * Filterable list for displaying search result entries
+     * 
+     * @param <T> 
+     */
     private class SearchResultsList<T extends Concept> extends FilterableList<NATConceptSearchResult<T>> {
         
         private final NATBrowserPanel<T> mainPanel;
@@ -82,10 +88,7 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
     private final JButton btnDoSearch;
 
     private final SearchResultsList<T> searchResultList;
-    
-    private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
-    
+        
     private volatile int searchID = 0;
     private Thread searchThread = null;
 
@@ -93,12 +96,9 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
         
-        super(mainPanel);
+        super(mainPanel, dataSource);
         
         this.setLayout(new GridBagLayout());
-
-        this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
 
         JPanel buttonPanel = new JPanel();
         
@@ -162,14 +162,6 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
 
         this.add(searchResultList, c);
     }
-    
-    @Override
-    protected void setFontSize(int fontSize) {
-        optStarting.setFont(optStarting.getFont().deriveFont(Font.BOLD, fontSize));
-        optAnywhere.setFont(optAnywhere.getFont().deriveFont(Font.BOLD, fontSize));
-        optExact.setFont(optExact.getFont().deriveFont(Font.BOLD, fontSize));
-        optId.setFont(optId.getFont().deriveFont(Font.BOLD, fontSize));
-    }
         
     private JRadioButton makeSearchRadioButton(String text, ButtonGroup group, Container panel) {
         JRadioButton rb = new JRadioButton(text);
@@ -185,7 +177,7 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
 
         if (searchText.isEmpty()) {
             
-            JOptionPane.showMessageDialog(mainPanel, 
+            JOptionPane.showMessageDialog(getMainPanel(), 
                     "Please enter a search term.",
                     "Invalid Input", 
                     JOptionPane.ERROR_MESSAGE);
@@ -194,7 +186,7 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
         } else {
             if (this.optAnywhere.isSelected() && searchText.length() < 3) {
                 
-                JOptionPane.showMessageDialog(mainPanel, 
+                JOptionPane.showMessageDialog(getMainPanel(), 
                         "Please enter at least three characters.",
                         "Invalid Input", 
                         JOptionPane.ERROR_MESSAGE);
@@ -246,6 +238,8 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
         public void run() {
             ArrayList<NATConceptSearchResult<T>> results;
 
+            ConceptBrowserDataSource<T> dataSource = getDataSource();
+            
             if (optExact.isSelected()) {
                 results = dataSource.searchExact(term);
             } else if (optAnywhere.isSelected()) {

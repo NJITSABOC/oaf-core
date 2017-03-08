@@ -4,7 +4,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 
 /**
- *
+ * Base class for returning concepts that are "two steps away"  from the 
+ * given focus concept(e.g., grandparents and grandchildren)
+ * 
  * @author Chris O
  * @param <T>
  */

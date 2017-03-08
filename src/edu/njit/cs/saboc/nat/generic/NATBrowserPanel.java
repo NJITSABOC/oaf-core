@@ -9,9 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * The main panel  of the NAT
+ * The main panel of the NAT. Also maintains a reference to the 
+ * current data source, the focus concept manager for this instance
+ * of the NAT, and the audit data base for the current instance of the NAT.
  * 
- * @param <T> The type of concept used in this NAT (e.g., OWL Class or SNOMED CT concept)
+ * @author Chris O
+ * 
+ * @param <T>
  */
 public class NATBrowserPanel<T extends Concept> extends JPanel {
 

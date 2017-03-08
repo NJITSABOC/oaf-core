@@ -7,7 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- *
+ * A custom panel that displays a text field and an animated "spinner/working" icon
+ * that can be toggled shown/hidden
+ * 
  * @author Chris O
  */
 public class SpinnerTextField extends JPanel {

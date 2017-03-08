@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An interface that defines high level functionality that must be implemented by every instance of a NAT
+ * Defines implementation-specific functionality that must be implemented by every instance
+ * of the NAT
  * 
  * @author Chris O
  * @param <T>
@@ -17,7 +18,6 @@ import java.util.Set;
 public abstract class ConceptBrowserDataSource<T extends Concept> {
 
     private final Ontology<T> ontology;
-    
     private final Map<T, Integer> descendantCount;
     
     public ConceptBrowserDataSource(Ontology<T> ontology) {

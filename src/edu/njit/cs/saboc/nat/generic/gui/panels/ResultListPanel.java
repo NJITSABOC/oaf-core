@@ -129,11 +129,6 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     public void removeResultSelectedListener(ResultSelectedListener<V> listener) {
         this.resultSelectedListeners.remove(listener);
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        list.setListFontSize(fontSize);
-    }
     
     @Override
     public void dataPending() {

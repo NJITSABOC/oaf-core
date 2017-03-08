@@ -7,16 +7,28 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.util.ArrayList;
 import java.util.Optional;
 
-
+/**
+ * Class for managing the current focus concept in the NAT. 
+ * Handles navigation between different concepts and 
+ * calling listeners to inform them that the focus concept
+ * changed.
+ * 
+ * @author Chris O
+ * @param <T> 
+ */
 public class FocusConceptManager<T extends Concept> {
     
+    /**
+     * Listener for handling the focus concept changing
+     * 
+     * @param <T> 
+     */
     public interface FocusConceptChangedListener<T extends Concept> {
         public void focusConceptChanged(T concept);
     }
     
     private final ConceptBrowserDataSource<T> dataSource;
     private final NATBrowserPanel<T> browser;
-    
     
     private final ArrayList<FocusConceptChangedListener<T>> listeners = new ArrayList<>();
 

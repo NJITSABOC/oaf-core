@@ -90,7 +90,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
         backButton.addActionListener((ae) -> {
             if(history.getPosition() > 0) {
-                history.minusPosition();
+                history.historyBack();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
                 //add nagvigationhistory to the top of history list
@@ -108,7 +108,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         forwardButton.addActionListener((ae) -> {
             
             if(history.getPosition() < (history.getHistory().size() - 1)) {
-                history.plusPosition();
+                history.historyForward();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
                 history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
@@ -360,23 +360,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             forwardButton.setEnabled(false);
             forwardButton.setToolTipText(null);
         }
-    }
-    
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-        if (editFocusConceptPanel.isEnabled()) {
-            jtf.setFont(jtf.getFont().deriveFont(Font.BOLD, fontSize));
-        } else {
-            jtf.setFont(jtf.getFont().deriveFont(Font.PLAIN, fontSize));
-        }
-        
-        backButton.setFont(backButton.getFont().deriveFont(Font.BOLD, fontSize));
-        forwardButton.setFont(forwardButton.getFont().deriveFont(Font.BOLD, fontSize));
-        
-        optionButtons.forEach((JButton btn) -> {
-            btn.setFont(btn.getFont().deriveFont(Font.BOLD, fontSize));
-        });
     }
     
     public void dataEmpty() {

@@ -18,9 +18,4 @@ public class DescendantsPanel<T extends Concept> extends MultiResultListPanel<T>
         super.addResultListPanel(new ChildrenPanel<>(browserPanel, dataSource, true), "Children Only");
         super.addResultListPanel(new GrandchildrenPanel<>(browserPanel, dataSource), "Children and Grandchildren");
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

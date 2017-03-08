@@ -21,9 +21,4 @@ public class AncestorPanel<T extends Concept> extends MultiResultListPanel<T>  {
         super.addResultListPanel(new GrandparentsPanel<>(browserPanel, dataSource), "Parents and Grandparents");
         super.addResultListPanel(new FocusConceptAncestorsPanel<>(browserPanel, dataSource, true), "All Ancestors");
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

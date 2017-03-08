@@ -114,9 +114,4 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
                 String.format("Parents (%d) and Grandparents (%d)", data.size(), grandparents.size()))
         );
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

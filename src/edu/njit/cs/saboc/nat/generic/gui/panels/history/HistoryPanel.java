@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableFocusConceptHistoryEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.HistoryEntryRenderer;
-import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory.HistoryListener;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistoryEntry;
 import java.awt.BorderLayout;
@@ -16,12 +16,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *
+ * A panel displaying the history of visited focus concepts, sorted by 
+ * date
+ * 
  * @author Chris O
  * @param <T>
  */
-public class HistoryPanel<T extends Concept> extends NATLayoutPanel {
+public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
     
+    /**
+     * A filterable list for displaying focus concept history entries
+     * 
+     * @param <T> 
+     */
     private class HistoryEntryList<T extends Concept> extends FilterableList<FocusConceptHistoryEntry<T>> {
         
         private final NATBrowserPanel<T> mainPanel;
@@ -68,18 +75,12 @@ public class HistoryPanel<T extends Concept> extends NATLayoutPanel {
     }
 
     private final HistoryEntryList<T> historyList;
-    
-    private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
 
     public HistoryPanel(
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
         
-        super(mainPanel);
-        
-        this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
+        super(mainPanel, dataSource);
         
         this.historyList = new HistoryEntryList<>(mainPanel, dataSource);
         
@@ -104,10 +105,5 @@ public class HistoryPanel<T extends Concept> extends NATLayoutPanel {
                 historyList.updateHistoryDisplay();
             }
         });
-    }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
     }
 }

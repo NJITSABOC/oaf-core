@@ -5,7 +5,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrow
 import javax.swing.ImageIcon;
 
 /**
- *
+ * OpenBrowserButton configuration for searching on Wikipedia
+ * 
  * @author Chris O
  */
 public class WikipediaSearchConfig implements OpenBrowserButtonConfig {

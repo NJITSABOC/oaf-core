@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Date;
 
 /**
- *
+ * An entry for visiting a focus concept at a specific time.
+ * 
  * @author Chris O
  * @param <T>
  */

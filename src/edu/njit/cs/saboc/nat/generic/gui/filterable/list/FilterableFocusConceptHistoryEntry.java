@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistoryEntry;
 
 /**
- *
+ * A filterable type for displaying an entry from the history of visited 
+ * focus concepts.
+ * 
  * @author Chris O
  * @param <T>
  */
@@ -34,6 +36,11 @@ public class FilterableFocusConceptHistoryEntry<T extends Concept> extends Filte
         return getObject().getConcept();
     }
     
+    /**
+     * A history entry contains a filter if the name or ID or the concept matches the filter
+     * @param filter
+     * @return 
+     */
     @Override
     public boolean containsFilter(String filter) {
         

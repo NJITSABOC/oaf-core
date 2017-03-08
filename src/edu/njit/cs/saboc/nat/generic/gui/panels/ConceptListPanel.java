@@ -9,7 +9,8 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptR
 import java.util.ArrayList;
 
 /**
- *
+ * A result list that displays some list of concepts (e.g., parents, children, siblings)
+ * 
  * @author Chris O
  * @param <T>
  */

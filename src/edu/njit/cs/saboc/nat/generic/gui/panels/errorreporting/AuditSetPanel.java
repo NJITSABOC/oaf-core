@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
@@ -11,7 +10,6 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoaderException;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.BorderLayout;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -64,10 +62,5 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
                 
             }
         }
-    }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
     }
 }

@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 /**
- *
+ * Panel that contains multiple choices for which result panel to display
+ * 
  * @author Chris O
  * @param <T>
  */
@@ -46,6 +47,12 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
         this.add(contentPanel, BorderLayout.CENTER);
     }
     
+    /**
+     * Adds a new result panel option
+     * 
+     * @param resultPanel
+     * @param optionName 
+     */
     public void addResultListPanel(ResultPanel resultPanel, String optionName) {
         
         resultPanels.add(resultPanel);
@@ -80,10 +87,4 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
         
         this.revalidate();
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
-
 }

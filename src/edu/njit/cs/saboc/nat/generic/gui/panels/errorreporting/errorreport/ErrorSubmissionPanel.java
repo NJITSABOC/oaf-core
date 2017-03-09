@@ -43,11 +43,4 @@ public class ErrorSubmissionPanel<T extends Concept> extends BaseNATPanel<T> {
         this.add(errorReportPanel, BorderLayout.CENTER);
         this.add(southPanel, BorderLayout.SOUTH);
     }
-    
-    
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

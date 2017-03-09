@@ -172,11 +172,6 @@ public class MissingParentPanel<T extends Concept> extends ErrorReportPanel<T, M
     }
 
     @Override
-    protected void setFontSize(int fontSize) {
-       
-    }
-
-    @Override
     public boolean errorReady() {
         return !commentPanel.getComment().isEmpty() || missingParent.isPresent();
     }

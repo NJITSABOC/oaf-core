@@ -201,13 +201,6 @@ public class IncorrectParentPanel<T extends Concept> extends ErrorReportPanel<T,
         this.commentPanel.reset();
         
         this.replacementParent = Optional.empty();
-        
-        
-    }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-       
     }
 
     @Override

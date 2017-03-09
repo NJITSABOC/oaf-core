@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableSearchResultE
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SearchResultRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyAdapter;
@@ -180,15 +179,7 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
     public void removeSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
         this.searchResultList.removeSearchResultSelectedListener(listener);
     }
-    
-    @Override
-    protected void setFontSize(int fontSize) {
-        optStarting.setFont(optStarting.getFont().deriveFont(Font.BOLD, fontSize));
-        optAnywhere.setFont(optAnywhere.getFont().deriveFont(Font.BOLD, fontSize));
-        optExact.setFont(optExact.getFont().deriveFont(Font.BOLD, fontSize));
-        optId.setFont(optId.getFont().deriveFont(Font.BOLD, fontSize));
-    }
-        
+
     private JRadioButton makeSearchRadioButton(String text, ButtonGroup group, Container panel) {
         JRadioButton rb = new JRadioButton(text);
         

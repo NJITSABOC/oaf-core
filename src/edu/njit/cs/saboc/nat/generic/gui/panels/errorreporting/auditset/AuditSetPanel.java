@@ -82,9 +82,4 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
             }
         }
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

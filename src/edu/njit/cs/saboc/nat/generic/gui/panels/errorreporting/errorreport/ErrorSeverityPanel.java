@@ -80,9 +80,4 @@ public class ErrorSeverityPanel<T extends Concept> extends BaseNATPanel<T> {
     public Severity getSeverity() {
         return selectedSeverity;
     }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
-    }
 }

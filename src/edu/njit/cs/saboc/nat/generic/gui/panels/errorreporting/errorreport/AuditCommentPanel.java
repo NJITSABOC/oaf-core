@@ -33,12 +33,7 @@ public class AuditCommentPanel<T extends Concept> extends BaseNATPanel<T> {
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 "Comments"));
     }
-    
-    @Override
-    protected void setFontSize(int fontSize) {
         
-    }
-    
     public String getComment() {
         return commentPane.getText();
     }

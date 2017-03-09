@@ -12,7 +12,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.Incor
 import javax.swing.JDialog;
 
 /**
- *
+ * Displays the parents of the focus concept
+ * 
  * @author Chris O
  * @param <T>
  */

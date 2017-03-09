@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * A filterable entry for displaying a search result
  * 
  * @author Chris O
  * @param <T>

@@ -23,8 +23,10 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 
 /**
- *
+ * Panel for displaying the grandparents of the focus concept
+ * 
  * @author Chris O
+ * 
  * @param <T>
  */
 public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayList<GrandparentResult<T>>> {

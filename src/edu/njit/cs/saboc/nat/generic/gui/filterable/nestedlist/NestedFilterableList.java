@@ -21,13 +21,22 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * A custom fitlerable list where filterable entries are nested under other
+ * filterable entries (e.g., grandchildren grouped under children). 
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */
 public abstract class NestedFilterableList<T, V> extends JPanel {
     
+    /**
+     * Listener for selecting entities for handling selection of entries
+     * from the list
+     * 
+     * @param <V> 
+     */
     public interface EntrySelectionListener<V> {
         public void entryClicked(V entry);
         public void entryDoubleClicked(V entry);
@@ -170,6 +179,10 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
             
             this.contentPanel.add(entryPanel);
             
+            /**
+             * Initialize nested filterable list listeners for each 
+             * filterable entry in the list
+             */
             entryPanel.getSubPanels().forEach( (panel) -> {
                 
                 panel.addMouseListener(new MouseAdapter() {

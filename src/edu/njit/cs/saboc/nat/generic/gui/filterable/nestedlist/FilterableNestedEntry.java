@@ -4,8 +4,11 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import java.util.ArrayList;
 
 /**
- *
+ * Generic type for nested entries in a nested filterable list. 
+ * Contains an list of subentries. 
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */
@@ -37,7 +40,15 @@ public abstract class FilterableNestedEntry<T, V> extends Filterable<T> {
             entry.setCurrentFilter(filter);
         });
     }
+    
 
+    /**
+     * A nested filterable entry is matched to a filter if any of its
+     * sub entries contain the filter
+     * 
+     * @param filter
+     * @return 
+     */
     @Override
     public boolean containsFilter(String filter) {
         

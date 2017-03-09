@@ -11,7 +11,8 @@ import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 
 /**
- *
+ * Siblings the siblings (or, optionally, strict siblings) of the focus concept
+ * 
  * @author Chris O
  * @param <T>
  */

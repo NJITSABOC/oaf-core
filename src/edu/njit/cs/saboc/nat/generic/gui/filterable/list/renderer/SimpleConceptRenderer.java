@@ -102,19 +102,25 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
                 isSelected, 
                 cellHasFocus);
 
-        T concept = value.getObject();
+        showDetailsFor(value);
+        
+        return this;
+    }
+    
+    public void showDetailsFor(Filterable<T> filterableEntry) {
+        T concept = filterableEntry.getObject();
         
         String conceptNameStr = concept.getName();
         String conceptIdStr = concept.getIDAsString();
-        
-        if(value.getCurrentFilter().isPresent()) {
-            conceptNameStr = Filterable.filter(conceptNameStr, value.getCurrentFilter().get());
-            conceptIdStr = Filterable.filter(conceptIdStr, value.getCurrentFilter().get());
+
+        if (filterableEntry.getCurrentFilter().isPresent()) {
+            conceptNameStr = Filterable.filter(conceptNameStr, filterableEntry.getCurrentFilter().get());
+            conceptIdStr = Filterable.filter(conceptIdStr, filterableEntry.getCurrentFilter().get());
         }
-        
+
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
-        
+
         if (displayInfo.equals(HierarchyDisplayInfo.Descendants)) {
             int descendantCount = dataSource.getDescendantCount(concept);
 
@@ -125,10 +131,6 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
                 this.descendantCountLabel.setForeground(Color.BLACK);
                 this.descendantCountLabel.setText(String.format("Descendants: %d", descendantCount));
             }
-
         }
-        
-       
-        return this;
     }
 }

@@ -9,8 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 /**
- *
+ * The base class for all renderers that are used in filterable lists
+ * 
  * @author Chris O
+ * @param <T>
  */
 public abstract class BaseFilterableRenderer<T> extends JPanel 
         implements ListCellRenderer<Filterable<T>> {

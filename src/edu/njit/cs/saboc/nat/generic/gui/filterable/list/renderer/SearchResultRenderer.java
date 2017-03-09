@@ -14,7 +14,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 /**
- *
+ * Renderer for displaying concept search results
+ * 
  * @author Chris O
  * @param <T>
  */

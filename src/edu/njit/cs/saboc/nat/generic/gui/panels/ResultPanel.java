@@ -6,13 +6,21 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import javax.swing.SwingUtilities;
 
 /**
- *
+ * Base panel for displaying a focus-concept-related result.
+ * 
  * @author Chris O
  * @param <T>
  * @param <V>
  */
 public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> {
     
+    /**
+     * Interface for defining methods that are used to retrieve data
+     * related to a focus concept
+     * 
+     * @param <T>
+     * @param <V> 
+     */
     public interface DataRetriever<T extends Concept, V> {
         public V getData(T concept);
         
@@ -77,16 +85,27 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
         loadThread.start();
     }
     
+    /**
+     * Reloads the data displayed in the result panel, if the panel is active
+     */
     protected void reload() {
         doLoad(getMainPanel().getFocusConceptManager().getActiveFocusConcept());
     }
     
+    /**
+     * Forces the panel to reload the data, even if its not active
+     */
     protected void forceReload() {
         this.loaded = false;
         
         reload();
     }
     
+    /**
+     * Set a different data retriever for that same result type
+     * 
+     * @param dataRetriever 
+     */
     public void setDataRetriever(DataRetriever<T, V> dataRetriever) {
         this.dataRetriever = dataRetriever;
         
@@ -98,7 +117,8 @@ public abstract class ResultPanel<T extends Concept, V> extends BaseNATPanel<T> 
     public DataRetriever<T, V> getCurrentDataRetriever() {
         return dataRetriever;
     }
-    
+
     public abstract void dataPending();
+    
     public abstract void displayResults(V data);
 }

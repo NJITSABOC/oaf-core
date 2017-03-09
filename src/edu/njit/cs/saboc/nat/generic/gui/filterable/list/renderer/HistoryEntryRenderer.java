@@ -17,7 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 /**
- *
+ * Renderer for focus concept history entries
+ * 
  * @author Chris O
  * @param <T>
  */

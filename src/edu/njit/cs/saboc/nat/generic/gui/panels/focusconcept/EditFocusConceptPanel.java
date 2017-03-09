@@ -17,11 +17,16 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 /**
- *
+ * A panel for editing the name of the current focus concept. Used for searching
+ * within the focus concept panel.
+ * 
  * @author Chris O
  */
 public class EditFocusConceptPanel extends JPanel {
     
+    /**
+     * Listener for handling events in the edit focus concept panel
+     */
     public interface EditFocusConceptListener {
         public void acceptClicked();
         public void cancelClicked();

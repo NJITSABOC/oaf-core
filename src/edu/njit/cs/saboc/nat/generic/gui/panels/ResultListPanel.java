@@ -25,8 +25,10 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.TitledBorder;
 
 /**
- *
+ * A result panel for displaying a list of results.
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */
@@ -164,6 +166,13 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         }
     }
     
+    /**
+     * Create the filterable entry for the type of data being displayed in the 
+     * filterable list
+     * 
+     * @param entry
+     * @return 
+     */
     protected abstract Filterable<V> createFilterableEntry(V entry);
     
     private TitledBorder createTitltedBorder(String type, String countOrStatus) {

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
- *
+ * A panel that nests a list of filterable entry panels within it
+ * 
  * @author Chris O
+ * 
  * @param <T>
  */
 public abstract class FilterableNestedEntryPanel<T extends FilterableNestedEntry> extends JPanel {

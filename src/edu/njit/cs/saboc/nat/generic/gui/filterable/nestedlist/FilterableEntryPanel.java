@@ -6,7 +6,9 @@ import java.util.Optional;
 import javax.swing.JPanel;
 
 /**
- *
+ * The filterable entries that are displayed within a nested filterable entry.
+ * The user interacts with these sub panels.
+ * 
  * @author Chris O
  * @param <T>
  */

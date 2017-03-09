@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.MultiResultListPanel;
 
 /**
- *
+ * Panel for displaying results related to the ancestors of the focus concept
+ * 
  * @author Chris O
  * @param <T>
  */

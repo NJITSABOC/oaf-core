@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 
 
 /**
- * Base class for defining a panel in the NAT.
+ * Base class for defining a panel in the NAT. All NAT panels should
+ * extend this panel, as it provides access to the data source and main panel
  * 
  * @author cro3
  * @param <T> 

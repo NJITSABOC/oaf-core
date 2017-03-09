@@ -8,7 +8,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 
 /**
- *
+ * Panel for displaying the ancestors of the focus concept, in topological order
+ * 
  * @author Chris O
  * @param <T>
  */

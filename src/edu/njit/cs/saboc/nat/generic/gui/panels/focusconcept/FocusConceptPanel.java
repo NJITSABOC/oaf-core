@@ -37,8 +37,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 
 /**
- * The center panel, which displays the information about the Focus
- * Concept.
+ * A panel for displaying details about the current focus concept
+ * 
  * @param <T>
  */
 public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {

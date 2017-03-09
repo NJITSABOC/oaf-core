@@ -15,6 +15,7 @@ import javax.swing.JRadioButton;
  * Panel that contains multiple choices for which result panel to display
  * 
  * @author Chris O
+ * 
  * @param <T>
  */
 public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {

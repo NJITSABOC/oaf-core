@@ -10,7 +10,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 
 /**
- *
+ * Panel for displaying the children of the focus concept
+ * 
  * @author Chris O
  * @param <T>
  */

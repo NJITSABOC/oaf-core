@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting;
+package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.auditset;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;

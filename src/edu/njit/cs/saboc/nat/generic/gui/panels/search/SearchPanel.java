@@ -32,7 +32,13 @@ import javax.swing.SwingUtilities;
  */
 public class SearchPanel<T extends Concept> extends NATLayoutPanel {
     
+    public interface SearchResultSelectedListener<T extends Concept> {
+        public void searchResultSelected(NATConceptSearchResult<T> result);
+    }
+    
     private class SearchResultsList<T extends Concept> extends FilterableList<NATConceptSearchResult<T>> {
+
+        private final ArrayList<SearchResultSelectedListener<T>> resultSelectedListeners = new ArrayList<>();
         
         private final NATBrowserPanel<T> mainPanel;
         private final ConceptBrowserDataSource<T> dataSource;
@@ -50,9 +56,10 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
                 public void mouseClicked(MouseEvent e) {
                     if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
                         if(!getSelectedValues().isEmpty()) {
-                            NATConceptSearchResult<T> result = getSelectedValues().get(0).getObject();
-                            
-                            mainPanel.getFocusConceptManager().navigateTo(result.getConcept());
+                            resultSelectedListeners.forEach((listener) -> {
+                                NATConceptSearchResult<T> result = getSelectedValues().get(0).getObject();
+                                listener.searchResultSelected(result);
+                            });
                         }
                     }
                 }
@@ -69,6 +76,14 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
             });
             
             super.setContents(filterableEntries);
+        }
+        
+        public void addSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
+            this.resultSelectedListeners.add(listener);
+        }
+        
+        public void removeSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
+            this.resultSelectedListeners.remove(listener);
         }
     }
 
@@ -161,6 +176,14 @@ public class SearchPanel<T extends Concept> extends NATLayoutPanel {
         this.searchResultList = new SearchResultsList<>(mainPanel, dataSource);
 
         this.add(searchResultList, c);
+    }
+    
+    public void addSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
+        this.searchResultList.addSearchResultSelectedListener(listener);
+    }
+    
+    public void removeSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
+        this.searchResultList.removeSearchResultSelectedListener(listener);
     }
     
     @Override

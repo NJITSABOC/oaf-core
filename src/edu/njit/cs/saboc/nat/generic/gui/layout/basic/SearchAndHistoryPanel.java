@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.AuditSetPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.auditset.AuditSetPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.history.HistoryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.search.SearchPanel;
 import java.awt.BorderLayout;
@@ -36,6 +36,9 @@ public class SearchAndHistoryPanel<T extends Concept> extends NATLayoutPanel<T> 
 
         searchPanel = new SearchPanel<>(mainPanel, dataSource);
         searchPanel.setPreferredSize(new Dimension(450, -1));
+        searchPanel.addSearchResultSelectedListener( (result) -> {
+            mainPanel.getFocusConceptManager().navigateTo(result.getConcept());
+        });
 
         historyPanel = new HistoryPanel<>(mainPanel, dataSource);
         

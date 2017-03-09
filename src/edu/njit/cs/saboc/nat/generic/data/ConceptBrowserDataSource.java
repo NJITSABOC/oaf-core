@@ -45,7 +45,9 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
                 concept.getName(), 
                 concept.getIDAsString());
     }
-        
+    
+    public abstract String getOntologyID();
+    
     public abstract ArrayList<NATConceptSearchResult<T>> searchStarting(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchExact(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchAnywhere(String str);

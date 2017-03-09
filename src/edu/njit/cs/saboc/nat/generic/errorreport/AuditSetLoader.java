@@ -28,7 +28,10 @@ public class AuditSetLoader {
                 
                 Set<T> concepts = dataSource.getConceptsFromIds(idStrs);
                 
-                AuditSet<T> auditSet = new AuditSet<>(file.getName(), concepts);
+                AuditSet<T> auditSet = new AuditSet<>(
+                        dataSource, 
+                        file.getName(), 
+                        concepts);
                 
                 return auditSet;
                 

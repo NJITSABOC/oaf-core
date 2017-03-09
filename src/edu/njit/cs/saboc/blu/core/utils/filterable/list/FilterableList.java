@@ -248,6 +248,11 @@ public class FilterableList<T> extends JPanel {
         return list.getSelectedIndex();
     }
     
+    //select a particular row in JList
+    public void setSelectedIndex(int row){
+        this.list.setSelectedIndex(row);
+    }
+    
     public void setListFontSize(int size) {
         if(size > 0) {
             list.setFont(list.getFont().deriveFont(Font.PLAIN, (float)size));
@@ -256,5 +261,11 @@ public class FilterableList<T> extends JPanel {
     
     public boolean filterShowing() {
         return filterPanel.isVisible();
+    }
+    
+    //return the row idx in which the mouse event takes place
+    public int locationToIndex(MouseEvent e){
+        int row = this.list.locationToIndex(e.getPoint());
+        return row;
     }
 }

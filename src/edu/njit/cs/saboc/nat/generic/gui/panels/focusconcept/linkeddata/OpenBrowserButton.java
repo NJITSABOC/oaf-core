@@ -11,7 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
- *
+ * Base class for buttons that open a web browser to do a web search 
+ * on a specific website. Searches for the name of the current focus concept.
+ * 
  * @author Chris O
  * @param <T>
  */
@@ -44,7 +46,6 @@ public class OpenBrowserButton<T extends Concept> extends JButton {
         if(Desktop.isDesktopSupported()) {
             T focusConcept = browserPanel.getFocusConceptManager().getActiveFocusConcept();
             
-
             try {
                 String query = String.format("%s%s", searchURL, URLEncoder.encode(focusConcept.getName(), "UTF-8"));
 

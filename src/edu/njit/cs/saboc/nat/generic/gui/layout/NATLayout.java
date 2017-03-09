@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import javax.swing.JPanel;
 
 /**
- *
+ * Base class for defining the location of result panels in the NAT
+ * 
  * @author Chris O
  * @param <T>
  */

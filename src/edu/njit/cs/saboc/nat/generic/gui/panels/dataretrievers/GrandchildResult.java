@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 
 /**
- *
+ * Result consisting of a child concept and the children of the child concept
+ * 
  * @author Chris O
  * @param <T>
  */

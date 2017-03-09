@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 
 /**
- *
+ * Result for storing the parent of a concept and the parents of the parent
+ * 
  * @author Chris O
  * @param <T>
  */

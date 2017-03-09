@@ -4,20 +4,18 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
+import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.NATLayoutPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Chris O
  * @param <T>
  */
-public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
+public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private final ConceptListPanel<T> siblingPanel;
         
@@ -25,7 +23,7 @@ public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
     
     public SiblingPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         
-        super(mainPanel);
+        super(mainPanel, dataSource);
         
         this.setLayout(new BorderLayout());
 
@@ -51,10 +49,5 @@ public class SiblingPanel<T extends Concept> extends NATLayoutPanel {
         this.siblingPanel.addOptionsComponent(chkShowStrictOnly);
 
         this.add(siblingPanel, BorderLayout.CENTER);
-    }
-
-    @Override
-    protected void setFontSize(int fontSize) {
-        
     }
 }

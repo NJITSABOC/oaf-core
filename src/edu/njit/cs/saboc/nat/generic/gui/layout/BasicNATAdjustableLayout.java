@@ -11,7 +11,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.SiblingPanel;
 import javax.swing.JSplitPane;
 
 /**
- *
+ * A basic, adjustable layout for the NAT interface
+ * 
  * @author Chris O
  * @param <T>
  */

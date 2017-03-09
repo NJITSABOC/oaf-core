@@ -7,7 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
 /**
- * Generic Internal Frame for displaying a NAT in an internal windowed frame 
+ * Generic frame for displaying a NAT browser panel in the OAF 
+ * system.
  * 
  * @author Chris
  * @param <T>
@@ -24,6 +25,7 @@ public class NATBrowserFrame<T extends Concept> extends JInternalFrame {
         super("Neighborhood Auditing Tool (NAT)", 
                 true, 
                 true, 
+                true,
                 true);
         
         this.browser = new NATBrowserPanel<>(parentFrame, dataSource, layout);

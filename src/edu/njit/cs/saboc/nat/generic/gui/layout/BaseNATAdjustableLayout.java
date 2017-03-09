@@ -14,7 +14,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 
 /**
- *
+ * A layout that separates the NAT display into three adjustable columns 
+ * 
  * @author Chris
  * @param <T>
  */

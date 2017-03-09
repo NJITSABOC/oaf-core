@@ -4,12 +4,16 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 
 /**
- * A  class that keeps track of the user's browsing history.
+ * Keeps track of the history of visited focus concepts. Manages
+ * history-related events.
+ * 
  * @param <T>
  */
-
 public class FocusConceptHistory<T extends Concept> {
     
+    /**
+     * Listener for handling history-related events
+     */
     public interface HistoryListener {
         public void historyEntryAdded();
         public void historyBack();
@@ -37,7 +41,7 @@ public class FocusConceptHistory<T extends Concept> {
     public void addHistoryEntry(T concept) {
         if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
             conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
-
+            
             setPosition(conceptHistory.size() - 1);
 
             listeners.forEach((listener) -> {
@@ -45,16 +49,26 @@ public class FocusConceptHistory<T extends Concept> {
             });
         }
     }
+    
+    public void addNavigationHistory(T concept){
+        if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
+            conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
 
-    public void minusPosition() {
+            listeners.forEach((listener) -> {
+                listener.historyEntryAdded();
+            });
+        }    
+    }
+
+    public void historyBack() {
         setPosition(position - 1);
-        
+
         listeners.forEach( (listener) -> {
             listener.historyBack();
         });
     }
 
-    public void plusPosition() {
+    public void historyForward() {
         setPosition(position + 1);
         
         listeners.forEach( (listener) -> {

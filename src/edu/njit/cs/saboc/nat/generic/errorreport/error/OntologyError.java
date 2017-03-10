@@ -4,12 +4,16 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
- *
+ * Represents an error reported in an ontology
+ * 
  * @author Chris O
  * @param <T>
  */
 public abstract class OntologyError<T extends Concept> {
     
+    /**
+     * The allowed error severity types
+     */
     public enum Severity {
         NonCritical,
         Moderate,

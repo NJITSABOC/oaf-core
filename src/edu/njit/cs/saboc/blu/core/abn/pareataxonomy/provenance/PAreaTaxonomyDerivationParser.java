@@ -79,10 +79,9 @@ public class PAreaTaxonomyDerivationParser {
 
     public RootSubtaxonomyDerivation parseRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory) {
 
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation base = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         Concept pareaRootConcept = null;
 
@@ -102,23 +101,23 @@ public class PAreaTaxonomyDerivationParser {
 
     public RelationshipSubtaxonomyDerivation parseRelationshipSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory) {
 
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation base = coreParser(arr_base, sourceOntology, factory, conceptFactory);
         
         //need implement getSelectedProperties by id or sth similar
         Set<InheritableProperty> selectedProperties = null;
+        JSONObject propertyObject = findJSONObjectByName(jsonArr, "Properties");
+        JSONArray arr_property = (JSONArray) propertyObject.get("Properties");
         RelationshipSubtaxonomyDerivation result = new RelationshipSubtaxonomyDerivation(base, selectedProperties);
 
         return result;
     }
 
     public ExpandedSubtaxonomyDerivation parseExpandedSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory) {
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation base = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         Concept aggregatePAreaRoot = null;
 
@@ -141,10 +140,9 @@ public class PAreaTaxonomyDerivationParser {
     
     public AncestorSubtaxonomyDerivation parseAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory){
     
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation base = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         Concept pareaRootConcept = null;
 
@@ -163,10 +161,9 @@ public class PAreaTaxonomyDerivationParser {
 
     
     public AggregateRootSubtaxonomyDerivation parseAggregateRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory){
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation aggregateBase = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation aggregateBase = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
@@ -190,10 +187,9 @@ public class PAreaTaxonomyDerivationParser {
     
     
     public AggregatePAreaTaxonomyDerivation parseAggregatePAreaTaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory) {
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation nonAggregateSourceDerivation = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation nonAggregateSourceDerivation = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
         int bound = (int) boundObject.get("Bound");
@@ -205,10 +201,9 @@ public class PAreaTaxonomyDerivationParser {
 
     public AggregateAncestorSubtaxonomyDerivation parseAggregateAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, PAreaTaxonomyFactory factory, ConceptLocationDataFactory conceptFactory){
     
-        PAreaTaxonomyDerivationParser parser = new PAreaTaxonomyDerivationParser();
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation aggregateBase = parser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        PAreaTaxonomyDerivation aggregateBase = coreParser(arr_base, sourceOntology, factory, conceptFactory);
 
         
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");

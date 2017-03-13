@@ -72,12 +72,7 @@ public class TANFromPartitionedNodeDerivation<
 
         //serialize node
         JSONObject obj_node = new JSONObject();
-        JSONArray arr = new JSONArray();
-        Set<Concept> set = node.getRoots();
-        set.forEach(root -> {
-            arr.add(root.getIDAsString());
-        });
-        obj_node.put("RootIDs", arr);
+        obj_node.put("NodeName", node.getName());
         result.add(obj_node);
 
         return result;

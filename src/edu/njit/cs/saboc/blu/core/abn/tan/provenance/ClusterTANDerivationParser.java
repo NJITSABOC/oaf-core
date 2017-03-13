@@ -5,6 +5,7 @@
  */
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivationParser;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
@@ -51,7 +52,7 @@ public class ClusterTANDerivationParser {
         } else if (className.equalsIgnoreCase("AggregateAncestorSubTANDerivation")) {
             result = (T) parseAggregateAncestorSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
         }else if (className.equalsIgnoreCase("TANFromPartitionedNodeDerivation")) {
-            result = (T) parseTANFromPartitionedNodeDerivation(factory);
+            result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory);
         }else if (className.equalsIgnoreCase("TANFromSinglyRootedNodeDerivation")) {
             result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory);
         }
@@ -205,16 +206,39 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(TANFactory factory){
-    
-                // how to deserialize this??
-        AbNDerivation parentAbNDerivation =null;
-        PartitionedNode node =null;
-        
-    // how to deserialize parentAbNderivation and node???
-    TANFromPartitionedNodeDerivation result = new TANFromPartitionedNodeDerivation(parentAbNDerivation, factory, node);
-    return result;
-        
+    public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+
+        // how to deserialize this??
+        AbNDerivation parentAbNDerivation = null;
+        JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
+        JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
+        String classType = (String)arr_base.get(0);
+        if (classType.contains("Disjoint")) {
+            DisjointAbNDerivationParser disjointParser = new DisjointAbNDerivationParser();
+            parentAbNDerivation = disjointParser.disjointParser(arr_base, sourceOntology, factory, conceptFactory);           
+        }else if (classType.contains("TAN")) {
+            ClusterTANDerivationParser tanParser = new ClusterTANDerivationParser();
+            parentAbNDerivation = tanParser.tanParser(arr_base, sourceOntology, factory, conceptFactory);
+            
+        }else{
+            PAreaTaxonomyDerivationParser pparser = new PAreaTaxonomyDerivationParser();
+            parentAbNDerivation = pparser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+        }
+
+        // how to deserialize parentAbNderivation and node???
+        PartitionedNode node = null;
+        JSONObject nodeObj = findJSONObjectByName(jsonArr, "NodeName");
+        String nodeName = (String) nodeObj.get("NodeName");
+
+        try {
+            node = (PartitionedNode) parentAbNDerivation.getAbstractionNetwork().searchNodes(nodeName).iterator().next();
+        } catch (Exception e) {
+            System.err.println("Cannot find node: " + nodeName + " Fail at getting node from sourceDisjointAbNDerivation!!!");
+        }
+
+        TANFromPartitionedNodeDerivation result = new TANFromPartitionedNodeDerivation(parentAbNDerivation, factory, node);
+        return result;
+
     }
     
     

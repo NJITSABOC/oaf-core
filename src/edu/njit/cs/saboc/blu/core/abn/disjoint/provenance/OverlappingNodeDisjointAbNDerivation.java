@@ -39,7 +39,6 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     @Override
     public DisjointAbstractionNetwork getAbstractionNetwork() {
         DisjointAbstractionNetwork disjointAbN = getSuperAbNDerivation().getAbstractionNetwork();
-        
         return disjointAbN.getOverlappingNodeDisjointAbN(overlappingNode);
     }
 
@@ -64,7 +63,7 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
 
         //serialize overlappingNode
         JSONObject obj_overlappingNode = new JSONObject();    
-        obj_overlappingNode.put("RootID", overlappingNode.getRoot().getIDAsString());
+        obj_overlappingNode.put("NodeName", overlappingNode.getName());
         result.add(obj_overlappingNode);
         
         return result;       

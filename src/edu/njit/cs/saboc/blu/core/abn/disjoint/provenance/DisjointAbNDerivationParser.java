@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.AccessibleRole;
+import javax.swing.Action;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -85,7 +87,20 @@ public class DisjointAbNDerivationParser {
         DisjointAbNDerivation sourceDisjointAbNDerivation = disjointParser(arr_base, sourceOntology, factory, conceptFactory);
 
         //how to deserialize this??
-        Set subsSet = null;
+        Set<SinglyRootedNode> subsSet = null;
+
+        JSONObject rootObj = findJSONObjectByName(jsonArr, "RootNodeNames");
+
+        ArrayList<String> rootNodeNames = (ArrayList<String>) rootObj.get("RootNodeNames");
+
+        rootNodeNames.forEach((String name) -> {
+            try {
+                subsSet.addAll(sourceDisjointAbNDerivation.getAbstractionNetwork().searchNodes(name));
+            } catch (Exception e) {
+                System.err.println("Cannot find node: " + name +" Fail at getting node from sourceDisjointAbNDerivation!!!");
+            }
+        });
+
         SubsetDisjointAbNDerivation result = new SubsetDisjointAbNDerivation(sourceDisjointAbNDerivation, subsSet);
         return result;
     }
@@ -98,6 +113,17 @@ public class DisjointAbNDerivationParser {
 
         //how to deserialize this??
         SinglyRootedNode overlappingNode = null;
+      
+        JSONObject rootObj = findJSONObjectByName(jsonArr, "NodeName");
+
+        String nodeName = (String)rootObj.get("NodeName");
+
+            try {
+                overlappingNode = (SinglyRootedNode)sourceDisjointAbNDerivation.getAbstractionNetwork().searchNodes(nodeName).iterator().next();
+            } catch (Exception e) {
+                System.err.println("Cannot find node: " + nodeName +" Fail at getting node from sourceDisjointAbNDerivation!!!");
+            }
+
 
         OverlappingNodeDisjointAbNDerivation result = new OverlappingNodeDisjointAbNDerivation(sourceDisjointAbNDerivation, overlappingNode);
         return result;
@@ -162,7 +188,7 @@ public class DisjointAbNDerivationParser {
         return result;
     }
 
-    public AggregateAncestorTANDerivation parseAggregateAncestorTANDerivation(JSONArray jsonArr, Ontology sourceOntology, DisjointAbNFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public AggregateAncestorDisjointAbNDerivation parseAggregateAncestorTANDerivation(JSONArray jsonArr, Ontology sourceOntology, DisjointAbNFactory factory, ConceptLocationDataFactory conceptFactory) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
@@ -184,7 +210,7 @@ public class DisjointAbNDerivationParser {
             System.err.println("Fail at getting root from conceptFactory!!!");
         }
 
-        AggregateAncestorTANDerivation result = new AggregateAncestorTANDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
+        AggregateAncestorDisjointAbNDerivation result = new AggregateAncestorDisjointAbNDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
         return result;
 
     }

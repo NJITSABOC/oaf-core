@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
+import com.sun.corba.se.impl.orbutil.graph.NodeData;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
@@ -67,9 +68,9 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
         JSONObject obj_subset = new JSONObject();
         JSONArray arr = new JSONArray();
         subset.forEach(node ->{
-            arr.add(node.getRoot().getIDAsString());
+            arr.add(node.getName());
         });        
-        obj_subset.put("RootIDs", arr);
+        obj_subset.put("RootNodeNames", arr);
         result.add(obj_subset);
         
         return result;

@@ -20,7 +20,9 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.TitledBorder;
 
@@ -40,7 +42,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     }
  
     private final FilterableList<V> list;
-    
+ 
     private final JPanel optionsPanel;
     
     private final ArrayList<ResultSelectedListener<V>> resultSelectedListeners = new ArrayList<>();
@@ -81,6 +83,14 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
                         });
                     }
                 }
+                
+                //right click to select and show pop up menu
+                if (e.getButton() == MouseEvent.BUTTON3){
+                    int row = list.locationToIndex(e); // find the (right-clicked)selected row
+                    list.setSelectedIndex(row); //select the row
+                    rightClick(e); //show popup
+                }
+                
             }
         });
         
@@ -132,6 +142,25 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         this.resultSelectedListeners.remove(listener);
     }
     
+   
+    protected void rightClick(MouseEvent e){
+        
+        final JPopupMenu popup = new JPopupMenu();
+
+        JMenuItem reportMenu = new JMenuItem("report");
+
+        JMenuItem closeMenu = new JMenuItem("close");
+
+        //do something with reportMenu...
+
+        popup.add(reportMenu);
+        popup.add(closeMenu);
+
+
+        popup.show(e.getComponent(), e.getX(), e.getY());
+
+   }
+   
     @Override
     public void dataPending() {
         list.showPleaseWait();

@@ -5,14 +5,14 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
 
 /**
- *
+ * A node that that summarizes a subhierarchy of other nodes that 
+ * are smaller than some bound
+ * 
  * @author Chris O
  * 
- * @param <NODE_T> The types of nodes that are aggregated
+ * @param <T> The types of nodes that are aggregated
  */
-public interface AggregateNode<NODE_T extends Node> {
-    
-    public Hierarchy<NODE_T> getAggregatedHierarchy();
-    
-    public Set<NODE_T> getAggregatedNodes();
+public interface AggregateNode<T extends Node> {
+    public Hierarchy<T> getAggregatedHierarchy();
+    public Set<T> getAggregatedNodes();
 }

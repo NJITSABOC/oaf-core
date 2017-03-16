@@ -9,9 +9,16 @@ import java.util.Optional;
 
 /**
  * Represents an abstraction network that partitions another abstraction network.
- * For example, a partial-area taxonomy partitions an area taxonomy.
+ * 
+ * The singly rooted nodes of a partitioned abstraction network are separated into 
+ * "containers" or "partitioned nodes" based on some structural criteria.
+ * 
+ * For example, in a partial-area taxonomy, partial-areas are separated into
+ * areas (in the OAF system, the inverse is true in the papers describing taxonomies)
  * 
  * @author Chris O
+ * @param <NODE_T>
+ * @param <BASENODE_T>
  */
 public abstract class PartitionedAbstractionNetwork<
         NODE_T extends SinglyRootedNode, 
@@ -34,6 +41,13 @@ public abstract class PartitionedAbstractionNetwork<
         return baseAbstractionNetwork;
     }
     
+    /**
+     * Returns the partition node that contains the given singly rooted node,
+     * if such a partition node exists in the given partitioned abstraction network.
+     * 
+     * @param node
+     * @return 
+     */
     public BASENODE_T getPartitionNodeFor(NODE_T node) {
         
         Optional<BASENODE_T> containerNode = baseAbstractionNetwork.getNodes().stream().filter((baseNode) -> {

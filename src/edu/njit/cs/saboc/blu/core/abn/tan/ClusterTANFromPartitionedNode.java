@@ -5,8 +5,13 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromPartitionedNodeDerivation;
 
 /**
- *
+ * A TAN created from a partition node in another abstraction network 
+ * (e.g., a TAN created from an area in a partial-area taxonomy).
+ * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <V>
  */
 public class ClusterTANFromPartitionedNode<
         T extends PartitionedNode, 

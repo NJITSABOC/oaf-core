@@ -7,8 +7,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * A base class for specifying the arguments needed to create a specific 
+ * kind of abstraction network, such that it can be recreated at a later time
+ * for the same ontology, a different version of the same ontology, or a 
+ * different ontology
+ * 
  * @author Chris O
+ * 
+ * @param <T>
  */
 public abstract class AbNDerivation<T extends AbstractionNetwork> {
 

@@ -12,7 +12,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an expanded disjoint abstraction network
+ * 
  * @author Chris O
  * @param <T>
  */

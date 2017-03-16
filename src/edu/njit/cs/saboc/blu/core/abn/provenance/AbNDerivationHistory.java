@@ -3,7 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.provenance;
 import java.util.ArrayList;
 
 /**
- *
+ * Represents a sequence of abstraction network derivations
+ * 
  * @author Chris O
  */
 public class AbNDerivationHistory {

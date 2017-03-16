@@ -6,7 +6,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * A utility class for saving an abstraction network in-memory so it
+ * doesn't have to be rederived. Useful for when re-deriving takes 
+ * an annoying amount of time.
+ * 
  * @author Chris O
  * @param <T>
  */

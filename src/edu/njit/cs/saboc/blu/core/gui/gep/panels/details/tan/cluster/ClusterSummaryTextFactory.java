@@ -28,7 +28,7 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory<Cluster
     public String createNodeSummaryText(Cluster cluster) {
         ClusterTribalAbstractionNetwork tan = config.getAbstractionNetwork();
         
-        String conceptType = config.getTextConfiguration().getConceptTypeName(true).toLowerCase();
+        String conceptType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
         
         String rootName = cluster.getName();
         int classCount = cluster.getConceptCount();
@@ -47,9 +47,6 @@ public class ClusterSummaryTextFactory implements NodeSummaryTextFactory<Cluster
         String result = String.format("<html><b>%s</b> is a cluster that summarizes %d %s. It has %d parent clusters and %d child clusters. "
                 + "There are a total of %d descendant clusters that summarize %d %s",
                 rootName, classCount, conceptType, parentCount, childCount, descendantClusters.size(), descendantClasses.size(), conceptType);
-        
-        result += "<p><b>Help / Description:</b><br>";
-        result += config.getTextConfiguration().getNodeHelpDescription(cluster);
 
         return result;
     }

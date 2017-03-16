@@ -8,7 +8,8 @@ import java.util.Collections;
 import java.util.Set;
 /**
  *
- * Represents a Band in a tribal abstraction network
+ * Represents a Band in a tribal abstraction network. Summaries a set of nodes
+ * that belong to the same subhierarchies (as rooted at patriarch concepts)
  * 
  * @author Chris O
  */

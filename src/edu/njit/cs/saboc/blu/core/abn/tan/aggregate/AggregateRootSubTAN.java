@@ -8,7 +8,9 @@ import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateRootSubTANDerivati
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * An aggregate TAN that consists of a chosen aggregate cluster and all of its
+ * descendant aggregate clusters
+ * 
  * @author Chris O
  */
 public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster> 

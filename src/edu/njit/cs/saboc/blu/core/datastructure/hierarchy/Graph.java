@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Represents a directed graph
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class Graph<T> {
     
@@ -36,7 +38,7 @@ public class Graph<T> {
     }
     
     public final void addEdge(Edge<T> edge) {
-        addEdge(edge.getFrom(), edge.getTo());
+        addEdge(edge.getSource(), edge.getTarget());
     }
     
     public final void addEdge(T from, T to) {
@@ -62,13 +64,7 @@ public class Graph<T> {
     public Set<Edge<T>> getEdges() {
         Set<Edge<T>> edges = new HashSet<>();
         
-        Set<T> allNodes = new HashSet<>();
-
         outgoingEdges.forEach((node, adjacentNodes) -> {
-            
-            allNodes.add(node);
-            allNodes.addAll(adjacentNodes);
-            
             adjacentNodes.forEach( (adjacentNode) -> {
                 edges.add(new Edge(node, adjacentNode));
             });
@@ -82,8 +78,8 @@ public class Graph<T> {
     }
     
     public boolean contains(Edge<T> edge) {
-        if(outgoingEdges.containsKey(edge.getFrom())) {
-            return outgoingEdges.get(edge.getFrom()).contains(edge.getTo());
+        if(outgoingEdges.containsKey(edge.getSource())) {
+            return outgoingEdges.get(edge.getSource()).contains(edge.getTarget());
         }
         
         return false;

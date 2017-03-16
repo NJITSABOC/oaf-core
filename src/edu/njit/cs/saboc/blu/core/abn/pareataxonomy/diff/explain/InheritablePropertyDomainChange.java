@@ -5,11 +5,16 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Objects;
 
 /**
- *
+ * Captures a change to an inhertiable property's domain  (e.g., its used to 
+ * model a concept or its not)
+ * 
  * @author Chris O
  */
 public class InheritablePropertyDomainChange extends InheritablePropertyChange {
     
+   /**
+    * Valid states for an inheritable property between two ontology releases
+    */
    public static enum PropertyState {
         Added,
         Removed,
@@ -17,6 +22,10 @@ public class InheritablePropertyDomainChange extends InheritablePropertyChange {
         Unmodified
     }
 
+   /**
+    * Valid states for a concept in the domain of a property between two 
+    * ontology releases
+    */
     public static enum DomainModificationType {
         Added,
         Removed
@@ -97,7 +106,4 @@ public class InheritablePropertyDomainChange extends InheritablePropertyChange {
         
         return true;
     }
-
-    
-
 }

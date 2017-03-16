@@ -14,11 +14,23 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
- *
+ * A generator class for creating target abstraction networks
+ * 
  * @author Chris O
  */
 public class TargetAbstractionNetworkGenerator {
     
+    /**
+     * Creates a target abstraction network that summarizes the subhierarchy of
+     * target concepts that have incoming relationships of a specified type 
+     * coming from a source subhierarchy. 
+     * 
+     * @param factory
+     * @param sourceHierarchy
+     * @param relationshipType
+     * @param targetHierarchy
+     * @return 
+     */
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,
             Hierarchy<Concept> sourceHierarchy, 
@@ -32,6 +44,17 @@ public class TargetAbstractionNetworkGenerator {
                 targetHierarchy);
     }
     
+    /**
+     * Creates a target abstraction network that summarizes the subhierarchy of
+     * target concepts that have incoming relationships of specified types
+     * coming from a specified source subhierarchy. 
+     * 
+     * @param factory
+     * @param sourceHierarchy
+     * @param relationshipTypes
+     * @param targetHierarchy
+     * @return 
+     */
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,
             Hierarchy<Concept> sourceHierarchy, 
@@ -44,6 +67,7 @@ public class TargetAbstractionNetworkGenerator {
         
         Set<Concept> uniqueTargets = new HashSet<>();
         
+        // Step 1: Identify the targets of the relationships
         sourceHierarchy.getNodes().forEach( (concept) -> {
             Set<RelationshipTriple> relationships = factory.getRelationshipsToTargetHierarchyFor(concept, relationshipTypes, targetHierarchy);
             
@@ -64,6 +88,8 @@ public class TargetAbstractionNetworkGenerator {
         
         Set<Concept> targetGroupRoots = new HashSet<>(Collections.singleton(targetHierarchy.getRoot()));
         
+        // Step 2: Identify the roots of the target groups (these are the 
+        // lowest non-target ancestors of the target concepts).
         lowestNontargetAncestors.values().forEach((lowestNontargetConcepts) -> {
             targetGroupRoots.addAll(lowestNontargetConcepts);
         });
@@ -96,6 +122,8 @@ public class TargetAbstractionNetworkGenerator {
         
         queue.add(targetHierarchy.getRoot()); // Start from the root of the hierarchy...
 
+        // Step 3: Identify the hierarchy of concepts that belong to each 
+        // target group
         while (!queue.isEmpty()) {
             Concept concept = queue.remove();
 
@@ -141,6 +169,7 @@ public class TargetAbstractionNetworkGenerator {
                     new IncomingRelationshipDetails(groupIncomingRelationships.get(root))));
         });
         
+        // Step 4: Build the target group hierarchy
         Hierarchy<TargetGroup> nodeHierarchy = new Hierarchy<>(targetGroups.get(targetHierarchy.getRoot()));
         
         targetGroups.values().forEach( (group) -> {
@@ -168,6 +197,16 @@ public class TargetAbstractionNetworkGenerator {
                         targetHierarchy.getRoot()));
     }
     
+    
+    /**
+     * Identifies the lowest common ancestor(s) of a set of concepts that are not targets
+     * of a type of relationship. Used to define the roots of the nodes in 
+     * the target abstraction network.
+     * 
+     * @param targets
+     * @param hierarchy
+     * @return 
+     */
     private Map<Concept, Set<Concept>> getLowestNonTargetAncestor(Set<Concept> targets, Hierarchy<Concept> hierarchy) {
         
         Map<Concept, Set<Concept>> lowestNontargetConcepts = new HashMap<>();

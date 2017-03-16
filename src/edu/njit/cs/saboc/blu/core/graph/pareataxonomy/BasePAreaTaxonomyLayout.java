@@ -15,13 +15,14 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
 import javax.swing.JLabel;
 
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
 public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends AbstractionNetworkGraphLayout<T> {
 
@@ -63,6 +64,7 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
         this.taxonomy = taxonomy;
     }
     
+    @Override
     public void doLayout() {
         ArrayList<Area> sortedAreas = new ArrayList<>();    // Used for generating the graph
         ArrayList<Area> levelAreas = new ArrayList<>();     // Used for generating the graph
@@ -71,15 +73,8 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
 
         Area lastArea = null;
 
-        Collections.sort(tempAreas, new Comparator<Area>() {    // Sort the areas based on the number of their relationships.
-
-            public int compare(Area a, Area b) {
-                if (a.getRelationships() == null || b.getRelationships() == null) {
-                    return 0;
-                }
-                
-                return a.getRelationships().size() - b.getRelationships().size();
-            }
+        Collections.sort(tempAreas, (a, b) -> {
+            return a.getRelationships().size() - b.getRelationships().size();
         });
 
         for (Area area : tempAreas) {
@@ -131,6 +126,7 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
         this.setAreasInLayout(sortedAreas);
     }
     
+    @Override
     public void resetLayout() {
          ArrayList<Area> areas = this.getAreasInLayout();
          

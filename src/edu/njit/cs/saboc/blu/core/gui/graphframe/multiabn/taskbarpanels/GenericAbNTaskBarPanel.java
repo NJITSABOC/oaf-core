@@ -41,7 +41,7 @@ public class GenericAbNTaskBarPanel extends TaskBarPanel {
     @Override
     protected String getAbNMetricsLabel(AbNConfiguration config) {
         return String.format("%s: %d | %s: %d", 
-                config.getTextConfiguration().getConceptTypeName(true), 
+                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), 
                 config.getAbstractionNetwork().getSourceHierarchy().size(),
                 config.getTextConfiguration().getNodeTypeName(true),
                 config.getAbstractionNetwork().getNodeCount());

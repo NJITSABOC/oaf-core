@@ -14,12 +14,20 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A cluster TAN that has been aggregated. Consists of a hierarchy of aggregate clusters.
+ * 
  * @author Chris O
  */
 public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstractionNetwork<AggregateCluster> 
         implements AggregateAbstractionNetwork<AggregateCluster, ClusterTribalAbstractionNetwork> {
     
+    /**
+     * Creates an aggregate TAN from a non-aggregate TAN
+     * 
+     * @param nonAggregatedClusterTAN
+     * @param minBound
+     * @return 
+     */
     public static final ClusterTribalAbstractionNetwork generateAggregatedClusterTAN(
         ClusterTribalAbstractionNetwork nonAggregatedClusterTAN, 
         int minBound) {
@@ -35,6 +43,15 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         return aggregateTAN;
     }
     
+    /**
+     * Creates an aggregate TAN that consists of a chosen aggregate clusters
+     * and all of its descendant aggregate clusters
+     * 
+     * @param nonAggregatedClusterTAN
+     * @param sourceAggregatedClusterTAN
+     * @param selectedRoot
+     * @return 
+     */
     public static final AggregateRootSubTAN generateAggregateRootSubTAN(
             ClusterTribalAbstractionNetwork nonAggregatedClusterTAN, 
             ClusterTribalAbstractionNetwork sourceAggregatedClusterTAN,
@@ -54,6 +71,15 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
                 aggregateRootSubtaxonomy);
     }
     
+    /**
+     * Creates an aggregate TAN consisting of a chosen aggregate cluster and all of its 
+     * ancestor aggregate clusters
+     * 
+     * @param nonAggregateTaxonomy
+     * @param superAggregateTaxonomy
+     * @param selectedRoot
+     * @return 
+     */
     public static final AggregateAncestorSubTAN generateAggregateAncestorSubTAN(
             ClusterTribalAbstractionNetwork nonAggregateTaxonomy,
             ClusterTribalAbstractionNetwork superAggregateTaxonomy,

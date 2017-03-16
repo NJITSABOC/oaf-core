@@ -45,7 +45,7 @@ public class AggregateBandSummaryTextFactory extends BandSummaryTextFactory {
         if (aggregateClusters.isEmpty()) {
             pareaStr = String.format("%d %s in %d regular %s.",
                     totalConcepts.size(),
-                    config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                     regularClusters.size(),
                     config.getTextConfiguration().getNodeTypeName(regularClusters.size() != 1).toLowerCase());
         } else {
@@ -53,13 +53,13 @@ public class AggregateBandSummaryTextFactory extends BandSummaryTextFactory {
             if (regularClusters.isEmpty()) {
                 pareaStr = String.format("%d %s in %d aggregate %s.",
                         totalConcepts.size(),
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                         aggregateClusters.size(),
                         config.getTextConfiguration().getNodeTypeName(aggregateClusters.size() != 1).toLowerCase());
             } else {
                 pareaStr = String.format("%d %s in %d regular %s and %d aggregate %s.",
                         totalConcepts.size(),
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                         regularClusters.size(),
                         config.getTextConfiguration().getNodeTypeName(regularClusters.size() != 1).toLowerCase(),
                         aggregateClusters.size(),
@@ -69,10 +69,9 @@ public class AggregateBandSummaryTextFactory extends BandSummaryTextFactory {
 
         String bandName = band.getName();
 
-        return String.format("<html><b>%s</b> is a band that summarizes %s"
-                + "<p><b>Help / Description:</b><br>%s",
+        return String.format("<html><b>%s</b> is a band that summarizes %s",
                 bandName,
-                pareaStr,
-                config.getTextConfiguration().getContainerHelpDescription(band));
+                pareaStr
+        );
     }
 }

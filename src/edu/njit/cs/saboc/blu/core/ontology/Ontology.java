@@ -8,11 +8,13 @@ import java.util.Optional;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class Ontology<T extends Concept> {
+    
     private final Hierarchy<T> conceptHierarchy;
     
-    private final Map<Object, Concept> concepts = new HashMap<>();
+    private final Map<Object, T> concepts = new HashMap<>();
     
     public Ontology(Hierarchy<T> conceptHierarchy) {
         this.conceptHierarchy = conceptHierarchy;
@@ -26,7 +28,7 @@ public class Ontology<T extends Concept> {
         return conceptHierarchy;
     }
     
-    public Optional<Concept> getConceptFromID(Object id) {
+    public Optional<T> getConceptFromID(Object id) {
         return Optional.ofNullable(concepts.get(id));
     }
 }

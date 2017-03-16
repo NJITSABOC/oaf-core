@@ -14,8 +14,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create a disjoint abstraction network 
+ * from a partitioned node in a partitioned abstraction network.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> {
     

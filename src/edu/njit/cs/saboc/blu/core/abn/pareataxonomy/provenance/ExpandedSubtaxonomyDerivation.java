@@ -10,8 +10,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author cro3
+ *  Stores the arguments needed to create an expanded subtaxonomy
+ * 
+ * @author Chris O
  */
 public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation 
         implements SubAbNDerivation<PAreaTaxonomyDerivation> {

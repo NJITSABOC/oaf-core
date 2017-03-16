@@ -6,6 +6,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
+ * A node that represents a subhierarchy of concepts that serve as the targets of
+ * relationships that have a specific type. The root of the node is the 
+ * lowest common ancestor of those concepts that is not a target.
  * 
  * @author Chris O
  */

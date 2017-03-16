@@ -8,8 +8,14 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * Represents a disjoint abstraction network created by expanding the hierarchy of
+ * disjoint nodes summarized by a selected aggregate disjoint node.
+ * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class ExpandedDisjointAbN<
         T extends DisjointNode<PARENTNODE_T>,

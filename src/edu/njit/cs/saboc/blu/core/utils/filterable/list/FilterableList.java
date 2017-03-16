@@ -1,6 +1,6 @@
 package edu.njit.cs.saboc.blu.core.utils.filterable.list;
 
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterPanel.FilterPanelListener;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.Point;
@@ -15,56 +15,38 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
 import javax.swing.ToolTipManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class FilterableList extends JPanel {
-    
-    private final JTextField filterField = new JTextField();
-    private final JButton closeButton = new JButton();
-    
-    private final DefaultListModel pleaseWaitModel = new DefaultListModel();
-    
-    private final DefaultListModel dataEmptyModel = new DefaultListModel();
-    
-    private final DefaultListModel noResultModel = new DefaultListModel();
-    
-    
-    
+public class FilterableList<T> extends JPanel {
     
     private final FilterableListModel entryModel = new FilterableListModel();
     
-    private final JList list;
-    private final JPanel filterPanel = new JPanel();
-
+    private final JList<Filterable<T>> list;
+    
+    private final FilterPanel filterPanel;
+    
     public FilterableList() {
 
         setLayout(new BorderLayout());
 
-        list = new JList() {
-            // This method is called as the cursor moves within the list.
+        this.list = new JList<Filterable<T>>() {
+            
             @Override
             public String getToolTipText(MouseEvent evt) {
                 if(getModel() != entryModel) {
@@ -75,13 +57,14 @@ public class FilterableList extends JPanel {
 
                 if(getCellBounds(index, index) == null
                         || !getCellBounds(index, index).contains(evt.getPoint())) {
+                    
                     return null;
                 }
 
                 if(index > -1) {
                     Filterable obj = entryModel.get(index);
                     
-                    return obj.getToolTipText();
+                    return obj.getToolTipText(); 
                 }
 
                 return null;
@@ -96,7 +79,7 @@ public class FilterableList extends JPanel {
             }
         };
         
-        list.setModel(entryModel);
+        this.list.setModel(entryModel);
         
         Action copyAction = new AbstractAction() {
 
@@ -124,97 +107,78 @@ public class FilterableList extends JPanel {
         InputMap inputMap = list.getInputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), "Copy");
 
-
-        pleaseWaitModel.addElement("Please wait...");
-        dataEmptyModel.addElement(" ");
-        noResultModel.addElement("No results found...");
-        
         JScrollPane scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
-
-        closeButton.setIcon(ImageManager.getImageManager().getIcon("cross.png"));
-        closeButton.setToolTipText("Close");
-
-        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
-        filterPanel.add(closeButton);
-        filterPanel.add(Box.createHorizontalStrut(10));
-        filterPanel.add(new JLabel("Filter:  "));
-        filterPanel.add(filterField);
+        
+        this.filterPanel = new FilterPanel();
 
         add(filterPanel, BorderLayout.SOUTH);
 
-        filterField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                if(ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    setFilterPanelOpen(false, null);
-                }
-            }
-        });
+        filterPanel.addFilterPanelListener(new FilterPanelListener() {
 
-        closeButton.addActionListener((e) -> {
-            setFilterPanelOpen(false, null);
-        });
-
-        filterField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
+            public void filterChanged(String filter) {
+                entryModel.changeFilter(filter);
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                entryModel.changeFilter(filterField.getText());
+            public void filterClosed() {
+                setFilterPanelOpen(false);
             }
         });
         
-        list.addKeyListener(new KeyAdapter() {
+        this.list.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
 
                 if (!e.isControlDown() && !e.isAltDown()) {
-                    setFilterPanelOpen(true, e);
+                    initializeFilter(true, e);
                 }
             }
         });
 
-        list.addMouseListener(new MouseAdapter() {
+        this.list.addMouseListener(new MouseAdapter() {
+            
             private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
 
+            @Override
             public void mouseEntered(MouseEvent me) {
                 ToolTipManager.sharedInstance().setDismissDelay(60000);
             }
 
+            @Override
             public void mouseExited(MouseEvent me) {
                 ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
             }
         });
 
+        this.setFilterPanelOpen(false);
+    }
+    
+    public void setListCellRenderer(ListCellRenderer<Filterable<T>> renderer) {
+        this.list.setCellRenderer(renderer);
+    }
+    
+    private void clearContents() {
+        entryModel.changeFilter("");
+        filterPanel.setVisible(false);
+        
+        this.setContents(new ArrayList<>());
     }
 
     public void showPleaseWait() {
-        list.setModel(pleaseWaitModel);
-        entryModel.changeFilter("");
-        filterPanel.setVisible(false);
+        clearContents();
     }
 
     public void showDataEmpty() {
-        list.setModel(dataEmptyModel);
-        entryModel.changeFilter("");
-        filterPanel.setVisible(false);
-    }
-    
-    public void showNoResults() {
-        list.setModel(noResultModel);
-        entryModel.changeFilter("");
-        filterPanel.setVisible(false);
+        clearContents();
     }
 
-    public void setContents(Collection<? extends Filterable> content) {
+    public void showNoResults() {
+        clearContents();
+    }
+
+    public void setContents(ArrayList<? extends Filterable> content) {
         entryModel.changeFilter("");
         
         filterPanel.setVisible(false);
@@ -225,32 +189,31 @@ public class FilterableList extends JPanel {
         list.setModel(entryModel);
     }
 
-    /* opens (open = true) or closes the filter panel */
-    public void toggleFilterPanel() {
-        if(!filterPanel.isVisible()) {
-            setFilterPanelOpen(true, null);
+    public void setFilterPanelOpen(boolean value) {
+        
+        if(value) {
+            initializeFilter(true, null);
+        } else {
+            initializeFilter(false, null);
         }
-        else {
-            setFilterPanelOpen(false, null);
-        }
+        
     }
 
-    /*opens the filter panell and uses a KeyEvent if openned by typing */
-    public void setFilterPanelOpen(boolean open, KeyEvent e) {
+    public final void initializeFilter(boolean open, KeyEvent e) {
+        
         if(open) {
             if(!filterPanel.isVisible()) {
                 filterPanel.setVisible(true);
                 
-                if(e != null) {
-                    filterField.setText(Character.toString(e.getKeyChar()));
+                if(e == null) {
+                    filterPanel.reset();
                 } else {
-                    filterField.setText("");
+                    filterPanel.filteringStarted(Character.toString(e.getKeyChar()));
                 }
-                
-                filterField.requestFocus();
             }
         } else {
             entryModel.changeFilter("");
+            
             filterPanel.setVisible(false);
             list.grabFocus();
         }
@@ -264,13 +227,13 @@ public class FilterableList extends JPanel {
         list.removeMouseListener(listener);
     }
     
-    public List<Filterable> getSelectedValues() {
+    public List<Filterable<T>> getSelectedValues() {
         
         if(list.getSelectedIndices().length == 0) {
-            return (List<Filterable>)Collections.EMPTY_LIST;
+            return Collections.EMPTY_LIST;
         }
         
-        ArrayList<Filterable> selectedItems = new ArrayList<>();
+        ArrayList<Filterable<T>> selectedItems = new ArrayList<>();
         
         int [] selectedIndices = list.getSelectedIndices();
         
@@ -285,9 +248,24 @@ public class FilterableList extends JPanel {
         return list.getSelectedIndex();
     }
     
+    //select a particular row in JList
+    public void setSelectedIndex(int row){
+        this.list.setSelectedIndex(row);
+    }
+    
     public void setListFontSize(int size) {
         if(size > 0) {
             list.setFont(list.getFont().deriveFont(Font.PLAIN, (float)size));
         }
+    }
+    
+    public boolean filterShowing() {
+        return filterPanel.isVisible();
+    }
+    
+    //return the row idx in which the mouse event takes place
+    public int locationToIndex(MouseEvent e){
+        int row = this.list.locationToIndex(e.getPoint());
+        return row;
     }
 }

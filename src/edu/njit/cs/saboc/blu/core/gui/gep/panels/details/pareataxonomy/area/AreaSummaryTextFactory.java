@@ -24,15 +24,11 @@ public class AreaSummaryTextFactory implements NodeSummaryTextFactory<Area> {
         String areaName = area.getName();
         int classCount = area.getConcepts().size();
 
-        String conceptType = config.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
+        String conceptType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("<html><b>%s</b> is an area that summarizes %d %s.",
                 areaName, classCount, conceptType));
-
-        builder.append("<p>");
-        builder.append("<b>Help / Description</b><p>");
-        builder.append(config.getTextConfiguration().getContainerHelpDescription(area));
 
         return builder.toString();
     }

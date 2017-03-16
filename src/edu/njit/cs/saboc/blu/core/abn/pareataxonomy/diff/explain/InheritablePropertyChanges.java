@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyDomainChange.DomainModificationType;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyDomainChange.PropertyState;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyHierarchyChange.SubclassState;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritablePropertyHierarchyChange.HierarchicalConnectionState;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Collections;
@@ -20,13 +20,18 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * The set of all changes to inheritable properties that affected an ontology
+ * between two releases
+ * 
  * @author Chris O
  */
 public class InheritablePropertyChanges extends OntologyChanges {
     
+    // Changes to the "domains" of a property (i.e., which concepts are modeled explicitly 
+    // with a a certain type of property)
     private final Map<Concept, Set<InheritablePropertyDomainChange>> propertyDomainChanges;
     
+    // Changes to the inheritance of properties due to hierarchical changes
     private final Map<Concept, Set<InheritablePropertyHierarchyChange>> propertyHierarchyChange;
     
     private final HierarchicalChanges hierarchyChanges;
@@ -80,6 +85,19 @@ public class InheritablePropertyChanges extends OntologyChanges {
         return propertyHierarchyChange.getOrDefault(c, Collections.emptySet());
     }
     
+    /**
+     * Explains the explicit and implicit effects of adding, removing, and modifying 
+     * inheritable properties
+     * 
+     * @param fromTaxonomy
+     * @param toTaxonomy
+     * @param addedProperties
+     * @param removedProperties
+     * @param transferredProperties
+     * @param fromPropertyDomains
+     * @param toPropertyDomains
+     * @return 
+     */
     private Map<Concept, Set<InheritablePropertyDomainChange>> explainPropertyChangeEffects(
             PAreaTaxonomy fromTaxonomy,
             PAreaTaxonomy toTaxonomy,
@@ -265,6 +283,16 @@ public class InheritablePropertyChanges extends OntologyChanges {
         return modifiedClasses;
     }
 
+    /**
+     * Determines how the addition and removals of parent concepts affected the 
+     * inheritance of inheritable properties in a subhierarchy
+     * 
+     * @param fromTaxonomy
+     * @param toTaxonomy
+     * @param transferredConcepts
+     * @param conceptsAffectedByPropertyChange
+     * @return 
+     */
     private Map<Concept, Set<InheritablePropertyHierarchyChange>> explainHierarchyChangeEffects(
             PAreaTaxonomy fromTaxonomy,
             PAreaTaxonomy toTaxonomy, 
@@ -394,7 +422,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                                 transferredConcept,
                                                 removedParent,
                                                 inheritedProp,
-                                                SubclassState.Removed,
+                                                HierarchicalConnectionState.Removed,
                                                 ChangeInheritanceType.Direct);
 
                                 hierarchicalPropertyChanges.get(transferredConcept).add(directChange);
@@ -404,7 +432,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                                 transferredConcept,
                                                 removedParent,
                                                 inheritedProp,
-                                                SubclassState.Removed,
+                                                HierarchicalConnectionState.Removed,
                                                 ChangeInheritanceType.Indirect);
 
                                 descendantConcepts.forEach((descendant) -> {
@@ -443,12 +471,12 @@ public class InheritablePropertyChanges extends OntologyChanges {
                         for (InheritableProperty inheritedProp : newlyInheritedProps) {
                             if (parentToProps.contains(inheritedProp)) {
                                 
-                                 InheritablePropertyHierarchyChange directChange
+                                InheritablePropertyHierarchyChange directChange
                                         = new InheritablePropertyHierarchyChange(
                                                 transferredConcept,
                                                 addedParent,
                                                 inheritedProp,
-                                                SubclassState.Added,
+                                                HierarchicalConnectionState.Added,
                                                 ChangeInheritanceType.Direct);
 
                                 hierarchicalPropertyChanges.get(transferredConcept).add(directChange);
@@ -458,7 +486,7 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                                 transferredConcept,
                                                 addedParent,
                                                 inheritedProp,
-                                                SubclassState.Added,
+                                                HierarchicalConnectionState.Added,
                                                 ChangeInheritanceType.Indirect);
 
                                 descendantConcepts.forEach((descendant) -> {                                    

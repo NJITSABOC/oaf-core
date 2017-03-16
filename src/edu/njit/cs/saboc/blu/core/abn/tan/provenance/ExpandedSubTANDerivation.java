@@ -10,8 +10,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author cro3
+ * Stores the arguments needed to create an expanded Sub TAN
+ * 
+ * @author Chris O
  */
 public class ExpandedSubTANDerivation extends ClusterTANDerivation 
         implements SubAbNDerivation<ClusterTANDerivation> {

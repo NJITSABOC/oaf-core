@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
@@ -15,11 +16,15 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public abstract class TANTextConfiguration implements PartitionedAbNTextConfiguration<Cluster, Band> {
+public abstract class TANTextConfiguration extends PartitionedAbNTextConfiguration<Cluster, Band> {
 
     private final ClusterTribalAbstractionNetwork<Cluster> tan;
 
-    public TANTextConfiguration(ClusterTribalAbstractionNetwork<Cluster> tan) {
+    public TANTextConfiguration(OntologyEntityNameConfiguration ontologyEntityNameConfig, 
+            ClusterTribalAbstractionNetwork<Cluster> tan) {
+        
+        super(ontologyEntityNameConfig);
+        
         this.tan = tan;
     }
     
@@ -76,8 +81,8 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     public String getContainerHelpDescription(Band container) {
         StringBuilder helpDescription = new StringBuilder();
         
-        String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
-        String singularConceptName = this.getConceptTypeName(false).toLowerCase();
+        String pluralConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
+        String singularConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(false).toLowerCase();
         
         String text = String.format("A <b>band</b> summarizes the set of all %s which belong to the intersection of the exact same subhierarchies. "
                 + "That is, the %s summarized by a band are all descendants of the same patriarch %s (shown below)."
@@ -94,7 +99,7 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     public String getNodeHelpDescription(Cluster node) {
         StringBuilder helpDescription = new StringBuilder();
         
-        String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
+        String pluralConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
         
         String text = String.format("A <b>cluster</b> summarizes the subhierarchy of %s at a "
                 + "specific point of intersection between two or more subhierarchies.", pluralConceptName);
@@ -137,7 +142,7 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
 
         Set<Cluster> nonintersectingPatriarchClusters = tan.getNonOverlappingPatriarchClusters();
         
-        String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
+        String pluralConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
         
         String result = String.format("The <b>%s</b> Tribal Abstraction Network (TAN) summarizes %d %s in %d band(s) and %d cluster(s). "
                 + "There are a total of %d patriarch clusters that intersect. A total of %d %s are descendants "
@@ -203,8 +208,8 @@ public abstract class TANTextConfiguration implements PartitionedAbNTextConfigur
     @Override
     public String getAbNHelpDescription() {
         
-        String pluralConceptName = this.getConceptTypeName(true).toLowerCase();
-        String singularConceptName = this.getConceptTypeName(true).toLowerCase();
+        String pluralConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
+        String singularConceptName = this.getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase();
         
         String result = String.format("A <b>Tribal Abstraction Network (TAN)</b> is an abstraction network which summarizes the major points of intersection within "
                 + "a hierarchy of %s. Given a hierarchy of %s, the children of the root of the hierarchy are defined as <i>patriarchs</i>. "

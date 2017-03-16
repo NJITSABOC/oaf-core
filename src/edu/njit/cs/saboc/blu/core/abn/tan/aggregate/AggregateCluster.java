@@ -8,7 +8,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A cluster that summarizes a subhierarchy of aggregate nodes that summarize
+ * fewer concepts than some bound
+ * 
  * @author Chris O
  */
 public class AggregateCluster extends Cluster implements AggregateNode<Cluster> {

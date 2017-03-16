@@ -14,7 +14,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * An abstraction network that summarizes subhierarchies of concepts that exist 
+ * at specific points of intersection among two or more patriarch-defined
+ * subhierarchies. Consists of a hierarchy of clusters embedded within a 
+ * hierarchy of Bands (i.e., a Band Tribal Abstraction Network).s
+ * 
  * @author Chris
  * @param <T>
  */

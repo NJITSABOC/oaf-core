@@ -3,9 +3,8 @@ package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionListener;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionMode;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel.RootSelectionListener;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
@@ -31,10 +30,10 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     private final JToggleButton useChildrenBtn;
     private final JToggleButton userSelectionBtn;
     
-    private final RootSelectionPanel rootSelectionPanel;
+    private final BaseRootSelectionOptionsPanel rootSelectionPanel;
     
     public TANPatriarchListPanel(AbNConfiguration config, 
-            RootSelectionPanel rootSelectionPanel) {
+            BaseRootSelectionOptionsPanel rootSelectionPanel) {
         
         this.rootSelectionPanel = rootSelectionPanel;
         
@@ -42,7 +41,7 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         this.setLayout(new BorderLayout());
         
         this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", 
-                    config.getTextConfiguration().getChildConceptTypeName(true)));
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getChildConceptTypeName(true)));
         this.useChildrenBtn.addActionListener( (ae) -> {
             useChildrenSelected();
         });
@@ -91,15 +90,15 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         this.rootSelectionPanel.addRootSelectionModeChangedListener((mode) -> {
             this.useChildrenBtn.setSelected(true);
 
-            if (mode.equals(RootSelectionMode.WholeOntology)) {
-                useChildrenSelected();
-
-                this.useChildrenBtn.setEnabled(false);
-                this.userSelectionBtn.setEnabled(false);
-            } else {
-                this.useChildrenBtn.setEnabled(true);
-                this.userSelectionBtn.setEnabled(true);
-            }
+//            if (mode.equals(RootSelectionMode.WholeOntology)) {
+//                useChildrenSelected();
+//
+//                this.useChildrenBtn.setEnabled(false);
+//                this.userSelectionBtn.setEnabled(false);
+//            } else {
+//                this.useChildrenBtn.setEnabled(true);
+//                this.userSelectionBtn.setEnabled(true);
+//            }
         });
         
         resetView();
@@ -109,16 +108,17 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         return selectedPatriarchs;
     }
     
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
 
-        if (rootSelectionPanel.getRootSelectionMode().equals(RootSelectionMode.WholeOntology)) {
-            // Don't enable when in whole ontology selection mode...
-            
-        } else {
-            useChildrenBtn.setEnabled(value);
-            userSelectionBtn.setEnabled(value);
-        }
+//        if (rootSelectionPanel.getRootSelectionMode().equals(RootSelectionMode.WholeOntology)) {
+//            // Don't enable when in whole ontology selection mode...
+//            
+//        } else {
+//            useChildrenBtn.setEnabled(value);
+//            userSelectionBtn.setEnabled(value);
+//        }
 
     }
     
@@ -139,18 +139,21 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
         selectedPatriarchList.setContents(sortedConcepts);
     }
     
+    @Override
     public void initialize(Ontology ont) {
         super.initialize(ont);
         
         resetView();
     }
     
+    @Override
     public void clearContents() {
         super.clearContents();
         
         this.selectedPatriarchList.clearContents();
     }
     
+    @Override
     public final void resetView() {
         useChildrenBtn.setSelected(true);
         

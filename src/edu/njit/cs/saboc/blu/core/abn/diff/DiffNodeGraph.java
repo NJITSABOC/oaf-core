@@ -9,7 +9,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Represents a graph of Diff Nodes.
+ * 
+ * A specialized class based on, but does not (currently) extend, the Graph class.
+ * 
  * @author Chris O
  */
 public class DiffNodeGraph {
@@ -117,5 +120,4 @@ public class DiffNodeGraph {
             return toDiffEdges(unchangedEdges.getEdges(), EdgeState.Unmodified);
         }
     }
-
 }

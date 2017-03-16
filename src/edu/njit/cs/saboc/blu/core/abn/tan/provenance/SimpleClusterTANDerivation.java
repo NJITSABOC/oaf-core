@@ -11,7 +11,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create a TAN for a selected set of ontology
+ * subhierarchies
+ * 
  * @author Chris O
  */
 public class SimpleClusterTANDerivation extends ClusterTANDerivation {

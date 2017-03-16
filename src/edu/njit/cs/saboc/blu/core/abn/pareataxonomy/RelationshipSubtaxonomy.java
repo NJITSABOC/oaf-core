@@ -5,8 +5,12 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RelationshipSubta
 import java.util.Set;
 
 /**
- *
+ * A partial-area taxonomy created by selecting a subset of the inheritable 
+ * properties used to define concepts in a selected subhierarchy.
+ * 
  * @author cro3
+ * 
+ * @param <T>
  */
 public class RelationshipSubtaxonomy<T extends PArea> extends PAreaTaxonomy<T> implements SubAbstractionNetwork<PAreaTaxonomy> {
     

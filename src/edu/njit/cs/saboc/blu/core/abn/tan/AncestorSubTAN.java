@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * Defines a TAN created from a selected cluster and all of its ancestor
+ * clusters
+ * 
  * @author Chris O
  * @param <T>
  */

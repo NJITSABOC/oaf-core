@@ -7,7 +7,10 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Represents a region of an area in a partial-area taxonomy
+ * Represents a region of an area in a partial-area taxonomy. Partitions
+ * an area's partial-areas based on the introduction or inheritance 
+ * of their inheritable properties
+ * 
  * @author Chris O
  */
 public class Region extends SimilarityNode<PArea> {
@@ -40,10 +43,12 @@ public class Region extends SimilarityNode<PArea> {
         return getPAreas().contains(parea);
     }
     
+    @Override
     public int hashCode() {
         return relationships.hashCode();
     }
     
+    @Override
     public boolean equals(Object o) {
         if(o instanceof Region) {
             Region other = (Region)o;

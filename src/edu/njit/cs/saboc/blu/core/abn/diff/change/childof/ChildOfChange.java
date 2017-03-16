@@ -5,10 +5,14 @@ import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 
 /**
- *
+ * Represents a chance to the CHILD OF links between two 
+ * nodes between the "FROM" version of an abstraction network and the 
+ * "TO" version of an abstraction network.
+ * 
  * @author Chris
  */
 public class ChildOfChange implements AbNChange {
+    
     private final Node child;
     private final Node parent;
     private final ChangeState state;

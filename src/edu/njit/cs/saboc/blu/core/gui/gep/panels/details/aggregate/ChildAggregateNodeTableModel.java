@@ -17,7 +17,7 @@ public class ChildAggregateNodeTableModel<T extends Node> extends OAFAbstractTab
         super(new String [] {
             configuration.getTextConfiguration().getNodeTypeName(false), 
             String.format("# Aggregate %s", configuration.getTextConfiguration().getNodeTypeName(true)),
-            String.format("# %s", configuration.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
         this.configuration = configuration;

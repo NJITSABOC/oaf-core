@@ -17,9 +17,9 @@ public class ParentClusterTableModel extends OAFAbstractTableModel<ParentNodeDet
     
     public ParentClusterTableModel(TANConfiguration config) {
         super(new String [] {
-            config.getTextConfiguration().getParentConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false),
             "Parent Cluster",
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             "Band"
         });
         

@@ -1,13 +1,16 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.result;
 
 /**
- *
+ * A result class that stores the longest path hierarchical depth for the given
+ * hierarchy node
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AncestorDepthResult<T>  {
-    private T node;
+    private final T node;
     
-    private int depth;
+    private final int depth;
     
     public AncestorDepthResult(T node, int depth) {
         this.node = node;

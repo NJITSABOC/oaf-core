@@ -7,7 +7,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create a disjoint abstraction network based 
+ * on the selection of an overlapping singly rooted node.
+ * 
  * @author Chris O
  * @param <T>
  */

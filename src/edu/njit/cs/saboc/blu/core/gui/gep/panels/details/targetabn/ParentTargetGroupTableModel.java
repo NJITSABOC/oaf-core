@@ -1,9 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
@@ -19,10 +16,10 @@ public class ParentTargetGroupTableModel extends OAFAbstractTableModel<ParentNod
     
     public ParentTargetGroupTableModel(TargetAbNConfiguration config) {
         super(new String [] {
-            config.getTextConfiguration().getParentConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false),
             "Parent Target Group",
-            String.format("# Target %s", config.getTextConfiguration().getConceptTypeName(true)),
-            String.format("# Source %s", config.getTextConfiguration().getConceptTypeName(true))
+            String.format("# Target %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
+            String.format("# Source %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
         this.config = config;

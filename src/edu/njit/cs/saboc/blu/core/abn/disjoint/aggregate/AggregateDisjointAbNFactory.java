@@ -8,8 +8,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating aggregated disjoint abstraction networks. 
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AggregateDisjointAbNFactory<T extends Node> implements AggregateAbNFactory<DisjointNode<T>, AggregateDisjointNode<T>> {
 

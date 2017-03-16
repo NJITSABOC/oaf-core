@@ -11,8 +11,17 @@ import javax.swing.JLabel;
  */
 public class GraphLayoutUtilities {
 
+    /**
+     * Creates a label that is sized to fit the given set of strings
+     * 
+     * @param entries
+     * @param boundingWidth
+     * @param fontMetrics
+     * @return 
+     */
     public static JLabel createFittedPartitionLabel(String[] entries, int boundingWidth, FontMetrics fontMetrics) {
-        ArrayList<String> lines = new ArrayList<String>();
+        
+        ArrayList<String> lines = new ArrayList<>();
 
         int remainingSpace = boundingWidth;
 

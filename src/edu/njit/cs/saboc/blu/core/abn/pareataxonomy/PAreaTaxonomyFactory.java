@@ -1,13 +1,14 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating implementation-specific partial-area taxonomy
+ * objects
+ * 
  * @author Chris O
  */
 public abstract class PAreaTaxonomyFactory {

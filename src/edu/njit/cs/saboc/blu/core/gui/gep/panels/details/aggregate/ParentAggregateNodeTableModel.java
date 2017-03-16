@@ -16,10 +16,10 @@ public class ParentAggregateNodeTableModel<T extends Node> extends OAFAbstractTa
     
     public ParentAggregateNodeTableModel(AbNConfiguration config) {
         super(new String [] {
-            String.format("Parent %s", config.getTextConfiguration().getConceptTypeName(false)),
+            String.format("Parent %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
             String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
             String.format("# Aggregated %s", config.getTextConfiguration().getNodeTypeName(true)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
         this.config = config;

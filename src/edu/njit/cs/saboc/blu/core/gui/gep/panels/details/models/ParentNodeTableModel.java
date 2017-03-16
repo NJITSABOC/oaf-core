@@ -18,9 +18,9 @@ public class ParentNodeTableModel<T extends Node> extends OAFAbstractTableModel<
 
     public ParentNodeTableModel(AbNConfiguration<T> config) {
         super(new String [] {
-            config.getTextConfiguration().getParentConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getParentConceptTypeName(false),
             String.format("Parent %s", config.getTextConfiguration().getNodeTypeName(false)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
     }
     

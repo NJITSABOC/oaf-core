@@ -14,7 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Represents the changes to a given subhierarchy of concepts between the 
+ * "FROM" and "TO" releases of an ontology. 
+ * 
  * @author Chris O
  */
 public class HierarchicalChanges extends OntologyChanges {

@@ -10,7 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an Aggregate Root Subtaxonomy
+ * 
  * @author Chris O
  */
 public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation 

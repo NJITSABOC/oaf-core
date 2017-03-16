@@ -6,11 +6,12 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.RootSelectionPanel.RootSelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel.RootSelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.SubhierarchySearcher;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.InheritablePropertySelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.InheritablePropertySelectionPanel.SelectionType;
+import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.GenericRootSelectionOptionsPanel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.BorderLayout;
@@ -45,7 +46,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
                 Hierarchy<Concept> targetHierarchy);
     }
     
-    private final RootSelectionPanel<TargetAbstractionNetwork> sourceRootSelectionPanel;
+    private final BaseRootSelectionOptionsPanel<TargetAbstractionNetwork> sourceRootSelectionPanel;
     
     private final InheritablePropertySelectionPanel propertyListPanel;
     
@@ -60,7 +61,8 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     
     public TargetAbNDerivationWizardPanel(
             AbNConfiguration config,
-            DeriveTargetAbNAction derivationAction) {
+            DeriveTargetAbNAction derivationAction,
+            BaseRootSelectionOptionsPanel<TargetAbstractionNetwork> sourceRootSelectionPanel) {
         
         this.derivationAction = derivationAction;
         
@@ -69,7 +71,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         JPanel derivationOptionsPanel = new JPanel();
         derivationOptionsPanel.setLayout(new BoxLayout(derivationOptionsPanel, BoxLayout.X_AXIS));
         
-        this.sourceRootSelectionPanel = new RootSelectionPanel(config);
+        this.sourceRootSelectionPanel = sourceRootSelectionPanel;
         this.sourceRootSelectionPanel.addRootSelectionListener(new RootSelectionListener() {
 
             @Override
@@ -102,7 +104,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         this.sourceRootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("1. Select Source Hierarchy Root %s", 
-                        config.getTextConfiguration().getConceptTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false))));
         
         derivationOptionsPanel.add(sourceRootSelectionPanel);
         
@@ -143,13 +145,13 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         this.propertyListPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
                 String.format("2. Select %s Type",
-                        config.getTextConfiguration().getPropertyTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getPropertyTypeName(false))));
         
         this.propertyListPanel.setPreferredSize(new Dimension(250, -1));
         
         this.targetRootSelectionPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK),
                 String.format("3. Select Target Hierarchy Root %s",
-                        config.getTextConfiguration().getConceptTypeName(false))));
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false))));
 
         derivationOptionsPanel.add(propertyListPanel);
         
@@ -166,6 +168,13 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         southPanel.add(deriveButton, BorderLayout.EAST);
         
         this.add(southPanel, BorderLayout.SOUTH);
+    }
+    
+     public TargetAbNDerivationWizardPanel(
+            AbNConfiguration config,
+            DeriveTargetAbNAction derivationAction) {
+         
+         this(config, derivationAction, new GenericRootSelectionOptionsPanel(config));
     }
 
     public void initialize(

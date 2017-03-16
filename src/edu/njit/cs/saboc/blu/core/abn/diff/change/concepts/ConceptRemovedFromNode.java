@@ -5,7 +5,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * Represents a concept no longer being summarized by a node in the "TO" version
+ * of the abstraction network but it is still summarized by at least one node
+ * it was summarized by in the "FROM" release.
+ * 
  * @author Chris O
  */
 public class ConceptRemovedFromNode extends NodeConceptChange {

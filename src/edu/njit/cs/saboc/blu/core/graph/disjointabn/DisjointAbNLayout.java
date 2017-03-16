@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
 
@@ -154,6 +155,7 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
         return disjointAbN;
     }
 
+    @Override
     public void doLayout() {
 
         Set<DisjointNode> disjointNodes = disjointAbN.getAllDisjointNodes();

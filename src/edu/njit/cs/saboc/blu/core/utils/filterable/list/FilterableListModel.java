@@ -6,18 +6,19 @@ import javax.swing.AbstractListModel;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-/** 
+/**
  * An extention of {@link Vector}&lt;{@link Concept}> that implements {@link
- * javax.swing.ListModel}.  The class can be filtered in such a way that
- * only those Concepts that match the filter will be accessible through the
- * ListModel interface, but all the Concepts will always be accessible through
- * the Vector methods.
+ * javax.swing.ListModel}. The class can be filtered in such a way that only
+ * those Concepts that match the filter will be accessible through the ListModel
+ * interface, but all the Concepts will always be accessible through the Vector
+ * methods.
  */
 public class FilterableListModel extends MonitoredVector<Filterable> implements ListModel {
-    
+
     protected Vector<Filterable> modelledVector = this;
 
     private class DelegateListModel extends AbstractListModel {
+
         @Override
         public int getSize() {
             return FilterableListModel.this.getSize();
@@ -45,8 +46,8 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
     }
 
     private String filter = "";
-    
-    private DelegateListModel delegateLM = new DelegateListModel();
+
+    private final DelegateListModel delegateLM = new DelegateListModel();
 
     public FilterableListModel() {
 
@@ -59,11 +60,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     @Override
     public Object getElementAt(int index) {
-        if(filter.isEmpty()) {
-            return modelledVector.get(index).getInitialText();
-        } else {
-            return modelledVector.get(index).getFilterText(filter);
-        }
+        return modelledVector.get(index);
     }
 
     public Filterable getFilterableAtModelIndex(int index) {
@@ -86,88 +83,94 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
 
     @Override
     protected void elementsInserted(int index0, int index1) {
-        if(filter.isEmpty()) {
+        if (filter.isEmpty()) {
             delegateLM.fireIntervalAdded(this, index0, index1);
-        }
-        else {
+        } else {
             updateFilter();
         }
     }
 
     @Override
     protected void elementsRemoved(int index0, int index1) {
-        if(filter.isEmpty()) {
+        if (filter.isEmpty()) {
             delegateLM.fireIntervalRemoved(this, index0, index1);
-        }
-        else {
+        } else {
             updateFilter();
         }
     }
 
     @Override
     protected void elementsUpdated(int index0, int index1) {
-        if(filter.isEmpty()) {
+        if (filter.isEmpty()) {
             delegateLM.fireContentsChanged(this, index0, index1);
-        }
-        else {
+        } else {
             updateFilter();
         }
     }
 
     public void updateFilter() {
-        
-        if(!filter.isEmpty()) {
-            assert modelledVector != this;
+
+        if (!filter.isEmpty()) {
             int size = modelledVector.size();
             modelledVector.clear();
 
-            if(size > 0) {
+            if (size > 0) {
                 delegateLM.fireIntervalRemoved(this, 0, size - 1);
             }
-
-            for(Filterable f : this) {
-                if(f.containsFilter(filter.toLowerCase())) {
-                    modelledVector.add(f);
-                }
-            }
             
-            if(!modelledVector.isEmpty()) {
+            this.forEach((filterable) -> {
+                filterable.setCurrentFilter(filter);
+                
+                if (filterable.containsFilter(filter.toLowerCase())) {
+                    modelledVector.add(filterable);
+                }
+            });
+
+            if (!modelledVector.isEmpty()) {
                 delegateLM.fireIntervalAdded(this, 0, modelledVector.size() - 1);
             }
         }
     }
 
     public void changeFilter(String newFilter) {
-        newFilter = newFilter.toLowerCase();
         
-        if(newFilter.equals(filter)) {
-            return;
-        }
-        else if(newFilter.isEmpty()) {
+        newFilter = newFilter.toLowerCase();
+
+        if (newFilter.isEmpty()) {
             modelledVector = this;
             filter = newFilter;
+
             delegateLM.fireContentsChanged(this, 0, modelledVector.size() - 1);
-        }
-        else if(filter.isEmpty() || !newFilter.contains(filter)) {
-            modelledVector = new Vector<Filterable>(this);
-            filter = newFilter;
-            updateFilter();
-        }
-        else {
-            filter = newFilter;
-            ListIterator<Filterable> iter = modelledVector.listIterator();
             
-            while(iter.hasNext()) {
-                String text = iter.next().getInitialText().toLowerCase();
-                
-                if(!text.contains(filter)) {
+            this.forEach( (filterable) -> {
+                filterable.clearFilter();
+            });
+            
+        } else if (filter.isEmpty() || !newFilter.contains(filter)) {
+            modelledVector = new Vector<>(this);
+
+            filter = newFilter;
+            
+            updateFilter();
+            
+        } else {
+            filter = newFilter;
+            
+            ListIterator<Filterable> iter = modelledVector.listIterator();
+
+            while (iter.hasNext()) {
+                Filterable filterable = iter.next();
+                filterable.setCurrentFilter(filter);
+
+                if (!filterable.containsFilter(filter)) {
                     int index = iter.nextIndex() - 1;
                     iter.remove();
+                    
                     delegateLM.fireIntervalRemoved(this, index, index);
                 }
-                
+
             }
-            
+
             delegateLM.fireContentsChanged(this, 0, modelledVector.size() - 1);
         }
     }

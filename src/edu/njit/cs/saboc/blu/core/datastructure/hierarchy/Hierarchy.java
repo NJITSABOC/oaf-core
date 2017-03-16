@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.AncestorHierar
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.HierarchyVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.LowestCommonAncestorVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.RetrieveLeavesVisitor;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderListener;
+import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyBuilderVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchyMembersVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.SubhierarchySizeVisitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.TopRootVisitor;
@@ -24,9 +24,10 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Data type representing a rooted Directed Acylic Graph (DAG).
+ * A rooted Directed Acylic Graph (DAG).
  * 
- * @author Chris
+ * @author Chris O
+ * @param <T>
  */
 public class Hierarchy<T> {
     
@@ -43,7 +44,7 @@ public class Hierarchy<T> {
     }
     
     /**
-     * Initializes a multirooted hierarchyt
+     * Initializes a multirooted hierarchy
      * @param roots 
      */
     public Hierarchy(Set<T> roots) {
@@ -65,7 +66,7 @@ public class Hierarchy<T> {
     }
     
     /**
-     * Initializes a singlyrooted subhierarchy within the source hierarchy
+     * Initializes a singly rooted subhierarchy within the source hierarchy
      * @param root
      * @param sourceHierarchy 
      */
@@ -81,7 +82,7 @@ public class Hierarchy<T> {
     public Hierarchy(Set<T> roots, Hierarchy<T> sourceHierarchy) {
         this(roots);
         
-        SubhierarchyBuilderListener<T> subhierarchyBuilderVisitor = new SubhierarchyBuilderListener<>(sourceHierarchy, roots);
+        SubhierarchyBuilderVisitor<T> subhierarchyBuilderVisitor = new SubhierarchyBuilderVisitor<>(sourceHierarchy, roots);
         sourceHierarchy.topologicalDownInSubhierarchy(roots, subhierarchyBuilderVisitor);
         
         subhierarchyBuilderVisitor.getResult().getEdges().forEach( (edge) -> {
@@ -138,7 +139,7 @@ public class Hierarchy<T> {
      * @param edge The edge
      */
     public final void addEdge(Edge<T> edge) {
-        this.addEdge(edge.getFrom(), edge.getTo());
+        this.addEdge(edge.getSource(), edge.getTarget());
     }
     
     /**
@@ -379,18 +380,20 @@ public class Hierarchy<T> {
     }
     
     public void topologicalUp(Set<T> startingPoints, TopologicalVisitor<T> visitor) {
-        Set<T> ancestors = this.getAncestors(startingPoints);
-        ancestors.addAll(startingPoints);
+        
+        Set<T> subhierarchyNodes = this.getAncestors(startingPoints);
+        
+        subhierarchyNodes.addAll(startingPoints);
 
         HashMap<T, Integer> childCountInSubhierarchy = new HashMap<>();
 
-        ancestors.forEach((node) -> {
+        subhierarchyNodes.forEach((node) -> {
             int childCount = 0;
 
-            Set<T> children = this.getParents(node);
+            Set<T> children = this.getChildren(node);
 
             for (T child : children) {
-                if (ancestors.contains(child)) {
+                if (subhierarchyNodes.contains(child)) {
                     childCount++;
                 }
             }
@@ -647,6 +650,8 @@ public class Hierarchy<T> {
             });
         });
         
+        strictSiblings.remove(node);
+        
         return strictSiblings;
     }
     
@@ -692,5 +697,13 @@ public class Hierarchy<T> {
         ancestorHierarchy.topologicalUp(nodes, visitor);
 
         return visitor.getLowestCommonAncestors();
+    }
+    
+    public boolean isAncestorOf(T potentialAncestor, T node) {
+        return this.getAncestors(node).contains(potentialAncestor);
+    }
+    
+    public boolean isDescendantOf(T potentialDescendant, T node) {
+        return this.getDescendants(node).contains(potentialDescendant);
     }
 }

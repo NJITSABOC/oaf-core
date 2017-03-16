@@ -4,30 +4,39 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A generator class for creating target abstraction networks.
+ * 
  * @author Chris 
  */
 public class AggregateTargetAbNGenerator {
     
+    /**
+     * Creates an aggregate target abstraction network with the given bound
+     * 
+     * @param sourceTargetAbN
+     * @param generator
+     * @param aggregateGenerator
+     * @param bound
+     * @return 
+     */
     public TargetAbstractionNetwork createAggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             TargetAbstractionNetworkGenerator generator,
             AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
-            int minGroupSize) {
+            int bound) {
 
-        if (minGroupSize == 1) {
+        if (bound == 1) {
             return sourceTargetAbN;
         }
         
-        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createReducedAbN(
-                        new AggregateTargetAbNFactory(),
+        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),
-                        minGroupSize);
+                        bound);
         
         Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
         
-        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, minGroupSize, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
+        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, bound, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
 
         targetAbN.setAggregated(true);
         

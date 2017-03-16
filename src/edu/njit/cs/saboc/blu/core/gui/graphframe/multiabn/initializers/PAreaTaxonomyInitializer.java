@@ -20,6 +20,7 @@ import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.PAreaTaxonomy
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JToggleButton;
 
 /**
  *
@@ -46,7 +47,8 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     }
 
     @Override
-    public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, 
+    public TaskBarPanel getTaskBar(
+            MultiAbNGraphFrame graphFrame, 
             PAreaTaxonomyConfiguration config) {
         
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
@@ -68,6 +70,12 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
         
         taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
         
+        JToggleButton showRegionsBtn = new JToggleButton("Regions");
+        showRegionsBtn.addActionListener( (ae) -> {
+            
+        });
+        
+        taskBar.addOtherOptionsComponent(showRegionsBtn);
         
         JButton derivationHelpBtn = new JButton("Help!");
         derivationHelpBtn.addActionListener( (ae) -> {

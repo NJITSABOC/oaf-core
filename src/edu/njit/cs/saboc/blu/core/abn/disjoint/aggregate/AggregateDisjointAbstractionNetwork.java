@@ -14,8 +14,11 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- *
+ * A class for representing aggregate disjoint abstraction networks
+ * 
  * @author Chris O
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class AggregateDisjointAbstractionNetwork<
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,
@@ -24,6 +27,16 @@ public class AggregateDisjointAbstractionNetwork<
                 implements AggregateAbstractionNetwork<AggregateDisjointNode<PARENTNODE_T>, DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T>> {
     
     
+    /**
+     * Static method for generating aggregate disjoint abstraction networks 
+     * that consist of a selected aggregate disjoint node and all of its  
+     * aggregate disjoint node ancestors
+     * 
+     * @param nonAggregateDisjointAbN The non-aggregate version of the source disjoint abstraction network
+     * @param superAggregateDisjointAbN The aggregate disjoint abstraction network
+     * @param selectedRoot The selected aggregate disjoint node
+     * @return 
+     */
     public static final AggregateAncestorDisjointAbN generateAggregateSubsetDisjointAbstractionNetwork(
             DisjointAbstractionNetwork nonAggregateDisjointAbN,
             DisjointAbstractionNetwork superAggregateDisjointAbN,
@@ -64,6 +77,7 @@ public class AggregateDisjointAbstractionNetwork<
                 ancestorDisjointAbN,
                 aggregatedAncestorAbN);
     }
+    
     
     private final DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> sourceAbN;
     

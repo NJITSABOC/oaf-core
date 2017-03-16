@@ -45,7 +45,7 @@ public class AggregateAreaSummaryTextFactory extends AreaSummaryTextFactory {
         if (aggregatePAreas.isEmpty()) {
             pareaStr = String.format("%d %s in %d regular %s.",
                     totalConcepts.size(),
-                    config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                     regularPAreas.size(),
                     config.getTextConfiguration().getNodeTypeName(regularPAreas.size() != 1).toLowerCase());
         } else {
@@ -53,13 +53,13 @@ public class AggregateAreaSummaryTextFactory extends AreaSummaryTextFactory {
             if (regularPAreas.isEmpty()) {
                 pareaStr = String.format("%d %s in %d aggregate %s.",
                         totalConcepts.size(),
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                         aggregatePAreas.size(),
                         config.getTextConfiguration().getNodeTypeName(aggregatePAreas.size() != 1).toLowerCase());
             } else {
                 pareaStr = String.format("%d %s in %d regular %s and %d aggregate %s.",
                         totalConcepts.size(),
-                        config.getTextConfiguration().getConceptTypeName(true).toLowerCase(),
+                        config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true).toLowerCase(),
                         regularPAreas.size(),
                         config.getTextConfiguration().getNodeTypeName(regularPAreas.size() != 1).toLowerCase(),
                         aggregatePAreas.size(),
@@ -69,11 +69,10 @@ public class AggregateAreaSummaryTextFactory extends AreaSummaryTextFactory {
 
         String areaName = area.getName();
 
-        return String.format("<html><b>%s</b> is an area that summarizes %s"
-                + "<p><b>Help / Description:</b><br>%s",
+        return String.format("<html><b>%s</b> is an area that summarizes %s",
                 areaName,
-                pareaStr,
-                config.getTextConfiguration().getContainerHelpDescription(area));
+                pareaStr
+        );
 
     }
     

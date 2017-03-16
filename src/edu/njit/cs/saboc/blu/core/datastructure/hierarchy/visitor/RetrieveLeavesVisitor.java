@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A visitor for obtaining all of the leaf nodes in the DAG
+ * 
  * @author Chris O
  */
 public class RetrieveLeavesVisitor<T> extends HierarchyVisitor<T> {
@@ -15,6 +16,7 @@ public class RetrieveLeavesVisitor<T> extends HierarchyVisitor<T> {
         super(theHierarchy);
     }
     
+    @Override
     public void visit(T node) {
         Hierarchy<T> theHierarchy = super.getHierarchy();
         

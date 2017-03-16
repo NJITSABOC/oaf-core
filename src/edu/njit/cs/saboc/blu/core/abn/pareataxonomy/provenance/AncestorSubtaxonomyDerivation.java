@@ -10,7 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an ancestor subtaxonomy
+ * 
  * @author Chris O
  */
 public class AncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation 

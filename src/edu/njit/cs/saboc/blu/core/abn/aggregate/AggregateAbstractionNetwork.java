@@ -3,8 +3,12 @@ package edu.njit.cs.saboc.blu.core.abn.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 
 /**
- *
+ * Represents an abstraction network that has been aggregated and 
+ * consists of aggregate nodes.
+ * 
  * @author Chris O
+ * 
+ * @param <T>
  * @param <ABN_T>
  */
 public interface AggregateAbstractionNetwork<T extends AggregateNode,

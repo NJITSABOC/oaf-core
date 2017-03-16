@@ -9,8 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Represents a disjoint node that summarizes a set of other disjoint nodes
+ * that summarizer fewer than a selected number of concepts.
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AggregateDisjointNode<T extends Node> extends DisjointNode<T> implements AggregateNode<DisjointNode<T>> {
     

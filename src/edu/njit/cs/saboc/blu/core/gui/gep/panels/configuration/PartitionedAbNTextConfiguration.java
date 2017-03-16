@@ -6,12 +6,19 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 /**
  *
  * @author Chris O
+ * @param <T>
+ * @param <V>
  */
-public interface PartitionedAbNTextConfiguration<T extends SinglyRootedNode, V extends PartitionedNode> extends AbNTextConfiguration<T> {
-    public String getBaseAbstractionNetworkTypeName(boolean plural);
+public abstract class PartitionedAbNTextConfiguration<T extends SinglyRootedNode, V extends PartitionedNode> extends AbNTextConfiguration<T> {
     
-    public String getContainerTypeName(boolean plural);
-    public String getContainerHelpDescription(V container);
+    public PartitionedAbNTextConfiguration(OntologyEntityNameConfiguration ontologyEntityNameConfiguration) {
+        super(ontologyEntityNameConfiguration);
+    }
     
-    public String getDisjointNodeTypeName(boolean plural);
+    public abstract String getBaseAbstractionNetworkTypeName(boolean plural);
+    
+    public abstract String getContainerTypeName(boolean plural);
+    public abstract String getContainerHelpDescription(V container);
+    
+    public abstract String getDisjointNodeTypeName(boolean plural);
 }

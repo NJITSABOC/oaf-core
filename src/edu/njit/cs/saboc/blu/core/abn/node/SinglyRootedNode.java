@@ -5,9 +5,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
 /**
- * Represents an abstraction network node that consists of a singly rooted hierarchy of concepts.
+ * An abstraction network node that consists of a singly rooted hierarchy of concepts.
  * 
- * Examples include partial-areas and clusters
+ * Examples include partial-areas, clusters, disjoint nodes, etc
  * 
  * @author Chris O
  */

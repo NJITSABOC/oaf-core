@@ -3,8 +3,10 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * Base class for defining a visit operation for a traversal of a hierarchy
+ * 
  * @author Chris O
+ * @param <T>
  */
 public abstract class HierarchyVisitor<T> {
     

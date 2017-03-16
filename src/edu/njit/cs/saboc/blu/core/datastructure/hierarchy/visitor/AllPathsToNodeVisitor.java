@@ -3,16 +3,20 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A visitor that returns all of the paths from the root of theHierarchy to the 
+ * specified end point
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
     private ArrayList<ArrayList<T>> allPaths = new ArrayList<>();
     
-    private HashMap<T, ArrayList<ArrayList<T>>> pathMap = new HashMap<>();
+    private Map<T, ArrayList<ArrayList<T>>> pathMap = new HashMap<>();
     
     private final T endPoint;
     
@@ -32,6 +36,7 @@ public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
         });
     }
     
+    @Override
     public void visit(T node) {
         Hierarchy<T> theHierarchy = super.getHierarchy();
         
@@ -42,17 +47,17 @@ public class AllPathsToNodeVisitor<T> extends TopologicalVisitor<T> {
         Set<T> parents = theHierarchy.getParents(node);
 
         ArrayList<ArrayList<T>> pathsToConcept = new ArrayList<>();
-
-        for (T parent : parents) {
+        
+        parents.forEach( (parent) -> {
             ArrayList<ArrayList<T>> parentPaths = (ArrayList<ArrayList<T>>) pathMap.get(parent).clone();
 
-            for (ArrayList<T> parentPath : parentPaths) {
+            parentPaths.forEach( (parentPath) -> {
                 ArrayList<T> path = (ArrayList<T>) parentPath.clone();
                 path.add(node);
 
                 pathsToConcept.add(path);
-            }
-        }
+            });
+        });
 
         if (node.equals(endPoint)) {
             this.allPaths = pathsToConcept;

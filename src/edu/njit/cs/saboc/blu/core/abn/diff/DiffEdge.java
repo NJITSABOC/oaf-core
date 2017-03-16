@@ -4,7 +4,9 @@ package edu.njit.cs.saboc.blu.core.abn.diff;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Edge;
 
 /**
- *
+ * Represents a CHILD OF edge between two diff nodes. The edge can be
+ * added, removed, or modified.
+ * 
  * @author Chris O
  */
 public class DiffEdge extends Edge<DiffNode> {
@@ -24,7 +26,7 @@ public class DiffEdge extends Edge<DiffNode> {
     }
     
     public DiffEdge(Edge<DiffNode> edge, EdgeState state) {
-        this(edge.getFrom(), edge.getTo(), state);
+        this(edge.getSource(), edge.getTarget(), state);
     }
     
     public EdgeState getState() {

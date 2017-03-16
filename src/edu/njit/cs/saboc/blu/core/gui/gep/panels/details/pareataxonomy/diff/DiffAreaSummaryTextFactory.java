@@ -21,6 +21,7 @@ public class DiffAreaSummaryTextFactory extends AreaSummaryTextFactory {
         super(config);
     }
     
+    @Override
     public DiffPAreaTaxonomyConfiguration getConfiguration() {
         return (DiffPAreaTaxonomyConfiguration)super.getConfiguration();
     }
@@ -34,7 +35,7 @@ public class DiffAreaSummaryTextFactory extends AreaSummaryTextFactory {
         String areaName = area.getName();
         int classCount = area.getConcepts().size();
 
-        String conceptType = config.getTextConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
+        String conceptType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("<html><b>%s</b> is a diff area.", areaName));
@@ -56,11 +57,6 @@ public class DiffAreaSummaryTextFactory extends AreaSummaryTextFactory {
         diffPAreasByType.forEach( (type, diffPAreasOfType) -> {
             builder.append(String.format("%s: %d<br>", type, diffPAreasOfType.size()));
         });
-        
-
-        builder.append("<br>");
-        builder.append("<b>Help / Description</b><p>");
-        builder.append(config.getTextConfiguration().getContainerHelpDescription(area));
 
         return builder.toString();
     }

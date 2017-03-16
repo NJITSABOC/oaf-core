@@ -9,7 +9,9 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
 /**
- *
+ * A TAN that is created from the subhierarchy of clusters summarized by an 
+ * aggregate cluster
+ * 
  * @author Chris O
  */
 public class ExpandedClusterTribalAbstractionNetwork extends ClusterTribalAbstractionNetwork 

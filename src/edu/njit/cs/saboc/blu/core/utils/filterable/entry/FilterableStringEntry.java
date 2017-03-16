@@ -22,16 +22,23 @@ public class FilterableStringEntry extends Filterable<String> {
         return String.format("<html>%s</html>", filter(entry, filter));
     }
 
+    @Override
     public String getObject() {
         return entry;
     }
     
+    @Override
     public boolean containsFilter(String filter) {
         return entry.toLowerCase().contains(filter);
     }
         
     @Override
     public String getClipboardText() {
+        return entry;
+    }
+
+    @Override
+    public String getToolTipText() {
         return entry;
     }
 }

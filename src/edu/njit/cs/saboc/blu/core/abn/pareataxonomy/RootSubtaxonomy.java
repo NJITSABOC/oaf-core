@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDeri
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RootSubtaxonomyDerivation;
 
 /**
- *
+ * A partial-area taxonomy that consists of a selected partial-area and all of
+ * its descendant partial-areas from the "super taxonomy" (i.e., source taxonomy)
+ * 
  * @author Chris O
  * @param <T>
  */

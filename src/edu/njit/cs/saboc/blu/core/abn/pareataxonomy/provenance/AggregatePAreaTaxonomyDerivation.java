@@ -7,7 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate partial-area taxonomy 
+ * 
  * @author Chris O
  */
 public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation 

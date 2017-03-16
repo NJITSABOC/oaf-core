@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * A factory class for creating aggregate target abstraction networks
+ *  
  * @author Chris O
  */
 public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGroup, AggregateTargetGroup> {

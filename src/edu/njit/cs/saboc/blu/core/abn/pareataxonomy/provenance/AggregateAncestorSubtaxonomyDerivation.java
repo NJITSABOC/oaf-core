@@ -10,7 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments for creating aggregate an ancestor subtaxonomy
+ * 
  * @author Chris O
  */
 public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation 
@@ -55,7 +56,8 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
 
     @Override
     public PAreaTaxonomyDerivation getNonAggregateSourceDerivation() {
-        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
+        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = 
+                (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
         
         return derivedAggregate.getNonAggregateSourceDerivation();
     }

@@ -8,7 +8,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments for creating a relationship subtaxonomy
+ * 
  * @author Chris O
  */
 public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation 

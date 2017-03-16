@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import java.util.Set;
 
 /**
- *
+ * The details of why a node was introduced in the TO version of 
+ * an abstraction network.
+ * 
  * @author Chris O
  */
 public class IntroduceNodeDetails extends NodeChangeDetails {

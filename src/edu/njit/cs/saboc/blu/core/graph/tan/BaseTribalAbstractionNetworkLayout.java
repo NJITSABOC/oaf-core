@@ -279,7 +279,7 @@ public abstract class BaseTribalAbstractionNetworkLayout<T extends ClusterTribal
 
         int conceptCount = conceptsInPartition.size();
 
-        String conceptName = config.getTextConfiguration().getConceptTypeName(conceptCount != 1);
+        String conceptName = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount != 1);
 
         String clusterName = config.getTextConfiguration().getNodeTypeName(clusterCount != 1);
 

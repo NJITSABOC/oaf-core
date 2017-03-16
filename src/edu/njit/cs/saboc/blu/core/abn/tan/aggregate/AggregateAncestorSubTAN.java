@@ -7,7 +7,9 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateAncestorSubTANDerivation;
 
 /**
- *
+ * An aggregate TAN consisting of a chosen aggregate cluster and 
+ * all of its ancestor aggregate clusters
+ * 
  * @author Chris O
  */
 public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster> 

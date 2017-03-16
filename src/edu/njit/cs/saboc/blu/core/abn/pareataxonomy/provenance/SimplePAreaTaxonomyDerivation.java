@@ -9,7 +9,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create a regular partial-area taxonomy for an ontology
+ * or a subhierarchy of an ontology 
+ * 
  * @author Chris O
  */
 public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {

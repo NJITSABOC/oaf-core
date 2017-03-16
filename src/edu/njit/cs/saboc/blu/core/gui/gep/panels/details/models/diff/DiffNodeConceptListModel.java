@@ -28,7 +28,7 @@ public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntity
     
     public DiffNodeConceptListModel(AbNConfiguration config) {
         super(new String[] {
-            config.getTextConfiguration().getConceptTypeName(false),
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
             "ID",
             "Change",
             "Change Explanation"

@@ -16,7 +16,7 @@ public class ChildNodeTableModel<T extends Node> extends OAFAbstractTableModel<T
     public ChildNodeTableModel(AbNConfiguration config) {
         super(new String [] {
             String.format("Child %s", config.getTextConfiguration().getNodeTypeName(false)),
-            String.format("# %s", config.getTextConfiguration().getConceptTypeName(true))
+            String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
     }
     

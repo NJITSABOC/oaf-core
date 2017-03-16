@@ -35,7 +35,7 @@ public class AggregateClusterSummaryTextFactory extends ClusterSummaryTextFactor
             
             typeDesc = String.format("<b>%s</b> is a regular cluster that summarizes %d %s.",
                     rootName, rootCluster.getConceptCount(), 
-                    config.getTextConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(conceptCount > 1 || conceptCount == 0)).toLowerCase();
             
         } else {
             int aggregatedGroupCount = aggregateCluster.getAggregatedNodes().size();
@@ -44,7 +44,7 @@ public class AggregateClusterSummaryTextFactory extends ClusterSummaryTextFactor
             typeDesc = String.format("<b>%s</b> is an aggregate cluster that summarizes %d %s and %d %s.",
                     rootName, 
                     totalConceptCount, 
-                    config.getTextConfiguration().getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
+                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(totalConceptCount > 1 || totalConceptCount == 0).toLowerCase(),
                     aggregatedGroupCount,
                     config.getTextConfiguration().getNodeTypeName(aggregatedGroupCount > 1 || aggregatedGroupCount == 0).toLowerCase());
         }
@@ -55,14 +55,12 @@ public class AggregateClusterSummaryTextFactory extends ClusterSummaryTextFactor
         Set<Cluster> descendantClusters = tan.getClusterHierarchy().getDescendants(aggregateCluster);
 
         return String.format("<html>%s It has %d parent clusters(s) and %d child clusters(s). "
-                + "There are a total of %d descendant clusters(s)."
-                + "<p>"
-                + "<b>Help / Description:</b><br>%s",
+                + "There are a total of %d descendant clusters(s).",
                 typeDesc,  
                 parentCount, 
                 childCount, 
-                descendantClusters.size(), 
-                config.getTextConfiguration().getNodeHelpDescription(aggregateCluster));
+                descendantClusters.size()
+        );
     }
     
 }

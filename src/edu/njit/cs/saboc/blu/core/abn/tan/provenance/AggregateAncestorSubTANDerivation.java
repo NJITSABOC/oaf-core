@@ -10,7 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate ancestor sub TAN
+ * 
  * @author Chris O
  */
 public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation 

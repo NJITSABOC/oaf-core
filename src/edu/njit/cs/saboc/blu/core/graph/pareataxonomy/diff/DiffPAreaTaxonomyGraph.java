@@ -22,6 +22,7 @@ public class DiffPAreaTaxonomyGraph extends PAreaTaxonomyGraph<DiffPAreaTaxonomy
         super(parentFrame, diffPAreaTaxonomy, labelCreator, config);
     }
     
+    @Override
     public DiffPAreaTaxonomy getPAreaTaxonomy() {
         return (DiffPAreaTaxonomy) getAbstractionNetwork();
     }

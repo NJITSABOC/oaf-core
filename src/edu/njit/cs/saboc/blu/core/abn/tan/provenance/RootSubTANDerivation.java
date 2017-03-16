@@ -9,7 +9,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create a Root Sub TAN
+ * 
  * @author Chris O
  */
 public class RootSubTANDerivation extends ClusterTANDerivation 

@@ -57,7 +57,7 @@ public class PartitionedAbNTaskBarPanel extends TaskBarPanel {
                 partitionNodeCount, 
                 partitionedConfig.getTextConfiguration().getNodeTypeName(true),
                 singlyRootedNodeCount, 
-                partitionedConfig.getTextConfiguration().getConceptTypeName(true),
+                partitionedConfig.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                 conceptCount);
     }
 }

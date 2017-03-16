@@ -10,10 +10,24 @@ import java.util.Set;
 
 /**
  *
+ * A set of utility algorithms for abstraction networks. Defines algorithms that are 
+ * applicable to all kinds of abstraction networks.
+ * 
  * @author Chris O
  */
 public class AbstractionNetworkUtils {
 
+    
+    /**
+     * Returns details about which singly rooted nodes the parent concepts of a 
+     * given singly rooted node's root belong to.
+     * 
+     * @param <T>
+     * @param node
+     * @param conceptHierarchy
+     * @param allNodes
+     * @return 
+     */
     public static <T extends SinglyRootedNode> Set<ParentNodeDetails<T>> getSinglyRootedNodeParentNodeDetails(
             T node,
             Hierarchy<Concept> conceptHierarchy,
@@ -36,6 +50,17 @@ public class AbstractionNetworkUtils {
         return parentNodeDetails;
     }
 
+    /**
+     * 
+     * Returns details about which partition nodes contain the parent concepts
+     * of the roots of the given partitioned node.
+     * 
+     * @param <T>
+     * @param node
+     * @param hierarchy
+     * @param allNodes
+     * @return 
+     */
     public static <T extends PartitionedNode> Set<ParentNodeDetails<T>> getMultiRootedNodeParentNodeDetails(
             PartitionedNode node,
             Hierarchy<Concept> hierarchy,
@@ -62,6 +87,17 @@ public class AbstractionNetworkUtils {
         return parentNodeDetails;
     }
 
+    /**
+     * Returns the original hierarchy of nodes from a hierarchy of aggregate nodes.
+     * 
+     * "Deaggregates" a hierarchy of aggregate nodes
+     * 
+     * @param <T>
+     * @param <V>
+     * @param fullNonAggregatedHierarchy
+     * @param aggregatedAncestorHierarchy
+     * @return 
+     */
     public static <T extends SinglyRootedNode, V extends AggregateNode<T>>
             Hierarchy<T> getDeaggregatedAncestorHierarchy(
                     Hierarchy<T> fullNonAggregatedHierarchy,
@@ -89,7 +125,7 @@ public class AbstractionNetworkUtils {
                 });
 
                 potentialHierarchy.getEdges().forEach((edge) -> {
-                    if (allAggregatedNodes.contains(edge.getFrom()) && allAggregatedNodes.contains(edge.getTo())) {
+                    if (allAggregatedNodes.contains(edge.getSource()) && allAggregatedNodes.contains(edge.getTarget())) {
                         resultHierarchy.addEdge(edge);
                     }
                 });
@@ -97,6 +133,14 @@ public class AbstractionNetworkUtils {
                 return resultHierarchy;
             }
 
+    /**
+     * Computes the complete subhierarchy of concepts that are summarized by a hierarchy of nodes
+     * 
+     * @param <T>
+     * @param nodeHierarchy
+     * @param fullHierarchy
+     * @return 
+     */
     public static <T extends SinglyRootedNode> Hierarchy<Concept> getConceptHierarchy(Hierarchy<T> nodeHierarchy, Hierarchy<Concept> fullHierarchy) {
         
         Set<Concept> roots = new HashSet<>();

@@ -8,11 +8,21 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
- *
+ * A generator class for creating aggregate partial-area taxonomy objects
+ * 
  * @author Chris O
  */
 public class AggregatePAreaTaxonomyGenerator {
         
+    /**
+     * Creates an aggregate partial-area taxonomy with the chosen bound
+     * 
+     * @param sourceTaxonomy
+     * @param generator
+     * @param aggregateGenerator
+     * @param min
+     * @return 
+     */
     public PAreaTaxonomy createAggregatePAreaTaxonomy(
             final PAreaTaxonomy sourceTaxonomy,
             final PAreaTaxonomyGenerator generator,
@@ -24,7 +34,7 @@ public class AggregatePAreaTaxonomyGenerator {
         }
         
         Hierarchy<AggregatePArea> reducedPAreaHierarchy = 
-                aggregateGenerator.createReducedAbN(
+                aggregateGenerator.createAggregateAbN(
                         new AggregatePAreaTaxonomyFactory(),
                         sourceTaxonomy.getPAreaHierarchy(), 
                         sourceTaxonomy.getSourceHierarchy(),
@@ -45,6 +55,14 @@ public class AggregatePAreaTaxonomyGenerator {
                 aggregatedTaxonomy);
     }
     
+    /**
+     * Creates an expanded subtaxonomy from the given aggregate partial-area
+     * 
+     * @param sourceAggregateTaxonomy
+     * @param aggregatePArea
+     * @param generator
+     * @return 
+     */
     public ExpandedSubtaxonomy createExpandedSubtaxonomy(
             PAreaTaxonomy sourceAggregateTaxonomy,
             AggregatePArea aggregatePArea, 

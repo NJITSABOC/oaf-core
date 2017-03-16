@@ -9,8 +9,11 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateAncestorDisjo
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
 /**
- *
+ * Represents an ancestor disjoint abstraction network that has been aggregated.
+ * 
  * @author Chris O
+ * @param <PARENTABN_T>
+ * @param <PARENTNODE_T>
  */
 public class AggregateAncestorDisjointAbN<
         PARENTABN_T extends AbstractionNetwork<PARENTNODE_T>,

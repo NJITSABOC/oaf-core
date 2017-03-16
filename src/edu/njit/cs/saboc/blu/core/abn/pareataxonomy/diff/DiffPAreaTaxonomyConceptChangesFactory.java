@@ -8,7 +8,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.InheritableProp
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.explain.PropertyChangeDetailsFactory;
 
 /**
- *
+ * Factory class for creating diff partial-area taxonomy specific structural change 
+ * information that affected the concepts in a subhierarchy
+ * 
  * @author Chris O
  */
 public class DiffPAreaTaxonomyConceptChangesFactory implements DiffAbNConceptChangesFactory {
@@ -16,7 +18,6 @@ public class DiffPAreaTaxonomyConceptChangesFactory implements DiffAbNConceptCha
     private final PropertyChangeDetailsFactory propertyChangesFactory;
     
     private final PAreaTaxonomy fromTaxonomy;
-    
     private final PAreaTaxonomy toTaxonomy;
     
     public DiffPAreaTaxonomyConceptChangesFactory(
@@ -29,7 +30,6 @@ public class DiffPAreaTaxonomyConceptChangesFactory implements DiffAbNConceptCha
         this.fromTaxonomy = fromTaxonomy;
         this.toTaxonomy = toTaxonomy;
     }
-
     
     @Override
     public DiffAbNConceptChanges getConceptChanges(HierarchicalChanges hierarchyChanges) {

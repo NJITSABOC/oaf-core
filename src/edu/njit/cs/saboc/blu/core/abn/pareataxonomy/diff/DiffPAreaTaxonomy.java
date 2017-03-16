@@ -6,7 +6,10 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
 
 /**
- *
+ * A diff abstraction network that summarizes the changes in the introduction
+ * and inheritance of inheritable properties from one version of an ontology
+ * to another.
+ * 
  * @author Chris O
  */
 public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffAbstractionNetworkInstance<PAreaTaxonomy>{
@@ -26,6 +29,15 @@ public class DiffPAreaTaxonomy extends PAreaTaxonomy<DiffPArea> implements DiffA
         this.toTaxonomy = toTaxonomy;
     }
     
+    public DiffPAreaTaxonomy(DiffPAreaTaxonomy diffTaxonomy) {
+        
+        this(   diffTaxonomy.getAreaTaxonomy(), 
+                diffTaxonomy.getFrom(), 
+                diffTaxonomy.getTo(), 
+                diffTaxonomy.getPAreaHierarchy());
+    }
+    
+    @Override
     public DiffAreaTaxonomy getAreaTaxonomy() {
         return (DiffAreaTaxonomy)super.getAreaTaxonomy();
     }

@@ -4,8 +4,11 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import java.util.Set;
 
 /**
- *
+ * A visitor for building an ancestor hierarchy for a specified set of starting
+ * points
+ * 
  * @author Chris O
+ * @param <T>
  */
 public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
     
@@ -20,6 +23,7 @@ public class AncestorHierarchyBuilderVisitor<T> extends HierarchyVisitor<T> {
         this.ancestorHierarchy = ancestorHierarchy;
     }
     
+    @Override
     public void visit(T node) {
         Hierarchy<T> theHierarchy = super.getHierarchy();
         

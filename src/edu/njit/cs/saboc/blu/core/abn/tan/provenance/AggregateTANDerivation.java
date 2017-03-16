@@ -7,7 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Stores the arguments needed to create an aggregate cluster TAN
+ * 
  * @author Chris O
  */
 public class AggregateTANDerivation extends ClusterTANDerivation 

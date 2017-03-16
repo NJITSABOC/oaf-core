@@ -6,7 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
- *
+ * Base class for storing the arguments to create some kind of cluster TAN
+ * 
  * @author Chris O
  */
 public abstract class ClusterTANDerivation extends AbNDerivation<ClusterTribalAbstractionNetwork> {

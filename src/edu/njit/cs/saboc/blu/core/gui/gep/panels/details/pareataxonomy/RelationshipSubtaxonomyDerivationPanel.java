@@ -32,7 +32,7 @@ public class RelationshipSubtaxonomyDerivationPanel extends JPanel {
         
         super(new BorderLayout());
         
-        this.propertySelectionPanel = new InheritablePropertySelectionPanel(SelectionType.Multiple);
+        this.propertySelectionPanel = new InheritablePropertySelectionPanel(SelectionType.Multiple, false);
         
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.BLACK), "Select [Inheritable Property] to Use in Derivation"));

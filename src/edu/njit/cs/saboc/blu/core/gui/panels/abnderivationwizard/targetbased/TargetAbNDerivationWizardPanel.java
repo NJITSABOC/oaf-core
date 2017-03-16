@@ -108,7 +108,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         derivationOptionsPanel.add(sourceRootSelectionPanel);
         
-        this.propertyListPanel = new InheritablePropertySelectionPanel(SelectionType.Single);
+        this.propertyListPanel = new InheritablePropertySelectionPanel(SelectionType.Single, false);
         
         this.targetRootSelectionPanel = new TargetSubhierarchyRootSelectionPanel(config);
         

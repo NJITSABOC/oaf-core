@@ -9,17 +9,21 @@ import org.json.simple.JSONObject;
 /**
  *
  * @author Chris O
- * 
  * @param <T>
  * @param <V>
  */
-public class OtherSemanticRelationshipError<T extends Concept, V extends InheritableProperty> extends ErroneousSemanticRelationship<T, V> {
+public class RemoveSemanticRelationshipError<T extends Concept, V extends InheritableProperty> 
+        extends ErroneousSemanticRelationship<T, V> {
     
-    public OtherSemanticRelationshipError(Ontology<T> ontology, V relType, T target) {
+    public RemoveSemanticRelationshipError(
+            Ontology<T> ontology, 
+            V relType, 
+            T target) {
+        
         super(ontology, relType, target);
     }
     
-    public OtherSemanticRelationshipError(
+    public RemoveSemanticRelationshipError(
             Ontology<T> ontology, 
             V relType, 
             T target,
@@ -31,6 +35,6 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
 
     @Override
     public JSONObject toJSON() {
-        return super.getBaseJSON("OtherSemanticRelationshipError");
+        return super.getBaseJSON("RemoveSemanticRelationship");
     }
 }

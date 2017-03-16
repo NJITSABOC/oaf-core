@@ -21,6 +21,7 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
             ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<T>> dataRetriever,
             SimpleConceptRenderer<T> renderer,
+            boolean navigable,
             boolean showFilter,
             boolean showBorder) {
         
@@ -31,18 +32,20 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
                 showFilter,
                 showBorder);
         
-        super.addResultSelectedListener(new ResultSelectedListener<T>() {
+        if (navigable) {
+            super.addResultSelectedListener(new ResultSelectedListener<T>() {
 
-            @Override
-            public void resultSelected(T result) {
-                mainPanel.getFocusConceptManager().navigateTo(result);
-            }
+                @Override
+                public void resultSelected(T result) {
+                    mainPanel.getFocusConceptManager().navigateTo(result);
+                }
 
-            @Override
-            public void noResultSelected() {
-                
-            }
-        });
+                @Override
+                public void noResultSelected() {
+
+                }
+            });
+        }
     }
 
     @Override

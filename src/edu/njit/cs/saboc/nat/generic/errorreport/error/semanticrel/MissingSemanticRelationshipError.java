@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.util.Optional;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -49,5 +50,20 @@ public class MissingSemanticRelationshipError<T extends Concept, V extends Inher
     
     public Optional<T> getMissingTarget() {
         return missingTarget;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject object = super.getBaseJSON("MissingSemanticRelationship");
+        
+        if(missingRelType.isPresent()) {
+            object.put("missingreltypeid", missingRelType.get().getIDAsString());
+        }
+        
+        if(missingTarget.isPresent()) {
+            object.put("missingtargetid", missingTarget.get().getIDAsString());
+        }
+        
+        return object;
     }
 }

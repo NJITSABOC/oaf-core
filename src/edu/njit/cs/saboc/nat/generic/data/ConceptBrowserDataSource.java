@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.data;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.DescendantsVisitor;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -53,5 +54,8 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
     public abstract ArrayList<NATConceptSearchResult<T>> searchAnywhere(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchID(String str);
     
+    public abstract ArrayList<InheritableProperty> getAvailableProperties();
+    
     public abstract Set<T> getConceptsFromIds(Set<String> id);
+    public abstract Set<? extends InheritableProperty>  getPropertiesFromIds(Set<String> ids);
 }

@@ -24,6 +24,7 @@ public class FocusConceptAncestorsPanel<T extends Concept> extends ConceptListPa
                 dataSource, 
                 CommonBrowserDataRetrievers.getTopologicalAncestorsRetriever(dataSource), 
                 new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
+                true, 
                 showFilter,
                 true);
     }

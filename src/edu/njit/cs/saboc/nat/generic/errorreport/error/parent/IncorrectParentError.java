@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONObject;
 
 /**
  * Represents some kind of error in an existing parent of a concept
@@ -28,5 +29,13 @@ public abstract class IncorrectParentError<T extends Concept> extends ParentErro
     
     public T getErroneousParent() {
         return erroneousParent;
+    }
+    
+    @Override
+    public JSONObject getBaseJSON(String errorType) {
+        JSONObject baseJSON = super.getBaseJSON(errorType);
+        baseJSON.put("parentid", erroneousParent.getIDAsString());
+        
+        return baseJSON;
     }
 }

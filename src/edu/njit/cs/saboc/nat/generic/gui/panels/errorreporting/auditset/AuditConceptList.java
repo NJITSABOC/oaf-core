@@ -24,6 +24,7 @@ public class AuditConceptList<T extends Concept> extends ConceptListPanel<T> {
                 CommonBrowserDataRetrievers.getCurrentAuditSet(mainPanel), 
                 new SimpleConceptRenderer(dataSource, HierarchyDisplayInfo.None),
                 true,
+                true,
                 false);
     }
     

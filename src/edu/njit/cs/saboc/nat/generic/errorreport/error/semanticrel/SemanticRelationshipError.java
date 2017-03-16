@@ -10,14 +10,17 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
  * 
  * @param <T>
  */
-public class SemanticRelationshipError<T extends Concept> extends OntologyError<T> {
+public abstract class SemanticRelationshipError<T extends Concept> extends OntologyError<T> {
     
     public SemanticRelationshipError(Ontology<T> ontology) {
         super(ontology, "", OntologyError.Severity.NonCritical);
     }
     
-    public SemanticRelationshipError(Ontology<T> ontology, String comment, OntologyError.Severity severity) {
+    public SemanticRelationshipError(
+            Ontology<T> ontology, 
+            String comment, 
+            OntologyError.Severity severity) {
+        
        super(ontology, comment, severity);
     }
-    
 }

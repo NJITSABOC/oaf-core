@@ -27,5 +27,4 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
     public abstract boolean errorReady();
     
     public abstract V getError();
-    public abstract void displayError(V error);
 }

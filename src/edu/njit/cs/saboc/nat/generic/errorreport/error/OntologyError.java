@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONObject;
 
 /**
  * Represents an error reported in an ontology
@@ -53,5 +54,19 @@ public abstract class OntologyError<T extends Concept> {
     
     public Severity getSeverity() {
         return severity;
+    }
+    
+    public abstract JSONObject toJSON();
+    
+    protected JSONObject getBaseJSON(String type) {
+        JSONObject object = new JSONObject();
+        object.put("type", type);
+        object.put("severity", severity.toString());
+        
+        if(!comment.isEmpty()) {
+            object.put("comment", comment);
+        }
+        
+        return object;
     }
 }

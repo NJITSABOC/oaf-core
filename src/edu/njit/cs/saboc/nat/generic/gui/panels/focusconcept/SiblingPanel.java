@@ -34,6 +34,7 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
                 CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource),
                 new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
                 true,
+                true,
                 true);
 
         this.chkShowStrictOnly = new JCheckBox("Show Strict Siblings Only");

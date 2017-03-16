@@ -70,7 +70,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
             @Override
             public void mouseClicked(MouseEvent e) {
                 
-                if (e.getClickCount() == 2) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
                     List<Filterable<V>> selectedValues = list.getSelectedValues();
 
                     if (!selectedValues.isEmpty()) {

@@ -10,7 +10,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
  * @author Chris O
  * @param <T>
  */
-public class ParentError<T extends Concept> extends OntologyError<T> {
+public abstract class ParentError<T extends Concept> extends OntologyError<T> {
     
     public ParentError(Ontology<T> ontology) {
         super(ontology, "", Severity.NonCritical);

@@ -25,6 +25,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
                 dataSource, 
                 CommonBrowserDataRetrievers.getChildrenRetriever(dataSource), 
                 new SimpleConceptRenderer<>(dataSource, HierarchyDisplayInfo.Descendants),
+                true,
                 showFilter,
                 true);
     }

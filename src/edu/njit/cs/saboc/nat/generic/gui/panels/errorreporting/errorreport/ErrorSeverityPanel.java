@@ -37,13 +37,19 @@ public class ErrorSeverityPanel<T extends Concept> extends BaseNATPanel<T> {
             selectedSeverity = Severity.NonCritical;
         });
         
+        btnNonCritical.setForeground(new Color(0, 212, 255));
+        
         btnModerate.addActionListener( (ae) -> {
             selectedSeverity = Severity.Moderate;
         });
         
+        btnModerate.setForeground(new Color(255, 128, 0));
+        
         btnSevere.addActionListener( (ae) -> {
             selectedSeverity = Severity.Severe;
         });
+        
+        btnSevere.setForeground(Color.RED);
         
         ButtonGroup group = new ButtonGroup();
         

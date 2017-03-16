@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Optional;
+import org.json.simple.JSONObject;
 
 /**
  * A report of a parent missing from a concept
@@ -33,5 +34,16 @@ public class MissingParentError<T extends Concept> extends ParentError<T> {
     
     public Optional<T> getMissingParent() {
         return missingParent;
+    }
+    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject errorObject = super.getBaseJSON("MissingParent");
+        
+        if(missingParent.isPresent()) {
+            errorObject.put("parentid", missingParent.get().getIDAsString());
+        }
+        
+        return errorObject;
     }
 }

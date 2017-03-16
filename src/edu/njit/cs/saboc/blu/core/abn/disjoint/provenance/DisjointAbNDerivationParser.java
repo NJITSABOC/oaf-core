@@ -5,11 +5,9 @@
  */
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
-import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivationParser;
-import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
@@ -17,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.AccessibleRole;
-import javax.swing.Action;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

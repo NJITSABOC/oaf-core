@@ -2,6 +2,7 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
@@ -28,5 +29,99 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
                 true,
                 showFilter,
                 true);
+        
+        
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Erroneous child (remove)") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error with child (describe)") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Missing child (add)") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                doEmptyAction();
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return true;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                doEmptyAction();
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return true;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
     }
 }

@@ -35,7 +35,6 @@ public abstract class BaseFilterableRenderer<T> extends JPanel
             this.setBorder(BorderFactory.createEmptyBorder());
         }
 
-        
         if(isSelected) {
             this.setBackground(new Color(0, 0, 255, 50));
         } else {

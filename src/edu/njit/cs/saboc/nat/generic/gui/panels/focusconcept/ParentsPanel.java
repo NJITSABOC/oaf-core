@@ -31,7 +31,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
                 true);
         
         
-        super.addRightClickMenuItem(new EntityRightClickMenuItem<T>("TEST!") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Erroneous parent (remove)") {
 
             @Override
             public boolean isEnabledFor(T item) {
@@ -54,16 +54,85 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        super.addRightClickMenuItem(new EntityRightClickMenuItem<T>("TEST 2!") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Redundant parent (remove)") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return false;
+                return true;
             }
 
             @Override
             public void doActionFor(T item) {
                 
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error with parent (describe)") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Missing parent (add)") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                doEmptyAction();
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return true;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return true;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                doEmptyAction();
             }
 
             @Override

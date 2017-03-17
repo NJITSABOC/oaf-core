@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -13,15 +14,22 @@ import javax.swing.JPopupMenu;
  * @param <T>
  */
 public class EntityRightClickManager<T> {
+            
+    private final JLabel nameLabel;
     
     private final JPopupMenu popup = new JPopupMenu();
     
     private final Map<EntityRightClickMenuItem, JMenuItem> menuItems = new HashMap<>();
-    
+        
     private Optional<T> rightClickedItem;
-
+    
     public EntityRightClickManager(){
         this.rightClickedItem = Optional.empty();
+        
+        this.nameLabel = new JLabel("(no selection)");
+        
+        this.popup.add(nameLabel);
+        this.popup.addSeparator();
     }
 
     public void setRightClickedItem(T item) {
@@ -30,6 +38,8 @@ public class EntityRightClickManager<T> {
         menuItems.forEach((action, menuItem) -> {
             menuItem.setEnabled(action.isEnabledFor(item));
         });
+        
+        nameLabel.setText(item.toString());
     }
     
     public void clearRightClickedItem() {
@@ -38,6 +48,8 @@ public class EntityRightClickManager<T> {
         menuItems.forEach((action, menuItem) -> {
             menuItem.setEnabled(action.enabledWhenNoSelection());
         });
+        
+        this.nameLabel.setText("(no selection)");
     }
     
     public void addMenuItem(EntityRightClickMenuItem item) {

@@ -33,11 +33,11 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
         
         
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Erroneous child (remove)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Remove erroneous child") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -56,11 +56,11 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error with child (describe)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Report other error with child") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -79,11 +79,11 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Missing child (add)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Add missing child") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return enabledWhenNoSelection();
             }
 
             @Override
@@ -93,7 +93,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public boolean enabledWhenNoSelection() {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -102,11 +102,11 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Report other error") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return enabledWhenNoSelection();
             }
 
             @Override
@@ -116,7 +116,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public boolean enabledWhenNoSelection() {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override

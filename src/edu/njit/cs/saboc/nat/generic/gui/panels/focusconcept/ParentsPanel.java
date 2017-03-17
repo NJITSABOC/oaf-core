@@ -32,11 +32,11 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
                 true);
         
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Erroneous parent (remove)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Remove erroneous parent") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -55,11 +55,11 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Redundant parent (remove)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Remove redundant parent") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -78,11 +78,34 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error with parent (describe)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Replace erroneous parent") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                ErrorReportDialog.displayReplaceParentDialog(mainPanel, dataSource, item);
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Report other error with parent") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -101,11 +124,11 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Missing parent (add)") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Add missing parent") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return enabledWhenNoSelection();
             }
 
             @Override
@@ -115,7 +138,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public boolean enabledWhenNoSelection() {
-                return true;
+                return mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override
@@ -124,11 +147,11 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             }
         });
         
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Other error") {
+        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Report other error") {
 
             @Override
             public boolean isEnabledFor(T item) {
-                return true;
+                return enabledWhenNoSelection();
             }
 
             @Override
@@ -138,7 +161,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public boolean enabledWhenNoSelection() {
-                return true;
+                return  mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
             }
 
             @Override

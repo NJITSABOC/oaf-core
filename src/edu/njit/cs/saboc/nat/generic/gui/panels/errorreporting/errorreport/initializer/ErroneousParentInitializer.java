@@ -34,4 +34,9 @@ public class ErroneousParentInitializer<T extends Concept> implements ErrorRepor
     public ErroneousParentError<T> generateError(String comment, OntologyError.Severity severity) {
         return new ErroneousParentError(theOntology, erroneousParent, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Erroneous Parent Concept";
+    }
 }

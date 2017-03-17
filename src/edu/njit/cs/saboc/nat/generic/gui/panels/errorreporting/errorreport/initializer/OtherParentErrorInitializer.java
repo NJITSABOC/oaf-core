@@ -34,5 +34,10 @@ public class OtherParentErrorInitializer<T extends Concept> implements ErrorRepo
     public OtherParentError<T> generateError(String comment, OntologyError.Severity severity) {
         return new OtherParentError(theOntology, erroneousParent, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Other Error with Parent Concept";
+    }
     
 }

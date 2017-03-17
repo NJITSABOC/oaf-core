@@ -34,4 +34,9 @@ public class ErroneousChildInitializer<T extends Concept> implements ErrorReport
     public ErroneousChildError<T> generateError(String comment, OntologyError.Severity severity) {
         return new ErroneousChildError(theOntology, erroneousChild, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Erroneous Child Concept";
+    }
 }

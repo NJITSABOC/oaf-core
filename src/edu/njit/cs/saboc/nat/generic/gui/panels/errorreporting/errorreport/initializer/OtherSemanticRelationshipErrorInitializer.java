@@ -46,4 +46,9 @@ public class OtherSemanticRelationshipErrorInitializer<T extends Concept, V exte
     public OtherSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
         return new OtherSemanticRelationshipError<>(theOntology, erroneousRelType, erroneousTarget, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Other Error with Semantic Relationship";
+    }
 }

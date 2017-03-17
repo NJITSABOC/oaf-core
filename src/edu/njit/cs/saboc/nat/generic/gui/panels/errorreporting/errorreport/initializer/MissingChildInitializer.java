@@ -40,4 +40,9 @@ public class MissingChildInitializer<T extends Concept> implements MissingConcep
         
         return error;
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Missing Child Concept";
+    }
 }

@@ -46,4 +46,9 @@ public class ErroneousSemanticRelationshipInitializer<T extends Concept, V exten
     public RemoveSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
         return new RemoveSemanticRelationshipError<>(theOntology, erroneousRelType, erroneousTarget, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Erroneous Semantic Relationship";
+    }
 }

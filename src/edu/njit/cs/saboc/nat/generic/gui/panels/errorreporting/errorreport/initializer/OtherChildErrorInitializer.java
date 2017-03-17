@@ -35,5 +35,10 @@ public class OtherChildErrorInitializer<T extends Concept> implements ErrorRepor
     public OtherChildError<T> generateError(String comment, OntologyError.Severity severity) {
         return new OtherChildError<>(theOntology, erroneousChild, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Other Error with Child Concept";
+    }
     
 }

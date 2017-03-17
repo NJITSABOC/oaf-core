@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptR
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
 
 /**
  * Displays the parents of the focus concept
@@ -40,7 +41,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doActionFor(T item) {
-                
+                ErrorReportDialog.displayErroneousParentDialog(mainPanel, dataSource, item);
             }
 
             @Override
@@ -63,7 +64,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doActionFor(T item) {
-                
+                ErrorReportDialog.displayRedundantParentErrorDialog(mainPanel, dataSource, item);
             }
 
             @Override
@@ -86,7 +87,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doActionFor(T item) {
-                
+                ErrorReportDialog.displayOtherParentErrorDialog(mainPanel, dataSource, item);
             }
 
             @Override
@@ -119,7 +120,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doEmptyAction() {
-                
+                ErrorReportDialog.displayMissingParentDialog(mainPanel, dataSource);
             }
         });
         
@@ -142,9 +143,8 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doEmptyAction() {
-                
+                ErrorReportDialog.displayOtherErrorDialog(mainPanel, dataSource);
             }
         });
-        
     }
 }

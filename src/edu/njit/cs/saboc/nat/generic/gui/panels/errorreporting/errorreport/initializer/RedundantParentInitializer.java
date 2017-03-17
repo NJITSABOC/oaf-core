@@ -34,4 +34,9 @@ public class RedundantParentInitializer<T extends Concept> implements ErrorRepor
     public RedundantParentError<T> generateError(String comment, OntologyError.Severity severity) {
         return new RedundantParentError(theOntology, erroneousParent, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Reundant Parent Concept";
+    }
 }

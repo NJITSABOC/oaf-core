@@ -63,4 +63,9 @@ public class MissingSemanticRelationshipInitializer<T extends Concept, V extends
         
         return error;
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Missing Semantic Relationship";
+    }
 }

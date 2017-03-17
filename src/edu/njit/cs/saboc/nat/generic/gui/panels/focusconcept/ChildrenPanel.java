@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptR
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
 
 /**
  * Panel for displaying the children of the focus concept
@@ -41,7 +42,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doActionFor(T item) {
-                
+                ErrorReportDialog.displayErroneousChildDialog(mainPanel, dataSource, item);
             }
 
             @Override
@@ -64,7 +65,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doActionFor(T item) {
-                
+                ErrorReportDialog.displayOtherChildErrorDialog(mainPanel, dataSource, item);
             }
 
             @Override
@@ -97,7 +98,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doEmptyAction() {
-                
+                ErrorReportDialog.displayMissingChildDialog(mainPanel, dataSource);
             }
         });
         
@@ -120,7 +121,7 @@ public class ChildrenPanel<T extends Concept> extends ConceptListPanel<T> {
 
             @Override
             public void doEmptyAction() {
-                
+                ErrorReportDialog.displayOtherErrorDialog(mainPanel, dataSource);
             }
         });
     }

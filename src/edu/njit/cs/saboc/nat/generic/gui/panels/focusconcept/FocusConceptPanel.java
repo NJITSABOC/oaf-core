@@ -226,7 +226,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!pending && e.getClickCount() == 2) {
+                if(!pending && e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
                     
                     if(!jtf.isEditable() ){
                         openEditorPane();

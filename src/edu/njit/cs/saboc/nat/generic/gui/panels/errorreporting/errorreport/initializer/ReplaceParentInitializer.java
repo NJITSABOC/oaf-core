@@ -43,4 +43,9 @@ public class ReplaceParentInitializer<T extends Concept> implements MissingConce
 
         return error;
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Replace Erroneous Parent Concept";
+    }
 }

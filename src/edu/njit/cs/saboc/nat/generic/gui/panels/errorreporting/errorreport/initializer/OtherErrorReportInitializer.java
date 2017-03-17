@@ -34,4 +34,9 @@ public class OtherErrorReportInitializer<T extends Concept> implements ErrorRepo
     public OtherError<T> generateError(String comment, OntologyError.Severity severity) {
         return new OtherError<>(ontology, comment, severity);
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Other Type of Error";
+    }
 }

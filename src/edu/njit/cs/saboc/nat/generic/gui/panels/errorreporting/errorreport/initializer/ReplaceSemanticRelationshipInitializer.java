@@ -71,4 +71,9 @@ public class ReplaceSemanticRelationshipInitializer <T extends Concept, V extend
         
         return error;
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Replace Erroneous Semantic Relationship";
+    }
 }

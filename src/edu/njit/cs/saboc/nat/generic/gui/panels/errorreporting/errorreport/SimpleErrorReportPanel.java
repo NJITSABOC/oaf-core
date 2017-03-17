@@ -102,4 +102,9 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
                 auditCommentPanel.getComment(), 
                 errorSeverityPanel.getSeverity());
     }
+
+    @Override
+    public Optional<? extends ErrorReportPanelInitializer> getInitializer() {
+        return this.initializer;
+    }
 }

@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.ErrorReportPanelInitializer;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.MissingRelationshipInitializer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -206,5 +207,10 @@ public class SelectRelationshipErrorReportPanel<T extends Concept, V extends Inh
     @Override
     public boolean errorReady() {
         return true;
+    }
+
+    @Override
+    public Optional<? extends ErrorReportPanelInitializer> getInitializer() {
+        return this.initializer;
     }
 }

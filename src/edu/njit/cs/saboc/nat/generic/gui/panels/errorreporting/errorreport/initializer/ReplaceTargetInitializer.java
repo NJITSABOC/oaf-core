@@ -52,4 +52,9 @@ public class ReplaceTargetInitializer<T extends Concept, V extends InheritablePr
         
         return error;
     }
+
+    @Override
+    public String getErrorTypeName() {
+        return "Replace Erroneous Semantic Relationship Target";
+    }
 }

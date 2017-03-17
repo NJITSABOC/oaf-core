@@ -9,6 +9,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
  * @param <V>
  */
 public interface ErrorReportPanelInitializer<V extends OntologyError> {
+    public String getErrorTypeName();
     
     public String getStyledErrorDescriptionText();
     public OntologyError.Severity getDefaultSeverity();

@@ -1,26 +1,24 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
+package edu.njit.cs.saboc.blu.core.utils.rightclickmanager;
 
 import java.util.Objects;
 
 /**
  *
- * @author cro3
+ * @author Chris O
+ * 
+ * @param <T>
  */
-public abstract class EntityListRightClickMenuItem<T> {
+public abstract class EntityRightClickMenuItem<T> {
 
     private final String itemName;
 
-    public EntityListRightClickMenuItem(String itemName) {
+    public EntityRightClickMenuItem(String itemName) {
         this.itemName = itemName;
     }
 
     public String getItemName() {
         return itemName;
     }
-
-    public abstract boolean isEnabledFor(T item);
-
-    public abstract void doActionFor(T item);
 
     @Override
     public int hashCode() {
@@ -40,7 +38,7 @@ public abstract class EntityListRightClickMenuItem<T> {
             return false;
         }
 
-        final EntityListRightClickMenuItem other = (EntityListRightClickMenuItem) obj;
+        final EntityRightClickMenuItem other = (EntityRightClickMenuItem) obj;
 
         if (!Objects.equals(this.itemName, other.itemName)) {
             return false;
@@ -48,4 +46,10 @@ public abstract class EntityListRightClickMenuItem<T> {
 
         return true;
     }
+    
+    public abstract boolean isEnabledFor(T item);
+    public abstract void doActionFor(T item);
+    
+    public abstract boolean enabledWhenNoSelection();
+    public abstract void doEmptyAction();
 }

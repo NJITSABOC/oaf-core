@@ -1,9 +1,11 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,7 +51,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     private final JPanel filterPanel;
 
-    private final EntityListRightClickMenu rightClickMenu;
+    private final EntityRightClickManager<T> rightClickManager;
     
     private final NodeOptionsPanel optionsPanel;
 
@@ -159,9 +161,26 @@ public abstract class AbstractEntityList<T> extends JPanel {
             }
         });
 
-        rightClickMenu = new EntityListRightClickMenu<>(this);
+        rightClickManager = new EntityRightClickManager<>();
         
-        entityTable.addMouseListener(rightClickMenu.getListener());
+        entityTable.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                    
+                    int row = entityTable.rowAtPoint(e.getPoint());
+                    
+                    if(row >= 0) {
+                        rightClickManager.setRightClickedItem(tableModel.getItemAtRow(row));
+                    } else {
+                        rightClickManager.clearRightClickedItem();
+                    }
+                    
+                    rightClickManager.showPopup(e);
+                }
+            }
+        });
         
         optionsPanel = new NodeOptionsPanel();
 
@@ -299,8 +318,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable.getColumnModel().getColumn(column).setCellRenderer(renderer);
     }
     
-    public void addRightClickMenuItem() {
-        
+    public void addRightClickMenuItem(EntityRightClickMenuItem<T> rightClickMenuItem) {
+        this.rightClickManager.addMenuItem(rightClickMenuItem);
     }
 
     public void addOptionButton(JButton btn) {

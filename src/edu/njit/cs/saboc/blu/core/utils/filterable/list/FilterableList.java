@@ -244,8 +244,17 @@ public class FilterableList<T> extends JPanel {
         return selectedItems;
     }
     
+    public Filterable<T> getItemAtIndex(int index) {
+        return entryModel.get(index);
+    }
+    
     public int getSelectedIndex() {
         return list.getSelectedIndex();
+    }
+    
+    //select a particular row in JList
+    public void setSelectedIndex(int row){
+        this.list.setSelectedIndex(row);
     }
     
     //select a particular row in JList

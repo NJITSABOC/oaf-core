@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearche
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public class SelectOntologyRootPanel<T extends Concept> extends RootSelectionPan
                 });
             }
         });
-        
+                
         this.setLayout(new BorderLayout());
         
         this.add(this.ontologyRootList, BorderLayout.CENTER);

@@ -1,10 +1,15 @@
 package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
-import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterPanel;
+import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterPanel.FilterPanelListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +37,8 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         public void propertiesSelected(Set<InheritableProperty> properties);
     }
     
+    private ButtonGroup buttonGroup;
+    
     private final ArrayList<JToggleButton> propertyBoxes;
     private final ArrayList<InheritableProperty> availableProperties;
     
@@ -42,12 +49,18 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
     
     private final JScrollPane propertyScroller;
     
+    private final FilterPanel filterPanel;
+    
     private final SelectionType selectionType;
+    
+    private final boolean showFilter;
     
     private final ArrayList<InheritablePropertySelectionListener> selectedPropertiesChangedListeners = new ArrayList<>();
     
-    public InheritablePropertySelectionPanel(SelectionType selectionType) {
+    public InheritablePropertySelectionPanel(SelectionType selectionType, boolean showFilter) {
+        
         this.selectionType = selectionType;
+        this.showFilter = showFilter;
         
         this.setLayout(new BorderLayout());
         
@@ -68,6 +81,8 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
             propertyBoxes.forEach( (cb) -> {
                cb.setSelected(false);
             });
+            
+            buttonGroup.clearSelection();
         });
         
         btnSelectAll = new JButton("Select All");
@@ -84,8 +99,45 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         if(this.selectionType == SelectionType.Multiple) {
             selectionBtnPanel.add(btnSelectAll);
         }
+        
+        this.buttonGroup = new ButtonGroup();
 
-        this.add(selectionBtnPanel, BorderLayout.SOUTH);
+        this.filterPanel = new FilterPanel();
+        this.filterPanel.addFilterPanelListener(new FilterPanelListener() {
+
+            @Override
+            public void filterChanged(String filter) {
+                filter(filter);
+            }
+
+            @Override
+            public void filterClosed() {
+                showFilterPanel(false);
+            }
+            
+        });
+        
+        JPanel optionPanel = new JPanel(new BorderLayout());
+        
+        if(showFilter) {
+            JButton filterButton = new JButton();
+
+            filterButton.setPreferredSize(new Dimension(24, 24));
+            filterButton.setIcon(ImageManager.getImageManager().getIcon("filter.png"));
+            filterButton.setToolTipText("Filter these entries");
+            filterButton.addActionListener((ae) -> {
+                showFilterPanel(!filterPanel.isShowing());
+            });
+            
+            optionPanel.add(filterButton, BorderLayout.WEST);
+            optionPanel.add(filterPanel, BorderLayout.CENTER);
+            
+            showFilterPanel(false);
+        }
+        
+        optionPanel.add(selectionBtnPanel, BorderLayout.EAST);
+        
+        this.add(optionPanel, BorderLayout.SOUTH);
     }
     
     public void addSelectedPropertiesChangedListener(InheritablePropertySelectionListener listener) {
@@ -94,6 +146,41 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
     
     public void removeSelectedPropertiesChangedListener(InheritablePropertySelectionListener listener) {
         this.selectedPropertiesChangedListeners.remove(listener);
+    }
+    
+    public final void showFilterPanel(boolean value) {
+
+        if (value) {
+            filterPanel.reset();
+        } else {
+            filter("");
+        }
+
+        filterPanel.setVisible(value);
+    }
+    
+    private void filter(String str) {
+        if(availableProperties.isEmpty()) {
+            return;
+        }
+        
+        if(str.isEmpty()) {
+            propertyBoxes.forEach( (btn) -> {
+                btn.setVisible(true);
+            });
+            
+            return;
+        }
+        
+        for(int c = 0; c < availableProperties.size(); c++) {
+            InheritableProperty property = availableProperties.get(c);
+            
+            if(property.getName().toLowerCase().contains(str.toLowerCase())) {
+                propertyBoxes.get(c).setVisible(true);
+            } else {
+                propertyBoxes.get(c).setVisible(false);
+            }
+        }
     }
     
     public Set<InheritableProperty> getAvailableProperties() {
@@ -112,6 +199,7 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         return propertyDetails;
     }
     
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
         
@@ -119,6 +207,7 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         btnSelectAll.setEnabled(value);
     }
     
+    @Override
     public void clearContents() {
         propertyBoxes.clear();
         availableProperties.clear();
@@ -128,6 +217,7 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         propertyListPanel.removeAll();
     }
     
+    @Override
     public void resetView() {
         clearContents();
         
@@ -144,7 +234,7 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
 
         this.propertyListPanel.removeAll();
 
-        ButtonGroup buttonGroup = new ButtonGroup();
+        this.buttonGroup = new ButtonGroup();
 
         availableProperties.forEach( (property) -> {
             String propertyName = property.getName();
@@ -165,6 +255,30 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
             chkSelectProperty.addActionListener( (ae) -> {
                 fireSelectedPropertiesChangedListeners();
             });
+            
+            if (showFilter) {
+                chkSelectProperty.addKeyListener(new KeyAdapter() {
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (chkSelectProperty.hasFocus()) {
+                            showFilterPanel(true);
+
+                            filterPanel.filteringStarted(Character.toString(e.getKeyChar()));
+                        }
+                    }
+                });
+            }
 
             propertyBoxes.add(chkSelectProperty);
             propertyListPanel.add(chkSelectProperty);

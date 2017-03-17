@@ -1,17 +1,13 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.MissingSemanticRelationshipError;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.SelectRelationshipErrorReportPanel;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.MissingSemanticRelationshipInitializer;
-import javax.swing.JDialog;
 
 /**
  * Displays the parents of the focus concept
@@ -34,25 +30,49 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
                 showFilter,
                 true);
         
-        super.addResultSelectedListener(new ResultSelectedListener<T>() {
+        
+        super.addRightClickMenuItem(new EntityRightClickMenuItem<T>("TEST!") {
 
             @Override
-            public void resultSelected(T result) {
-                JDialog testDialog = new JDialog();
-                
-                SelectRelationshipErrorReportPanel<T, InheritableProperty, MissingSemanticRelationshipError<T, InheritableProperty>> missingParentPanel = 
-                        new SelectRelationshipErrorReportPanel<>(mainPanel, dataSource);
-                
-                missingParentPanel.setInitializer(new MissingSemanticRelationshipInitializer<>(dataSource.getOntology()));
-                
-                testDialog.add(missingParentPanel);
-                testDialog.setModal(true);
-                testDialog.setSize(1000, 800);
-                testDialog.setVisible(true);
+            public boolean isEnabledFor(T item) {
+                return true;
             }
 
             @Override
-            public void noResultSelected() {
+            public void doActionFor(T item) {
+                
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return false;
+            }
+
+            @Override
+            public void doEmptyAction() {
+                
+            }
+        });
+        
+        super.addRightClickMenuItem(new EntityRightClickMenuItem<T>("TEST 2!") {
+
+            @Override
+            public boolean isEnabledFor(T item) {
+                return false;
+            }
+
+            @Override
+            public void doActionFor(T item) {
+                
+            }
+
+            @Override
+            public boolean enabledWhenNoSelection() {
+                return true;
+            }
+
+            @Override
+            public void doEmptyAction() {
                 
             }
         });

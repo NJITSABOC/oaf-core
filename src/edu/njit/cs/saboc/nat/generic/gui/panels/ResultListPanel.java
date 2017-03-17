@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
@@ -20,9 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.TitledBorder;
 
@@ -48,6 +48,8 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     private final ArrayList<ResultSelectedListener<V>> resultSelectedListeners = new ArrayList<>();
     
     private final ArrayList<DataLoadedListener<ArrayList<V>>> dataLoadedListeners = new ArrayList<>();
+    
+    private final EntityRightClickManager<V> rightClickManager = new EntityRightClickManager<>();
     
     private final boolean showBorder;
     
@@ -84,13 +86,19 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
                     }
                 }
                 
-                //right click to select and show pop up menu
                 if (e.getButton() == MouseEvent.BUTTON3){
-                    int row = list.locationToIndex(e); // find the (right-clicked)selected row
-                    list.setSelectedIndex(row); //select the row
-                    rightClick(e); //show popup
+                    int index = list.locationToIndex(e);
+                    
+                    if(index >= 0) {
+                        V item = list.getItemAtIndex(index).getObject();
+                        
+                        rightClickManager.setRightClickedItem(item);
+                    } else {
+                        rightClickManager.clearRightClickedItem();
+                    }
+                    
+                    rightClickManager.showPopup(e);
                 }
-                
             }
         });
         
@@ -125,6 +133,10 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         optionsPanel.add(component, 0);
         optionsPanel.add(Box.createHorizontalStrut(16), 0);
     }
+    
+    public final void addRightClickMenuItem(EntityRightClickMenuItem<V> menuItem) {
+        this.rightClickManager.addMenuItem(menuItem);
+    }
 
     public void addDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {
         this.dataLoadedListeners.add(listener);
@@ -141,26 +153,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     public void removeResultSelectedListener(ResultSelectedListener<V> listener) {
         this.resultSelectedListeners.remove(listener);
     }
-    
-   
-    protected void rightClick(MouseEvent e){
-        
-        final JPopupMenu popup = new JPopupMenu();
 
-        JMenuItem reportMenu = new JMenuItem("report");
-
-        JMenuItem closeMenu = new JMenuItem("close");
-
-        //do something with reportMenu...
-
-        popup.add(reportMenu);
-        popup.add(closeMenu);
-
-
-        popup.show(e.getComponent(), e.getX(), e.getY());
-
-   }
-   
     @Override
     public void dataPending() {
         list.showPleaseWait();

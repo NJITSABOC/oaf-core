@@ -52,4 +52,6 @@ public abstract class BaseFilterableRenderer<T> extends JPanel
 
         return this;
     }
+    
+    public abstract void showDetailsFor(Filterable<T> element);
 }

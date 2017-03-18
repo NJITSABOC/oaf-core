@@ -2,8 +2,9 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.concept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
-import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableNestedEntryPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.ExtendedNeighborhoodResult;
 import java.awt.BorderLayout;
@@ -21,7 +22,10 @@ import javax.swing.JPanel;
 public class GrandparentEntryPanel <T extends Concept, V extends ExtendedNeighborhoodResult<T>> 
             extends FilterableNestedEntryPanel<FilterableExtendedNeighborhoodEntry<T, V>> {
     
-    public GrandparentEntryPanel(FilterableExtendedNeighborhoodEntry<T, V> entry, ConceptBrowserDataSource<T> dataSource) {
+    public GrandparentEntryPanel(
+            NATBrowserPanel<T> mainPanel, 
+            FilterableExtendedNeighborhoodEntry<T, V> entry, 
+            ConceptBrowserDataSource<T> dataSource) {
         
         super(entry);
         
@@ -34,10 +38,11 @@ public class GrandparentEntryPanel <T extends Concept, V extends ExtendedNeighbo
         entry.getExpandedNeighborhoodEntries().forEach((grandParentEntry) -> {
 
             ConceptEntryPanel grandParentEntryPanel = new ConceptEntryPanel(
+                    mainPanel,
                     grandParentEntry, 
                     entry.getCurrentFilter(), 
                     dataSource, 
-                    HierarchyDisplayInfo.None);
+                    new SimpleConceptRenderer<>(mainPanel, dataSource));
             
             this.add(grandParentEntryPanel);
 
@@ -47,10 +52,11 @@ public class GrandparentEntryPanel <T extends Concept, V extends ExtendedNeighbo
         Filterable<T> parentEntry = entry.getDirectNeighborhoodEntry();
         
         ConceptEntryPanel parentEntryPanel = new ConceptEntryPanel(
+                mainPanel,
                 parentEntry, 
                 entry.getCurrentFilter(), 
                 dataSource, 
-                HierarchyDisplayInfo.None);
+                new SimpleConceptRenderer<>(mainPanel, dataSource));
         
         JPanel indentPanel = new JPanel(new BorderLayout());
         indentPanel.add(Box.createHorizontalStrut(32), BorderLayout.WEST);

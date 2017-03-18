@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.ErrorSubmissionPanel.ErrorSubmissionListener;
 import java.awt.BorderLayout;
 import java.util.Optional;
 import javax.swing.JPanel;
@@ -42,7 +41,7 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
         this.errorSubmissionPanel = new ErrorSubmissionPanel<>(
                 mainPanel, 
                 dataSource, 
-                new ErrorSubmissionListener() {
+                new ErrorSubmissionPanel.ErrorSubmissionListener() {
 
                     @Override
                     public void resetClicked() {
@@ -51,7 +50,7 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
 
                     @Override
                     public void submitClicked() {
-                        
+                        submitError();
                     }
         });
         
@@ -78,12 +77,11 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
             this.errorSeverityPanel.setSeverity(theInitializer.getDefaultSeverity());
             this.auditCommentPanel.reset();
         }
-
     }
 
     @Override
     public boolean errorReady() {
-        return false;
+        return true;
     }
     
     public void setInitializer(ErrorReportPanelInitializer<V> initializer) {

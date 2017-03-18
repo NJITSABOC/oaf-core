@@ -13,8 +13,8 @@ import java.util.Optional;
  */
 public class AuditDatabase<T extends Concept> {
 
-    public interface AuditChangeListener {
-        public void auditConceptChanged();
+    public interface AuditDatabaseChangeListener {
+        public void auditSetChanged();
     }
     
     private Optional<AuditSet<T>> loadedAuditSet;
@@ -22,7 +22,7 @@ public class AuditDatabase<T extends Concept> {
     private final NATBrowserPanel<T> mainPanel;
     private final ConceptBrowserDataSource<T> dataSource;
     
-    private final ArrayList<AuditChangeListener> changeListeners = new ArrayList<>();
+    private final ArrayList<AuditDatabaseChangeListener> changeListeners = new ArrayList<>();
 
     public AuditDatabase(
             NATBrowserPanel<T> mainPanel, 
@@ -34,17 +34,33 @@ public class AuditDatabase<T extends Concept> {
         this.dataSource = dataSource;
     }
     
+    public void addAuditDatabaseChangeListener(AuditDatabaseChangeListener listener) {
+        changeListeners.add(listener);
+    }
+    
+    public void removeAuditDatabaseChangeListener(AuditDatabaseChangeListener listener) {
+        changeListeners.remove(listener);
+    }
+    
     public void setAuditSet(AuditSet<T> auditSet) {
         this.loadedAuditSet = Optional.of(auditSet);
+        
+        auditSet.addAuditSetChangedListener(new AuditSetChangedAdapter<T>() {
+
+            @Override
+            public void auditSetChanged() {
+                loadedAuditSetChanged();
+            }
+        });
     }
     
     public Optional<AuditSet<T>> getLoadedAuditSet() {
         return loadedAuditSet;
     }
 
-    private void auditConceptChanged() {
-        changeListeners.forEach( (listener) -> {
-            listener.auditConceptChanged();
+    private void loadedAuditSetChanged() {
+        changeListeners.forEach((listener) -> {
+            listener.auditSetChanged();
         });
     }
 }

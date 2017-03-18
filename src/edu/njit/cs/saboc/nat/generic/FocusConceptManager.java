@@ -55,8 +55,12 @@ public class FocusConceptManager<T extends Concept> {
     public void navigateToRoot() {
         navigateTo(dataSource.getOntology().getConceptHierarchy().getRoot());
     }
+    
+    public final void refresh() {
+        navigateTo(this.getActiveFocusConcept(), false);
+    }
 
-    public void navigateTo(T concept) {
+    public final void navigateTo(T concept) {
         navigateTo(concept, true);
     }
     

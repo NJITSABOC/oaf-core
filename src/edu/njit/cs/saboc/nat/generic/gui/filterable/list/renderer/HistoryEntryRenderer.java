@@ -26,6 +26,7 @@ public class HistoryEntryRenderer<T extends Concept> extends BaseFilterableRende
     
     private final JLabel conceptNameLabel;
     private final JLabel conceptIdLabel;
+    
     private final JLabel timeViewedLabel;
     
     private final NATBrowserPanel<T> mainPanel;
@@ -128,5 +129,10 @@ public class HistoryEntryRenderer<T extends Concept> extends BaseFilterableRende
         this.timeViewedLabel.setFont(timeViewedLabel.getFont().deriveFont(fontStyle));
 
         return this;
+    }
+
+    @Override
+    public void showDetailsFor(Filterable<FocusConceptHistoryEntry<T>> element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

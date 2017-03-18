@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuIt
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
-import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
@@ -26,7 +25,7 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
         super(mainPanel, 
                 dataSource, 
                 CommonBrowserDataRetrievers.getParentsRetriever(dataSource), 
-                new SimpleConceptRenderer<>(dataSource, HierarchyDisplayInfo.None),
+                new SimpleConceptRenderer<>(mainPanel, dataSource),
                 true,
                 showFilter,
                 true);
@@ -144,29 +143,6 @@ public class ParentsPanel<T extends Concept> extends ConceptListPanel<T> {
             @Override
             public void doEmptyAction() {
                 ErrorReportDialog.displayMissingParentDialog(mainPanel, dataSource);
-            }
-        });
-        
-        this.addRightClickMenuItem(new EntityRightClickMenuItem<T>("Report other error") {
-
-            @Override
-            public boolean isEnabledFor(T item) {
-                return enabledWhenNoSelection();
-            }
-
-            @Override
-            public void doActionFor(T item) {
-                doEmptyAction();
-            }
-
-            @Override
-            public boolean enabledWhenNoSelection() {
-                return  mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent();
-            }
-
-            @Override
-            public void doEmptyAction() {
-                ErrorReportDialog.displayOtherErrorDialog(mainPanel, dataSource);
             }
         });
     }

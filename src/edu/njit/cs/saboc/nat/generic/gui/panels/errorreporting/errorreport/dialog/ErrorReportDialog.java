@@ -4,7 +4,9 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.ErrorReportPanel;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.ErrorReportPanel.ErrorReportPanelListener;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.SelectConceptErrorReportPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.SelectRelationshipErrorReportPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.SimpleErrorReportPanel;
@@ -45,6 +47,24 @@ public class ErrorReportDialog {
         dialog.setLocationRelativeTo(errorReportPanel.getMainPanel().getParentFrame());
         
         ErrorReportPanelInitializer initializer = (ErrorReportPanelInitializer)errorReportPanel.getInitializer().get();
+        
+        errorReportPanel.addErrorReportPanelListener(new ErrorReportPanelListener() {
+
+            @Override
+            public void errorSubmitted(OntologyError error) {
+                doClose();
+            }
+
+            @Override
+            public void errorSubmissionCancelled() {
+                doClose();
+            }
+            
+            private void doClose() {
+                dialog.setVisible(false);
+                dialog.dispose();
+            }
+        });
         
         dialog.setTitle(String.format("Report %s", initializer.getErrorTypeName()));
         

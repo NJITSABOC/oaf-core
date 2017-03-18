@@ -3,10 +3,14 @@ package edu.njit.cs.saboc.nat.generic.errorreport;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult.State;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +18,6 @@ import java.util.Optional;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  *
@@ -22,7 +25,7 @@ import org.json.simple.JSONValue;
  * @param <T>
  */
 public class AuditSet<T extends Concept> {
-    
+        
     private String name = "";
 
     private Date date;
@@ -34,6 +37,8 @@ public class AuditSet<T extends Concept> {
     private final Map<T, AuditResult<T>> auditResults;
     
     private final ConceptBrowserDataSource<T> dataSource;
+    
+    private final ArrayList<AuditSetChangedListener<T>> changeListeners = new ArrayList<>();
 
     public AuditSet(
             ConceptBrowserDataSource<T> dataSource, 
@@ -65,6 +70,14 @@ public class AuditSet<T extends Concept> {
         this.concepts = concepts;
         this.auditResults = auditResults;
     }
+    
+    public void addAuditSetChangedListener(AuditSetChangedListener<T> listener) {
+        this.changeListeners.add(listener);
+    }
+    
+    public void removeAuditSetChangedListener(AuditSetChangedListener<T> listener) {
+        this.changeListeners.remove(listener);
+    }
 
     public Set<T> getConcepts() {
         return concepts;
@@ -86,124 +99,226 @@ public class AuditSet<T extends Concept> {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public void addConcept(T c) {
         concepts.add(c);
+        
+        changeListeners.forEach( (listener) -> {
+            listener.conceptAddedToAuditSet(c);
+        });
+        
+        fireAuditSetChanged();
     }
 
     public void removeConcept(T c) {
         concepts.remove(c);
+        
+        changeListeners.forEach( (listener) -> {
+            listener.conceptRemovedFromAuditSet(c);
+        });
+        
+        fireAuditSetChanged();
     }
 
     public int size() {
         return concepts.size();
     }
     
-    private AuditResult createAuditResult(T concept) {
+    private AuditResult<T> createAuditResult(T concept) {
         AuditResult r = new AuditResult();
         auditResults.put(concept, r);
         
         return r;
     }
     
-    private AuditResult getOrCreateAuditResult(T concept) {
-        
-        if(!auditResults.containsKey(concept)) {
-            return createAuditResult(concept);
-        } else {
+    private AuditResult<T> getOrCreateAuditResult(T concept) {
+        if (auditResults.containsKey(concept)) {
             return auditResults.get(concept);
+        } else {
+            return createAuditResult(concept);
         }
     }
     
-    public void updateAuditState(T concept) {
+    public void updateAuditState(T concept, State state) {
         AuditResult ar = getOrCreateAuditResult(concept);
         
+        State oldState = ar.getState();
+        
+        ar.setAuditState(state);
+        
+        changeListeners.forEach((listener) -> {
+            listener.auditStateChanged(concept, oldState, state);
+        });
+        
+        fireAuditSetChanged();
     }
     
     public void updateComment(T concept, String comment) {
         AuditResult ar = getOrCreateAuditResult(concept);
 
         ar.setComment(comment);
+        
+        changeListeners.forEach((listener) -> {
+            listener.commentChanged(concept, comment);
+        });
+        
+        fireAuditSetChanged();
     }
     
     public void addError(T concept, OntologyError<T> error) {
         AuditResult ar = getOrCreateAuditResult(concept);
         
         ar.addError(error);
+        
+        changeListeners.forEach((listener) -> {
+            listener.errorAdded(concept, error);
+        });
+        
+        fireAuditSetChanged();
     }
 
     public void deleteAuditResult(T concept) {
         auditResults.remove(concept);
+        
+        changeListeners.forEach((listener) -> {
+            listener.auditResultRemoved(concept);
+        });
+        
+        fireAuditSetChanged();
     }
     
     public void deleteError(T concept, OntologyError<T> error) {
         AuditResult ar = getOrCreateAuditResult(concept);
         
         ar.getErrors().remove(error);
+        
+        changeListeners.forEach((listener) -> {
+            listener.errorRemoved(concept, error);
+        });
+        
+        fireAuditSetChanged();
     }
     
-    public void updateError(T concept, OntologyError<T> oldError, OntologyError<T> newError) {
+    public void updateError(T concept, 
+            OntologyError<T> oldError, 
+            OntologyError<T> newError) {
+        
         AuditResult ar = getOrCreateAuditResult(concept);
         
+        ar.removeError(oldError);
         ar.addError(newError);
-        ar.getErrors().remove(oldError);
+        
+        changeListeners.forEach((listener) -> {
+            listener.errorUpdated(concept, oldError, newError);
+        });
+        
+        fireAuditSetChanged();
     }
     
-    public Optional<AuditResult> getAuditResult(T concept) {
+    private void fireAuditSetChanged() {
+        changeListeners.forEach((listener) -> {
+            listener.auditSetChanged();
+        });
+    }
+    
+    public Optional<AuditResult<T>> getAuditResult(T concept) {
         return Optional.ofNullable(auditResults.get(concept));
     }
     
-    public void exportToJSON(File file) {
-        
-        if(!ensureFileExistsAndWritable(file)) {
-            return;
-        }
-        
+    public JSONObject toJSON() {
+                
         JSONObject exportJSON = new JSONObject();
         
-        exportJSON.put("Type", "AuditSet");
-        exportJSON.put("OntologyID", dataSource.getOntologyID());
-        exportJSON.put("CreationDate", Long.toString(date.getTime()));
+        exportJSON.put("type", "AuditSet");
+        exportJSON.put("name", name);
+        exportJSON.put("ontologyid", dataSource.getOntologyID());
+        exportJSON.put("creationdate", Long.toString(date.getTime()));
         
         JSONArray auditSetJSON = new JSONArray();
         
         this.concepts.forEach( (concept) -> {
-            JSONObject conceptInfoJSON = createConceptJSON(concept);
-            JSONObject conceptAuditReportJSON = createAuditReportJSON(concept);
-            
             JSONObject auditResultJSON = new JSONObject();
-            auditResultJSON.put("Concept", conceptInfoJSON);
-            auditResultJSON.put("ErrorReport", conceptAuditReportJSON);
+
+            auditResultJSON.put("conceptid", concept.getIDAsString());
+            
+            if(auditResults.containsKey(concept)) {
+                auditResultJSON.put("errorreport", auditResults.get(concept).toJSON());
+            }
             
             auditSetJSON.add(auditResultJSON);
         });
         
-        exportJSON.put("AuditResult", auditSetJSON);
+        exportJSON.put("auditresult", auditSetJSON);
 
+        return exportJSON;
+    }
+    
+    public boolean saveToFile(File file) {        
+        if(!ensureFileExistsAndWritable(file)) {
+            // Error
+            
+            return false;
+        }
+        
         try (PrintWriter out = new PrintWriter(file)) {
-            out.println(JSONValue.toJSONString(auditSetJSON));
+            out.println(this.toJSON());
+            
+            return true;
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            return false;
         }
     }
     
-    private JSONObject createConceptJSON(T concept) {
-        JSONObject conceptInfoJSON = new JSONObject();
+    public boolean saveBackupFile() {
+         Optional<File> auditSetFile = this.getAuditSetFile();
+
+        if (!auditSetFile.isPresent()) {
+            return false;
+        }
         
-        conceptInfoJSON.put("ID", concept.getIDAsString());
+        File theFile = auditSetFile.get();
         
-        return conceptInfoJSON;
+        File dir = theFile.getParentFile();
+        
+        if (dir.isDirectory()) {
+            String path = dir.getAbsolutePath() + "\\AuditSet Backup\\";
+
+            File backupDir = new File(path);
+
+            try {
+                if (!backupDir.exists()) {
+                    backupDir.mkdir();
+                }
+                
+                DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                Date currentDate = new Date();
+                
+                String backupFileName = String.format("%s Backup %s", 
+                        theFile.getName().substring(0, theFile.getName().length() - 4), 
+                        dateFormat.format(currentDate));
+                
+                String backupFilePath = String.format("%s\\%s", backupDir.getAbsolutePath(), backupFileName);
+                
+                File backupFile = new File(backupFilePath);
+                
+                if(!backupFile.exists()) {
+                    backupFile.createNewFile();
+                    
+                    saveToFile(backupFile);
+
+                    return true;
+                }
+                
+            } catch (SecurityException | IOException se) {
+                se.printStackTrace();
+                
+                return false;
+            }
+        }
+        
+        return false;
     }
-    
-    private JSONObject createAuditReportJSON(T concept) {
-        JSONObject auditReportJSON = new JSONObject();
-        
-        return auditReportJSON;
-    }
-    
+
     private boolean ensureFileExistsAndWritable(File file) {
         boolean error = false;
         

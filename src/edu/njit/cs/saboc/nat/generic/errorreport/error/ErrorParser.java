@@ -112,7 +112,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
     }
     
     public OntologyError<T> parseError(JSONObject object) {
-        String type = object.get("ype").toString();
+        String type = object.get("type").toString();
         
         if(type.equals("MissingParent")) {
             return parseMissingParentError(object);

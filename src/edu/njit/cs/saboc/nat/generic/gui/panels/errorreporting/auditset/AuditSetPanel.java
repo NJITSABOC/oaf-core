@@ -26,6 +26,8 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     private final JButton btnCreateFromConceptList;
     private final JButton btnExportAuditSet;
     
+    private final JButton btnOpenAuditSet;
+    
     public AuditSetPanel(NATBrowserPanel<T> browserPanel, ConceptBrowserDataSource<T> dataSource) {
         super(browserPanel, dataSource);
         
@@ -38,12 +40,18 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
             createAuditSetFromFile();
         });
         
-        this.btnExportAuditSet = new JButton("Save");
+        this.btnOpenAuditSet = new JButton("Open");
+        this.btnOpenAuditSet.addActionListener( (ae) -> {
+            openAuditSet();
+        });
+        
+        this.btnExportAuditSet = new JButton("Save As");
         this.btnExportAuditSet.addActionListener( (ae) -> {
             exportAuditSet();
         });
         
         northPanel.add(btnCreateFromConceptList);
+        northPanel.add(btnOpenAuditSet);
         northPanel.add(btnExportAuditSet);
         
         this.add(northPanel, BorderLayout.NORTH);
@@ -71,6 +79,24 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         }
     }
     
+    private void openAuditSet() {
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+
+        if (idFile.isPresent()) {
+            
+            try {
+                AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromJSON(idFile.get(), getDataSource());
+
+                getMainPanel().getAuditDatabase().setAuditSet(auditSet);
+
+                this.auditConceptList.reloadAuditSet();
+
+            } catch (AuditSetLoaderException asle) {
+
+            }
+        }
+    }
+    
     private void exportAuditSet() {
         Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectDialog();
 
@@ -78,7 +104,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
             if(getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
                 AuditSet<T> auditSet = getMainPanel().getAuditDatabase().getLoadedAuditSet().get();
                 
-                auditSet.exportToJSON(auditSetFile.get());
+                auditSet.saveToFile(auditSetFile.get());
             }
         }
     }

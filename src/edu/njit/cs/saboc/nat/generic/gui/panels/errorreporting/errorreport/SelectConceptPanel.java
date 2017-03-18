@@ -77,7 +77,11 @@ public class SelectConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         });
         
         this.recentConceptList = new FilterableList<>();
-        this.recentConceptList.setListCellRenderer(new SimpleConceptRenderer(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None));
+        this.recentConceptList.setListCellRenderer(
+                new SimpleConceptRenderer(
+                        mainPanel,
+                        dataSource));
+        
         this.recentConceptList.addListMouseListener(new MouseAdapter() {
 
             @Override

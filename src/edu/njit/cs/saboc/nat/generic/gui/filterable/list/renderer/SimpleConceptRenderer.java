@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,7 +10,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -22,55 +22,36 @@ import javax.swing.JPanel;
  */
 public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRenderer<T> {
     
-    public enum HierarchyDisplayInfo {
-        Ancestors,
-        Descendants,
-        None
-    }
-    
     private final JLabel conceptNameLabel;
     private final JLabel conceptIdLabel;
-    private final JLabel descendantCountLabel;
     
-    private final HierarchyDisplayInfo displayInfo;
-    
+    private final NATBrowserPanel<T> mainPanel;
     private final ConceptBrowserDataSource<T> dataSource;
     
-    public SimpleConceptRenderer(ConceptBrowserDataSource<T> dataSource, HierarchyDisplayInfo displayInfo) {
+    public SimpleConceptRenderer(
+            NATBrowserPanel<T> mainPanel,
+            ConceptBrowserDataSource<T> dataSource) {
         
-        this.displayInfo = displayInfo;
-        
+        this.mainPanel = mainPanel;
         this.dataSource = dataSource;
         
         this.setLayout(new BorderLayout());
         
         this.conceptNameLabel = new JLabel();
         this.conceptIdLabel = new JLabel();
-        this.descendantCountLabel = new JLabel(); 
         
         this.conceptNameLabel.setFont(this.conceptNameLabel.getFont().deriveFont(Font.PLAIN, 16));
         this.conceptIdLabel.setFont(this.conceptIdLabel.getFont().deriveFont(Font.PLAIN, 10));
-        this.descendantCountLabel.setFont(this.descendantCountLabel.getFont().deriveFont(Font.PLAIN, 10));
         
         this.conceptIdLabel.setForeground(Color.BLUE);
         
         this.conceptNameLabel.setOpaque(false);
         this.conceptIdLabel.setOpaque(false);
-        this.descendantCountLabel.setOpaque(false);
         
-        JPanel leftPanel = new JPanel(new GridLayout(2, 1));
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         leftPanel.add(conceptNameLabel);
-        
-        
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
-        labelPanel.add(conceptIdLabel);
-        labelPanel.add(Box.createHorizontalStrut(10));
-        labelPanel.add(descendantCountLabel);
-        
-        labelPanel.setOpaque(false);
-        
-        leftPanel.add(labelPanel);
+        leftPanel.add(Box.createHorizontalStrut(10));
+        leftPanel.add(conceptIdLabel);
         
         leftPanel.setOpaque(false);
         
@@ -84,7 +65,15 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
         
         this.setOpaque(true);
         
-        this.setPreferredSize(new Dimension(-1, 50));
+        this.setPreferredSize(new Dimension(-1, 38));
+    }
+    
+    public NATBrowserPanel<T> getMainPanel() {
+        return mainPanel;
+    }
+    
+    public ConceptBrowserDataSource<T> getDataSource() {
+        return dataSource;
     }
 
     @Override
@@ -107,6 +96,7 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
         return this;
     }
     
+    
     public void showDetailsFor(Filterable<T> filterableEntry) {
         T concept = filterableEntry.getObject();
         
@@ -120,17 +110,21 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
 
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
-
-        if (displayInfo.equals(HierarchyDisplayInfo.Descendants)) {
-            int descendantCount = dataSource.getDescendantCount(concept);
-
-            if (descendantCount == 0) {
-                this.descendantCountLabel.setForeground(new Color(64, 200, 64));
-                this.descendantCountLabel.setText("Leaf");
-            } else {
-                this.descendantCountLabel.setForeground(Color.BLACK);
-                this.descendantCountLabel.setText(String.format("Descendants: %d", descendantCount));
-            }
-        }
+        
+        
+//        if(mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+//            AuditSet<T> currentAuditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
+//            T focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
+//            
+//            if(currentAuditSet.getConcepts().contains(focusConcept)) {
+//                Optional<AuditResult<T>> auditResult = currentAuditSet.getAuditResult(focusConcept);
+//                
+//                if(auditResult.isPresent()) {
+//                    AuditResult<T> theAuditResult = auditResult.get();
+//                    
+//                    theAuditResult.getErrors();
+//                }
+//            }
+//        }
     }
 }

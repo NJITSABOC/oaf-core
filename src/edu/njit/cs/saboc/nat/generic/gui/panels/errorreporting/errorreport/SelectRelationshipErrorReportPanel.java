@@ -97,7 +97,7 @@ public class SelectRelationshipErrorReportPanel<T extends Concept, V extends Inh
 
                     @Override
                     public void submitClicked() {
-                        
+                        submitError();
                     }
                 });
 

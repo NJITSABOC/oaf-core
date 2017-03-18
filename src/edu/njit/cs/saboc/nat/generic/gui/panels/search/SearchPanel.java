@@ -65,7 +65,7 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             });
             
-            super.setListCellRenderer(new SearchResultRenderer());
+            super.setListCellRenderer(new SearchResultRenderer(mainPanel, dataSource));
         }
         
         public void displayResults(ArrayList<NATConceptSearchResult<T>> searchResults) {

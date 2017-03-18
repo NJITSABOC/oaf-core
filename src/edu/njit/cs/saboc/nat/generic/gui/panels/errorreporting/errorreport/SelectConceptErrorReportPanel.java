@@ -84,7 +84,7 @@ public class SelectConceptErrorReportPanel<T extends Concept, V extends Ontology
 
                     @Override
                     public void submitClicked() {
-                        
+                        submitError();
                     }
                 });
 

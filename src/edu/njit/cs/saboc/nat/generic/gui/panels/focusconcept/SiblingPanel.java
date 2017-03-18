@@ -32,7 +32,7 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
                 mainPanel,
                 dataSource,
                 CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource),
-                new SimpleConceptRenderer<>(dataSource, SimpleConceptRenderer.HierarchyDisplayInfo.None),
+                new SimpleConceptRenderer<>(mainPanel, dataSource),
                 true,
                 true,
                 true);

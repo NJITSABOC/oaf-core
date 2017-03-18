@@ -48,6 +48,10 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         this.auditDatabase = new AuditDatabase<>(this, dataSource);
         
+        auditDatabase.addAuditDatabaseChangeListener( () -> {
+            focusConceptManager.refresh();
+        });
+        
         layout.createLayout(this);
         
         this.revalidate();

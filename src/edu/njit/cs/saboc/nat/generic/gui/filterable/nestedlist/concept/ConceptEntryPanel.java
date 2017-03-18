@@ -2,9 +2,10 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.concept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.BaseFilterableRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
-import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer.HierarchyDisplayInfo;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableEntryPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,16 +19,19 @@ import java.util.Optional;
  */
 public class ConceptEntryPanel<T extends Concept> extends FilterableEntryPanel<Filterable<T>> {
 
-    private final SimpleConceptRenderer<T> renderer;
+    private final BaseFilterableRenderer<T> renderer;
 
-    public ConceptEntryPanel(Filterable<T> entry, 
+    public ConceptEntryPanel(
+            NATBrowserPanel<T> mainPanel,
+            Filterable<T> entry, 
             Optional<String> filter, 
             ConceptBrowserDataSource<T> dataSource, 
-            HierarchyDisplayInfo displayInfo) {
+            BaseFilterableRenderer<T> renderer) {
         
         super(entry, filter);
         
-        this.renderer = new SimpleConceptRenderer<>(dataSource, displayInfo);
+        this.renderer = renderer;
+        
         this.renderer.showDetailsFor(entry);
         this.renderer.setBackground(Color.WHITE);
         

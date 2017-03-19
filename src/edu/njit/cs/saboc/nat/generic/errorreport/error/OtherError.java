@@ -26,4 +26,20 @@ public class OtherError<T extends Concept> extends OntologyError<T> {
     public JSONObject toJSON() {
         return super.getBaseJSON("OtherError");
     }
+
+    @Override
+    public String getSummaryText() {
+        String comment = getComment();
+        
+        if(comment.length() > 23) {
+            comment = String.format("%s...", comment.substring(0, 20));
+        }
+        
+        return String.format("Other error: %s", comment);
+    }
+
+    @Override
+    public String getTooltipText() {
+        return getSummaryText();
+    }
 }

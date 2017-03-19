@@ -25,7 +25,7 @@ public abstract class OntologyError<T extends Concept> {
     private Severity severity;
     
     private final Ontology<T> ontology;
-    
+
     public OntologyError(Ontology<T> ontology) {
         this(ontology, "", Severity.NonCritical);
     }
@@ -55,6 +55,19 @@ public abstract class OntologyError<T extends Concept> {
     public Severity getSeverity() {
         return severity;
     }
+    
+    public String getAbbridgedComment() {
+        String shortComment = getComment();
+
+        if (shortComment.length() > 23) {
+            shortComment = String.format("%s...", shortComment.substring(0, 20));
+        }
+
+        return shortComment;
+    }
+    
+    public abstract String getSummaryText();
+    public abstract String getTooltipText();
     
     public abstract JSONObject toJSON();
     

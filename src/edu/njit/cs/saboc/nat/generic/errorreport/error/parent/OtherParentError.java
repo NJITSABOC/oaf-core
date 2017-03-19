@@ -25,4 +25,14 @@ public class OtherParentError<T extends Concept> extends IncorrectParentError<T>
     public JSONObject toJSON() {
         return super.getBaseJSON("OtherParentError");
     }
+
+    @Override
+    public String getSummaryText() {
+        return String.format("Other error with parent: %s", this.getErroneousParent().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Other error with parent";
+    }
 }

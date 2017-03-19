@@ -66,4 +66,47 @@ public class MissingSemanticRelationshipError<T extends Concept, V extends Inher
         
         return object;
     }
+
+    @Override
+    public String getSummaryText() {
+        
+        if(missingRelType.isPresent()) {
+            if(missingTarget.isPresent()) {
+                return String.format("Missing relationship: == %s ==> %s", 
+                        missingRelType.get().getName(),
+                        missingTarget.get().getName());
+            } else {
+                return String.format("Missing relationship: == %s ==> [target not specified]", 
+                        missingRelType.get().getName());
+            }
+        } else {
+            if(missingTarget.isPresent()) {
+                return String.format("Missing relationship: == [type not specified] ==> %s", 
+                        missingTarget.get().getName());
+            } else {
+                return String.format("Missing relationship: %s", this.getAbbridgedComment());
+            }
+        }
+    }
+
+    @Override
+    public String getTooltipText() {
+        if(missingRelType.isPresent()) {
+            if(missingTarget.isPresent()) {
+                return String.format("Missing relationship: == %s ==> %s", 
+                        missingRelType.get().getName(),
+                        missingTarget.get().getName());
+            } else {
+                return String.format("Missing relationship: == %s ==> [target not specified]", 
+                        missingRelType.get().getName());
+            }
+        } else {
+            if(missingTarget.isPresent()) {
+                return String.format("Missing relationship: == [type not specified] ==> %s", 
+                        missingTarget.get().getName());
+            } else {
+                return "Missing relationship";
+            }
+        }
+    }
 }

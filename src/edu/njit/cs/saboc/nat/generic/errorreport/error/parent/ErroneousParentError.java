@@ -31,4 +31,14 @@ public class ErroneousParentError<T extends Concept> extends RemoveParentError<T
     public JSONObject toJSON() {
         return super.getBaseJSON("ErroneousParent");
     }
+
+    @Override
+    public String getSummaryText() {
+        return String.format("Erroneous parent: %s", this.getErroneousParent().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Remove parent (erroneous)";
+    }
 }

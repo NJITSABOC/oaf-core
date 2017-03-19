@@ -46,4 +46,32 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
         
         return errorObject;
     }
+
+    @Override
+    public String getSummaryText() {
+        String base = String.format("Replace erroneous parent: %s.", this.getErroneousParent().getName());
+        
+        String replaceWithDesc;
+        
+        if (this.replacementParent.isPresent()) {
+            replaceWithDesc = this.replacementParent.get().getName();
+        } else {
+            if (this.getComment().isEmpty()) {
+                replaceWithDesc = "[not specified]";
+            } else {
+                replaceWithDesc = this.getAbbridgedComment();
+            }
+        }
+        
+        return String.format("%s Replace with: %s", base, replaceWithDesc);
+    }
+
+    @Override
+    public String getTooltipText() {
+        if(replacementParent.isPresent()) {
+            return String.format("Replace with: %s", replacementParent.get().getName());
+        } else {
+            return "Replace parent";
+        }
+    }
 }

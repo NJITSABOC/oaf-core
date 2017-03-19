@@ -54,4 +54,34 @@ public class ReplaceTargetError <T extends Concept, V extends InheritablePropert
         
         return object;
     }
+
+    @Override
+    public String getSummaryText() {
+        
+        String desc;
+        
+        if (this.replacementTarget.isPresent()) {
+            desc = this.replacementTarget.get().getName();
+        } else {
+            if (this.getComment().isEmpty()) {
+                desc = "[not specified]";
+            } else {
+                desc = this.getAbbridgedComment();
+            }
+        }
+        
+        return String.format("Replace target of == %s ==> %s: %s", 
+                this.getRelType().getName(),
+                this.getTarget().getName(),
+                desc);
+    }
+
+    @Override
+    public String getTooltipText() {
+        if(this.replacementTarget.isPresent()) {
+            return String.format("Replace target with: %s", this.replacementTarget.get().getName());
+        } else {
+            return "Replace target";
+        }
+    }
 }

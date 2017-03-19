@@ -33,4 +33,19 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
     public JSONObject toJSON() {
         return super.getBaseJSON("OtherSemanticRelationshipError");
     }
+
+    @Override
+    public String getSummaryText() {
+        String abbridgedComment = this.getAbbridgedComment();
+        
+         return String.format("Other error with == %s ==> %s: %s", 
+                this.getRelType().getName(),
+                this.getTarget().getName(),
+                abbridgedComment);
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Other error";
+    }
 }

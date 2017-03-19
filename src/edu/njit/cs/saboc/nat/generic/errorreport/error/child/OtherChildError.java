@@ -24,4 +24,14 @@ public class OtherChildError<T extends Concept> extends IncorrectChildError<T> {
     public JSONObject toJSON() {
         return super.getBaseJSON("OtherChildError");
     }
+
+    @Override
+    public String getSummaryText() {
+        return String.format("Other error with child: %s", this.getErroneousChild().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Other error with child";
+    }
 }

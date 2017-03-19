@@ -47,4 +47,31 @@ public class MissingChildError<T extends Concept> extends ChildError<T> {
         
         return errorObject;
     }
+
+    @Override
+    public String getSummaryText() {
+        
+        String description;
+        
+        if(this.missingChild.isPresent()) {
+            description = this.missingChild.get().getName();
+        } else {
+            if(this.getComment().isEmpty()) {
+                description = "[not specified]";
+            } else {
+                description = this.getAbbridgedComment();
+            }
+        }
+        
+        return String.format("Child missing: %s", description);
+    }
+
+    @Override
+    public String getTooltipText() {
+        if(this.missingChild.isPresent()) {
+            return String.format("Child missing: %s", this.missingChild.get().getName());
+        } else {
+            return "Child missing";
+        }
+    }
 }

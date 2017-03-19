@@ -38,7 +38,5 @@ public class ConceptEntryPanel<T extends Concept> extends FilterableEntryPanel<F
         this.setLayout(new BorderLayout());
         
         this.add(renderer, BorderLayout.CENTER);
-
-        this.setPreferredSize(new Dimension(-1, 50));
     }
 }

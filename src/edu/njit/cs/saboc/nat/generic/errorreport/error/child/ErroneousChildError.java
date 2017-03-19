@@ -30,4 +30,14 @@ public class ErroneousChildError<T extends Concept> extends IncorrectChildError<
     public JSONObject toJSON() {
         return super.getBaseJSON("ErroneousChild");
     }
+
+    @Override
+    public String getSummaryText() {
+        return String.format("Erroneous child: ", super.getErroneousChild().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Erroneous child";
+    }
 }

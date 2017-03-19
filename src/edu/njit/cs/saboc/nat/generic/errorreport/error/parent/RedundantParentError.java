@@ -31,4 +31,14 @@ public class RedundantParentError<T extends Concept> extends RemoveParentError<T
     public JSONObject toJSON() {
         return super.getBaseJSON("RedundantParent");
     }
+
+    @Override
+    public String getSummaryText() {
+        return String.format("Redundant parent: %s", this.getErroneousParent().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Remove parent (redundant)";
+    }
 }

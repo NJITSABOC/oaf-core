@@ -4,10 +4,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -42,14 +42,14 @@ public class DetailsConceptRenderer<T extends Concept> extends BaseFilterableRen
         
         this.detailsPanel.add(Box.createHorizontalStrut(10));
         
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new BorderLayout());
         
-        this.add(conceptRenderer);
-        this.add(detailsPanel);
+        this.add(conceptRenderer, BorderLayout.CENTER);
+        this.add(detailsPanel, BorderLayout.SOUTH);
         
-        this.setPreferredSize(new Dimension(-1, 58));
+        this.setPreferredSize(new Dimension(-1, 60));
     }
-    
+
     public NATBrowserPanel<T> getMainPanel() {
         return mainPanel;
     }
@@ -83,6 +83,7 @@ public class DetailsConceptRenderer<T extends Concept> extends BaseFilterableRen
         return this;
     }
     
+    @Override
     public void showDetailsFor(Filterable<T> filterableEntry) {
         conceptRenderer.showDetailsFor(filterableEntry);
     }

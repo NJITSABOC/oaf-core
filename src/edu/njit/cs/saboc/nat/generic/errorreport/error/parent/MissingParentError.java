@@ -46,4 +46,30 @@ public class MissingParentError<T extends Concept> extends ParentError<T> {
         
         return errorObject;
     }
+
+    @Override
+    public String getSummaryText() {
+        String description;
+
+        if (this.missingParent.isPresent()) {
+            description = this.missingParent.get().getName();
+        } else {
+            if (this.getComment().isEmpty()) {
+                description = "[not specified]";
+            } else {
+                description = this.getAbbridgedComment();
+            }
+        }
+
+        return String.format("Parent missing: %s", description);
+    }
+
+    @Override
+    public String getTooltipText() {
+        if(this.missingParent.isPresent()) {
+            return String.format("Missing parent: %s", this.missingParent.get().getName());
+        } else {
+            return "Missing parent";
+        }
+    }
 }

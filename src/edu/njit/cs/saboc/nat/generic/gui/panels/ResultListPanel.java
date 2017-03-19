@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
-import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
@@ -134,8 +134,12 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         optionsPanel.add(Box.createHorizontalStrut(16), 0);
     }
     
-    public final void addRightClickMenuItem(EntityRightClickMenuItem<V> menuItem) {
-        this.rightClickManager.addMenuItem(menuItem);
+    public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<V> generator) {
+        this.rightClickManager.setMenuGenerator(generator);
+    }
+    
+    public final void clearRightClickMenuGenerator() {
+        this.rightClickManager.clearMenuGenerator();
     }
 
     public void addDataLoadedListener(DataLoadedListener<ArrayList<V>> listener) {

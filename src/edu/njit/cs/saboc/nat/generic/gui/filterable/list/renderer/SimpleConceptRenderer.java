@@ -97,6 +97,7 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
     }
     
     
+    @Override
     public void showDetailsFor(Filterable<T> filterableEntry) {
         T concept = filterableEntry.getObject();
         
@@ -110,21 +111,5 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
 
         this.conceptNameLabel.setText(conceptNameStr);
         this.conceptIdLabel.setText(conceptIdStr);
-        
-        
-//        if(mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
-//            AuditSet<T> currentAuditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
-//            T focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-//            
-//            if(currentAuditSet.getConcepts().contains(focusConcept)) {
-//                Optional<AuditResult<T>> auditResult = currentAuditSet.getAuditResult(focusConcept);
-//                
-//                if(auditResult.isPresent()) {
-//                    AuditResult<T> theAuditResult = auditResult.get();
-//                    
-//                    theAuditResult.getErrors();
-//                }
-//            }
-//        }
     }
 }

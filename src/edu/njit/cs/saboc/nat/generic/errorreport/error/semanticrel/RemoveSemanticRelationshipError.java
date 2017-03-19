@@ -37,4 +37,16 @@ public class RemoveSemanticRelationshipError<T extends Concept, V extends Inheri
     public JSONObject toJSON() {
         return super.getBaseJSON("RemoveSemanticRelationship");
     }
+
+    @Override
+    public String getSummaryText() {
+         return String.format("Remove erroneous relationship == %s ==> %s", 
+                this.getRelType().getName(),
+                this.getTarget().getName());
+    }
+
+    @Override
+    public String getTooltipText() {
+        return "Erroneous relationship";
+    }
 }

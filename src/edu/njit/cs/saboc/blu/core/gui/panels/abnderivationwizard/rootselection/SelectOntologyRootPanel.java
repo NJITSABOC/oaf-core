@@ -7,7 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearche
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
-import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 

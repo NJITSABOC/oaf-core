@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelecti
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.gui.utils.renderers.MultiLineTextRenderer;
-import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuItem;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -318,8 +318,8 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable.getColumnModel().getColumn(column).setCellRenderer(renderer);
     }
     
-    public void addRightClickMenuItem(EntityRightClickMenuItem<T> rightClickMenuItem) {
-        this.rightClickManager.addMenuItem(rightClickMenuItem);
+    public void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
+        this.rightClickManager.setMenuGenerator(generator);
     }
 
     public void addOptionButton(JButton btn) {

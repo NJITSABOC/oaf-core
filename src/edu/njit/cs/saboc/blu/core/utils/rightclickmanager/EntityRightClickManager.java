@@ -1,11 +1,9 @@
 package edu.njit.cs.saboc.blu.core.utils.rightclickmanager;
 
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Optional;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 /**
@@ -14,78 +12,66 @@ import javax.swing.JPopupMenu;
  * @param <T>
  */
 public class EntityRightClickManager<T> {
-            
-    private final JLabel nameLabel;
     
-    private final JPopupMenu popup = new JPopupMenu();
+    private final JPopupMenu popup;
+                
+    private Optional<EntityRightClickMenuGenerator<T>> menuGenerator;
     
-    private final Map<EntityRightClickMenuItem, JMenuItem> menuItems = new HashMap<>();
-        
     private Optional<T> rightClickedItem;
     
+    private int menuItemCount = 0;
+    
     public EntityRightClickManager(){
+        this.menuGenerator = Optional.empty();
         this.rightClickedItem = Optional.empty();
         
-        this.nameLabel = new JLabel("(no selection)");
-        
-        this.popup.add(nameLabel);
-        this.popup.addSeparator();
+        this.popup = new JPopupMenu();
+    }
+    
+    public void setMenuGenerator(EntityRightClickMenuGenerator<T> menuGenerator) {
+        this.menuGenerator = Optional.of(menuGenerator);
+    }
+    
+    public void clearMenuGenerator() {
+        this.menuGenerator = Optional.empty();
     }
 
     public void setRightClickedItem(T item) {
+        resetPopup();
+        
         rightClickedItem = Optional.of(item);
 
-        menuItems.forEach((action, menuItem) -> {
-            menuItem.setEnabled(action.isEnabledFor(item));
-        });
-        
-        nameLabel.setText(item.toString());
+        if(menuGenerator.isPresent()) {
+            buildPopup(menuGenerator.get().buildRightClickMenuFor(item));
+        }
     }
     
     public void clearRightClickedItem() {
+        resetPopup();
+        
         this.rightClickedItem = Optional.empty();
         
-        menuItems.forEach((action, menuItem) -> {
-            menuItem.setEnabled(action.enabledWhenNoSelection());
-        });
-        
-        this.nameLabel.setText("(no selection)");
-    }
-    
-    public void addMenuItem(EntityRightClickMenuItem item) {
-        
-        JMenuItem menuItem = new JMenuItem(item.getItemName());
-        menuItem.setFont(menuItem.getFont().deriveFont(14.0f));
-        
-        menuItem.addActionListener((ae) -> {
-            if(rightClickedItem.isPresent()) {
-                item.doActionFor(rightClickedItem.get());
-            } else {
-                if(item.enabledWhenNoSelection()) {
-                    item.doEmptyAction();
-                }
-            }
-        });
-
-        popup.add(menuItem);
-        
-        menuItems.put(item, menuItem);
-    }
-
-    public void removeMenuItem(EntityRightClickMenuItem item) {
-        
-        if(menuItems.containsKey(item)) {
-            popup.remove(menuItems.get(item));
-            menuItems.remove(item);
+        if(menuGenerator.isPresent()) {
+            buildPopup(menuGenerator.get().buildEmptyListRightClickMenu());
         }
-        
     }
     
+    private void resetPopup() {
+        this.menuItemCount = 0;
+        this.popup.removeAll();
+    }
+    
+    private void buildPopup(ArrayList<JComponent> components) {
+        components.forEach((component) -> {
+            popup.add(component);
+        });
+        
+        this.menuItemCount = components.size();
+    }
+
     public void showPopup(MouseEvent e) {
-        if(menuItems.isEmpty()) {
-            return;
+        if(menuGenerator.isPresent() && menuItemCount > 0) {
+            popup.show(e.getComponent(), e.getX(), e.getY());
         }
-        
-        popup.show(e.getComponent(), e.getX(), e.getY());
     }
 }

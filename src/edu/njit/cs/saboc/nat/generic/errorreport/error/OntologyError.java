@@ -69,6 +69,8 @@ public abstract class OntologyError<T extends Concept> {
     public abstract String getSummaryText();
     public abstract String getTooltipText();
     
+    public abstract String getStyledText();
+    
     public abstract JSONObject toJSON();
     
     protected JSONObject getBaseJSON(String type) {

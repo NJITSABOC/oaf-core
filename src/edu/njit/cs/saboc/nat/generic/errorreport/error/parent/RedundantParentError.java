@@ -41,4 +41,11 @@ public class RedundantParentError<T extends Concept> extends RemoveParentError<T
     public String getTooltipText() {
         return "Remove parent (redundant)";
     }
+    
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'>"
+                + "<b>Redundant parent (remove): </b></font> %s", 
+                super.getErroneousParent().getName());
+    }
 }

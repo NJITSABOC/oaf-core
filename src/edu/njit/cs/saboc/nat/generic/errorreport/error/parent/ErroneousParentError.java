@@ -41,4 +41,11 @@ public class ErroneousParentError<T extends Concept> extends RemoveParentError<T
     public String getTooltipText() {
         return "Remove parent (erroneous)";
     }
+
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'>"
+                + "<b>Erroneous parent (remove): </b></font> %s", 
+                super.getErroneousParent().getName());
+    }
 }

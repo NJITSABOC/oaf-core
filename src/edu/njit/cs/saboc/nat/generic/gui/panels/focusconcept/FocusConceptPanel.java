@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
@@ -13,6 +14,7 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSe
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -60,6 +62,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private boolean pending = false;
 
+    private final EntityRightClickManager<T> rightClickManager;
+    
     public FocusConceptPanel(
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
@@ -93,6 +97,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.historyBack();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
+                
                 //add nagvigationhistory to the top of history list
                 history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
@@ -191,6 +196,9 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         add(alignmentPanel, BorderLayout.NORTH);
         add(focusConceptPanel, BorderLayout.CENTER);
         
+        this.rightClickManager = new EntityRightClickManager<>();
+        this.rightClickManager.setMenuGenerator(new FocusConceptRightClickMenu<>(mainPanel, dataSource));
+        
         jtf.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -223,17 +231,23 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         });
 
         jtf.addMouseListener(new MouseAdapter() {
-            
+
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!pending && e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-                    
-                    if(!jtf.isEditable() ){
-                        openEditorPane();
-                    } else{
-                        editFocusConceptPanel.setVisible(false);
-                        
-                        display();
+                if (!pending) {
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        if (e.getClickCount() == 2) {
+                            if (!jtf.isEditable()) {
+                                openEditorPane();
+                            } else {
+                                editFocusConceptPanel.setVisible(false);
+
+                                display();
+                            }
+                        }
+                    } else if (e.getButton() == MouseEvent.BUTTON3) {
+                        rightClickManager.setRightClickedItem(mainPanel.getFocusConceptManager().getActiveFocusConcept());
+                        rightClickManager.showPopup(e);
                     }
                 }
             }

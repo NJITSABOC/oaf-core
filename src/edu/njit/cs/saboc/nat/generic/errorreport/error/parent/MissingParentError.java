@@ -72,4 +72,21 @@ public class MissingParentError<T extends Concept> extends ParentError<T> {
             return "Missing parent";
         }
     }
+    
+    @Override
+    public String getStyledText() {
+        String description;
+        
+        if(this.missingParent.isPresent()) {
+            description = this.missingParent.get().getName();
+        } else {
+            if(this.getComment().isEmpty()) {
+                description = "[details not specified]";
+            } else {
+                description = this.getComment();
+            }
+        }
+        
+        return String.format("<html><font color = 'RED'><b>Missing parent: </b></font> %s", description);
+    }
 }

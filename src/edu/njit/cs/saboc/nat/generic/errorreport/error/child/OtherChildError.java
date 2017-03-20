@@ -34,4 +34,10 @@ public class OtherChildError<T extends Concept> extends IncorrectChildError<T> {
     public String getTooltipText() {
         return "Other error with child";
     }
+
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'><b>Other error with child: </b></font> %s", 
+                super.getErroneousChild().getName());
+    }
 }

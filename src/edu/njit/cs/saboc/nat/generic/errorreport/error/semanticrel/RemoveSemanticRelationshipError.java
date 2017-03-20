@@ -49,4 +49,9 @@ public class RemoveSemanticRelationshipError<T extends Concept, V extends Inheri
     public String getTooltipText() {
         return "Erroneous relationship";
     }
+    
+    @Override
+    public String getStyledText() {
+        return getSummaryText();
+    }
 }

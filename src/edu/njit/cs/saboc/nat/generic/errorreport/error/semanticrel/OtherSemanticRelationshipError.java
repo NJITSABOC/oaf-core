@@ -48,4 +48,9 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
     public String getTooltipText() {
         return "Other error";
     }
+    
+    @Override
+    public String getStyledText() {
+        return getSummaryText();
+    }
 }

@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.child;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ParentError;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -73,5 +72,22 @@ public class MissingChildError<T extends Concept> extends ChildError<T> {
         } else {
             return "Child missing";
         }
+    }
+
+    @Override
+    public String getStyledText() {
+        String description;
+        
+        if(this.missingChild.isPresent()) {
+            description = this.missingChild.get().getName();
+        } else {
+            if(this.getComment().isEmpty()) {
+                description = "[details not specified]";
+            } else {
+                description = this.getComment();
+            }
+        }
+        
+        return String.format("<html><font color = 'RED'><b>Missing child: </b></font> %s", description);
     }
 }

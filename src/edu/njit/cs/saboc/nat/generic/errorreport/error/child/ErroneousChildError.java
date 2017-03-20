@@ -40,4 +40,10 @@ public class ErroneousChildError<T extends Concept> extends IncorrectChildError<
     public String getTooltipText() {
         return "Erroneous child";
     }
+
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'><b>Erroneous child: </b></font> %s", 
+                super.getErroneousChild().getName()); 
+    }
 }

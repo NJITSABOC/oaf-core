@@ -35,4 +35,12 @@ public class OtherParentError<T extends Concept> extends IncorrectParentError<T>
     public String getTooltipText() {
         return "Other error with parent";
     }
+    
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'>"
+                + "<b>Other error with parent: </b></font> %s. %s", 
+                super.getErroneousParent().getName(), 
+                getComment());
+    }
 }

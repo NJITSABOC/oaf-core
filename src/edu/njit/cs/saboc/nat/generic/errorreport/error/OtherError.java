@@ -42,4 +42,9 @@ public class OtherError<T extends Concept> extends OntologyError<T> {
     public String getTooltipText() {
         return getSummaryText();
     }
+
+    @Override
+    public String getStyledText() {
+        return String.format("<html><font color = 'RED'><b>Other error: </b></font> %s", getComment());
+    }
 }

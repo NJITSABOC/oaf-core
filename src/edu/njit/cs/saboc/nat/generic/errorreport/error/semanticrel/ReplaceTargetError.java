@@ -84,4 +84,9 @@ public class ReplaceTargetError <T extends Concept, V extends InheritablePropert
             return "Replace target";
         }
     }
+    
+    @Override
+    public String getStyledText() {
+        return getSummaryText();
+    }
 }

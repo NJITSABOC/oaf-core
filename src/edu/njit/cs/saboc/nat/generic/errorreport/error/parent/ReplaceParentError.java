@@ -74,4 +74,25 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
             return "Replace parent";
         }
     }
+    
+    @Override
+    public String getStyledText() {
+        
+        String description;
+        
+        if (this.replacementParent.isPresent()) {
+            description = this.replacementParent.get().getName();
+        } else {
+            if (this.getComment().isEmpty()) {
+                description = "[not specified]";
+            } else {
+                description = this.getComment();
+            }
+        }
+        
+        return String.format("<html><font color = 'RED'>"
+                + "<b>Erroneous parent (remove): </b></font> %s. Replace with: %s", 
+                super.getErroneousParent().getName(), 
+                description);
+    }
 }

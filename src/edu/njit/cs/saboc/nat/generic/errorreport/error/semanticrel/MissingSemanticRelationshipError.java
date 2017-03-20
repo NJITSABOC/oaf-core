@@ -109,4 +109,9 @@ public class MissingSemanticRelationshipError<T extends Concept, V extends Inher
             }
         }
     }
+
+    @Override
+    public String getStyledText() {
+        return getSummaryText();
+    }
 }

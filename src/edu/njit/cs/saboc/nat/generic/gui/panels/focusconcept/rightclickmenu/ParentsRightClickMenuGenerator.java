@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
@@ -14,7 +13,6 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -24,7 +22,7 @@ import javax.swing.JSeparator;
  * @author Chris O
  * @param <T>
  */
-public class ParentsRightClickMenuGenerator<T extends Concept> extends EntityRightClickMenuGenerator<T> {
+public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditReportRightClickMenu<T> {
     
     private final NATBrowserPanel<T> mainPanel;
     private final ConceptBrowserDataSource<T> dataSource;
@@ -147,25 +145,4 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends EntityRig
         return new ArrayList<>();
     }
     
-    private JMenu generateRemoveErrorMenu(
-            AuditSet<T> auditSet, 
-            T focusConcept, 
-            List<ParentError<T>> reportedParentErrors) {
-  
-        JMenu removeExistingErrorsMenu = new JMenu("Remove reported parent error");
-        removeExistingErrorsMenu.setFont(removeExistingErrorsMenu.getFont().deriveFont(14.0f));
-
-        reportedParentErrors.forEach((error) -> {
-            JMenuItem errorBtn = new JMenuItem(error.getSummaryText());
-            errorBtn.setFont(errorBtn.getFont().deriveFont(14.0f));
-            errorBtn.addActionListener((ae) -> {
-                auditSet.deleteError(focusConcept, error);
-            });
-
-            removeExistingErrorsMenu.add(errorBtn);
-        });
-        
-        return removeExistingErrorsMenu;
-    }
-
 }

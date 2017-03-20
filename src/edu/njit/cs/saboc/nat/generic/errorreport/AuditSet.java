@@ -5,8 +5,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult.State;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.child.ChildError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.child.IncorrectChildError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.IncorrectParentError;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ParentError;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -227,6 +229,48 @@ public class AuditSet<T extends Concept> {
     
     public Optional<AuditResult<T>> getAuditResult(T concept) {
         return Optional.ofNullable(auditResults.get(concept));
+    }
+    
+    public List<OntologyError<T>> getAllReportedErrors(T auditSetConcept) {
+        Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
+
+        if (!optAuditResult.isPresent()) {
+            return Collections.emptyList();
+        }
+        
+        return optAuditResult.get().getErrors();
+    }
+    
+    public List<ParentError<T>> getParentErrors(T auditSetConcept) {
+        Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
+        
+        if(!optAuditResult.isPresent()) {
+            return Collections.emptyList();
+        }
+        
+        List<ParentError<T>> relatedErrors = optAuditResult.get().getErrors().stream().filter((error) -> {
+            return (error instanceof ParentError);
+        }).map((error) -> {
+            return (ParentError<T>) error;
+        }).collect(Collectors.toList());
+
+        return relatedErrors;
+    }
+    
+    public List<ChildError<T>> getChildErrors(T auditSetConcept) {
+        Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
+
+        if (!optAuditResult.isPresent()) {
+            return Collections.emptyList();
+        }
+
+        List<ChildError<T>> relatedErrors = optAuditResult.get().getErrors().stream().filter((error) -> {
+            return (error instanceof ChildError);
+        }).map((error) -> {
+            return (ChildError<T>) error;
+        }).collect(Collectors.toList());
+
+        return relatedErrors;
     }
            
     public List<IncorrectParentError<T>> getRelatedParentErrors(T auditSetConcept, T parentConcept) {

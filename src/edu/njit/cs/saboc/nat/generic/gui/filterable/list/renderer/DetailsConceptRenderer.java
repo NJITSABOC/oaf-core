@@ -58,6 +58,10 @@ public class DetailsConceptRenderer<T extends Concept> extends BaseFilterableRen
         return dataSource;
     }
     
+    protected SimpleConceptRenderer<T> getConceptRenderer() {
+        return conceptRenderer;
+    }
+    
     public void addDetailsLabel(JLabel label) {
         detailsPanel.add(label);
         detailsPanel.add(Box.createHorizontalStrut(10));

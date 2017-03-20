@@ -91,6 +91,8 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
                     
                     if(index >= 0) {
                         V item = list.getItemAtIndex(index).getObject();
+                        
+                        list.setSelectedIndex(index);
     
                         rightClickManager.setRightClickedItem(item);
                     } else {

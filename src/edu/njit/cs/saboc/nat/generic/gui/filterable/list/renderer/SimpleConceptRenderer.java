@@ -75,6 +75,14 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
     public ConceptBrowserDataSource<T> getDataSource() {
         return dataSource;
     }
+    
+    public JLabel getConceptNameLabel() {
+        return conceptNameLabel;
+    }
+    
+    public JLabel getConceptIdLabel() {
+        return conceptIdLabel;
+    }
 
     @Override
     public Component getListCellRendererComponent(

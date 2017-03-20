@@ -214,11 +214,12 @@ public class ClusterTANDerivationParser {
         AbNDerivation parentAbNDerivation = null;
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
-        String classType = (String)arr_base.get(0);
-        if (classType.contains("Disjoint")) {
+        JSONObject resultObject = findJSONObjectByName(arr_base, "ClassName");
+        String className = resultObject.get("ClassName").toString();
+        if (className.contains("Disjoint")) {
             DisjointAbNDerivationParser disjointParser = new DisjointAbNDerivationParser();
             parentAbNDerivation = disjointParser.disjointParser(arr_base, sourceOntology, testing.getDisjointPAreaAbNFactory(), conceptFactory, propertyFactory, testing);           
-        }else if (classType.contains("TAN")) {
+        }else if (className.contains("TAN")) {
             ClusterTANDerivationParser tanParser = new ClusterTANDerivationParser();
             parentAbNDerivation = tanParser.tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
             
@@ -249,7 +250,22 @@ public class ClusterTANDerivationParser {
     
     
         // how to deserialize this??
-        AbNDerivation parentAbNDerivation =null;
+        AbNDerivation parentAbNDerivation = null;
+        JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
+        JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
+        JSONObject resultObject = findJSONObjectByName(arr_base, "ClassName");
+        String className = resultObject.get("ClassName").toString();
+        if (className.contains("Disjoint")) {
+            DisjointAbNDerivationParser disjointParser = new DisjointAbNDerivationParser();
+            parentAbNDerivation = disjointParser.disjointParser(arr_base, sourceOntology, testing.getDisjointPAreaAbNFactory(), conceptFactory, propertyFactory, testing);           
+        }else if (className.contains("TAN")) {
+            ClusterTANDerivationParser tanParser = new ClusterTANDerivationParser();
+            parentAbNDerivation = tanParser.tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
+            
+        }else{
+            PAreaTaxonomyDerivationParser pparser = new PAreaTaxonomyDerivationParser();
+            parentAbNDerivation = pparser.coreParser(arr_base, sourceOntology, testing.getPAreaTaxonomyFactory(), conceptFactory, propertyFactory, testing);
+        }
         
         Concept nodeRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");

@@ -256,12 +256,7 @@ public class FilterableList<T> extends JPanel {
     public void setSelectedIndex(int row){
         this.list.setSelectedIndex(row);
     }
-    
-    //select a particular row in JList
-    public void setSelectedIndex(int row){
-        this.list.setSelectedIndex(row);
-    }
-    
+        
     public void setListFontSize(int size) {
         if(size > 0) {
             list.setFont(list.getFont().deriveFont(Font.PLAIN, (float)size));

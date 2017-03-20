@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDeri
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.PropertyLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import testing.AbNDerivationFactoryTesting;
 
 /**
  *
@@ -32,35 +34,35 @@ public class ClusterTANDerivationParser {
     public ClusterTANDerivationParser() {
     }
 
-    public <T extends ClusterTANDerivation> T tanParser(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public <T extends AbNDerivation> T tanParser(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "ClassName");
         String className = (String) jsonObject.get("ClassName");
         T result = null;
         if (className.equalsIgnoreCase("SimpleClusterTANDerivation")) {
-            result = (T) parseSimpleClusterTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseSimpleClusterTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("RootSubTANDerivation")) {
-            result = (T) parseRootSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseRootSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("ExpandedSubTANDerivation")) {
-            result = (T) parseExpandedSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseExpandedSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("AncestorSubTANDerivation")) {
-            result = (T) parseAncestorSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseAncestorSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("AggregateTANDerivation")) {
-            result = (T) parseAggregateTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseAggregateTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("AggregateRootSubTANDerivation")) {
-            result = (T) parseAggregateRootSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseAggregateRootSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("AggregateAncestorSubTANDerivation")) {
-            result = (T) parseAggregateAncestorSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseAggregateAncestorSubTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         }else if (className.equalsIgnoreCase("TANFromPartitionedNodeDerivation")) {
-            result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         }else if (className.equalsIgnoreCase("TANFromSinglyRootedNodeDerivation")) {
-            result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory);
+            result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         }
 
         return result;
     }
 
-    public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         Set<Concept> root = null;
 
@@ -79,11 +81,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public RootSubTANDerivation parseRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public RootSubTANDerivation parseRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         Concept clusterRootConcept = null;
 
@@ -101,11 +103,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public ExpandedSubTANDerivation parseExpandedSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public ExpandedSubTANDerivation parseExpandedSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         Concept aggregateClusterRoot = null;
 
@@ -123,11 +125,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public AncestorSubTANDerivation parseAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public AncestorSubTANDerivation parseAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         Concept clusterRootConcept = null;
 
@@ -145,11 +147,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public AggregateTANDerivation parseAggregateTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public AggregateTANDerivation parseAggregateTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation base = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
         int bound = (int) boundObject.get("Bound");
@@ -158,11 +160,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public AggregateRootSubTANDerivation parseAggregateRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public AggregateRootSubTANDerivation parseAggregateRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation aggregateBase = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation aggregateBase = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
         int minBound = (int) boundObject.get("Bound");
@@ -182,11 +184,11 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public AggregateAncestorSubTANDerivation parseAggregateAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public AggregateAncestorSubTANDerivation parseAggregateAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation aggregateBase = tanParser(arr_base, sourceOntology, factory, conceptFactory);
+        ClusterTANDerivation aggregateBase = tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
         int minBound = (int) boundObject.get("Bound");
@@ -206,7 +208,7 @@ public class ClusterTANDerivationParser {
         return result;
     }
 
-    public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory) {
+    public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
 
         // how to deserialize this??
         AbNDerivation parentAbNDerivation = null;
@@ -215,14 +217,14 @@ public class ClusterTANDerivationParser {
         String classType = (String)arr_base.get(0);
         if (classType.contains("Disjoint")) {
             DisjointAbNDerivationParser disjointParser = new DisjointAbNDerivationParser();
-            parentAbNDerivation = disjointParser.disjointParser(arr_base, sourceOntology, factory, conceptFactory);           
+            parentAbNDerivation = disjointParser.disjointParser(arr_base, sourceOntology, testing.getDisjointPAreaAbNFactory(), conceptFactory, propertyFactory, testing);           
         }else if (classType.contains("TAN")) {
             ClusterTANDerivationParser tanParser = new ClusterTANDerivationParser();
-            parentAbNDerivation = tanParser.tanParser(arr_base, sourceOntology, factory, conceptFactory);
+            parentAbNDerivation = tanParser.tanParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
             
         }else{
             PAreaTaxonomyDerivationParser pparser = new PAreaTaxonomyDerivationParser();
-            parentAbNDerivation = pparser.coreParser(arr_base, sourceOntology, factory, conceptFactory);
+            parentAbNDerivation = pparser.coreParser(arr_base, sourceOntology, testing.getPAreaTaxonomyFactory(), conceptFactory, propertyFactory, testing);
         }
 
         // how to deserialize parentAbNderivation and node???
@@ -243,7 +245,7 @@ public class ClusterTANDerivationParser {
     
     
     
-    public TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory){
+    public TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, TANFactory factory, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing){
     
     
         // how to deserialize this??

@@ -19,6 +19,8 @@ public class EntityRightClickManager<T> {
     
     private Optional<T> rightClickedItem;
     
+    private int menuItemCount = 0;
+    
     public EntityRightClickManager(){
         this.menuGenerator = Optional.empty();
         this.rightClickedItem = Optional.empty();
@@ -35,7 +37,7 @@ public class EntityRightClickManager<T> {
     }
 
     public void setRightClickedItem(T item) {
-        this.popup.removeAll();
+        resetPopup();
         
         rightClickedItem = Optional.of(item);
 
@@ -45,7 +47,7 @@ public class EntityRightClickManager<T> {
     }
     
     public void clearRightClickedItem() {
-        this.popup.removeAll();
+        resetPopup();
         
         this.rightClickedItem = Optional.empty();
         
@@ -54,15 +56,21 @@ public class EntityRightClickManager<T> {
         }
     }
     
+    private void resetPopup() {
+        this.menuItemCount = 0;
+        this.popup.removeAll();
+    }
+    
     private void buildPopup(ArrayList<JComponent> components) {
         components.forEach((component) -> {
             popup.add(component);
         });
+        
+        this.menuItemCount = components.size();
     }
 
     public void showPopup(MouseEvent e) {
-        
-        if(menuGenerator.isPresent()) {
+        if(menuGenerator.isPresent() && menuItemCount > 0) {
             popup.show(e.getComponent(), e.getX(), e.getY());
         }
     }

@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptR
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.SiblingsRightClickMenu;
 import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 
@@ -25,7 +26,7 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
     public SiblingPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
         
         super(mainPanel, dataSource);
-        
+
         this.setLayout(new BorderLayout());
 
         this.siblingPanel = new ConceptListPanel<>(
@@ -36,7 +37,9 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
                 true,
                 true,
                 true);
-
+        
+        this.siblingPanel.setRightClickMenuGenerator(new SiblingsRightClickMenu<>(mainPanel, dataSource));    
+        
         this.chkShowStrictOnly = new JCheckBox("Show Strict Siblings Only");
         
         this.chkShowStrictOnly.addActionListener((ae) -> {

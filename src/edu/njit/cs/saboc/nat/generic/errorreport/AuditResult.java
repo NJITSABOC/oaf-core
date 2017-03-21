@@ -61,6 +61,11 @@ public class AuditResult<T extends Concept> {
     }
         
     public void addError(OntologyError<T> error) {
+        
+        if(error == null) {
+            return;
+        }
+        
         errors.add(error);
         
         this.state = State.Error;
@@ -73,7 +78,7 @@ public class AuditResult<T extends Concept> {
             this.state = State.Unaudited;
         }
     }
-    
+        
     public ArrayList<OntologyError<T>> getErrors() {
         return errors;
     }

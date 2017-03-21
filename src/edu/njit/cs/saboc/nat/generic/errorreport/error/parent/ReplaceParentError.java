@@ -90,8 +90,10 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
             }
         }
         
+        
         return String.format("<html><font color = 'RED'>"
-                + "<b>Erroneous parent (remove): </b></font> %s. Replace with: %s", 
+                + "<b>Erroneous parent (remove): </b></font> %s. "
+                + "<font color = 'RED'><b>Replace with: </b></font>%s", 
                 super.getErroneousParent().getName(), 
                 description);
     }

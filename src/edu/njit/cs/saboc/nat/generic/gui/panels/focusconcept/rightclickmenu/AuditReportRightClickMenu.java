@@ -24,7 +24,7 @@ public abstract class AuditReportRightClickMenu<T extends Concept> extends Entit
         JMenu removeExistingErrorsMenu = new JMenu("Remove reported error");
         removeExistingErrorsMenu.setFont(removeExistingErrorsMenu.getFont().deriveFont(14.0f));
 
-        reportedErrors.forEach((error) -> {
+        reportedErrors.forEach( (error) -> {
             JMenuItem errorBtn = new JMenuItem(error.getStyledText());
             errorBtn.setFont(errorBtn.getFont().deriveFont(14.0f));
             errorBtn.addActionListener((ae) -> {

@@ -19,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 
 /**
  * A custom fitlerable list where filterable entries are nested under other
@@ -53,7 +55,8 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     private final ArrayList<EntrySelectionListener<V>> selectionListeners = new ArrayList<>();
     
     private final JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
+    private final EntityRightClickManager<V> rightClickManager = new EntityRightClickManager<>();
+    
     public NestedFilterableList() {
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
@@ -216,6 +219,11 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
                             }
                         }
                         
+                        if (e.getButton() == MouseEvent.BUTTON3){
+                            rightClickManager.setRightClickedItem((V)panel.getEntry().getObject());
+                            rightClickManager.showPopup(e);
+                        }                     
+                        
                         panel.requestFocusInWindow();
                     }
                 });
@@ -262,6 +270,9 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         clearSelection();
         
         panel.setSelected(true);
+    }
+    public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<V> generator) {
+        this.rightClickManager.setMenuGenerator(generator);
     }
     
     public abstract FilterableNestedEntryPanel<FilterableNestedEntry<T, V>> 

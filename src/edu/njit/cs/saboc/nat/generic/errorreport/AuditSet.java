@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.nat.generic.errorreport;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult.State;
@@ -9,6 +10,8 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.child.ChildError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.child.IncorrectChildError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.IncorrectParentError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ParentError;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.ErroneousSemanticRelationship;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.SemanticRelationshipError;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -272,6 +275,22 @@ public class AuditSet<T extends Concept> {
 
         return relatedErrors;
     }
+    
+    public List<SemanticRelationshipError<T>> getSemanticRelationshipErrors(T auditSetConcept) {
+        Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
+
+        if (!optAuditResult.isPresent()) {
+            return Collections.emptyList();
+        }
+
+        List<SemanticRelationshipError<T>> relatedErrors = optAuditResult.get().getErrors().stream().filter((error) -> {
+            return (error instanceof SemanticRelationshipError);
+        }).map((error) -> {
+            return (SemanticRelationshipError<T>) error;
+        }).collect(Collectors.toList());
+
+        return relatedErrors;
+    }
            
     public List<IncorrectParentError<T>> getRelatedParentErrors(T auditSetConcept, T parentConcept) {
         
@@ -320,6 +339,34 @@ public class AuditSet<T extends Concept> {
 
         return relatedErrors;
     }
+    
+    public List<ErroneousSemanticRelationship<T, InheritableProperty>> getRelatedSemanticRelationshipErrors(
+            T auditSetConcept, 
+            InheritableProperty property, 
+            T target) {
+        
+        Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
+
+        if (!optAuditResult.isPresent()) {
+            return Collections.emptyList();
+        }
+
+        List<ErroneousSemanticRelationship<T, InheritableProperty>> relatedErrors = optAuditResult.get().getErrors().stream().filter((error) -> {
+            
+            if(error instanceof ErroneousSemanticRelationship) {
+                ErroneousSemanticRelationship<T, InheritableProperty> relError = (ErroneousSemanticRelationship<T, InheritableProperty>)error;
+                
+                return relError.getRelType().equals(property) && relError.getTarget().equals(target);
+            }
+            
+            return false;
+        }).map((error) -> {
+            return (ErroneousSemanticRelationship<T, InheritableProperty>) error;
+        }).collect(Collectors.toList());
+
+        return relatedErrors;
+    }
+    
     
     public JSONObject toJSON() {
                 

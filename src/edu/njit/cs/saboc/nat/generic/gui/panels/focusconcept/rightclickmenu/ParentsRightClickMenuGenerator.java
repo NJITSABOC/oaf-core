@@ -22,7 +22,7 @@ import javax.swing.JSeparator;
  * @author Chris O
  * @param <T>
  */
-public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditReportRightClickMenu<T> {
+public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditReportRightClickMenu<T, T> {
     
     private final NATBrowserPanel<T> mainPanel;
     private final ConceptBrowserDataSource<T> dataSource;

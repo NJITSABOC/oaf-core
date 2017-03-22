@@ -14,7 +14,6 @@ import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.concept.Grandpare
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.CommonBrowserDataRetrievers;
 import edu.njit.cs.saboc.nat.generic.gui.panels.dataretrievers.GrandparentResult;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.GrandparentsRightClickMenu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -60,9 +59,7 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
                         (FilterableNestedEntryPanel<?>)relGroupPanel;
             }
         };
-        
-        this.grandParentList.setRightClickMenuGenerator(new GrandparentsRightClickMenu<>(mainPanel, dataSource));
-                
+
         this.grandParentList.addEntrySelectionListener(new EntrySelectionListener<T>() {
 
             @Override

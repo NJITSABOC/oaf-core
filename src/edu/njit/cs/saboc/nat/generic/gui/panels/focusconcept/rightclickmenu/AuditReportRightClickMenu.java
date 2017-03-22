@@ -12,9 +12,11 @@ import javax.swing.JSeparator;
 /**
  *
  * @author Chris O
+ * 
  * @param <T>
+ * @param <V>
  */
-public abstract class AuditReportRightClickMenu<T extends Concept> extends EntityRightClickMenuGenerator<T> {
+public abstract class AuditReportRightClickMenu<T extends Concept, V> extends EntityRightClickMenuGenerator<V> {
 
     protected JMenu generateRemoveErrorMenu(
             AuditSet<T> auditSet,

@@ -55,6 +55,7 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     private final ArrayList<EntrySelectionListener<V>> selectionListeners = new ArrayList<>();
     
     private final JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    
     private final EntityRightClickManager<V> rightClickManager = new EntityRightClickManager<>();
     
     public NestedFilterableList() {

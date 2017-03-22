@@ -112,6 +112,42 @@ public class MissingSemanticRelationshipError<T extends Concept, V extends Inher
 
     @Override
     public String getStyledText() {
-        return getSummaryText();
+        
+        String missingRelName;
+        
+        if (missingRelType.isPresent()) {
+            if (missingTarget.isPresent()) {
+                missingRelName = super.generateStyledRelationshipText(
+                        missingRelType.get().getName(), 
+                        missingTarget.get().getName());
+                
+            } else {
+               missingRelName = super.generateStyledRelationshipText(
+                        missingRelType.get().getName(), 
+                        "[target not specified]");
+            }
+        } else {
+            if (missingTarget.isPresent()) {
+                missingRelName = super.generateStyledRelationshipText(
+                        "[type not specified]", 
+                        missingTarget.get().getName());
+            } else {
+                missingRelName = "[not specified]";
+            }
+        }
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Missing relationship: </b></font> %s. ", 
+                missingRelName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
 }

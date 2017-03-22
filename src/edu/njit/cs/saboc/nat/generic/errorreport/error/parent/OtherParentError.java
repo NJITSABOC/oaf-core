@@ -28,7 +28,7 @@ public class OtherParentError<T extends Concept> extends IncorrectParentError<T>
 
     @Override
     public String getSummaryText() {
-        return String.format("Other error with parent: %s", this.getErroneousParent().getName());
+        return String.format("Other error with parent: %s", this.getIncorrectParent().getName());
     }
 
     @Override
@@ -38,9 +38,17 @@ public class OtherParentError<T extends Concept> extends IncorrectParentError<T>
     
     @Override
     public String getStyledText() {
-        return String.format("<html><font color = 'RED'>"
-                + "<b>Other error with parent: </b></font> %s. %s", 
-                super.getErroneousParent().getName(), 
-                getComment());
+        String text = String.format("<html><font color = 'RED'><b>Other error with parent: </b></font> %s", 
+                super.getIncorrectParent().getName());
+        
+        String desc;
+        
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 }

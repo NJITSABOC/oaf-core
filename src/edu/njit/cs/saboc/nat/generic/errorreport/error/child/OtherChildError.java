@@ -37,7 +37,15 @@ public class OtherChildError<T extends Concept> extends IncorrectChildError<T> {
 
     @Override
     public String getStyledText() {
-        return String.format("<html><font color = 'RED'><b>Other error with child: </b></font> %s", 
+        String text =  String.format("<html><font color = 'RED'><b>Other error with child: </b></font> %s", 
                 super.getErroneousChild().getName());
+        
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 }

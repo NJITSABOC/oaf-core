@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
  * @param <T>
  * @param <V>
  */
-public class OtherSemanticRelationshipError<T extends Concept, V extends InheritableProperty> extends ErroneousSemanticRelationship<T, V> {
+public class OtherSemanticRelationshipError<T extends Concept, V extends InheritableProperty> extends IncorrectSemanticRelationshipError<T, V> {
     
     public OtherSemanticRelationshipError(Ontology<T> ontology, V relType, T target) {
         super(ontology, relType, target);
@@ -51,6 +51,20 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
     
     @Override
     public String getStyledText() {
-        return getSummaryText();
+        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Other error with relationship: </b></font> %s", 
+                relName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
 }

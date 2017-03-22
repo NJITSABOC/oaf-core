@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -29,6 +30,8 @@ public abstract class AuditReportRightClickMenu<T extends Concept, V> extends En
         reportedErrors.forEach( (error) -> {
             JMenuItem errorBtn = new JMenuItem(error.getStyledText());
             errorBtn.setFont(errorBtn.getFont().deriveFont(14.0f));
+            errorBtn.setFont(errorBtn.getFont().deriveFont(Font.PLAIN));
+            
             errorBtn.addActionListener((ae) -> {
                 auditSet.deleteError(focusConcept, error);
             });
@@ -41,9 +44,7 @@ public abstract class AuditReportRightClickMenu<T extends Concept, V> extends En
         JMenuItem removeAllBtn = new JMenuItem("Remove all errors");
         removeAllBtn.setFont(removeAllBtn.getFont().deriveFont(14.0f));
         removeAllBtn.addActionListener((ae) -> {
-            reportedErrors.forEach( (error) -> {
-                auditSet.deleteError(focusConcept, error);
-            });
+            auditSet.deleteAllErrors(focusConcept);
         });
 
         removeExistingErrorsMenu.add(removeAllBtn);

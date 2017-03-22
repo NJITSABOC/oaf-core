@@ -12,20 +12,20 @@ import org.json.simple.JSONObject;
  * @param <T>
  * @param <V>
  */
-public abstract class ErroneousSemanticRelationship<T extends Concept, V extends InheritableProperty> 
+public abstract class IncorrectSemanticRelationshipError<T extends Concept, V extends InheritableProperty> 
             extends SemanticRelationshipError<T> {
     
     private final V relType;
     private final T target;
      
-    public ErroneousSemanticRelationship(Ontology<T> ontology, V relType, T target) {
+    public IncorrectSemanticRelationshipError(Ontology<T> ontology, V relType, T target) {
         super(ontology);
         
         this.relType = relType;
         this.target = target;
     }
     
-    public ErroneousSemanticRelationship(
+    public IncorrectSemanticRelationshipError(
             Ontology<T> ontology, 
             V relType, 
             T target,

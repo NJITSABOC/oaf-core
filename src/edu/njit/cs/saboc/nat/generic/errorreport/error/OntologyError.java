@@ -73,6 +73,18 @@ public abstract class OntologyError<T extends Concept> {
     
     public abstract JSONObject toJSON();
     
+    protected String getStyledCommentText() {
+        String base = "<html><table><tr><td width = '32'></td><td><font size = '-1'><b>Comments:</b> %s</font></td></tr></table>";
+        
+        return String.format(base, getComment());
+    }
+    
+    protected String getStyledEmptyCommentText() {
+        String base = "<html><table><tr><td width = '32'></td><td><font size = '-1'><b>Comments:</b> %s</font></td></tr></table>";
+        
+        return String.format(base, "[No comments specified]");
+    }
+    
     protected JSONObject getBaseJSON(String type) {
         JSONObject object = new JSONObject();
         object.put("type", type);

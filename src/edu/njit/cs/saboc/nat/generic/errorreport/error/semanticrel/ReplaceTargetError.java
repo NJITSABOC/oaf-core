@@ -10,11 +10,12 @@ import org.json.simple.JSONObject;
 /**
  *
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */
 public class ReplaceTargetError <T extends Concept, V extends InheritableProperty> 
-            extends ErroneousSemanticRelationship<T, V> {
+            extends IncorrectSemanticRelationshipError<T, V> {
     
     private Optional<T> replacementTarget = Optional.empty();
 
@@ -87,6 +88,30 @@ public class ReplaceTargetError <T extends Concept, V extends InheritablePropert
     
     @Override
     public String getStyledText() {
-        return getSummaryText();
+        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        
+        String replacementTargetName;
+        
+        if(replacementTarget.isPresent()) {
+            replacementTargetName = this.getReplacementTarget().get().getName();
+        } else {
+            replacementTargetName = "[not specified]";
+        }
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Replace target of relationship: </b></font> %s. "
+                + "<font color = 'RED'><b>Replace with: </b></font> %s",
+                relName,
+                replacementTargetName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
 }

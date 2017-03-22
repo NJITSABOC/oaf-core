@@ -34,7 +34,7 @@ public class ErroneousParentError<T extends Concept> extends RemoveParentError<T
 
     @Override
     public String getSummaryText() {
-        return String.format("Erroneous parent: %s", this.getErroneousParent().getName());
+        return String.format("Erroneous parent: %s", this.getIncorrectParent().getName());
     }
 
     @Override
@@ -44,8 +44,15 @@ public class ErroneousParentError<T extends Concept> extends RemoveParentError<T
 
     @Override
     public String getStyledText() {
-        return String.format("<html><font color = 'RED'>"
+        String text = String.format("<html><font color = 'RED'>"
                 + "<b>Erroneous parent (remove): </b></font> %s", 
-                super.getErroneousParent().getName());
+                super.getIncorrectParent().getName());
+        
+        
+        if(!getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+ 
+        return text;
     }
 }

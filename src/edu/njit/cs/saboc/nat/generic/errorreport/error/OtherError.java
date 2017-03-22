@@ -45,6 +45,15 @@ public class OtherError<T extends Concept> extends OntologyError<T> {
 
     @Override
     public String getStyledText() {
-        return String.format("<html><font color = 'RED'><b>Other error: </b></font> %s", getComment());
+        
+        String text = "<html><font color = 'RED'><b>Other error</b></font>";
+        
+        if(this.getComment().isEmpty()) {
+            text += "<br>[Not specified]";
+        } else {
+            text += this.getStyledCommentText();
+        }
+        
+        return text;
     }
 }

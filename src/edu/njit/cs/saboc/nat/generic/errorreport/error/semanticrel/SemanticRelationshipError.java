@@ -23,4 +23,10 @@ public abstract class SemanticRelationshipError<T extends Concept> extends Ontol
         
        super(ontology, comment, severity);
     }
+    
+    public String generateStyledRelationshipText(String propertyName, String targetName) {
+        return String.format("<font color = 'RED'>==</font> %s <font color = 'RED'>==></font> %s", 
+                        propertyName,
+                        targetName);
+    }
 }

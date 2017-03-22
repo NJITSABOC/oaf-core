@@ -13,7 +13,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.OtherParentError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.RedundantParentError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ReplaceParentError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.OtherSemanticRelationshipError;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.ErroneousSemanticRelationship;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.IncorrectSemanticRelationshipError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.MissingSemanticRelationshipError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.RemoveSemanticRelationshipError;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.ReplaceSemanticRelationshipError;
@@ -221,7 +221,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public ErroneousSemanticRelationship<T, V> parseRemoveSemanticRelationship(JSONObject object) {
+    public IncorrectSemanticRelationshipError<T, V> parseRemoveSemanticRelationship(JSONObject object) {
         BaseIncorrectSemanticRelationshipParseResult<T, V> baseResult = this.getBaseIncorrectSemanticRelationshipResult(object);
         
         return new RemoveSemanticRelationshipError<>(

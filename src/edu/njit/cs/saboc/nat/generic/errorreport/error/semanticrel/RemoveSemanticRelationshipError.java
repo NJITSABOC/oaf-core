@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
  * @param <V>
  */
 public class RemoveSemanticRelationshipError<T extends Concept, V extends InheritableProperty> 
-        extends ErroneousSemanticRelationship<T, V> {
+        extends IncorrectSemanticRelationshipError<T, V> {
     
     public RemoveSemanticRelationshipError(
             Ontology<T> ontology, 
@@ -52,6 +52,18 @@ public class RemoveSemanticRelationshipError<T extends Concept, V extends Inheri
     
     @Override
     public String getStyledText() {
-        return getSummaryText();
+        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Remove erroneous relationship: </b></font> %s", 
+                relName);
+        
+        text += "<br>";
+        
+        if(!this.getComment().isEmpty()) {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
 }

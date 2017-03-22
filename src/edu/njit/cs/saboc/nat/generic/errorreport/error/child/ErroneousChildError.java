@@ -43,7 +43,13 @@ public class ErroneousChildError<T extends Concept> extends IncorrectChildError<
 
     @Override
     public String getStyledText() {
-        return String.format("<html><font color = 'RED'><b>Erroneous child: </b></font> %s", 
-                super.getErroneousChild().getName()); 
+        String text = String.format("<html><font color = 'RED'><b>Erroneous child: </b></font> %s", 
+                super.getErroneousChild().getName());
+        
+        if(!this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 }

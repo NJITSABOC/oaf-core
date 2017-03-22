@@ -49,7 +49,7 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
 
     @Override
     public String getSummaryText() {
-        String base = String.format("Replace erroneous parent: %s.", this.getErroneousParent().getName());
+        String base = String.format("Replace erroneous parent: %s.", this.getIncorrectParent().getName());
         
         String replaceWithDesc;
         
@@ -83,18 +83,20 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
         if (this.replacementParent.isPresent()) {
             description = this.replacementParent.get().getName();
         } else {
-            if (this.getComment().isEmpty()) {
-                description = "[not specified]";
-            } else {
-                description = this.getComment();
-            }
+            description = "[Replacement not specified]";
         }
         
-        
-        return String.format("<html><font color = 'RED'>"
+        String text =  String.format("<html><font color = 'RED'>"
                 + "<b>Erroneous parent (remove): </b></font> %s. "
                 + "<font color = 'RED'><b>Replace with: </b></font>%s", 
-                super.getErroneousParent().getName(), 
+                super.getIncorrectParent().getName(), 
                 description);
+        
+        
+        if(!this.getComment().isEmpty()) {
+             text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 }

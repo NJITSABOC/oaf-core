@@ -58,4 +58,48 @@ public class ReplaceSemanticRelationshipError<T extends Concept, V extends Inher
 
         return object;
     }
+    
+     @Override
+    public String getStyledText() {
+        String incorrectRelName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        
+        String replacementRelName;
+        
+        if (this.replacementRelType.isPresent()) {
+            if (super.getReplacementTarget().isPresent()) {
+                replacementRelName = super.generateStyledRelationshipText(
+                        replacementRelType.get().getName(), 
+                        super.getReplacementTarget().get().getName());
+                
+            } else {
+               replacementRelName = super.generateStyledRelationshipText(
+                        replacementRelType.get().getName(), 
+                        "[target not specified]");
+            }
+        } else {
+            if (super.getReplacementTarget().isPresent()) {
+                replacementRelName = super.generateStyledRelationshipText(
+                        "[type not specified]", 
+                         super.getReplacementTarget().get().getName());
+            } else {
+                replacementRelName = "[not specified]";
+            }
+        }
+
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Replace relationship: </b></font> %s.<br>"
+                + "<font color = 'RED'><b>Replace with: </b></font> %s",
+                incorrectRelName,
+                replacementRelName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+        
+        return text;
+    }
 }

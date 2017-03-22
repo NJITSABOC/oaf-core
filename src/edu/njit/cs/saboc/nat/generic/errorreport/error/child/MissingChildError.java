@@ -76,18 +76,22 @@ public class MissingChildError<T extends Concept> extends ChildError<T> {
 
     @Override
     public String getStyledText() {
-        String description;
+        String missingChildName;
         
         if(this.missingChild.isPresent()) {
-            description = this.missingChild.get().getName();
+            missingChildName = this.missingChild.get().getName();
         } else {
-            if(this.getComment().isEmpty()) {
-                description = "[details not specified]";
-            } else {
-                description = this.getComment();
-            }
+            missingChildName = "[Not specified]";
         }
         
-        return String.format("<html><font color = 'RED'><b>Missing child: </b></font> %s", description);
+        String text = String.format("<html><font color = 'RED'><b>Missing child: </b></font> %s", missingChildName);
+        
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 }

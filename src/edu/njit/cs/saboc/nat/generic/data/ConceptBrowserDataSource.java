@@ -5,8 +5,13 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.DescendantsVisitor;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
+import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -45,6 +50,80 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
         return String.format("<html><font face='Arial' size = '5'><b>%s</b><br>%s", 
                 concept.getName(), 
                 concept.getIDAsString());
+    }
+    
+    public String getFocusConceptText(AuditSet<T> auditSet, T concept) {
+        
+        return String.format("<html><font face='Arial' size = '5'><b>%s</b><br>%s<br>%s", 
+                concept.getName(), 
+                concept.getIDAsString(),
+                getStyledAuditStatusText(auditSet, concept));
+    }
+    
+    public String getStyledAuditStatusText(AuditSet<T> auditSet, T concept) {
+        if(auditSet.getConcepts().contains(concept)) {
+            Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(concept);
+            
+            if(optAuditResult.isPresent()) {
+                AuditResult.State auditState = optAuditResult.get().getState();
+                
+                String base = "<b>Audit Status: <font color = '%s'>%s</font></b>";
+                
+                if(auditState == AuditResult.State.Unaudited) {
+                    return String.format(base, "black", "Unaudited");
+                } else if(auditState == AuditResult.State.Correct) {
+                    return String.format(base, "green", "Correct");
+                } else {
+                    List<OntologyError<T>> errors = auditSet.getAllReportedErrors(concept);
+                    
+                    return String.format(base, "red", String.format("Erroneous - %d Error(s) reported", errors.size()));
+                }
+            }
+        }
+        
+        return "";
+    }
+    
+    public String getConceptToolTipText(T concept) {
+        return String.format("<html><font size = '5'>%s</font>", concept.getName());
+    }
+    
+    public String getAuditConceptToolTipText(AuditSet<T> auditSet, T concept) {
+        
+        String result = this.getConceptToolTipText(concept);
+
+        if (auditSet.getConcepts().contains(concept)) {
+
+            Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(concept);
+
+            String auditStatus = this.getStyledAuditStatusText(auditSet, concept);
+
+            result += "<br>";
+            result += auditStatus;
+
+            if (optAuditResult.isPresent()) {
+                AuditResult<T> auditResult = optAuditResult.get();
+
+                if (!auditResult.getComment().isEmpty()) {
+                    result += "<p><p>";
+                    result += String.format("<b>Audit comment: </b> <div align = 'justify'>%s</div>", auditResult.getComment());
+                }
+
+                ArrayList<OntologyError<T>> errors = auditResult.getErrors();
+
+                if (!errors.isEmpty()) {
+                    result += String.format("<p><p><font size = '3'><b>"
+                            + "Reported Errors (%d)</b></font><br>", errors.size());
+
+                    for (OntologyError<T> error : errors) {
+                        result += error.getStyledText();
+                        result += "<br>";
+                    }
+                }
+            }
+        }
+        
+        return result;
     }
     
     public abstract String getOntologyID();

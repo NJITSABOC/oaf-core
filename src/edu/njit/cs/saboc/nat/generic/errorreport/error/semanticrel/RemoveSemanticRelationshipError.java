@@ -47,12 +47,22 @@ public class RemoveSemanticRelationshipError<T extends Concept, V extends Inheri
 
     @Override
     public String getTooltipText() {
-        return "Erroneous relationship";
+        String text = "<html><font color = 'RED'><b>Remove erroneous relationship</b></font>";
+
+        text += "<br>";
+
+        if (this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
     
     @Override
     public String getStyledText() {
-        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        String relName = SemanticRelationshipError.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
         
         String text =  String.format("<html><font color = 'RED'>"
                 + "<b>Remove erroneous relationship: </b></font> %s", 

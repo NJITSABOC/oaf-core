@@ -49,16 +49,33 @@ public class AuditSetConceptRenderer<T extends Concept> extends DetailsConceptRe
                 
                 if(auditResult.getState() == AuditResult.State.Correct) {
                     
-                    this.getConceptRenderer().getConceptNameLabel().setForeground(Color.GREEN);
+                    Color color = new Color(6, 159, 50);
+                    
+                    this.getConceptRenderer().getConceptNameLabel().setForeground(color);
+                    
+                    auditStatusLabel.setForeground(color);
                     auditStatusLabel.setText("Correct");
                     
                 } else if (auditResult.getState() == AuditResult.State.Error) {
-                    
                     this.getConceptRenderer().getConceptNameLabel().setForeground(Color.RED);
-                    auditStatusLabel.setText("Errors reported (#)");
+                    
+                    auditStatusLabel.setForeground(Color.RED);
+                    auditStatusLabel.setText(
+                            String.format("Erroneous - %d error(s) reported", 
+                                    auditResult.getErrors().size()));
                     
                 } else {
-                    auditStatusLabel.setText("Unaudited");
+                    
+                    if(auditResult.getComment().isEmpty()) {
+                        auditStatusLabel.setText("Unaudited");
+                    } else {
+                        Color color = new Color(73, 87, 213);
+                        
+                        this.getConceptRenderer().getConceptNameLabel().setForeground(color);
+
+                        auditStatusLabel.setForeground(color);
+                        auditStatusLabel.setText("Audit comment");
+                    }
                 }
                 
             } else {

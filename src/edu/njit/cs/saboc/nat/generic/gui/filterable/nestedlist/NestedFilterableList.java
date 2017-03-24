@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
+import javax.swing.ToolTipManager;
 
 /**
  * A custom fitlerable list where filterable entries are nested under other
@@ -65,8 +66,20 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         this.contentPanel = new JPanel();
         this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         this.contentPanel.setOpaque(false);
-
+        
         JPanel internalPanel = new JPanel(new BorderLayout());
+        
+        internalPanel.setFocusable(true);
+        
+        internalPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    rightClickManager.clearRightClickedItem();
+                    rightClickManager.showPopup(e);
+                }
+            }
+        });
 
         internalPanel.add(contentPanel, BorderLayout.NORTH);
         internalPanel.add(Box.createGlue(), BorderLayout.CENTER);
@@ -188,6 +201,22 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
              * filterable entry in the list
              */
             entryPanel.getSubPanels().forEach( (panel) -> {
+                
+                panel.setToolTipText(panel.getEntry().getToolTipText());
+                
+                panel.addMouseListener(new MouseAdapter() {
+                    private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
+
+                    @Override
+                    public void mouseEntered(MouseEvent me) {
+                        ToolTipManager.sharedInstance().setDismissDelay(60000);
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent me) {
+                        ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
+                    }
+                });
                 
                 panel.addMouseListener(new MouseAdapter() {
 

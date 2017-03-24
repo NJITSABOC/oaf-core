@@ -54,6 +54,12 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
+    public static class ErrorParseException extends Exception {
+        public ErrorParseException(String message) {
+            super(message);
+        }
+    }
+    
     private class BaseIncorrectParentParseResult<T extends Concept> extends BaseParseResult {
         
         private final T incorrectParent;
@@ -111,14 +117,14 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         this.dataSource = dataSource;
     }
     
-    public OntologyError<T> parseError(JSONObject object) {
+    public OntologyError<T> parseError(JSONObject object) throws ErrorParseException {
         String type = object.get("type").toString();
         
         if(type.equals("MissingParent")) {
             return parseMissingParentError(object);
         } else if(type.equals("OtherParentError")) {
             return parseOtherParentError(object);
-        } else if(type.equals("RedundantParentError")) {
+        } else if(type.equals("RedundantParent")) {
             return parseRedundantParentError(object);
         } else if(type.equals("ErroneousParent")) {
             return parseErroneousParent(object);
@@ -139,13 +145,13 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         } else if(type.equals("OtherChildError")) {
             return parseOtherChildError(object);
         } else if(type.equals("ErroneousChild")) {
-            
+            return parseErroneousChildError(object);
         }
         
-        return null;
+        throw new ErrorParseException("Unknown error type");
     }
     
-    public ErroneousParentError<T> parseErroneousParent(JSONObject object) {
+    public ErroneousParentError<T> parseErroneousParent(JSONObject object) throws ErrorParseException {
         BaseIncorrectParentParseResult<T> baseResult = getBaseIncorrectParentResult(object);
 
         return new ErroneousParentError(
@@ -155,7 +161,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public OtherParentError<T> parseOtherParentError(JSONObject object) {
+    public OtherParentError<T> parseOtherParentError(JSONObject object) throws ErrorParseException {
         BaseIncorrectParentParseResult<T> baseResult = getBaseIncorrectParentResult(object);
 
         return new OtherParentError(
@@ -165,7 +171,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public RedundantParentError<T> parseRedundantParentError(JSONObject object) {
+    public RedundantParentError<T> parseRedundantParentError(JSONObject object) throws ErrorParseException {
         BaseIncorrectParentParseResult<T> baseResult = getBaseIncorrectParentResult(object);
 
         return new RedundantParentError(
@@ -175,7 +181,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
 
-    public MissingParentError<T> parseMissingParentError(JSONObject object) {
+    public MissingParentError<T> parseMissingParentError(JSONObject object) throws ErrorParseException {
         
         BaseParseResult baseResult = getBaseParseResult(object);
         
@@ -190,7 +196,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return error;
     }
     
-    public ReplaceParentError<T> parseReplaceParentError(JSONObject object) {
+    public ReplaceParentError<T> parseReplaceParentError(JSONObject object) throws ErrorParseException {
         
         BaseIncorrectParentParseResult<T> baseResult = getBaseIncorrectParentResult(object);
         
@@ -209,7 +215,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return error;
     }
     
-    public OtherSemanticRelationshipError<T, V> parseOtherSemanticRelationshipError(JSONObject object) {
+    public OtherSemanticRelationshipError<T, V> parseOtherSemanticRelationshipError(JSONObject object) throws ErrorParseException {
         
         BaseIncorrectSemanticRelationshipParseResult<T, V> baseResult = this.getBaseIncorrectSemanticRelationshipResult(object);
         
@@ -221,7 +227,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public IncorrectSemanticRelationshipError<T, V> parseRemoveSemanticRelationship(JSONObject object) {
+    public IncorrectSemanticRelationshipError<T, V> parseRemoveSemanticRelationship(JSONObject object) throws ErrorParseException {
         BaseIncorrectSemanticRelationshipParseResult<T, V> baseResult = this.getBaseIncorrectSemanticRelationshipResult(object);
         
         return new RemoveSemanticRelationshipError<>(
@@ -232,7 +238,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public MissingSemanticRelationshipError<T, V> parseMissingSemanticRelationship(JSONObject object) {
+    public MissingSemanticRelationshipError<T, V> parseMissingSemanticRelationship(JSONObject object) throws ErrorParseException {
         BaseParseResult baseResult = this.getBaseParseResult(object);
         
         MissingSemanticRelationshipError<T, V> missingRelationshipError = 
@@ -249,7 +255,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return missingRelationshipError;
     }
     
-    public ReplaceTargetError<T, V> parseReplaceTarget(JSONObject object) {
+    public ReplaceTargetError<T, V> parseReplaceTarget(JSONObject object) throws ErrorParseException {
         BaseIncorrectSemanticRelationshipParseResult<T, V> baseResult = this.getBaseIncorrectSemanticRelationshipResult(object);
         
         ReplaceTargetError<T, V> replaceTarget = new ReplaceTargetError<>(
@@ -266,7 +272,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return replaceTarget;
     }
     
-    public ReplaceSemanticRelationshipError<T, V> parseReplaceSemanticRelationship(JSONObject object) {
+    public ReplaceSemanticRelationshipError<T, V> parseReplaceSemanticRelationship(JSONObject object) throws ErrorParseException {
         BaseIncorrectSemanticRelationshipParseResult<T, V> baseResult = this.getBaseIncorrectSemanticRelationshipResult(object);
 
         ReplaceSemanticRelationshipError<T, V> replaceRelError
@@ -288,7 +294,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return replaceRelError;
     }
     
-    public OtherError<T> parseOtherError(JSONObject object) {
+    public OtherError<T> parseOtherError(JSONObject object) throws ErrorParseException {
         BaseParseResult baseResult = this.getBaseParseResult(object);
         
         return new OtherError<>(
@@ -297,7 +303,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public MissingChildError<T> parseMissingChildError(JSONObject object) {
+    public MissingChildError<T> parseMissingChildError(JSONObject object) throws ErrorParseException {
         BaseParseResult baseResult = this.getBaseParseResult(object);
         
         MissingChildError<T> missingChild = new MissingChildError<>(dataSource.getOntology(), baseResult.getComment(), baseResult.getSeverity());
@@ -309,7 +315,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         return missingChild;
     }
     
-    public OtherChildError<T> parseOtherChildError(JSONObject object) {
+    public OtherChildError<T> parseOtherChildError(JSONObject object) throws ErrorParseException {
         BaseIncorrectChildParseResult<T> baseResult = getBaseIncorrectChildResult(object);
         
         return new OtherChildError<>(
@@ -319,7 +325,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    public ErroneousChildError<T> parseErroneousChildError(JSONObject object) {
+    public ErroneousChildError<T> parseErroneousChildError(JSONObject object) throws ErrorParseException {
         BaseIncorrectChildParseResult<T> baseResult = getBaseIncorrectChildResult(object);
         
         return new ErroneousChildError<>(
@@ -329,7 +335,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    private BaseParseResult getBaseParseResult(JSONObject object) {
+    private BaseParseResult getBaseParseResult(JSONObject object) throws ErrorParseException {
         String comment = "";
         
         if(object.containsKey("comment")) {
@@ -342,36 +348,47 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         );
     }
     
-    private BaseIncorrectParentParseResult<T> getBaseIncorrectParentResult(JSONObject object) {
+    private BaseIncorrectParentParseResult<T> getBaseIncorrectParentResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectParentParseResult<>(
                 getBaseParseResult(object), 
                 getConceptFrom(object.get("parentid").toString())
         );
     }
     
-    private BaseIncorrectChildParseResult<T> getBaseIncorrectChildResult(JSONObject object) {
+    private BaseIncorrectChildParseResult<T> getBaseIncorrectChildResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectChildParseResult<>(
                 getBaseParseResult(object), 
                 getConceptFrom(object.get("childid").toString())
         );
     }
     
-    private BaseIncorrectSemanticRelationshipParseResult<T, V> getBaseIncorrectSemanticRelationshipResult(JSONObject object) {
+    private BaseIncorrectSemanticRelationshipParseResult<T, V> getBaseIncorrectSemanticRelationshipResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectSemanticRelationshipParseResult<>(
                 getBaseParseResult(object), 
                 getPropertyFrom(object.get("typeid").toString()),
                 getConceptFrom(object.get("targetid").toString()));
     }
     
-    private T getConceptFrom(String conceptId) {
+    private T getConceptFrom(String conceptId) throws ErrorParseException {
         Set<String> parentID = Collections.singleton(conceptId);
 
         Set<T> concept = dataSource.getConceptsFromIds(parentID);
+        
+        if(!concept.isEmpty()) {
+            return concept.iterator().next();
+        }
 
-        return concept.iterator().next();
+        throw new ErrorParseException(String.format("Concept with given id not found (%s)", conceptId));
     }
     
-    private V getPropertyFrom(String propertyId) {
-        return (V)dataSource.getPropertiesFromIds(Collections.singleton(propertyId));
+    private V getPropertyFrom(String propertyId) throws ErrorParseException {
+        
+        Set<? extends InheritableProperty> properties = dataSource.getPropertiesFromIds(Collections.singleton(propertyId));
+        
+        if(!properties.isEmpty()) {
+            return (V)properties.iterator().next();
+        }
+        
+        throw new ErrorParseException(String.format("Property with given id not found (%s)", propertyId)); 
     }
 }

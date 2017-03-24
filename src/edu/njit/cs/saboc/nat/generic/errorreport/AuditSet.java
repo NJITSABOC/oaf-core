@@ -79,6 +79,17 @@ public class AuditSet<T extends Concept> {
         this.date = date;
         this.concepts = concepts;
         this.auditResults = auditResults;
+        
+        this.addAuditSetChangedListener(new AuditSetChangedAdapter() {
+
+            @Override
+            public void auditSetChanged() {
+                if(file.isPresent()) {
+                    boolean success = saveToFile(file.get());
+                }
+            }
+            
+        });
     }
     
     public void addAuditSetChangedListener(AuditSetChangedListener<T> listener) {
@@ -154,6 +165,10 @@ public class AuditSet<T extends Concept> {
         State oldState = ar.getState();
         
         ar.setAuditState(state);
+        
+        if(state != State.Error) {
+            deleteAllErrors(concept);
+        }
         
         changeListeners.forEach((listener) -> {
             listener.auditStateChanged(concept, oldState, state);

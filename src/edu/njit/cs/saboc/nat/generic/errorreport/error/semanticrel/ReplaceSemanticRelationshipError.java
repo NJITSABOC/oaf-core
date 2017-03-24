@@ -58,27 +58,68 @@ public class ReplaceSemanticRelationshipError<T extends Concept, V extends Inher
 
         return object;
     }
-    
-     @Override
-    public String getStyledText() {
-        String incorrectRelName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
-        
+
+    @Override
+    public String getTooltipText() {
+
         String replacementRelName;
         
         if (this.replacementRelType.isPresent()) {
             if (super.getReplacementTarget().isPresent()) {
-                replacementRelName = super.generateStyledRelationshipText(
+                replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         replacementRelType.get().getName(), 
                         super.getReplacementTarget().get().getName());
                 
             } else {
-               replacementRelName = super.generateStyledRelationshipText(
+               replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         replacementRelType.get().getName(), 
                         "[target not specified]");
             }
         } else {
             if (super.getReplacementTarget().isPresent()) {
-                replacementRelName = super.generateStyledRelationshipText(
+                replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
+                        "[type not specified]", 
+                         super.getReplacementTarget().get().getName());
+            } else {
+                replacementRelName = "[not specified]";
+            }
+        }
+
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Replace relationship with: </b></font> %s",
+                replacementRelName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+        
+        return text;
+    }
+    
+    @Override
+    public String getStyledText() {
+        String incorrectRelName = SemanticRelationshipError.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        
+        String replacementRelName;
+        
+        if (this.replacementRelType.isPresent()) {
+            if (super.getReplacementTarget().isPresent()) {
+                replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
+                        replacementRelType.get().getName(), 
+                        super.getReplacementTarget().get().getName());
+                
+            } else {
+               replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
+                        replacementRelType.get().getName(), 
+                        "[target not specified]");
+            }
+        } else {
+            if (super.getReplacementTarget().isPresent()) {
+                replacementRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         "[type not specified]", 
                          super.getReplacementTarget().get().getName());
             } else {

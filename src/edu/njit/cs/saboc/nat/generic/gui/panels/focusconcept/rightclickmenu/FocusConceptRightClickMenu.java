@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.AuditCommentReportDialog;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,22 +47,14 @@ public class FocusConceptRightClickMenu<T extends Concept> extends AuditReportRi
                 Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(focusConcept);
                 
                 if(optAuditResult.isPresent()) {
-                    AuditResult<T> auditResult = optAuditResult.get();
-                    
-                    if(auditResult.getState() == AuditResult.State.Unaudited) {
-                        
-                    } else if(auditResult.getState() == AuditResult.State.Correct) {
-                        
-                    } else if(auditResult.getState() == AuditResult.State.Error) {
-                        
-                    }
+                    components.add(new ConceptAuditStateMenu<>(mainPanel, dataSource, item));
                 }
             }
             
             JMenuItem auditCommentBtn = new JMenuItem("Edit audit comment");
             auditCommentBtn.setFont(auditCommentBtn.getFont().deriveFont(14.0f));
             auditCommentBtn.addActionListener((ae) -> {
-                // TODO: Audit comment dialog
+                 AuditCommentReportDialog.displayAuditCommentDialog(mainPanel, dataSource, item);
             });
            
             JMenuItem otherErrorBtn = new JMenuItem("Report other type of error");

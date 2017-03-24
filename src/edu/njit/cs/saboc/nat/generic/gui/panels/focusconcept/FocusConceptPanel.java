@@ -140,11 +140,21 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                             jtf.getWidth(),
                             jtf.getPreferredSize().height);
                     
-                    if(!conceptRect.contains(evt.getPoint())) {
+                    if (!conceptRect.contains(evt.getPoint())) {
                         return null;
                     }
 
-                    return mainPanel.getFocusConceptManager().getActiveFocusConcept().getName();
+                    String toolTip;
+                    T focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
+                    
+                    if (getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
+                        toolTip = getDataSource().getAuditConceptToolTipText(
+                                getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), focusConcept);
+                    } else {
+                        toolTip = getDataSource().getConceptToolTipText(focusConcept);
+                    }
+                    
+                    return toolTip;
                 }
 
                 return null;
@@ -159,8 +169,23 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 
                 return new Point(evt.getX(), evt.getY() + 21);
             }
-            
         };
+        
+        jtf.addMouseListener(new MouseAdapter() {
+
+            private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                ToolTipManager.sharedInstance().setDismissDelay(60000);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
+            }
+
+        });
         
         editFocusConceptPanel = new EditFocusConceptPanel(this, jtf);
         editFocusConceptPanel.addEditFocusConceptListener(new EditFocusConceptListener() {
@@ -183,11 +208,18 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         JScrollPane pane = new JScrollPane(jtf);
         ToolTipManager.sharedInstance().registerComponent(jtf);
+        
         pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        JPanel backBtnPanel = new JPanel();
+        backBtnPanel.add(backButton);
+        
+        JPanel forwardBtnPanel = new JPanel();
+        forwardBtnPanel.add(forwardButton);
 
         JPanel alignmentPanel = new JPanel(new BorderLayout());
-        alignmentPanel.add(backButton, BorderLayout.WEST);
-        alignmentPanel.add(forwardButton, BorderLayout.EAST);
+        alignmentPanel.add(backBtnPanel, BorderLayout.WEST);
+        alignmentPanel.add(forwardBtnPanel, BorderLayout.EAST);
         alignmentPanel.add(optionsPanel, BorderLayout.CENTER);
 
         focusConceptPanel.add(editFocusConceptPanel, BorderLayout.NORTH);
@@ -286,17 +318,23 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
 
         T fc = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
-        String conceptString = getDataSource().getFocusConceptText(fc);
-                
-        jtf.setText(conceptString);
+        String conceptString;
+        String toolTip;
         
-        jtf.setToolTipText(conceptString);
+        if(getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
+            conceptString = getDataSource().getFocusConceptText(getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), fc);
+            toolTip = getDataSource().getAuditConceptToolTipText(getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), fc);
+        } else {
+            conceptString = getDataSource().getFocusConceptText(fc);
+            toolTip = getDataSource().getConceptToolTipText(fc);
+        }
+     
+        jtf.setText(conceptString);
 
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);
         jtf.setEditable(false);
 
-        
         editFocusConceptPanel.clearEdits();
     }
 

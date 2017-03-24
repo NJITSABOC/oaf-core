@@ -117,18 +117,18 @@ public class MissingSemanticRelationshipError<T extends Concept, V extends Inher
         
         if (missingRelType.isPresent()) {
             if (missingTarget.isPresent()) {
-                missingRelName = super.generateStyledRelationshipText(
+                missingRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         missingRelType.get().getName(), 
                         missingTarget.get().getName());
                 
             } else {
-               missingRelName = super.generateStyledRelationshipText(
+               missingRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         missingRelType.get().getName(), 
                         "[target not specified]");
             }
         } else {
             if (missingTarget.isPresent()) {
-                missingRelName = super.generateStyledRelationshipText(
+                missingRelName = SemanticRelationshipError.generateStyledRelationshipText(
                         "[type not specified]", 
                         missingTarget.get().getName());
             } else {

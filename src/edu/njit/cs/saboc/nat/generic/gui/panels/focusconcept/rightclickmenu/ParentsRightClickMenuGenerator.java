@@ -59,47 +59,9 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
             components.add(namePanel);
             
             components.add(new JSeparator());
+            
+            components.addAll(ParentErrorReportOptions.createParentErrorComponents(mainPanel, dataSource, item));
 
-            JMenuItem removeErroneousParentBtn = new JMenuItem("Remove parent (erroneous)");
-            removeErroneousParentBtn.setFont(removeErroneousParentBtn.getFont().deriveFont(14.0f));
-            removeErroneousParentBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayErroneousParentDialog(mainPanel, dataSource, item);
-            });
-
-            JMenuItem removeRedundantParentBtn = new JMenuItem("Remove parent (redundant)");
-            removeRedundantParentBtn.setFont(removeRedundantParentBtn.getFont().deriveFont(14.0f));
-            removeRedundantParentBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayRedundantParentErrorDialog(mainPanel, dataSource, item);
-            });
-            
-            JMenuItem otherParentErrorBtn = new JMenuItem("Other error with parent");
-            otherParentErrorBtn.setFont(otherParentErrorBtn.getFont().deriveFont(14.0f));
-            otherParentErrorBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayOtherParentErrorDialog(mainPanel, dataSource, item);
-            });
-
-            JMenuItem replaceParentBtn = new JMenuItem("Replace erroneous parent");
-            replaceParentBtn.setFont(replaceParentBtn.getFont().deriveFont(14.0f));
-            replaceParentBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayReplaceParentDialog(mainPanel, dataSource, item);
-            });
-            
-            JMenuItem reportMissingParentBtn = new JMenuItem("Report missing parent");
-            reportMissingParentBtn.setFont(reportMissingParentBtn.getFont().deriveFont(14.0f));
-            reportMissingParentBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingParentDialog(mainPanel, dataSource);
-            });
-            
-            
-            components.add(removeErroneousParentBtn);
-            components.add(removeRedundantParentBtn);
-            components.add(otherParentErrorBtn);
-            components.add(replaceParentBtn);
-            
-            components.add(new JSeparator());
-
-            components.add(reportMissingParentBtn);
-            
             List<ParentError<T>> reportedParentErrors = auditSet.getParentErrors(focusConcept);
                         
             if(!reportedParentErrors.isEmpty()) {

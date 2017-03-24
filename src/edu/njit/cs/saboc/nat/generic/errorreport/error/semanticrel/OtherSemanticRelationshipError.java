@@ -46,12 +46,22 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
 
     @Override
     public String getTooltipText() {
-        return "Other error";
+        String text =  "<html><font color = 'RED'><b>Other error </b></font> %s";
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
     
     @Override
     public String getStyledText() {
-        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        String relName = SemanticRelationshipError.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
         
         String text =  String.format("<html><font color = 'RED'>"
                 + "<b>Other error with relationship: </b></font> %s", 

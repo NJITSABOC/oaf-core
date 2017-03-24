@@ -38,7 +38,16 @@ public class ErroneousChildError<T extends Concept> extends IncorrectChildError<
 
     @Override
     public String getTooltipText() {
-        return "Erroneous child";
+        String text = String.format("<html><font color = 'RED'><b>Child is erroneous</b></font> %s", 
+                super.getErroneousChild().getName());
+        
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 
     @Override

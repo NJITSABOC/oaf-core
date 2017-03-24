@@ -29,18 +29,12 @@ public class OtherError<T extends Concept> extends OntologyError<T> {
 
     @Override
     public String getSummaryText() {
-        String comment = getComment();
-        
-        if(comment.length() > 23) {
-            comment = String.format("%s...", comment.substring(0, 20));
-        }
-        
-        return String.format("Other error: %s", comment);
+        return String.format("Other error: %s", getComment());
     }
 
     @Override
     public String getTooltipText() {
-        return getSummaryText();
+        return getStyledText();
     }
 
     @Override
@@ -49,9 +43,9 @@ public class OtherError<T extends Concept> extends OntologyError<T> {
         String text = "<html><font color = 'RED'><b>Other error</b></font>";
         
         if(this.getComment().isEmpty()) {
-            text += "<br>[Not specified]";
+            text += "<br>" + this.getStyledEmptyCommentText();
         } else {
-            text += this.getStyledCommentText();
+            text += "<br>" + this.getStyledCommentText();
         }
         
         return text;

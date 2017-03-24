@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.ErrorParser;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.ErrorParser.ErrorParseException;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +174,11 @@ public class AuditSetLoader {
                         for (Object errorObj : errorsJSON) {
                             JSONObject errorJSON = (JSONObject) errorObj;
 
-                            errors.add(errorParser.parseError(errorJSON));
+                            try {
+                                errors.add(errorParser.parseError(errorJSON));
+                            } catch(ErrorParseException epe) {
+                                epe.printStackTrace();
+                            }
                         }
                     }
 

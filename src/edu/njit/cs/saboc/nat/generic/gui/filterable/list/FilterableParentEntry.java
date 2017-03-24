@@ -43,8 +43,8 @@ public class FilterableParentEntry<T extends Concept> extends FilterableConceptE
                         this.getObject());
 
                 if (!relevantErrors.isEmpty()) {
-                    result += String.format("<p><p><font size = '4'><font color = 'RED'><b>"
-                            + "Reported Errors (%d):</b></font><br>", relevantErrors.size());
+                    result += String.format("<p><p><font size = '4'><b>"
+                            + "Reported Errors (%d)</b></font><br>", relevantErrors.size());
                     
                     for(IncorrectParentError<T> error : relevantErrors) {
                         result += error.getTooltipText();

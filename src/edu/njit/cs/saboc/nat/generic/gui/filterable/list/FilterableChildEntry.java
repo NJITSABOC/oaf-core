@@ -41,8 +41,8 @@ public class FilterableChildEntry<T extends Concept> extends FilterableConceptEn
                         this.getObject());
 
                 if (!relevantErrors.isEmpty()) {
-                    result += String.format("<p><p><font size = '4'><font color = 'RED'><b>"
-                            + "Reported Errors (%d):</b></font><br>", relevantErrors.size());
+                    result += String.format("<p><p><font size = '4'><b>"
+                            + "Reported Errors (%d)</b></font><br>", relevantErrors.size());
                     
                     for(IncorrectChildError<T> error : relevantErrors) {
                         result += error.getTooltipText();

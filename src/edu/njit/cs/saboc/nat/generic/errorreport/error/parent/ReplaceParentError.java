@@ -68,11 +68,25 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
 
     @Override
     public String getTooltipText() {
-        if(replacementParent.isPresent()) {
-            return String.format("Replace with: %s", replacementParent.get().getName());
+        String description;
+        
+        if (this.replacementParent.isPresent()) {
+            description = this.replacementParent.get().getName();
         } else {
-            return "Replace parent";
+            description = "[Replacement not specified]";
         }
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Replace erroneous parent (remove): </b></font> %s. "
+                + "<font color = 'RED'><b>Replace with: </b></font>%s", 
+                super.getIncorrectParent().getName(), 
+                description);
+        
+        if(!this.getComment().isEmpty()) {
+             text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
     
     @Override
@@ -83,18 +97,18 @@ public class ReplaceParentError<T extends Concept> extends IncorrectParentError<
         if (this.replacementParent.isPresent()) {
             description = this.replacementParent.get().getName();
         } else {
-            description = "[Replacement not specified]";
+            description = "[replacement not specified]";
         }
         
         String text =  String.format("<html><font color = 'RED'>"
-                + "<b>Erroneous parent (remove): </b></font> %s. "
-                + "<font color = 'RED'><b>Replace with: </b></font>%s", 
-                super.getIncorrectParent().getName(), 
+                + "<b>Replace parent with: </b></font>%s", 
                 description);
         
         
-        if(!this.getComment().isEmpty()) {
-             text += ("<br>" + this.getStyledCommentText());
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
         }
         
         return text;

@@ -32,7 +32,15 @@ public class OtherChildError<T extends Concept> extends IncorrectChildError<T> {
 
     @Override
     public String getTooltipText() {
-        return "Other error with child";
+        String text =  "<html><font color = 'RED'><b>Other error</b></font>";
+        
+        if(this.getComment().isEmpty()) {
+            text += ("<br>" + this.getStyledEmptyCommentText());
+        } else {
+            text += ("<br>" + this.getStyledCommentText());
+        }
+        
+        return text;
     }
 
     @Override

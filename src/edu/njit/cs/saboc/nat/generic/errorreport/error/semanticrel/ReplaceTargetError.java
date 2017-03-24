@@ -79,16 +79,33 @@ public class ReplaceTargetError <T extends Concept, V extends InheritablePropert
 
     @Override
     public String getTooltipText() {
-        if(this.replacementTarget.isPresent()) {
-            return String.format("Replace target with: %s", this.replacementTarget.get().getName());
+
+        String replacementTargetName;
+        
+        if(replacementTarget.isPresent()) {
+            replacementTargetName = this.getReplacementTarget().get().getName();
         } else {
-            return "Replace target";
+            replacementTargetName = "[not specified]";
         }
+        
+        String text =  String.format("<html><font color = 'RED'>"
+                + "<b>Replace target with: </b></font> %s",
+                replacementTargetName);
+        
+        text += "<br>";
+        
+        if(this.getComment().isEmpty()) {
+            text += this.getStyledEmptyCommentText();
+        } else {
+            text += this.getStyledCommentText();
+        }
+
+        return text;
     }
     
     @Override
     public String getStyledText() {
-        String relName = this.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
+        String relName = SemanticRelationshipError.generateStyledRelationshipText(this.getRelType().getName(), this.getTarget().getName());
         
         String replacementTargetName;
         

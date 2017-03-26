@@ -46,7 +46,7 @@ public class OtherSemanticRelationshipError<T extends Concept, V extends Inherit
 
     @Override
     public String getTooltipText() {
-        String text =  "<html><font color = 'RED'><b>Other error </b></font> %s";
+        String text =  "<html><font color = 'RED'><b>Other error </b></font>";
         
         text += "<br>";
         

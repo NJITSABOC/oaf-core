@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import java.util.Objects;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -90,5 +91,25 @@ public class MissingParentError<T extends Concept> extends ParentError<T> {
         }
 
         return text;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final MissingParentError<?> other = (MissingParentError<?>) obj;
+        
+        if (!Objects.equals(this.missingParent, other.missingParent)) {
+            return false;
+        }
+        
+        return true;
     }
 }

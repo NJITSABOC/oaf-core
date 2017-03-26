@@ -31,7 +31,7 @@ import org.json.simple.JSONObject;
  */
 public class ErrorParser<T extends Concept, V extends InheritableProperty> {
     
-    private class BaseParseResult {
+    protected class BaseParseResult {
         
         private final String comment;
         private final Severity severity;
@@ -60,7 +60,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
-    private class BaseIncorrectParentParseResult<T extends Concept> extends BaseParseResult {
+    protected class BaseIncorrectParentParseResult<T extends Concept> extends BaseParseResult {
         
         private final T incorrectParent;
         
@@ -75,7 +75,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
-    private class BaseIncorrectChildParseResult<T extends Concept> extends BaseParseResult {
+    protected class BaseIncorrectChildParseResult<T extends Concept> extends BaseParseResult {
         
         private final T incorrectChild;
         
@@ -90,7 +90,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
-    private class BaseIncorrectSemanticRelationshipParseResult<T extends Concept, V extends InheritableProperty> extends BaseParseResult {
+    protected class BaseIncorrectSemanticRelationshipParseResult<T extends Concept, V extends InheritableProperty> extends BaseParseResult {
         
         private final T incorrectTarget;
         private final V incorrectRelType;
@@ -117,7 +117,12 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         this.dataSource = dataSource;
     }
     
-    public OntologyError<T> parseError(JSONObject object) throws ErrorParseException {
+    public OntologyError<T> parseError(T concept, JSONObject object) throws ErrorParseException {
+        
+        if(!object.containsKey("type")) {
+            throw new ErrorParseException("Type not defined for error object.");
+        }
+        
         String type = object.get("type").toString();
         
         if(type.equals("MissingParent")) {
@@ -335,7 +340,7 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
                 baseResult.getSeverity());
     }
     
-    private BaseParseResult getBaseParseResult(JSONObject object) throws ErrorParseException {
+    protected BaseParseResult getBaseParseResult(JSONObject object) throws ErrorParseException {
         String comment = "";
         
         if(object.containsKey("comment")) {
@@ -348,21 +353,21 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         );
     }
     
-    private BaseIncorrectParentParseResult<T> getBaseIncorrectParentResult(JSONObject object) throws ErrorParseException {
+    protected BaseIncorrectParentParseResult<T> getBaseIncorrectParentResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectParentParseResult<>(
                 getBaseParseResult(object), 
                 getConceptFrom(object.get("parentid").toString())
         );
     }
     
-    private BaseIncorrectChildParseResult<T> getBaseIncorrectChildResult(JSONObject object) throws ErrorParseException {
+    protected BaseIncorrectChildParseResult<T> getBaseIncorrectChildResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectChildParseResult<>(
                 getBaseParseResult(object), 
                 getConceptFrom(object.get("childid").toString())
         );
     }
     
-    private BaseIncorrectSemanticRelationshipParseResult<T, V> getBaseIncorrectSemanticRelationshipResult(JSONObject object) throws ErrorParseException {
+    protected BaseIncorrectSemanticRelationshipParseResult<T, V> getBaseIncorrectSemanticRelationshipResult(JSONObject object) throws ErrorParseException {
         return new BaseIncorrectSemanticRelationshipParseResult<>(
                 getBaseParseResult(object), 
                 getPropertyFrom(object.get("typeid").toString()),

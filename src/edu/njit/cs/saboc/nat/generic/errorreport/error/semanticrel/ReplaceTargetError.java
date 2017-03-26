@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import java.util.Objects;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -131,4 +132,38 @@ public class ReplaceTargetError <T extends Concept, V extends InheritablePropert
 
         return text;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final ReplaceTargetError<?, ?> other = (ReplaceTargetError<?, ?>) obj;
+        
+        if(!this.getRelType().equals(other.getRelType())) {
+            return false;
+        }
+        
+        if(!this.getTarget().equals(other.getTarget())) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.replacementTarget, other.replacementTarget)) {
+            return false;
+        }
+        
+        return true;
+    }
+
 }

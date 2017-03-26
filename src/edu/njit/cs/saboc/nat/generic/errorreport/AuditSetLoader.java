@@ -81,7 +81,7 @@ public class AuditSetLoader {
     private static <T extends Concept> AuditSet<T> parseAuditSetJSON(
             String str, 
             File sourceFile,
-            ConceptBrowserDataSource<T> dataSource) {
+            ConceptBrowserDataSource<T> dataSource) throws AuditSetLoaderException {
         
         JSONParser parser = new JSONParser();
         
@@ -89,35 +89,40 @@ public class AuditSetLoader {
             JSONObject object = (JSONObject)parser.parse(str);
             
             if(!object.containsKey("type")) {
-                // Error
+                throw new AuditSetLoaderException("Type not defined.");
             }
             
             String type = object.get("type").toString();
             
-            if(!type.equals("auditset")) {
-                // Error
+            if(!type.equals("AuditSet")) {
+                throw new AuditSetLoaderException("Type is not Audit Set.");
             }
 
-            
             if(!object.containsKey("name")) {
-                // Error
+                 throw new AuditSetLoaderException("Audit set name not set.");
             }
             
             if(!object.containsKey("ontologyid")) {
-                // Error
+                throw new AuditSetLoaderException("Ontology ID not set.");
             }
             
             if(!object.containsKey("creationdate")) {
-                // Error
+                throw new AuditSetLoaderException("Creation date not set.");
+            }
+            
+            if(!object.containsKey("lastsaveddate")) {
+                throw new AuditSetLoaderException("Last save date not set.");
             }
             
             if(!object.containsKey("auditresult")) {
-                // Error
+                throw new AuditSetLoaderException("Audit set does not contain audit result.");
             }
             
             String name = object.get("name").toString();
             String ontologyid = object.get("ontologyid").toString();
+            
             Date creationDate = new Date(Long.parseLong(object.get("creationdate").toString()));
+            Date lastSavedDate = new Date(Long.parseLong(object.get("lastsaveddate").toString()));
             
             JSONArray auditResultJSON = (JSONArray)object.get("auditresult");
             
@@ -140,11 +145,13 @@ public class AuditSetLoader {
                 conceptsById.put(concept.getIDAsString().toLowerCase(), concept);
             });
             
+            ErrorParser<T, InheritableProperty> errorParser = dataSource.getErrorParser();
+            
             for (Object obj : auditResultJSON) {
                 JSONObject conceptResult = (JSONObject) obj;
 
                 if (!conceptResult.containsKey("conceptid")) {
-                    // Error
+                    throw new AuditSetLoaderException("Concept ID not set.");
                 }
                 
                 T concept = conceptsById.get(conceptResult.get("conceptid").toString().toLowerCase());
@@ -153,7 +160,7 @@ public class AuditSetLoader {
                     JSONObject errorReport = (JSONObject) conceptResult.get("errorreport");
 
                     if (!errorReport.containsKey("state")) {
-                        // Error
+                        throw new AuditSetLoaderException("Error state not set.");
                     }
 
                     AuditResult.State state = AuditResult.State.valueOf(errorReport.get("state").toString());
@@ -167,17 +174,15 @@ public class AuditSetLoader {
                     }
 
                     if (errorReport.containsKey("errors")) {
-                        ErrorParser<T, InheritableProperty> errorParser = new ErrorParser<>(dataSource);
-
                         JSONArray errorsJSON = (JSONArray) errorReport.get("errors");
 
                         for (Object errorObj : errorsJSON) {
                             JSONObject errorJSON = (JSONObject) errorObj;
 
                             try {
-                                errors.add(errorParser.parseError(errorJSON));
+                                errors.add(errorParser.parseError(concept, errorJSON));
                             } catch(ErrorParseException epe) {
-                                epe.printStackTrace();
+                                throw new AuditSetLoaderException("Error parsing error.");
                             }
                         }
                     }
@@ -191,13 +196,12 @@ public class AuditSetLoader {
                     Optional.of(sourceFile), 
                     name, 
                     creationDate, 
+                    lastSavedDate,
                     concepts, 
                     auditResults);
             
         } catch(ParseException pe) {
-            
+            throw new AuditSetLoaderException("Error parsing JSON file.");
         }
-        
-        return null;
     }
 }

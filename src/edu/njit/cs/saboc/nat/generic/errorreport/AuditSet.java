@@ -38,7 +38,8 @@ public class AuditSet<T extends Concept> {
         
     private String name = "";
 
-    private Date date;
+    private Date dateCreated;
+    private Date lastSavedDate;
     
     private Optional<File> file;
     
@@ -59,6 +60,7 @@ public class AuditSet<T extends Concept> {
                 Optional.empty(),
                 name, 
                 new Date(), 
+                new Date(),
                 concepts, 
                 new HashMap<>());
     }
@@ -67,7 +69,8 @@ public class AuditSet<T extends Concept> {
             ConceptBrowserDataSource<T> dataSource,
             Optional<File> file,
             String name, 
-            Date date, 
+            Date dateCreated, 
+            Date lastSavedDate,
             Set<T> concepts,
             Map<T, AuditResult<T>> auditResults) {
         
@@ -76,7 +79,8 @@ public class AuditSet<T extends Concept> {
         this.file = file;
         
         this.name = name;
-        this.date = date;
+        this.dateCreated = dateCreated;
+        this.lastSavedDate = lastSavedDate;
         this.concepts = concepts;
         this.auditResults = auditResults;
         
@@ -88,7 +92,6 @@ public class AuditSet<T extends Concept> {
                     boolean success = saveToFile(file.get());
                 }
             }
-            
         });
     }
     
@@ -104,7 +107,7 @@ public class AuditSet<T extends Concept> {
         return concepts;
     }
 
-    public Optional<File> getAuditSetFile() {
+    public Optional<File> getFile() {
         return file;
     }
     
@@ -116,8 +119,12 @@ public class AuditSet<T extends Concept> {
         this.name = name;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+    
+    public Date getLastSavedDate() {
+        return lastSavedDate;
     }
 
     public void addConcept(T c) {
@@ -398,7 +405,8 @@ public class AuditSet<T extends Concept> {
         exportJSON.put("type", "AuditSet");
         exportJSON.put("name", name);
         exportJSON.put("ontologyid", dataSource.getOntologyID());
-        exportJSON.put("creationdate", Long.toString(date.getTime()));
+        exportJSON.put("creationdate", Long.toString(dateCreated.getTime()));
+        exportJSON.put("lastsaveddate", Long.toString(lastSavedDate.getTime()));
         
         JSONArray auditSetJSON = new JSONArray();
         
@@ -419,7 +427,8 @@ public class AuditSet<T extends Concept> {
         return exportJSON;
     }
     
-    public boolean saveToFile(File file) {        
+    public boolean saveToFile(File file) {      
+        
         if(!ensureFileExistsAndWritable(file)) {
             // Error
             
@@ -427,6 +436,8 @@ public class AuditSet<T extends Concept> {
         }
         
         try (PrintWriter out = new PrintWriter(file)) {
+            this.lastSavedDate = new Date();
+            
             out.println(this.toJSON());
             
             return true;
@@ -437,7 +448,7 @@ public class AuditSet<T extends Concept> {
     }
     
     public boolean saveBackupFile() {
-         Optional<File> auditSetFile = this.getAuditSetFile();
+         Optional<File> auditSetFile = this.getFile();
 
         if (!auditSetFile.isPresent()) {
             return false;

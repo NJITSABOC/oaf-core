@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.child;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import java.util.Objects;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -94,4 +95,26 @@ public class MissingChildError<T extends Concept> extends ChildError<T> {
         
         return text;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final MissingChildError<?> other = (MissingChildError<?>) obj;
+        
+        if (!Objects.equals(this.missingChild, other.missingChild)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    
 }

@@ -61,4 +61,20 @@ public class ErroneousChildError<T extends Concept> extends IncorrectChildError<
         
         return text;
     }
+    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final ErroneousChildError<?> other = (ErroneousChildError<?>) obj;
+        
+        return this.getErroneousChild().equals(other.getErroneousChild());
+    }
 }

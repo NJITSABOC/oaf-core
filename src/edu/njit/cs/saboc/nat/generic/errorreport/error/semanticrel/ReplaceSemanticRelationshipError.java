@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import java.util.Objects;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -143,4 +144,36 @@ public class ReplaceSemanticRelationshipError<T extends Concept, V extends Inher
         
         return text;
     }
+    
+        @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final ReplaceSemanticRelationshipError<?, ?> other = (ReplaceSemanticRelationshipError<?, ?>) obj;
+        
+        if(!this.getRelType().equals(other.getRelType())) {
+            return false;
+        }
+        
+        if(!this.getTarget().equals(other.getTarget())) {
+            return false;
+        }
+        
+        if (!Objects.equals(this.getReplacementTarget(), other.getReplacementTarget())) {
+            return false;
+        }
+        
+        if(!Objects.equals(this.replacementRelType, other.replacementRelType)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
 }

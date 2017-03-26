@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.child.ErroneousChildError;
 import org.json.simple.JSONObject;
 
 /**
@@ -62,5 +63,21 @@ public class ErroneousParentError<T extends Concept> extends RemoveParentError<T
         }
  
         return text;
+    }
+    
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final ErroneousParentError<?> other = (ErroneousParentError<?>) obj;
+        
+        return this.getIncorrectParent().equals(other.getIncorrectParent());
     }
 }

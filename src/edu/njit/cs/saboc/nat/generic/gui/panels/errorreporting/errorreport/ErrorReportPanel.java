@@ -8,7 +8,9 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.ErrorReportPanelInitializer;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 /**
@@ -70,7 +72,53 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
             currentAuditSet.addConcept(focusConcept);
         }
         
-        currentAuditSet.addError(focusConcept, error);
+        List<OntologyError<T>> allErrors = currentAuditSet.getAllReportedErrors(focusConcept);
+        
+        if (allErrors.contains(error)) {
+            
+            Object[] options = {
+                "Report as-is",
+                "Overwrite existing",
+                "Cancel"};
+
+            int option = JOptionPane.showInternalOptionDialog(
+                    this.getParent(),
+                    "<html>A similar error has already been reported for this concept."
+                    + "<br>Please select an option.",
+                    
+                    "Focus Concept Not in Audit Set",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            
+            System.out.println(option);
+            
+
+            if(option == 0) {
+                currentAuditSet.addError(focusConcept, error);
+            } else if(option == 1) {
+                
+                List<OntologyError<T>> matchedErrors = allErrors.stream().filter( (existingError) -> {
+                    return existingError.equals(error);
+                }).collect(Collectors.toList());
+                
+                matchedErrors.forEach( (existingError) -> {
+                    currentAuditSet.updateError(focusConcept, existingError, error);
+                });
+                
+            } else if(option == 2) {
+                errorReportPanelListeners.forEach((listener) -> {
+                    listener.errorSubmissionCancelled();
+                });
+
+                return;
+            }
+            
+        } else {
+            currentAuditSet.addError(focusConcept, error);
+        }
         
         errorReportPanelListeners.forEach( (listener) -> {
             listener.errorSubmitted(error);

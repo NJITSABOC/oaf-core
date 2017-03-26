@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
+import java.util.Objects;
 import org.json.simple.JSONObject;
 
 /**
@@ -63,5 +64,25 @@ public class RedundantParentError<T extends Concept> extends RemoveParentError<T
         }
         
         return text;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        
+        final RedundantParentError<?> other = (RedundantParentError<?>) obj;
+        
+        if (!Objects.equals(this.getIncorrectParent(), other.getIncorrectParent())) {
+            return false;
+        }
+        
+        return true;
     }
 }

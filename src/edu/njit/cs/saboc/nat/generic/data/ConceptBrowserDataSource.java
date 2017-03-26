@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
+import edu.njit.cs.saboc.nat.generic.errorreport.error.ErrorParser;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,15 +116,22 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
                     result += String.format("<p><p><font size = '3'><b>"
                             + "Reported Errors (%d)</b></font><br>", errors.size());
 
+                    result += "<ul>";
+                    
                     for (OntologyError<T> error : errors) {
-                        result += error.getStyledText();
-                        result += "<br>";
+                        result += String.format("<li>%s</li>", error.getStyledText());
                     }
+                    
+                    result += "</ul>";
                 }
             }
         }
         
         return result;
+    }
+    
+    public ErrorParser<T, InheritableProperty> getErrorParser() {
+        return new ErrorParser<>(this);
     }
     
     public abstract String getOntologyID();

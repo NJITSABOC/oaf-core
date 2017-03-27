@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
-import com.sun.corba.se.impl.orbutil.graph.NodeData;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;

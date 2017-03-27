@@ -65,10 +65,10 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
         if(auditSet.getConcepts().contains(concept)) {
             Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(concept);
             
+            String base = "<b>Audit Status: <font color = '%s'>%s</font></b>";
+            
             if(optAuditResult.isPresent()) {
                 AuditResult.State auditState = optAuditResult.get().getState();
-                
-                String base = "<b>Audit Status: <font color = '%s'>%s</font></b>";
                 
                 if(auditState == AuditResult.State.Unaudited) {
                     return String.format(base, "black", "Unaudited");
@@ -79,6 +79,8 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
                     
                     return String.format(base, "red", String.format("Erroneous - %d Error(s) reported", errors.size()));
                 }
+            } else {
+                return String.format(base, "black", "Unaudited");
             }
         }
         

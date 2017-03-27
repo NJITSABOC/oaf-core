@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.AuditCommentReportDialog;
+import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.AuditSetReportDialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -91,6 +92,15 @@ public class AuditSetRightClickMenu<T extends Concept> extends AuditReportRightC
                 components.add(generateRemoveErrorMenu(auditSet, auditSetConcept, reportedErrors));
             }
             
+            components.add(new JSeparator());
+            
+            JMenuItem auditReportBtn = new JMenuItem("View Complete Audit Report");
+            auditReportBtn.setFont(auditReportBtn.getFont().deriveFont(14.0f));
+            auditReportBtn.addActionListener((ae) -> {
+                AuditSetReportDialog.showAuditSetReport(mainPanel, dataSource);
+            });
+            
+            components.add(auditReportBtn);
         }
 
         return components; 

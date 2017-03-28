@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableConceptEntry;
-import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.BaseFilterableRenderer;
+import edu.njit.cs.saboc.blu.core.utils.filterable.renderer.BaseFilterableRenderer;
 import java.util.ArrayList;
 
 /**

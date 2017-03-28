@@ -44,8 +44,7 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
         ancestorPanel = new AncestorPanel<>(mainPanel, getDataSource());
         descendantPanel = new DescendantsPanel<>(mainPanel, getDataSource());
         
-        
-        JSplitPane leftPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        JSplitPane leftPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         leftPane.setDividerLocation(800);
         
         leftPane.setTopComponent(searchAndHistoryPanel);
@@ -53,13 +52,13 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
         
         super.setLeftPanelContents(leftPane);
         
-        JSplitPane topPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        JSplitPane topPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         topPane.setDividerLocation(250);
         
         topPane.setTopComponent(ancestorPanel);
         
         
-        JSplitPane bottomPane = createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
+        JSplitPane bottomPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         bottomPane.setDividerLocation(170);
         
         bottomPane.setTopComponent(focusConceptPanel);
@@ -76,5 +75,17 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
     
     public DescendantsPanel<T> getDescendantsPanel() {
         return descendantPanel;
+    }
+    
+    public SiblingPanel<T> getSiblingPanel() {
+        return siblingPanel;
+    }
+    
+    public SearchAndHistoryPanel<T> getSearchAndHistoryPanel() {
+        return searchAndHistoryPanel;
+    }
+    
+    public FocusConceptPanel<T> getFocusConceptPanel() {
+        return focusConceptPanel;
     }
 }

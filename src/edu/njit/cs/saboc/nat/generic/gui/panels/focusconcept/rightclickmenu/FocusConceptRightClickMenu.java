@@ -33,6 +33,14 @@ public class FocusConceptRightClickMenu<T extends Concept> extends AuditReportRi
         this.mainPanel = mainPanel;
         this.dataSource = dataSource;
     }
+    
+    protected NATBrowserPanel<T> getMainPanel() {
+        return mainPanel;
+    }
+    
+    protected ConceptBrowserDataSource<T> getDataSource() {
+        return dataSource;
+    }
 
     @Override
     public ArrayList<JComponent> buildRightClickMenuFor(T item) {

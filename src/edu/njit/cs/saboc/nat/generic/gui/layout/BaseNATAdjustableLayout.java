@@ -36,12 +36,12 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
     @Override
     public void createLayout(NATBrowserPanel<T> mainPanel) {
         
-        JSplitPane leftPane = createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        JSplitPane leftPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         leftPane.setDividerLocation(400);
         
         leftPane.setLeftComponent(leftPanel);
         
-        JSplitPane rightPane = createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        JSplitPane rightPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         
         rightPane.setDividerLocation(450);
         rightPane.setLeftComponent(midPanel);
@@ -68,7 +68,7 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
         this.rightPanel.add(panel, BorderLayout.CENTER);
     }
     
-    protected JSplitPane createStyledSplitPane(int alignment) {
+    public static JSplitPane createStyledSplitPane(int alignment) {
         JSplitPane splitPane = new JSplitPane(alignment);
         splitPane.setBorder(null);
 

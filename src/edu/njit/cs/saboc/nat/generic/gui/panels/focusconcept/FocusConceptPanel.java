@@ -229,7 +229,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         add(focusConceptPanel, BorderLayout.CENTER);
         
         this.rightClickManager = new EntityRightClickManager<>();
-        this.rightClickManager.setMenuGenerator(new FocusConceptRightClickMenu<>(mainPanel, dataSource));
+        this.setRightClickMenuGenerator(new FocusConceptRightClickMenu<>(mainPanel, dataSource));
         
         jtf.addKeyListener(new KeyAdapter() {
             @Override
@@ -294,6 +294,14 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         this.addOptionButton(new OpenBrowserButton(mainPanel, new GoogleSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new WikipediaSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new PubMedSearchConfig()));
+    }
+    
+    public void setRightClickMenuGenerator(FocusConceptRightClickMenu menuGenerator) {
+        this.rightClickManager.setMenuGenerator(menuGenerator);
+    }
+    
+    public void clearRightClickMenuGenerator() {
+        this.rightClickManager.clearMenuGenerator();
     }
 
     private void setConcept() {

@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
+//import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
@@ -13,6 +15,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSe
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
+//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
+//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.ParentsRightClickMenuGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,18 +24,24 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
@@ -42,11 +52,15 @@ import javax.swing.ToolTipManager;
  * @param <T>
  */
 public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
-    
+    private ArrayList<T> bookMarkedEntries = new ArrayList<T>();    
     private JEditorPane jtf;
     
     private JButton backButton;
+    private JPopupMenu popup = new JPopupMenu();
     private JButton forwardButton;
+    
+    //focusConcept
+    private JPopupMenu bookmarks = new JPopupMenu();
        
     private EditFocusConceptPanel editFocusConceptPanel;
 
@@ -58,7 +72,11 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private ArrayList<JButton> optionButtons = new ArrayList<>();
     
+    private static int maxRecentHistory = 5;
+    
     private boolean pending = false;
+    private final EntityRightClickManager<T> rightClickManager = new EntityRightClickManager<>();
+
 
     public FocusConceptPanel(
             NATBrowserPanel<T> mainPanel, 
@@ -103,7 +121,21 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             }
         });
+        backButton.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
 
+                if (e.getButton() == MouseEvent.BUTTON3){
+//                    setRightClickMenuGenerator(new FocusConceptRightClickMenu<T>(mainPanel, dataSource));
+//                    int latestConceptIndex = history.getHistory().size();
+//                    rightClickManager.setRightClickedItem(history.getHistory().get(latestConceptIndex).getConcept());
+//                    rightClickManager.showPopup(e);
+                    navigationRightClickMenu(history, e, mainPanel);
+                }
+            } 
+
+
+        });
         forwardButton.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
         forwardButton.addActionListener((ae) -> {
             
@@ -235,6 +267,9 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                         
                         display();
                     }
+                }
+                if (e.getButton() == MouseEvent.BUTTON3){
+                    textPaneRightClickMenu(history, e, mainPanel);
                 }
             }
         });
@@ -369,4 +404,79 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
         jtf.setText("Please enter a valid concept.");
     }
+
+    
+    public void navigationRightClickMenu(FocusConceptHistory<T> history, MouseEvent e, NATBrowserPanel<T> mainPanel){
+        popup.removeAll();
+        JMenuItem conceptMenuItem;
+        T concept;
+        HashSet <T> recentHistorySet= new HashSet <T>();
+        
+        
+        int count = history.getHistory().size();
+        int lastEntryIdx = count - 1;
+        int i = 0;
+        while ( i < count && recentHistorySet.size() < maxRecentHistory){
+            int idx = lastEntryIdx - i;
+            concept = history.getHistory().get(idx).getConcept();
+            if (recentHistorySet.contains(concept)){
+                i++;
+                continue;
+            } else {
+                recentHistorySet.add(concept);
+            }
+            conceptMenuItem = new JMenuItem(concept.getName());
+
+            //JMenuItem selection
+            conceptMenuItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(idx).getConcept(), false);
+                }
+            });
+
+            popup.add(conceptMenuItem);
+            i++;
+        }
+
+
+        popup.show(e.getComponent(), e.getX(), e.getY());
+    }
+
+    
+    public void textPaneRightClickMenu(FocusConceptHistory<T> history, MouseEvent e, NATBrowserPanel<T> mainPanel){
+        bookmarks.removeAll();
+        JMenuItem add_to_bookmark = new JMenuItem("add to bookmark");
+        JMenu bookmark = new JMenu("bookmark");
+        
+        add_to_bookmark.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //save item
+                bookMarkedEntries.add(mainPanel.getFocusConceptManager().getActiveFocusConcept());
+            }
+        });
+        bookmarks.add(add_to_bookmark);
+        
+        //add submenu(bookmarked entries) to rightclick menu
+        if(bookMarkedEntries.size() > 0){
+            int n = bookMarkedEntries.size();
+            for (int i = 0; i < n; i++){
+                T entry = bookMarkedEntries.get(i);
+                JMenuItem bookMarkedItem = new JMenuItem(entry.getName());
+                bookMarkedItem.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //nagvigate to this entry
+                        mainPanel.getFocusConceptManager().navigateTo(entry, false);                        
+                    }
+                });
+                bookmark.add(bookMarkedItem);
+            }
+            //add submenu
+            bookmarks.add(bookmark);
+        }
+        
+        bookmarks.show(e.getComponent(), e.getX(), e.getY());        
+    }
+//    public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
+//        rightClickManager.setMenuGenerator(generator);
+//    }
 }

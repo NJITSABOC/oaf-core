@@ -10,7 +10,9 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error where a specific audit set concept is missing a  
+ * semantic relationship with the specified type and target
+ * 
  * @author Chris O
  * 
  * @param <T>

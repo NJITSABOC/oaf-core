@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error of unspecified type on a specific child concept for a given 
+ * audit set concept
+ * 
  * @author Chris O
  * 
  * @param <T>

@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
- * Represents an error reported in an ontology
+ * Represents an error reported for a single concept in an ontology
  * 
  * @author Chris O
  * @param <T>
@@ -66,12 +66,36 @@ public abstract class OntologyError<T extends Concept> {
         return shortComment;
     }
     
+    /**
+     * Returns a short string describing the reported error
+     * 
+     * @return 
+     */
     public abstract String getSummaryText();
+    
+    /**
+     * Returns HTML-styled text for use in tooltips when 
+     * a user mouses over the given error
+     * 
+     * @return 
+     */
     public abstract String getTooltipText();
     
+    /**
+     * Returns HTML-styled text providing a full description of
+     * the error
+     * 
+     * @return 
+     */
     public abstract String getStyledText();
     
+    /**
+     * Serializes the error to a JSON object
+     * 
+     * @return 
+     */
     public abstract JSONObject toJSON();
+    
     
     protected String getStyledCommentText() {
         String base = "<html><table><tr><td width = '32'></td><td><font size = '-1'><b>Comments:</b> %s</font></td></tr></table>";
@@ -85,6 +109,12 @@ public abstract class OntologyError<T extends Concept> {
         return String.format(base, "[No comments specified]");
     }
     
+    /**
+     * Returns the JSON that all ontology errors will contain
+     * 
+     * @param type
+     * @return 
+     */
     protected JSONObject getBaseJSON(String type) {
         JSONObject object = new JSONObject();
         object.put("type", type);

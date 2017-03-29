@@ -5,7 +5,9 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 
 /**
- *
+ * Represents some type of error with a child concept in relation to a specific
+ * audit set concept
+ * 
  * @author Chris O
  * 
  * @param <T>

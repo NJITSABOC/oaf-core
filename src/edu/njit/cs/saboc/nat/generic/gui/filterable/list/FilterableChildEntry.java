@@ -8,7 +8,8 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.child.IncorrectChildError
 import java.util.List;
 
 /**
- *
+ * Filterable entry for the 
+ * 
  * @author Chris O
  * @param <T>
  */
@@ -16,7 +17,8 @@ public class FilterableChildEntry<T extends Concept> extends FilterableConceptEn
     
     private final NATBrowserPanel<T> mainPanel;
     
-    public FilterableChildEntry(NATBrowserPanel<T> mainPanel,
+    public FilterableChildEntry(
+            NATBrowserPanel<T> mainPanel,
             ConceptBrowserDataSource<T> dataSource,
             T concept) {
         

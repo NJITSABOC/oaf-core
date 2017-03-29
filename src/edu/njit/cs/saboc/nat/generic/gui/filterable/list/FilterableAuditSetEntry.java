@@ -6,8 +6,10 @@ import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 
 /**
- *
+ * Filterable entry for the list of audit set concepts
+ * 
  * @author Chris O
+ * 
  * @param <T>
  */
 public class FilterableAuditSetEntry<T extends Concept> extends FilterableConceptEntry<T> {

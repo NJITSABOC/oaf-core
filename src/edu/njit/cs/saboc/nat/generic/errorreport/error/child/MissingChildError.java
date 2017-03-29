@@ -8,7 +8,9 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents an error where a child concept should be added to a given
+ * audit set concept
+ * 
  * @author Chris O
  * 
  * @param <T>

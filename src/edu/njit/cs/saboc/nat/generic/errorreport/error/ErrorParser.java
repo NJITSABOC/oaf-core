@@ -23,7 +23,8 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Parser for deserializing JSON into OntologyError objects
+ * 
  * @author Chris O
  * 
  * @param <T>
@@ -31,6 +32,11 @@ import org.json.simple.JSONObject;
  */
 public class ErrorParser<T extends Concept, V extends InheritableProperty> {
     
+    /**
+     * All ontology errors contain a comment and severity. This class
+     * is used to store the general information and is extended by 
+     * more specific types of parse results
+     */
     protected class BaseParseResult {
         
         private final String comment;
@@ -54,12 +60,22 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
+    /**
+     * An exception that occurs when parsing a JSON object that should
+     * contain an ontology error
+     */
     public static class ErrorParseException extends Exception {
         public ErrorParseException(String message) {
             super(message);
         }
     }
     
+    /**
+     * Base result from parsing an error related to a specific parent being specified as
+     * incorrect
+     * 
+     * @param <T> 
+     */
     protected class BaseIncorrectParentParseResult<T extends Concept> extends BaseParseResult {
         
         private final T incorrectParent;
@@ -75,6 +91,12 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
+    /**
+     * Base result from parsing an error related to a specific child being specified as
+     * incorrect
+     * 
+     * @param <T> 
+     */
     protected class BaseIncorrectChildParseResult<T extends Concept> extends BaseParseResult {
         
         private final T incorrectChild;
@@ -90,6 +112,13 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         }
     }
     
+    /**
+     * Base result from parsing an error related to a specific semantic relationship being specified as
+     * incorrect
+     * 
+     * @param <T> 
+     * @param <V> 
+     */
     protected class BaseIncorrectSemanticRelationshipParseResult<T extends Concept, V extends InheritableProperty> extends BaseParseResult {
         
         private final T incorrectTarget;
@@ -117,8 +146,20 @@ public class ErrorParser<T extends Concept, V extends InheritableProperty> {
         this.dataSource = dataSource;
     }
     
+    /**
+     * Parses an error specified for the given concept, as stored in the given
+     * JSON object
+     * 
+     * @param concept
+     * @param object
+     * @return
+     * 
+     * @throws ErrorParseException 
+     */
     public OntologyError<T> parseError(T concept, JSONObject object) throws ErrorParseException {
         
+        // If the object doesn't have a type specified its not
+        // a valid serialization of an ontology error
         if(!object.containsKey("type")) {
             throw new ErrorParseException("Type not defined for error object.");
         }

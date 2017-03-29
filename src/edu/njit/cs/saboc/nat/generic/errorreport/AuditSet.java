@@ -30,15 +30,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents a set of concepts to be audited by a domain expert.
+ *  
  * @author Chris O
  * @param <T>
  */
 public class AuditSet<T extends Concept> {
         
-    private String name = "";
+    private final String name;
 
-    private Date dateCreated;
+    private final Date dateCreated;
     private Date lastSavedDate;
     
     private Optional<File> file;
@@ -90,16 +91,21 @@ public class AuditSet<T extends Concept> {
             public void auditSetChanged() {
                 if(file.isPresent()) {
                     boolean success = saveToFile(file.get());
+                    
+                    if(!success) {
+                        
+                    }
                 }
             }
         });
     }
     
-    public void addAuditSetChangedListener(AuditSetChangedListener<T> listener) {
+    
+    public final void addAuditSetChangedListener(AuditSetChangedListener<T> listener) {
         this.changeListeners.add(listener);
     }
     
-    public void removeAuditSetChangedListener(AuditSetChangedListener<T> listener) {
+    public final void removeAuditSetChangedListener(AuditSetChangedListener<T> listener) {
         this.changeListeners.remove(listener);
     }
 
@@ -113,10 +119,6 @@ public class AuditSet<T extends Concept> {
     
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Date getDateCreated() {
@@ -274,6 +276,12 @@ public class AuditSet<T extends Concept> {
         return optAuditResult.get().getErrors();
     }
     
+    /**
+     * Returns the list of parent errors for the given concept
+     * 
+     * @param auditSetConcept
+     * @return 
+     */
     public List<ParentError<T>> getParentErrors(T auditSetConcept) {
         Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
         
@@ -290,6 +298,12 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
     
+    /**
+     * Returns the list of child errors for the given concept
+     * 
+     * @param auditSetConcept
+     * @return 
+     */
     public List<ChildError<T>> getChildErrors(T auditSetConcept) {
         Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
 
@@ -306,6 +320,12 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
     
+    /**
+     * Returns the list of semantic relationship errors for the given concept
+     * 
+     * @param auditSetConcept
+     * @return 
+     */
     public List<SemanticRelationshipError<T>> getSemanticRelationshipErrors(T auditSetConcept) {
         Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
 
@@ -322,6 +342,15 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
            
+    /**
+     * Returns the parent errors specified for the given parent concept in 
+     * relation to the given auditSetConcept
+     * 
+     * @param auditSetConcept
+     * @param parentConcept
+     * 
+     * @return 
+     */
     public List<IncorrectParentError<T>> getRelatedParentErrors(T auditSetConcept, T parentConcept) {
         
         Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
@@ -346,6 +375,15 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
     
+    /**
+     * Returns the child errors specified for the given child concept in 
+     * relation to the given auditSetConcept
+     * 
+     * @param auditSetConcept
+     * @param childConcept
+     * 
+     * @return 
+     */
     public List<IncorrectChildError<T>> getRelatedChildErrors(T auditSetConcept, T childConcept) {
         
         Optional<AuditResult<T>> optAuditResult = getAuditResult(auditSetConcept);
@@ -370,6 +408,15 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
     
+    /**
+     * Returns the set of semantic relationship errors with the given property and target
+     * in relation to the given auditSetConcept
+     * 
+     * @param auditSetConcept
+     * @param property
+     * @param target
+     * @return 
+     */
     public List<IncorrectSemanticRelationshipError<T, InheritableProperty>> getRelatedSemanticRelationshipErrors(
             T auditSetConcept, 
             InheritableProperty property, 
@@ -397,7 +444,11 @@ public class AuditSet<T extends Concept> {
         return relatedErrors;
     }
     
-    
+    /**
+     * Serializes the audit set to JSON
+     * 
+     * @return 
+     */
     public JSONObject toJSON() {
                 
         JSONObject exportJSON = new JSONObject();
@@ -427,6 +478,12 @@ public class AuditSet<T extends Concept> {
         return exportJSON;
     }
     
+    /**
+     * Saves the audit set to the specified file
+     * 
+     * @param file
+     * @return 
+     */
     public boolean saveToFile(File file) {      
         
         if(!ensureFileExistsAndWritable(file)) {
@@ -447,6 +504,12 @@ public class AuditSet<T extends Concept> {
         }
     }
     
+    /**
+     * Saves an automatically created file containing a backup of
+     * the given audit set
+     * 
+     * @return 
+     */
     public boolean saveBackupFile() {
          Optional<File> auditSetFile = this.getFile();
 
@@ -497,6 +560,12 @@ public class AuditSet<T extends Concept> {
         return false;
     }
 
+    /**
+     * Makes sure the audit set can be saved to the given file
+     * 
+     * @param file
+     * @return 
+     */
     private boolean ensureFileExistsAndWritable(File file) {
         boolean error = false;
         
@@ -506,7 +575,7 @@ public class AuditSet<T extends Concept> {
                     error = true;
                 }
             }
-        } catch(Exception e) {
+        } catch(IOException e) {
             error = true;
         }
         

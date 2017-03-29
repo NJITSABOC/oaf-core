@@ -22,11 +22,23 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- *
- * @author CHris O
+ * Method for loading/creating audit sets from files
+ * 
+ * @author Chris O
  */
 public class AuditSetLoader {
 
+    /**
+     * Creates an empty audit set from a list of concept ids
+     * 
+     * @param <T>
+     * @param file
+     * @param dataSource
+     * 
+     * @return
+     * 
+     * @throws AuditSetLoaderException 
+     */
     public static <T extends Concept> AuditSet<T> createAuditSetFromConceptIds(
             File file, ConceptBrowserDataSource<T> dataSource) throws AuditSetLoaderException {
 
@@ -56,6 +68,16 @@ public class AuditSetLoader {
         }
     }
 
+    /**
+     * Loads an audit set that had previously been serialized to JSON
+     * 
+     * @param <T>
+     * @param file
+     * @param dataSource
+     * @return
+     * 
+     * @throws AuditSetLoaderException 
+     */
     public static <T extends Concept> AuditSet<T> createAuditSetFromJSON(
             File file, ConceptBrowserDataSource<T> dataSource) throws AuditSetLoaderException {
 
@@ -78,6 +100,18 @@ public class AuditSetLoader {
         }
     }
     
+    /**
+     * Parses a properly formatted JSON audit set file into an Audit Set object
+     * 
+     * @param <T>
+     * @param str
+     * @param sourceFile
+     * @param dataSource
+     * 
+     * @return
+     * 
+     * @throws AuditSetLoaderException 
+     */
     private static <T extends Concept> AuditSet<T> parseAuditSetJSON(
             String str, 
             File sourceFile,

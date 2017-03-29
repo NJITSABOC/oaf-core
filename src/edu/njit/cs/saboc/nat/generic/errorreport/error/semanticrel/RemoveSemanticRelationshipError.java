@@ -4,12 +4,14 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import java.util.Objects;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error where the auditor specified that the given semantic relationship is 
+ * erroneous and should be removed without replacement
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */

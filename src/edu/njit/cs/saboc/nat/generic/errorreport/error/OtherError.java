@@ -5,8 +5,10 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error other than one currently defined in the NAT system 
+ * 
  * @author Chris O
+ * 
  * @param <T>
  */
 public class OtherError<T extends Concept> extends OntologyError<T> {

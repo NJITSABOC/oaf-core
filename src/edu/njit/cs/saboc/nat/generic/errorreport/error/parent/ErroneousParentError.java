@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.errorreport.error.parent;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.errorreport.error.child.ErroneousChildError;
 import org.json.simple.JSONObject;
 
 /**

@@ -9,7 +9,10 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error where the auditor specified that the given semantic relationship's
+ * current target concept is erroneous and it should be replaced by 
+ * the specified target.
+ * 
  * @author Chris O
  * 
  * @param <T>

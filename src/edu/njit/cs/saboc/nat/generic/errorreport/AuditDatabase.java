@@ -7,12 +7,17 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 /**
+ * A local "database" for managing Audit Sets. 
  * 
  * @author Chris O
  * @param <T>
  */
 public class AuditDatabase<T extends Concept> {
 
+    /**
+     * Listener for handing changes the currently loaded
+     * audit set
+     */
     public interface AuditDatabaseChangeListener {
         public void auditSetChanged();
     }
@@ -43,6 +48,9 @@ public class AuditDatabase<T extends Concept> {
     }
     
     public void setAuditSet(AuditSet<T> auditSet) {
+        
+        // TODO: Cleanup for an already-loaded audit set?
+        
         this.loadedAuditSet = Optional.of(auditSet);
         
         auditSet.addAuditSetChangedListener(new AuditSetChangedAdapter<T>() {

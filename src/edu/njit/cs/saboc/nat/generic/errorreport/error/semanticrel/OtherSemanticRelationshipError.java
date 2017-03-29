@@ -7,7 +7,8 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents some other type of error with the given semantic relationship
+ * 
  * @author Chris O
  * 
  * @param <T>

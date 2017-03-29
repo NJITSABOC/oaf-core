@@ -43,16 +43,41 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
         return ontology;
     }
     
+    /**
+     * Returns the number of descendant concepts for the given concept
+     * 
+     * @param concept
+     * @return 
+     */
     public int getDescendantCount(T concept) {
         return descendantCount.get(concept);
     }
     
+    /**
+     * Returns the description text for the given concept (as displayed in 
+     * the focus concept panel). This method is used when error information
+     * is not printed.
+     * 
+     * @param concept
+     * 
+     * @return 
+     */
     public String getFocusConceptText(T concept) {
         return String.format("<html><font face='Arial' size = '5'><b>%s</b><br>%s", 
                 concept.getName(), 
                 concept.getIDAsString());
     }
     
+    /**
+     * Returns the description text for the given concept (as displayed in 
+     * the focus concept panel). This method is used when error information
+     * about the given concept may be present
+     * 
+     * @param auditSet
+     * @param concept
+     * 
+     * @return 
+     */
     public String getFocusConceptText(AuditSet<T> auditSet, T concept) {
         
         return String.format("<html><font face='Arial' size = '5'><b>%s</b><br>%s<br>%s", 
@@ -61,6 +86,14 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
                 getStyledAuditStatusText(auditSet, concept));
     }
     
+    /**
+     * Returns an HTML-styled string describing the audit status of the current concept,
+     * if it belongs to the given audit set
+     * 
+     * @param auditSet
+     * @param concept
+     * @return 
+     */
     public String getStyledAuditStatusText(AuditSet<T> auditSet, T concept) {
         if(auditSet.getConcepts().contains(concept)) {
             Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(concept);
@@ -87,10 +120,25 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
         return "";
     }
     
+    /**
+     * Returns HTML-styled text displaying the concept name
+     * 
+     * @param concept
+     * @return 
+     */
     public String getConceptToolTipText(T concept) {
         return String.format("<html><font size = '5'>%s</font>", concept.getName());
     }
     
+    /**
+     * Returns HTML-styled text that includes the full audit details of the 
+     * given concept
+     * 
+     * @param auditSet
+     * @param concept
+     * 
+     * @return 
+     */
     public String getAuditConceptToolTipText(AuditSet<T> auditSet, T concept) {
         
         String result = this.getConceptToolTipText(concept);
@@ -132,19 +180,51 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
         return result;
     }
     
+    /**
+     * Returns an ErrorParser for parsing a collection of errors from
+     * JSON
+     * 
+     * @return 
+     */
     public ErrorParser<T, InheritableProperty> getErrorParser() {
         return new ErrorParser<>(this);
     }
     
+    /**
+     * Returns the unique identifier of the given ontology
+     * 
+     * @return 
+     */
     public abstract String getOntologyID();
     
+   
+    /* Methods for searching within an ontology */
     public abstract ArrayList<NATConceptSearchResult<T>> searchStarting(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchExact(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchAnywhere(String str);
     public abstract ArrayList<NATConceptSearchResult<T>> searchID(String str);
     
+    /**
+     * Returns the set of inheritable properties that can be used to define 
+     * concepts in the ontology
+     * 
+     * @return 
+     */
     public abstract ArrayList<InheritableProperty> getAvailableProperties();
     
+    /**
+     * Returns the set of concepts with the given set of ids (as stored as strings)
+     * 
+     * @param id
+     * @return 
+     */
     public abstract Set<T> getConceptsFromIds(Set<String> id);
-    public abstract Set<? extends InheritableProperty>  getPropertiesFromIds(Set<String> ids);
+    
+    /**
+     * Returns the set of inheritable properties with the given ids (as stores as strings)
+     * 
+     * @param ids
+     * @return 
+     */
+    public abstract Set<? extends InheritableProperty> getPropertiesFromIds(Set<String> ids);
 }

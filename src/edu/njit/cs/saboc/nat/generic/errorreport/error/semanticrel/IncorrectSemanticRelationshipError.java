@@ -7,8 +7,11 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents a given semantic relationship being incorrect in an ontology, 
+ * in relation to a given audit set concept
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */

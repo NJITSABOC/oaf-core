@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents an error where a given child concept is erroneously a child
+ * of a specific audit set concept
+ * 
  * @author Chris O
  * 
  * @param <T>

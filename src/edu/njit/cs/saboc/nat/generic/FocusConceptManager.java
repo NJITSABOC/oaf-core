@@ -51,11 +51,18 @@ public class FocusConceptManager<T extends Concept> {
     public void addFocusConceptListener(FocusConceptChangedListener<T> fcl) {
         listeners.add(fcl);
     }
+    
+    public void removeFocusConceptListener(FocusConceptChangedListener<T> fcl) {
+        listeners.remove(fcl);
+    }
 
     public void navigateToRoot() {
         navigateTo(dataSource.getOntology().getConceptHierarchy().getRoot());
     }
     
+    /**
+     * Reloads all panels for the current focus concept
+     */
     public final void refresh() {
         navigateTo(this.getActiveFocusConcept(), false);
     }

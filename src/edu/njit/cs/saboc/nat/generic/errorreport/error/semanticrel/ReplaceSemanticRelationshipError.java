@@ -9,8 +9,12 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * An error where the auditor specified that the given semantic relationship is 
+ * erroneous and should be replaced by a semantic relationship of the specified
+ * type and target.
+ * 
  * @author Chris O
+ * 
  * @param <T>
  * @param <V>
  */

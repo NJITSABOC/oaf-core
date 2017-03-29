@@ -8,7 +8,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents the result of auditing a concept
+ * 
  * @author Chris O
  * @param <T>
  */

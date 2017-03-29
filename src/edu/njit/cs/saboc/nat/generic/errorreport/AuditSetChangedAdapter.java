@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 
 /**
- *
+ * Adapter for AuditSetChangedListener
+ * 
  * @author Chris O
  * @param <T>
  */

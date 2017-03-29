@@ -6,7 +6,9 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represents a child that is incorrectly a child (in relation to another concept)
+ * in an ontology
+ * 
  * @author Chris O
  * 
  * @param <T>

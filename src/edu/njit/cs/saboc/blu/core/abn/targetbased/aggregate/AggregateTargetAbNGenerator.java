@@ -1,6 +1,12 @@
-package edu.njit.cs.saboc.blu.core.abn.targetbased;
+package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.ExpandedDisjointAbN;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 
 /**
@@ -42,4 +48,15 @@ public class AggregateTargetAbNGenerator {
         
         return targetAbN;
     }
+    
+    public ExpandedTargetAbN createExpandedTargetAbN(
+            TargetAbstractionNetwork sourceAggregateTargetAbN,
+            AggregateTargetGroup aggregateDisjointNode) {
+
+        ExpandedTargetAbN expandedDisjointAbN = new ExpandedTargetAbN(
+                sourceAggregateTargetAbN,
+                aggregateDisjointNode);
+
+        return expandedDisjointAbN;
+    } 
 }

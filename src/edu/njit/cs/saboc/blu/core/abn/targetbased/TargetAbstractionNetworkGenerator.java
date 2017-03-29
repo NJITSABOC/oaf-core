@@ -186,15 +186,17 @@ public class TargetAbstractionNetworkGenerator {
             });
         });
         
-        return new TargetAbstractionNetwork(
-                nodeHierarchy, 
-                targetHierarchy,
-                new TargetAbNDerivation(
+        TargetAbNDerivation derivation = new TargetAbNDerivation(
                         factory.getSourceOntology(), 
                         factory, 
                         sourceHierarchy.getRoot(), 
                         relationshipTypes.iterator().next(), 
-                        targetHierarchy.getRoot()));
+                        targetHierarchy.getRoot());
+        
+        return factory.createTargetAbstractionNetwork(
+                nodeHierarchy, 
+                sourceHierarchy, 
+                derivation);
     }
     
     

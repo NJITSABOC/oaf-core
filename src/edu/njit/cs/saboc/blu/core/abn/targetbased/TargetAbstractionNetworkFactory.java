@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
@@ -22,6 +23,17 @@ public abstract class TargetAbstractionNetworkFactory {
     
     public Ontology getSourceOntology() {
         return sourceOntology;
+    }
+    
+    public TargetAbstractionNetwork createTargetAbstractionNetwork(
+            Hierarchy<TargetGroup> groupHierarchy, 
+            Hierarchy<Concept> sourceHierarchy,
+            TargetAbNDerivation derivation) {
+        
+        return new TargetAbstractionNetwork(
+                groupHierarchy, 
+                sourceHierarchy,
+                derivation);
     }
     
     public abstract Set<RelationshipTriple> getRelationshipsToTargetHierarchyFor(

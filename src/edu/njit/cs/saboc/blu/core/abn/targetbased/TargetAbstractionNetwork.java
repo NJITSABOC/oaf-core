@@ -31,6 +31,12 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
         super(groupHierarchy, sourceHierarchy, derivation);
     }
     
+    public TargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
+        this(targetAbN.getNodeHierarchy(), 
+                targetAbN.getSourceHierarchy(), 
+                targetAbN.getDerivation());
+    }
+    
     @Override
     public TargetAbNDerivation getDerivation() {
         return (TargetAbNDerivation)super.getDerivation();

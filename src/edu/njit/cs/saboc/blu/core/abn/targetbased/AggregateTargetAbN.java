@@ -32,7 +32,8 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     
     private final int minBound;
 
-    public AggregateTargetAbN(TargetAbstractionNetwork sourceTargetAbN,
+    public AggregateTargetAbN(
+            TargetAbstractionNetwork sourceTargetAbN,
             int minBound,
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
@@ -43,6 +44,14 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;
+    }
+    
+    public AggregateTargetAbN(AggregateTargetAbN base) {
+        
+        this(base.getNonAggregateSourceAbN(), 
+                base.getAggregateBound(), 
+                base.getNodeHierarchy(), 
+                base.getSourceHierarchy());
     }
 
     @Override

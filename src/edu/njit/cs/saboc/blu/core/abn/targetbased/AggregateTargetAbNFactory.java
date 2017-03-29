@@ -27,6 +27,7 @@ public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGrou
             allRelationshipTriples.addAll(group.getIncomingRelationshipDetails().getAllRelationships());
         });
         
-        return new AggregateTargetGroup(hierarchy, new IncomingRelationshipDetails(allRelationshipTriples), aggregatedNodes);
+        return new AggregateTargetGroup(hierarchy, 
+                new IncomingRelationshipDetails(allRelationshipTriples), aggregatedNodes);
     }
 }

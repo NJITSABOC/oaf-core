@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -17,10 +18,15 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryPanel;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -33,12 +39,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.filechooser.FileFilter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import testing.AbNDerivationCoreParser;
+import testing.AbNDerivationParserUtils;
 
 /**
  *
  * @author Chris O
  */
-public class MultiAbNGraphFrame extends JInternalFrame {
+public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser>extends JInternalFrame {
     
     private final JFrame parentFrame;
 
@@ -54,8 +65,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final MultiAbNDisplayManager displayManager;
     
     private final AbNDerivationHistoryPanel derivationHistoryPanel;
+    
+    private final AbNDerivationCoreParser abnParser;
         
-    public MultiAbNGraphFrame(JFrame parentFrame, AbNGraphFrameInitializers initializers) {
+    public MultiAbNGraphFrame(JFrame parentFrame, AbNGraphFrameInitializers initializers, T abnParser) {
         
         super("Ontology Abstraction Framework (OAF) Display",
                 true, //resizable
@@ -65,6 +78,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         this.parentFrame = parentFrame;
         this.initializers = initializers;
+        this.abnParser = abnParser;
         
         this.displayManager = new MultiAbNDisplayManager(this, null);
         
@@ -82,12 +96,70 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
         
         JButton showDerivationHistoryBtn = new JButton("Abstraction Network History");
-        showDerivationHistoryBtn.addActionListener( (ae) -> {
+        showDerivationHistoryBtn.addActionListener((ae) -> {
             JDialog historyDialog = new JDialog();
             historyDialog.setSize(600, 800);
-            
+
             historyDialog.add(derivationHistoryPanel);
+            JButton saveBtn = new JButton("SAVE");
+            saveBtn.addActionListener((as) -> {
+                ArrayList<AbNDerivationHistoryEntry> entries = derivationHistoryPanel.getEntries();
+
+                for (AbNDerivationHistoryEntry entry : entries) {
+                    JSONArray arr = entry.getDerivation().serializeToJSON();
+                    try (FileWriter file = new FileWriter("testing.json")) {
+                        file.write(arr.toJSONString());
+                        System.out.println("Serialized JSON Object to File...");
+                        System.out.println("JSON Object: " + arr);
+                        file.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+
+                }
+
+            });
+
+            JButton loadBtn = new JButton("LOAD");
+            loadBtn.addActionListener((ActionEvent al) -> {
+                JSONParser parser = new JSONParser();
+                try {
+                    JSONArray jsonArr = (JSONArray) parser.parse(new FileReader("testing.json"));
+                    System.out.println(jsonArr);
+                    JSONObject resultObject = AbNDerivationParserUtils.findJSONObjectByName(jsonArr, "ClassName");
+                    String className = resultObject.get("ClassName").toString();
+                    System.out.println(className);
+                    
+                    AbstractionNetwork abn = abnParser.coreParser(jsonArr).getAbstractionNetwork();
+                    if (abn instanceof PAreaTaxonomy) {
+                        displayPAreaTaxonomy((PAreaTaxonomy) abn, false);
+                    } else if (abn instanceof DisjointAbstractionNetwork) {
+                        DisjointAbstractionNetwork dabn = (DisjointAbstractionNetwork) abn;
+                        if (dabn.getParentAbstractionNetwork() instanceof PAreaTaxonomy) {
+                            displayDisjointPAreaTaxonomy(dabn, false);
+                        } else if (dabn.getParentAbstractionNetwork() instanceof ClusterTribalAbstractionNetwork) {
+                            displayDisjointTAN(dabn, false);                            
+                        }
+                        
+                    } else if (abn instanceof ClusterTribalAbstractionNetwork) {
+                        displayTAN((ClusterTribalAbstractionNetwork) abn, false);
+                    } else if (abn instanceof TargetAbstractionNetwork) {
+                        displayTargetAbstractionNewtork((TargetAbstractionNetwork) abn, false);                       
+                    }
+           
+                } catch (Exception ioe) {
+                    ioe.printStackTrace();
+                }
+                
+                System.out.println("Done Deserialization.");
+                
+            });
             
+            JPanel subPanel = new JPanel();
+            subPanel.add(saveBtn);
+            subPanel.add(loadBtn);
+            historyDialog.add(subPanel, BorderLayout.AFTER_LAST_LINE);
+
             historyDialog.setVisible(true);
         });
         

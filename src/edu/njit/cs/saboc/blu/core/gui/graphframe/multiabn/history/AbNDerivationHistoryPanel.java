@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +39,7 @@ public class AbNDerivationHistoryPanel extends JPanel implements ActionListener{
 
             @Override
             public void entityClicked(AbNDerivationHistoryEntry entity) {
-                
+
             }
 
             @Override
@@ -54,19 +56,19 @@ public class AbNDerivationHistoryPanel extends JPanel implements ActionListener{
         this.add(derivationList, BorderLayout.CENTER);
         
 
-        JButton button1 = new JButton("SAVE");
-        button1.setActionCommand("SAVE");
-        button1.addActionListener((ActionListener) this);
-
-        JButton button2 = new JButton("LOAD");
-        button2.setActionCommand("LOAD");
-        button2.addActionListener((ActionListener) this);
-
-        JPanel subPanel = new JPanel();
-        subPanel.add(button1);
-        subPanel.add(button2);
-
-        this.add(subPanel, BorderLayout.AFTER_LAST_LINE);
+//        JButton button1 = new JButton("SAVE");
+//        button1.setActionCommand("SAVE");
+//        button1.addActionListener((ActionListener) this);
+//
+//        JButton button2 = new JButton("LOAD");
+//        button2.setActionCommand("LOAD");
+//        button2.addActionListener((ActionListener) this);
+//
+//        JPanel subPanel = new JPanel();
+//        subPanel.add(button1);
+//        subPanel.add(button2);
+//
+//        this.add(subPanel, BorderLayout.AFTER_LAST_LINE);
 
 
 
@@ -81,6 +83,11 @@ public class AbNDerivationHistoryPanel extends JPanel implements ActionListener{
         
         derivationList.setContents(entries);
     }
+    
+    public ArrayList<AbNDerivationHistoryEntry> getEntries(){
+        return entries;
+    } 
+    
     
     public void actionPerformed(ActionEvent e) {
         
@@ -110,7 +117,9 @@ public class AbNDerivationHistoryPanel extends JPanel implements ActionListener{
             JSONObject resultObject = findJSONObjectByName(jsonArr, "ClassName");
             String className = resultObject.get("ClassName").toString();
             System.out.println(className);
-            
+            entries.get(entries.size()-1).getDerivation();
+
+    
 
         } catch (Exception ioe) {
             ioe.printStackTrace();

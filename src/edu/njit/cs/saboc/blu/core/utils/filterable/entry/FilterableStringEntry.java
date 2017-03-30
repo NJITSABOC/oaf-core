@@ -8,11 +8,13 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
  */
 public class FilterableStringEntry extends Filterable<String> {
 
-    private String entry;
+    private final String entry;
     
     public FilterableStringEntry(String entry) {
         this.entry = entry;
     }
+    
+    
     
     public String getInitialText() {
         return String.format("<html>%s</html>", entry);

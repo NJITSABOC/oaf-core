@@ -1,7 +1,10 @@
-package edu.njit.cs.saboc.blu.core.abn.targetbased;
+package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -28,11 +31,21 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
                     smallestNode);
     }
     
+    public static final TargetAbstractionNetwork createExpanded(
+            AggregateTargetAbN aggregateAbN, 
+            AggregateTargetGroup selectedGroup) {
+        
+        AggregateTargetAbNGenerator generator = new AggregateTargetAbNGenerator();
+        
+        return generator.createExpandedTargetAbN(aggregateAbN, selectedGroup);
+    }
+    
     private final TargetAbstractionNetwork sourceTargetAbN;
     
     private final int minBound;
 
-    public AggregateTargetAbN(TargetAbstractionNetwork sourceTargetAbN,
+    public AggregateTargetAbN(
+            TargetAbstractionNetwork sourceTargetAbN,
             int minBound,
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
@@ -43,6 +56,14 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;
+    }
+    
+    public AggregateTargetAbN(AggregateTargetAbN base) {
+        
+        this(base.getNonAggregateSourceAbN(), 
+                base.getAggregateBound(), 
+                base.getNodeHierarchy(), 
+                base.getSourceHierarchy());
     }
 
     @Override
@@ -63,5 +84,9 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
         return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode);
+    }
+    
+    public TargetAbstractionNetwork expandAggregateTargetGroup(AggregateTargetGroup targetGroup) {
+        return AggregateTargetAbN.createExpanded(this, targetGroup);
     }
 }

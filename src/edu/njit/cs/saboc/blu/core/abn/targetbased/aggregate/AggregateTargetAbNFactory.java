@@ -1,6 +1,9 @@
-package edu.njit.cs.saboc.blu.core.abn.targetbased;
+package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNFactory;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.IncomingRelationshipDetails;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.RelationshipTriple;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -27,6 +30,7 @@ public class AggregateTargetAbNFactory implements AggregateAbNFactory<TargetGrou
             allRelationshipTriples.addAll(group.getIncomingRelationshipDetails().getAllRelationships());
         });
         
-        return new AggregateTargetGroup(hierarchy, new IncomingRelationshipDetails(allRelationshipTriples), aggregatedNodes);
+        return new AggregateTargetGroup(hierarchy, 
+                new IncomingRelationshipDetails(allRelationshipTriples), aggregatedNodes);
     }
 }

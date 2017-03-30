@@ -1,6 +1,11 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -186,15 +191,17 @@ public class TargetAbstractionNetworkGenerator {
             });
         });
         
-        return new TargetAbstractionNetwork(
-                nodeHierarchy, 
-                targetHierarchy,
-                new TargetAbNDerivation(
+        TargetAbNDerivation derivation = new TargetAbNDerivation(
                         factory.getSourceOntology(), 
                         factory, 
                         sourceHierarchy.getRoot(), 
                         relationshipTypes.iterator().next(), 
-                        targetHierarchy.getRoot()));
+                        targetHierarchy.getRoot());
+        
+        return factory.createTargetAbstractionNetwork(
+                nodeHierarchy, 
+                sourceHierarchy, 
+                derivation);
     }
     
     

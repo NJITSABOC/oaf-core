@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
+import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
@@ -29,6 +30,12 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
             TargetAbNDerivation derivation) {
         
         super(groupHierarchy, sourceHierarchy, derivation);
+    }
+    
+    public TargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
+        this(targetAbN.getNodeHierarchy(), 
+                targetAbN.getSourceHierarchy(), 
+                targetAbN.getDerivation());
     }
     
     @Override

@@ -1,7 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn;
 
-import edu.njit.cs.saboc.blu.core.abn.targetbased.AggregateTargetGroup;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateTargetGroup;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
 

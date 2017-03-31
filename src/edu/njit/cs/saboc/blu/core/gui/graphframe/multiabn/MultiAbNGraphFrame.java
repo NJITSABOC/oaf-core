@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -95,19 +96,41 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser>extends JInter
         
         this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
         
+        Preferences prefs = Preferences.userNodeForPackage(getClass());
+        
         JButton showDerivationHistoryBtn = new JButton("Abstraction Network History");
         showDerivationHistoryBtn.addActionListener((ae) -> {
             JDialog historyDialog = new JDialog();
             historyDialog.setSize(600, 800);
 
             historyDialog.add(derivationHistoryPanel);
+            
             JButton saveBtn = new JButton("SAVE");
+            saveBtn.addActionListener((as) -> {
+                AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
+                
+                    JSONArray arr = entry.getDerivation().serializeToJSON();
+                    prefs.remove("Selected View");
+                    prefs.put("Selected View", arr.toJSONString());
+                    
+//                    try (FileWriter file = new FileWriter("testing.json", true)) {
+//                        file.write(arr.toJSONString());
+//                        System.out.println("Serialized JSON Object to File...");
+//                        System.out.println("JSON Object: " + arr);
+//                        file.close();
+//                    } catch (IOException ioe) {
+//                        ioe.printStackTrace();
+//                    }
+
+            });
+       
+            JButton saveAllBtn = new JButton("SAVE ALL");
             saveBtn.addActionListener((as) -> {
                 ArrayList<AbNDerivationHistoryEntry> entries = derivationHistoryPanel.getEntries();
 
                 for (AbNDerivationHistoryEntry entry : entries) {
                     JSONArray arr = entry.getDerivation().serializeToJSON();
-                    try (FileWriter file = new FileWriter("testing.json")) {
+                    try (FileWriter file = new FileWriter("testing.json",true)) {
                         file.write(arr.toJSONString());
                         System.out.println("Serialized JSON Object to File...");
                         System.out.println("JSON Object: " + arr);
@@ -120,12 +143,19 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser>extends JInter
 
             });
 
-            JButton loadBtn = new JButton("LOAD");
+            JButton loadBtn = new JButton("LOAD Last Viewed Taxonomy");
             loadBtn.addActionListener((ActionEvent al) -> {
                 JSONParser parser = new JSONParser();
                 try {
-                    JSONArray jsonArr = (JSONArray) parser.parse(new FileReader("testing.json"));
-                    System.out.println(jsonArr);
+//                    JSONArray jsonArr = (JSONArray) parser.parse(new FileReader("testing.json"));                     
+                    String strJson = prefs.get("Selected View","0");
+                    
+                    JSONArray jsonArr = new JSONArray();
+                    if(strJson != null)  {
+                        System.out.println("Get the array from prefs");
+                        jsonArr = (JSONArray) parser.parse((strJson));
+                    }
+                   
                     JSONObject resultObject = AbNDerivationParserUtils.findJSONObjectByName(jsonArr, "ClassName");
                     String className = resultObject.get("ClassName").toString();
                     System.out.println(className);
@@ -157,6 +187,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser>extends JInter
             
             JPanel subPanel = new JPanel();
             subPanel.add(saveBtn);
+            subPanel.add(saveAllBtn);
             subPanel.add(loadBtn);
             historyDialog.add(subPanel, BorderLayout.AFTER_LAST_LINE);
 

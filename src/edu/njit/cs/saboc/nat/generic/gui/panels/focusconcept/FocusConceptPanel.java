@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
+//import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
@@ -14,7 +15,8 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSe
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
-import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
+//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
+//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.ParentsRightClickMenuGenerator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -76,8 +78,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     private final EntityRightClickManager<T> rightClickManager = new EntityRightClickManager<>();
 
 
-    private final EntityRightClickManager<T> rightClickManager;
-    
     public FocusConceptPanel(
             NATBrowserPanel<T> mainPanel, 
             ConceptBrowserDataSource<T> dataSource) {
@@ -111,7 +111,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.historyBack();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
-                
                 //add nagvigationhistory to the top of history list
                 history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
@@ -168,21 +167,11 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                             jtf.getWidth(),
                             jtf.getPreferredSize().height);
                     
-                    if (!conceptRect.contains(evt.getPoint())) {
+                    if(!conceptRect.contains(evt.getPoint())) {
                         return null;
                     }
 
-                    String toolTip;
-                    T focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-                    
-                    if (getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
-                        toolTip = getDataSource().getAuditConceptToolTipText(
-                                getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), focusConcept);
-                    } else {
-                        toolTip = getDataSource().getConceptToolTipText(focusConcept);
-                    }
-                    
-                    return toolTip;
+                    return mainPanel.getFocusConceptManager().getActiveFocusConcept().getName();
                 }
 
                 return null;
@@ -197,23 +186,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 
                 return new Point(evt.getX(), evt.getY() + 21);
             }
+            
         };
-        
-        jtf.addMouseListener(new MouseAdapter() {
-
-            private final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
-
-            @Override
-            public void mouseEntered(MouseEvent me) {
-                ToolTipManager.sharedInstance().setDismissDelay(60000);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
-            }
-
-        });
         
         editFocusConceptPanel = new EditFocusConceptPanel(this, jtf);
         editFocusConceptPanel.addEditFocusConceptListener(new EditFocusConceptListener() {
@@ -236,18 +210,11 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         JScrollPane pane = new JScrollPane(jtf);
         ToolTipManager.sharedInstance().registerComponent(jtf);
-        
         pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        
-        JPanel backBtnPanel = new JPanel();
-        backBtnPanel.add(backButton);
-        
-        JPanel forwardBtnPanel = new JPanel();
-        forwardBtnPanel.add(forwardButton);
 
         JPanel alignmentPanel = new JPanel(new BorderLayout());
-        alignmentPanel.add(backBtnPanel, BorderLayout.WEST);
-        alignmentPanel.add(forwardBtnPanel, BorderLayout.EAST);
+        alignmentPanel.add(backButton, BorderLayout.WEST);
+        alignmentPanel.add(forwardButton, BorderLayout.EAST);
         alignmentPanel.add(optionsPanel, BorderLayout.CENTER);
 
         focusConceptPanel.add(editFocusConceptPanel, BorderLayout.NORTH);
@@ -255,9 +222,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
 
         add(alignmentPanel, BorderLayout.NORTH);
         add(focusConceptPanel, BorderLayout.CENTER);
-        
-        this.rightClickManager = new EntityRightClickManager<>();
-        this.setRightClickMenuGenerator(new FocusConceptRightClickMenu<>(mainPanel, dataSource));
         
         jtf.addKeyListener(new KeyAdapter() {
             @Override
@@ -291,23 +255,17 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         });
 
         jtf.addMouseListener(new MouseAdapter() {
-
+            
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (!pending) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        if (e.getClickCount() == 2) {
-                            if (!jtf.isEditable()) {
-                                openEditorPane();
-                            } else {
-                                editFocusConceptPanel.setVisible(false);
-
-                                display();
-                            }
-                        }
-                    } else if (e.getButton() == MouseEvent.BUTTON3) {
-                        rightClickManager.setRightClickedItem(mainPanel.getFocusConceptManager().getActiveFocusConcept());
-                        rightClickManager.showPopup(e);
+                if(!pending && e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    
+                    if(!jtf.isEditable() ){
+                        openEditorPane();
+                    } else{
+                        editFocusConceptPanel.setVisible(false);
+                        
+                        display();
                     }
                 }
                 if (e.getButton() == MouseEvent.BUTTON3){
@@ -325,14 +283,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         this.addOptionButton(new OpenBrowserButton(mainPanel, new GoogleSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new WikipediaSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new PubMedSearchConfig()));
-    }
-    
-    public void setRightClickMenuGenerator(FocusConceptRightClickMenu menuGenerator) {
-        this.rightClickManager.setMenuGenerator(menuGenerator);
-    }
-    
-    public void clearRightClickMenuGenerator() {
-        this.rightClickManager.clearMenuGenerator();
     }
 
     private void setConcept() {
@@ -357,23 +307,17 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
 
         T fc = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
-        String conceptString;
-        String toolTip;
-        
-        if(getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
-            conceptString = getDataSource().getFocusConceptText(getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), fc);
-            toolTip = getDataSource().getAuditConceptToolTipText(getMainPanel().getAuditDatabase().getLoadedAuditSet().get(), fc);
-        } else {
-            conceptString = getDataSource().getFocusConceptText(fc);
-            toolTip = getDataSource().getConceptToolTipText(fc);
-        }
-     
+        String conceptString = getDataSource().getFocusConceptText(fc);
+                
         jtf.setText(conceptString);
+        
+        jtf.setToolTipText(conceptString);
 
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);
         jtf.setEditable(false);
 
+        
         editFocusConceptPanel.clearEdits();
     }
 

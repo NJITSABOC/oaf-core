@@ -16,10 +16,12 @@ public class CompleteOntologyRootPanel<T extends Concept> extends RootSelectionP
     
     @Override
     public void selected() {
+        
         if (getOntology().isPresent()) {
             getRootSelectionListeners().forEach((listener) -> {
                 listener.rootSelected(getOntology().get().getConceptHierarchy().getRoot());
             });
         }
+        
     }
 }

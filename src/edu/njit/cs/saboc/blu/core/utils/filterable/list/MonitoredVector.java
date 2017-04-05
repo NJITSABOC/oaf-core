@@ -7,7 +7,10 @@ import java.util.Vector;
  * An extention of {@link Vector} that monitors itself for changes.
  * Whenever the vector is modified, the appropriate elementsXxx is called.
  * Override these methods to take whatever action you would like.
+ * 
  * @author Paul Accisano
+ * 
+ * @param <T>
  */
 public class MonitoredVector<T> extends Vector<T> {
     /**

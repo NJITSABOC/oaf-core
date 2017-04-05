@@ -12,10 +12,13 @@ import javax.swing.event.ListDataListener;
  * those Concepts that match the filter will be accessible through the ListModel
  * interface, but all the Concepts will always be accessible through the Vector
  * methods.
+ * 
+ * @author Paul Accisano
+ * 
  */
-public class FilterableListModel extends MonitoredVector<Filterable> implements ListModel {
+public class FilterableListModel<T> extends MonitoredVector<Filterable<T>> implements ListModel<Filterable<T>> {
 
-    protected Vector<Filterable> modelledVector = this;
+    protected Vector<Filterable<T>> modelledVector = this;
 
     private class DelegateListModel extends AbstractListModel {
 
@@ -59,7 +62,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
     }
 
     @Override
-    public Object getElementAt(int index) {
+    public Filterable<T> getElementAt(int index) {
         return modelledVector.get(index);
     }
 
@@ -156,7 +159,7 @@ public class FilterableListModel extends MonitoredVector<Filterable> implements 
         } else {
             filter = newFilter;
             
-            ListIterator<Filterable> iter = modelledVector.listIterator();
+            ListIterator<Filterable<T>> iter = modelledVector.listIterator();
 
             while (iter.hasNext()) {
                 Filterable filterable = iter.next();

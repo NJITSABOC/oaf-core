@@ -17,7 +17,6 @@ public class ConceptList extends AbstractEntityList<Concept> {
     
     public ConceptList(AbNConfiguration config) {
         this(config, new ConceptTableModel(config));
-        
     }
     
     public ConceptList(AbNConfiguration config, OAFAbstractTableModel<Concept> model) {

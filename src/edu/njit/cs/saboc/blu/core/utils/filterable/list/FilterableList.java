@@ -35,9 +35,16 @@ import javax.swing.ToolTipManager;
  */
 public class FilterableList<T> extends JPanel {
     
-    private final FilterableListModel entryModel = new FilterableListModel();
+    public interface FilterableListSelectionListener<T> {
+        public void elementSelected(T element, int clicks);
+        public void noElementSelected();
+    }
+    
+    private final FilterableListModel<T> entryModel = new FilterableListModel<>();
     
     private final JList<Filterable<T>> list;
+    
+    private final ArrayList<FilterableListSelectionListener<T>> selectionListeners = new ArrayList<>();
     
     private final FilterPanel filterPanel;
     
@@ -62,7 +69,7 @@ public class FilterableList<T> extends JPanel {
                 }
 
                 if(index > -1) {
-                    Filterable obj = entryModel.get(index);
+                    Filterable<T> obj = entryModel.get(index);
                     
                     return obj.getToolTipText(); 
                 }
@@ -79,6 +86,22 @@ public class FilterableList<T> extends JPanel {
             }
         };
         
+        this.list.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                if(list.getSelectedIndex() >= 0) {
+                    selectionListeners.forEach( (listener) -> {
+                       listener.elementSelected(list.getSelectedValue().getObject(), me.getClickCount());
+                    });
+                } else {
+                    selectionListeners.forEach((listener) -> {
+                        listener.noElementSelected();
+                    });
+                }
+            }
+        });
+        
         this.list.setModel(entryModel);
         
         Action copyAction = new AbstractAction() {
@@ -90,14 +113,13 @@ public class FilterableList<T> extends JPanel {
                     StringBuilder selectionBuilder = new StringBuilder();
                     
                     entryModel.modelledVector.forEach( (filterable) -> {
-                        selectionBuilder.append( String.format("%s\n", filterable.getClipboardText()));
+                        selectionBuilder.append(String.format("%s\n", filterable.getClipboardText()));
                     });
 
                     StringSelection selection = new StringSelection(selectionBuilder.toString());
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(selection, selection);
                 }
-
             }
         };
 
@@ -159,6 +181,14 @@ public class FilterableList<T> extends JPanel {
         this.list.setCellRenderer(renderer);
     }
     
+    public void addListSelectionListener(FilterableListSelectionListener<T> listener) {
+        this.selectionListeners.add(listener);
+    }
+    
+    public void removeListSelectionListener(FilterableListSelectionListener<T> listener) {
+        this.selectionListeners.remove(listener);
+    }
+    
     private void clearContents() {
         entryModel.changeFilter("");
         filterPanel.setVisible(false);
@@ -178,7 +208,7 @@ public class FilterableList<T> extends JPanel {
         clearContents();
     }
 
-    public void setContents(ArrayList<? extends Filterable> content) {
+    public void setContents(ArrayList<? extends Filterable<T>> content) {
         entryModel.changeFilter("");
         
         filterPanel.setVisible(false);

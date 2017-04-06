@@ -15,6 +15,7 @@ import java.util.Optional;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -76,6 +77,8 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
                 ((CardLayout)currentRootSelectionPanel.getLayout()).show(
                         currentRootSelectionPanel, 
                         panel.getSelectionType());
+                
+                panel.selected();
             }
         });
         
@@ -116,7 +119,7 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
         
         this.rootSelectionPanels.put(panel.getSelectionType(), panel);
     }
-    
+        
     public void addRootSelectionListener(RootSelectionListener rootSelectionListener) {
         rootSelectionListeners.add(rootSelectionListener);
     }
@@ -154,7 +157,9 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
             panel.initialize(ontology, searcher);
         });
         
-        this.rootSelectionOptionButtons.get(0).setSelected(true);
+        SwingUtilities.invokeLater( () -> {
+            this.rootSelectionOptionButtons.get(0).doClick();
+        });
     }
     
     @Override

@@ -95,7 +95,7 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         //serialize selectedAggregatePAreaRoot
         JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
         obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
-        result.add(obj_minBound);
+        result.add(obj_selectedAggregatePAreaRoot);
         
         return result;
     }

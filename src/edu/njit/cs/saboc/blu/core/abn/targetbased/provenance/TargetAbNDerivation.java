@@ -84,23 +84,26 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
 
     @Override
     public JSONArray serializeToJSON() {
-        //InheritableProperty 
-    JSONArray result = new JSONArray();
-        result.add("TargetAbNDerivation");
+
+        JSONArray result = new JSONArray();
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","TargetAbNDerivation");       
+        result.add(obj_class);
         
         //serialzie sourceHierarchyRoot
         JSONObject obj_sourceHierarchyRoot = new JSONObject();
-        obj_sourceHierarchyRoot.put("SourceID", sourceHierarchyRoot.getIDAsString());   
+        obj_sourceHierarchyRoot.put("SourceRootID", sourceHierarchyRoot.getIDAsString());   
         result.add(obj_sourceHierarchyRoot);
 
         //serialize propertyType
         JSONObject obj_propertyType = new JSONObject();
-        obj_propertyType.put("PropertyType", propertyType.getIDAsString());
+        obj_propertyType.put("PropertyID", propertyType.getIDAsString());
         result.add(obj_propertyType);
         
         //serialize targetHierarchyRoot
         JSONObject obj_targetHierarchyRoot = new JSONObject();
-        obj_targetHierarchyRoot.put("TargetID", targetHierarchyRoot.getIDAsString());
+        obj_targetHierarchyRoot.put("TargetRootID", targetHierarchyRoot.getIDAsString());
         result.add(obj_targetHierarchyRoot);
         
         return result;

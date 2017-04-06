@@ -3,6 +3,8 @@ package testing;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkFactory;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,5 +25,7 @@ public interface AbNDerivationFactoryTesting {
     public <U extends DisjointAbNFactory> U getDisjointTANbNFactory();
     
     public <N extends TANFactory> N getTANFactory();
+    
+    public <R extends TargetAbstractionNetworkFactory> R getTargetAbNFactory();
     
 }

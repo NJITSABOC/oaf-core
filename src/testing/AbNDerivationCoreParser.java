@@ -36,17 +36,18 @@ import edu.njit.cs.saboc.blu.core.abn.tan.provenance.RootSubTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.SimpleClusterTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromPartitionedNodeDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.ExpandedTargetAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.PropertyLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -132,6 +133,12 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("TANFromSinglyRootedNodeDerivation")) {
             result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+        } else if (className.equalsIgnoreCase("TargetAbNDerivation")) {
+
+        } else if (className.equalsIgnoreCase("ExpandedTargetAbNDerivation")) {
+
+        } else if (className.equalsIgnoreCase("AggregateTargetAbNDerivation")) {
+
         }
 
         return result;
@@ -147,51 +154,57 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
         if (className.equalsIgnoreCase("SimplePAreaTaxonomyDerivation")) {
             result = (T) parseSimplePAreaTaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("RootSubtaxonomyDerivation")) {
-            result = (T) parseRootSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseRootSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("RelationshipSubtaxonomyDerivation")) {
-            result = (T) parseRelationshipSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseRelationshipSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("ExpandedSubtaxonomyDerivation")) {
-            result = (T) parseExpandedSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseExpandedSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AncestorSubtaxonomyDerivation")) {
-            result = (T) parseAncestorSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAncestorSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateRootSubtaxonomyDerivation")) {
-            result = (T) parseAggregateRootSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateRootSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregatePAreaTaxonomyDerivation")) {
             result = (T) parseAggregatePAreaTaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateAncestorSubtaxonomyDerivation")) {
-            result = (T) parseAggregateAncestorSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateAncestorSubtaxonomyDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("SimpleDisjointAbNDerivation")) {
             result = (T) parseSimpleDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("SubsetDisjointAbNDerivation")) {
-            result = (T) parseSubsetDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseSubsetDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("OverlappingNodeDisjointAbNDerivation")) {
-            result = (T) parseOverlappingNodeDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseOverlappingNodeDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("ExpandedDisjointAbNDerivation")) {
-            result = (T) parseExpandedDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseExpandedDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AncestorDisjointAbNDerivation")) {
-            result = (T) parseAncestorDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAncestorDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateDisjointAbNDerivation")) {
-            result = (T) parseAggregateDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateDisjointAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateAncestorTANDerivation")) {
-            result = (T) parseAggregateAncestorTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateAncestorTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("SimpleClusterTANDerivation")) {
             result = (T) parseSimpleClusterTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("RootSubTANDerivation")) {
-            result = (T) parseRootSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseRootSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("ExpandedSubTANDerivation")) {
-            result = (T) parseExpandedSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseExpandedSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AncestorSubTANDerivation")) {
-            result = (T) parseAncestorSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAncestorSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateTANDerivation")) {
-            result = (T) parseAggregateTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateRootSubTANDerivation")) {
-            result = (T) parseAggregateRootSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateRootSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("AggregateAncestorSubTANDerivation")) {
-            result = (T) parseAggregateAncestorSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseAggregateAncestorSubTANDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("TANFromPartitionedNodeDerivation")) {
-            result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseTANFromPartitionedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         } else if (className.equalsIgnoreCase("TANFromSinglyRootedNodeDerivation")) {
-            result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing);
+            result = (T) parseTANFromSinglyRootedNodeDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
+        } else if (className.equalsIgnoreCase("TargetAbNDerivation")) {
+            result = (T) parseTargetAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
+        } else if (className.equalsIgnoreCase("ExpandedTargetAbNDerivation")) {
+            result = (T) parseExpandedTargetAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
+        } else if (className.equalsIgnoreCase("AggregateTargetAbNDerivation")) {
+            result = (T) parseAggregateTargetAbNDerivation(jsonArr, sourceOntology, conceptFactory, propertyFactory, testing, baseDerivation);
         }
 
         return result;
@@ -211,17 +224,23 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             root = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
         SimplePAreaTaxonomyDerivation result = new SimplePAreaTaxonomyDerivation(sourceOntology, root, testing.getPAreaTaxonomyFactory());
         return result;
     }
 
-    public RootSubtaxonomyDerivation parseRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
+    public <T extends AbNDerivation> RootSubtaxonomyDerivation parseRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        PAreaTaxonomyDerivation base = null;
 
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (PAreaTaxonomyDerivation) baseDerivation[0];
+        }
 
         Concept pareaRootConcept = null;
 
@@ -233,32 +252,38 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             pareaRootConcept = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
+        }
+        return new RootSubtaxonomyDerivation(base, pareaRootConcept);
+    }
+
+    public <T extends AbNDerivation> RelationshipSubtaxonomyDerivation parseRelationshipSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        PAreaTaxonomyDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (PAreaTaxonomyDerivation) baseDerivation[0];
         }
 
-        RootSubtaxonomyDerivation result = new RootSubtaxonomyDerivation(base, pareaRootConcept);
-        return result;
-    }
-
-    public RelationshipSubtaxonomyDerivation parseRelationshipSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
-
-        //implement getSelectedProperties by id need testing on this.
         Set<InheritableProperty> selectedProperties = null;
-        JSONObject propertyObject = findJSONObjectByName(jsonArr, "Properties");
-        ArrayList<String> arr_property = (ArrayList<String>) propertyObject.get("Properties");
+        JSONObject propertyObject = findJSONObjectByName(jsonArr, "PropertyIDs");
+        ArrayList<String> arr_property = (ArrayList<String>) propertyObject.get("PropertyIDs");
         selectedProperties = propertyFactory.getPropertiesFromIds(arr_property);
 
-        RelationshipSubtaxonomyDerivation result = new RelationshipSubtaxonomyDerivation(base, selectedProperties);
-        return result;
+        return new RelationshipSubtaxonomyDerivation(base, selectedProperties);
     }
 
-    public ExpandedSubtaxonomyDerivation parseExpandedSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> ExpandedSubtaxonomyDerivation parseExpandedSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        PAreaTaxonomyDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (PAreaTaxonomyDerivation) baseDerivation[0];
+        }
 
         Concept aggregatePAreaRoot = null;
 
@@ -270,19 +295,21 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             aggregatePAreaRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        ExpandedSubtaxonomyDerivation result = new ExpandedSubtaxonomyDerivation(base, aggregatePAreaRoot);
-
-        return result;
-
+        return new ExpandedSubtaxonomyDerivation(base, aggregatePAreaRoot);
     }
 
-    public AncestorSubtaxonomyDerivation parseAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AncestorSubtaxonomyDerivation parseAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        PAreaTaxonomyDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (PAreaTaxonomyDerivation) baseDerivation[0];
+        }
 
         Concept pareaRootConcept = null;
 
@@ -294,18 +321,25 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             pareaRootConcept = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
-        AncestorSubtaxonomyDerivation result = new AncestorSubtaxonomyDerivation(base, pareaRootConcept);
-        return result;
+
+        return new AncestorSubtaxonomyDerivation(base, pareaRootConcept);
     }
 
-    public AggregateRootSubtaxonomyDerivation parseAggregateRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateRootSubtaxonomyDerivation parseAggregateRootSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+
+        PAreaTaxonomyDerivation aggregateBase = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            aggregateBase = (PAreaTaxonomyDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int minBound = (int) boundObject.get("Bound");
+        int minBound = ((Long) boundObject.get("Bound")).intValue();
 
         Concept selectedAggregatePAreaRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
@@ -316,38 +350,41 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             selectedAggregatePAreaRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
+        return new AggregateRootSubtaxonomyDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
 
-        AggregateRootSubtaxonomyDerivation result = new AggregateRootSubtaxonomyDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
-        return result;
     }
 
     public <T extends AbNDerivation> AggregatePAreaTaxonomyDerivation parseAggregatePAreaTaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
-        PAreaTaxonomyDerivation nonAggregateSourceDerivation =null;
-        
-        if (baseDerivation ==null) {
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        nonAggregateSourceDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        PAreaTaxonomyDerivation nonAggregateSourceDerivation = null;
+
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            nonAggregateSourceDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            nonAggregateSourceDerivation = (PAreaTaxonomyDerivation) baseDerivation[0];
         }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
         int bound = ((Long) boundObject.get("Bound")).intValue();
-        
-         if (baseDerivation != null) {
-             return new AggregatePAreaTaxonomyDerivation((PAreaTaxonomyDerivation)baseDerivation[0], bound);
-         }
-         else return new AggregatePAreaTaxonomyDerivation(nonAggregateSourceDerivation, bound);
+
+        return new AggregatePAreaTaxonomyDerivation(nonAggregateSourceDerivation, bound);
     }
 
-    public AggregateAncestorSubtaxonomyDerivation parseAggregateAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        PAreaTaxonomyDerivation aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateAncestorSubtaxonomyDerivation parseAggregateAncestorSubtaxonomyDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        PAreaTaxonomyDerivation aggregateBase = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            aggregateBase = (PAreaTaxonomyDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int minBound = (int) boundObject.get("Bound");
+        int minBound = ((Long) boundObject.get("Bound")).intValue();
 
         Concept selectedAggregatePAreaRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
@@ -358,26 +395,26 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             selectedAggregatePAreaRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
-
-        AggregateAncestorSubtaxonomyDerivation result = new AggregateAncestorSubtaxonomyDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
-        return result;
+        return new AggregateAncestorSubtaxonomyDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
     }
 
     //disjoint parser
     public <T extends AbNDerivation> SimpleDisjointAbNDerivation parseSimpleDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
-        DisjointAbNDerivation parentAbNDerivation = null;
-        
-        if (baseDerivation ==null) {
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        T parentAbNDerivation = null;
+
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            parentAbNDerivation = baseDerivation[0];
         }
 
         Set<Concept> root = null;
 
         JSONObject rootObj = findJSONObjectByName(jsonArr, "RootIDs");
-
         ArrayList<String> conceptIDs = (ArrayList<String>) rootObj.get("RootIDs");
         try {
             Set<Concept> newRoot = conceptFactory.getConceptsFromIds(conceptIDs);
@@ -385,53 +422,52 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             root = newRoot;
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
-        }
-        
-        
-        if (baseDerivation != null) {
-            return new SimpleDisjointAbNDerivation(testing.getDisjointPAreaAbNFactory(), baseDerivation[0], root);
-        } else {
-            return new SimpleDisjointAbNDerivation(testing.getDisjointPAreaAbNFactory(), parentAbNDerivation, root);
+            e.printStackTrace();
         }
 
+        return new SimpleDisjointAbNDerivation(testing.getDisjointPAreaAbNFactory(), parentAbNDerivation, root);
     }
 
-    public SubsetDisjointAbNDerivation parseSubsetDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> SubsetDisjointAbNDerivation parseSubsetDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation sourceDisjointAbNDerivation = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            sourceDisjointAbNDerivation = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         //how to deserialize this??
         Set<SinglyRootedNode> subsSet = null;
-
         JSONObject rootObj = findJSONObjectByName(jsonArr, "RootNodeNames");
-
         ArrayList<String> rootNodeNames = (ArrayList<String>) rootObj.get("RootNodeNames");
 
-        rootNodeNames.forEach((String name) -> {
+        for (String name : rootNodeNames) {
             try {
                 subsSet.addAll(sourceDisjointAbNDerivation.getAbstractionNetwork().searchNodes(name));
             } catch (Exception e) {
                 System.err.println("Cannot find node: " + name + " Fail at getting node from sourceDisjointAbNDerivation!!!");
             }
-        });
+        }
 
         SubsetDisjointAbNDerivation result = new SubsetDisjointAbNDerivation(sourceDisjointAbNDerivation, subsSet);
         return result;
     }
 
-    public OverlappingNodeDisjointAbNDerivation parseOverlappingNodeDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> OverlappingNodeDisjointAbNDerivation parseOverlappingNodeDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation sourceDisjointAbNDerivation = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            sourceDisjointAbNDerivation = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         //how to deserialize this??
         SinglyRootedNode overlappingNode = null;
-
         JSONObject rootObj = findJSONObjectByName(jsonArr, "NodeName");
-
         String nodeName = (String) rootObj.get("NodeName");
 
         try {
@@ -439,16 +475,18 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
         } catch (Exception e) {
             System.err.println("Cannot find node: " + nodeName + " Fail at getting node from sourceDisjointAbNDerivation!!!");
         }
-
-        OverlappingNodeDisjointAbNDerivation result = new OverlappingNodeDisjointAbNDerivation(sourceDisjointAbNDerivation, overlappingNode);
-        return result;
+        return new OverlappingNodeDisjointAbNDerivation(sourceDisjointAbNDerivation, overlappingNode);
     }
 
-    public ExpandedDisjointAbNDerivation parseExpandedDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> ExpandedDisjointAbNDerivation parseExpandedDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation sourceDisjointAbNDerivation = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            sourceDisjointAbNDerivation = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         Concept root = null;
 
@@ -461,17 +499,21 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             root = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        ExpandedDisjointAbNDerivation result = new ExpandedDisjointAbNDerivation(sourceDisjointAbNDerivation, root);
-        return result;
+        return new ExpandedDisjointAbNDerivation(sourceDisjointAbNDerivation, root);
     }
 
-    public AncestorDisjointAbNDerivation parseAncestorDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AncestorDisjointAbNDerivation parseAncestorDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation sourceDisjointAbNDerivation = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            sourceDisjointAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            sourceDisjointAbNDerivation = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         Concept disjointNodeRoot = null;
 
@@ -484,38 +526,43 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             disjointNodeRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        AncestorDisjointAbNDerivation result = new AncestorDisjointAbNDerivation(sourceDisjointAbNDerivation, disjointNodeRoot);
-        return result;
+        return new AncestorDisjointAbNDerivation(sourceDisjointAbNDerivation, disjointNodeRoot);
     }
 
-    public AggregateDisjointAbNDerivation parseAggregateDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation nonAggregateDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateDisjointAbNDerivation parseAggregateDisjointAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation nonAggregateDerivation = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            nonAggregateDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            nonAggregateDerivation = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int aggregateBound = (int) boundObject.get("Bound");
+        int aggregateBound = ((Long) boundObject.get("Bound")).intValue();
 
-        AggregateDisjointAbNDerivation result = new AggregateDisjointAbNDerivation(nonAggregateDerivation, aggregateBound);
-        return result;
+        return new AggregateDisjointAbNDerivation(nonAggregateDerivation, aggregateBound);
     }
 
-    public AggregateAncestorDisjointAbNDerivation parseAggregateAncestorTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        DisjointAbNDerivation aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateAncestorDisjointAbNDerivation parseAggregateAncestorTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        DisjointAbNDerivation aggregateBase = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            aggregateBase = (DisjointAbNDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int minBound = (int) boundObject.get("Bound");
+        int minBound = ((Long) boundObject.get("Bound")).intValue();
 
         Concept selectedAggregatePAreaRoot = null;
-
         JSONObject rootObj = findJSONObjectByName(jsonArr, "ConceptID");
-
         ArrayList<String> conceptIDs = (ArrayList<String>) rootObj.get("ConceptID");
         try {
             Set<Concept> newRoot = conceptFactory.getConceptsFromIds(conceptIDs);
@@ -523,11 +570,10 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             selectedAggregatePAreaRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        AggregateAncestorDisjointAbNDerivation result = new AggregateAncestorDisjointAbNDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
-        return result;
-
+        return new AggregateAncestorDisjointAbNDerivation(aggregateBase, minBound, selectedAggregatePAreaRoot);
     }
 
     //Tan parser
@@ -544,17 +590,21 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             root = newRoot;
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        SimpleClusterTANDerivation result = new SimpleClusterTANDerivation(root, sourceOntology, testing.getTANFactory());
-        return result;
+        return new SimpleClusterTANDerivation(root, sourceOntology, testing.getTANFactory());
     }
 
-    public RootSubTANDerivation parseRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> RootSubTANDerivation parseRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         Concept clusterRootConcept = null;
 
@@ -566,17 +616,21 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             clusterRootConcept = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        RootSubTANDerivation result = new RootSubTANDerivation(base, clusterRootConcept);
-        return result;
+        return new RootSubTANDerivation(base, clusterRootConcept);
     }
 
-    public ExpandedSubTANDerivation parseExpandedSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> ExpandedSubTANDerivation parseExpandedSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         Concept aggregateClusterRoot = null;
 
@@ -588,17 +642,20 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             aggregateClusterRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
-
-        ExpandedSubTANDerivation result = new ExpandedSubTANDerivation(base, aggregateClusterRoot);
-        return result;
+        return new ExpandedSubTANDerivation(base, aggregateClusterRoot);
     }
 
-    public AncestorSubTANDerivation parseAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AncestorSubTANDerivation parseAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         Concept clusterRootConcept = null;
 
@@ -610,33 +667,41 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             clusterRootConcept = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        AncestorSubTANDerivation result = new AncestorSubTANDerivation(base, clusterRootConcept);
-        return result;
+        return new AncestorSubTANDerivation(base, clusterRootConcept);
     }
 
-    public AggregateTANDerivation parseAggregateTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateTANDerivation parseAggregateTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation base = null;
+        if (baseDerivation == null || baseDerivation.length == 0) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            System.out.println("base: " + baseDerivation.toString());
+            base = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int bound = (int) boundObject.get("Bound");
+        int bound = ((Long) boundObject.get("Bound")).intValue();
 
-        AggregateTANDerivation result = new AggregateTANDerivation(base, bound);
-        return result;
+        return new AggregateTANDerivation(base, bound);
     }
 
-    public AggregateRootSubTANDerivation parseAggregateRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateRootSubTANDerivation parseAggregateRootSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation aggregateBase = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            aggregateBase = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int minBound = (int) boundObject.get("Bound");
+        int minBound = ((Long) boundObject.get("Bound")).intValue();
 
         Concept selectedAggregateClusterRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
@@ -647,20 +712,24 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             selectedAggregateClusterRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        AggregateRootSubTANDerivation result = new AggregateRootSubTANDerivation(aggregateBase, minBound, selectedAggregateClusterRoot);
-        return result;
+        return new AggregateRootSubTANDerivation(aggregateBase, minBound, selectedAggregateClusterRoot);
     }
 
-    public AggregateAncestorSubTANDerivation parseAggregateAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
-
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
-        ClusterTANDerivation aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+    public <T extends AbNDerivation> AggregateAncestorSubTANDerivation parseAggregateAncestorSubTANDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        ClusterTANDerivation aggregateBase = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            aggregateBase = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            aggregateBase = (ClusterTANDerivation) baseDerivation[0];
+        }
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
-        int minBound = (int) boundObject.get("Bound");
+        int minBound = ((Long) boundObject.get("Bound")).intValue();
 
         Concept selectedAggregateClusterRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
@@ -671,19 +740,23 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             selectedAggregateClusterRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        AggregateAncestorSubTANDerivation result = new AggregateAncestorSubTANDerivation(aggregateBase, minBound, selectedAggregateClusterRoot);
-        return result;
+        return new AggregateAncestorSubTANDerivation(aggregateBase, minBound, selectedAggregateClusterRoot);
     }
 
-    public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
+    public <T extends AbNDerivation> TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
 
         // how to deserialize this??
         AbNDerivation parentAbNDerivation = null;
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
-        parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
+            parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            parentAbNDerivation = baseDerivation[0];
+        }
 
         // how to deserialize parentAbNderivation and node???
         PartitionedNode node = null;
@@ -696,18 +769,20 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             System.err.println("Cannot find node: " + nodeName + " Fail at getting node from sourceDisjointAbNDerivation!!!");
         }
 
-        TANFromPartitionedNodeDerivation result = new TANFromPartitionedNodeDerivation(parentAbNDerivation, testing.getTANFactory(), node);
-        return result;
-
+        return new TANFromPartitionedNodeDerivation(parentAbNDerivation, testing.getTANFactory(), node);
     }
 
-    public TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing) {
+    public <T extends AbNDerivation> TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
 
         // how to deserialize this??
         AbNDerivation parentAbNDerivation = null;
-        JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
-        JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
-        parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "ParentDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("ParentDerivation");
+            parentAbNDerivation = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            parentAbNDerivation = baseDerivation[0];
+        }
 
         Concept nodeRoot = null;
         JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
@@ -718,17 +793,95 @@ public class AbNDerivationCoreParser<O extends Ontology, C extends ConceptLocati
             nodeRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
         }
 
-        TANFromSinglyRootedNodeDerivation result = new TANFromSinglyRootedNodeDerivation(parentAbNDerivation, testing.getTANFactory(), nodeRoot);
-        return result;
+        return new TANFromSinglyRootedNodeDerivation(parentAbNDerivation, testing.getTANFactory(), nodeRoot);
+    }
+
+    //Target Parser
+    public <T extends AbNDerivation> TargetAbNDerivation parseTargetAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+
+        Concept sourceHierarchyRoot = null;
+        JSONObject sourceObject = findJSONObjectByName(jsonArr, "SourceRootID");
+        String sourceConceptID = (String) sourceObject.get("SourceRootID");
+        try {
+            Set<Concept> newRoot = conceptFactory.getConceptsFromIds(new ArrayList<String>(Arrays.asList(sourceConceptID)));
+            System.out.println("conceptFactory:  " + newRoot.toString());
+            sourceHierarchyRoot = newRoot.stream().findAny().get();
+        } catch (Exception e) {
+            System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
+        }
+
+        InheritableProperty selectedProperty = null;
+        JSONObject propertyObject = findJSONObjectByName(jsonArr, "PropertyID");
+        String propertyID = (String) propertyObject.get("PropertyID");
+        Set<InheritableProperty> foundProperty = propertyFactory.getPropertiesFromIds(new ArrayList<String>(Arrays.asList(propertyID)));
+        selectedProperty = foundProperty.stream().findAny().get();
+
+        Concept targetHierarchyRoot = null;
+        JSONObject targetObject = findJSONObjectByName(jsonArr, "TargetRootID");
+        String targetConceptID = (String) targetObject.get("TargetRootID");
+        try {
+            Set<Concept> newRoot = conceptFactory.getConceptsFromIds(new ArrayList<String>(Arrays.asList(targetConceptID)));
+            System.out.println("conceptFactory:  " + newRoot.toString());
+            targetHierarchyRoot = newRoot.stream().findAny().get();
+        } catch (Exception e) {
+            System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
+        }
+
+        return new TargetAbNDerivation(sourceOntology, testing.getTargetAbNFactory(), sourceHierarchyRoot, selectedProperty, targetHierarchyRoot);
+    }
+
+    public <T extends AbNDerivation> ExpandedTargetAbNDerivation parseExpandedTargetAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+
+        TargetAbNDerivation base = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            base = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            base = (TargetAbNDerivation) baseDerivation[0];
+        }
+
+        Concept aggregateTargetGroupRoot = null;
+        JSONObject conceptObject = findJSONObjectByName(jsonArr, "ConceptID");
+        String conceptID = (String) conceptObject.get("ConceptID");
+        try {
+            Set<Concept> newRoot = conceptFactory.getConceptsFromIds(new ArrayList<String>(Arrays.asList(conceptID)));
+            System.out.println("conceptFactory:  " + newRoot.toString());
+            aggregateTargetGroupRoot = newRoot.stream().findAny().get();
+        } catch (Exception e) {
+            System.err.println("Fail at getting root from conceptFactory!!!");
+            e.printStackTrace();
+        }
+
+        return new ExpandedTargetAbNDerivation(base, aggregateTargetGroupRoot);
+    }
+
+    public <T extends AbNDerivation> AggregateTargetAbNDerivation parseAggregateTargetAbNDerivation(JSONArray jsonArr, Ontology sourceOntology, ConceptLocationDataFactory conceptFactory, PropertyLocationDataFactory propertyFactory, AbNDerivationFactoryTesting testing, T... baseDerivation) {
+        TargetAbNDerivation nonAggregateSource = null;
+        if (baseDerivation == null) {
+            JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
+            JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+            nonAggregateSource = coreParser(arr_base, (O) sourceOntology, (C) conceptFactory, (P) propertyFactory, (A) testing);
+        } else {
+            nonAggregateSource = (TargetAbNDerivation) baseDerivation[0];
+        }
+
+        JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
+        int bound = ((Long) boundObject.get("Bound")).intValue();
+
+        return new AggregateTargetAbNDerivation(nonAggregateSource, bound);
     }
 
     public static JSONObject findJSONObjectByName(JSONArray jsonArr, String name) {
 
         JSONObject result = new JSONObject();
 
-        if (jsonArr==null || jsonArr.isEmpty()) {
+        if (jsonArr == null || jsonArr.isEmpty()) {
             return result;
         }
         JSONParser parser = new JSONParser();

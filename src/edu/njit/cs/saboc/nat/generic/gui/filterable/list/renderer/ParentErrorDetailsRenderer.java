@@ -7,9 +7,11 @@ import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.errorsummarylabel.ParentErrorSummaryLabel;
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
+import javax.swing.Box;
 import javax.swing.JList;
+import javax.swing.JPanel;
 
 /**
  *
@@ -34,17 +36,25 @@ public class ParentErrorDetailsRenderer<T extends Concept> extends BaseFilterabl
         this.conceptRenderer = new SimpleConceptRenderer<>(mainPanel, dataSource);
         this.parentErrorLabel = new ParentErrorSummaryLabel<>(mainPanel, dataSource);
         
-        this.conceptRenderer.setOpaque(false);
-        this.conceptRenderer.setPreferredSize(null);
+        this.setLayout(new BorderLayout());
         
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JPanel eastPanel = new JPanel();
+        eastPanel.add(parentErrorLabel);
+        eastPanel.add(Box.createHorizontalStrut(10));
+        eastPanel.setOpaque(false);
         
-        this.add(conceptRenderer);
-        this.add(parentErrorLabel);
+        this.add(conceptRenderer, BorderLayout.CENTER);
+        this.add(eastPanel, BorderLayout.EAST);
     }
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends Filterable<T>> list, Filterable<T> value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(
+            JList<? extends Filterable<T>> list, 
+            Filterable<T> value,
+            int index, 
+            boolean isSelected, 
+            boolean cellHasFocus) {
+        
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus); 
         
         showDetailsFor(value);
@@ -56,6 +66,7 @@ public class ParentErrorDetailsRenderer<T extends Concept> extends BaseFilterabl
     public void showDetailsFor(Filterable<T> filterableEntry) {
         
         conceptRenderer.showDetailsFor(filterableEntry);
+        parentErrorLabel.setText("");
 
         if(mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
             AuditSet<T> currentAuditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();

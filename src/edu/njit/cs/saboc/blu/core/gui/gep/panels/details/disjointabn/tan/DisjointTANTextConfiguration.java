@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfiguration<DisjointNode<Cluster>> {
 
-    private final DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTaxonomy;
+    private final DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN;
 
     public DisjointTANTextConfiguration(
             OntologyEntityNameConfiguration ontologyEntityNameConfig, 
@@ -27,7 +27,7 @@ public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfig
         
         super(ontologyEntityNameConfig);
         
-        this.disjointTaxonomy = disjointTaxonomy;
+        this.disjointTAN = disjointTaxonomy;
     }
 
     @Override
@@ -61,7 +61,7 @@ public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfig
     public String getNodeHelpDescription(DisjointNode<Cluster> node) {
         StringBuilder helpDescription = new StringBuilder();
 
-        if (disjointTaxonomy.isAggregated()) {
+        if (disjointTAN.isAggregated()) {
             helpDescription.append("[AGGREGATE DISJOINT TAN DESCRIPTION TEXT]");
             
         } else {
@@ -83,23 +83,22 @@ public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfig
     
     @Override
     public String getAbNName() {
-        return "[DISJOINT_TAN_NAME]";
+        return disjointTAN.getDerivation().getName();
     }
 
     @Override
     public String getAbNSummary() {
         
-        Cluster cluster = disjointTaxonomy.getOverlappingNodes().iterator().next();
+        Cluster cluster = disjointTAN.getOverlappingNodes().iterator().next();
+        String bandName = disjointTAN.getParentAbstractionNetwork().getPartitionNodeFor(cluster).getName();
 
-        String bandName = disjointTaxonomy.getParentAbstractionNetwork().getPartitionNodeFor(cluster).getName();
+        int overlappingClusterCount = disjointTAN.getOverlappingNodes().size();
 
-        int overlappingClusterCount = disjointTaxonomy.getOverlappingNodes().size();
-
-        int disjointClusterCount = disjointTaxonomy.getAllDisjointNodes().size();
+        int disjointClusterCount = disjointTAN.getAllDisjointNodes().size();
 
         int conceptCount = 0;
 
-        Set<DisjointNode<Cluster>> disjointClusters = disjointTaxonomy.getAllDisjointNodes();
+        Set<DisjointNode<Cluster>> disjointClusters = disjointTAN.getAllDisjointNodes();
 
         Map<Integer, Set<DisjointNode<Cluster>>> levels = new HashMap<>();
 
@@ -161,7 +160,7 @@ public abstract class DisjointTANTextConfiguration extends DisjointAbNTextConfig
 
         String description;
 
-        if (disjointTaxonomy.isAggregated()) {
+        if (disjointTAN.isAggregated()) {
             description = "[AGGREGATE DISJOINT TAN DESCRIPTION]";
         } else {
             description = "[DISJOINT TAN DESCRIPTION]";

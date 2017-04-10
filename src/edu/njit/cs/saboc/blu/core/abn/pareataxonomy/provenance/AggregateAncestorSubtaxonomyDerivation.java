@@ -17,6 +17,7 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     
     private final PAreaTaxonomyDerivation aggregateBase;
     private final int minBound;
+    
     private final Concept selectedAggregatePAreaRoot;
     
     public AggregateAncestorSubtaxonomyDerivation(
@@ -72,5 +73,10 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
         Set<PArea> pareas = sourceTaxonomy.getNodesWith(selectedAggregatePAreaRoot);
         
         return sourceTaxonomy.createAncestorSubtaxonomy(pareas.iterator().next());
+    }
+
+    @Override
+    public String getName() {
+        return super.getName(); //To change body of generated methods, choose Tools | Templates.
     }
 }

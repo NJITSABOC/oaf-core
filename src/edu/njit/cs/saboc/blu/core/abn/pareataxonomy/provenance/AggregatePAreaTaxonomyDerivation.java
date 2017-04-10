@@ -45,4 +45,9 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     public PAreaTaxonomy getAbstractionNetwork() {
         return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound);
     }
+
+    @Override
+    public String getName() {
+        return super.getName(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

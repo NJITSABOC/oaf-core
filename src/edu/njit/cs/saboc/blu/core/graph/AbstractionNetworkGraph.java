@@ -36,7 +36,7 @@ import javax.swing.JPopupMenu;
 /**
  * The view of an abstraction network. 
  * 
- * TODO: Remove use of Swing
+ * TODO: Remove the use of Swing objects, move edge functionality to separate class
  *
  * @author David Daudelin 
  * @author Chris O

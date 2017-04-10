@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 
 /**
- * Represents a directed edge between two graph nodes
+ * A directed edge between two graph nodes
  * 
  * @author Chris O
  * @param <T>

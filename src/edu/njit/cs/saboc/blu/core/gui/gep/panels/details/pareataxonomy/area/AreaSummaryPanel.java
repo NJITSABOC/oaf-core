@@ -19,6 +19,7 @@ public class AreaSummaryPanel extends NodeSummaryPanel<Area> {
     private final PAreaTaxonomyConfiguration configuration;
     
     public AreaSummaryPanel(PAreaTaxonomyConfiguration configuration, AreaSummaryTextFactory summaryTextFactory) {
+        
         super(summaryTextFactory);
 
         this.configuration = configuration;

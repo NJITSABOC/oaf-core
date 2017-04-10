@@ -29,7 +29,7 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
 
     @Override
     public String getAbNName() {
-        return "Partial-area Taxonomy";
+        return taxonomy.getDerivation().getName();
     }
 
     @Override

@@ -33,6 +33,11 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
     }
 
     @Override
+    public String getAbNName() {
+        return tan.getDerivation().getName();
+    }
+    
+    @Override
     public String getBaseAbstractionNetworkTypeName(boolean plural) {
         if(plural) {
             return "Band TANs";

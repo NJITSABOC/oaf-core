@@ -27,7 +27,9 @@ import java.util.Set;
 import javax.swing.JLabel;
 
 /**
- *
+ * A layout for disjoint abstraction networks. Disjoint nodes are organized into
+ * groups based on their set of overlaps.
+ * 
  * @author Chris O
  * @param <T>
  */

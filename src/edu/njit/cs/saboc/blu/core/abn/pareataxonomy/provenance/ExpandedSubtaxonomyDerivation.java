@@ -58,5 +58,14 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     public String getDescription() {
         return String.format("Expanded aggregate partial-area (%s)", aggregatePAreaRoot.getName());
     }
-    
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", aggregatePAreaRoot.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Expanded Subtaxonomy";
+    }
 }

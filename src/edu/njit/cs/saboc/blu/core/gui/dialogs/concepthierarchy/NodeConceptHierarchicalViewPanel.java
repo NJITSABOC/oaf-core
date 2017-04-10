@@ -52,6 +52,8 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
         this.setPreferredSize(new Dimension(this.getWidth(), 2000));
         
         this.addMouseListener(new MouseAdapter() {
+            
+            @Override
             public void mouseClicked(MouseEvent e) {
 
                 if(!initialized || loading) {
@@ -62,14 +64,14 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
 
                 if(e.getClickCount() >= 1 && e.getButton() == MouseEvent.BUTTON1) {
 
-                    for (ArrayList<ConceptEntry> level : conceptEntries) {
-                        for (ConceptEntry entry : level) {
+                    conceptEntries.forEach((level) -> {
+                        level.forEach((entry) -> {
                             entry.resetState();
-                        }
-                    }
+                        });
+                    });
 
                     if(clickedEntry != null) {
-                        if (e.getClickCount() >= 2) {
+                        if (clickListener != null && e.getClickCount() >= 2) {
                             clickListener.conceptDoubleClicked(clickedEntry.getConcept());
                         }
 
@@ -99,6 +101,8 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
         });
 
         this.addMouseMotionListener(new MouseMotionAdapter() {
+            
+            @Override
             public void mouseMoved(MouseEvent e) {
                 
                 if(!initialized || loading) {
@@ -122,6 +126,7 @@ public class NodeConceptHierarchicalViewPanel extends JPanel {
         });
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 

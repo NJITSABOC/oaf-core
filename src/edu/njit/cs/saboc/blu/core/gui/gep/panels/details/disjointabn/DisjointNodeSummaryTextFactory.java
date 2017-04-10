@@ -14,24 +14,25 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implements NodeSummaryTextFactory<DisjointNode<T>> {
-    
-    private final DisjointAbNConfiguration config;
+public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> extends NodeSummaryTextFactory<DisjointNode<T>> {
     
     public DisjointNodeSummaryTextFactory(DisjointAbNConfiguration config) {
-        this.config = config;
+        super(config);
     }
     
+    @Override
     public DisjointAbNConfiguration getConfiguration() {
-        return config;
+        return (DisjointAbNConfiguration)super.getConfiguration();
     }
 
     @Override
     public String createNodeSummaryText(DisjointNode<T> node) {
-
         String rootName = node.getName();
         int classCount = node.getConceptCount();
+        
+        DisjointAbNConfiguration config = this.getConfiguration();
         
         DisjointAbstractionNetwork disjointAbN = config.getAbstractionNetwork();
 
@@ -52,7 +53,9 @@ public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implemen
         String result;
         
         if(overlaps.size() == 1) {
-            result = String.format("<b>%s</b> is a basis (non-overlapping) %s that summarizes %d non-overlapping %s. It has %d descendant overlapping %s which summarizes %d overlapping %s.",
+            result = String.format("<b>%s</b> is a basis (non-overlapping) %s that summarizes %d non-overlapping %s. "
+                    + "It has %d descendant overlapping %s which summarizes %d overlapping %s.",
+                    
                     rootName, 
                     config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), 
                     classCount, 
@@ -79,6 +82,7 @@ public class DisjointNodeSummaryTextFactory<T extends SinglyRootedNode> implemen
             
             result = String.format("<b>%s</b> is an overlapping %s that summarizes %d overlapping %s. It overlaps between the following %s: <b>%s</b>."
                     + " It has %d descendant overlapping %s which summarizes %d overlapping %s.",
+                    
                     rootName, 
                     config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), 
                     classCount, 

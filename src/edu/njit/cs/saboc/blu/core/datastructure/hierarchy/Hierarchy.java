@@ -24,7 +24,7 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * A rooted Directed Acylic Graph (DAG).
+ * A rooted Directed Acyclic Graph (DAG)
  * 
  * @author Chris O
  * @param <T>

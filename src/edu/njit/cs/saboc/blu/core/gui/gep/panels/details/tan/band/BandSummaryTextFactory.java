@@ -12,16 +12,15 @@ import java.util.Set;
  *
  * @author Chris O
  */
-public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
+public class BandSummaryTextFactory extends NodeSummaryTextFactory<Band> {
     
-    private final TANConfiguration config;
-
     public BandSummaryTextFactory(TANConfiguration config) {
-        this.config = config;
+        super(config);
     }
     
+    @Override
     public TANConfiguration getConfiguration() {
-        return config;
+        return (TANConfiguration)super.getConfiguration();
     }
     
     @Override
@@ -39,7 +38,7 @@ public class BandSummaryTextFactory implements NodeSummaryTextFactory<Band> {
         String result = String.format("<html><b>%s</b> is a tribal band that summarizes %d %s in %d clusters.",
                 bandName,
                 allConcepts.size(),
-                config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(allConcepts.size() != 1).toLowerCase(),
+                getConfiguration().getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(allConcepts.size() != 1).toLowerCase(),
                 clusters.size());
 
         return result;

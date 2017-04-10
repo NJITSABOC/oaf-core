@@ -8,15 +8,15 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
  *
  * @author Chris O
  */
-public class AreaSummaryTextFactory implements NodeSummaryTextFactory<Area> {
-    private final PAreaTaxonomyConfiguration config;
-    
+public class AreaSummaryTextFactory extends NodeSummaryTextFactory<Area> {
+
     public AreaSummaryTextFactory(PAreaTaxonomyConfiguration config) {
-        this.config = config;
+        super(config);
     }
     
+    @Override
     public PAreaTaxonomyConfiguration getConfiguration() {
-        return config;
+        return (PAreaTaxonomyConfiguration)super.getConfiguration();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class AreaSummaryTextFactory implements NodeSummaryTextFactory<Area> {
         String areaName = area.getName();
         int classCount = area.getConcepts().size();
 
-        String conceptType = config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
+        String conceptType = getConfiguration().getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
 
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("<html><b>%s</b> is an area that summarizes %d %s.",

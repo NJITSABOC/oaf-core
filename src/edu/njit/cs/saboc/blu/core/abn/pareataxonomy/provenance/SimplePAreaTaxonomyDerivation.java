@@ -49,4 +49,14 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     public String getDescription() {
         return String.format("Derived Partial-area Taxonomy (Root: %s)", root.getName());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", root.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Partial-area Taxonomy";
+    }
 }

@@ -48,4 +48,23 @@ public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     public String getDescription() {
         return "Created relationship subtaxonomy";
     }
+
+    @Override
+    public String getName() {
+        
+        if(base instanceof SimplePAreaTaxonomyDerivation) {
+            String rootName = ((SimplePAreaTaxonomyDerivation)base).getRoot().getName();
+            
+            return String.format("%s %s", rootName, getAbstractionNetworkTypeName());
+        }
+        
+        return super.getName();
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Relationship Subtaxonomy";
+    }
+    
+    
 }

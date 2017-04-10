@@ -82,7 +82,7 @@ public abstract class DisjointPAreaTaxonomyTextConfiguration extends DisjointAbN
     
     @Override
     public String getAbNName() {
-        return "[DISJOINT_PAREA_TAXONOMY_NAME]";
+        return disjointTaxonomy.getDerivation().getName();
     }
 
     @Override

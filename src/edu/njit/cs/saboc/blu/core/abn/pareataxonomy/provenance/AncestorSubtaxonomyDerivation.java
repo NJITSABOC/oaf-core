@@ -52,4 +52,18 @@ public class AncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         return taxonomy.createAncestorSubtaxonomy(pareas.iterator().next());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", 
+                pareaRootConcept.getName(), 
+                getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Ancestor Subtaxonomy";
+    }
+    
+    
 }

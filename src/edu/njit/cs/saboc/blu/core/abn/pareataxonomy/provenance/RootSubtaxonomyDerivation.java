@@ -51,4 +51,14 @@ public class RootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         return taxonomy.createRootSubtaxonomy(pareas.iterator().next());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", pareaRootConcept.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Root Subtaxonomy";
+    }
 }

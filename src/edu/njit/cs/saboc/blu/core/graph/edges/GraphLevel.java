@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * This class is a data representation of the graphical representation of a level of areas.
+ * 
  * @author David Daudelin
  */
 public class GraphLevel {

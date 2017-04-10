@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 /**
  *
  * @author Den
+ * @param <T>
  */
 public class NodeSummaryPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 
@@ -43,6 +44,7 @@ public class NodeSummaryPanel<T extends Node> extends BaseNodeInformationPanel<T
         this.add(detailsPanel);
     }
     
+    @Override
     public void setContents(T node) {
         nodeDetailsPane.setText(textFactory.createNodeSummaryText(node));
         
@@ -50,6 +52,7 @@ public class NodeSummaryPanel<T extends Node> extends BaseNodeInformationPanel<T
         nodeDetailsPane.setSelectionEnd(0);
     }
     
+    @Override
     public void clearContents() {
         nodeDetailsPane.setText("");
     }

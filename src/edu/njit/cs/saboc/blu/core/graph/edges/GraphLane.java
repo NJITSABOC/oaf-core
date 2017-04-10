@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * The data class representing the visual concept of a lane within a row/column
+ * 
  * @author David Daudelin
  */
 public class GraphLane {

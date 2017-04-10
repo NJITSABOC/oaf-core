@@ -19,6 +19,7 @@ public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> 
     implements RootedSubAbNDerivation<DisjointAbNDerivation>, AggregateAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation aggregateBase;
+    
     private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
     

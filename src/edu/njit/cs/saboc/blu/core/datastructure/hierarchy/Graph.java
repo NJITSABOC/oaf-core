@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents a directed graph
+ * A directed graph
  * 
  * @author Chris O
  * @param <T>

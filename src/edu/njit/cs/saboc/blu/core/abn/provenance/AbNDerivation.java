@@ -26,6 +26,14 @@ public abstract class AbNDerivation<T extends AbstractionNetwork> {
         return sourceOntology;
     }
     
+    public String getName() {
+        return "[UNSET ABSTRACTION NETWORK NAME]";
+    }
+    
+    public String getAbstractionNetworkTypeName() {
+        return "[UNSET ABSTRACTION NETWORK BASE DERIVATION]";
+    }
+    
     public abstract String getDescription();
     public abstract T getAbstractionNetwork();
 }

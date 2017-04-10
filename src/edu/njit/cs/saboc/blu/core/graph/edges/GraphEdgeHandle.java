@@ -11,7 +11,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 
 /**
- *
+ * A handle for selecting and moving an edge
+ * 
  * @author David Daudelin
  */
 public class GraphEdgeHandle extends JPanel implements MouseInputListener {

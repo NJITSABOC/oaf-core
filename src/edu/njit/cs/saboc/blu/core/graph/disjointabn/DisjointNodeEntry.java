@@ -10,7 +10,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 /**
- * The view of a disjoint node.
+ * The view object for a disjoint node. Disjoint nodes are color coded according to
+ * their overlaps.
  * 
  * @author Chris O
  */

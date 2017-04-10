@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 
 /**
- *
+ * Utilties used 
+ * 
  * @author Chris O
  */
 public class GraphLayoutUtilities {

@@ -70,4 +70,16 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         
         return sourceTaxonomy.createRootSubtaxonomy(pareas.iterator().next());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", 
+                selectedAggregatePAreaRoot.getName(), 
+                getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Aggregate Root Subtaxonomy";
+    }
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * The data representation of a level of visual pArea objects within an Area.
+ * 
  * @author David Daudelin
  */
 public class GraphGroupLevel {

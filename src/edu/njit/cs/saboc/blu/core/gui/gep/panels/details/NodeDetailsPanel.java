@@ -16,6 +16,7 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     

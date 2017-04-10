@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public abstract class AbNTextConfiguration<T extends Node> {
     

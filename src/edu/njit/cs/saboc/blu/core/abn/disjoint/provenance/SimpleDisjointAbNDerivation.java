@@ -21,7 +21,9 @@ import java.util.Set;
 public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> {
     
     private final DisjointAbNFactory factory;
+    
     private final AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation;
+    
     private final Set<Concept> sourceNodeRoots;
     
     public SimpleDisjointAbNDerivation(

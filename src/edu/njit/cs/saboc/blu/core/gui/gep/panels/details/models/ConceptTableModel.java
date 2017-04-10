@@ -13,7 +13,6 @@ public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
     public ConceptTableModel(AbNConfiguration config) {
         super(new String [] {
             config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
-            "ID"
         });
     }
     
@@ -23,6 +22,6 @@ public class ConceptTableModel extends OAFAbstractTableModel<Concept> {
 
     @Override
     protected Object[] createRow(Concept concept) {
-        return new Object [] {concept.getName(), concept.getIDAsString()};
+        return new Object [] {concept};
     }
 }

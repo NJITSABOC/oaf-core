@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.ConceptTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.utils.renderers.ConceptListConceptRenderer;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -23,6 +24,8 @@ public class ConceptList extends AbstractEntityList<Concept> {
         super(model);
         
         this.config = config;
+        
+        this.setDefaultTableRenderer(Concept.class, new ConceptListConceptRenderer<>());
     }
 
     @Override

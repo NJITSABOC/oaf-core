@@ -51,7 +51,7 @@ public class ExportAbNButton extends JButton {
         
         AbNConfiguration config = optCurrentConfig.get();
 
-        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if (exportFile.isPresent()) {
             doNodeExport(exportFile.get());

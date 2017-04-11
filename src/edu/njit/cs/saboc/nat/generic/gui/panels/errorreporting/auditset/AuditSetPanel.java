@@ -195,7 +195,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     
     
     private void createAuditSetFromFile() {
-        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
         
         if(idFile.isPresent()) {
             try {
@@ -208,7 +208,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void openAuditSet() {
-        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
 
         if (idFile.isPresent()) {
             
@@ -224,7 +224,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void exportAuditSet() {
-        Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if(auditSetFile.isPresent()) {
             if(getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {

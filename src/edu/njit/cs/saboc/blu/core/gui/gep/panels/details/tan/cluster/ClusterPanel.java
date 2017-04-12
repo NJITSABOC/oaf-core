@@ -5,7 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeHierarchyPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.SinglyRootedNodePanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 
 /**
  *

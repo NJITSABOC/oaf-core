@@ -60,4 +60,9 @@ public class TANFromSinglyRootedNodeDerivation <
 
         return generator.createTANFromSinglyRootedNode(sourceAbN, nodes.iterator().next(), super.getFactory());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", nodeRoot.getName(), super.getAbstractionNetworkTypeName());
+    }
 }

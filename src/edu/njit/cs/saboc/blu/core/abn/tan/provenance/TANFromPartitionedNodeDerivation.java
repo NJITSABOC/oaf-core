@@ -53,4 +53,9 @@ public class TANFromPartitionedNodeDerivation<
                 node.getHierarchy(),
                 super.getFactory());
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", node.getName(), super.getAbstractionNetworkTypeName());
+    }
 }

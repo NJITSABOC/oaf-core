@@ -58,4 +58,13 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
         return String.format("Expanded aggregate cluster (%s)", aggregateClusterRoot.getName());
     }
     
+    @Override
+    public String getName() {
+        return String.format("%s %s", aggregateClusterRoot.getName(), getAbstractionNetworkTypeName()); 
+    }
+    
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Expanded Tribal Abstraction Network";
+    }
 }

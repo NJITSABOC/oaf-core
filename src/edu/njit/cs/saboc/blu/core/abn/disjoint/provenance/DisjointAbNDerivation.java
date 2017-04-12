@@ -3,39 +3,31 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
  * Stores the arguments needed to create a disjoint abstraction network.
  * 
  * @author Chris O
- * @param <T>
  */
-public abstract class DisjointAbNDerivation<T extends SinglyRootedNode> extends AbNDerivation<DisjointAbstractionNetwork> {
+public abstract class DisjointAbNDerivation extends AbNDerivation<DisjointAbstractionNetwork> {
     
     private final DisjointAbNFactory factory;
-    private final AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation;
     
-    public DisjointAbNDerivation(
-            DisjointAbNFactory factory,
-            AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation) {
+    public DisjointAbNDerivation(DisjointAbNFactory factory, Ontology<Concept> sourceOntology) {
         
-        super(parentAbNDerivation.getSourceOntology());
+        super(sourceOntology);
         
         this.factory = factory;
-        this.parentAbNDerivation = parentAbNDerivation;
     }
     
     public DisjointAbNDerivation(DisjointAbNDerivation derivedAbN) {
-        this(derivedAbN.getFactory(), derivedAbN.getParentAbNDerivation());
+        this(derivedAbN.getFactory(), derivedAbN.getSourceOntology());
     }
     
     public DisjointAbNFactory getFactory() {
         return factory;
-    }
-    
-    public AbNDerivation<PartitionedAbstractionNetwork> getParentAbNDerivation() {
-        return parentAbNDerivation;
     }
 }

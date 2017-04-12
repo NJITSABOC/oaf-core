@@ -31,4 +31,9 @@ public abstract class ClusterTANDerivation extends AbNDerivation<ClusterTribalAb
     public TANFactory getFactory() {
         return factory;
     }
+    
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Tribal Abstraction Network";
+    }
 }

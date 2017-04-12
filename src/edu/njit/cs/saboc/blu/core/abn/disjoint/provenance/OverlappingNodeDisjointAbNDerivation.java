@@ -11,7 +11,7 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
  * @author Chris O
  * @param <T>
  */
-public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> 
+public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation
         implements SubAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation sourceDisjointAbNDerivation;
@@ -32,7 +32,7 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     }
     
     @Override
-    public DisjointAbNDerivation<T> getSuperAbNDerivation() {
+    public DisjointAbNDerivation getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
@@ -46,5 +46,15 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     @Override
     public String getDescription() {
         return String.format("%s (overlapping node)", sourceDisjointAbNDerivation.getDescription());
+    }
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

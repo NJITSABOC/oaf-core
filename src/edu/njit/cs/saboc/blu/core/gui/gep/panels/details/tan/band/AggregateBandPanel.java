@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.PartitionedNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.aggregate.ContainerAggregatedNodePanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import java.util.Set;
 
 /**

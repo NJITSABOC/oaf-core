@@ -77,6 +77,11 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
 
     @Override
     public String getName() {
-        return super.getName(); //To change body of generated methods, choose Tools | Templates.
+        return String.format("%s %s", selectedAggregatePAreaRoot.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Aggregate Ancestor Subtaxonomy";
     }
 }

@@ -29,4 +29,14 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
     public T getAbstractionNetwork() {
         return abn;
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s (cached)", abn.getDerivation().getName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return abn.getDerivation().getAbstractionNetworkTypeName();
+    }
 }

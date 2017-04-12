@@ -79,4 +79,14 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
         
         return targetAbN;
     }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", propertyType.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Target Abstraction Network";
+    }
 }

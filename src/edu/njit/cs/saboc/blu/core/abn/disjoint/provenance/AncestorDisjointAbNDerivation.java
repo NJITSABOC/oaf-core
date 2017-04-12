@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -12,9 +11,8 @@ import java.util.Set;
  * network
  * 
  * @author Chris O
- * @param <T>
  */
-public class AncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> 
+public class AncestorDisjointAbNDerivation extends DisjointAbNDerivation
         implements RootedSubAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation sourceDisjointAbNDerivation;
@@ -36,7 +34,7 @@ public class AncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends D
     }
 
     @Override
-    public DisjointAbNDerivation<T> getSuperAbNDerivation() {
+    public DisjointAbNDerivation getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
@@ -52,6 +50,16 @@ public class AncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends D
 
     @Override
     public String getDescription() {
-        return String.format("%s (subset)", sourceDisjointAbNDerivation.getDescription());
+        return String.format("%s (ancestor subset)", sourceDisjointAbNDerivation.getDescription());
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", disjointNodeRoot.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return String.format("Ancestor %s", sourceDisjointAbNDerivation.getAbstractionNetworkTypeName());
     }
 }

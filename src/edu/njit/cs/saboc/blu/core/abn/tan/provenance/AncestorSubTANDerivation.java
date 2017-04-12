@@ -52,4 +52,14 @@ public class AncestorSubTANDerivation extends ClusterTANDerivation
         
         return tan.createAncestorTAN(clusters.iterator().next());
     }
+    
+    @Override
+    public String getName() {
+        return String.format("%s %s", clusterRootConcept.getName(), getAbstractionNetworkTypeName()); 
+    }
+    
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Ancestor Sub Tribal Abstraction Network";
+    }
 }

@@ -48,6 +48,12 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
 
     @Override
     public String getName() {
-        return super.getName(); //To change body of generated methods, choose Tools | Templates.
+        return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName());
     }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Aggregate Partial-area Taxonomy";
+    }
+
 }

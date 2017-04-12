@@ -1,5 +1,5 @@
 
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;

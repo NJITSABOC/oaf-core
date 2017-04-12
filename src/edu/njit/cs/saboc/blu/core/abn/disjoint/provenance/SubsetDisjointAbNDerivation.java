@@ -12,7 +12,7 @@ import java.util.Set;
  * @author Chris O
  * @param <T>
  */
-public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> 
+public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation
         implements SubAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation sourceDisjointAbNDerivation;
@@ -29,7 +29,7 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     }
 
     @Override
-    public DisjointAbNDerivation<T> getSuperAbNDerivation() {
+    public DisjointAbNDerivation getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
@@ -45,5 +45,15 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     @Override
     public String getDescription() {
         return String.format("%s (subset)", sourceDisjointAbNDerivation.getDescription());
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s (Subset)", sourceDisjointAbNDerivation.getName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return String.format("Subset %s", sourceDisjointAbNDerivation.getName());
     }
 }

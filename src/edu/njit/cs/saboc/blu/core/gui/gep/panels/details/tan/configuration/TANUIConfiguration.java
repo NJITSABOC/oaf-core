@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration;
 
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
@@ -7,6 +7,9 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIC
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.ChildClusterTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.ParentClusterTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.TANDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.AggregateBandPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.band.BandPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.cluster.AggregateClusterPanel;

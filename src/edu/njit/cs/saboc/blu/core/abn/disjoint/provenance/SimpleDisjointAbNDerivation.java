@@ -18,7 +18,7 @@ import java.util.Set;
  * @author Chris O
  * @param <T>
  */
-public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> {
+public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation {
     
     private final DisjointAbNFactory factory;
     
@@ -31,7 +31,7 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
             AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation, 
             Set<Concept> sourceNodeRoots) {
         
-        super(factory, parentAbNDerivation);
+        super(factory, parentAbNDerivation.getSourceOntology());
         
         this.factory = factory;
         this.parentAbNDerivation = parentAbNDerivation;
@@ -46,9 +46,13 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
         return sourceNodeRoots;
     }
 
+    public AbNDerivation<PartitionedAbstractionNetwork> getParentAbNDerivation() {
+        return parentAbNDerivation;
+    }
+    
     @Override
     public String getDescription() {
-        return String.format("Disjointed %d", sourceNodeRoots.size());
+        return String.format("Disjointed %d Nodes", sourceNodeRoots.size());
     }
 
     @Override
@@ -67,5 +71,15 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
                 factory,
                 partitionedAbN,
                 overlappingNodes);
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s (Disjoint)", parentAbNDerivation.getName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return String.format("Disjoint %s", parentAbNDerivation.getAbstractionNetworkTypeName());
     }
 }

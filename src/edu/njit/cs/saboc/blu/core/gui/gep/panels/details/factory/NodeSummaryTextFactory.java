@@ -46,7 +46,7 @@ public class NodeSummaryTextFactory<T extends Node> {
             descendantConcepts.addAll(descendentPArea.getConcepts());
         });
         
-        result += "<p>";
+        result += "<br>";
         
         String parentStr;
         

@@ -13,9 +13,8 @@ import java.util.Set;
  * abstraction network.
  * 
  * @author Chris O
- * @param <T>
  */
-public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T>
+public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivation
     implements RootedSubAbNDerivation<DisjointAbNDerivation>, AggregateAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation aggregateBase;
@@ -47,7 +46,7 @@ public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> 
     }
 
     @Override
-    public DisjointAbNDerivation<T> getSuperAbNDerivation() {
+    public DisjointAbNDerivation getSuperAbNDerivation() {
         return aggregateBase;
     }
 
@@ -57,7 +56,7 @@ public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> 
     }
 
     @Override
-    public DisjointAbNDerivation<T> getNonAggregateSourceDerivation() {
+    public DisjointAbNDerivation getNonAggregateSourceDerivation() {
         AggregateAbNDerivation<DisjointAbNDerivation> derivedAggregate = (AggregateAbNDerivation<DisjointAbNDerivation>)this.getSuperAbNDerivation();
         
         return derivedAggregate.getNonAggregateSourceDerivation();
@@ -65,7 +64,7 @@ public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> 
   
     @Override
     public String getDescription() {
-        return String.format("Derived aggregate disjoint (%s)", selectedAggregatePAreaRoot.getName());
+        return String.format("Derived aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
     }
 
     @Override
@@ -75,5 +74,15 @@ public class AggregateAncestorDisjointAbNDerivation<T extends SinglyRootedNode> 
         Set<DisjointNode> nodes = aggregateDisjointAbN.getNodesWith(selectedAggregatePAreaRoot);
         
         return aggregateDisjointAbN.getAncestorDisjointAbN(nodes.iterator().next());
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", selectedAggregatePAreaRoot.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return String.format("Ancestor %s", aggregateBase.getAbstractionNetworkTypeName());
     }
 }

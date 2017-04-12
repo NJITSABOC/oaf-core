@@ -70,4 +70,16 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         
         return sourceTAN.createRootSubTAN(clusters.iterator().next());
     }
+    
+    @Override
+    public String getName() {
+        return String.format("%s %s", 
+                selectedAggregateClusterRoot.getName(), 
+                getAbstractionNetworkTypeName()); 
+    }
+    
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return "Aggregate Descendants Sub TAN";
+    }
 }

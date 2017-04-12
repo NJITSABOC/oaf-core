@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
@@ -13,9 +12,8 @@ import java.util.Set;
  * Stores the arguments needed to create an expanded disjoint abstraction network
  * 
  * @author Chris O
- * @param <T>
  */
-public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends DisjointAbNDerivation<T> 
+public class ExpandedDisjointAbNDerivation extends DisjointAbNDerivation
         implements SubAbNDerivation<DisjointAbNDerivation> {
     
     private final DisjointAbNDerivation sourceDisjointAbNDerivation;
@@ -36,7 +34,7 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
     }
     
     @Override
-    public DisjointAbNDerivation<T> getSuperAbNDerivation() {
+    public DisjointAbNDerivation getSuperAbNDerivation() {
         return sourceDisjointAbNDerivation;
     }
     
@@ -55,5 +53,15 @@ public class ExpandedDisjointAbNDerivation<T extends SinglyRootedNode> extends D
     @Override
     public String getDescription() {
         return String.format("Expanded %s", expandedAggregateNodeRoot.getName());
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s %s", expandedAggregateNodeRoot.getName(), getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public String getAbstractionNetworkTypeName() {
+        return String.format("Expanded %s", sourceDisjointAbNDerivation.getAbstractionNetworkTypeName());
     }
 }

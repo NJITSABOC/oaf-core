@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -45,5 +47,29 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
     @Override
     public String getDescription() {
         return String.format("Derived tribal abstraction network");
+    }
+
+    @Override
+    public String getName() {
+        ArrayList<Concept> sortedPatriarchs = new ArrayList<>(this.getPatriarchs());
+        sortedPatriarchs.sort(new ConceptNameComparator());
+        
+        String name;
+        
+        if(sortedPatriarchs.size() < 4) {
+            name = sortedPatriarchs.toString().substring(1, sortedPatriarchs.size() - 1);
+        } else {
+            name = sortedPatriarchs.get(0).getName();
+            
+            for(int c = 1; c <= 2; c++) {
+                name += (", " + sortedPatriarchs.get(c));
+            }
+            
+            name += ", ...";
+        }
+        
+        name = String.format("{%s}", name);
+        
+        return String.format("%s %s", name, getAbstractionNetworkTypeName());
     }
 }

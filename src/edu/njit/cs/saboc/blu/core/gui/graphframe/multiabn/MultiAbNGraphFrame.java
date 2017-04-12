@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
@@ -210,9 +211,9 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea>> entry = new AbNDerivationHistoryEntry<>(
+            AbNDerivationHistoryEntry<DisjointAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
                     disjointTaxonomy.getDerivation(),
-                    (DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> abn) -> {
+                     (abn) -> {
                         this.displayDisjointPAreaTaxonomy(abn, false);
                     },
                     "Disjoint Partial-area Taxonomy"
@@ -273,10 +274,9 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         initialize(disjointTAN, initializers.getDisjointTANInitializer());
         
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>> entry = new AbNDerivationHistoryEntry<>(
+            AbNDerivationHistoryEntry<DisjointAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
                     disjointTAN.getDerivation(),
-                    
-                    (DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> abn) -> {
+                    (abn) -> {
                         this.displayDisjointTAN(abn, false);
                     },
                     

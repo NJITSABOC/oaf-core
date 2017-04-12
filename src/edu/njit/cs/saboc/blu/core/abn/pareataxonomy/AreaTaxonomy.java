@@ -22,6 +22,18 @@ import java.util.Set;
  */
 public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
     
+    private static SimplePAreaTaxonomyDerivation makeDerivation(
+            PAreaTaxonomyFactory factory, 
+            Concept root) {
+        
+        SimplePAreaTaxonomyDerivation derivation = new SimplePAreaTaxonomyDerivation(
+                        factory.getSourceOntology(), 
+                        root, 
+                        factory);
+        
+        return derivation;
+    }
+    
     // The factory that was used to create this area taxonomy
     private final PAreaTaxonomyFactory factory;
     
@@ -44,10 +56,7 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
         this(factory,
                 areaHierarchy, 
                 sourceHierarchy, 
-                new SimplePAreaTaxonomyDerivation(
-                        factory.getSourceOntology(), 
-                        sourceHierarchy.getRoot(), 
-                        factory));
+                AreaTaxonomy.makeDerivation(factory, sourceHierarchy.getRoot()));
     }
     
     @Override

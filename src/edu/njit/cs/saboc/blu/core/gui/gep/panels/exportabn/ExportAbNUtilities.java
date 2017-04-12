@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn;
 
-import com.sun.javafx.logging.JFRInputEvent;
 
 import java.io.File;
 import java.util.Optional;
@@ -12,6 +11,7 @@ import javax.swing.JFileChooser;
  */
 public class ExportAbNUtilities {
     private enum DialogType{OPEN, SAVE}
+    
     public static Optional<File> displayFileSelectDialog(DialogType option) {
         final JFileChooser chooser = new JFileChooser();
 

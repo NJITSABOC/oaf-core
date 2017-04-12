@@ -34,6 +34,10 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
         this.config = config;
     }
     
+    public TANConfiguration getConfiguration() {
+        return config;
+    }
+    
     @Override
     public TANListenerConfiguration getListenerConfiguration() {
         return (TANListenerConfiguration)super.getListenerConfiguration();

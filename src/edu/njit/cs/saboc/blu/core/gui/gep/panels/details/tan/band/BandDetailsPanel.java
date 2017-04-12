@@ -11,11 +11,14 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANCo
  * @author Chris O
  */
 public class BandDetailsPanel extends NodeDetailsPanel<Band> {
+    
     public BandDetailsPanel(TANConfiguration config) {
-
         super(new BandSummaryPanel(config), 
                 config.getUIConfiguration().getPartitionedNodeOptionsPanel(), 
                 new NodeConceptList(new PartitionNodeOverlappingConceptTableModel(config), config),
                 config);
+        
+        super.getConceptList().getEntityTable().getColumnModel().getColumn(1).setMaxWidth(80);
     }
+    
 }

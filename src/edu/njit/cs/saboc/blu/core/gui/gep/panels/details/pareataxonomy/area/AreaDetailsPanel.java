@@ -19,5 +19,7 @@ public class AreaDetailsPanel extends NodeDetailsPanel<Area> {
                 configuration.getUIConfiguration().getPartitionedNodeOptionsPanel(), 
                 new NodeConceptList(new PartitionNodeOverlappingConceptTableModel(configuration), configuration),
                 configuration);
+        
+        super.getConceptList().getEntityTable().getColumnModel().getColumn(1).setMaxWidth(80);
     }
 }

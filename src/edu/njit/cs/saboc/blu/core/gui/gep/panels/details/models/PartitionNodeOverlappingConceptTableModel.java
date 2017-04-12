@@ -11,6 +11,7 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class PartitionNodeOverlappingConceptTableModel<T extends PartitionedNode> extends AbstractNodeEntityTableModel<Concept, T> {
     
@@ -21,8 +22,7 @@ public class PartitionNodeOverlappingConceptTableModel<T extends PartitionedNode
     public PartitionNodeOverlappingConceptTableModel(PartitionedAbNConfiguration config) {
         super(new String [] { 
             config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
-            "ID",
-            String.format("In # %s", config.getTextConfiguration().getNodeTypeName(true))
+            String.format("Overlapping", config.getTextConfiguration().getNodeTypeName(true))
         });
         
         this.config = config;
@@ -51,10 +51,17 @@ public class PartitionNodeOverlappingConceptTableModel<T extends PartitionedNode
             nodeCount = currentPartitionedNodeConcepts.get().get(item).size();
         } 
         
+        String overlapStr;
+        
+        if(nodeCount == 1) {
+            overlapStr = "No";
+        } else {
+            overlapStr = String.format("Yes (%d)", nodeCount);
+        }
+        
         return new Object[]{
-                item.getName(),
-                item.getIDAsString(),
-                nodeCount
+                item,
+                overlapStr
             };
     }
 }

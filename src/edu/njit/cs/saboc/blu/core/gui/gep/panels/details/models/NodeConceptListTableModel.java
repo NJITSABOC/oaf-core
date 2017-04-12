@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class NodeConceptListTableModel<T extends Node> extends AbstractNodeEntityTableModel<Concept, T> {
     
@@ -14,8 +15,7 @@ public class NodeConceptListTableModel<T extends Node> extends AbstractNodeEntit
     
     public NodeConceptListTableModel(AbNConfiguration config) {
         super(new String[] {
-            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
-            "ID"
+            config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)
         });
         
         this.config = config;
@@ -27,9 +27,6 @@ public class NodeConceptListTableModel<T extends Node> extends AbstractNodeEntit
 
     @Override
     protected Object[] createRow(Concept item) {
-        return new Object [] {
-            item.getName(),
-            item.getIDAsString()
-        };
+        return new Object [] { item };
     }
 }

@@ -29,6 +29,10 @@ public abstract class DisjointAbNUIConfiguration<T extends DisjointNode> extends
         
         this.config = config;
     }
+    
+    public DisjointAbNConfiguration<T> getConfiguration() {
+        return config;
+    }
 
     @Override
     public OAFAbstractTableModel<ParentNodeDetails<T>> getParentNodeTableModel() {

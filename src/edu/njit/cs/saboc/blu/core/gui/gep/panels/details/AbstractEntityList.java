@@ -36,6 +36,7 @@ import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public abstract class AbstractEntityList<T> extends JPanel {
 

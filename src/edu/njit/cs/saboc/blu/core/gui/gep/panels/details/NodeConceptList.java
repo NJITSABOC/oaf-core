@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.AbstractNodeEntityTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.NodeConceptListTableModel;
+import edu.njit.cs.saboc.blu.core.gui.utils.renderers.ConceptListConceptRenderer;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -17,12 +18,15 @@ public class NodeConceptList<T extends Node> extends NodeEntityList<T, Concept> 
     
     private AbNConfiguration config;
     
-    public NodeConceptList(AbstractNodeEntityTableModel<Concept, T> model, 
+    public NodeConceptList(
+            AbstractNodeEntityTableModel<Concept, T> model, 
             AbNConfiguration config) {
         
         super(model);
         
         this.config = config;
+        
+        this.setDefaultTableRenderer(Concept.class, new ConceptListConceptRenderer<>());
     }
     
     public NodeConceptList(AbNConfiguration config) {

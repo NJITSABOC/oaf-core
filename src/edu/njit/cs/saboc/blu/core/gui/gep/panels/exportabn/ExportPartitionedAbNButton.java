@@ -32,7 +32,7 @@ public class ExportPartitionedAbNButton extends ExportAbNButton {
         
         PartitionedAbNConfiguration config = (PartitionedAbNConfiguration)super.getCurrentConfiguration().get();
 
-        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if (exportFile.isPresent()) {
             String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)", 

@@ -106,7 +106,7 @@ public class AbNConceptLocationReportPanel extends AbNReportPanel {
     }
     
     private ArrayList<String> loadConceptIdentifiersFromFile() {
-        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
         
         if(idFile.isPresent()) {
 

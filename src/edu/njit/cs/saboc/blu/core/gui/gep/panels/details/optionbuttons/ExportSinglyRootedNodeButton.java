@@ -31,7 +31,7 @@ public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends Ex
 
     @Override
     public void exportAction() {
-        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if (exportFile.isPresent()) {
             

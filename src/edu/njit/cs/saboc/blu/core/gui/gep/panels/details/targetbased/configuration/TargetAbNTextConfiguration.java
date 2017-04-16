@@ -28,7 +28,7 @@ public abstract class TargetAbNTextConfiguration extends AbNTextConfiguration<Ta
 
     @Override
     public String getAbNName() {
-        return "[TARGET Abstraction Network NAME]";
+        return targetAbN.getDerivation().getName();
     }
 
     @Override
@@ -57,5 +57,10 @@ public abstract class TargetAbNTextConfiguration extends AbNTextConfiguration<Ta
         } else {
             return "Target Group";
         }
+    }
+
+    @Override
+    public String getNodeHelpDescription(TargetGroup node) {
+        return "";
     }
 }

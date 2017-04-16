@@ -32,12 +32,14 @@ public class OverlappingNodeDisjointAbN<
             PARENTNODE_T overlappingNode,
             Hierarchy<T> subset,
             Hierarchy<Concept> sourceHierarchy,
+            DisjointAbNFactory factory,
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
             OverlappingNodeDisjointAbNDerivation derivation) {
 
         super(sourceDisjointAbN.getParentAbstractionNetwork(),
                 subset,
                 sourceHierarchy,
+                factory,
                 sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
                 sourceDisjointAbN.getOverlappingNodes(),

@@ -45,13 +45,17 @@ public class DisjointAbstractionNetwork<
     
     private final PARENTABN_T parentAbN;
     
+    private final DisjointAbNFactory factory;
+    
     private final int levels;
     
     private boolean isAggregated;
     
-    public DisjointAbstractionNetwork(PARENTABN_T parentAbN, 
+    public DisjointAbstractionNetwork(
+            PARENTABN_T parentAbN, 
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy,
+            DisjointAbNFactory factory,
             int levels,
             Set<PARENTNODE_T> allNodes,
             Set<PARENTNODE_T> overlappingNodes,
@@ -65,9 +69,34 @@ public class DisjointAbstractionNetwork<
         
         this.overlappingNodes = overlappingNodes;
         
+        this.factory = factory;
+        
         this.levels = levels;
         
         this.isAggregated = false;
+    }
+    
+    public DisjointAbstractionNetwork(
+            DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> disjointAbN, DisjointAbNDerivation derivation) { 
+        
+        this(disjointAbN.getParentAbstractionNetwork(),
+                disjointAbN.getNodeHierarchy(), 
+                disjointAbN.getSourceHierarchy(), 
+                disjointAbN.getFactory(),
+                disjointAbN.getLevelCount(), 
+                disjointAbN.getAllSourceNodes(), 
+                disjointAbN.getOverlappingNodes(), 
+                derivation);
+    }
+    
+    public DisjointAbstractionNetwork(
+            DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> disjointAbN) {
+        
+        this(disjointAbN, disjointAbN.getDerivation());
+    }
+    
+    public DisjointAbNFactory getFactory() {
+        return factory;
     }
     
     @Override
@@ -181,6 +210,7 @@ public class DisjointAbstractionNetwork<
                 overlaps, 
                 subsetSubhierarchy, 
                 conceptSubhierarchy, 
+                this.getFactory(),
                 this,
                 new SubsetDisjointAbNDerivation(getDerivation(), overlaps));
     }
@@ -202,6 +232,7 @@ public class DisjointAbstractionNetwork<
                 overlappingNode, 
                 nodeSubhierarchy, 
                 conceptSubhierarchy, 
+                this.getFactory(),
                 this, 
                 new OverlappingNodeDisjointAbNDerivation(this.getDerivation(), overlappingNode));
     }

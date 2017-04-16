@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configur
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.PartitionedNodeDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -60,6 +61,6 @@ public abstract class PAreaTaxonomyConfiguration extends PartitionedAbNConfigura
                         getPAreaTaxonomy(), 
                         area.getPAreas());
 
-        return disjointTaxonomy;
+        return new PartitionedNodeDisjointAbN<>(disjointTaxonomy, area);
     }
 }

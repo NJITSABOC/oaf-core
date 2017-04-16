@@ -34,6 +34,7 @@ public class AncestorDisjointAbN <
         super(sourceDisjointAbN.getParentAbstractionNetwork(), 
                 nodeAncestorSubhierarchy, 
                 sourceSubhierarchy, 
+                sourceDisjointAbN.getFactory(),
                 sourceDisjointAbN.getLevelCount(), 
                 sourceDisjointAbN.getAllSourceNodes(), 
                 sourceDisjointAbN.getOverlappingNodes(),

@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -83,6 +84,31 @@ public class NodeSummaryTextFactory<T extends Node> {
             descendantStr = descendantStr.replaceAll("<descendantConceptCount>", Integer.toString(descendantConcepts.size()));
                         
             result += ("<p>" + descendantStr);
+        }
+        
+        if (node instanceof AggregateNode) {
+            AggregateNode<?> aNode = (AggregateNode) node;
+
+            if (!aNode.getAggregatedNodes().isEmpty()) {
+
+                result += "<p>";
+
+                Set<Concept> aggregatedConcepts = new HashSet<>();
+
+                aNode.getAggregatedNodes().forEach((aggregatedNode) -> {
+                    aggregatedConcepts.addAll(aggregatedNode.getConcepts());
+                });
+
+                String aggregateStr = "<nodeName> is an <b>aggregate <nodeTypeName></b> that summarizes "
+                        + "<font color='RED'><aggregatedNodeCount></font> small <nodeTypeName count=<aggregateNotCount>> "
+                        + " that summarized a total of <font color = 'RED'><aggrgateConceptCount></font> <conceptTypeName "
+                        + "count=<aggrgateConceptCount>>.";
+
+                aggregateStr = aggregateStr.replaceAll("<aggregatedNodeCount>", Integer.toString(aNode.getAggregatedNodes().size()));
+                aggregateStr = aggregateStr.replaceAll("<aggrgateConceptCount>", Integer.toString(aggregatedConcepts.size()));
+
+                result += aggregateStr;
+            }
         }
 
         return result;

@@ -4,8 +4,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.PartitionedNodeDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.tan.Band;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
@@ -61,12 +60,12 @@ public class TANConfiguration extends PartitionedAbNConfiguration<Cluster, Band>
     public DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> getDisjointTANFor(Band band) {
         DisjointAbNGenerator<ClusterTribalAbstractionNetwork<Cluster>, Cluster> generator = new DisjointAbNGenerator<>();
         
-        DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTaxonomy = 
+        DisjointAbstractionNetwork<DisjointNode<Cluster>, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN = 
                 generator.generateDisjointAbstractionNetwork(
                         new DisjointTANFactory(), 
                         getTribalAbstractionNetwork(), 
                         band.getClusters());
 
-        return disjointTaxonomy;
+        return new PartitionedNodeDisjointAbN<>(disjointTAN, band);
     }
 }

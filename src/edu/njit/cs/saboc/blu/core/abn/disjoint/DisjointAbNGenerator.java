@@ -326,6 +326,7 @@ public class DisjointAbNGenerator<
                 parentAbN, 
                 groupHierarchy, 
                 conceptHierarchy, 
+                factory,
                 maxOverlap, 
                 parentNodes, 
                 overlappingNodes, 

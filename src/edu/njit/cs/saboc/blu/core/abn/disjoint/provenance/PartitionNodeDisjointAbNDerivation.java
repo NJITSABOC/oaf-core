@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -22,17 +23,17 @@ public class PartitionNodeDisjointAbNDerivation<
         V extends PartitionedNode<T>> extends DisjointAbNDerivation {
 
     private final AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation;
-    private final V partitionedNode;
+    private final String partitionedNodeName;
     
     public PartitionNodeDisjointAbNDerivation(
             DisjointAbNFactory factory,
             AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation,
-            V partitionedNode) {
+            String partitionedNodeName) {
         
         super(factory, parentAbNDerivation.getSourceOntology());
         
         this.parentAbNDerivation = parentAbNDerivation;
-        this.partitionedNode = partitionedNode;
+        this.partitionedNodeName = partitionedNodeName;
     }
         
     public AbNDerivation<PartitionedAbstractionNetwork<T, V>> getParentAbNDerivation() {
@@ -41,7 +42,7 @@ public class PartitionNodeDisjointAbNDerivation<
     
     @Override
     public String getDescription() {
-        return String.format("Disjointed %s", partitionedNode.getName());
+        return String.format("Disjointed %s", partitionedNodeName);
     }
     
     @Override
@@ -51,14 +52,26 @@ public class PartitionNodeDisjointAbNDerivation<
 
     @Override
     public String getName() {
-        return String.format("%s %s", partitionedNode.getName(), getAbstractionNetworkTypeName());
+        return String.format("%s %s", partitionedNodeName, getAbstractionNetworkTypeName());
     }
 
     @Override
     public DisjointAbstractionNetwork getAbstractionNetwork() {
         
-        PartitionedAbstractionNetwork partitionedAbN = parentAbNDerivation.getAbstractionNetwork();
+        PartitionedAbstractionNetwork<T, V> partitionedAbN = parentAbNDerivation.getAbstractionNetwork();
         
+        Optional<V> theNode = partitionedAbN
+                .getBaseAbstractionNetwork()
+                .getNodes()
+                .stream()
+                .filter( (node) -> {
+                    PartitionedNode pNode = (PartitionedNode)node;
+                    
+                    return pNode.getName().equalsIgnoreCase(partitionedNodeName);
+                }).findAny();
+        
+        V partitionedNode = theNode.get();
+
         Set<SinglyRootedNode> overlappingNodes = new HashSet<>();
         
         partitionedNode.getOverlappingConceptDetails().forEach( (details) -> {

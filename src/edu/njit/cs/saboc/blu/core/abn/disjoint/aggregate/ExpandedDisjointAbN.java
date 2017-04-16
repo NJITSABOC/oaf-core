@@ -32,6 +32,7 @@ public class ExpandedDisjointAbN<
         super(sourceAbN.getParentAbstractionNetwork(), 
                 (Hierarchy<T>)aggregatedNode.getAggregatedHierarchy(), 
                 aggregatedNode.getHierarchy(), 
+                sourceAbN.getFactory(),
                 sourceAbN.getLevelCount(), 
                 sourceAbN.getAllSourceNodes(),
                 sourceAbN.getOverlappingNodes(), 

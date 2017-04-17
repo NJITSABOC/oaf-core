@@ -39,6 +39,7 @@ public class ClusterTANDerivationParser {
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "ClassName");
         String className = (String) jsonObject.get("ClassName");
         T result = null;
+        
         if (className.equalsIgnoreCase("SimpleClusterTANDerivation")) {
             result = (T) parseSimpleClusterTANDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
         } else if (className.equalsIgnoreCase("RootSubTANDerivation")) {

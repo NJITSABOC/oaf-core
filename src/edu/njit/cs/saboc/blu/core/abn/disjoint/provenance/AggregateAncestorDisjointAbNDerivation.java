@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -86,28 +85,13 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     }
 
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName", "AggregateAncestorTANDerivation");       
-        result.add(obj_class);
-        
-        //serialzie aggregateBase
-        JSONObject obj_aggregateBase = new JSONObject();
-        obj_aggregateBase.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.add(obj_aggregateBase);
-
-        //serialize minBound
-        JSONObject obj_minBound = new JSONObject();
-        obj_minBound.put("Bound", minBound);
-        result.add(obj_minBound);
-        
-        //serialize selectedAggregatePAreaRoot
-        JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
-        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
-        result.add(obj_selectedAggregatePAreaRoot);
+        result.put("ClassName", "AggregateAncestorDisjointAbNDerivation");       
+        result.put("BaseDerivation", aggregateBase.serializeToJSON());
+        result.put("Bound", minBound);
+        result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
         
         return result;
     }    

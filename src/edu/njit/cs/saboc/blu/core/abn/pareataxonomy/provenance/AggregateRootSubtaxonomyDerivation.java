@@ -86,28 +86,13 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
     
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateRootSubtaxonomyDerivation");       
-        result.add(obj_class);
-        
-        //serialzie aggregateBase
-        JSONObject obj_base = new JSONObject();
-        obj_base.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.add(obj_base);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize minBound
-        JSONObject obj_minBound = new JSONObject();
-        obj_minBound.put("Bound", minBound);
-        result.add(obj_minBound);
-        
-        //serialize selectedAggregatePAreaRoot
-        JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
-        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
-        result.add(obj_selectedAggregatePAreaRoot);
+        result.put("ClassName","AggregateRootSubtaxonomyDerivation");       
+        result.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.put("Bound", minBound);
+        result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
         
         return result;
     }

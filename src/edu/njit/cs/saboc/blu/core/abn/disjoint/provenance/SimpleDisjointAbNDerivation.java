@@ -85,32 +85,20 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     }
     
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName", "SimpleDisjointAbNDerivation");       
-        result.add(obj_class);
-        
-        //serialzie parentAbNDerivation
-        JSONObject obj_parentAbNDerivation = new JSONObject();
-        obj_parentAbNDerivation.put("BaseDerivation", parentAbNDerivation.serializeToJSON());   
-        result.add(obj_parentAbNDerivation);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize sourceNodeRoots
-        JSONObject obj_sourceNodeRoots = new JSONObject();
-        
+        result.put("ClassName", "SimpleDisjointAbNDerivation");       
+        result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());   
+
         JSONArray arr = new JSONArray();
         
         sourceNodeRoots.forEach(root ->{
             arr.add(root.getIDAsString());
-        });        
+        });
         
-        obj_sourceNodeRoots.put("RootIDs", arr);
-        
-        result.add(obj_sourceNodeRoots);
-        
+        result.put("RootIDs", arr);
+                
         return result;
         
     }

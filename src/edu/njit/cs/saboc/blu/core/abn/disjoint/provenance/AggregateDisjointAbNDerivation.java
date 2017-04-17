@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
@@ -60,25 +59,13 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     }
     
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateDisjointAbNDerivation");       
-        result.add(obj_class);
-        
-        //serialzie nonAggregateDerivation
-        JSONObject obj_nonAggregateDerivation = new JSONObject();
-        obj_nonAggregateDerivation.put("BaseDerivation", nonAggregateDerivation.serializeToJSON());   
-        result.add(obj_nonAggregateDerivation);
-
-        //serialize aggregateBound
-        JSONObject obj_aggregateBound = new JSONObject();
-        obj_aggregateBound.put("Bound", aggregateBound);
-        result.add(obj_aggregateBound);
+        result.put("ClassName", "AggregateDisjointAbNDerivation");       
+        result.put("BaseDerivation", nonAggregateDerivation.serializeToJSON());   
+        result.put("Bound", aggregateBound);
         
         return result;
     }    
-
 }

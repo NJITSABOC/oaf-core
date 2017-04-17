@@ -68,23 +68,12 @@ public class TANFromSinglyRootedNodeDerivation <
         return String.format("%s %s", nodeRoot.getName(), super.getAbstractionNetworkTypeName());
     }
 
-    public JSONArray serializeToJSON() {        
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","TANFromSinglyRootedNodeDerivation");       
-        result.add(obj_class);
-        
-        //serialzie parentAbNDerivation
-        JSONObject obj_parentAbNDerivation = new JSONObject();
-        obj_parentAbNDerivation.put("ParentDerivation", parentAbNDerivation.serializeToJSON());   
-        result.add(obj_parentAbNDerivation);
-        
-        //serialzie nodeRoot
-        JSONObject obj_nodeRoot = new JSONObject();
-        obj_nodeRoot.put("RootID", nodeRoot.getIDAsString());   
-        result.add(obj_nodeRoot);
+        result.put("ClassName","TANFromSinglyRootedNodeDerivation");
+        result.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("RootID", nodeRoot.getIDAsString());
         
         return result;
     }   

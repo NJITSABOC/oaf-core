@@ -16,8 +16,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -37,6 +35,7 @@ public class DisjointAbNDerivationParser {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "ClassName");
         String className = (String) jsonObject.get("ClassName");
+        
         T result = null;
         if (className.equalsIgnoreCase("SimpleDisjointAbNDerivation")) {
             result = (T) parseSimpleDisjointAbNDerivation(jsonArr, sourceOntology, factory, conceptFactory, propertyFactory, testing);
@@ -90,14 +89,15 @@ public class DisjointAbNDerivationParser {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+        
         DisjointAbNDerivation sourceDisjointAbNDerivation = disjointParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
-        //how to deserialize this??
+        // how to deserialize this??
         Set<SinglyRootedNode> subsSet = null;
 
-        JSONObject rootObj = findJSONObjectByName(jsonArr, "RootNodeNames");
+        JSONObject rootObj = findJSONObjectByName(jsonArr, "RootNodeIDs");
 
-        ArrayList<String> rootNodeNames = (ArrayList<String>) rootObj.get("RootNodeNames");
+        ArrayList<String> rootNodeNames = (ArrayList<String>) rootObj.get("RootNodeIDs");
 
         rootNodeNames.forEach((String name) -> {
             try {
@@ -171,7 +171,9 @@ public class DisjointAbNDerivationParser {
         ArrayList<String> conceptIDs = (ArrayList<String>) rootObj.get("ConceptID");
         try {
             Set<Concept> newRoot = conceptFactory.getConceptsFromIds(conceptIDs);
+            
             System.out.println("conceptFactory:  " + newRoot.toString());
+            
             disjointNodeRoot = newRoot.stream().findAny().get();
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
@@ -198,6 +200,7 @@ public class DisjointAbNDerivationParser {
 
         JSONObject jsonObject = findJSONObjectByName(jsonArr, "BaseDerivation");
         JSONArray arr_base = (JSONArray) jsonObject.get("BaseDerivation");
+        
         DisjointAbNDerivation aggregateBase = disjointParser(arr_base, sourceOntology, factory, conceptFactory, propertyFactory, testing);
 
         JSONObject boundObject = findJSONObjectByName(jsonArr, "Bound");
@@ -210,8 +213,11 @@ public class DisjointAbNDerivationParser {
         ArrayList<String> conceptIDs = (ArrayList<String>) rootObj.get("ConceptID");
         try {
             Set<Concept> newRoot = conceptFactory.getConceptsFromIds(conceptIDs);
+            
             System.out.println("conceptFactory:  " + newRoot.toString());
+            
             selectedAggregatePAreaRoot = newRoot.stream().findAny().get();
+            
         } catch (Exception e) {
             System.err.println("Fail at getting root from conceptFactory!!!");
         }
@@ -228,14 +234,17 @@ public class DisjointAbNDerivationParser {
         if (jsonArr.isEmpty()) {
             return result;
         }
+        
         JSONParser parser = new JSONParser();
+        
         for (Object o : jsonArr) {
 
             JSONObject jsonObject = new JSONObject();
+            
             try {
                 jsonObject = (JSONObject) parser.parse(o.toString());
             } catch (ParseException ex) {
-                Logger.getLogger(PAreaTaxonomyDerivationParser.class.getName()).log(Level.SEVERE, null, ex);
+                
             }
 
             if (jsonObject.containsKey(name)) {

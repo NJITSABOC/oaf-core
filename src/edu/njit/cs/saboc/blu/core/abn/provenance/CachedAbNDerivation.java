@@ -2,7 +2,6 @@
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -32,6 +31,7 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
         return abn;
     }
 
+    @Override
     public String getName() {
         return String.format("%s (cached)", abn.getDerivation().getName());
     }
@@ -41,8 +41,9 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
         return abn.getDerivation().getAbstractionNetworkTypeName();
     }
 
-    public JSONArray serializeToJSON() {        
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
+        
         return result;
     }
 }

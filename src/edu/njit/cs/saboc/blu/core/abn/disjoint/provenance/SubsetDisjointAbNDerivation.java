@@ -59,34 +59,20 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
         return String.format("Subset %s", sourceDisjointAbNDerivation.getName());
     }
 
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","SubsetDisjointAbNDerivation");       
-        result.add(obj_class);
+        result.put("ClassName", "SubsetDisjointAbNDerivation");       
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
 
-        
-        //serialzie sourceDisjointAbNDerivation
-        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
-        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
-        result.add(obj_sourceDisjointAbNDerivation);
-
-        //serialize subset
-        JSONObject obj_subset = new JSONObject();
-        
         JSONArray arr = new JSONArray();
         
         subset.forEach(node ->{
-            arr.add(node.getName());
+            arr.add(node.getRoot().getIDAsString());
         });        
         
-        obj_subset.put("RootNodeNames", arr);
-        
-        result.add(obj_subset);
+        result.put("RootNodeIDs", arr);
         
         return result;
-        
     }
 }

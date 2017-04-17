@@ -62,28 +62,16 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
 
 
     @Override
-    public JSONArray serializeToJSON() {        
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
 
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","ExpandedSubTANDerivation");       
-        result.add(obj_class);
-        
-        //serialzie base
-        JSONObject obj_base = new JSONObject();
-        obj_base.put("BaseDerivation", base.serializeToJSON());   
-        result.add(obj_base);
-        
-        //serialzie aggregateClusterRoot
-        JSONObject obj_aggregateClusterRoot = new JSONObject();
-        obj_aggregateClusterRoot.put("ConceptID", aggregateClusterRoot.getIDAsString());   
-        result.add(obj_aggregateClusterRoot);
+        result.put("ClassName","ExpandedSubTANDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", aggregateClusterRoot.getIDAsString());   
         
         return result;
     }   
      
-    
     @Override
     public String getName() {
         return String.format("%s %s", aggregateClusterRoot.getName(), getAbstractionNetworkTypeName()); 

@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -66,23 +65,12 @@ public class AncestorDisjointAbNDerivation extends DisjointAbNDerivation
     }
     
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AncestorDisjointAbNDerivation");       
-        result.add(obj_class);
-        
-        //serialzie sourceDisjointAbNDerivation
-        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
-        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
-        result.add(obj_sourceDisjointAbNDerivation);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize disjointNodeRoot
-        JSONObject obj_disjointNodeRoot = new JSONObject();    
-        obj_disjointNodeRoot.put("ConceptID", disjointNodeRoot.getIDAsString());
-        result.add(obj_disjointNodeRoot);
+        result.put("ClassName", "AncestorDisjointAbNDerivation");       
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.put("ConceptID", disjointNodeRoot.getIDAsString());
         
         return result;       
     }     

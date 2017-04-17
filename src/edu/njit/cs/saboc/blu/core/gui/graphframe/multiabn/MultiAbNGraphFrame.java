@@ -2,11 +2,9 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -20,7 +18,6 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationH
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -108,21 +105,23 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
             historyDialog.add(derivationHistoryPanel);
 
             JButton saveBtn = new JButton("SAVE");
-            saveBtn.addActionListener((ActionEvent se) -> {
+            saveBtn.addActionListener( (se) -> {
                 AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
+                
                 if (entry == null) {
                     int size = derivationHistoryPanel.getEntries().size();
                     entry = derivationHistoryPanel.getEntries().get(size - 1);
                 }
                 
-                JSONArray arr = entry.getDerivation().serializeToJSON();
-//                    prefs.remove("Selected View");
-//                    prefs.put("Selected View", arr.toJSONString());
+                JSONObject arr = entry.getDerivation().serializeToJSON();
                 
                 try (FileWriter file = new FileWriter("testing.json")) {
+                    
                     file.write(arr.toJSONString());
+                    
                     System.out.println("Serialized JSON Object to File...");
                     System.out.println("JSON Object: " + arr);
+                    
                     file.close();
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
@@ -134,11 +133,15 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
                 ArrayList<AbNDerivationHistoryEntry> entries = derivationHistoryPanel.getEntries();
                 
                 for (AbNDerivationHistoryEntry entry : entries) {
-                    JSONArray arr = entry.getDerivation().serializeToJSON();
+                    
+                    JSONObject arr = entry.getDerivation().serializeToJSON();
+                    
                     try (FileWriter file = new FileWriter("testing.json")) {
                         file.write(arr.toJSONString());
+                        
                         System.out.println("Serialized JSON Object to File...");
                         System.out.println("JSON Object: " + arr);
+                        
                         file.close();
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
@@ -148,8 +151,10 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
             });
 
             JButton loadBtn = new JButton("LOAD Last Viewed Taxonomy");
+            
             loadBtn.addActionListener((ActionEvent al) -> {
                 JSONParser parser = new JSONParser();
+                
                 try {
                     JSONArray jsonArr = (JSONArray) parser.parse(new FileReader("testing.json"));
 //                    String strJson = prefs.get("Selected View","0");                    
@@ -161,6 +166,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
 
                     JSONObject resultObject = AbNDerivationParserUtils.findJSONObjectByName(jsonArr, "ClassName");
                     String className = resultObject.get("ClassName").toString();
+                    
                     System.out.println(className);
 
                     AbstractionNetwork abn = abnParser.coreParser(jsonArr).getAbstractionNetwork();

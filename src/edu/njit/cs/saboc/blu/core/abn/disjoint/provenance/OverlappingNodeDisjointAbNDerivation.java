@@ -60,23 +60,12 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     }
 
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName", "OverlappingNodeDisjointAbNDerivation");       
-        result.add(obj_class);
-        
-        //serialzie sourceDisjointAbNDerivation
-        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
-        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
-        result.add(obj_sourceDisjointAbNDerivation);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize overlappingNode
-        JSONObject obj_overlappingNode = new JSONObject();    
-        obj_overlappingNode.put("NodeName", overlappingNode.getName());
-        result.add(obj_overlappingNode);
+        result.put("ClassName", "OverlappingNodeDisjointAbNDerivation");
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.put("OverlappingNodeRootId", overlappingNode.getRoot().getIDAsString());
         
         return result;       
     }

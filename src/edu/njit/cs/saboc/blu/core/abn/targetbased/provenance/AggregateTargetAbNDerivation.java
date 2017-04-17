@@ -46,26 +46,13 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     }
     
     @Override
-    public JSONArray serializeToJSON() {
- 
-        JSONArray result = new JSONArray();
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateTargetAbNDerivation");       
-        result.add(obj_class);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        
-        //serialzie nonAggregateSource
-        JSONObject obj_nonAggregateSource = new JSONObject();
-        obj_nonAggregateSource.put("BaseDerivation", nonAggregateSource.serializeToJSON());   
-        result.add(obj_nonAggregateSource);
+        result.put("ClassName","AggregateTargetAbNDerivation");       
+        result.put("BaseDerivation", nonAggregateSource.serializeToJSON());   
+        result.put("Bound", bound);
 
-        //serialize bound
-        JSONObject obj_bound = new JSONObject();
-        obj_bound.put("Bound", bound);
-        result.add(obj_bound);
-        
         return result;
-        
     }
 }

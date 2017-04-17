@@ -25,17 +25,17 @@ public class PartitionNodeDisjointAbNDerivation<
         V extends PartitionedNode<T>> extends DisjointAbNDerivation {
 
     private final AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation;
-    private final String partitionedNodeName;
+    private final V partitionedNode;
     
     public PartitionNodeDisjointAbNDerivation(
             DisjointAbNFactory factory,
             AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation,
-            String partitionedNodeName) {
+            V partitionedNode) {
         
         super(factory, parentAbNDerivation.getSourceOntology());
         
         this.parentAbNDerivation = parentAbNDerivation;
-        this.partitionedNodeName = partitionedNodeName;
+        this.partitionedNode = partitionedNode;
     }
         
     public AbNDerivation<PartitionedAbstractionNetwork<T, V>> getParentAbNDerivation() {
@@ -44,7 +44,7 @@ public class PartitionNodeDisjointAbNDerivation<
     
     @Override
     public String getDescription() {
-        return String.format("Disjointed %s", partitionedNodeName);
+        return String.format("Disjointed %s", partitionedNode.getName());
     }
     
     @Override
@@ -54,7 +54,7 @@ public class PartitionNodeDisjointAbNDerivation<
 
     @Override
     public String getName() {
-        return String.format("%s %s", partitionedNodeName, getAbstractionNetworkTypeName());
+        return String.format("%s %s", partitionedNode.getName(), getAbstractionNetworkTypeName());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PartitionNodeDisjointAbNDerivation<
                 .filter( (node) -> {
                     PartitionedNode pNode = (PartitionedNode)node;
                     
-                    return pNode.getName().equalsIgnoreCase(partitionedNodeName);
+                    return pNode.getName().equalsIgnoreCase(partitionedNode.getName());
                 }).findAny();
         
         V partitionedNode = theNode.get();
@@ -91,24 +91,13 @@ public class PartitionNodeDisjointAbNDerivation<
     }
 
     @Override
-    public JSONArray serializeToJSON() {
-        
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName", "PartitionNodeDisjointAbNDerivation");
-        result.add(obj_class);
-
-        //serialzie parentAbNDerivation
-        JSONObject obj_parentAbNDerivation = new JSONObject();
-        obj_parentAbNDerivation.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("ClassName", "PartitionNodeDisjointAbNDerivation");
+        result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("PartitionedNodeName", this.partitionedNode.getName());
         
-        JSONObject obj_partitionNodeName = new JSONObject();
-        obj_partitionNodeName.put("PartitionedNodeName", this.partitionedNodeName);
-        
-        result.add(obj_parentAbNDerivation);
-
         return result;
     }
 }

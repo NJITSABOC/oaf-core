@@ -85,28 +85,14 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         return "Aggregate Descendants Sub TAN";
     }
 
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateRootSubTANDerivation");       
-        result.add(obj_class);
-        
-        //serialzie aggregateBase
-        JSONObject obj_aggregateBase = new JSONObject();
-        obj_aggregateBase.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.add(obj_aggregateBase);
-
-        //serialize minBound
-        JSONObject obj_minBound = new JSONObject();
-        obj_minBound.put("Bound", minBound);
-        result.add(obj_minBound);
-        
-        //serialize selectedAggregateClusterRoot
-        JSONObject obj_selectedAggregateClusterRoot = new JSONObject();
-        obj_selectedAggregateClusterRoot.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
-        result.add(obj_selectedAggregateClusterRoot);
+        result.put("ClassName", "AggregateRootSubTANDerivation");       
+        result.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.put("Bound", minBound);
+        result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
         
         return result;
     }

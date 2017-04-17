@@ -68,24 +68,13 @@ public class ExpandedDisjointAbNDerivation extends DisjointAbNDerivation
     }
 
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","ExpandedDisjointAbNDerivation");       
-        result.add(obj_class);
-        
-        //serialzie sourceDisjointAbNDerivation
-        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
-        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
-        result.add(obj_sourceDisjointAbNDerivation);
+        result.put("ClassName", "ExpandedDisjointAbNDerivation");       
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.put("ConceptID", expandedAggregateNodeRoot.getIDAsString());
 
-        //serialize expandedAggregateNodeRoot
-        JSONObject obj_expandedAggregateNodeRoot = new JSONObject();    
-        obj_expandedAggregateNodeRoot.put("ConceptID", expandedAggregateNodeRoot.getIDAsString());
-        result.add(obj_expandedAggregateNodeRoot);
-        
         return result;       
     }           
 }

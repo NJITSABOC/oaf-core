@@ -76,24 +76,19 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
     }
     
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","SimpleClusterTANDerivation");       
-        result.add(obj_class);
+        result.put("ClassName", "SimpleClusterTANDerivation");       
         
-        //serialize patriarchs
-        JSONObject obj_patriarchs = new JSONObject();
         JSONArray arr = new JSONArray();
+        
         patriarchs.forEach(node ->{
             arr.add(node.getIDAsString());
         });        
-        obj_patriarchs.put("ConceptIDs", arr);
-        result.add(obj_patriarchs);
+        
+        result.put("ConceptIDs", arr);
         
         return result;
-        
     }
 }

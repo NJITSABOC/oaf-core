@@ -68,23 +68,12 @@ public class AncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
         
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AncestorSubtaxonomyDerivation");       
-        result.add(obj_class);
-        
-        //serialzie base
-        JSONObject obj_base = new JSONObject();
-        obj_base.put("BaseDerivation", base.serializeToJSON());   
-        result.add(obj_base);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize pareaRootConcept
-        JSONObject obj_pareaRootConcept = new JSONObject();
-        obj_pareaRootConcept.put("ConceptID", pareaRootConcept.getIDAsString());
-        result.add(obj_pareaRootConcept);
+        result.put("ClassName", "AncestorSubtaxonomyDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", pareaRootConcept.getIDAsString());
         
         return result;
     }

@@ -33,5 +33,6 @@ public abstract class AbNDerivation<T extends AbstractionNetwork> {
     
     public abstract String getDescription();
     public abstract T getAbstractionNetwork();
-    public abstract JSONArray serializeToJSON();
+    
+    public abstract JSONObject serializeToJSON();
 }

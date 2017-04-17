@@ -62,27 +62,13 @@ public class ExpandedTargetAbNDerivation extends TargetAbNDerivation
     }
     
     @Override
-    public JSONArray serializeToJSON() {
- 
-        JSONArray result = new JSONArray();
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","ExpandedTargetAbNDerivation");       
-        result.add(obj_class);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        
-        //serialzie base
-        JSONObject obj_base = new JSONObject();
-        obj_base.put("BaseDerivation", base.serializeToJSON());   
-        result.add(obj_base);
-
-        //serialize aggregateTargetGroupRoot
-        JSONObject obj_aggregateTargetGroupRoot = new JSONObject();
-        obj_aggregateTargetGroupRoot.put("ConceptID", aggregateTargetGroupRoot.getIDAsString());
-        result.add(obj_aggregateTargetGroupRoot);
+        result.put("ClassName", "ExpandedTargetAbNDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", aggregateTargetGroupRoot.getIDAsString());
                
         return result;
-        
     }
-    
 }

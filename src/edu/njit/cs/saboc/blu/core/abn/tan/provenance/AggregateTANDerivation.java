@@ -58,24 +58,14 @@ public class AggregateTANDerivation extends ClusterTANDerivation
         return "Aggregate Tribal Abstraction Network";
     }
 
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
         
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregateTANDerivation");       
-        result.add(obj_class);
+        result.put("ClassName", "AggregateTANDerivation");       
+        result.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
+        result.put("Bound", bound);
         
-        //serialzie nonAggregateSourceDerivation
-        JSONObject obj_nonAggregateSourceDerivation = new JSONObject();
-        obj_nonAggregateSourceDerivation.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
-        result.add(obj_nonAggregateSourceDerivation);
-
-        //serialize bound
-        JSONObject obj_bound = new JSONObject();
-        obj_bound.put("Bound", bound);
-        result.add(obj_bound);
-       
         return result;
     }
 }

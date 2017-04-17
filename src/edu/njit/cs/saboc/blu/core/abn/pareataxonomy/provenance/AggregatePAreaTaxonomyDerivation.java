@@ -58,24 +58,13 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public JSONArray serializeToJSON() {
-        JSONArray result = new JSONArray();
-        
-        //serialize class
-        JSONObject obj_class = new JSONObject();
-        obj_class.put("ClassName","AggregatePAreaTaxonomyDerivation");       
-        result.add(obj_class);
-        
-        //serialzie nonAggregateSourceDerivation
-        JSONObject obj_nonAggregateSourceDerivation = new JSONObject();
-        obj_nonAggregateSourceDerivation.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
-        result.add(obj_nonAggregateSourceDerivation);
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
 
-        //serialize bound
-        JSONObject obj_bound = new JSONObject();
-        obj_bound.put("Bound", bound);
-        result.add(obj_bound);
-       
+        result.put("ClassName", "AggregatePAreaTaxonomyDerivation");       
+        result.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
+        result.put("Bound", bound);
+
         return result;
     }
 }

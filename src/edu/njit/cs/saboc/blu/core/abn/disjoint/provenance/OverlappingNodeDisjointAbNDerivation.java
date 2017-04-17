@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a disjoint abstraction network based 
@@ -39,7 +41,6 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     @Override
     public DisjointAbstractionNetwork getAbstractionNetwork() {
         DisjointAbstractionNetwork disjointAbN = getSuperAbNDerivation().getAbstractionNetwork();
-        
         return disjointAbN.getOverlappingNodeDisjointAbN(overlappingNode);
     }
 
@@ -56,5 +57,27 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     @Override
     public String getAbstractionNetworkTypeName() {
         return String.format("Overlapping Node %s", sourceDisjointAbNDerivation.getAbstractionNetworkTypeName());
+    }
+
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName", "OverlappingNodeDisjointAbNDerivation");       
+        result.add(obj_class);
+        
+        //serialzie sourceDisjointAbNDerivation
+        JSONObject obj_sourceDisjointAbNDerivation = new JSONObject();
+        obj_sourceDisjointAbNDerivation.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.add(obj_sourceDisjointAbNDerivation);
+
+        //serialize overlappingNode
+        JSONObject obj_overlappingNode = new JSONObject();    
+        obj_overlappingNode.put("NodeName", overlappingNode.getName());
+        result.add(obj_overlappingNode);
+        
+        return result;       
     }
 }

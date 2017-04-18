@@ -9,6 +9,8 @@ import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import edu.njit.cs.saboc.blu.core.utils.comparators.ConceptNameComparator;
 import java.util.ArrayList;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a TAN for a selected set of ontology
@@ -71,5 +73,22 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
         name = String.format("{%s}", name);
         
         return String.format("%s %s", name, getAbstractionNetworkTypeName());
+    }
+    
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName", "SimpleClusterTANDerivation");       
+        
+        JSONArray arr = new JSONArray();
+        
+        patriarchs.forEach(node ->{
+            arr.add(node.getIDAsString());
+        });        
+        
+        result.put("ConceptIDs", arr);
+        
+        return result;
     }
 }

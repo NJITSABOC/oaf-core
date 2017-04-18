@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
-import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;

@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a TAN from a singly rooted node 
@@ -65,4 +67,14 @@ public class TANFromSinglyRootedNodeDerivation <
     public String getName() {
         return String.format("%s %s", nodeRoot.getName(), super.getAbstractionNetworkTypeName());
     }
+
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName","TANFromSinglyRootedNodeDerivation");
+        result.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("RootID", nodeRoot.getIDAsString());
+        
+        return result;
+    }   
 }

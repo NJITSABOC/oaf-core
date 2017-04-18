@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a subset disjoint abstraction network
@@ -55,5 +57,22 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     @Override
     public String getAbstractionNetworkTypeName() {
         return String.format("Subset %s", sourceDisjointAbNDerivation.getName());
+    }
+
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName", "SubsetDisjointAbNDerivation");       
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+
+        JSONArray arr = new JSONArray();
+        
+        subset.forEach(node ->{
+            arr.add(node.getRoot().getIDAsString());
+        });        
+        
+        result.put("RootNodeIDs", arr);
+        
+        return result;
     }
 }

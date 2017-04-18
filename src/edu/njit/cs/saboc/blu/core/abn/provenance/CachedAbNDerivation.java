@@ -2,6 +2,7 @@
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import org.json.simple.JSONObject;
 
 /**
  * A utility class for saving an abstraction network in-memory so it
@@ -38,5 +39,11 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
     @Override
     public String getAbstractionNetworkTypeName() {
         return abn.getDerivation().getAbstractionNetworkTypeName();
+    }
+
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
+        
+        return result;
     }
 }

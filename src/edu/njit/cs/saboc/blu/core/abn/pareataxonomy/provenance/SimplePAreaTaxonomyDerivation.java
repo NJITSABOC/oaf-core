@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a regular partial-area taxonomy for an ontology
@@ -51,7 +53,6 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     public String getDescription() {
         return String.format("Derived Partial-area Taxonomy (Root: %s)", root.getName());
     }
-
     @Override
     public String getName() {
         return String.format("%s %s", root.getName(), getAbstractionNetworkTypeName());
@@ -60,5 +61,15 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Partial-area Taxonomy";
+    }
+
+    @Override
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName", "SimplePAreaTaxonomyDerivation");       
+        result.put("ConceptID", root.getIDAsString());   
+        
+        return result;
     }
 }

@@ -31,4 +31,5 @@ public abstract class PAreaTaxonomyDerivation extends AbNDerivation<PAreaTaxonom
     public PAreaTaxonomyFactory getFactory() {
         return factory;
     }
+    
 }

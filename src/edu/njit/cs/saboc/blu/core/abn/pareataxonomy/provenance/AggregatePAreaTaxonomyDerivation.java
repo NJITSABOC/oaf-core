@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create an aggregate partial-area taxonomy 
@@ -45,7 +47,6 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     public PAreaTaxonomy getAbstractionNetwork() {
         return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound);
     }
-
     @Override
     public String getName() {
         return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName());
@@ -56,4 +57,14 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
         return "Aggregate Partial-area Taxonomy";
     }
 
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName", "AggregatePAreaTaxonomyDerivation");       
+        result.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
+        result.put("Bound", bound);
+
+        return result;
+    }
 }

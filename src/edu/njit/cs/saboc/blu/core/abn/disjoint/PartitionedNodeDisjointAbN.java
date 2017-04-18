@@ -9,6 +9,11 @@ import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
  * A disjoint abstraction network created from a partitioned node (e.g., an area)
  * 
  * @author Chris O
+ * 
+ * @param <T>
+ * @param <PARENTABN_T>
+ * @param <PARTITIONNODE_T>
+ * @param <PARENTNODE_T>
  */
 public class PartitionedNodeDisjointAbN<
         T extends DisjointNode<PARENTNODE_T>,
@@ -23,7 +28,7 @@ public class PartitionedNodeDisjointAbN<
         super(source, new PartitionNodeDisjointAbNDerivation(
                 source.getFactory(), 
                 source.getParentAbstractionNetwork().getDerivation(),
-                partitionedNode.getName()));
+                partitionedNode));
         
         this.partitionedNode = partitionedNode;
     }

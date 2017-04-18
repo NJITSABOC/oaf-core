@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *  Stores the arguments needed to create an expanded subtaxonomy
@@ -67,5 +69,16 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Expanded Subtaxonomy";
+    }
+    
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName", "ExpandedSubtaxonomyDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", aggregatePAreaRoot.getIDAsString());
+        
+        return result;
     }
 }

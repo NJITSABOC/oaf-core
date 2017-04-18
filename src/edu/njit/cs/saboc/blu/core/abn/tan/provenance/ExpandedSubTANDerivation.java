@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateCluster;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create an expanded Sub TAN
@@ -57,7 +59,19 @@ public class ExpandedSubTANDerivation extends ClusterTANDerivation
     public String getDescription() {
         return String.format("Expanded aggregate cluster (%s)", aggregateClusterRoot.getName());
     }
-    
+
+
+    @Override
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName","ExpandedSubTANDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", aggregateClusterRoot.getIDAsString());   
+        
+        return result;
+    }   
+     
     @Override
     public String getName() {
         return String.format("%s %s", aggregateClusterRoot.getName(), getAbstractionNetworkTypeName()); 

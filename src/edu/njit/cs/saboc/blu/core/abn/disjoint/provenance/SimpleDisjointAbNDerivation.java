@@ -10,6 +10,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a disjoint abstraction network 
@@ -72,7 +74,6 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
                 partitionedAbN,
                 overlappingNodes);
     }
-
     @Override
     public String getName() {
         return String.format("%s (Disjoint)", parentAbNDerivation.getName());
@@ -81,5 +82,24 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     @Override
     public String getAbstractionNetworkTypeName() {
         return String.format("Disjoint %s", parentAbNDerivation.getAbstractionNetworkTypeName());
+    }
+    
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName", "SimpleDisjointAbNDerivation");       
+        result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());   
+
+        JSONArray arr = new JSONArray();
+        
+        sourceNodeRoots.forEach(root ->{
+            arr.add(root.getIDAsString());
+        });
+        
+        result.put("RootIDs", arr);
+                
+        return result;
+        
     }
 }

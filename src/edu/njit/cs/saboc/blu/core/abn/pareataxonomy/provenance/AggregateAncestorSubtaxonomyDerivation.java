@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments for creating aggregate an ancestor subtaxonomy
@@ -83,5 +85,17 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Aggregate Ancestor Subtaxonomy";
+    }
+    
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName","AggregateAncestorSubtaxonomyDerivation");
+        result.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.put("Bound", minBound);
+        result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        
+        return result;
     }
 }

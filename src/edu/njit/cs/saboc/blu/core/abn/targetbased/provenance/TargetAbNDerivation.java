@@ -8,6 +8,8 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenera
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a target abstraction network 
@@ -88,5 +90,16 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Target Abstraction Network";
+    }
+
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName", "TargetAbNDerivation");       
+        result.put("SourceRootID", sourceHierarchyRoot.getIDAsString());   
+        result.put("PropertyID", propertyType.getIDAsString());
+        result.put("TargetRootID", targetHierarchyRoot.getIDAsString());
+        
+        return result;
     }
 }

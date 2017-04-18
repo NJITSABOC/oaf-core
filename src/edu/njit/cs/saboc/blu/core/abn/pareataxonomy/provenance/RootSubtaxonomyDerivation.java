@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a root subtaxonomy
@@ -60,5 +62,16 @@ public class RootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Root Subtaxonomy";
+    }
+
+    @Override
+    public JSONObject serializeToJSON() {        
+        JSONObject result = new JSONObject();
+
+        result.put("ClassName", "RootSubtaxonomyDerivation");       
+        result.put("BaseDerivation", base.serializeToJSON());   
+        result.put("ConceptID", pareaRootConcept.getIDAsString());   
+
+        return result;
     }
 }

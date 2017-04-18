@@ -7,6 +7,8 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create an expanded disjoint abstraction network
@@ -64,4 +66,15 @@ public class ExpandedDisjointAbNDerivation extends DisjointAbNDerivation
     public String getAbstractionNetworkTypeName() {
         return String.format("Expanded %s", sourceDisjointAbNDerivation.getAbstractionNetworkTypeName());
     }
+
+    @Override
+    public JSONObject serializeToJSON() {
+        JSONObject result = new JSONObject();
+        
+        result.put("ClassName", "ExpandedDisjointAbNDerivation");       
+        result.put("BaseDerivation", sourceDisjointAbNDerivation.serializeToJSON());   
+        result.put("ConceptID", expandedAggregateNodeRoot.getIDAsString());
+
+        return result;       
+    }           
 }

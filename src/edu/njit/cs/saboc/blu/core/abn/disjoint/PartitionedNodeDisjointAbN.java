@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.PartitionNodeDisjointAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.PartitionedNodeDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 
@@ -25,7 +25,7 @@ public class PartitionedNodeDisjointAbN<
     
     public PartitionedNodeDisjointAbN(DisjointAbstractionNetwork source, PARTITIONNODE_T partitionedNode) {
         
-        super(source, new PartitionNodeDisjointAbNDerivation(
+        super(source, new PartitionedNodeDisjointAbNDerivation(
                 source.getFactory(), 
                 source.getParentAbstractionNetwork().getDerivation(),
                 partitionedNode));

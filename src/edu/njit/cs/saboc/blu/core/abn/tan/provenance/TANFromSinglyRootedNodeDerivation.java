@@ -72,8 +72,8 @@ public class TANFromSinglyRootedNodeDerivation <
         JSONObject result = new JSONObject();
         
         result.put("ClassName","TANFromSinglyRootedNodeDerivation");
-        result.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
-        result.put("RootID", nodeRoot.getIDAsString());
+        result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("ConceptId", nodeRoot.getIDAsString());
         
         return result;
     }   

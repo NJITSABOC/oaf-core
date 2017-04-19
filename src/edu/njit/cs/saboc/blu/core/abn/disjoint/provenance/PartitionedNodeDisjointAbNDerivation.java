@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -20,14 +19,14 @@ import org.json.simple.JSONObject;
  * @param <T>
  * @param <V>
  */
-public class PartitionNodeDisjointAbNDerivation<
+public class PartitionedNodeDisjointAbNDerivation<
         T extends SinglyRootedNode, 
         V extends PartitionedNode<T>> extends DisjointAbNDerivation {
 
     private final AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation;
     private final V partitionedNode;
     
-    public PartitionNodeDisjointAbNDerivation(
+    public PartitionedNodeDisjointAbNDerivation(
             DisjointAbNFactory factory,
             AbNDerivation<PartitionedAbstractionNetwork<T, V>> parentAbNDerivation,
             V partitionedNode) {
@@ -94,9 +93,9 @@ public class PartitionNodeDisjointAbNDerivation<
     public JSONObject serializeToJSON() {
         JSONObject result = new JSONObject();
 
-        result.put("ClassName", "PartitionNodeDisjointAbNDerivation");
+        result.put("ClassName", "PartitionedNodeDisjointAbNDerivation");
         result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
-        result.put("PartitionedNodeName", this.partitionedNode.getName());
+        result.put("NodeName", this.partitionedNode.getName());
         
         return result;
     }

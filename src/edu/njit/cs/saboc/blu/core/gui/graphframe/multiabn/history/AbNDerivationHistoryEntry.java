@@ -3,7 +3,10 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import java.util.Date;
+import javax.swing.SwingUtilities;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -11,38 +14,35 @@ import java.util.Date;
  * @param <T>
  */
 public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
-    
-    public interface DisplayDerivedAbNAction<T extends AbstractionNetwork> {
-        public void display(T abn);
-    }
-    
+   
+    private final MultiAbNGraphFrame graphFrame;
+
     private final AbNDerivation<T> derivation;
-    private final String abnTypeName;
-    
-    private final DisplayDerivedAbNAction<T> displayAction;
-    
+
     private final Date entryDate;
     
     public AbNDerivationHistoryEntry(
             AbNDerivation<T> derivation, 
-            DisplayDerivedAbNAction<T> displayAction, 
-            String abnTypeName) {
+            MultiAbNGraphFrame graphFrame,
+            Date date) {
         
         this.derivation = derivation;
-        this.displayAction = displayAction;
-        this.abnTypeName = abnTypeName;
+        this.graphFrame = graphFrame;
         
-        this.entryDate = new Date();
+        this.entryDate = date;
     }
+    
+    public AbNDerivationHistoryEntry(
+            AbNDerivation<T> derivation, 
+            MultiAbNGraphFrame graphFrame) {
+        
+       this(derivation, graphFrame, new Date());
+    } 
     
     public AbNDerivation<T> getDerivation() {
         return derivation;
     }
-    
-    public String getAbNTypeName() {
-        return abnTypeName;
-    }
-    
+        
     public Date getDate() {
         return entryDate;
     }
@@ -52,9 +52,21 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
         Thread displayThread = new Thread( () -> {
            T abn = derivation.getAbstractionNetwork();
            
-           displayAction.display(abn);
+           SwingUtilities.invokeLater( () -> {
+               graphFrame.displayAbstractionNetwork(abn, false);
+           });
         });
         
         displayThread.start();
+    }
+    
+    public JSONObject toJSON() {
+        
+        JSONObject obj = new JSONObject();
+        
+        obj.put("TimeViewed", entryDate.getTime());
+        obj.put("Derivation", derivation.serializeToJSON());
+        
+        return obj;
     }
 }

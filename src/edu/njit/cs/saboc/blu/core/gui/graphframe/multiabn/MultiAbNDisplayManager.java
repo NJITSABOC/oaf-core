@@ -69,6 +69,6 @@ public class MultiAbNDisplayManager extends AbNDisplayManager {
 
     @Override
     public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
-        graphFrame.displayTargetAbstractionNewtork(targetAbN);
+        graphFrame.displayTargetAbstractionNetwork(targetAbN);
     }
 }

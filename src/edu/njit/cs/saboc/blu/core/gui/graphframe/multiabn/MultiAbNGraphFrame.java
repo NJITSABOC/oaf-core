@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -17,7 +18,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryPanel;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -27,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -42,14 +41,15 @@ import javax.swing.filechooser.FileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import testing.AbNDerivationCoreParser;
-import testing.AbNDerivationParserUtils;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser.AbNParseException;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
 
 /**
  *
  * @author Chris O
  */
-public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInternalFrame {
+public class MultiAbNGraphFrame extends JInternalFrame {
 
     private final JFrame parentFrame;
 
@@ -64,11 +64,14 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
 
     private final MultiAbNDisplayManager displayManager;
 
-    private final AbNDerivationHistoryPanel derivationHistoryPanel;
+    private final AbNDerivationHistory abnDerivationHistory;
 
-    private final AbNDerivationCoreParser abnParser;
+    private final AbNDerivationParser abnParser;
 
-    public MultiAbNGraphFrame(JFrame parentFrame, AbNGraphFrameInitializers initializers, T abnParser) {
+    public MultiAbNGraphFrame(
+            JFrame parentFrame, 
+            AbNGraphFrameInitializers initializers, 
+            AbNDerivationParser abnParser) {
 
         super("Ontology Abstraction Framework (OAF) Display",
                 true, //resizable
@@ -78,6 +81,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
 
         this.parentFrame = parentFrame;
         this.initializers = initializers;
+        
         this.abnParser = abnParser;
 
         this.displayManager = new MultiAbNDisplayManager(this, null);
@@ -93,35 +97,31 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(taskPanel, BorderLayout.CENTER);
 
-        this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
-
-        Preferences prefs = Preferences.userNodeForPackage(getClass());
+        this.abnDerivationHistory = new AbNDerivationHistory();
 
         JButton showDerivationHistoryBtn = new JButton("Abstraction Network History");
         showDerivationHistoryBtn.addActionListener((ae) -> {
+            
             JDialog historyDialog = new JDialog();
             historyDialog.setSize(600, 800);
 
+            AbNDerivationHistoryPanel derivationHistoryPanel = new AbNDerivationHistoryPanel();
+            
             historyDialog.add(derivationHistoryPanel);
 
-            JButton saveBtn = new JButton("SAVE");
-            saveBtn.addActionListener( (se) -> {
+            JButton saveBtn = new JButton("SAVE CURRENT");
+            saveBtn.addActionListener((se) -> {
+                
                 AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
+
+                JSONArray arr = new JSONArray();
+                JSONObject abnJSON = entry.toJSON();
                 
-                if (entry == null) {
-                    int size = derivationHistoryPanel.getEntries().size();
-                    entry = derivationHistoryPanel.getEntries().get(size - 1);
-                }
-                
-                JSONObject arr = entry.getDerivation().serializeToJSON();
+                arr.add(abnJSON);
                 
                 try (FileWriter file = new FileWriter("testing.json")) {
-                    
                     file.write(arr.toJSONString());
-                    
-                    System.out.println("Serialized JSON Object to File...");
-                    System.out.println("JSON Object: " + arr);
-                    
+   
                     file.close();
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
@@ -129,70 +129,44 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
             });
 
             JButton saveAllBtn = new JButton("SAVE ALL");
-            saveAllBtn.addActionListener((ActionEvent sae) -> {
-                ArrayList<AbNDerivationHistoryEntry> entries = derivationHistoryPanel.getEntries();
+            saveAllBtn.addActionListener((sae) -> {
+                ArrayList<AbNDerivationHistoryEntry> entries = abnDerivationHistory.getHistory();
+                
+                JSONArray arr = new JSONArray();
                 
                 for (AbNDerivationHistoryEntry entry : entries) {
-                    
-                    JSONObject arr = entry.getDerivation().serializeToJSON();
-                    
-                    try (FileWriter file = new FileWriter("testing.json")) {
-                        file.write(arr.toJSONString());
-                        
-                        System.out.println("Serialized JSON Object to File...");
-                        System.out.println("JSON Object: " + arr);
-                        
-                        file.close();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-                    
+                    arr.add(entry.getDerivation().serializeToJSON());
+                }
+                
+                try (FileWriter file = new FileWriter("testing.json")) {
+                    file.write(arr.toJSONString());
+
+                    file.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
             });
 
-            JButton loadBtn = new JButton("LOAD Last Viewed Taxonomy");
+            JButton loadBtn = new JButton("LOAD TEST");
             
-            loadBtn.addActionListener((ActionEvent al) -> {
+            loadBtn.addActionListener( (lae) -> {
                 JSONParser parser = new JSONParser();
                 
                 try {
-                    JSONArray jsonArr = (JSONArray) parser.parse(new FileReader("testing.json"));
-//                    String strJson = prefs.get("Selected View","0");                    
-//                    JSONArray jsonArr = new JSONArray();
-//                    if(strJson != null)  {
-//                        System.out.println("Get the array from prefs");
-//                        jsonArr = (JSONArray) parser.parse((strJson));
-//                    }
-
-                    JSONObject resultObject = AbNDerivationParserUtils.findJSONObjectByName(jsonArr, "ClassName");
-                    String className = resultObject.get("ClassName").toString();
+                    JSONArray json = (JSONArray) parser.parse(new FileReader("testing.json"));
                     
-                    System.out.println(className);
-
-                    AbstractionNetwork abn = abnParser.coreParser(jsonArr).getAbstractionNetwork();
-                    if (abn instanceof PAreaTaxonomy) {
-                        displayPAreaTaxonomy((PAreaTaxonomy) abn, false);
-                    } else if (abn instanceof DisjointAbstractionNetwork) {
-                        DisjointAbstractionNetwork dabn = (DisjointAbstractionNetwork) abn;
-                        if (dabn.getParentAbstractionNetwork() instanceof PAreaTaxonomy) {
-                            displayDisjointPAreaTaxonomy(dabn, false);
-                        } else if (dabn.getParentAbstractionNetwork() instanceof ClusterTribalAbstractionNetwork) {
-                            displayDisjointTAN(dabn, false);
+                    json.forEach( (abnJSON) -> {
+                        try {
+                            AbNDerivation derivation = abnParser.parseDerivationHistory((JSONObject)abnJSON);
+                            
+                        } catch (AbNParseException pe) {
+                            pe.printStackTrace();
                         }
-
-                    } else if (abn instanceof ClusterTribalAbstractionNetwork) {
-                        displayTAN((ClusterTribalAbstractionNetwork) abn, false);
-                    } else if (abn instanceof TargetAbstractionNetwork) {
-                        displayTargetAbstractionNewtork((TargetAbstractionNetwork) abn, false);
-                    }
+                    });
 
                 } catch (Exception ioe) {
                     ioe.printStackTrace();
                 }
-
-                System.out.println("Done Deserialization.");
-                System.gc(); 
-
             });
 
             JPanel subPanel = new JPanel();
@@ -270,6 +244,41 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
     public AbNExplorationPanel getAbNExplorationPanel() {
         return abnExplorationPanel;
     }
+    
+    public void displayAbstractionNetwork(AbstractionNetwork<?> abn) {
+        displayAbstractionNetwork(abn, true);
+    }
+    
+    public void displayAbstractionNetwork(AbstractionNetwork<?> abn, boolean createHistoryEntry) {
+        
+        if(abn instanceof PAreaTaxonomy) {
+            displayPAreaTaxonomy((PAreaTaxonomy)abn, createHistoryEntry);
+        } else if(abn instanceof ClusterTribalAbstractionNetwork) {
+            displayTAN( (ClusterTribalAbstractionNetwork)abn, createHistoryEntry);
+        } else if(abn instanceof TargetAbstractionNetwork) {
+            displayTargetAbstractionNetwork( (TargetAbstractionNetwork)abn, createHistoryEntry);
+        } else if(abn instanceof DisjointAbstractionNetwork) {
+            DisjointAbstractionNetwork<?, ?, ?> disjointAbN = (DisjointAbstractionNetwork)abn;
+            
+            if(disjointAbN.getParentAbstractionNetwork() instanceof PAreaTaxonomy) {
+                
+                displayDisjointPAreaTaxonomy(
+                        (DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea>)disjointAbN, 
+                        createHistoryEntry);
+                
+            } else if(disjointAbN.getParentAbstractionNetwork() instanceof ClusterTribalAbstractionNetwork) {
+                
+                displayDisjointTAN(
+                        (DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>)disjointAbN, 
+                        createHistoryEntry);
+                
+            }
+        }
+    }
+    
+    public void addDerivationHistoryEntry(AbstractionNetwork<?> abn) {
+        this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this));
+    }
 
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
         displayPAreaTaxonomy(taxonomy, true);
@@ -279,15 +288,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<PAreaTaxonomy> entry = new AbNDerivationHistoryEntry<>(
-                    taxonomy.getDerivation(),
-                    (abn) -> {
-                        this.displayPAreaTaxonomy(abn, false);
-                    },
-                    "Partial-area Taxonomy"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(taxonomy);
         }
     }
 
@@ -299,15 +300,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<PAreaTaxonomy> entry = new AbNDerivationHistoryEntry<>(
-                    taxonomy.getDerivation(),
-                    (abn) -> {
-                        this.displayAreaTaxonomy(abn, false);
-                    },
-                    "Area Taxonomy"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(taxonomy);
         }
     }
 
@@ -323,15 +316,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<DisjointAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
-                    disjointTaxonomy.getDerivation(),
-                     (abn) -> {
-                        this.displayDisjointPAreaTaxonomy(abn, false);
-                    },
-                    "Disjoint Partial-area Taxonomy"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(disjointTaxonomy);
         }
     }
 
@@ -343,15 +328,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(tan, initializers.getTANInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<ClusterTribalAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
-                    tan.getDerivation(),
-                    (abn) -> {
-                        this.displayTAN(abn, false);
-                    },
-                    "Cluster Tribal Abstraction Network"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(tan);
         }
     }
 
@@ -363,15 +340,7 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(tan, initializers.getBandTANInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<ClusterTribalAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
-                    tan.getDerivation(),
-                    (abn) -> {
-                        this.displayBandTAN(abn, false);
-                    },
-                    "Band Tribal Abstraction Network"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(tan);
         }
     }
 
@@ -386,35 +355,19 @@ public class MultiAbNGraphFrame<T extends AbNDerivationCoreParser> extends JInte
         initialize(disjointTAN, initializers.getDisjointTANInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<DisjointAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
-                    disjointTAN.getDerivation(),
-                    (abn) -> {
-                        this.displayDisjointTAN(abn, false);
-                    },
-                    "Disjoint Cluster Tribal Abstraction Network"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(disjointTAN);
         }
     }
 
-    public void displayTargetAbstractionNewtork(TargetAbstractionNetwork targetAbN) {
-        displayTargetAbstractionNewtork(targetAbN, true);
+    public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
+        displayTargetAbstractionNetwork(targetAbN, true);
     }
 
-    public void displayTargetAbstractionNewtork(TargetAbstractionNetwork targetAbN, boolean createHistoryEntry) {
+    public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN, boolean createHistoryEntry) {
         initialize(targetAbN, initializers.getTargetAbNInitializer());
 
         if (createHistoryEntry) {
-            AbNDerivationHistoryEntry<TargetAbstractionNetwork> entry = new AbNDerivationHistoryEntry<>(
-                    targetAbN.getDerivation(),
-                    (abn) -> {
-                        this.displayTargetAbstractionNewtork(abn, false);
-                    },
-                    "Target Abstraction Network"
-            );
-
-            this.derivationHistoryPanel.addEntry(entry);
+            addDerivationHistoryEntry(targetAbN);
         }
     }
 

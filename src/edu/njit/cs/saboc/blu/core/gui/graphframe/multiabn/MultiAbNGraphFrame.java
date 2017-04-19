@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -42,8 +41,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
-import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser.AbNParseException;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser;
 
 /**
  *
@@ -106,10 +105,11 @@ public class MultiAbNGraphFrame extends JInternalFrame {
             historyDialog.setSize(600, 800);
 
             AbNDerivationHistoryPanel derivationHistoryPanel = new AbNDerivationHistoryPanel();
+            derivationHistoryPanel.showHistory(abnDerivationHistory);
             
             historyDialog.add(derivationHistoryPanel);
 
-            JButton saveBtn = new JButton("SAVE CURRENT");
+            JButton saveBtn = new JButton("SAVE SELECTED");
             saveBtn.addActionListener((se) -> {
                 
                 AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
@@ -135,7 +135,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 JSONArray arr = new JSONArray();
                 
                 for (AbNDerivationHistoryEntry entry : entries) {
-                    arr.add(entry.getDerivation().serializeToJSON());
+                    arr.add(entry.toJSON());
                 }
                 
                 try (FileWriter file = new FileWriter("testing.json")) {
@@ -147,7 +147,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 }
             });
 
-            JButton loadBtn = new JButton("LOAD TEST");
+            JButton loadBtn = new JButton("LOAD TEST FILE");
             
             loadBtn.addActionListener( (lae) -> {
                 JSONParser parser = new JSONParser();
@@ -155,15 +155,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 try {
                     JSONArray json = (JSONArray) parser.parse(new FileReader("testing.json"));
                     
-                    json.forEach( (abnJSON) -> {
-                        try {
-                            AbNDerivation derivation = abnParser.parseDerivationHistory((JSONObject)abnJSON);
-                            
-                        } catch (AbNParseException pe) {
-                            pe.printStackTrace();
-                        }
-                    });
-
+                    AbNDerivationHistoryParser historyParser = new AbNDerivationHistoryParser();
+                    
+                    ArrayList<AbNDerivationHistoryEntry> entries = historyParser.getDerivationHistory(this, abnParser, json);
+                    
+                    this.abnDerivationHistory.setHistory(entries);
+                    
+                    derivationHistoryPanel.showHistory(abnDerivationHistory);
                 } catch (Exception ioe) {
                     ioe.printStackTrace();
                 }

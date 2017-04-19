@@ -39,6 +39,10 @@ public class AbNDerivationHistoryPanel extends JPanel {
         
         this.add(derivationList, BorderLayout.CENTER);
     }
+    
+    public void showHistory(AbNDerivationHistory history) {
+        this.derivationList.setContents(history.getHistory());
+    }
       
     public AbNDerivationHistoryEntry getSelectedEntry() {
         return selectedEntry;

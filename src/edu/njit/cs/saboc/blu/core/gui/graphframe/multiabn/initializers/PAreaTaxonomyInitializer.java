@@ -20,7 +20,6 @@ import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.PAreaTaxonomy
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JToggleButton;
 
 /**
  *
@@ -69,13 +68,6 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
         abnTypeSelectionPanel.initialize(config, getInitializerType().equals(PAreaInitializerType.PAreaTaxonomy));
         
         taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
-        
-        JToggleButton showRegionsBtn = new JToggleButton("Regions");
-        showRegionsBtn.addActionListener( (ae) -> {
-            
-        });
-        
-        taskBar.addOtherOptionsComponent(showRegionsBtn);
         
         JButton derivationHelpBtn = new JButton("Help!");
         derivationHelpBtn.addActionListener( (ae) -> {

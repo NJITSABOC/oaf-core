@@ -16,13 +16,11 @@ public class PropertyTableModel extends OAFAbstractTableModel<InheritablePropert
         
         if(forArea) {
             return new String[] {
-                String.format("%s Name", propertyType),
-                String.format("%s ID", propertyType)
+                String.format("%s Name", propertyType)
             };
         } else {
             return new String[] {
                 String.format("%s Name", propertyType),
-                String.format("%s ID", propertyType),
                 "Inheritance"
             };
         }
@@ -43,13 +41,11 @@ public class PropertyTableModel extends OAFAbstractTableModel<InheritablePropert
     protected Object[] createRow(InheritableProperty item) {
         if (forArea) {
             return new Object[]{
-                item.getName(),
-                item.getIDAsString(),
+                item.getName()
             };
         } else {
             return new Object[]{
                 item.getName(),
-                item.getIDAsString(),
                 item.getInheritanceType().toString()
             };
         }

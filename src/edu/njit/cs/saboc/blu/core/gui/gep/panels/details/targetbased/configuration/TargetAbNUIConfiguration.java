@@ -3,7 +3,10 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurat
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNUIConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.AggregateTargetGroupPanel;
@@ -11,6 +14,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.ChildTargetGr
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.ParentTargetGroupTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.TargetAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.TargetGroupPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.TargetGroupSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
@@ -44,20 +48,35 @@ public abstract class TargetAbNUIConfiguration extends AbNUIConfiguration<Target
     public SimpleAbNDetailsPanel createAbNDetailsPanel() {
         return new TargetAbNDetailsPanel(config);
     }
+    
+    @Override
+    public CompactAbNDetailsPanel createCompactAbNDetailsPanel() {
+        return new CompactAbNDetailsPanel(config);
+    }
 
     @Override
-    public boolean hasGroupDetailsPanel() {
+    public boolean hasNodeDetailsPanel() {
         return true;
     }
 
     @Override
-    public NodeDashboardPanel createGroupDetailsPanel() {
+    public NodeDashboardPanel createNodeDetailsPanel() {
         
         if(config.getTargetAbstractionNetwork().isAggregated()) {
             return new AggregateTargetGroupPanel(config);
         } else {
             return new TargetGroupPanel(config);
         }
+    }
+    
+    @Override
+    public CompactNodeDashboardPanel<TargetGroup> createCompactNodeDetailsPanel() {
+        
+        return new CompactNodeDashboardPanel<>(
+            new NodeSummaryPanel<>(new TargetGroupSummaryTextFactory(config)),
+            this.getNodeOptionsPanel(), 
+            config);
+        
     }
     
     @Override

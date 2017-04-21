@@ -16,7 +16,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNHistoryNavigationPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -28,8 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -58,13 +56,18 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final AbNExplorationPanel abnExplorationPanel;
 
     private Optional<AbstractionNetworkGraph> optCurrentGraph = Optional.empty();
+    
     private Optional<TaskBarPanel> optCurrentTaskBarPanel = Optional.empty();
 
     private final AbNGraphFrameInitializers initializers;
 
     private final MultiAbNDisplayManager displayManager;
 
+
     private final AbNDerivationHistory abnDerivationHistory;
+
+    private final AbNHistoryNavigationPanel historyNavigationPanel;
+
 
     private final AbNDerivationParser abnParser;
 
@@ -97,91 +100,12 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(taskPanel, BorderLayout.CENTER);
 
+
         this.abnDerivationHistory = new AbNDerivationHistory();
 
-        JButton showDerivationHistoryBtn = new JButton("Abstraction Network History");
-        showDerivationHistoryBtn.addActionListener((ae) -> {
-            
-            JDialog historyDialog = new JDialog();
-            historyDialog.setSize(600, 800);
+        this.historyNavigationPanel = new AbNHistoryNavigationPanel();
 
-            AbNDerivationHistoryPanel derivationHistoryPanel = new AbNDerivationHistoryPanel();
-            
-            historyDialog.add(derivationHistoryPanel);
-
-            JButton saveBtn = new JButton("SAVE CURRENT");
-            saveBtn.addActionListener((se) -> {
-                
-                AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
-
-                JSONArray arr = new JSONArray();
-                JSONObject abnJSON = entry.toJSON();
-                
-                arr.add(abnJSON);
-                
-                try (FileWriter file = new FileWriter("testing.json")) {
-                    file.write(arr.toJSONString());
-   
-                    file.close();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            });
-
-            JButton saveAllBtn = new JButton("SAVE ALL");
-            saveAllBtn.addActionListener((sae) -> {
-                ArrayList<AbNDerivationHistoryEntry> entries = abnDerivationHistory.getHistory();
-                
-                JSONArray arr = new JSONArray();
-                
-                for (AbNDerivationHistoryEntry entry : entries) {
-                    arr.add(entry.getDerivation().serializeToJSON());
-                }
-                
-                try (FileWriter file = new FileWriter("testing.json")) {
-                    file.write(arr.toJSONString());
-
-                    file.close();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            });
-
-            JButton loadBtn = new JButton("LOAD TEST");
-            
-            loadBtn.addActionListener( (lae) -> {
-                JSONParser parser = new JSONParser();
-                
-                try {
-                    JSONArray json = (JSONArray) parser.parse(new FileReader("testing.json"));
-                    
-                    json.forEach( (abnJSON) -> {
-                        try {
-                            AbNDerivation derivation = abnParser.parseDerivationHistory((JSONObject)abnJSON);
-                            
-                        } catch (AbNParseException pe) {
-                            pe.printStackTrace();
-                        }
-                    });
-
-                } catch (Exception ioe) {
-                    ioe.printStackTrace();
-                }
-            });
-
-            JPanel subPanel = new JPanel();
-            subPanel.add(saveBtn);
-            subPanel.add(saveAllBtn);
-            subPanel.add(loadBtn);
-            historyDialog.add(subPanel, BorderLayout.AFTER_LAST_LINE);
-
-            historyDialog.setVisible(true);
-        });
-
-        JPanel historyButtonPanel = new JPanel();
-        historyButtonPanel.add(showDerivationHistoryBtn);
-
-        northPanel.add(historyButtonPanel, BorderLayout.WEST);
+        northPanel.add(historyNavigationPanel, BorderLayout.WEST);
 
         this.add(northPanel, BorderLayout.NORTH);
         this.add(abnExplorationPanel, BorderLayout.CENTER);

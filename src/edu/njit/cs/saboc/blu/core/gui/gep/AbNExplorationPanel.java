@@ -7,13 +7,9 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.GenericPartitionEntry;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel.AbNEntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import java.awt.BorderLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 
 /**
@@ -23,27 +19,18 @@ import javax.swing.JSplitPane;
 public class AbNExplorationPanel extends JPanel {
     
     private AbNConfiguration configuration;
-    
-    private final JSplitPane splitPane;
-    
+
     private final AbNDashboardPanel dashboardPanel = new AbNDashboardPanel();
     private final AbNDisplayPanel displayPanel = new AbNDisplayPanel();
 
+    private final FloatingAbNDashboardFrame dashboardFrame;
+    
     public AbNExplorationPanel() {
         super(new BorderLayout());
 
-        splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-
-        splitPane.setLeftComponent(dashboardPanel);
-        splitPane.setRightComponent(displayPanel);
-        
-        this.addComponentListener(new ComponentAdapter() {
-            
-            @Override
-            public void componentResized(ComponentEvent e) {
-                splitPane.setDividerLocation(500);
-            }
-        });
+        dashboardFrame = new FloatingAbNDashboardFrame(
+                this,
+                dashboardPanel);
 
         displayPanel.addAbNSelectionListener(new AbNEntitySelectionListener() {
 
@@ -68,8 +55,12 @@ public class AbNExplorationPanel extends JPanel {
                 dashboardPanel.reset();
             }
         });
+        
+        displayPanel.add(dashboardFrame);
+        
+        dashboardFrame.setLocation(10, 160);
 
-        this.add(splitPane, BorderLayout.CENTER);
+        this.add(displayPanel, BorderLayout.CENTER);
     }
     
     public AbNDashboardPanel getDashboardPanel() {
@@ -81,6 +72,7 @@ public class AbNExplorationPanel extends JPanel {
     }
     
     public void showLoading() {
+        dashboardFrame.setVisible(false);
         displayPanel.doLoading();
     }
     
@@ -114,5 +106,7 @@ public class AbNExplorationPanel extends JPanel {
         displayPanel.updateWidgetLocations();
         
         config.getUIConfiguration().setDisplayPanel(displayPanel);
+        
+        dashboardFrame.setVisible(true);
     }
 }

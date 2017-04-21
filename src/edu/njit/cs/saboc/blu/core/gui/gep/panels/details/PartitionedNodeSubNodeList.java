@@ -12,6 +12,8 @@ import javax.swing.JSplitPane;
 /**
  *
  * @author Chris O
+ * @param <T>
+ * @param <V>
  */
 public class PartitionedNodeSubNodeList<T extends PartitionedNode, V extends SinglyRootedNode> extends BaseNodeInformationPanel<T> {
     
@@ -34,6 +36,8 @@ public class PartitionedNodeSubNodeList<T extends PartitionedNode, V extends Sin
         this.nodeList = new NodeList(configuration);
         
         this.nodeList.addEntitySelectionListener(new EntitySelectionAdapter<V>() {
+            
+            @Override
             public void entityClicked(V node) {
                 ArrayList<Concept> sortedConcepts = new ArrayList<>(node.getConcepts());
                 sortedConcepts.sort((a,b) -> a.getName().compareTo(b.getName()));
@@ -41,6 +45,7 @@ public class PartitionedNodeSubNodeList<T extends PartitionedNode, V extends Sin
                 conceptList.setContents(sortedConcepts);
             }
             
+            @Override
             public void noEntitySelected() {
                 conceptList.clearContents();
             }

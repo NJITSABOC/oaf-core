@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.NodeConceptHierarchicalViewPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
@@ -10,7 +9,9 @@ import javax.swing.ScrollPaneConstants;
 
 /**
  *
- * @author Den
+ * @author Chris O
+ * 
+ * @param <T>
  */
 public class ConceptHierarchyPanel<T extends SinglyRootedNode> extends BaseNodeInformationPanel<T> {
 

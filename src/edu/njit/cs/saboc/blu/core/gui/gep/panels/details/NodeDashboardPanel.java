@@ -11,6 +11,8 @@ import javax.swing.JTabbedPane;
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
 public class NodeDashboardPanel<T extends Node> extends BaseNodeInformationPanel<T> {
     
@@ -48,6 +50,7 @@ public class NodeDashboardPanel<T extends Node> extends BaseNodeInformationPanel
         return configuration;
     }
     
+    @Override
     public void setContents(T node) {
         nodeNameLabel.setText(node.getName());
         
@@ -56,6 +59,7 @@ public class NodeDashboardPanel<T extends Node> extends BaseNodeInformationPanel
         });
     }
     
+    @Override
     public void clearContents() {
         nodeNameLabel.setText("");
         

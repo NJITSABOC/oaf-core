@@ -43,12 +43,12 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
     }
 
     @Override
-    public boolean hasContainerDetailsPanel() {
+    public boolean hasPartitionedNodeDetailsPanel() {
         return true;
     }
 
     @Override
-    public NodeDashboardPanel createContainerDetailsPanel() {
+    public NodeDashboardPanel createPartitionedNodeDetailsPanel() {
         return new DiffAreaPanel(getConfiguration());
     }
 
@@ -58,12 +58,12 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
     }
 
     @Override
-    public boolean hasGroupDetailsPanel() {
+    public boolean hasNodeDetailsPanel() {
         return true;
     }
 
     @Override
-    public NodeDashboardPanel createGroupDetailsPanel() {
+    public NodeDashboardPanel createNodeDetailsPanel() {
         return new DiffPAreaPanel(getConfiguration(), changeExplanationFactory);
     }
 }

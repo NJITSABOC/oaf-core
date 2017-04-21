@@ -34,7 +34,7 @@ public class PopoutNodeDetailsButton<T extends Node> extends NodeOptionButton<T>
     
     private void displayDetailsWindow() {
         JDialog detailsDialog = new JDialog();
-        detailsDialog.setSize(700, 600);
+        detailsDialog.setSize(700, 800);
         
         detailsDialog.add(generatorAction.generatePanel());
         detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

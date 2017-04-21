@@ -30,7 +30,8 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
     
     private Optional<T> currentNode = Optional.empty();
 
-    public NodeDetailsPanel(NodeSummaryPanel nodeSummaryPanel, 
+    public NodeDetailsPanel(
+            NodeSummaryPanel nodeSummaryPanel, 
             NodeOptionsPanel nodeOptionsMenuPanel, 
             NodeConceptList nodeConceptList,
             AbNConfiguration config) {
@@ -46,6 +47,7 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
         this.splitPane = NodeDetailsPanel.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         
         JPanel upperPanel = new JPanel(new BorderLayout());
+        
         upperPanel.add(nodeSummaryPanel, BorderLayout.CENTER);
         upperPanel.add(nodeOptionsMenuPanel, BorderLayout.SOUTH);
         
@@ -60,6 +62,7 @@ public class NodeDetailsPanel<T extends Node> extends BaseNodeInformationPanel<T
         return nodeConceptList;
     }
     
+    @Override
     public void setContents(T node) {
         this.currentNode = Optional.of(node);
 

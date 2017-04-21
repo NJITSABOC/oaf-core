@@ -8,12 +8,13 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class PartitionedNodePanel<T extends PartitionedNode> extends NodeDashboardPanel<T> {
 
     private final PartitionedNodeSubNodeList groupListPanel;
     
-    private final DisjointAbNMetricsPanel disjointMetricsPanel;
+    private final DisjointAbNMetricsPanel<T> disjointMetricsPanel;
     
     private final int disjointMetricsTabIndex;
 

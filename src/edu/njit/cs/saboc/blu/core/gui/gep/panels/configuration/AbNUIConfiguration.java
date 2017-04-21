@@ -4,8 +4,11 @@ import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.concepthierarchy.ConceptPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
@@ -13,6 +16,8 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
 public abstract class AbNUIConfiguration<T extends Node> {
     
@@ -46,6 +51,10 @@ public abstract class AbNUIConfiguration<T extends Node> {
         return listenerConfiguration;
     }
     
+    public AbNOptionsPanel getAbNOptionsPanel() {
+        return new AbNOptionsPanel();
+    }
+    
     public abstract OAFAbstractTableModel<ParentNodeDetails<T>> getParentNodeTableModel();
     public abstract OAFAbstractTableModel<T> getChildNodeTableModel();
     
@@ -55,6 +64,9 @@ public abstract class AbNUIConfiguration<T extends Node> {
     
     public abstract SimpleAbNDetailsPanel createAbNDetailsPanel();
     
-    public abstract boolean hasGroupDetailsPanel();
-    public abstract NodeDashboardPanel<T> createGroupDetailsPanel();
+    public abstract CompactAbNDetailsPanel createCompactAbNDetailsPanel();
+    
+    public abstract boolean hasNodeDetailsPanel();
+    public abstract NodeDashboardPanel<T> createNodeDetailsPanel();
+    public abstract CompactNodeDashboardPanel<T> createCompactNodeDetailsPanel();
 }

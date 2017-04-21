@@ -5,7 +5,10 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNUIConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AggregateAreaPanel;
@@ -16,6 +19,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAr
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaTaxonomyDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ParentPAreaTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaSummaryTextFactory;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
@@ -46,17 +51,27 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     }
 
     @Override
-    public boolean hasContainerDetailsPanel() {
+    public boolean hasPartitionedNodeDetailsPanel() {
         return true;
     }
 
     @Override
-    public NodeDashboardPanel createContainerDetailsPanel() {
+    public NodeDashboardPanel createPartitionedNodeDetailsPanel() {
         if(config.getPAreaTaxonomy().isAggregated()) {
             return new AggregateAreaPanel(config);
         } else {
             return new AreaPanel(config);
         }
+    }
+    
+    @Override
+    public CompactNodeDashboardPanel<Area> createCompactPartitionedNodeDetailsPanel() {
+        
+        return new CompactNodeDashboardPanel<>(
+            new NodeSummaryPanel<>(new AreaSummaryTextFactory(config)),
+            this.getPartitionedNodeOptionsPanel(), 
+            config);
+        
     }
 
     @Override
@@ -65,17 +80,32 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     }
 
     @Override
-    public boolean hasGroupDetailsPanel() {
+    public CompactAbNDetailsPanel createCompactAbNDetailsPanel() {
+        return new CompactAbNDetailsPanel(config);
+    }
+
+    @Override
+    public boolean hasNodeDetailsPanel() {
         return true;
     }
 
     @Override
-    public NodeDashboardPanel createGroupDetailsPanel() {
+    public NodeDashboardPanel createNodeDetailsPanel() {
         if(config.getPAreaTaxonomy().isAggregated()) {
             return new AggregatePAreaPanel(config);
         } else {
             return new PAreaPanel(config);
         }
+    }
+
+    @Override
+    public CompactNodeDashboardPanel<PArea> createCompactNodeDetailsPanel() {
+        
+        return new CompactNodeDashboardPanel<>(
+            new NodeSummaryPanel<>(new PAreaSummaryTextFactory(config)),
+            this.getNodeOptionsPanel(), 
+            config);
+        
     }
     
     public OAFAbstractTableModel<InheritableProperty> getPropertyTableModel(boolean forArea) {
@@ -91,5 +121,4 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     public OAFAbstractTableModel<PArea> getChildNodeTableModel() {
         return new ChildPAreaTableModel(config);
     }
-    
 }

@@ -13,6 +13,8 @@ import javax.swing.JSplitPane;
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
 public class AggregatedNodesPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 

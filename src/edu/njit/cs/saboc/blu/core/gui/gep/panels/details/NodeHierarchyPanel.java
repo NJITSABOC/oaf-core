@@ -15,6 +15,8 @@ import javax.swing.JSplitPane;
 /**
  *
  * @author Chris O
+ * 
+ * @param <T>
  */
 public class NodeHierarchyPanel<T extends Node> extends BaseNodeInformationPanel<T> {
 

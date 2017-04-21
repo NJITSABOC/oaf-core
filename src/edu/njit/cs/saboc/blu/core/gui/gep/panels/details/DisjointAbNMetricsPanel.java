@@ -25,8 +25,9 @@ import javax.swing.JTabbedPane;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
+public class DisjointAbNMetricsPanel<T extends PartitionedNode> extends BaseNodeInformationPanel<T> {
     
     private final AbstractEntityList<OverlappingNodeEntry> overlappingGroupTable;
     private final AbstractEntityList<OverlappingDetailsEntry> overlappingDetailsTable;
@@ -170,9 +171,8 @@ public class DisjointAbNMetricsPanel extends BaseNodeInformationPanel {
     }
     
     @Override
-    public void setContents(Node node) {
-        PartitionedNode partitionedNode = (PartitionedNode)node;
-        
+    public void setContents(T partitionedNode) {
+
         splitPane.setDividerLocation(300);
         
         DisjointAbstractionNetwork disjointAbN = configuration.getDisjointAbstractionNetworkFor(partitionedNode);

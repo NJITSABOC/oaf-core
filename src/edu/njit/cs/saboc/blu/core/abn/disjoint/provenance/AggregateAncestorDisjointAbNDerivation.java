@@ -7,11 +7,11 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
- * Stores the arguments needed to derive a given aggregate ancestor disjoint
- * abstraction network.
- * 
+ *
  * @author Chris O
  */
 public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivation
@@ -76,7 +76,6 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
         return aggregateDisjointAbN.getAncestorDisjointAbN(nodes.iterator().next());
     }
 
-    @Override
     public String getName() {
         return String.format("%s %s", selectedAggregatePAreaRoot.getName(), getAbstractionNetworkTypeName());
     }
@@ -85,4 +84,31 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     public String getAbstractionNetworkTypeName() {
         return String.format("Ancestor %s", aggregateBase.getAbstractionNetworkTypeName());
     }
+
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName", "AggregateAncestorTANDerivation");       
+        result.add(obj_class);
+        
+        //serialzie aggregateBase
+        JSONObject obj_aggregateBase = new JSONObject();
+        obj_aggregateBase.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.add(obj_aggregateBase);
+
+        //serialize minBound
+        JSONObject obj_minBound = new JSONObject();
+        obj_minBound.put("Bound", minBound);
+        result.add(obj_minBound);
+        
+        //serialize selectedAggregatePAreaRoot
+        JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
+        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.add(obj_selectedAggregatePAreaRoot);
+        
+        return result;
+    }    
 }

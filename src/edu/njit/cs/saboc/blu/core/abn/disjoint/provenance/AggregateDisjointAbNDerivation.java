@@ -2,7 +2,10 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
-import static javafx.scene.input.KeyCode.T;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 /**
  * Stores the arguments needed to create an aggregate disjoint abstraction 
@@ -55,4 +58,27 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     public String getAbstractionNetworkTypeName() {
         return String.format("Aggregate %s", nonAggregateDerivation.getAbstractionNetworkTypeName());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateDisjointAbNDerivation");       
+        result.add(obj_class);
+        
+        //serialzie nonAggregateDerivation
+        JSONObject obj_nonAggregateDerivation = new JSONObject();
+        obj_nonAggregateDerivation.put("BaseDerivation", nonAggregateDerivation.serializeToJSON());   
+        result.add(obj_nonAggregateDerivation);
+
+        //serialize aggregateBound
+        JSONObject obj_aggregateBound = new JSONObject();
+        obj_aggregateBound.put("Bound", aggregateBound);
+        result.add(obj_aggregateBound);
+        
+        return result;
+    }    
+
 }

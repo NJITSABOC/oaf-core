@@ -5,6 +5,10 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create a TAN from a partitioned node
@@ -58,4 +62,26 @@ public class TANFromPartitionedNodeDerivation<
     public String getName() {
         return String.format("%s %s", node.getName(), super.getAbstractionNetworkTypeName());
     }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","TANFromPartitionedNodeDerivation");       
+        result.add(obj_class);
+
+        //serialzie parentAbNDerivation
+        JSONObject obj_parentAbNDerivation = new JSONObject();
+        obj_parentAbNDerivation.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
+        result.add(obj_parentAbNDerivation);
+
+        //serialize node
+        JSONObject obj_node = new JSONObject();
+        obj_node.put("NodeName", node.getName());
+        result.add(obj_node);
+
+        return result;
+    } 
 }

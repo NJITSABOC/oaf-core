@@ -10,6 +10,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -86,5 +88,27 @@ public class PartitionNodeDisjointAbNDerivation<
                 this.getFactory(),
                 partitionedAbN,
                 overlappingNodes);
+    }
+
+    @Override
+    public JSONArray serializeToJSON() {
+        
+        JSONArray result = new JSONArray();
+
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName", "PartitionNodeDisjointAbNDerivation");
+        result.add(obj_class);
+
+        //serialzie parentAbNDerivation
+        JSONObject obj_parentAbNDerivation = new JSONObject();
+        obj_parentAbNDerivation.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
+        
+        JSONObject obj_partitionNodeName = new JSONObject();
+        obj_partitionNodeName.put("PartitionedNodeName", this.partitionedNodeName);
+        
+        result.add(obj_parentAbNDerivation);
+
+        return result;
     }
 }

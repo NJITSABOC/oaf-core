@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Stores the arguments needed to create an Aggregate Root Subtaxonomy
@@ -81,5 +83,32 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public String getAbstractionNetworkTypeName() {
         return "Aggregate Root Subtaxonomy";
+    }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+        JSONArray result = new JSONArray();
+        
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","AggregateRootSubtaxonomyDerivation");       
+        result.add(obj_class);
+        
+        //serialzie aggregateBase
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", aggregateBase.serializeToJSON());   
+        result.add(obj_base);
+
+        //serialize minBound
+        JSONObject obj_minBound = new JSONObject();
+        obj_minBound.put("Bound", minBound);
+        result.add(obj_minBound);
+        
+        //serialize selectedAggregatePAreaRoot
+        JSONObject obj_selectedAggregatePAreaRoot = new JSONObject();
+        obj_selectedAggregatePAreaRoot.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.add(obj_selectedAggregatePAreaRoot);
+        
+        return result;
     }
 }

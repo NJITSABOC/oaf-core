@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateTargetGroup;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -57,6 +59,30 @@ public class ExpandedTargetAbNDerivation extends TargetAbNDerivation
     public String getDescription() {
         return String.format("Expanded aggregate target abstraction network (%s)", 
                 aggregateTargetGroupRoot.getName());
+    }
+    
+    @Override
+    public JSONArray serializeToJSON() {
+ 
+        JSONArray result = new JSONArray();
+        //serialize class
+        JSONObject obj_class = new JSONObject();
+        obj_class.put("ClassName","ExpandedTargetAbNDerivation");       
+        result.add(obj_class);
+
+        
+        //serialzie base
+        JSONObject obj_base = new JSONObject();
+        obj_base.put("BaseDerivation", base.serializeToJSON());   
+        result.add(obj_base);
+
+        //serialize aggregateTargetGroupRoot
+        JSONObject obj_aggregateTargetGroupRoot = new JSONObject();
+        obj_aggregateTargetGroupRoot.put("ConceptID", aggregateTargetGroupRoot.getIDAsString());
+        result.add(obj_aggregateTargetGroupRoot);
+               
+        return result;
+        
     }
     
 }

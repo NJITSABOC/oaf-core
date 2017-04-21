@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
@@ -30,6 +31,7 @@ public class TANFromPartitionedNodeDerivation<
         super(parentAbNDerivation.getSourceOntology(), factory);
         
         this.parentAbNDerivation = parentAbNDerivation;
+        
         this.node = node;
     }
     
@@ -48,11 +50,11 @@ public class TANFromPartitionedNodeDerivation<
 
     @Override
     public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
+        PartitionedAbstractionNetwork<?, ?> partitionedAbN = (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork();
+        
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-
-        return generator.deriveTANFromMultiRootedHierarchy(
-                node.getHierarchy(),
-                super.getFactory());
+       
+        return generator.createTANFromPartitionedNode(partitionedAbN, node, super.getFactory());
     }
 
     @Override
@@ -65,7 +67,7 @@ public class TANFromPartitionedNodeDerivation<
         JSONObject result = new JSONObject();
 
         result.put("ClassName", "TANFromPartitionedNodeDerivation");       
-        result.put("ParentDerivation", parentAbNDerivation.serializeToJSON());
+        result.put("BaseDerivation", parentAbNDerivation.serializeToJSON());
         result.put("NodeName", node.getName());
  
         return result;

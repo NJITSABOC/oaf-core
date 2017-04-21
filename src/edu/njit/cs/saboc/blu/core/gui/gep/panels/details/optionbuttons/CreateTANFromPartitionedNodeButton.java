@@ -18,6 +18,8 @@ public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> exten
 
     private final TANFactory factory;
     
+    private final PartitionedAbNConfiguration config;
+    
     public CreateTANFromPartitionedNodeButton(
             TANFactory factory,
             PartitionedAbNConfiguration config,
@@ -26,16 +28,20 @@ public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> exten
         super(config.getTextConfiguration().getContainerTypeName(false).toLowerCase(), listener);
         
         this.factory = factory;
+        
+        this.config = config;
     }
 
     @Override
     public ClusterTribalAbstractionNetwork deriveTAN() {
         T partitionedNode = super.getCurrentNode().get();
-        
-        Hierarchy<Concept> hierarchy = partitionedNode.getHierarchy();
 
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromMultiRootedHierarchy(hierarchy, factory);
+        
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromPartitionedNode(
+                config.getAbstractionNetwork(), 
+                partitionedNode, 
+                factory);
         
         return tan;
     }

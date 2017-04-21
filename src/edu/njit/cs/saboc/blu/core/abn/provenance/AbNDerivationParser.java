@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
@@ -63,7 +58,7 @@ import org.json.simple.JSONObject;
  * @author Chris O
  * 
  */
-public class AbNDerivationParser {
+public abstract class AbNDerivationParser {
     
     public static class AbNParseException extends Exception {
         public AbNParseException(String message) {
@@ -86,6 +81,10 @@ public class AbNDerivationParser {
         this.conceptFactory = conceptFactory;
         this.propertyFactory = propertyFactory;
         this.derivationFactory = derivationFactory;
+    }
+    
+    public PropertyLocationDataFactory getPropertyLocationFactory() {
+        return propertyFactory;
     }
 
     public AbNDerivation parseDerivationHistory(JSONObject obj) throws AbNParseException {
@@ -370,16 +369,18 @@ public class AbNDerivationParser {
 
         String partitionedNodeName = (String) obj.get("NodeName");
 
-        Set<?> node = partitionedAbN.getBaseAbstractionNetwork().searchNodes(partitionedNodeName.toLowerCase());
+        Optional<?> node = partitionedAbN.getBaseAbstractionNetwork().getNodes().stream().filter( (partitionedNode) -> {
+            return partitionedNode.getName().equalsIgnoreCase(partitionedNodeName);
+        }).findAny();
 
-        if (node.isEmpty()) {
+        if (!node.isPresent()) {
             throw new AbNParseException("Partitioned node not found.");
         }
         
         return new PartitionedNodeDisjointAbNDerivation(
                 new DisjointTANFactory(), 
                 parentAbNDerivation, 
-                (PartitionedNode)node.iterator().next());
+                (PartitionedNode)node.get());
     }
 
     public ExpandedDisjointAbNDerivation parseExpandedDisjointAbNDerivation(JSONObject obj) throws AbNParseException {
@@ -463,18 +464,20 @@ public class AbNDerivationParser {
         
         PartitionedAbstractionNetwork<?, ?> partitionedAbN = (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork();
         
-        String partitionedNodeName = (String)obj.get("NodeName");
-        
-        Set<?> node = partitionedAbN.getBaseAbstractionNetwork().searchNodes(partitionedNodeName.toLowerCase());
-        
-        if(node.isEmpty()) {
+        String partitionedNodeName = (String) obj.get("NodeName");
+
+        Optional<?> node = partitionedAbN.getBaseAbstractionNetwork().getNodes().stream().filter( (partitionedNode) -> {
+            return partitionedNode.getName().equalsIgnoreCase(partitionedNodeName);
+        }).findAny();
+
+        if (!node.isPresent()) {
             throw new AbNParseException("Partitioned node not found.");
         }
        
         return new TANFromPartitionedNodeDerivation(
                 parentAbNDerivation, 
                 derivationFactory.getTANFactory(), 
-                (PartitionedNode)node.iterator().next());
+                (PartitionedNode)node.get());
     }
 
     public TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONObject obj) throws AbNParseException {
@@ -485,30 +488,7 @@ public class AbNDerivationParser {
     }
 
     // Target Parser
-    public TargetAbNDerivation parseTargetAbNDerivation(JSONObject obj) throws AbNParseException {
-
-        if(!obj.containsKey("PropertyID")) {
-            throw new AbNParseException("Property ID not specified.");
-        }
-        
-        Concept sourceHierarchyRoot = getRoot(obj, "SourceRootID");
-        Concept targetHierarchyRoot =  getRoot(obj, "TargetRootID");
-        
-        String propertyID = (String)obj.get("PropertyID");
-        
-        Set<InheritableProperty> property = propertyFactory.getPropertiesFromIds(new ArrayList<>(Arrays.asList(propertyID)));
-        
-        if(property.isEmpty()) {
-            throw new AbNParseException("Property with specified ID not found.");
-        }
-  
-        return new TargetAbNDerivation(
-                sourceOntology, 
-                derivationFactory.getTargetAbNFactory(), 
-                sourceHierarchyRoot, 
-                property.iterator().next(), 
-                targetHierarchyRoot);
-    }
+    public abstract TargetAbNDerivation parseTargetAbNDerivation(JSONObject obj) throws AbNParseException;
 
     public <T extends AbNDerivation> ExpandedTargetAbNDerivation parseExpandedTargetAbNDerivation(JSONObject obj) throws AbNParseException {
         return new ExpandedTargetAbNDerivation(getBaseAbNDerivation(obj), getRoot(obj));

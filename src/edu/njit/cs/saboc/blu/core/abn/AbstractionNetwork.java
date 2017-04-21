@@ -69,8 +69,11 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
      * @return 
      */
     public Set<NODE_T> getNodesWith(Concept concept) {
+        
         Set<NODE_T> nodes = nodeHierarchy.getNodes().stream().filter( 
-                (node) -> {return node.getConcepts().contains(concept); }).collect(Collectors.toSet());
+                (node) -> {
+                    return node.getConcepts().contains(concept); 
+                }).collect(Collectors.toSet());
         
         return nodes;
     }

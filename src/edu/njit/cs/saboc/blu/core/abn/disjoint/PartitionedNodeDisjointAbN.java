@@ -25,10 +25,12 @@ public class PartitionedNodeDisjointAbN<
     
     public PartitionedNodeDisjointAbN(DisjointAbstractionNetwork source, PARTITIONNODE_T partitionedNode) {
         
-        super(source, new PartitionedNodeDisjointAbNDerivation(
-                source.getFactory(), 
-                source.getParentAbstractionNetwork().getDerivation(),
-                partitionedNode));
+        super(source, 
+                new PartitionedNodeDisjointAbNDerivation(
+                    source.getFactory(), 
+                    source.getParentAbstractionNetwork().getDerivation(),
+                    partitionedNode)
+        );
         
         this.partitionedNode = partitionedNode;
     }

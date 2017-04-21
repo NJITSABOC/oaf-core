@@ -21,10 +21,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -35,12 +31,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.filechooser.FileFilter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser;
 
 /**
  *
@@ -67,9 +59,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
     private final AbNHistoryNavigationPanel historyNavigationPanel;
 
-
-    private final AbNDerivationParser abnParser;
-
     public MultiAbNGraphFrame(
             JFrame parentFrame, 
             AbNGraphFrameInitializers initializers, 
@@ -83,8 +72,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         this.parentFrame = parentFrame;
         this.initializers = initializers;
-        
-        this.abnParser = abnParser;
 
         this.displayManager = new MultiAbNDisplayManager(this, null);
 
@@ -102,7 +89,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         this.abnDerivationHistory = new AbNDerivationHistory();
 
-        this.historyNavigationPanel = new AbNHistoryNavigationPanel();
+        this.historyNavigationPanel = new AbNHistoryNavigationPanel(
+                this,
+                abnDerivationHistory,
+                abnParser);
 
         northPanel.add(historyNavigationPanel, BorderLayout.WEST);
 

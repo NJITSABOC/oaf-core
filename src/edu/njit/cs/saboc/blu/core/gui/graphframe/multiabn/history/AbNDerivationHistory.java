@@ -9,10 +9,18 @@ import org.json.simple.JSONArray;
  */
 public class AbNDerivationHistory {
     
-    private final ArrayList<AbNDerivationHistoryEntry> entries = new ArrayList<>();
+    private ArrayList<AbNDerivationHistoryEntry> entries;
     
     public AbNDerivationHistory() {
-        
+        setHistory(new ArrayList<>());
+    }
+    
+    public AbNDerivationHistory(ArrayList<AbNDerivationHistoryEntry> entries) {
+        setHistory(entries);
+    }
+    
+    public final void setHistory(ArrayList<AbNDerivationHistoryEntry> entries) {
+        this.entries = entries;
     }
     
     public void addEntry(AbNDerivationHistoryEntry entry) {

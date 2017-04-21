@@ -18,7 +18,9 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SimpleDisjointAbNDeriv
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SubsetDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateAncestorSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregatePAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateRootSubtaxonomyDerivation;
@@ -27,6 +29,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.ExpandedSubtaxono
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RelationshipSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RootSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.SimplePAreaTaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateAncestorSubTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateRootSubTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.AggregateTANDerivation;
@@ -39,6 +42,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDeri
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.ExpandedTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
+import edu.njit.cs.saboc.blu.core.graph.tan.DisjointTANFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.PropertyLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -193,13 +197,17 @@ public class AbNDerivationParser {
         
         return (T)this.parseDerivationHistory((JSONObject)obj.get("BaseDerivation"));
     }
-    
+
     public SimplePAreaTaxonomyDerivation parseSimplePAreaTaxonomyDerivation(JSONObject obj) throws AbNParseException {
+        return parseSimplePAreaTaxonomyDerivation(obj, derivationFactory.getPAreaTaxonomyFactory());
+    }
+    
+    public SimplePAreaTaxonomyDerivation parseSimplePAreaTaxonomyDerivation(JSONObject obj, PAreaTaxonomyFactory factory) throws AbNParseException {
         
         SimplePAreaTaxonomyDerivation result = new SimplePAreaTaxonomyDerivation(
                 sourceOntology, 
                 getRoot(obj), 
-                derivationFactory.getPAreaTaxonomyFactory());
+                factory);
         
         return result;
     }
@@ -281,7 +289,7 @@ public class AbNDerivationParser {
             // TODO: Warning?
         }
 
-        return new SimpleDisjointAbNDerivation(derivationFactory.getDisjointPAreaAbNFactory(), getBaseAbNDerivation(obj), roots);
+        return new SimpleDisjointAbNDerivation(new DisjointPAreaTaxonomyFactory(), getBaseAbNDerivation(obj), roots);
     }
 
     public SubsetDisjointAbNDerivation parseSubsetDisjointAbNDerivation(JSONObject obj) throws AbNParseException {
@@ -369,7 +377,7 @@ public class AbNDerivationParser {
         }
         
         return new PartitionedNodeDisjointAbNDerivation(
-                derivationFactory.getDisjointTANbNFactory(), 
+                new DisjointTANFactory(), 
                 parentAbNDerivation, 
                 (PartitionedNode)node.iterator().next());
     }
@@ -390,8 +398,12 @@ public class AbNDerivationParser {
         return new AggregateAncestorDisjointAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
     }
 
-    // TAN parser
     public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONObject obj) throws AbNParseException {
+        return this.parseSimpleClusterTANDerivation(obj, derivationFactory.getTANFactory());
+    }
+    
+    // TAN parser
+    public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONObject obj, TANFactory factory) throws AbNParseException {
         
         if(!obj.containsKey("ConceptIDs")) {
             throw new AbNParseException("Concept IDs not specified.");
@@ -414,7 +426,7 @@ public class AbNDerivationParser {
             // TODO: Warning?
         }
 
-        return new SimpleClusterTANDerivation(roots, sourceOntology, derivationFactory.getTANFactory());
+        return new SimpleClusterTANDerivation(roots, sourceOntology, factory);
     }
 
     public RootSubTANDerivation parseRootSubTANDerivation(JSONObject obj) throws AbNParseException {
@@ -466,7 +478,10 @@ public class AbNDerivationParser {
     }
 
     public TANFromSinglyRootedNodeDerivation parseTANFromSinglyRootedNodeDerivation(JSONObject obj) throws AbNParseException {
-        return new TANFromSinglyRootedNodeDerivation(getBaseAbNDerivation(obj), derivationFactory.getTANFactory(), getRoot(obj));
+        return new TANFromSinglyRootedNodeDerivation(
+                getBaseAbNDerivation(obj), 
+                derivationFactory.getTANFactory(), 
+                getRoot(obj));
     }
 
     // Target Parser

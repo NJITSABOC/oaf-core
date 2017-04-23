@@ -26,9 +26,7 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
             ConceptBrowserDataSource<T> dataSource) {
         
         this.renderer = new SimpleConceptRenderer<>(mainPanel, dataSource);
-        this.renderer.setOpaque(false);
-        
-        
+
         this.setLayout(new BorderLayout());
         
         this.add(renderer, BorderLayout.CENTER);

@@ -10,6 +10,8 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoaderException;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
@@ -73,6 +75,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         this.btnOpenAuditSet.addActionListener( (ae) -> {
             openAuditSet();
         });
+        
         
         this.btnExportAuditSet = new JButton("Save As");
         this.btnExportAuditSet.addActionListener( (ae) -> {
@@ -145,7 +148,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     
     
     private void createAuditSetFromFile() {
-        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
         
         if(idFile.isPresent()) {
             try {
@@ -158,7 +161,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void openAuditSet() {
-        Optional<File> idFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
 
         if (idFile.isPresent()) {
             
@@ -172,7 +175,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void exportAuditSet() {
-        Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectDialog();
+        Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if(auditSetFile.isPresent()) {
             if(getMainPanel().getAuditDatabase().getLoadedAuditSet().isPresent()) {
@@ -189,8 +192,6 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
                             "Error Saving Audit Set", 
                             JOptionPane.ERROR_MESSAGE);
                 }
-                
-                
             }
         }
     }
@@ -212,4 +213,5 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         return Optional.ofNullable(auditSetName);
     }
     
+
 }

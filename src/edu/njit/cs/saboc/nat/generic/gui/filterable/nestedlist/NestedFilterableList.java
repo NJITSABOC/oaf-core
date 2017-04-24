@@ -79,18 +79,13 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
                     rightClickManager.clearRightClickedItem();
                     rightClickManager.showPopup(e);
                 }
+                internalPanel.grabFocus();
             }
         });
 
         internalPanel.add(contentPanel, BorderLayout.NORTH);
         internalPanel.add(Box.createGlue(), BorderLayout.CENTER);
         internalPanel.setBackground(Color.WHITE);
-        internalPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                internalPanel.grabFocus();
-            }
-        });
         internalPanel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {

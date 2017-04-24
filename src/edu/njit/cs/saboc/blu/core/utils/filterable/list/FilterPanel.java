@@ -128,8 +128,11 @@ public class FilterPanel extends JPanel {
     }
     
     public void filteringStarted(String firstChar) {
-        filterField.setText(firstChar);
         
+        if(isPrintableCharacter(firstChar.charAt(0))) {  
+            filterField.setText(firstChar);
+        }
+
         filterField.requestFocus();
     }
     
@@ -137,5 +140,14 @@ public class FilterPanel extends JPanel {
         filterField.setText("");
 
         filterField.requestFocus();
+    }
+    
+    private boolean isPrintableCharacter(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+        
+        return (!Character.isISOControl(c))
+                && c != KeyEvent.CHAR_UNDEFINED
+                && block != null
+                && block != Character.UnicodeBlock.SPECIALS;
     }
 }

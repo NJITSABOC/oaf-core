@@ -282,7 +282,7 @@ public class FilterableList<T> extends JPanel {
         return list.getSelectedIndex();
     }
     
-    //select a particular row in JList
+    // select a particular row in JList
     public void setSelectedIndex(int row){
         this.list.setSelectedIndex(row);
     }
@@ -297,9 +297,10 @@ public class FilterableList<T> extends JPanel {
         return filterPanel.isVisible();
     }
     
-    //return the row idx in which the mouse event takes place
+    // return the row idx in which the mouse event takes place
     public int locationToIndex(MouseEvent e){
         int row = this.list.locationToIndex(e.getPoint());
+        
         return row;
     }
 }

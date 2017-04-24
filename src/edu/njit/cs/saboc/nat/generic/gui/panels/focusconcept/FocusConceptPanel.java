@@ -126,10 +126,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             public void mouseClicked(MouseEvent e) {
 
                 if (e.getButton() == MouseEvent.BUTTON3){
-//                    setRightClickMenuGenerator(new FocusConceptRightClickMenu<T>(mainPanel, dataSource));
-//                    int latestConceptIndex = history.getHistory().size();
-//                    rightClickManager.setRightClickedItem(history.getHistory().get(latestConceptIndex).getConcept());
-//                    rightClickManager.showPopup(e);
                     navigationRightClickMenu(history, e, mainPanel);
                 }
             } 
@@ -143,7 +139,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.historyForward();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
-                history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
+                //history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
                 backButton.setEnabled(true);
                 

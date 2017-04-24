@@ -47,6 +47,7 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     }
     
     private final JPanel contentPanel;
+    private final JPanel internalPanel;
     
     private final FilterPanel filterPanel;
     
@@ -67,7 +68,7 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         this.contentPanel.setOpaque(false);
         
-        JPanel internalPanel = new JPanel(new BorderLayout());
+        internalPanel = new JPanel(new BorderLayout());
         
         internalPanel.setFocusable(true);
         
@@ -84,6 +85,19 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         internalPanel.add(contentPanel, BorderLayout.NORTH);
         internalPanel.add(Box.createGlue(), BorderLayout.CENTER);
         internalPanel.setBackground(Color.WHITE);
+        internalPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                internalPanel.grabFocus();
+            }
+        });
+        internalPanel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                showFilterPanel(true);
+                filterPanel.filteringStarted(Character.toString(e.getKeyChar()));
+            }
+        });
         
         this.add(new JScrollPane(internalPanel), BorderLayout.CENTER);
         
@@ -142,6 +156,7 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
             filterPanel.reset();
         } else {
             filter("");
+            internalPanel.grabFocus();
         }
         
         filterPanel.setVisible(value);
@@ -261,17 +276,6 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
                 panel.setFocusable(true);
                 
                 panel.addKeyListener(new KeyAdapter() {
-
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                        
-                    }
-
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        
-                    }
-                    
                     @Override
                     public void keyTyped(KeyEvent e) {
                         if (panel.isSelected()) {

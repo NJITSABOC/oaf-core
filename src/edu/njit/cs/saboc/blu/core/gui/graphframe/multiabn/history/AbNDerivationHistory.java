@@ -9,22 +9,46 @@ import org.json.simple.JSONArray;
  */
 public class AbNDerivationHistory {
     
-    private ArrayList<AbNDerivationHistoryEntry> entries;
+    public interface AbNDerivationHistoryListener {
+        public void historyChanged();
+    }
+    
+    private final ArrayList<AbNDerivationHistoryEntry> entries = new ArrayList<>();
+    
+    private final ArrayList<AbNDerivationHistoryListener> historyChangedListeners = new ArrayList<>();;
     
     public AbNDerivationHistory() {
-        setHistory(new ArrayList<>());
+        
     }
     
     public AbNDerivationHistory(ArrayList<AbNDerivationHistoryEntry> entries) {
-        setHistory(entries);
+        this.entries.addAll(entries);
+    }
+    
+    public void addHistoryChangedListener(AbNDerivationHistoryListener listener) {
+        this.historyChangedListeners.add(listener);
+    }
+    
+    public void removeHistoryChangedListener(AbNDerivationHistoryListener listener) {
+        this.historyChangedListeners.remove(listener);
     }
     
     public final void setHistory(ArrayList<AbNDerivationHistoryEntry> entries) {
-        this.entries = entries;
+        
+        this.entries.clear();
+        this.entries.addAll(entries);
+
+        historyChangedListeners.forEach((listener) -> {
+            listener.historyChanged();
+        });
     }
     
     public void addEntry(AbNDerivationHistoryEntry entry) {
         entries.add(entry);
+        
+        historyChangedListeners.forEach( (listener) -> {
+            listener.historyChanged();
+        });
     }
     
     public ArrayList<AbNDerivationHistoryEntry> getHistory() {

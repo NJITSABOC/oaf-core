@@ -32,6 +32,8 @@ public class AbNHistoryNavigationPanel extends JPanel {
     
     private final AbNDerivationHistory derivationHistory;
     
+    private final AbNHistoryNavigationManager historyNavigationManager;
+    
     private final AbNDerivationParser abnParser;
 
     public AbNHistoryNavigationPanel(
@@ -43,10 +45,14 @@ public class AbNHistoryNavigationPanel extends JPanel {
         this.derivationHistory = derivationHistory;
         this.abnParser = abnParser;
         
+        historyNavigationManager = new AbNHistoryNavigationManager(derivationHistory);
+        
         backBtn = new JButton();
         backBtn.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
         backBtn.addActionListener((ae) -> {
-
+            historyNavigationManager.goBack();
+            
+            updateNavigationButtons();
         });
         
         backBtn.setPreferredSize(new Dimension(60, 24));
@@ -54,10 +60,17 @@ public class AbNHistoryNavigationPanel extends JPanel {
         forwardBtn = new JButton();
         forwardBtn.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
         forwardBtn.addActionListener((ae) -> {
-
+            
+            historyNavigationManager.goForward();
+            
+            updateNavigationButtons();
         });
         
         forwardBtn.setPreferredSize(new Dimension(60, 24));
+        
+        derivationHistory.addHistoryChangedListener( () -> {
+            updateNavigationButtons();
+        });
 
         viewHistoryBtn = new JButton("View History");
         viewHistoryBtn.addActionListener( (ae) -> {
@@ -71,6 +84,11 @@ public class AbNHistoryNavigationPanel extends JPanel {
         this.add(forwardBtn);
     }
 
+    private void updateNavigationButtons() {
+        backBtn.setEnabled(historyNavigationManager.canGoBack());
+        forwardBtn.setEnabled(historyNavigationManager.canGoForward());
+    }
+    
     public void showHistoryDialog() {
         JDialog historyDialog = new JDialog();
         historyDialog.setSize(600, 800);
@@ -85,7 +103,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
         AbNDerivationHistoryPanel derivationHistoryPanel = new AbNDerivationHistoryPanel();
         derivationHistoryPanel.showHistory(derivationHistory);
 
-        JButton saveBtn = new JButton("SAVE SELECTED");
+        JButton saveBtn = new JButton("Save Selected Entry");
         saveBtn.addActionListener((se) -> {
 
             AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
@@ -104,7 +122,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
             }
         });
 
-        JButton saveAllBtn = new JButton("SAVE FULL HISTORY");
+        JButton saveAllBtn = new JButton("Save History");
         saveAllBtn.addActionListener((ae) -> {
             ArrayList<AbNDerivationHistoryEntry> entries = derivationHistory.getHistory();
 
@@ -123,8 +141,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
             }
         });
 
-        JButton loadBtn = new JButton("LOAD TEST FILE");
-
+        JButton loadBtn = new JButton("Load History");
         loadBtn.addActionListener((ae) -> {
             JSONParser parser = new JSONParser();
 

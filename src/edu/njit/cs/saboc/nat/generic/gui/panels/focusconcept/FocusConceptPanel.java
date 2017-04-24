@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
+import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 //import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
@@ -76,7 +77,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private boolean pending = false;
     private final EntityRightClickManager<T> rightClickManager = new EntityRightClickManager<>();
-
 
     public FocusConceptPanel(
             NATBrowserPanel<T> mainPanel, 
@@ -472,7 +472,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         bookmarks.show(e.getComponent(), e.getX(), e.getY());        
     }
-//    public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
-//        rightClickManager.setMenuGenerator(generator);
-//    }
+    public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
+        rightClickManager.setMenuGenerator(generator);
+    }
 }

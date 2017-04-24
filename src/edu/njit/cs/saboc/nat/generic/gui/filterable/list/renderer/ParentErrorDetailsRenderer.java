@@ -43,6 +43,8 @@ public class ParentErrorDetailsRenderer<T extends Concept> extends BaseFilterabl
         eastPanel.add(Box.createHorizontalStrut(10));
         eastPanel.setOpaque(false);
         
+        this.conceptRenderer.setOpaque(false);
+        
         this.add(conceptRenderer, BorderLayout.CENTER);
         this.add(eastPanel, BorderLayout.EAST);
     }

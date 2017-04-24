@@ -38,7 +38,7 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
         
         this.add(renderer, BorderLayout.CENTER);
         
-        this.setOpaque(false);
+        //this.setOpaque(false);
     }
     
     public NATBrowserPanel<T> getMainPanel() {

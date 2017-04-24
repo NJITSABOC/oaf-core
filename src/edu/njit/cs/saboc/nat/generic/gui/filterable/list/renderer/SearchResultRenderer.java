@@ -29,6 +29,8 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
 
         this.setLayout(new BorderLayout());
         
+        renderer.setOpaque(false);
+        
         this.add(renderer, BorderLayout.CENTER);
     }
 

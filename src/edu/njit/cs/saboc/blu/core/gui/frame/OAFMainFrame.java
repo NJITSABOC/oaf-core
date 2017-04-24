@@ -15,6 +15,8 @@ import javax.swing.JMenuItem;
 import javax.swing.border.BevelBorder;
 import java.awt.Dimension;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 
@@ -31,6 +33,7 @@ public class OAFMainFrame extends JFrame {
      * File chooser for picking where to save an image of a graph.
      */
     private final JFileChooser pngFileChooser = new JFileChooser();
+    
 
     private JInternalFrame abnSelectionFrame;
     /**
@@ -262,6 +265,7 @@ public class OAFMainFrame extends JFrame {
      */
     public void cascader(JDesktopPane desktopPane) {
         JInternalFrame[] frames = desktopPane.getAllFrames();
+        
         if (frames.length == 0) {
             return;
         }
@@ -302,6 +306,7 @@ public class OAFMainFrame extends JFrame {
      */
     public void tiler(JDesktopPane desktopPane, int layer) {
         JInternalFrame[] frames = desktopPane.getAllFramesInLayer(layer);
+        
         if (frames.length == 0) {
             return;
         }
@@ -453,5 +458,22 @@ public class OAFMainFrame extends JFrame {
         desktopPane.setComponentZOrder(frame, 0);
 
         repaint();
+    }
+    
+    public void closeFrames(List<JInternalFrame> frames) {
+        frames.forEach( (frame) -> {
+            desktopPane.remove(frame);
+        });
+        
+        desktopPane.revalidate();
+        desktopPane.repaint();
+    }
+    
+    public ArrayList<JInternalFrame> getContentFrames() {
+        ArrayList<JInternalFrame> internalFrames = new ArrayList(Arrays.asList(desktopPane.getAllFrames()));
+        
+        internalFrames.remove(abnSelectionFrame);
+        
+        return internalFrames;
     }
 }

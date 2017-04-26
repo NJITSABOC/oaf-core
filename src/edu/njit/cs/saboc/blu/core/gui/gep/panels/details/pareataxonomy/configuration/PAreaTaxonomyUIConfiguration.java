@@ -9,14 +9,15 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPan
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.CompactPAreaTaxonomyDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AggregateAreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.AggregatePAreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ChildPAreaTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.PAreaTaxonomyDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PAreaTaxonomyDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.parea.ParentPAreaTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.PropertyTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area.AreaSummaryTextFactory;
@@ -75,13 +76,13 @@ public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfi
     }
 
     @Override
-    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
+    public AbNDetailsPanel createAbNDetailsPanel() {
         return new PAreaTaxonomyDetailsPanel(config);
     }
 
     @Override
     public CompactAbNDetailsPanel createCompactAbNDetailsPanel() {
-        return new CompactAbNDetailsPanel(config);
+        return new CompactPAreaTaxonomyDetailsPanel(config);
     }
 
     @Override

@@ -6,15 +6,15 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate.AggregateDisjointNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.ExpandAggregateButton;
+import edu.njit.cs.saboc.blu.core.gui.createanddisplayabn.CreateAndDisplayAbNThread;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.ExpandAggregateNodeButton;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 /**
  *
  * @author Chris O
  */
-public class ExpandAggregateDisjointNodeButton<T extends AggregateDisjointNode> extends ExpandAggregateButton<T> {
+public class ExpandAggregateDisjointNodeButton<T extends AggregateDisjointNode> extends ExpandAggregateNodeButton<T> {
     
     private final DisplayAbNAction<AggregateDisjointAbstractionNetwork> disjointDisplayAction;
     private final DisjointAbNConfiguration config;

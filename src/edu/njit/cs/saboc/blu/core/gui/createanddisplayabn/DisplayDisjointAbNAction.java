@@ -1,8 +1,9 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.createanddisplayabn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.createanddisplayabn.CreateAndDisplayAbNThread;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 public class DisplayDisjointAbNAction extends CreateAndDisplayAbNThread {

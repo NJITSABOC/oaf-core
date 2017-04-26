@@ -6,7 +6,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPan
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.AggregateDisjointNodePanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.ChildDisjointNodeTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.disjointabn.DisjointNodePanel;
@@ -49,8 +49,8 @@ public abstract class DisjointAbNUIConfiguration<T extends DisjointNode> extends
     }
 
     @Override
-    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
-        return new SimpleAbNDetailsPanel<>(config);
+    public AbNDetailsPanel createAbNDetailsPanel() {
+        return new AbNDetailsPanel<>(config);
     }
     
     @Override

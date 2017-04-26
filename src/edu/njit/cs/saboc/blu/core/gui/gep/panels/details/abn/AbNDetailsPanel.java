@@ -11,13 +11,13 @@ import javax.swing.JTabbedPane;
  * @author Chris O
  * @param <T>
  */
-public class SimpleAbNDetailsPanel<T extends AbstractionNetwork> extends JPanel {
+public class AbNDetailsPanel<T extends AbstractionNetwork> extends JPanel {
     
     private final GenericAbNSummaryPanel<T> abnSummaryPanel;
     
     private final JTabbedPane abnDetailsPane;
     
-    public SimpleAbNDetailsPanel(AbNConfiguration config) {
+    public AbNDetailsPanel(AbNConfiguration config) {
         
         this.abnSummaryPanel = new GenericAbNSummaryPanel<>(config);
         

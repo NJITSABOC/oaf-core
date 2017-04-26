@@ -9,7 +9,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPan
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeOptionsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
@@ -62,7 +62,7 @@ public abstract class AbNUIConfiguration<T extends Node> {
     
     public abstract ConceptPainter getConceptHierarchyPainter();
     
-    public abstract SimpleAbNDetailsPanel createAbNDetailsPanel();
+    public abstract AbNDetailsPanel createAbNDetailsPanel();
     
     public abstract CompactAbNDetailsPanel createCompactAbNDetailsPanel();
     

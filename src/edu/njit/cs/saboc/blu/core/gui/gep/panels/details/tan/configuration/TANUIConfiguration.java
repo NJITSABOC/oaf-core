@@ -8,7 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.CompactNodeDashboardPan
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeSummaryPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.CompactAbNDetailsPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.ChildClusterTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.ParentClusterTableModel;
@@ -83,7 +83,7 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
     }
 
     @Override
-    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
+    public AbNDetailsPanel createAbNDetailsPanel() {
         return new TANDetailsPanel(config);
     }
     

@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.createanddisplayabn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.dialogs.LoadStatusDialog;

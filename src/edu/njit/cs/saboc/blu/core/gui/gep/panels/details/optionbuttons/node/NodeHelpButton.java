@@ -1,5 +1,6 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
@@ -14,9 +15,9 @@ import java.awt.*;
  * 
  * @param <T>
  */
-public class HelpButton<T extends Node> extends NodeOptionButton<T> {
+public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
 
-    public HelpButton(AbNConfiguration config){
+    public NodeHelpButton(AbNConfiguration config){
         super("BluHelp.png", "Help");
         
         this.addActionListener((ae) -> {

@@ -1,5 +1,6 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
+import edu.njit.cs.saboc.blu.core.gui.createanddisplayabn.DisplayNewTAN;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T> {
     
@@ -32,7 +34,6 @@ public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T
     }
     
     public abstract ClusterTribalAbstractionNetwork deriveTAN();
-    
-    
+
 }
 

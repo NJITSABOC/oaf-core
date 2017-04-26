@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.ExportAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
 import java.awt.BorderLayout;
@@ -26,8 +26,6 @@ public abstract class TaskBarPanel extends JPanel {
     
     private final JLabel abnMetricsLabel = new JLabel();
     
-    private final ExportAbNButton exportBtn;
-
     private final JPanel menuPanel = new JPanel();
     
     private final JPanel otherOptionsPanel = new JPanel();
@@ -72,35 +70,18 @@ public abstract class TaskBarPanel extends JPanel {
             graphFrame.getAbNExplorationPanel().getDisplayPanel().getAutoScroller().resetDisplay();
         });
 
-        final JButton saveButton = new JButton("Save Image");
-        saveButton.setToolTipText("Save the current screen as a PNG image. Available only in Graph Exploration mode.");
-
-        saveButton.addActionListener((ae) -> {
-            graphFrame.saveCurrentView();
-        });
 
         add(goToRootBtn);
-        add(saveButton);
 
         add(new JSeparator(SwingConstants.VERTICAL));
         add(Box.createHorizontalStrut(5));
 
         add(toggleButtonPanel);
-
-        saveButton.setEnabled(true);
-        
-        this.exportBtn = getExportButton(config);
-        
-        addReportButtonToMenu(exportBtn);
-        
-        
         
         this.abnSearchBtn = getAbNSearchButton(config);
         
         this.addToggleableButtonToMenu(abnSearchBtn);
-        
-        
-        
+
         displayAbNMetrics(config);
 
         add(menuPanel, BorderLayout.CENTER);
@@ -111,7 +92,6 @@ public abstract class TaskBarPanel extends JPanel {
     }
     
     protected abstract AbNSearchButton getAbNSearchButton(AbNConfiguration config);
-    protected abstract ExportAbNButton getExportButton(AbNConfiguration config);
     protected abstract String getAbNMetricsLabel(AbNConfiguration config);
     
     private void displayAbNMetrics(AbNConfiguration config) {

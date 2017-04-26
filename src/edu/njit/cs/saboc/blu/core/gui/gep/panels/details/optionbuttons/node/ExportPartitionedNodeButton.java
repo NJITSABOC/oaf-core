@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author Chris O
  */
-public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedNode>> extends ExportButton<T> {
+public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedNode>> extends ExportNodeButton<T> {
 
     private static final String getToolTipStr(PartitionedAbNConfiguration config) {
         return String.format("Export %s's %s.",

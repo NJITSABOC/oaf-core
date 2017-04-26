@@ -1,8 +1,12 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn;
 
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.io.File;
 import java.io.IOException;
@@ -14,37 +18,63 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author cro3
+ * @author Chris O
+ * 
+ * @param <T>
  */
-public class ExportPartitionedAbNButton extends ExportAbNButton {
+public class ExportAbNButton<T extends AbstractionNetwork> extends AbNOptionsButton<T> {
     
-    public ExportPartitionedAbNButton() {
-
+    private final AbNConfiguration config;
+    
+    public ExportAbNButton(String toolTip, AbNConfiguration config) {
+        super("BluExport.png", toolTip);
+        
+        this.config = config;
+        
+        this.addActionListener((ae) -> {
+            exportAction();
+        });
     }
-
-    protected void doExport() {
-        
-        if(!super.getCurrentConfiguration().isPresent()) {
-            // TODO: error
-            
-            return;
+    
+    @Override
+    public void setEnabledFor(T abn) {
+        this.setEnabled(true);
+    }
+    
+    public void exportAction() {
+        if(super.getCurrentAbN().isPresent()) {
+            if(super.getCurrentAbN().get() instanceof PartitionedAbstractionNetwork) {
+                doPartitionedAbNExport();
+            } else {
+                doBasicAbNExport();
+            }
         }
-        
-        PartitionedAbNConfiguration config = (PartitionedAbNConfiguration)super.getCurrentConfiguration().get();
-
+    }
+    
+    private void doBasicAbNExport() {
         Optional<File> exportFile = ExportAbNUtilities.displayFileSelectSaveDialog();
 
         if (exportFile.isPresent()) {
-            String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)", 
-                    config.getTextConfiguration().getContainerTypeName(true), 
-                    config.getTextConfiguration().getNodeTypeName(true), 
+            doNodeExport(exportFile.get());
+        }
+    }
+    
+    private void doPartitionedAbNExport() {
+        PartitionedAbNConfiguration partitionedConfig = (PartitionedAbNConfiguration)config;
+        
+        Optional<File> exportFile = ExportAbNUtilities.displayFileSelectSaveDialog();
+
+        if (exportFile.isPresent()) {
+            String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)",
+                    partitionedConfig.getTextConfiguration().getContainerTypeName(true),
+                    config.getTextConfiguration().getNodeTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
-            
-            String containerChoice = String.format("%s and %s Only", 
-                    config.getTextConfiguration().getContainerTypeName(true), 
+
+            String containerChoice = String.format("%s and %s Only",
+                    partitionedConfig.getTextConfiguration().getContainerTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
-            
+
             String groupChoice = String.format("%s and %s Only",
                     config.getTextConfiguration().getNodeTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
@@ -62,25 +92,53 @@ public class ExportPartitionedAbNButton extends ExportAbNButton {
                 doFullExport(exportFile.get());
             } else if (input.equals(choices[1])) {
                 doPartitionNodeExport(exportFile.get());
-            } else if(input.equals(choices[2])) {
-                super.doNodeExport(exportFile.get());
+            } else if (input.equals(choices[2])) {
+                doNodeExport(exportFile.get());
             } else {
-                
+
             }
         }
     }
     
+    private void doNodeExport(File file) {
+
+        try (PrintWriter writer = new PrintWriter(file)) {
+
+            Set<SinglyRootedNode> nodes = super.getCurrentAbN().get().getNodes();
+
+            nodes.forEach((group) -> {
+                String groupName = group.getName();
+
+                Set<Concept> concepts = group.getConcepts();
+
+                concepts.forEach((concept) -> {
+                    writer.println(String.format(
+                            "%s\t%s\t%s",
+                            groupName,
+                            group.getRoot().getIDAsString(),
+                            concept.getName(),
+                            concept.getIDAsString()));
+                });
+            });
+
+        } catch (IOException ioe) {
+            
+        }
+    }
+    
     private void doFullExport(File file) {
-        PartitionedAbNConfiguration config = (PartitionedAbNConfiguration)super.getCurrentConfiguration().get();
+        
+        PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)super.getCurrentAbN().get();
+        PartitionedAbNConfiguration partitionedConfig = (PartitionedAbNConfiguration)config;
         
         try (PrintWriter writer = new PrintWriter(file)) {
             
-            Set<PartitionedNode> containers = config.getAbstractionNetwork().getBaseAbstractionNetwork().getNodes();
+            Set<PartitionedNode> containers = partitionedAbN.getBaseAbstractionNetwork().getNodes();
             
             containers.forEach((container) -> {
                 Set<SinglyRootedNode> groups = container.getInternalNodes();
                 
-                int containerLevel = config.getPartitionedNodeLevel(container);
+                int containerLevel = partitionedConfig.getPartitionedNodeLevel(container);
                 
                 String containerName = container.getName();
                 
@@ -109,11 +167,12 @@ public class ExportPartitionedAbNButton extends ExportAbNButton {
     }
     
     private void doPartitionNodeExport(File file) {
-        PartitionedAbNConfiguration config = (PartitionedAbNConfiguration)super.getCurrentConfiguration().get();
+        PartitionedAbstractionNetwork partitionedAbN = (PartitionedAbstractionNetwork)super.getCurrentAbN().get();
+        PartitionedAbNConfiguration partitionedConfig = (PartitionedAbNConfiguration)config;
         
         try (PrintWriter writer = new PrintWriter(file)) {
 
-            Set<PartitionedNode> containers = config.getAbstractionNetwork().getBaseAbstractionNetwork().getNodes();
+            Set<PartitionedNode> containers = partitionedAbN.getBaseAbstractionNetwork().getNodes();
 
             containers.forEach((container) -> {
                 Set<SinglyRootedNode> groups = container.getInternalNodes();

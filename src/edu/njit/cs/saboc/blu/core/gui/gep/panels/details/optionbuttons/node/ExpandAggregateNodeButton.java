@@ -1,14 +1,15 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 
 /**
  *
  * @author Chris O
+ * @param <T>
  */
-public abstract class ExpandAggregateButton<T extends Node> extends NodeOptionButton<T> {
+public abstract class ExpandAggregateNodeButton<T extends Node> extends NodeOptionButton<T> {
     
-    public ExpandAggregateButton(String forExpandedAbNType, String forNodeType) {
+    public ExpandAggregateNodeButton(String forExpandedAbNType, String forNodeType) {
         
         super("BluExpandedSubtaxonomy.png", 
                 String.format("Created Expanded %s from Aggregate %s", forExpandedAbNType, forNodeType));

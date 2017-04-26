@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
@@ -20,14 +19,6 @@ public class GenericAbNTaskBarPanel extends TaskBarPanel {
     }
 
     @Override
-    protected ExportAbNButton getExportButton(AbNConfiguration config) {
-        ExportAbNButton btn = new ExportAbNButton();
-        btn.initialize(config);
-        
-        return btn;
-    }
-    
-    @Override
     protected AbNSearchButton getAbNSearchButton(AbNConfiguration config) {
         AbNSearchButton btn = new AbNSearchButton(
                 super.getGraphFrame().getParentFrame(),
@@ -40,7 +31,7 @@ public class GenericAbNTaskBarPanel extends TaskBarPanel {
 
     @Override
     protected String getAbNMetricsLabel(AbNConfiguration config) {
-        return String.format("%s: %d | %s: %d", 
+        return String.format("<html><font size='4'>%s: <font color='RED'><b>%d</b></font> | %s: <font color='RED'><b>%d</b></font>", 
                 config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), 
                 config.getAbstractionNetwork().getSourceHierarchy().size(),
                 config.getTextConfiguration().getNodeTypeName(true),

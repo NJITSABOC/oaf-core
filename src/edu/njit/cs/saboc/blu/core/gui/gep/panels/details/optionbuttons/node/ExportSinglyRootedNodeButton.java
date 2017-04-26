@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Chris O
  */
-public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends ExportButton<T> {
+public class ExportSinglyRootedNodeButton<T extends SinglyRootedNode> extends ExportNodeButton<T> {
     
     private static final String getToolTipStr(AbNConfiguration config) {
         return String.format("Export %s's %s.", 

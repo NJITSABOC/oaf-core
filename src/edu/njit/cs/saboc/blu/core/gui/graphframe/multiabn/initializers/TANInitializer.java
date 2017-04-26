@@ -42,23 +42,7 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TANConfiguration config) {
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
         
-        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
 
-            @Override
-            public void showFullClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(config.getAbstractionNetwork());
-            }
-
-            @Override
-            public void showBaseClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayBandTribalAbstractionNetwork(config.getAbstractionNetwork());
-            }
-        };
-        
-        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(TANInitializerType.ClusterTAN));
-        
-        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
-        
         return taskBar;
     }
 

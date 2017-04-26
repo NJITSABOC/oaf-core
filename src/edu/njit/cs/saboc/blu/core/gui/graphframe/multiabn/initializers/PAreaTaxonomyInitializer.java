@@ -51,37 +51,7 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
             PAreaTaxonomyConfiguration config) {
         
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
-        
-        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
 
-            @Override
-            public void showFullClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(config.getPAreaTaxonomy());
-            }
-
-            @Override
-            public void showBaseClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayAreaTaxonomy(config.getPAreaTaxonomy());
-            }
-        };
-
-        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(PAreaInitializerType.PAreaTaxonomy));
-        
-        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
-        
-        JButton derivationHelpBtn = new JButton("Help!");
-        derivationHelpBtn.addActionListener( (ae) -> {
-            JDialog derivationExplanationDialog = new JDialog();
-            derivationExplanationDialog.setModal(true);
-            
-            AbNDerivationExplanationPanel explanationPanel = new AbNDerivationExplanationPanel(new PAreaTaxonomyDerivationExplanation(config));
-            derivationExplanationDialog.add(explanationPanel);
-            derivationExplanationDialog.setSize(1200, 600);
-            
-            derivationExplanationDialog.setVisible(true);
-        });
-        
-        taskBar.addReportButtonToMenu(derivationHelpBtn);
         
         return taskBar;
     }

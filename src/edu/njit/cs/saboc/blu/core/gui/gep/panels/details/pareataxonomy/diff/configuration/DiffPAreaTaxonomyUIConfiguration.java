@@ -23,7 +23,7 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
             DiffPAreaTaxonomyListenerConfiguration listenerConfig, 
             ChangeExplanationRowEntryFactory changeExplanationFactory) {
         
-        super(config, displayManager, listenerConfig);
+        super(config, displayManager, listenerConfig, false);
         
         this.changeExplanationFactory = changeExplanationFactory;
     }

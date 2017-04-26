@@ -56,7 +56,7 @@ public class PAreaTaxonomyDetailsPanel extends AbNDetailsPanel<PAreaTaxonomy> {
         
         abnTypeSelectionPanel.setBorder(BorderFactory.createTitledBorder("Partial-area Taxonomy Display Type"));
 
-        abnTypeSelectionPanel.initialize(config, true);
+        abnTypeSelectionPanel.initialize(config, !config.getUIConfiguration().showingBaseAbN());
         
         this.add(abnTypeSelectionPanel, BorderLayout.SOUTH);
     }

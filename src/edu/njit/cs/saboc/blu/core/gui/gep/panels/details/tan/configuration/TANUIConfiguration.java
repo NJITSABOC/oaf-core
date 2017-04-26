@@ -32,9 +32,10 @@ public abstract class TANUIConfiguration extends PartitionedAbNUIConfiguration<C
     public TANUIConfiguration(
             TANConfiguration config, 
             AbNDisplayManager displayManager,
-            TANListenerConfiguration listenerConfig) {
+            TANListenerConfiguration listenerConfig,
+            boolean showingBandTAN) {
         
-        super(displayManager, listenerConfig);
+        super(displayManager, listenerConfig, showingBandTAN);
         
         this.config = config;
     }

@@ -33,8 +33,6 @@ public class AbNHistoryNavigationManager {
         }
         
         currentHistoryLocation = history.getHistory().size() - 1;
-        
-        history.getHistory().get(currentHistoryLocation).displayEntry();
     }
     
     public final void goBack() {

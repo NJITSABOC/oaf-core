@@ -32,7 +32,7 @@ public class CompactTANDetailsPanel extends CompactAbNDetailsPanel<ClusterTribal
 
         abnTypeSelectionPanel.setBorder(BorderFactory.createTitledBorder("Tribal Abstraction Network Display Type"));
 
-        abnTypeSelectionPanel.initialize(config, true);
+        abnTypeSelectionPanel.initialize(config, !config.getUIConfiguration().showingBaseAbN());
 
         this.add(abnTypeSelectionPanel, BorderLayout.SOUTH);
     }

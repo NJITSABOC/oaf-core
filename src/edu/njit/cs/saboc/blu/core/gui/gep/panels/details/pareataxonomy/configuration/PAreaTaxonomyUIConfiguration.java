@@ -26,18 +26,19 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
 
 /**
  *
- * @author Den
+ * @author Chris O
  */
 public abstract class PAreaTaxonomyUIConfiguration extends PartitionedAbNUIConfiguration<PArea, Area> {
     
     private final PAreaTaxonomyConfiguration config;
-    
+
     public PAreaTaxonomyUIConfiguration(
             PAreaTaxonomyConfiguration config, 
             AbNDisplayManager displayManager,
-            PAreaTaxonomyListenerConfiguration listenerConfig) {
+            PAreaTaxonomyListenerConfiguration listenerConfig,
+            boolean showingAreaTaxonomy) {
         
-        super(displayManager, listenerConfig);
+        super(displayManager, listenerConfig, showingAreaTaxonomy);
         
         this.config = config;
     }

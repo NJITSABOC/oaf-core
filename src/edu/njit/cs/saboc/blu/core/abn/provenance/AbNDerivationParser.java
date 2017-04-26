@@ -188,7 +188,7 @@ public abstract class AbNDerivationParser {
         }
     }
 
-    private <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj) throws AbNParseException {
+    protected <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj) throws AbNParseException {
         
         if(!obj.containsKey("BaseDerivation")) {
             throw new AbNParseException("Base AbN Derivation not specified.");

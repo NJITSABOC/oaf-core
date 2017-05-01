@@ -108,11 +108,11 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     public void initialize(Ontology ontology, OntologySearcher searcher) {
         super.initialize(ontology);
         
-        rootSelectionPanel.initialize(ontology, searcher);
-        selectedPatriarchPanel.initialize(ontology);
-        
         selectedPatriarchPanel.resetView();
         rootSelectionPanel.resetView();
+        
+        rootSelectionPanel.initialize(ontology, searcher);
+        selectedPatriarchPanel.initialize(ontology);
     }
     
     @Override

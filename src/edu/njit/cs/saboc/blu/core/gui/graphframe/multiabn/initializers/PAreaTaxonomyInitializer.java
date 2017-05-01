@@ -3,8 +3,10 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.PAreaTaxonomyGraph;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
@@ -51,37 +53,7 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
             PAreaTaxonomyConfiguration config) {
         
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
-        
-        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
 
-            @Override
-            public void showFullClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(config.getPAreaTaxonomy());
-            }
-
-            @Override
-            public void showBaseClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayAreaTaxonomy(config.getPAreaTaxonomy());
-            }
-        };
-
-        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(PAreaInitializerType.PAreaTaxonomy));
-        
-        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
-        
-        JButton derivationHelpBtn = new JButton("Help!");
-        derivationHelpBtn.addActionListener( (ae) -> {
-            JDialog derivationExplanationDialog = new JDialog();
-            derivationExplanationDialog.setModal(true);
-            
-            AbNDerivationExplanationPanel explanationPanel = new AbNDerivationExplanationPanel(new PAreaTaxonomyDerivationExplanation(config));
-            derivationExplanationDialog.add(explanationPanel);
-            derivationExplanationDialog.setSize(1200, 600);
-            
-            derivationExplanationDialog.setVisible(true);
-        });
-        
-        taskBar.addReportButtonToMenu(derivationHelpBtn);
         
         return taskBar;
     }
@@ -106,9 +78,26 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
-        return new AggregateableAbNExplorationPanelInitializer( (bound) -> {
-            PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
-            config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
-        });
+        
+        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound) -> {
+                    PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
+                    config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
+                }) {
+
+                    @Override
+                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
+                        super.initializeAbNDisplayPanel(displayPanel);
+
+                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+                        
+                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2 || 
+                                displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
+                            
+                            displayPanel.addWidget(minimapPanel);
+                        }
+                    }
+                };
+
+        return initializer;
     }
 }

@@ -246,13 +246,11 @@ public class ConceptSearchPanel extends JPanel {
         searchThread.start();
     }
     
-    
-    
     public void clearResults() {
         resultList.clearContents();
     }
     
-    public void clearContents() {
+    public void resetView() {
         txtSearchBox.clearText();
         
         clearResults();

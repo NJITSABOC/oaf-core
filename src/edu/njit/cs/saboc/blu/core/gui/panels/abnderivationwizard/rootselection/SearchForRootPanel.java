@@ -68,7 +68,7 @@ public class SearchForRootPanel<T extends Concept> extends RootSelectionPanel<T>
     
     @Override
     public void resetView() {
-        conceptSearchPanel.clearResults();
+        conceptSearchPanel.resetView();
     }
     
     @Override
@@ -76,6 +76,8 @@ public class SearchForRootPanel<T extends Concept> extends RootSelectionPanel<T>
         super.clear();
         
         this.optSearcher = Optional.empty();
+        
+        this.resetView();
     }
     
     @Override

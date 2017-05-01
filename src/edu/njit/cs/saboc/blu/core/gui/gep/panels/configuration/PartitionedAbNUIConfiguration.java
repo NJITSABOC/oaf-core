@@ -16,11 +16,20 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.AbNDisplayManager;
  */
 public abstract class PartitionedAbNUIConfiguration<T extends SinglyRootedNode, V extends PartitionedNode> extends AbNUIConfiguration<T> {
     
+    private final boolean showingBaseAbN;
+    
     protected PartitionedAbNUIConfiguration(
             AbNDisplayManager displayManager, 
-            PartitionedAbNListenerConfiguration listenerConfiguration) {
+            PartitionedAbNListenerConfiguration listenerConfiguration,
+            boolean showingBaseAbN) {
         
         super(displayManager, listenerConfiguration);
+        
+        this.showingBaseAbN = showingBaseAbN;
+    }
+    
+    public boolean showingBaseAbN() {
+        return showingBaseAbN;
     }
     
     @Override

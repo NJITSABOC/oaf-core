@@ -19,6 +19,7 @@ public class EntityOptionsPanel<T> extends JPanel {
     private Optional<T> currentEntity = Optional.empty();
     
     public EntityOptionsPanel() {
+        
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         
         this.add(Box.createHorizontalStrut(4));

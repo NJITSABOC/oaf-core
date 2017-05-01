@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.options.EntityOptionsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.options.IconOptionButton;
 import java.awt.BorderLayout;
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ public class NodeOptionsPanel<T extends Node> extends BaseNodeInformationPanel<T
         this.add(basePanel, BorderLayout.CENTER);
     }
     
-    public void addOptionButton(NodeOptionButton<T> optionBtn) {
+    public void addOptionButton(IconOptionButton<T> optionBtn) {
         basePanel.addOptionButton(optionBtn);
     }
     

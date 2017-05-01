@@ -5,8 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateCluster;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.CreateAndDisplayAbNThread;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.ExpandAggregateButton;
+import edu.njit.cs.saboc.blu.core.gui.createanddisplayabn.CreateAndDisplayAbNThread;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.ExpandAggregateNodeButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
@@ -14,7 +14,7 @@ import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
  *
  * @author Chris O
  */
-public class ExpandAggregateClusterButton<T extends AggregateCluster> extends ExpandAggregateButton<T> {
+public class ExpandAggregateClusterButton<T extends AggregateCluster> extends ExpandAggregateNodeButton<T> {
     
     private final DisplayAbNAction<ClusterTribalAbstractionNetwork> disjointDisplayAction;
     private final TANConfiguration config;

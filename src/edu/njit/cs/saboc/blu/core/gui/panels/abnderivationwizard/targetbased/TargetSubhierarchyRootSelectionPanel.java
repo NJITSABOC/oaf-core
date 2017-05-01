@@ -117,7 +117,7 @@ public class TargetSubhierarchyRootSelectionPanel extends AbNDerivationWizardPan
     }
 
     public final void resetView() {
-        conceptSearchPanel.clearContents();
+        conceptSearchPanel.resetView();
         
         btnUseWholeSubhierarchy.setSelected(true);
         

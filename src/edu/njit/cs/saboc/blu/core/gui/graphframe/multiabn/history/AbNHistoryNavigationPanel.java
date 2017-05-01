@@ -1,10 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
+import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser.AbNParseException;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser.AbNDerivationHistoryParseException;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import javax.swing.JPanel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -132,7 +136,9 @@ public class AbNHistoryNavigationPanel extends JPanel {
                 arr.add(entry.toJSON());
             }
 
-            try (FileWriter file = new FileWriter("testing.json")) {
+            File outputFile = new File("testing.json");
+            
+            try (FileWriter file = new FileWriter(outputFile)) {
                 file.write(arr.toJSONString());
 
                 file.close();
@@ -144,19 +150,32 @@ public class AbNHistoryNavigationPanel extends JPanel {
         JButton loadBtn = new JButton("Load History");
         loadBtn.addActionListener((ae) -> {
             JSONParser parser = new JSONParser();
+            
+            File file = new File("testing.json");
 
-            try {
-                JSONArray json = (JSONArray) parser.parse(new FileReader("testing.json"));
+            try(FileReader reader = new FileReader(file)) {
+                JSONArray json = (JSONArray) parser.parse(reader);
 
                 AbNDerivationHistoryParser historyParser = new AbNDerivationHistoryParser();
 
-                ArrayList<AbNDerivationHistoryEntry> entries = historyParser.getDerivationHistory(graphFrame, abnParser, json);
+                try {
+                    ArrayList<AbNDerivationHistoryEntry> entries = historyParser.getDerivationHistory(graphFrame, abnParser, json);
 
-                this.derivationHistory.setHistory(entries);
+                    this.derivationHistory.setHistory(entries);
+                } catch (AbNDerivationHistoryParseException parseException) {
+                    
+                    parseException.printStackTrace();
+                } catch (AbNParseException abnpe) {
+                    
+                    abnpe.printStackTrace();
+                }
 
                 derivationHistoryPanel.showHistory(derivationHistory);
-            } catch (Exception ioe) {
+                
+            } catch (IOException ioe) {
                 ioe.printStackTrace();
+            } catch (ParseException pe) {
+                pe.printStackTrace();
             }
         });
 

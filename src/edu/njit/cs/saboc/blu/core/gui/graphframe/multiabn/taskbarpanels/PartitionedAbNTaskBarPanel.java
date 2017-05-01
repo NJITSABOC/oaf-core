@@ -2,8 +2,6 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNButton;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportPartitionedAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.PartitionedAbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
@@ -36,15 +34,6 @@ public class PartitionedAbNTaskBarPanel extends TaskBarPanel {
     }
 
     @Override
-    protected ExportAbNButton getExportButton(AbNConfiguration config) {
-        ExportPartitionedAbNButton btn = new ExportPartitionedAbNButton();
-        
-        btn.initialize(config);
-        
-        return btn;
-    }
-
-    @Override
     protected String getAbNMetricsLabel(AbNConfiguration config) {
         PartitionedAbNConfiguration partitionedConfig = (PartitionedAbNConfiguration)config;
         
@@ -52,7 +41,10 @@ public class PartitionedAbNTaskBarPanel extends TaskBarPanel {
         int singlyRootedNodeCount = partitionedConfig.getAbstractionNetwork().getNodeCount();
         int conceptCount = partitionedConfig.getAbstractionNetwork().getSourceHierarchy().size();
         
-        return String.format("%s: %d | %s: %d | %s: %d",
+        return String.format("<html><font size='4'>%s: <font color='RED'><b>%d</b></font> "
+                + "| %s: <font color='RED'><b>%d</b></font> "
+                + "| %s: <font color='RED'><b>%d</b></font>",
+                
                 partitionedConfig.getTextConfiguration().getContainerTypeName(true),
                 partitionNodeCount, 
                 partitionedConfig.getTextConfiguration().getNodeTypeName(true),

@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.ViewportNavigationListener;
  * @author Chris O
  */
 public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGUIInitializer {
+    
     public BaseAbNExplorationPanelInitializer() {
         
     }
@@ -24,12 +25,6 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
         });
         
         displayPanel.addWidget(navigationPanel);
-        
-        
-        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
-        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2 || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2){
-            displayPanel.addWidget(minimapPanel);
-        }
     }
 
     @Override

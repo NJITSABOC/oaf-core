@@ -3,8 +3,10 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.PAreaTaxonomyGraph;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
@@ -76,9 +78,26 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
-        return new AggregateableAbNExplorationPanelInitializer( (bound) -> {
-            PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
-            config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
-        });
+        
+        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound) -> {
+                    PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
+                    config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
+                }) {
+
+                    @Override
+                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
+                        super.initializeAbNDisplayPanel(displayPanel);
+
+                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+                        
+                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2 || 
+                                displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
+                            
+                            displayPanel.addWidget(minimapPanel);
+                        }
+                    }
+                };
+
+        return initializer;
     }
 }

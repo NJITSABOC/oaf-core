@@ -1,10 +1,13 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.initializers;
 
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.tan.ClusterTANGraph;
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
@@ -42,23 +45,7 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     public TaskBarPanel getTaskBar(MultiAbNGraphFrame graphFrame, TANConfiguration config) {
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
         
-        PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
 
-            @Override
-            public void showFullClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(config.getAbstractionNetwork());
-            }
-
-            @Override
-            public void showBaseClicked() {
-                config.getUIConfiguration().getAbNDisplayManager().displayBandTribalAbstractionNetwork(config.getAbstractionNetwork());
-            }
-        };
-        
-        abnTypeSelectionPanel.initialize(config, getInitializerType().equals(TANInitializerType.ClusterTAN));
-        
-        taskBar.addOtherOptionsComponent(abnTypeSelectionPanel);
-        
         return taskBar;
     }
 
@@ -82,10 +69,26 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
-        return new AggregateableAbNExplorationPanelInitializer( (bound) -> {
-            
-            ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
-            config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
-        });
+
+        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound) -> {
+                    ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
+                    config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
+                }) {
+
+                    @Override
+                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
+                        super.initializeAbNDisplayPanel(displayPanel);
+
+                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+
+                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2
+                        || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
+
+                            displayPanel.addWidget(minimapPanel);
+                        }
+                    }
+                };
+
+        return initializer;
     }
 }

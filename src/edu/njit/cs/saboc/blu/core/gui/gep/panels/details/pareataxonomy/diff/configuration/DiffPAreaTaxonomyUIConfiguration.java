@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDashboardPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.SimpleAbNDetailsPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.abn.AbNDetailsPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffNodeRootChangeExplanationModel.ChangeExplanationRowEntryFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyUIConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.DiffAreaPanel;
@@ -23,7 +23,7 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
             DiffPAreaTaxonomyListenerConfiguration listenerConfig, 
             ChangeExplanationRowEntryFactory changeExplanationFactory) {
         
-        super(config, displayManager, listenerConfig);
+        super(config, displayManager, listenerConfig, false);
         
         this.changeExplanationFactory = changeExplanationFactory;
     }
@@ -53,7 +53,7 @@ public abstract class DiffPAreaTaxonomyUIConfiguration extends PAreaTaxonomyUICo
     }
 
     @Override
-    public SimpleAbNDetailsPanel createAbNDetailsPanel() {
+    public AbNDetailsPanel createAbNDetailsPanel() {
         return new DiffPAreaTaxonomyDetailsPanel(getConfiguration());
     }
 

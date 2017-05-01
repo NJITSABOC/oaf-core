@@ -327,42 +327,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void saveCurrentView() {
-        final JFileChooser chooser = new JFileChooser();
-
-        chooser.setFileFilter(new FileFilter() {
-
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                }
-
-                return f.getName().endsWith(".png");
-            }
-
-            @Override
-            public String getDescription() {
-                return "Portal Network Graphics (.png) Images";
-            }
-        });
-
-        int returnVal = chooser.showSaveDialog(null);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            BufferedImage graphImage = abnExplorationPanel.getDisplayPanel().getCurrentViewImage();
-
-            try {
-                String file = chooser.getSelectedFile().getAbsolutePath();
-
-                if (!file.toLowerCase().endsWith(".png")) {
-                    file += ".png";
-                }
-
-                ImageIO.write(graphImage, "png", new File(file));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        
     }
 }

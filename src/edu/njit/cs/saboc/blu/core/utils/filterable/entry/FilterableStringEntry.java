@@ -14,8 +14,6 @@ public class FilterableStringEntry extends Filterable<String> {
         this.entry = entry;
     }
     
-    
-    
     public String getInitialText() {
         return String.format("<html>%s</html>", entry);
     }

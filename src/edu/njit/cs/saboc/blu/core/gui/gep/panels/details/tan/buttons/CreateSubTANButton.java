@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.NodeOptionButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 
 /**

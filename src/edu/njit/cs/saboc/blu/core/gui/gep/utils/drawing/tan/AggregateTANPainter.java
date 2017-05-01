@@ -13,6 +13,6 @@ public class AggregateTANPainter extends TANPainter {
     
     @Override
     public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
-        AggregateNodePainter.paintGroupAtPoint(g2d, group, p, scale);
+        AggregateNodePainter.paintGroupAtPoint(g2d, group, p, scale, showingHighlights, highlightedSinglyRootedNodes, highlightedPartitionNodes);
     }
 }

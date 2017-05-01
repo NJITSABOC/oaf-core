@@ -21,15 +21,19 @@ public class AreaSummaryTextFactory extends NodeSummaryTextFactory<Area> {
 
     @Override
     public String createNodeSummaryText(Area area) {
-        String areaName = area.getName();
-        int classCount = area.getConcepts().size();
-
-        String conceptType = getConfiguration().getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(classCount > 1 || classCount == 0).toLowerCase();
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("<html><b>%s</b> is an area that summarizes %d %s.",
-                areaName, classCount, conceptType));
-
-        return builder.toString();
+        
+        String areaName = "<html><b><areaName></b> is an area that summarizes "
+                + "<font color = 'RED'><conceptCount></font> <conceptTypeName count=<conceptCount>> "
+                + "in <font color = 'RED'><pareaCount></font> <nodeTypeName count=<pareaCount>>. "
+                + "It contains <font color = 'RED'><overlappingConceptCount></font> overlapping "
+                + "<conceptTypeName count=<overlappingConceptCount>> that are summarized by "
+                + "multiple <nodeTypeName count=2>.";
+        
+        areaName = areaName.replaceAll("<areaName>", area.getName());
+        areaName = areaName.replaceAll("<conceptCount>", Integer.toString(area.getConcepts().size()));
+        areaName = areaName.replaceAll("<pareaCount>", Integer.toString(area.getPAreas().size()));
+        areaName = areaName.replaceAll("<overlappingConceptCount>", Integer.toString(area.getOverlappingConcepts().size()));
+       
+        return areaName;
     }
 }

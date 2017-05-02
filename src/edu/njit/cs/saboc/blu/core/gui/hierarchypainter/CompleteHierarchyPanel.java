@@ -43,6 +43,8 @@ public class CompleteHierarchyPanel<T extends Concept> extends JPanel {
     
     public CompleteHierarchyPanel(Hierarchy<T> hierarchy, int panelWidth) {
         this.hierarchyImage = paintHierarchy(hierarchy, panelWidth);
+        
+        this.setSize(hierarchyImage.getWidth(), hierarchyImage.getHeight());
     }
     
     @Override
@@ -86,11 +88,11 @@ public class CompleteHierarchyPanel<T extends Concept> extends JPanel {
             metrics.add(new LevelMetrics(depth, levelConceptCount, rowCount, colCount));
         });
         
-        final int COL_DIVIDE_WIDTH = 20;
-        final int ROW_DIVIDE_HEIGHT = 80;
-        final int LEVEL_DIVIDE_HEIGHT = 140;
+        final int COL_DIVIDE_WIDTH = 2;
+        final int ROW_DIVIDE_HEIGHT = 8;
+        final int LEVEL_DIVIDE_HEIGHT = 10;
         
-        final int CONCEPT_WIDTH =  40;
+        final int CONCEPT_WIDTH =  4;
         final int CONCEPT_HEIGHT = CONCEPT_WIDTH;
 
         int maxCols = metrics.get(0).cols;
@@ -107,17 +109,17 @@ public class CompleteHierarchyPanel<T extends Concept> extends JPanel {
 
         int imageWidth = maxCols * (CONCEPT_WIDTH + COL_DIVIDE_WIDTH);
         
-        double scale = (double)maxWidth / imageWidth;
+        int scale = 1;
         
         int imageWidthScaled = (int)(imageWidth * scale);
         
-        int colDividerWidthScaled = Math.max((int)(COL_DIVIDE_WIDTH * scale) , 1);
-        int rowDividerHeightScaled = Math.max((int)(ROW_DIVIDE_HEIGHT * scale) , 4);
+        int colDividerWidthScaled = (int)(COL_DIVIDE_WIDTH * scale);
+        int rowDividerHeightScaled = (int)(ROW_DIVIDE_HEIGHT * scale);
         
-        int levelDivideHeightScaled = Math.max((int)(LEVEL_DIVIDE_HEIGHT * scale) , 7);
+        int levelDivideHeightScaled = (int)(LEVEL_DIVIDE_HEIGHT * scale);
         
-        int conceptWidthScaled = Math.max((int)(CONCEPT_WIDTH * scale) , 2);
-        int conceptHeightScaled = Math.max((int)(CONCEPT_HEIGHT * scale) , 2);
+        int conceptWidthScaled = (int)(CONCEPT_WIDTH * scale);
+        int conceptHeightScaled = (int)(CONCEPT_HEIGHT * scale);
 
         Map<T, Point> conceptDrawLocation = new HashMap<>();
 
@@ -167,7 +169,7 @@ public class CompleteHierarchyPanel<T extends Concept> extends JPanel {
 
         Graphics2D g = (Graphics2D) image.getGraphics();
 
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
 
         g.fillRect(0, 0, imageWidthScaled, imageHeightScaled);
 

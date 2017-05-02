@@ -4,6 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,9 +18,11 @@ import java.util.Set;
 public class NodeSummaryTextFactory<T extends Node> {
     
     private final AbNConfiguration config;
+    private final AbNTextFormatter formatter;
     
     public NodeSummaryTextFactory(AbNConfiguration config) {
         this.config = config;
+        this.formatter = new AbNTextFormatter(config.getTextConfiguration());
     }
     
     public AbNConfiguration getConfiguration() {
@@ -110,7 +114,7 @@ public class NodeSummaryTextFactory<T extends Node> {
                 result += aggregateStr;
             }
         }
-
+        result = formatter.format(result);
         return result;
     }
 }

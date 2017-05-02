@@ -24,7 +24,7 @@ public class AggregateDisjointAbNPainter extends DisjointAbNPainter {
         Point labelOffset = entry.getLabelOffset();
         savedPoint.translate((int)(labelOffset.x * scale), (int)(labelOffset.y * scale));
 
-        AggregateNodePainter.paintGroupAtPoint(g2d, entry, savedPoint, scale);
+        AggregateNodePainter.paintGroupAtPoint(g2d, entry, savedPoint, scale, showingHighlights, highlightedSinglyRootedNodes, highlightedPartitionNodes);
         
         Stroke savedStroke = g2d.getStroke();
         

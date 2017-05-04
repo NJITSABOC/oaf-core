@@ -21,14 +21,16 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     
     public static final TargetAbstractionNetwork createAggregated(
             TargetAbstractionNetwork nonAggregated, 
-            int smallestNode) {
+            int smallestNode,
+            boolean weightedAggregated) {
         
         AggregateTargetAbNGenerator generator = new AggregateTargetAbNGenerator();
         
         return generator.createAggregateTargetAbN(nonAggregated, 
                     new TargetAbstractionNetworkGenerator(), 
                     new AggregateAbNGenerator<>(), 
-                    smallestNode);
+                    smallestNode,
+                    weightedAggregated);
     }
     
     public static final TargetAbstractionNetwork createExpanded(
@@ -83,7 +85,12 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode);
+        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode, false);
+    }
+    
+     @Override
+    public TargetAbstractionNetwork getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode, weightedAggregated);
     }
     
     public TargetAbstractionNetwork expandAggregateTargetGroup(AggregateTargetGroup targetGroup) {

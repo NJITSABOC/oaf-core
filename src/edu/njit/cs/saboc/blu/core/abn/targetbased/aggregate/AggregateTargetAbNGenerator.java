@@ -23,13 +23,15 @@ public class AggregateTargetAbNGenerator {
      * @param generator
      * @param aggregateGenerator
      * @param bound
+     * @param weightedAggregated
      * @return 
      */
     public TargetAbstractionNetwork createAggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             TargetAbstractionNetworkGenerator generator,
             AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
-            int bound) {
+            int bound,
+            boolean weightedAggregated) {
 
         if (bound == 1) {
             return sourceTargetAbN;
@@ -38,7 +40,8 @@ public class AggregateTargetAbNGenerator {
         Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),
-                        bound);
+                        bound,
+                        weightedAggregated);
         
         Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
         

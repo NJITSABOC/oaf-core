@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
+import com.sun.javafx.css.SizeUnits;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
@@ -10,34 +11,43 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import jdk.nashorn.internal.objects.Global;
 
 /**
  *
  * @author Chris O
  */
 public class AggregatationSliderPanel extends AbNDisplayWidget {
+    public static AggregationAction AggregationAction;
     
     public interface AggregationAction {
-        public void createAndDisplayAggregateAbN(int minBound);
+        public void createAndDisplayAggregateAbN(int minBound, boolean weightedAggregated);
     }
     
     private final JSlider aggregationSlider;
     
     private final JTextField txtCurrentBound;
     
+    private final JCheckBox aggregationCheckBox;
+    
     private final AggregationAction aggregationAction;
     
-    private final Dimension panelSize = new Dimension(150, 48);
+//    private final Dimension panelSize = new Dimension(150, 48);
+    private final Dimension panelSize = new Dimension(150, 70);
     
     private int currentBound = 1;
     
     private boolean initialized = false;
+    
+    private boolean weightedFlag = false;
     
     public AggregatationSliderPanel(AbNDisplayPanel displayPanel, AggregationAction aggregationAction) {
         super(displayPanel);
@@ -56,13 +66,14 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             int newValue = aggregationSlider.getValue();
             
             if (initialized && !aggregationSlider.getValueIsAdjusting()) {
-                setBound(newValue);
-                
+                setBound(newValue, weightedFlag);
+
                 displayCurrentBound();
             } else {
                 displayBound(newValue);
             }
-            
+
+            displayCurrentWeightedCheckBox();
             // Hack solution to preventing slider listeners from triggering when programmatically setting 
             // bound value on initialization
             initialized = true;
@@ -78,21 +89,37 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             try {
                 int x = Integer.parseInt(txt);
                 
-                setBound(Math.max(1, x));
+                setBound(Math.max(1, x), weightedFlag);
             } catch (NumberFormatException nfe) {
 
             }
 
             displayCurrentBound();
+            displayCurrentWeightedCheckBox();
         });
-
+        
+        aggregationCheckBox = new JCheckBox("Weighted");
+        aggregationCheckBox.addItemListener((ie) -> {  
+ 
+            if (ie.getStateChange()==ItemEvent.SELECTED){
+                this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
+                weightedFlag = true;
+            }
+            else{
+                this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
+                weightedFlag = false;
+            }  
+        });
+        
+        this.add(aggregationCheckBox, BorderLayout.NORTH);
         this.add(aggregationSlider, BorderLayout.CENTER);
         this.add(txtCurrentBound, BorderLayout.EAST);
+        
     }
     
-    private void setBound(int bound) {
+    private void setBound(int bound, boolean weightedAggregated) {
         if (currentBound != bound) {
-            aggregationAction.createAndDisplayAggregateAbN(bound);
+            aggregationAction.createAndDisplayAggregateAbN(bound, weightedAggregated);
         }
     }
     
@@ -102,6 +129,14 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private void displayBound(int bound) {
         txtCurrentBound.setText(Integer.toString(bound));
+    }
+    
+    private void displayCurrentWeightedCheckBox(){
+        displayWeightedFlag(weightedFlag);
+    }
+    
+    private void displayWeightedFlag(boolean flag){
+        aggregationCheckBox.setSelected(flag);
     }
     
     @Override

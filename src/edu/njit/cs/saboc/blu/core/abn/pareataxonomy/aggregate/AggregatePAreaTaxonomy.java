@@ -21,16 +21,18 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
  */
 public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> 
         implements AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> {
-    
-    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(PAreaTaxonomy nonAggregateTaxonomy, int bound) {
+           
+    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(PAreaTaxonomy nonAggregateTaxonomy, int bound, boolean weightedAggregated) {
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
         
         return generator.createAggregatePAreaTaxonomy(
                 nonAggregateTaxonomy, 
                 new PAreaTaxonomyGenerator(),
                 new AggregateAbNGenerator<>(),
-                bound);
+                bound,
+                weightedAggregated);
     }
+    
     
     public static final PAreaTaxonomy generateAggregateRootSubtaxonomy(
             PAreaTaxonomy nonAggregateTaxonomy,
@@ -142,7 +144,12 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
     @Override
     public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound);
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, false);
+    }
+    
+    @Override
+    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean weightedAggregated) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, weightedAggregated);
     }
 
     @Override

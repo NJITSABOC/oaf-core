@@ -166,6 +166,12 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
     @Override
     public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, aggregateBound);
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, aggregateBound, true);
     }
+    
+    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean weightedAggregated) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, aggregateBound, weightedAggregated);
+    }
+    
+    
 }

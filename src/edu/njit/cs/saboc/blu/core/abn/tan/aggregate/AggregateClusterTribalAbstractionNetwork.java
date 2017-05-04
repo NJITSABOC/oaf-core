@@ -26,11 +26,13 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
      * 
      * @param nonAggregatedClusterTAN
      * @param minBound
+     * @param weightedAggregated
      * @return 
      */
     public static final ClusterTribalAbstractionNetwork generateAggregatedClusterTAN(
         ClusterTribalAbstractionNetwork nonAggregatedClusterTAN, 
-        int minBound) {
+        int minBound,
+        boolean weightedAggregated) {
         
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
@@ -38,7 +40,8 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
             nonAggregatedClusterTAN, 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
-            minBound);
+            minBound,
+            weightedAggregated);
         
         return aggregateTAN;
     }
@@ -160,7 +163,12 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     
     @Override
     public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode);
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
+    }
+    
+    @Override
+    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, weightedAggregated);
     }
 
     @Override

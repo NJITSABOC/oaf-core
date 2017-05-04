@@ -26,7 +26,8 @@ public class AggregateTANGenerator {
             final ClusterTribalAbstractionNetwork sourceTAN,
             final TribalAbstractionNetworkGenerator generator,
             final AggregateAbNGenerator<Cluster, AggregateCluster> aggregateGenerator,
-            final int min) {
+            final int min,
+            final boolean weightedAggregated) {
 
         if (min == 1) {
             return sourceTAN;
@@ -37,7 +38,8 @@ public class AggregateTANGenerator {
                         new AggregateTANFactory(),
                         sourceTAN.getClusterHierarchy(),
                         sourceTAN.getSourceHierarchy(),
-                        min);
+                        min,
+                        weightedAggregated);
 
         Hierarchy<Cluster> clusterHierarchy = (Hierarchy<Cluster>) (Hierarchy<?>) aggregateClusterHierarchy;
 

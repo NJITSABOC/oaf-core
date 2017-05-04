@@ -129,8 +129,19 @@ public class AggregateDisjointAbstractionNetwork<
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
                 new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode);
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode, false);
     }
+    
+    @Override
+    public DisjointAbstractionNetwork getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+        AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
+        
+        AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
+                new AggregateAbNGenerator<>();
+        
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode, weightedAggregated);
+    }
+    
     
     @Override
     public ExpandedDisjointAbN expandAggregateNode(AggregateDisjointNode<PARENTNODE_T> aggregateNode) {

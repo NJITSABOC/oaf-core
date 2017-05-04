@@ -13,7 +13,7 @@ public class AggregatePAreaDetailsPanel extends NodeDetailsPanel<AggregatePArea>
     
     public AggregatePAreaDetailsPanel(PAreaTaxonomyConfiguration config) {
         
-        super(new AggregatePAreaSummaryPanel(config), 
+        super(new PAreaSummaryPanel(config), 
                 config.getUIConfiguration().getNodeOptionsPanel(), 
                 new NodeConceptList(config),
                 config);

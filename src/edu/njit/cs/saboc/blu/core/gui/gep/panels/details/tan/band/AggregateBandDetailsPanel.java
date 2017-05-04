@@ -13,7 +13,7 @@ public class AggregateBandDetailsPanel extends NodeDetailsPanel<Band> {
     
     public AggregateBandDetailsPanel(TANConfiguration configuration) {
 
-        super(new AggregateBandSummaryPanel(configuration), 
+        super(new BandSummaryPanel(configuration), 
                 configuration.getUIConfiguration().getPartitionedNodeOptionsPanel(), 
                 new NodeConceptList(configuration),
                 configuration);

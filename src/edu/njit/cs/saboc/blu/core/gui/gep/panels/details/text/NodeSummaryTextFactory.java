@@ -1,10 +1,9 @@
-package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.factory;
+package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.text;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateNode;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashSet;
@@ -18,11 +17,9 @@ import java.util.Set;
 public class NodeSummaryTextFactory<T extends Node> {
     
     private final AbNConfiguration config;
-    private final AbNTextFormatter formatter;
     
     public NodeSummaryTextFactory(AbNConfiguration config) {
         this.config = config;
-        this.formatter = new AbNTextFormatter(config.getTextConfiguration());
     }
     
     public AbNConfiguration getConfiguration() {
@@ -30,13 +27,10 @@ public class NodeSummaryTextFactory<T extends Node> {
     }
     
     public String createNodeSummaryText(T node) {
-        
+
         String result = "<html><b><nodeName></b> is a <nodeTypeName> "
                 + "that summarizes <font color='RED'><conceptCount></font> "
                 + "<conceptTypeName count=<conceptCount>>.";
-        
-        result = result.replaceAll("<nodeName>", node.getName());
-        result = result.replaceAll("<conceptCount>", Integer.toString(node.getConceptCount()));
         
         AbstractionNetwork<Node> abn = config.getAbstractionNetwork();
 
@@ -50,9 +44,7 @@ public class NodeSummaryTextFactory<T extends Node> {
         descendentNodes.forEach((descendentPArea) -> {
             descendantConcepts.addAll(descendentPArea.getConcepts());
         });
-        
-        result += "<br>";
-        
+                
         String parentStr;
         
         if(parentCount > 0) {
@@ -65,7 +57,7 @@ public class NodeSummaryTextFactory<T extends Node> {
             parentStr = "It has no parent <nodeTypeName count=0> and ";
         }
         
-        result += ("<p>" + parentStr);
+        result += " " + parentStr;
         
         String childStr;
         
@@ -103,18 +95,24 @@ public class NodeSummaryTextFactory<T extends Node> {
                     aggregatedConcepts.addAll(aggregatedNode.getConcepts());
                 });
 
-                String aggregateStr = "<nodeName> is an <b>aggregate <nodeTypeName></b> that summarizes "
-                        + "<font color='RED'><aggregatedNodeCount></font> small <nodeTypeName count=<aggregateNotCount>> "
-                        + " that summarized a total of <font color = 'RED'><aggrgateConceptCount></font> <conceptTypeName "
-                        + "count=<aggrgateConceptCount>>.";
+                String aggregateStr = "<b><nodeName></b> is an <i>aggregate <nodeTypeName></i> that summarizes "
+                        + "<font color='RED'><aggregatedNodeCount></font> small <nodeTypeName count=<aggregatedNodeCount>> "
+                        + " that summarized a total of <font color = 'RED'><aggregateConceptCount></font> <conceptTypeName "
+                        + "count=<aggregateConceptCount>>.";
 
                 aggregateStr = aggregateStr.replaceAll("<aggregatedNodeCount>", Integer.toString(aNode.getAggregatedNodes().size()));
-                aggregateStr = aggregateStr.replaceAll("<aggrgateConceptCount>", Integer.toString(aggregatedConcepts.size()));
+                aggregateStr = aggregateStr.replaceAll("<aggregateConceptCount>", Integer.toString(aggregatedConcepts.size()));
 
                 result += aggregateStr;
             }
         }
-        result = formatter.format(result);
-        return result;
+        
+        result = result.replaceAll("<nodeName>", node.getName());
+        result = result.replaceAll("<conceptCount>", Integer.toString(node.getConceptCount()));
+        
+        AbNTextFormatter formatter = new AbNTextFormatter(
+                this.getConfiguration().getTextConfiguration());
+
+        return formatter.format(result);
     }
 }

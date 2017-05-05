@@ -20,7 +20,7 @@ public class SavePNGButton<T extends AbstractionNetwork> extends AbNOptionsButto
     
     public SavePNGButton(AbNConfiguration config) {
         
-        super("BluSavePng.png", "Save currenty view as .png image.");
+        super("BluSavePng.png", "Save current view as .png image.");
         
         this.config = config;
         

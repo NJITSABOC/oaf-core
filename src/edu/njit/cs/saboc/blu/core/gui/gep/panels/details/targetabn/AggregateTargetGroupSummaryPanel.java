@@ -7,7 +7,10 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configurati
  * @author Chris O
  */
 public class AggregateTargetGroupSummaryPanel extends TargetGroupSummaryPanel {
+    
     public AggregateTargetGroupSummaryPanel(TargetAbNConfiguration configuration) {
-        super(configuration, new AggregateTargetGroupSummaryTextFactory(configuration));
+        
+        super(configuration, new TargetGroupSummaryTextFactory(configuration));
+        
     }
 }

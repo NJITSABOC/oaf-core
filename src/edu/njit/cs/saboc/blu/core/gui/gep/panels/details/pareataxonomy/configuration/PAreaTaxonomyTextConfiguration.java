@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 
 /**
  *
@@ -45,7 +46,9 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
         result = result.replaceAll("<areaCount>", Integer.toString(taxonomy.getAreas().size()));
         result = result.replaceAll("<pareaCount>", Integer.toString(taxonomy.getNodeCount()));
 
-        return result;
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(result);
     }
     
     @Override
@@ -75,7 +78,9 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
                 + "<propertyTypeName count=2>, are highlighted (in blue) and its child partial-areas, which have more types of "
                 + "<propertyTypeName count=2>, are highlighted (in purple).";
 
-        return pareaTaxonomyDesc;
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(pareaTaxonomyDesc);
     }
 
     @Override
@@ -128,7 +133,9 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
         String helpDesc = "<html>An <b>area</b> represents a set of <conceptTypeName count=2> (shown below) "
                 + "that are defined using the exact same types of <propertyTypeName count=2>.";
 
-        return helpDesc;
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+
+        return formatter.format(helpDesc);
     }
 
     @Override
@@ -144,6 +151,8 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
                     + "A partial-area is named after its root and it is labeled with the total number "
                     + "of <conceptTypeName count=2> summarized by the partial-area (in parenthesis).";
         
-        return helpDesc;
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(helpDesc);
     }
 }

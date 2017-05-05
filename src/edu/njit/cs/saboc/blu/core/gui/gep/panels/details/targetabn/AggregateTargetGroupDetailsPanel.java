@@ -13,7 +13,7 @@ public class AggregateTargetGroupDetailsPanel extends NodeDetailsPanel<Aggregate
     
     public AggregateTargetGroupDetailsPanel(TargetAbNConfiguration config) {
         
-        super(new AggregateTargetGroupSummaryPanel(config), 
+        super(new TargetGroupSummaryPanel(config), 
                 config.getUIConfiguration().getNodeOptionsPanel(), 
                 new NodeConceptList(config),
                 config);

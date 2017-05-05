@@ -33,6 +33,7 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     }
     
     public TargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
+        
         this(targetAbN.getNodeHierarchy(), 
                 targetAbN.getSourceHierarchy(), 
                 targetAbN.getDerivation());

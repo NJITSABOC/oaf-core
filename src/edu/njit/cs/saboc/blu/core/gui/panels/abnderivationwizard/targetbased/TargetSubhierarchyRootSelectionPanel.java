@@ -109,6 +109,7 @@ public class TargetSubhierarchyRootSelectionPanel extends AbNDerivationWizardPan
         resetView();
     }
     
+    @Override
     public void clearContents() {
         super.clearContents();
         
@@ -116,6 +117,7 @@ public class TargetSubhierarchyRootSelectionPanel extends AbNDerivationWizardPan
         this.optSearcher = Optional.empty();
     }
 
+    @Override
     public final void resetView() {
         conceptSearchPanel.resetView();
         
@@ -152,6 +154,7 @@ public class TargetSubhierarchyRootSelectionPanel extends AbNDerivationWizardPan
         this.conceptSearchPanel.setEnabled(true);
     }
     
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
         

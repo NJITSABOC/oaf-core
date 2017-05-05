@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNFromPAreaDerivation;
 
 /**
  *
@@ -17,13 +17,23 @@ public class TargetAbstractionNetworkFromPArea<T extends TargetGroup> extends Ta
     public TargetAbstractionNetworkFromPArea(
             TargetAbstractionNetwork targetAbN, 
             PAreaTaxonomy sourceTaxonomy, 
-            PArea sourcePArea, 
-            InheritableProperty property) {
+            PArea sourcePArea) {
         
-        super(targetAbN);
+        super(targetAbN.getTargetGroupHierarchy(), 
+                targetAbN.getSourceHierarchy(), 
+                new TargetAbNFromPAreaDerivation(
+                    targetAbN.getDerivation(),
+                    sourceTaxonomy.getDerivation()));
         
         this.sourceTaxonomy = sourceTaxonomy;
         this.sourcePArea = sourcePArea;
-        
+    }
+    
+    public PAreaTaxonomy getSourceTaxonomy() {
+        return sourceTaxonomy;
+    }
+    
+    public PArea getSourcePArea() {
+        return sourcePArea;
     }
 }

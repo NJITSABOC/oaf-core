@@ -49,6 +49,22 @@ public class TargetAbstractionNetworkGenerator {
                 targetHierarchy);
     }
     
+    public TargetAbstractionNetworkFromPArea deriveTargetAbNFromPArea(
+            TargetAbstractionNetworkFactory factory,
+            PAreaTaxonomy sourceTaxonomy,
+            PArea parea,
+            InheritableProperty relationshipType,
+            Hierarchy<Concept> targetHierarchy) {
+        
+        TargetAbstractionNetwork targetAbN = this.deriveTargetAbstractionNetwork(
+                factory, 
+                parea.getHierarchy(), 
+                relationshipType, 
+                targetHierarchy);
+        
+        return factory.createTargetAbNFromPArea(targetAbN, sourceTaxonomy, parea);
+    }
+    
     /**
      * Creates a target abstraction network that summarizes the subhierarchy of
      * target concepts that have incoming relationships of specified types

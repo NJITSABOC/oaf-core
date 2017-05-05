@@ -27,13 +27,18 @@ public abstract class CreateTANButton<T extends Node> extends NodeOptionButton<T
     }
     
     public void createAndDisplayTAN() {
+        
         if (getCurrentNode().isPresent()) {
-            DisplayNewTAN display = new DisplayNewTAN(this, this.displayTAN, "Creating Tribal Abstraction Network (TAN)");
+            DisplayNewTAN display = new DisplayNewTAN(
+                    this, 
+                    this.displayTAN, 
+                    "Creating Tribal Abstraction Network (TAN)");
+            
             display.startThread();
         }
+        
     }
     
     public abstract ClusterTribalAbstractionNetwork deriveTAN();
-
 }
 

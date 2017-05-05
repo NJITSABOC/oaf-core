@@ -55,9 +55,9 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
         
         this.add(internalPanel);
 
-        this.setSize(450, 700);
+        this.setSize(520, 700);
         
-        this.setMinimumSize(new Dimension(450, 150));
+        this.setMinimumSize(new Dimension(520, 150));
         
         showFull();
         

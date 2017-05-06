@@ -92,6 +92,7 @@ public abstract class TaskBarPanel extends JPanel {
     }
     
     protected abstract BaseAbNSearchButton getAbNSearchButton(AbNConfiguration config);
+    
     protected abstract String getAbNMetricsLabel(AbNConfiguration config);
     
     private void displayAbNMetrics(AbNConfiguration config) {

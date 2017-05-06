@@ -20,12 +20,11 @@ public class GenericAbNTaskBarPanel extends TaskBarPanel {
 
     @Override
     protected AbNSearchButton getAbNSearchButton(AbNConfiguration config) {
+        
         AbNSearchButton btn = new AbNSearchButton(
                 super.getGraphFrame().getParentFrame(),
-                config.getTextConfiguration());
-        
-        btn.initialize(config);
-        
+                config);
+
         return btn;
     }
 

@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.BaseAbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.PartitionedAbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
@@ -21,15 +21,13 @@ public class PartitionedAbNTaskBarPanel extends TaskBarPanel {
     }
 
     @Override
-    protected AbNSearchButton getAbNSearchButton(AbNConfiguration config) {
+    protected BaseAbNSearchButton getAbNSearchButton(AbNConfiguration config) {
         
         PartitionedAbNConfiguration partitionedConfig = (PartitionedAbNConfiguration)config;
         
         PartitionedAbNSearchButton btn = new PartitionedAbNSearchButton(
-                super.getGraphFrame().getParentFrame(), partitionedConfig.getTextConfiguration());
-        
-        btn.initialize(config);
-        
+                super.getGraphFrame().getParentFrame(), partitionedConfig);
+
         return btn;
     }
 

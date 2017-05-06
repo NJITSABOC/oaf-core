@@ -1,9 +1,9 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.ExportAbNButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.BaseAbNSearchButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public abstract class TaskBarPanel extends JPanel {
 
     private final ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<>();
     
-    private final AbNSearchButton abnSearchBtn;
+    private final BaseAbNSearchButton abnSearchBtn;
     
     public TaskBarPanel(
             MultiAbNGraphFrame graphFrame,
@@ -91,7 +91,7 @@ public abstract class TaskBarPanel extends JPanel {
         return graphFrame;
     }
     
-    protected abstract AbNSearchButton getAbNSearchButton(AbNConfiguration config);
+    protected abstract BaseAbNSearchButton getAbNSearchButton(AbNConfiguration config);
     protected abstract String getAbNMetricsLabel(AbNConfiguration config);
     
     private void displayAbNMetrics(AbNConfiguration config) {

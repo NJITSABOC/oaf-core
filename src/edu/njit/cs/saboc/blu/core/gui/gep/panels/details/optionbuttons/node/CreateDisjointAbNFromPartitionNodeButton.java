@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.gui.listener.DisplayAbNAction;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class CreateDisjointAbNFromPartitionNodeButton<T extends Node> extends NodeOptionButton<T> {
 

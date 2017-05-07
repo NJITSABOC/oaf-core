@@ -18,7 +18,5 @@ public abstract class AbNReportsBtn<T extends AbstractionNetwork> extends AbNOpt
         });
     }
     
-    
-    
     public abstract void displayReportsAndMetrics();
 }

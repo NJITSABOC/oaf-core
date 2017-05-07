@@ -10,7 +10,7 @@ import java.util.Collections;
  *
  * @author Chris O
  */
-public class OverlappingConceptReportTableModel extends OAFAbstractTableModel<OverlappingConceptDetails>  {
+public class OverlappingConceptReportTableModel extends OAFAbstractTableModel<OverlappingConceptDetails<?>>  {
     
     private final PartitionedAbNConfiguration config;
     
@@ -26,7 +26,7 @@ public class OverlappingConceptReportTableModel extends OAFAbstractTableModel<Ov
     }
     
     @Override
-    protected Object[] createRow(OverlappingConceptDetails item) {
+    protected Object[] createRow(OverlappingConceptDetails<?> item) {
         
         String overlappingConceptName = item.getConcept().getName();
         

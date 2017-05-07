@@ -12,8 +12,7 @@ public class AbNDerivationHistoryTableModel extends OAFAbstractTableModel<AbNDer
     public AbNDerivationHistoryTableModel() {
         super(new String [] {
             "Date/Time Created",
-            "Abstraction Network Name",
-            "Description"
+            "Abstraction Network Name"
         });
     }
 
@@ -23,8 +22,7 @@ public class AbNDerivationHistoryTableModel extends OAFAbstractTableModel<AbNDer
         
         return new Object[] {
             entryTimeFormat.format(item.getDate()),
-            item.getDerivation().getName(),
-            item.getDerivation().getDescription()
+            item.getDerivation().getName()
         };
     }
 }

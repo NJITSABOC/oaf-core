@@ -51,7 +51,6 @@ public class AbNHistoryNavigationPanel extends JPanel {
         forwardBtn = new JButton();
         forwardBtn.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
         forwardBtn.addActionListener((ae) -> {
-            
             historyNavigationManager.goForward();
             
             updateNavigationButtons();

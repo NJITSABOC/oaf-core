@@ -190,7 +190,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
     
     public void addDerivationHistoryEntry(AbstractionNetwork<?> abn) {
-        this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this));
+        this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this), true);
     }
 
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {

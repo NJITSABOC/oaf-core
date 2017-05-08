@@ -11,7 +11,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -54,42 +56,119 @@ public class AbNHistoryButton extends PopupToggleButton {
             JSONObject abnJSON = entry.toJSON();
 
             arr.add(abnJSON);
-
-            try (FileWriter file = new FileWriter("testing.json")) {
-                file.write(arr.toJSONString());
-
-                file.close();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
+            
+            saveHistoryToFile(arr);
         });
 
         JButton saveAllBtn = new JButton("Save History");
+        
         saveAllBtn.addActionListener((ae) -> {
             ArrayList<AbNDerivationHistoryEntry> entries = derivationHistory.getHistory();
 
             JSONArray arr = new JSONArray();
 
-            for (AbNDerivationHistoryEntry entry : entries) {
+            entries.forEach((entry) -> {
                 arr.add(entry.toJSON());
-            }
-
-            File outputFile = new File("testing.json");
-
-            try (FileWriter file = new FileWriter(outputFile)) {
-                file.write(arr.toJSONString());
-
-                file.close();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
+            });
+            
+            saveHistoryToFile(arr);
         });
 
         JButton loadBtn = new JButton("Load History");
-        loadBtn.addActionListener((ae) -> {
-            JSONParser parser = new JSONParser();
+        
+        loadBtn.addActionListener( (ae) -> {
+            loadHistoryFromFile(graphFrame, derivationHistory, abnParser);
+        });
 
-            File file = new File("testing.json");
+        JPanel subPanel = new JPanel();
+        subPanel.add(saveBtn);
+        subPanel.add(saveAllBtn);
+        subPanel.add(loadBtn);
+
+        historyPanel.add(derivationHistoryPanel, BorderLayout.CENTER);
+        historyPanel.add(subPanel, BorderLayout.SOUTH);
+
+        this.setPopupContent(historyPanel);
+    }
+    
+    private void saveHistoryToFile(JSONArray historyArr) {
+        
+        final JFileChooser chooser = new JFileChooser();
+
+        chooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                
+                if (f.isDirectory()) {
+                    return true;
+                }
+
+                return f.getName().endsWith(".abnd");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Abstraction Network Derivation (.abnd)";
+            }
+        });
+
+        int returnVal = chooser.showSaveDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+            File file = chooser.getSelectedFile();
+
+            String fileName = file.getAbsolutePath();
+
+            if (!fileName.toLowerCase().endsWith(".abnd")) {
+                fileName += ".abnd";
+            }
+
+            File saveFile = new File(fileName);
+
+            try (FileWriter fileWriter = new FileWriter(saveFile)) {
+                fileWriter.write(historyArr.toJSONString());
+
+                fileWriter.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+    }
+    
+    private void loadHistoryFromFile(
+            MultiAbNGraphFrame graphFrame,
+            AbNDerivationHistory derivationHistory,
+            AbNDerivationParser abnParser) {
+        
+        final JFileChooser chooser = new JFileChooser();
+
+        chooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                
+                if (f.isDirectory()) {
+                    return true;
+                }
+
+                return f.getName().endsWith(".abnd");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Abstraction Network Derivation (.abnd)";
+            }
+        });
+
+        int returnVal = chooser.showOpenDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+            File file = chooser.getSelectedFile();
+
+            JSONParser parser = new JSONParser();
 
             try (FileReader reader = new FileReader(file)) {
                 JSONArray json = (JSONArray) parser.parse(reader);
@@ -100,6 +179,7 @@ public class AbNHistoryButton extends PopupToggleButton {
                     ArrayList<AbNDerivationHistoryEntry> entries = historyParser.getDerivationHistory(graphFrame, abnParser, json);
 
                     this.derivationHistory.setHistory(entries);
+                    
                 } catch (AbNDerivationHistoryParseException parseException) {
 
                     parseException.printStackTrace();
@@ -115,16 +195,6 @@ public class AbNHistoryButton extends PopupToggleButton {
             } catch (ParseException pe) {
                 pe.printStackTrace();
             }
-        });
-
-        JPanel subPanel = new JPanel();
-        subPanel.add(saveBtn);
-        subPanel.add(saveAllBtn);
-        subPanel.add(loadBtn);
-
-        historyPanel.add(derivationHistoryPanel, BorderLayout.CENTER);
-        historyPanel.add(subPanel, BorderLayout.SOUTH);
-
-        this.setPopupContent(historyPanel);
+        }
     }
 }

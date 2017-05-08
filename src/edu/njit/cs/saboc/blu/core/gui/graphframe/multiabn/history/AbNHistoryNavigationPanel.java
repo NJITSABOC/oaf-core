@@ -19,22 +19,12 @@ public class AbNHistoryNavigationPanel extends JPanel {
    
     private final AbNHistoryButton viewHistoryBtn;
     
-    private final MultiAbNGraphFrame graphFrame;
-    
-    private final AbNDerivationHistory derivationHistory;
-    
     private final AbNHistoryNavigationManager historyNavigationManager;
-    
-    private final AbNDerivationParser abnParser;
 
     public AbNHistoryNavigationPanel(
             MultiAbNGraphFrame graphFrame,
             AbNDerivationHistory derivationHistory,
             AbNDerivationParser abnParser) {
-        
-        this.graphFrame = graphFrame;
-        this.derivationHistory = derivationHistory;
-        this.abnParser = abnParser;
         
         historyNavigationManager = new AbNHistoryNavigationManager(derivationHistory);
         

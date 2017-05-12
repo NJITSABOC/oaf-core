@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AncestorSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateAncestorSubtaxonomyDerivation;
@@ -16,13 +17,15 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     
     private final AncestorSubtaxonomy nonAggregatedRootSubtaxonomy;
     private final int aggregateBound;
+    private final boolean weightedAggregated;
     
     public AggregateAncestorSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
             int aggregateBound,
             AggregatePArea selectedRoot,
             AncestorSubtaxonomy nonAggregatedRootSubtaxonomy,
-            PAreaTaxonomy subtaxonomy) {
+            PAreaTaxonomy subtaxonomy,
+            boolean weightedAggregated) {
         
         super(aggregatedSuperAbN, 
                 selectedRoot, 
@@ -34,6 +37,7 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
         this.aggregateBound = aggregateBound;
+        this.weightedAggregated = weightedAggregated;
     }
     
     public AggregateAncestorSubtaxonomy(AggregateAncestorSubtaxonomy subtaxonomy) {
@@ -41,7 +45,9 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
                 subtaxonomy.getAggregateBound(), 
                 subtaxonomy.getSelectedRoot(), 
                 subtaxonomy.getNonAggregateSourceAbN(), 
-                subtaxonomy);
+                subtaxonomy,
+                subtaxonomy.getAggregatedProperty().getWeighted()
+                );
     }
 
     @Override
@@ -83,5 +89,10 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     @Override
     public PAreaTaxonomy createAncestorSubtaxonomy(AggregatePArea source) {
         return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSourceAbN(), this, source);
+    }
+    
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(aggregateBound, weightedAggregated);
     }
 }

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
@@ -45,12 +46,15 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     private final TargetAbstractionNetwork sourceTargetAbN;
     
     private final int minBound;
+    
+    private final boolean weightedAggregated;
 
     public AggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             int minBound,
             Hierarchy<T> groupHierarchy,
-            Hierarchy<Concept> sourceHierarchy) {
+            Hierarchy<Concept> sourceHierarchy,
+            boolean weightedAggregated) {
 
         super(groupHierarchy, 
                 sourceHierarchy, 
@@ -58,6 +62,7 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;
+        this.weightedAggregated = weightedAggregated;
     }
     
     public AggregateTargetAbN(AggregateTargetAbN base) {
@@ -65,7 +70,9 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
         this(base.getNonAggregateSourceAbN(), 
                 base.getAggregateBound(), 
                 base.getNodeHierarchy(), 
-                base.getSourceHierarchy());
+                base.getSourceHierarchy(),
+                base.getAggregatedProperty().getWeighted()
+        );
     }
 
     @Override
@@ -96,4 +103,11 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
     public TargetAbstractionNetwork expandAggregateTargetGroup(AggregateTargetGroup targetGroup) {
         return AggregateTargetAbN.createExpanded(this, targetGroup);
     }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, weightedAggregated);
+    }
+    
+    
 }

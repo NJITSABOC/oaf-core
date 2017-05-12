@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
@@ -76,13 +77,17 @@ public class AggregateDisjointAbstractionNetwork<
                 superAggregateDisjointAbN,
                 agregateAbN.getAggregateBound(),
                 ancestorDisjointAbN,
-                aggregatedAncestorAbN);
+                aggregatedAncestorAbN,
+                agregateAbN.getAggregatedProperty().getWeighted()
+        );
     }
     
     
     private final DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> sourceAbN;
     
     private final int aggregateBound;
+    
+    private final boolean weightedAggregated;
     
     public AggregateDisjointAbstractionNetwork(
             DisjointAbstractionNetwork sourceAbN,
@@ -92,7 +97,9 @@ public class AggregateDisjointAbstractionNetwork<
             Hierarchy<Concept> sourceHierarchy,
             int levels,
             Set<PARENTNODE_T> allNodes,
-            Set<PARENTNODE_T> overlappingNodes) {
+            Set<PARENTNODE_T> overlappingNodes,
+            boolean weightedAggregated
+        ) {
         
         super(parentAbN, 
                 groupHierarchy, 
@@ -105,6 +112,7 @@ public class AggregateDisjointAbstractionNetwork<
         
         this.sourceAbN = sourceAbN;
         this.aggregateBound = aggregateBound;
+        this.weightedAggregated = weightedAggregated;
     }
 
     @Override
@@ -156,4 +164,10 @@ public class AggregateDisjointAbstractionNetwork<
                 root);
         
     }
+    
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(aggregateBound, weightedAggregated);
+    }
+    
 }

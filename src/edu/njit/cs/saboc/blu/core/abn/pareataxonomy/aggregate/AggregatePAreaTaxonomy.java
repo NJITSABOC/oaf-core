@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AncestorSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.ExpandedSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
@@ -43,6 +44,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 selectedRoot.getAggregatedHierarchy().getRoot());
         
         int aggregateBound = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregateBound();
+        boolean weightedAggregated = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregatedProperty().getWeighted();
         
         PAreaTaxonomy aggregateRootSubtaxonomy = nonAggregateRootSubtaxonomy.getAggregated(aggregateBound);
         
@@ -50,7 +52,9 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 superAggregateTaxonomy,
                 aggregateBound,
                 nonAggregateRootSubtaxonomy, 
-                aggregateRootSubtaxonomy);
+                aggregateRootSubtaxonomy,
+                weightedAggregated
+        );
     }
     
     public static final PAreaTaxonomy generateAggregateAncestorSubtaxonomy(
@@ -73,6 +77,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 sourceHierarchy);
 
         int aggregateBound = ((AggregateAbstractionNetwork)superAggregateTaxonomy).getAggregateBound();
+        boolean weightedAggregate = ((AggregateAbstractionNetwork)superAggregateTaxonomy).getAggregatedProperty().getWeighted();
         
         // Convert to ancestor subhierarchy
         AncestorSubtaxonomy subtaxonomy = new AncestorSubtaxonomy(
@@ -87,7 +92,9 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 aggregateBound,
                 selectedRoot,
                 subtaxonomy, 
-                aggregateAncestorSubtaxonomy);
+                aggregateAncestorSubtaxonomy,
+                weightedAggregate
+        );
     }
     
     public static final ExpandedSubtaxonomy generateExpandedSubtaxonomy(
@@ -103,10 +110,13 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
     private final int minBound;
     
+    private final boolean weightedAggregated;
+    
     public AggregatePAreaTaxonomy(
             PAreaTaxonomy nonAggregateBaseTaxonomy,
             int minBound,
-            PAreaTaxonomy aggregatedPAreaTaxonomy) {
+            PAreaTaxonomy aggregatedPAreaTaxonomy,
+            boolean weightedAggregated) {
     
         super(aggregatedPAreaTaxonomy.getAreaTaxonomy(), 
                 aggregatedPAreaTaxonomy.getPAreaHierarchy(), 
@@ -115,6 +125,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
         
         this.nonAggregateBaseTaxonomy = nonAggregateBaseTaxonomy;
         this.minBound = minBound;
+        this.weightedAggregated = weightedAggregated;
     }
     
     @Override
@@ -160,5 +171,10 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     @Override
     public PAreaTaxonomy createAncestorSubtaxonomy(AggregatePArea source) {
         return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSourceAbN(), this, source);
+    }
+    
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(minBound, weightedAggregated);
     }
 }

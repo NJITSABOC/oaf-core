@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.tan.AncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
@@ -17,13 +18,15 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
     
     private final ClusterTribalAbstractionNetwork nonAggregateSourceTAN;
     private final int minBound;
+    private final boolean weightedAggregated;
     
     public AggregateAncestorSubTAN(
             ClusterTribalAbstractionNetwork aggregateSourceTAN, 
             AggregateCluster sourceCluster,
             int aggregateBound, 
             ClusterTribalAbstractionNetwork nonAggregateRootTAN,
-            ClusterTribalAbstractionNetwork subTAN) {
+            ClusterTribalAbstractionNetwork subTAN,
+            boolean weightedAggregated) {
         
         super(aggregateSourceTAN, 
                 sourceCluster, 
@@ -37,6 +40,7 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
         
         this.minBound = aggregateBound;
         this.nonAggregateSourceTAN = nonAggregateRootTAN;
+        this.weightedAggregated = weightedAggregated;
     }
     
     public AggregateAncestorSubTAN(AggregateAncestorSubTAN subTAN) {
@@ -45,7 +49,8 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 subTAN.getSelectedRoot(), 
                 subTAN.getAggregateBound(), 
                 subTAN.getNonAggregateSourceAbN(), 
-                subTAN);
+                subTAN,
+                subTAN.getAggregatedProperty().getWeighted());
     }
 
     @Override
@@ -95,6 +100,11 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 this.getNonAggregateSourceAbN(), 
                 this.getSuperAbN(), 
                 root);
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, weightedAggregated);
     }
     
 }

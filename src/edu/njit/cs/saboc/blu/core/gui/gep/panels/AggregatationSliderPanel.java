@@ -73,7 +73,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 displayBound(newValue);
             }
 
-            displayCurrentWeightedCheckBox();
+//            displayCurrentWeightedCheckBox();
             // Hack solution to preventing slider listeners from triggering when programmatically setting 
             // bound value on initialization
             initialized = true;
@@ -194,14 +194,17 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         aggregationSlider.setMaximum(bound);
         
-         this.initialized = false;
+        this.initialized = false;
         
         if(abn instanceof AggregateAbstractionNetwork) {
             int abnBound = ((AggregateAbstractionNetwork)abn).getAggregateBound();
+            boolean weightedAggregate = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getWeighted();
             
             aggregationSlider.setValue(abnBound);
+            aggregationCheckBox.setSelected(weightedAggregate);
             
             this.currentBound = abnBound;
+            this.weightedFlag = weightedAggregate;
         } else {
             this.initialized = true;
         }

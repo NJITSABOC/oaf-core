@@ -1,7 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
@@ -24,13 +26,15 @@ public class AggregateAncestorDisjointAbN<
     
     private final int aggregateBound;
     private final AncestorDisjointAbN nonAggregatedDisjointAbN;
+    private final boolean weightedAggregated;
     
     public AggregateAncestorDisjointAbN(
             AggregateDisjointNode<PARENTNODE_T> selectedRoot,
             DisjointAbstractionNetwork aggregatedSuperAbN, 
             int aggregateBound,
             AncestorDisjointAbN nonAggregatedDisjointAbN,
-            DisjointAbstractionNetwork subAbN) {
+            DisjointAbstractionNetwork subAbN,
+            boolean weightedAggregated) {
         
         super(selectedRoot, 
                 aggregatedSuperAbN, 
@@ -40,6 +44,8 @@ public class AggregateAncestorDisjointAbN<
         
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
         this.aggregateBound = aggregateBound;
+        this.weightedAggregated = weightedAggregated;
+        
     }
 
     @Override
@@ -72,4 +78,8 @@ public class AggregateAncestorDisjointAbN<
                 (AggregateDisjointNode)root);
     }
 
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(aggregateBound, weightedAggregated);
+    }
 }

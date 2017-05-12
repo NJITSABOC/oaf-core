@@ -46,7 +46,9 @@ public class AggregateDisjointAbNGenerator<
                 sourceDisjointAbN.getSourceHierarchy(),
                 sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
-                sourceDisjointAbN.getOverlappingNodes());
+                sourceDisjointAbN.getOverlappingNodes(),
+                weightedAggregated
+        );
 
         return aggregateDisjointAbN;
     }

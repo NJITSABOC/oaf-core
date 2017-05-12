@@ -45,7 +45,7 @@ public class AggregateTargetAbNGenerator {
         
         Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
         
-        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, bound, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
+        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, bound, targetHierarchy, sourceTargetAbN.getSourceHierarchy(), weightedAggregated);
 
         targetAbN.setAggregated(true);
         

@@ -20,6 +20,7 @@ public class AggregateTANGenerator {
      * @param generator
      * @param aggregateGenerator
      * @param min
+     * @param weightedAggregated
      * @return 
      */
     public ClusterTribalAbstractionNetwork createAggregateTAN(
@@ -53,7 +54,9 @@ public class AggregateTANGenerator {
                 min,
                 tan.getBandTAN(),
                 tan.getClusterHierarchy(),
-                tan.getSourceHierarchy());
+                tan.getSourceHierarchy(),
+                weightedAggregated
+        );
     }
     
     

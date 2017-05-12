@@ -55,7 +55,8 @@ public class AggregatePAreaTaxonomyGenerator {
         return new AggregatePAreaTaxonomy(
                 sourceTaxonomy, 
                 min, 
-                aggregatedTaxonomy);
+                aggregatedTaxonomy,
+                weightedAggregated);
     }
    
     /**

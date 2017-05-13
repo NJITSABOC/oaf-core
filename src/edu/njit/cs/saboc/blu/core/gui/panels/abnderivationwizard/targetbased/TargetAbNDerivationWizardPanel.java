@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -226,18 +227,43 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     private void deriveTargetAbstractionNetwork() {
         
         if(!super.getCurrentOntology().isPresent()) {
+            
+             JOptionPane.showMessageDialog(null,
+                    "Cannot derive Target Abstraction Network. No ontology loaded.",
+                    "Error: No ontology loaded",
+                    JOptionPane.ERROR_MESSAGE);
+            
             return;
         }
         
         if(!sourceRootSelectionPanel.getSelectedRoot().isPresent()) {
+            
+             JOptionPane.showMessageDialog(null,
+                    "Cannot derive Target Abstraction Network. No source root concept selected.",
+                    "Error: No Source Root Concept Selected",
+                    JOptionPane.ERROR_MESSAGE);
+            
             return;
         }
         
         if(propertyListPanel.getUserSelectedProperties().isEmpty()) {
+            
+            
+            JOptionPane.showMessageDialog(null,
+                    "Cannot derive Target Abstraction Network. No property selected.",
+                    "Error: No Property Selected",
+                    JOptionPane.ERROR_MESSAGE);
+            
             return;
         }
         
-        if(!targetRootSelectionPanel.getSelectedRoot().isPresent()) {
+        if (!targetRootSelectionPanel.getSelectedRoot().isPresent()) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Cannot derive Target Abstraction Network. No target root concept selected.",
+                    "Error: No Target Root Concept Selected",
+                    JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         

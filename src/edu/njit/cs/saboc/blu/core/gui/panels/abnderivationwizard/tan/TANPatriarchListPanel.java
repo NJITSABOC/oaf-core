@@ -36,7 +36,6 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
             BaseRootSelectionOptionsPanel rootSelectionPanel) {
         
         this.rootSelectionPanel = rootSelectionPanel;
-        
                 
         this.setLayout(new BorderLayout());
         
@@ -89,16 +88,6 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
 
         this.rootSelectionPanel.addRootSelectionModeChangedListener((mode) -> {
             this.useChildrenBtn.setSelected(true);
-
-//            if (mode.equals(RootSelectionMode.WholeOntology)) {
-//                useChildrenSelected();
-//
-//                this.useChildrenBtn.setEnabled(false);
-//                this.userSelectionBtn.setEnabled(false);
-//            } else {
-//                this.useChildrenBtn.setEnabled(true);
-//                this.userSelectionBtn.setEnabled(true);
-//            }
         });
         
         resetView();
@@ -111,18 +100,10 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
     @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
-
-//        if (rootSelectionPanel.getRootSelectionMode().equals(RootSelectionMode.WholeOntology)) {
-//            // Don't enable when in whole ontology selection mode...
-//            
-//        } else {
-//            useChildrenBtn.setEnabled(value);
-//            userSelectionBtn.setEnabled(value);
-//        }
-
     }
     
     public void conceptSelected(Concept concept) {
+        
         if (useChildrenBtn.isSelected()) {
             selectedPatriarchs.clear();
             

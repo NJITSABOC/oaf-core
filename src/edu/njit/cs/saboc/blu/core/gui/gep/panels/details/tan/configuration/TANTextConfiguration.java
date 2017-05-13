@@ -5,6 +5,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.text.AggregateAbNTextGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +19,7 @@ import java.util.Set;
 public abstract class TANTextConfiguration extends PartitionedAbNTextConfiguration<Cluster, Band> {
 
     private final ClusterTribalAbstractionNetwork<Cluster> tan;
-
+    
     public TANTextConfiguration(
             OntologyEntityNameConfiguration ontologyEntityNameConfig, 
             ClusterTribalAbstractionNetwork<Cluster> tan) {
@@ -83,30 +85,29 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
 
     @Override
     public String getContainerHelpDescription(Band container) {
-        StringBuilder helpDescription = new StringBuilder();
-
-        String text = "A <b>band</b> summarizes the set of all <conceptTypeName count=2> that "
+  
+        String result = "A <b>band</b> summarizes the set of all <conceptTypeName count=2> that "
                 + "exist at the intersection of the same subhierarchies. "
                 + "The <conceptTypeName count=2> summarized by a band are all descendants of "
                 + "the same patriarch <conceptTypeName count=2>. "
                 + "Each <conceptTypeName count=2> is summarized by exactly one band.";
 
-        helpDescription.append(text);
-
-        return helpDescription.toString();
+    
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(result);
     }
 
     @Override
     public String getNodeHelpDescription(Cluster node) {
-        StringBuilder helpDescription = new StringBuilder();
         
-        String text = "A <b>cluster</b> summarizes a subhierarchy of "
+        String result = "A <b>cluster</b> summarizes a subhierarchy of "
                 + "<conceptTypeName count=2> root at a specific point of intersection "
                 + "between two or more subhierarchies (the \"root\").";
 
-        helpDescription.append(text);
-
-        return helpDescription.toString();
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(result);
     }
 
     @Override
@@ -148,8 +149,19 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
         result = result.replaceAll("<clusterCount>", Integer.toString(tan.getClusters().size()));
         result = result.replaceAll("<patriarchCount>", Integer.toString(tan.getPatriarchClusters().size()));
         result = result.replaceAll("<intersectingConceptCount>", Integer.toString(intersectionConcepts.size()));
+        
+        
+        if (tan.isAggregated()) {
+            AggregateAbNTextGenerator generator = new AggregateAbNTextGenerator();
 
-        return result;
+            result += "<p>";
+
+            result += generator.generateAggregateDetailsText(this, tan);
+        }
+        
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(result);
     }
 
     @Override
@@ -177,6 +189,8 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
                 + "Clicking on a cluster will show you the parent clusters (in blue) "
                 + "and child clusters (in purple) that summarize descendants that are descendants of one or more  patriarchs.";
 
-        return result;
+        AbNTextFormatter formatter = new AbNTextFormatter(this);
+        
+        return formatter.format(result);
     }
 }

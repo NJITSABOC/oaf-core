@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.text.AggregateAbNTextGenerator;
 
 /**
  *
@@ -14,7 +15,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextConfiguration<PArea, Area> {
     
     private final PAreaTaxonomy taxonomy;
-    
+
     public PAreaTaxonomyTextConfiguration(
             OntologyEntityNameConfiguration ontologyEntityNameConfig, 
             PAreaTaxonomy taxonomy) {
@@ -45,6 +46,15 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
         result = result.replaceAll("<conceptCount>", Integer.toString(taxonomy.getSourceHierarchy().getNodes().size()));
         result = result.replaceAll("<areaCount>", Integer.toString(taxonomy.getAreas().size()));
         result = result.replaceAll("<pareaCount>", Integer.toString(taxonomy.getNodeCount()));
+        
+
+        if (taxonomy.isAggregated()) {
+            AggregateAbNTextGenerator generator = new AggregateAbNTextGenerator();
+
+            result += "<p>";
+
+            result += generator.generateAggregateDetailsText(this, taxonomy);
+        }
 
         AbNTextFormatter formatter = new AbNTextFormatter(this);
         

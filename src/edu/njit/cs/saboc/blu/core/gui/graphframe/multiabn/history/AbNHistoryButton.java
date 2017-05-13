@@ -41,7 +41,7 @@ public class AbNHistoryButton extends PopupToggleButton {
         this.derivationHistory = derivationHistory;
 
         this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
-        this.derivationHistoryPanel.showHistory(derivationHistory);
+        displayHistory(derivationHistory);
         
         this.addActionListener( (ae) -> {
             this.derivationHistoryPanel.showHistory(derivationHistory);
@@ -89,6 +89,10 @@ public class AbNHistoryButton extends PopupToggleButton {
         historyPanel.add(subPanel, BorderLayout.SOUTH);
 
         this.setPopupContent(historyPanel);
+    }
+    
+    public final void displayHistory(AbNDerivationHistory derivationHistory) {
+        this.derivationHistoryPanel.showHistory(derivationHistory);
     }
     
     private void saveHistoryToFile(JSONArray historyArr) {

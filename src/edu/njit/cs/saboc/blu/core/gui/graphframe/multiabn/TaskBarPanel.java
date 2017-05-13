@@ -2,12 +2,10 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.AbNSearchButton;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.search.BaseAbNSearchButton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -30,8 +28,6 @@ public abstract class TaskBarPanel extends JPanel {
     
     private final JPanel otherOptionsPanel = new JPanel();
 
-    private final JPanel reportsButtonPanel = new JPanel();
-
     private final JPanel toggleButtonPanel = new JPanel();
 
     private final ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<>();
@@ -49,11 +45,6 @@ public abstract class TaskBarPanel extends JPanel {
         
         add(otherOptionsPanel);
         
-        add(new JSeparator(SwingConstants.VERTICAL));
-        add(Box.createHorizontalStrut(5));
-
-        add(reportsButtonPanel);
-
         add(new JSeparator(SwingConstants.VERTICAL));
         add(Box.createHorizontalStrut(5));
 
@@ -91,6 +82,10 @@ public abstract class TaskBarPanel extends JPanel {
         return graphFrame;
     }
     
+    public void clear() {
+        this.disposeAllPopupButtons();
+    }
+    
     protected abstract BaseAbNSearchButton getAbNSearchButton(AbNConfiguration config);
     
     protected abstract String getAbNMetricsLabel(AbNConfiguration config);
@@ -107,6 +102,14 @@ public abstract class TaskBarPanel extends JPanel {
     
     public final void closeAllPopupButtons() {
         toggleMenuButtons.forEach((button) -> {
+            button.closePopup();
+        });
+    }
+    
+    public final void closeAllPopupButtonsException(PopupToggleButton btn) {
+        toggleMenuButtons.stream().filter( (button) -> {
+            return button != btn;
+        }).forEach( (button) -> {
             button.closePopup();
         });
     }
@@ -133,22 +136,10 @@ public abstract class TaskBarPanel extends JPanel {
         otherOptionsPanel.repaint();
     }
 
-    public final void addReportButtonToMenu(final AbstractButton button) {
-        reportsButtonPanel.add(button);
-        
-        reportsButtonPanel.revalidate();
-        reportsButtonPanel.repaint();
-    }
-
-    public final void removeReportButtonFromMenu(final AbstractButton button) {
-        reportsButtonPanel.remove(button);
-        
-        reportsButtonPanel.revalidate();
-        reportsButtonPanel.repaint();
-    }
-    
     public final void addToggleableButtonToMenu(final PopupToggleButton button) {
         toggleMenuButtons.add(button);
         toggleButtonPanel.add(button);
+        
+        button.setTaskBarPanel(this);
     }
 }

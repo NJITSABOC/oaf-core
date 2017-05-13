@@ -1,18 +1,12 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.buttons;
 
-import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -23,68 +17,10 @@ import javax.swing.JToggleButton;
  * @author Chris
  */
 public class PopupToggleButton extends JToggleButton {
-    
-    private class PopupStateManager {
 
-        private boolean popupHasFocus = false;
-        
-        private boolean buttonHasFocus = false;
-        
-        private boolean popupLostFocus = false;
-                
-        private boolean clickedToClose = false;
-        
-        private boolean clickedToOpen = false;
-        
-        
-        public void popupHasFocus(boolean value) {
-            popupHasFocus = value;
-
-            if(value) {
-                popupLostFocus = false;
-            } else {
-                popupLostFocus = true;
-                
-                if(clickedToOpen) {
-                    clickedToOpen = false;
-                } else {
-                    doUnselected();
-                }
-            }
-        }
-        
-        public void buttonHasFocus(boolean value) {
-            buttonHasFocus = value;
-            
-            if(value) {               
-                if (popupLostFocus) {
-                    popupLostFocus = false;
-                    clickedToClose = true;
-                }
-            } else {
-                popupLostFocus = false;
-                clickedToClose = false;
-            }
-        }
-        
-        public void buttonClicked() {
-
-            if(clickedToClose) {
-                clickedToClose = false;
-                
-                doUnselected();
-            } else {
-                clickedToOpen = true;
-                
-                doSelected();
-            }
-        }
-
-    }
-    
-    private final PopupStateManager popupState = new PopupStateManager();
-            
     private final JDialog popup;
+    
+    private TaskBarPanel taskBarPanel = null;
     
     public PopupToggleButton(JFrame parent, String text) {
         this.setText(text);
@@ -94,20 +30,15 @@ public class PopupToggleButton extends JToggleButton {
         popup.setFocusableWindowState(true);
         popup.setFocusable(true);
         
-        popup.addWindowFocusListener(new WindowFocusListener() {
-            public void windowGainedFocus(WindowEvent e) {
-                popupState.popupHasFocus(false);
+       
+        this.addActionListener( (ae) -> {
+            
+            if(isSelected()) {
+                doSelected();
+            } else {
+                doUnselected();
             }
 
-            public void windowLostFocus(WindowEvent e) {
-                popupState.popupHasFocus(false);
-            }
-        });
-
-        this.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                popupState.buttonClicked();
-            }
         });
         
         parent.addComponentListener(new ComponentListener() {
@@ -128,30 +59,28 @@ public class PopupToggleButton extends JToggleButton {
                 updatePopupLocation();
             }
         });
-
-        this.addFocusListener(new FocusListener() {
-
-            public void focusLost(FocusEvent e) {
-                popupState.buttonHasFocus(false);
-            }
-
-            public void focusGained(FocusEvent e) {
-                popupState.buttonHasFocus(true);
-            }
-        });
+    }
+    
+    public void setTaskBarPanel(TaskBarPanel taskBarPanel) {
+        this.taskBarPanel = taskBarPanel;
     }
         
-    public void doSelected() {
+    public final void doSelected() {
         setIcon(ImageManager.getImageManager().getIcon("cancel.png"));
         
         setSelected(true);
         
         popup.setVisible(true);
         
+        
+        if(taskBarPanel != null) {
+            taskBarPanel.closeAllPopupButtonsException(this);
+        }
+        
         updatePopupLocation();
     }
     
-    public void doUnselected() {
+    public final void doUnselected() {
         setIcon(null);
         
         setSelected(false);

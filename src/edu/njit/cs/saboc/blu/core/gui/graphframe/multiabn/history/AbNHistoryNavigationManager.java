@@ -43,6 +43,8 @@ public class AbNHistoryNavigationManager {
         
         currentHistoryLocation--;
         
+        history.addEntry(history.getHistory().get(currentHistoryLocation), false);
+
         history.getHistory().get(currentHistoryLocation).displayEntry();
     }
     

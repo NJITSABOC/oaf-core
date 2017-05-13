@@ -90,7 +90,7 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends MultiR
     }
     
     public Set<Concept> getOverlappingConcepts() {
-        Set<OverlappingConceptDetails> details = this.getOverlappingConceptDetails();
+        Set<OverlappingConceptDetails<T>> details = this.getOverlappingConceptDetails();
         
         Set<Concept> overlappingConcepts = new HashSet<>();
         
@@ -101,9 +101,9 @@ public abstract class PartitionedNode<T extends SinglyRootedNode> extends MultiR
         return overlappingConcepts;
     }
         
-    public Set<OverlappingConceptDetails> getOverlappingConceptDetails() {
+    public Set<OverlappingConceptDetails<T>> getOverlappingConceptDetails() {
         
-        Set<OverlappingConceptDetails> overlappingResults = new HashSet<>();
+        Set<OverlappingConceptDetails<T>> overlappingResults = new HashSet<>();
         
         getConceptNodes().forEach( (c, overlappingNodes) -> {
             if(overlappingNodes.size() > 1) {

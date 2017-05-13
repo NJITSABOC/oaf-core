@@ -18,17 +18,17 @@ import java.util.Set;
  */
 public class OverlappingConceptReportPanel extends AbNReportPanel<PartitionedAbstractionNetwork> {
     
-    private final AbstractEntityList<OverlappingConceptDetails> overlappingConceptReportList; 
+    private final AbstractEntityList<OverlappingConceptDetails<?>> overlappingConceptReportList; 
     
     public OverlappingConceptReportPanel(PartitionedAbNConfiguration config) {
         super(config);
         
         this.setLayout(new BorderLayout());
         
-        this.overlappingConceptReportList = new AbstractEntityList<OverlappingConceptDetails> (
+        this.overlappingConceptReportList = new AbstractEntityList<OverlappingConceptDetails<?>> (
                 new OverlappingConceptReportTableModel(config)) {
                     
-            public String getBorderText(Optional<ArrayList<OverlappingConceptDetails>> reports) {
+            public String getBorderText(Optional<ArrayList<OverlappingConceptDetails<?>>> reports) {
                 if(reports.isPresent()) {
                     return String.format("Overlapping %s (%d total)", 
                             config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true), reports.get().size());
@@ -47,7 +47,7 @@ public class OverlappingConceptReportPanel extends AbNReportPanel<PartitionedAbs
    
         Set<PartitionedNode> containers = abn.getBaseAbstractionNetwork().getNodes();
 
-        ArrayList<OverlappingConceptDetails> entries = new ArrayList<>();
+        ArrayList<OverlappingConceptDetails<?>> entries = new ArrayList<>();
         
         containers.forEach((container) -> {
             entries.addAll(container.getOverlappingConceptDetails());

@@ -43,12 +43,14 @@ public class AbNDerivationHistory {
         });
     }
     
-    public void addEntry(AbNDerivationHistoryEntry entry) {
+    public void addEntry(AbNDerivationHistoryEntry entry, boolean fireListeners) {
         entries.add(entry);
-        
-        historyChangedListeners.forEach( (listener) -> {
-            listener.historyChanged();
-        });
+
+        if (fireListeners) {
+            historyChangedListeners.forEach((listener) -> {
+                listener.historyChanged();
+            });
+        }
     }
     
     public ArrayList<AbNDerivationHistoryEntry> getHistory() {

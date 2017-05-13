@@ -12,15 +12,10 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.pareataxonomy.AggregatePAreaTaxonomyPainter;
-import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PartitionedAbNSelectionPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.AbNDerivationExplanationPanel;
-import edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation.PAreaTaxonomyDerivationExplanation;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 /**
@@ -54,7 +49,6 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
         
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
 
-        
         return taskBar;
     }
 

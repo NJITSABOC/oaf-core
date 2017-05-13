@@ -104,9 +104,7 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
 
             @Override
             public void noRootSelected() {
-                rootSelectionListeners.forEach((listener) -> {
-                    listener.noRootSelected();
-                });
+                clearCurrentRoot();
             }
         });
         
@@ -143,6 +141,14 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
     public Optional<Concept> getSelectedRoot() {
         return currentRoot;
     }
+    
+    public void clearCurrentRoot() {
+        this.currentRoot = Optional.empty();
+
+        rootSelectionListeners.forEach((listener) -> {
+            listener.noRootSelected();
+        });
+    }
 
     public void initialize(Ontology ontology, OntologySearcher searcher) {        
         super.initialize(ontology);
@@ -165,6 +171,8 @@ public abstract class BaseRootSelectionOptionsPanel<ABN_T extends AbstractionNet
     @Override
     public void clearContents() {
         super.clearContents();
+        
+        clearCurrentRoot();
         
         this.rootSelectionPanels.values().forEach( (panel) -> { 
             panel.clear();

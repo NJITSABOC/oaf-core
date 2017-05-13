@@ -37,7 +37,9 @@ public class SelectOntologyRootPanel<T extends Concept> extends RootSelectionPan
 
             @Override
             public void entityDoubleClicked(Concept c) {
-                entityClicked(c);
+                getRootSelectionListeners().forEach((listener) -> {
+                    listener.rootDoubleClicked(c);
+                });
             }
 
             @Override
@@ -91,8 +93,15 @@ public class SelectOntologyRootPanel<T extends Concept> extends RootSelectionPan
 
     @Override
     public void selected() {
-        getRootSelectionListeners().forEach((listener) -> {
-            listener.noRootSelected();
-        });
+        
+        if(this.ontologyRootList.getSelectedItem().isPresent()) {
+            getRootSelectionListeners().forEach((listener) -> {
+                listener.rootSelected(this.ontologyRootList.getSelectedItem().get());
+            });
+        } else {
+            getRootSelectionListeners().forEach((listener) -> {
+                listener.noRootSelected();
+            });
+        }
     }
 }

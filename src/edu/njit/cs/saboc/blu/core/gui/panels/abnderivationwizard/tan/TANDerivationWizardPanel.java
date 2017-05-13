@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -122,15 +123,23 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     }
     
     protected void deriveTribalAbstractionNetwork() {
-        if(!super.getCurrentOntology().isPresent()) {
-           return;
-        }
-        
-        if(!rootSelectionPanel.getSelectedRoot().isPresent()) {
+        if (!super.getCurrentOntology().isPresent()) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Cannot derive Tribal Abstraction Network. No ontology loaded.",
+                    "Error: No ontology loaded",
+                    JOptionPane.ERROR_MESSAGE);
+
             return;
         }
-        
+
         if(selectedPatriarchPanel.getSelectedPatriarchs().size() < 2) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Cannot derive Tribal Abstraction Network. At least two patriarch concepts are needed.",
+                    "Error: No patriarchs selected",
+                    JOptionPane.ERROR_MESSAGE);
+
             return;
         }
         

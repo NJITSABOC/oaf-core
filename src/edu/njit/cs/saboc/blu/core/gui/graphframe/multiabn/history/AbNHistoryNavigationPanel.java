@@ -19,22 +19,16 @@ public class AbNHistoryNavigationPanel extends JPanel {
    
     private final AbNHistoryButton viewHistoryBtn;
     
-    private final MultiAbNGraphFrame graphFrame;
-    
     private final AbNDerivationHistory derivationHistory;
     
     private final AbNHistoryNavigationManager historyNavigationManager;
-    
-    private final AbNDerivationParser abnParser;
 
     public AbNHistoryNavigationPanel(
             MultiAbNGraphFrame graphFrame,
             AbNDerivationHistory derivationHistory,
             AbNDerivationParser abnParser) {
         
-        this.graphFrame = graphFrame;
         this.derivationHistory = derivationHistory;
-        this.abnParser = abnParser;
         
         historyNavigationManager = new AbNHistoryNavigationManager(derivationHistory);
         
@@ -51,7 +45,6 @@ public class AbNHistoryNavigationPanel extends JPanel {
         forwardBtn = new JButton();
         forwardBtn.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
         forwardBtn.addActionListener((ae) -> {
-            
             historyNavigationManager.goForward();
             
             updateNavigationButtons();
@@ -70,6 +63,10 @@ public class AbNHistoryNavigationPanel extends JPanel {
         this.add(viewHistoryBtn);
         this.add(Box.createHorizontalStrut(4));
         this.add(forwardBtn);
+    }
+    
+    public void refreshHistoryDisplay() {
+        this.viewHistoryBtn.displayHistory(derivationHistory);
     }
 
     private void updateNavigationButtons() {

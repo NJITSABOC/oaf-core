@@ -19,18 +19,13 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNHistoryNavi
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Optional;
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.filechooser.FileFilter;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
 
@@ -53,7 +48,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final AbNGraphFrameInitializers initializers;
 
     private final MultiAbNDisplayManager displayManager;
-
 
     private final AbNDerivationHistory abnDerivationHistory;
 
@@ -190,7 +184,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
     
     public void addDerivationHistoryEntry(AbstractionNetwork<?> abn) {
-        this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this));
+        this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this), true);
     }
 
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy) {
@@ -299,8 +293,14 @@ public class MultiAbNGraphFrame extends JInternalFrame {
             AbNExplorationPanelGUIInitializer explorationInitializer = initializer.getExplorationGUIInitializer(config);
             TaskBarPanel tbp = initializer.getTaskBar(this, config);
 
+            if(optCurrentTaskBarPanel.isPresent()) {
+                optCurrentTaskBarPanel.get().clear();
+            }
+            
             this.optCurrentGraph = Optional.of(graph);
             this.optCurrentTaskBarPanel = Optional.of(tbp);
+            
+            this.historyNavigationPanel.refreshHistoryDisplay();
 
             displayAbstractionNetwork(graph, tbp, painter, config, explorationInitializer);
         });
@@ -316,6 +316,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
             AbNExplorationPanelGUIInitializer initializer) {
 
         SwingUtilities.invokeLater(() -> {
+                        
             this.taskPanel.removeAll();
             this.taskPanel.add(tbp, BorderLayout.CENTER);
 
@@ -324,9 +325,5 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
             this.abnExplorationPanel.initialize(graph, gepConfiguration, painter, initializer);
         });
-    }
-
-    public void saveCurrentView() {
-        
     }
 }

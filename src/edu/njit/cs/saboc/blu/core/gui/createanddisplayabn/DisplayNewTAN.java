@@ -9,6 +9,7 @@ public class DisplayNewTAN extends CreateAndDisplayAbNThread {
 
     public DisplayNewTAN(CreateTANButton btn, DisplayAbNAction display, String displayText) {
         super(displayText, display);
+        
         this.btn = btn;
     }
 
@@ -16,5 +17,4 @@ public class DisplayNewTAN extends CreateAndDisplayAbNThread {
     public AbstractionNetwork getAbN() {
         return btn.deriveTAN();
     }
-
 }

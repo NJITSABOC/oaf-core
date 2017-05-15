@@ -49,7 +49,6 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
         
         PartitionedAbNTaskBarPanel taskBar = new PartitionedAbNTaskBarPanel(graphFrame, config);
 
-        
         return taskBar;
     }
 

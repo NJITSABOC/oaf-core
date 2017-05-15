@@ -21,7 +21,7 @@ public class AggregateBandPanel extends PartitionedNodePanel<Band> {
     
     public AggregateBandPanel(TANConfiguration configuration) {
         
-        super(new AggregateBandDetailsPanel(configuration), configuration);
+        super(new BandDetailsPanel(configuration), configuration);
         
         this.aggregatedNodeList = new ContainerAggregatedNodePanel(configuration);
         

@@ -44,12 +44,14 @@ public class TANPainter extends AbNPainter {
         int radius = Math.max(1, (int)(EDGE_RADIUS * scale));
 
         g2d.setColor(partition.getBackground());
+        
         if (showingHighlights) {
             g2d.setPaint(new Color(0, 0, 0, 128));
             g2d.fillRoundRect(p.x, p.y, (int)(partition.getWidth() * scale), (int)(partition.getHeight() * scale), radius, radius);
         } else {        
             g2d.fillRoundRect(p.x, p.y, (int)(partition.getWidth() * scale), (int)(partition.getHeight() * scale), radius, radius);
         }
+        
         switch (partition.getHighlightState()) {
             case Selected:
                 if (partition.isMousedOver()) {

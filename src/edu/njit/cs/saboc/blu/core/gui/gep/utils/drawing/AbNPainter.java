@@ -19,8 +19,8 @@ import java.util.Set;
  */
 public class AbNPainter {
     
-    private final Set<SinglyRootedNodeEntry> highlightedSinglyRootedNodes = new HashSet<>();
-    private final Set<PartitionedNodeEntry> highlightedPartitionNodes = new HashSet<>();
+    protected final Set<SinglyRootedNodeEntry> highlightedSinglyRootedNodes = new HashSet<>();
+    protected final Set<PartitionedNodeEntry> highlightedPartitionNodes = new HashSet<>();
     
     protected boolean showingHighlights = false;
     

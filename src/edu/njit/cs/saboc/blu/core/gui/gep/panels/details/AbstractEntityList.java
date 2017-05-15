@@ -304,7 +304,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
     }
 
     public void clearContents() {
-        tableModel.setContents(new ArrayList<>());
+        setContents(new ArrayList<>());
     }
 
     public final void setDefaultTableRenderer(Class clazz, TableCellRenderer renderer) {

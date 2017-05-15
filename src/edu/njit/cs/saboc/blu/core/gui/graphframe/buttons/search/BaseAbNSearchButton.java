@@ -43,16 +43,22 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
         }
     }
     
-    private ArrayList<SearchActionEntry> searchActionList = new ArrayList<>();
+    private final ArrayList<SearchActionEntry> searchActionList = new ArrayList<>();
     
-    private AbNConfiguration config;
+    private final AbNConfiguration config;
 
-    protected BaseAbNSearchButton(JFrame parent) {
-        this(parent, new SearchResultListModel());
+    protected BaseAbNSearchButton(JFrame parent, AbNConfiguration config) {
+        this(parent, config, new SearchResultListModel());
     }
     
-    protected BaseAbNSearchButton(JFrame parent, OAFAbstractTableModel<SearchButtonResult> resultTableModel) {
+    protected BaseAbNSearchButton(
+            JFrame parent, 
+            AbNConfiguration config, 
+            OAFAbstractTableModel<SearchButtonResult> resultTableModel) {
+        
         super(parent, "Search");
+        
+        this.config = config;
         
         this.resultList = new SearchResultList(resultTableModel);
         this.resultList.addEntitySelectionListener(new EntitySelectionListener<SearchButtonResult>() {
@@ -141,9 +147,6 @@ public abstract class BaseAbNSearchButton extends PopupToggleButton {
         this.setPopupContent(popupPanel);
     }
     
-    public void initialize(AbNConfiguration config) {
-        this.config = config;
-    }
     
     public AbNConfiguration getConfiguration() {
         return config;

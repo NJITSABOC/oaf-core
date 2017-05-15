@@ -13,7 +13,7 @@ public class AggregateClusterDetailsPanel extends NodeDetailsPanel<AggregateClus
     
     public AggregateClusterDetailsPanel(TANConfiguration config) {
         
-        super(new AggregateClusterSummaryPanel(config), 
+        super(new ClusterSummaryPanel(config), 
                 config.getUIConfiguration().getNodeOptionsPanel(), 
                 new NodeConceptList(config),
                 config);

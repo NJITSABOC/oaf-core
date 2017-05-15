@@ -37,6 +37,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDeri
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.ExpandedTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNFromPAreaDerivation;
 import edu.njit.cs.saboc.blu.core.graph.tan.DisjointTANFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.ConceptLocationDataFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.PropertyLocationDataFactory;
@@ -151,6 +152,8 @@ public abstract class AbNDerivationParser {
             return parseExpandedTargetAbNDerivation(obj);
         } else if (className.equalsIgnoreCase("AggregateTargetAbNDerivation")) {
             return parseAggregateTargetAbNDerivation(obj);
+        } else if(className.equalsIgnoreCase("TargetAbNFromPAreaDerivation")) {
+            return parseTargetAbNFromPAreaDerivation(obj);
         } else {
             throw new AbNParseException("Unknown derivation history type specified");
         }
@@ -187,14 +190,18 @@ public abstract class AbNDerivationParser {
             throw new AbNParseException("Incorrectly formatted aggregate bound");
         }
     }
-
-    protected <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj) throws AbNParseException {
+    
+    protected <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj, String key) throws AbNParseException {
         
-        if(!obj.containsKey("BaseDerivation")) {
+        if (!obj.containsKey(key)) {
             throw new AbNParseException("Base AbN Derivation not specified.");
         }
-        
-        return (T)this.parseDerivationHistory((JSONObject)obj.get("BaseDerivation"));
+
+        return (T) this.parseDerivationHistory((JSONObject)obj.get(key));
+    }
+
+    protected <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj) throws AbNParseException {
+        return this.getBaseAbNDerivation(obj, "BaseDerivation");
     }
 
     public SimplePAreaTaxonomyDerivation parseSimplePAreaTaxonomyDerivation(JSONObject obj) throws AbNParseException {
@@ -403,7 +410,6 @@ public abstract class AbNDerivationParser {
         return this.parseSimpleClusterTANDerivation(obj, derivationFactory.getTANFactory());
     }
     
-    // TAN parser
     public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONObject obj, TANFactory factory) throws AbNParseException {
         
         if(!obj.containsKey("ConceptIDs")) {
@@ -487,14 +493,19 @@ public abstract class AbNDerivationParser {
                 getRoot(obj));
     }
 
-    // Target Parser
     public abstract TargetAbNDerivation parseTargetAbNDerivation(JSONObject obj) throws AbNParseException;
 
     public <T extends AbNDerivation> ExpandedTargetAbNDerivation parseExpandedTargetAbNDerivation(JSONObject obj) throws AbNParseException {
         return new ExpandedTargetAbNDerivation(getBaseAbNDerivation(obj), getRoot(obj));
     }
 
-    public <T extends AbNDerivation> AggregateTargetAbNDerivation parseAggregateTargetAbNDerivation(JSONObject obj) throws AbNParseException{
+    public <T extends AbNDerivation> AggregateTargetAbNDerivation parseAggregateTargetAbNDerivation(JSONObject obj) throws AbNParseException {
         return new AggregateTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj));
+    }
+    
+    public <T extends AbNDerivation> TargetAbNFromPAreaDerivation parseTargetAbNFromPAreaDerivation(JSONObject obj) throws AbNParseException {
+        return new TargetAbNFromPAreaDerivation(
+                getBaseAbNDerivation(obj, "TargetAbNDerivation"), 
+                getBaseAbNDerivation(obj, "PAreaTaxonomyDerivation"));
     }
 }

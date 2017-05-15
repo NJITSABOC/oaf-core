@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
-import com.sun.javafx.css.SizeUnits;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
@@ -19,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import jdk.nashorn.internal.objects.Global;
 
 /**
  *
@@ -68,12 +66,13 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             if (initialized && !aggregationSlider.getValueIsAdjusting()) {
                 setBound(newValue, weightedFlag);
 
-                displayCurrentBound();
+                displayCurrentBound();  
+                displayCurrentWeightedCheckBox();
             } else {
-                displayBound(newValue);
+                displayBound(newValue);               
             }
+            
 
-//            displayCurrentWeightedCheckBox();
             // Hack solution to preventing slider listeners from triggering when programmatically setting 
             // bound value on initialization
             initialized = true;
@@ -99,16 +98,18 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         });
         
         aggregationCheckBox = new JCheckBox("Weighted");
-        aggregationCheckBox.addItemListener((ie) -> {  
- 
+        aggregationCheckBox.addItemListener((ie) -> { 
+
             if (ie.getStateChange()==ItemEvent.SELECTED){
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
                 weightedFlag = true;
+                aggregationSlider.setMaximum(getMaximumNodeConceptCount(displayPanel));
             }
             else{
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
                 weightedFlag = false;
-            }  
+                aggregationSlider.setMaximum(100);
+            }             
         });
         
         this.add(aggregationCheckBox, BorderLayout.NORTH);
@@ -135,7 +136,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         displayWeightedFlag(weightedFlag);
     }
     
-    private void displayWeightedFlag(boolean flag){
+    private void displayWeightedFlag(boolean flag){   
         aggregationCheckBox.setSelected(flag);
     }
     
@@ -146,15 +147,18 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         AggregateableAbstractionNetwork abn = (AggregateableAbstractionNetwork)displayPanel.getGraph().getAbstractionNetwork();
         
         AbstractionNetwork abnToProcess;
+        
+        boolean weightedAggregatedFlag = false;
 
         if(abn.isAggregated()) {
             AggregateAbstractionNetwork aggregateAbN = (AggregateAbstractionNetwork)abn;
             
             abnToProcess = aggregateAbN.getNonAggregateSourceAbN();
+            weightedAggregatedFlag = aggregateAbN.getAggregatedProperty().getWeighted();
         } else {
             abnToProcess = displayPanel.getGraph().getAbstractionNetwork();
         }
-        
+               
         Set<Node> nodes = abnToProcess.getNodes();
         
         Map<Integer, Integer> sizeDistribution = new HashMap<>();
@@ -190,7 +194,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             }
         }
         
-        bound = Math.min(bound, 100);
+        if (weightedAggregatedFlag) {
+            bound = max[0];
+        } else {
+            bound = Math.min(bound, 100);
+        }
         
         aggregationSlider.setMaximum(bound);
         
@@ -218,5 +226,29 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 displayPanel.getHeight() - panelSize.height - 20, 
                 panelSize.width, 
                 panelSize.height);
+    }
+    
+    private int getMaximumNodeConceptCount(AbNDisplayPanel displayPanel){
+        
+        AggregateableAbstractionNetwork abn = (AggregateableAbstractionNetwork)displayPanel.getGraph().getAbstractionNetwork();
+        
+        AbstractionNetwork abnToProcess;
+        
+        if(abn.isAggregated()) {
+            AggregateAbstractionNetwork aggregateAbN = (AggregateAbstractionNetwork)abn;
+            
+            abnToProcess = aggregateAbN.getNonAggregateSourceAbN();
+
+        } else {
+            abnToProcess = displayPanel.getGraph().getAbstractionNetwork();
+        }
+               
+        Set<Node> nodes = abnToProcess.getNodes();     
+        int max = 0; 
+        for( Node node : nodes) {
+            int size = node.getConceptCount();     
+            if(size > max)  max = size;      
+        } 
+        return max;
     }
 }

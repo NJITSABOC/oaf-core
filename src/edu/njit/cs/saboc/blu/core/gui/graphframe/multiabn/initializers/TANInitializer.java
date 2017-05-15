@@ -69,23 +69,31 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
         AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound, weightedAggregated) -> {
-                    ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
-                    config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
-                }) {
 
-                    @Override
-                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
-                        super.initializeAbNDisplayPanel(displayPanel);
+            if (weightedAggregated) {
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getWeightedAggregated(bound, weightedAggregated);
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
 
-                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+            } else {
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
 
-                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2
+            }
+        }) {
+
+            @Override
+            public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
+                super.initializeAbNDisplayPanel(displayPanel);
+
+                MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+
+                if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2
                         || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
 
-                            displayPanel.addWidget(minimapPanel);
-                        }
-                    }
-                };
+                    displayPanel.addWidget(minimapPanel);
+                }
+            }
+        };
 
         return initializer;
     }

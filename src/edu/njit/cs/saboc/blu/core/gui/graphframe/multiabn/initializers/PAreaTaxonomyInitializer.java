@@ -74,11 +74,14 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
         
         AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((int bound, boolean weightedAggregated) -> {
-            PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
+//            PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
             if (weightedAggregated) {
-                aggregateTaxonomy = config.getPAreaTaxonomy().getWeightedAggregated(bound, weightedAggregated);
+                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getWeightedAggregated(bound, weightedAggregated);
+                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
+            } else {
+                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
+                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
             }
-            config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
         }
         
         ) {

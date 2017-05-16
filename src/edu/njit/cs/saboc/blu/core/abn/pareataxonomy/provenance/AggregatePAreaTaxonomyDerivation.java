@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**

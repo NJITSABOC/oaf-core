@@ -99,17 +99,16 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         aggregationCheckBox = new JCheckBox("Weighted");
         aggregationCheckBox.addItemListener((ie) -> { 
-
             if (ie.getStateChange()==ItemEvent.SELECTED){
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
-                weightedFlag = true;
-                aggregationSlider.setMaximum(getMaximumNodeConceptCount(displayPanel));
+                if(currentBound != 1) setBound(aggregationSlider.getValue(), true);
+                weightedFlag = true;                
             }
             else{
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
+                setBound(aggregationSlider.getValue(), false);
                 weightedFlag = false;
-                aggregationSlider.setMaximum(100);
-            }             
+            } 
         });
         
         this.add(aggregationCheckBox, BorderLayout.NORTH);
@@ -119,7 +118,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     private void setBound(int bound, boolean weightedAggregated) {
-        if (currentBound != bound) {
+        if (currentBound != bound || weightedFlag != weightedAggregated) {
             aggregationAction.createAndDisplayAggregateAbN(bound, weightedAggregated);
         }
     }
@@ -228,27 +227,4 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 panelSize.height);
     }
     
-    private int getMaximumNodeConceptCount(AbNDisplayPanel displayPanel){
-        
-        AggregateableAbstractionNetwork abn = (AggregateableAbstractionNetwork)displayPanel.getGraph().getAbstractionNetwork();
-        
-        AbstractionNetwork abnToProcess;
-        
-        if(abn.isAggregated()) {
-            AggregateAbstractionNetwork aggregateAbN = (AggregateAbstractionNetwork)abn;
-            
-            abnToProcess = aggregateAbN.getNonAggregateSourceAbN();
-
-        } else {
-            abnToProcess = displayPanel.getGraph().getAbstractionNetwork();
-        }
-               
-        Set<Node> nodes = abnToProcess.getNodes();     
-        int max = 0; 
-        for( Node node : nodes) {
-            int size = node.getConceptCount();     
-            if(size > max)  max = size;      
-        } 
-        return max;
-    }
 }

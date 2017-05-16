@@ -6,7 +6,6 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**

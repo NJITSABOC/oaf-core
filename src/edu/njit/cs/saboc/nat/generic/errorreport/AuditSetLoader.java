@@ -32,7 +32,8 @@ public class AuditSetLoader {
      * Creates an empty audit set from a list of concept ids
      * 
      * @param <T>
-     * @param file
+     * @param sourceFile
+     * @param destinationFile
      * @param dataSource
      * 
      * @return
@@ -40,12 +41,14 @@ public class AuditSetLoader {
      * @throws AuditSetLoaderException 
      */
     public static <T extends Concept> AuditSet<T> createAuditSetFromConceptIds(
-            File file, ConceptBrowserDataSource<T> dataSource) throws AuditSetLoaderException {
+            File sourceFile, 
+            File destinationFile,
+            ConceptBrowserDataSource<T> dataSource) throws AuditSetLoaderException {
 
         Set<String> idStrs = new HashSet<>();
 
-        if (file.exists()) {
-            try (Scanner scanner = new Scanner(file)) {
+        if (sourceFile.exists()) {
+            try (Scanner scanner = new Scanner(sourceFile)) {
 
                 while (scanner.hasNext()) {
                     idStrs.add(scanner.nextLine().trim());
@@ -55,7 +58,8 @@ public class AuditSetLoader {
 
                 AuditSet<T> auditSet = new AuditSet<>(
                         dataSource,
-                        file.getName(),
+                        destinationFile,
+                        sourceFile.getName(),
                         concepts);
 
                 return auditSet;
@@ -227,7 +231,7 @@ public class AuditSetLoader {
             
             return new AuditSet<>(
                     dataSource, 
-                    Optional.of(sourceFile), 
+                    sourceFile, 
                     name, 
                     creationDate, 
                     lastSavedDate,

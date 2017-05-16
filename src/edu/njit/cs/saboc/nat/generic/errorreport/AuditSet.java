@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.FileUtilities;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult.State;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
@@ -42,7 +43,7 @@ public class AuditSet<T extends Concept> {
     private final Date dateCreated;
     private Date lastSavedDate;
     
-    private Optional<File> file;
+    private final File file;
     
     private final Set<T> concepts;
     
@@ -54,11 +55,12 @@ public class AuditSet<T extends Concept> {
 
     public AuditSet(
             ConceptBrowserDataSource<T> dataSource, 
+            File file,
             String name,
             Set<T> concepts) {
         
         this(dataSource, 
-                Optional.empty(),
+                file,
                 name, 
                 new Date(), 
                 new Date(),
@@ -68,7 +70,7 @@ public class AuditSet<T extends Concept> {
     
     public AuditSet(
             ConceptBrowserDataSource<T> dataSource,
-            Optional<File> file,
+            File file,
             String name, 
             Date dateCreated, 
             Date lastSavedDate,
@@ -89,17 +91,12 @@ public class AuditSet<T extends Concept> {
 
             @Override
             public void auditSetChanged() {
-                if(file.isPresent()) {
-                    boolean success = saveToFile(file.get());
+                if(!saveToFile(file)) {
                     
-                    if(!success) {
-                        
-                    }
                 }
             }
         });
     }
-    
     
     public final void addAuditSetChangedListener(AuditSetChangedListener<T> listener) {
         this.changeListeners.add(listener);
@@ -113,7 +110,7 @@ public class AuditSet<T extends Concept> {
         return concepts;
     }
 
-    public Optional<File> getFile() {
+    public File getFile() {
         return file;
     }
     
@@ -478,6 +475,10 @@ public class AuditSet<T extends Concept> {
         return exportJSON;
     }
     
+    public boolean save() {
+        return saveToFile(file);
+    }
+    
     /**
      * Saves the audit set to the specified file
      * 
@@ -486,7 +487,7 @@ public class AuditSet<T extends Concept> {
      */
     public boolean saveToFile(File file) {      
         
-        if(!ensureFileExistsAndWritable(file)) {
+        if(!FileUtilities.ensureFileExistsAndWritable(file)) {
             // Error
             
             return false;
@@ -511,16 +512,10 @@ public class AuditSet<T extends Concept> {
      * @return 
      */
     public boolean saveBackupFile() {
-         Optional<File> auditSetFile = this.getFile();
+        File auditSetFile = this.getFile();
 
-        if (!auditSetFile.isPresent()) {
-            return false;
-        }
-        
-        File theFile = auditSetFile.get();
-        
-        File dir = theFile.getParentFile();
-        
+        File dir = auditSetFile.getParentFile();
+
         if (dir.isDirectory()) {
             String path = dir.getAbsolutePath() + "\\AuditSet Backup\\";
 
@@ -530,55 +525,33 @@ public class AuditSet<T extends Concept> {
                 if (!backupDir.exists()) {
                     backupDir.mkdir();
                 }
-                
+
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
                 Date currentDate = new Date();
-                
-                String backupFileName = String.format("%s Backup %s", 
-                        theFile.getName().substring(0, theFile.getName().length() - 4), 
+
+                String backupFileName = String.format("%s Backup %s",
+                        auditSetFile.getName().substring(0, auditSetFile.getName().length() - 4),
                         dateFormat.format(currentDate));
-                
+
                 String backupFilePath = String.format("%s\\%s", backupDir.getAbsolutePath(), backupFileName);
-                
+
                 File backupFile = new File(backupFilePath);
-                
-                if(!backupFile.exists()) {
+
+                if (!backupFile.exists()) {
                     backupFile.createNewFile();
-                    
+
                     saveToFile(backupFile);
 
                     return true;
                 }
-                
+
             } catch (SecurityException | IOException se) {
                 se.printStackTrace();
-                
+
                 return false;
             }
         }
-        
-        return false;
-    }
 
-    /**
-     * Makes sure the audit set can be saved to the given file
-     * 
-     * @param file
-     * @return 
-     */
-    private boolean ensureFileExistsAndWritable(File file) {
-        boolean error = false;
-        
-        try {
-            if(!file.createNewFile()) {
-                if(!file.canWrite()) {
-                    error = true;
-                }
-            }
-        } catch(IOException e) {
-            error = true;
-        }
-        
-        return !error;
+        return false;
     }
 }

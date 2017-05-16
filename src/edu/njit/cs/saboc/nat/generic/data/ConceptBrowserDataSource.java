@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.visitor.DescendantsVisitor;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
+import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.ErrorParser;
@@ -189,6 +190,8 @@ public abstract class ConceptBrowserDataSource<T extends Concept> {
     public ErrorParser<T, InheritableProperty> getErrorParser() {
         return new ErrorParser<>(this);
     }
+    
+    public abstract OAFRecentlyOpenedFileManager getRecentlyOpenedAuditSets();
     
     /**
      * Returns the unique identifier of the given ontology

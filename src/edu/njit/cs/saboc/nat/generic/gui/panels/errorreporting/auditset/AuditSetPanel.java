@@ -2,6 +2,9 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.auditset;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager;
+import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
+import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.RecentlyOpenedFile;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
@@ -14,6 +17,7 @@ import java.awt.GridLayout;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import javax.swing.JButton;
@@ -22,6 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 /**
  *
@@ -35,7 +40,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     private final JLabel nameLabel;
     private final JLabel lastSavedDateLabel;
     
-    private final JButton btnCreateFromConceptList;
+    private final JButton btnCreateAuditSet;
     private final JButton btnExportAuditSet;
     
     private final JButton btnOpenAuditSet;
@@ -47,10 +52,10 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         
         JPanel managementPanel = new JPanel();
         
-        this.btnCreateFromConceptList = new JButton("Create");
-        this.btnCreateFromConceptList.addActionListener( (ae) -> {
+        this.btnCreateAuditSet = new JButton("New");
+        this.btnCreateAuditSet.addActionListener((ae) -> {
             
-            JPopupMenu testMenu = new JPopupMenu();
+            JPopupMenu menu = new JPopupMenu();
             
             JMenuItem emptyOption = new JMenuItem("New empty audit set");
             emptyOption.setFont(emptyOption.getFont().deriveFont(14.0f));
@@ -58,34 +63,75 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
                 createEmptyAuditSet();
             });
             
-            testMenu.add(emptyOption);
+            menu.add(emptyOption);
             
             JMenuItem fileOption = new JMenuItem("From Concept ID file");
             fileOption.setFont(fileOption.getFont().deriveFont(14.0f));
             fileOption.addActionListener( (actionEvent) -> {
-                
+                createAuditSetFromIDFile();
             });
             
-            testMenu.add(fileOption);
+            menu.add(fileOption);
             
-            testMenu.show(managementPanel, btnCreateFromConceptList.getX() + 10, btnCreateFromConceptList.getY() + 10);
+            menu.show(managementPanel, 
+                    btnCreateAuditSet.getX() + 10,
+                    btnCreateAuditSet.getY() + 10);
         });
         
         this.btnOpenAuditSet = new JButton("Open");
-        this.btnOpenAuditSet.addActionListener( (ae) -> {
-            openAuditSet();
+        this.btnOpenAuditSet.addActionListener((ae) -> {
+            
+            JPopupMenu menu = new JPopupMenu();
+            
+            JMenuItem openFileOption = new JMenuItem("Open Audit Set File");
+            openFileOption.setFont(openFileOption.getFont().deriveFont(14.0f));
+            openFileOption.addActionListener( (actionEvent) -> {
+                openAuditSet();
+            });
+            
+            menu.add(openFileOption);
+            
+            if(dataSource.getRecentlyOpenedAuditSets() != null) {
+                OAFRecentlyOpenedFileManager recentAuditSetManager = dataSource.getRecentlyOpenedAuditSets();
+                
+                if(!recentAuditSetManager.getRecentlyOpenedFiles().isEmpty()) {
+                    menu.add(new JSeparator());
+                    
+                    ArrayList<RecentlyOpenedFile> recentAuditSets = recentAuditSetManager.getRecentlyOpenedFiles(5);
+
+                    recentAuditSets.forEach((auditSetFile) -> {
+                        
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat();
+                        String lastOpenedStr = dateFormatter.format(auditSetFile.getDate());
+
+                        JMenuItem item = new JMenuItem(
+                                String.format("<html><font size = '4' color = 'blue'><b>%s</b></font> (Last opened: %s)",
+                                        auditSetFile.getFile().getName(),
+                                        lastOpenedStr));
+
+                        item.addActionListener( (actionEvent) -> {
+                            loadAuditSetFromFile(auditSetFile.getFile());
+                        });
+                        
+                        menu.add(item);
+                    });
+                }
+            }
+            
+            menu.show(managementPanel, 
+                    btnCreateAuditSet.getX() + 10,
+                    btnCreateAuditSet.getY() + 10);
+ 
         });
-        
         
         this.btnExportAuditSet = new JButton("Save As");
         this.btnExportAuditSet.addActionListener( (ae) -> {
             exportAuditSet();
         });
         
-        managementPanel.add(btnCreateFromConceptList);
+        managementPanel.add(btnCreateAuditSet);
         managementPanel.add(btnOpenAuditSet);
         managementPanel.add(btnExportAuditSet);
-        
         
         this.nameLabel = new JLabel();
         this.lastSavedDateLabel = new JLabel();
@@ -119,15 +165,10 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         this.nameLabel.setText(auditSet.getName());
         
         SimpleDateFormat dateFormatter = new SimpleDateFormat();
-        
-        if(auditSet.getFile().isPresent()) {
-            this.lastSavedDateLabel.setText(dateFormatter.format(auditSet.getLastSavedDate()));
-        } else {
-            this.lastSavedDateLabel.setText("[not yet saved to file]");
-        }
+
+        this.lastSavedDateLabel.setText(dateFormatter.format(auditSet.getLastSavedDate()));
     }
     
-
     private void setCurrentAuditSet(AuditSet<T> auditSet) {
         getMainPanel().getAuditDatabase().setAuditSet(auditSet);
 
@@ -138,25 +179,82 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private void createEmptyAuditSet() {
         Optional<String> auditSetName = promptForAuditSetName();
-        
-        if(auditSetName.isPresent()) {
-            AuditSet<T> auditSet = new AuditSet<>(getDataSource(), auditSetName.get(), new HashSet<>());
-            
-            setCurrentAuditSet(auditSet);
+
+        if (auditSetName.isPresent()) {
+
+            Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectSaveDialog();
+
+            if (auditSetFile.isPresent()) {
+
+                AuditSet<T> auditSet = new AuditSet<>(
+                        getDataSource(),
+                        auditSetFile.get(),
+                        auditSetName.get(),
+                        new HashSet<>());
+
+                auditSetCreated(auditSet);
+            } else {
+                JOptionPane.showMessageDialog(getMainPanel().getParentFrame(),
+                        "<html>Audit Set not created. No audit set save file specified.",
+                        "Error Creating Audit Set",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(getMainPanel().getParentFrame(),
+                    "<html>Audit Set not created. No audit set name specified.",
+                    "Error Creating Audit Set",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    
-    private void createAuditSetFromFile() {
+    private void createAuditSetFromIDFile() {
         Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
         
         if(idFile.isPresent()) {
-            try {
-                AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromConceptIds(idFile.get(), getDataSource());
-                setCurrentAuditSet(auditSet);
-            } catch (AuditSetLoaderException asle) {
- 
+            
+            Optional<File> auditSetFile = ExportAbNUtilities.displayFileSelectSaveDialog();
+            
+            if (auditSetFile.isPresent()) {
+
+                try {
+                    AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromConceptIds(
+                            idFile.get(),
+                            auditSetFile.get(),
+                            getDataSource());
+
+                    auditSetCreated(auditSet);
+
+                } catch (AuditSetLoaderException asle) {
+
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(getMainPanel().getParentFrame(),
+                        "<html>Audit Set not created. No audit set save file specified.",
+                        "Error Creating Audit Set",
+                        JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(getMainPanel().getParentFrame(),
+                    "<html>Audit Set not created. No concept id file specified.",
+                    "Error Creating Audit Set",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void auditSetCreated(AuditSet<T> auditSet) {
+        
+        setCurrentAuditSet(auditSet);
+
+        auditSet.save();
+
+        OAFRecentlyOpenedFileManager recentAuditSetManager = this.getDataSource().getRecentlyOpenedAuditSets();
+
+        try {
+            recentAuditSetManager.addOrUpdateRecentlyOpenedFile(auditSet.getFile());
+        } catch (RecentlyOpenedFileException rofe) {
+
         }
     }
     
@@ -164,14 +262,28 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
 
         if (idFile.isPresent()) {
-            
-            try {
-                AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromJSON(idFile.get(), getDataSource());
-                setCurrentAuditSet(auditSet);
-            } catch (AuditSetLoaderException asle) {
-                asle.printStackTrace();
-            }
+            loadAuditSetFromFile(idFile.get());
         }
+    }
+    
+    private void loadAuditSetFromFile(File file) {
+
+        try {
+            AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromJSON(file, getDataSource());
+            
+            OAFRecentlyOpenedFileManager recentAuditSetManager = this.getDataSource().getRecentlyOpenedAuditSets();
+
+            try {
+                recentAuditSetManager.addOrUpdateRecentlyOpenedFile(file);
+            } catch (RecentlyOpenedFileException rofe) {
+
+            }
+
+            setCurrentAuditSet(auditSet);
+        } catch (AuditSetLoaderException asle) {
+            asle.printStackTrace();
+        }
+
     }
     
     private void exportAuditSet() {
@@ -196,7 +308,6 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         }
     }
     
-    
     private Optional<String> promptForAuditSetName() {
         
         String auditSetName = "";
@@ -212,6 +323,4 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         
         return Optional.ofNullable(auditSetName);
     }
-    
-
 }

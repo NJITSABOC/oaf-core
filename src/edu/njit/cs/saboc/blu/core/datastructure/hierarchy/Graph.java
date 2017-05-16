@@ -4,6 +4,7 @@ package edu.njit.cs.saboc.blu.core.datastructure.hierarchy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,8 +15,8 @@ import java.util.Set;
  */
 public class Graph<T> {
     
-    private final HashMap<T, Set<T>> outgoingEdges = new HashMap<>();
-    private final HashMap<T, Set<T>> incomingEdges = new HashMap<>();
+    private final Map<T, Set<T>> outgoingEdges = new HashMap<>();
+    private final Map<T, Set<T>> incomingEdges = new HashMap<>();
     
     public Graph() {
         
@@ -28,12 +29,15 @@ public class Graph<T> {
     }
     
     public void addNode(T node) {
+        
+        // Initial capacities are based on general ontology hierarchy DAG metrics
+        
         if(!outgoingEdges.containsKey(node)) {
-            outgoingEdges.put(node, new HashSet<>());
+            outgoingEdges.put(node, new HashSet<>(2));
         }
         
         if(!incomingEdges.containsKey(node)) {
-            incomingEdges.put(node, new HashSet<>());
+            incomingEdges.put(node, new HashSet<>(3));
         }
     }
     

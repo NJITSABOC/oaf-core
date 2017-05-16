@@ -1,6 +1,6 @@
-package edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile;
+package edu.njit.cs.saboc.blu.core.utils.toolstate;
 
-import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

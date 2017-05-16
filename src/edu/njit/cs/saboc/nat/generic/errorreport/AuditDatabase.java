@@ -53,6 +53,10 @@ public class AuditDatabase<T extends Concept> {
         
         this.loadedAuditSet = Optional.of(auditSet);
         
+        if (mainPanel.getWorkspace().isPresent()) {
+            mainPanel.getWorkspace().get().setAuditSet(auditSet);
+        }
+
         auditSet.addAuditSetChangedListener(new AuditSetChangedAdapter<T>() {
 
             @Override
@@ -60,6 +64,8 @@ public class AuditDatabase<T extends Concept> {
                 loadedAuditSetChanged();
             }
         });
+        
+        loadedAuditSetChanged();
     }
     
     public Optional<AuditSet<T>> getLoadedAuditSet() {

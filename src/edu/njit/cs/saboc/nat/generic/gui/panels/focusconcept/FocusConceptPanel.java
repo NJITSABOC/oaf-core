@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
-//import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
@@ -16,8 +15,7 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSe
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
-//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
-//import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.ParentsRightClickMenuGenerator;
+import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -53,7 +51,8 @@ import javax.swing.ToolTipManager;
  * @param <T>
  */
 public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
-    private ArrayList<T> bookMarkedEntries = new ArrayList<T>();    
+    
+    private ArrayList<T> bookMarkedEntries = new ArrayList<>();    
     private JEditorPane jtf;
     
     private JButton backButton;
@@ -279,6 +278,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         this.addOptionButton(new OpenBrowserButton(mainPanel, new GoogleSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new WikipediaSearchConfig()));
         this.addOptionButton(new OpenBrowserButton(mainPanel, new PubMedSearchConfig()));
+        
+        this.addOptionButton(new NATWorkspaceButton(mainPanel));
     }
 
     private void setConcept() {
@@ -367,32 +368,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         editFocusConceptPanel.updateUndoButtons();
     }
 
-    private void validateHistoryButtons() {
-        backButton.setEnabled(history.getPosition() > 0);
-
-        if(history.getPosition() > 0) {
-            backButton.setEnabled(true);
-            
-            T prev = history.getHistory().get(history.getPosition() - 1).getConcept();
-            
-            backButton.setToolTipText(prev.getName());
-        } else {
-            backButton.setEnabled(false);
-            backButton.setToolTipText(null);
-        }
-        
-        if(history.getPosition() < (history.getHistory().size() - 1)) {
-            forwardButton.setEnabled(true);
-            
-            T next = history.getHistory().get(history.getPosition() + 1).getConcept();
-            
-            forwardButton.setToolTipText(next.getName());
-        } else {
-            forwardButton.setEnabled(false);
-            forwardButton.setToolTipText(null);
-        }
-    }
-    
     public void dataEmpty() {
         jtf.setContentType("text/html");
         

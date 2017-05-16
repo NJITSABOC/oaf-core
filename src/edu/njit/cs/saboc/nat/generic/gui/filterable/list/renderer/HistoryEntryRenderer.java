@@ -121,10 +121,6 @@ public class HistoryEntryRenderer<T extends Concept> extends BaseFilterableRende
         
         int fontStyle = Font.PLAIN;
         
-        if (historyEntry.getPosition() == mainPanel.getFocusConceptManager().getHistory().getPosition()) {
-            fontStyle = Font.BOLD;
-        }
-        
         this.conceptNameLabel.setFont(conceptNameLabel.getFont().deriveFont(fontStyle));
         this.conceptIdLabel.setFont(conceptIdLabel.getFont().deriveFont(fontStyle));
         this.timeViewedLabel.setFont(timeViewedLabel.getFont().deriveFont(fontStyle));

@@ -80,6 +80,10 @@ public class FocusConceptManager<T extends Concept> {
         
         if(addHistoryEntry) {
             history.addHistoryEntry(concept);
+            
+            if(browser.getWorkspace().isPresent()) {
+                browser.getWorkspace().get().getHistory().addHistoryEntry(concept);
+            }
         }
     }
     

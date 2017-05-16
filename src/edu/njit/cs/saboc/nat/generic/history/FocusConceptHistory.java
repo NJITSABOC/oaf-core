@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.nat.generic.history;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Keeps track of the history of visited focus concepts. Manages
@@ -30,6 +32,17 @@ public class FocusConceptHistory<T extends Concept> {
         
     }
     
+    public FocusConceptHistory(ArrayList<FocusConceptHistoryEntry<T>> history) {
+        setHistory(history);
+    }
+    
+    public final void setHistory(ArrayList<FocusConceptHistoryEntry<T>> history) {
+        this.conceptHistory.clear();
+        this.conceptHistory.addAll(history);
+
+        fireHistoryEntryAddedListeners();
+    }
+
     public void addHistoryListener(HistoryListener listener) {
         listeners.add(listener);
     }
@@ -40,24 +53,26 @@ public class FocusConceptHistory<T extends Concept> {
 
     public void addHistoryEntry(T concept) {
         if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
-            conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
+            conceptHistory.add(new FocusConceptHistoryEntry<>(concept));
             
             setPosition(conceptHistory.size() - 1);
 
-            listeners.forEach((listener) -> {
-                listener.historyEntryAdded();
-            });
+            fireHistoryEntryAddedListeners();
         }
     }
     
-    public void addNavigationHistory(T concept){
+    public void addNavigationHistory(T concept) {
         if (conceptHistory.isEmpty() || !getLastVisitedEntry().getConcept().equals(concept)) {
-            conceptHistory.add(new FocusConceptHistoryEntry<>(concept, conceptHistory.size()));
+            conceptHistory.add(new FocusConceptHistoryEntry<>(concept));
 
-            listeners.forEach((listener) -> {
-                listener.historyEntryAdded();
-            });
+            fireHistoryEntryAddedListeners();
         }    
+    }
+    
+    private void fireHistoryEntryAddedListeners() {
+        listeners.forEach((listener) -> {
+            listener.historyEntryAdded();
+        });
     }
 
     public void historyBack() {
@@ -90,5 +105,21 @@ public class FocusConceptHistory<T extends Concept> {
 
     public ArrayList<FocusConceptHistoryEntry<T>> getHistory() {
         return conceptHistory;
+    }
+    
+    public JSONArray toJSON() {
+        
+        JSONArray arr = new JSONArray();
+        
+        this.conceptHistory.forEach( (entry) -> {
+            JSONObject obj = new JSONObject();
+            
+            obj.put("conceptid", entry.getConcept().getIDAsString());
+            obj.put("time", entry.getTimeViewed().getTime());
+            
+            arr.add(obj);
+        });
+        
+        return arr;
     }
 }

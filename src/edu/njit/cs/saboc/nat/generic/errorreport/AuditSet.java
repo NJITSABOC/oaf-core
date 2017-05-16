@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.nat.generic.errorreport;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.FileUtilities;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.FileUtilities;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult.State;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;

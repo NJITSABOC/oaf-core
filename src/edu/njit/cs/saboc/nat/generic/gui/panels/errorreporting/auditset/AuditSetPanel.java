@@ -2,9 +2,9 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.auditset;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager;
-import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
-import edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile.RecentlyOpenedFile;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager.RecentlyOpenedFileException;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.RecentlyOpenedFile;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
@@ -50,7 +50,15 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         
         this.setLayout(new BorderLayout());
         
+        browserPanel.getAuditDatabase().addAuditDatabaseChangeListener( () -> {
+            
+            if(browserPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+                setLoadedAuditedSet(browserPanel.getAuditDatabase().getLoadedAuditSet().get());
+            }
+        });
+        
         JPanel managementPanel = new JPanel();
+        
         
         this.btnCreateAuditSet = new JButton("New");
         this.btnCreateAuditSet.addActionListener((ae) -> {
@@ -170,8 +178,13 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void setCurrentAuditSet(AuditSet<T> auditSet) {
+        setLoadedAuditedSet(auditSet);
+        
+        
         getMainPanel().getAuditDatabase().setAuditSet(auditSet);
-
+    }
+    
+    private void setLoadedAuditedSet(AuditSet<T> auditSet) {
         this.auditConceptList.reloadAuditSet();
 
         displayDetails(auditSet);

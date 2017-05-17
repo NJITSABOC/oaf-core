@@ -8,7 +8,6 @@ import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationH
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser.AbNDerivationHistoryParseException;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.FileUtilities;
-import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,9 +30,54 @@ public class AbNWorkspace extends OAFWorkspace {
     
     private final AbNDerivationParser abnParser;
     
+    public static AbNWorkspace createNewWorkspaceFromCurrent(MultiAbNGraphFrame graphFrame,
+            String name,
+            File file,
+            AbNDerivationParser abnParser) {
+        
+        return new AbNWorkspace(graphFrame, name, file, abnParser);
+    }
+        
+    /**
+     * Constructor for initializing a new workspace
+     * 
+     * @param graphFrame
+     * @param name
+     * @param file
+     * @param abnParser 
+     */
+    private AbNWorkspace(
+            MultiAbNGraphFrame graphFrame,
+            String name,
+            File file,
+            AbNDerivationParser abnParser) {
+
+        super(file);
+
+        this.graphFrame = graphFrame;
+
+        this.setName(name);
+        this.abnParser = abnParser;
+
+        this.derivationHistory = new AbNDerivationHistory(graphFrame);
+        this.derivationHistory.setHistory(graphFrame.getDerivationHistory().getHistory());
+
+        this.derivationHistory.addHistoryChangedListener(() -> {
+            saveWorkspace();
+        });
+        
+        saveWorkspace();
+    }
+    
+    /**
+     * Constructor for initializing from a file
+     * 
+     * @param graphFrame
+     * @param file
+     * @param abnParser 
+     */
     public AbNWorkspace(
             MultiAbNGraphFrame graphFrame,
-            String name, 
             File file, 
             AbNDerivationParser abnParser) {
         
@@ -42,7 +86,7 @@ public class AbNWorkspace extends OAFWorkspace {
         this.graphFrame = graphFrame;
         this.abnParser = abnParser;
         
-        this.derivationHistory = new AbNDerivationHistory();
+        this.derivationHistory = new AbNDerivationHistory(graphFrame);
         
         this.derivationHistory.addHistoryChangedListener( () -> {
             saveWorkspace();
@@ -66,7 +110,6 @@ public class AbNWorkspace extends OAFWorkspace {
             
             String name = obj.get("name").toString();
             super.setName(name);
-            
             
             JSONArray json = (JSONArray)obj.get("history");
 

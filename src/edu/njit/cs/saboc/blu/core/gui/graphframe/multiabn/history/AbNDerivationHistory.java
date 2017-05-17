@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 
@@ -15,13 +16,20 @@ public class AbNDerivationHistory {
     
     private final ArrayList<AbNDerivationHistoryEntry> entries = new ArrayList<>();
     
-    private final ArrayList<AbNDerivationHistoryListener> historyChangedListeners = new ArrayList<>();;
+    private final ArrayList<AbNDerivationHistoryListener> historyChangedListeners = new ArrayList<>();
     
-    public AbNDerivationHistory() {
-        
+    private final MultiAbNGraphFrame graphFrame;
+    
+    public AbNDerivationHistory(MultiAbNGraphFrame graphFrame) {
+        this.graphFrame = graphFrame;
     }
     
-    public AbNDerivationHistory(ArrayList<AbNDerivationHistoryEntry> entries) {
+    public AbNDerivationHistory(
+            MultiAbNGraphFrame graphFrame, 
+            ArrayList<AbNDerivationHistoryEntry> entries) {
+        
+        this(graphFrame);
+        
         this.entries.addAll(entries);
     }
     
@@ -44,12 +52,18 @@ public class AbNDerivationHistory {
     }
     
     public void addEntry(AbNDerivationHistoryEntry entry, boolean fireListeners) {
+        
         entries.add(entry);
 
         if (fireListeners) {
             historyChangedListeners.forEach((listener) -> {
                 listener.historyChanged();
             });
+        }
+        
+        if(graphFrame.getWorkspace().isPresent()) {
+            graphFrame.getWorkspace().get().getWorkspaceHistory().getHistory().add(entry);
+            graphFrame.getWorkspace().get().saveWorkspace();
         }
     }
     

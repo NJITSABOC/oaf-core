@@ -8,12 +8,16 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.DisjointAbNConfig
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager;
 
 /**
  *
  * @author Chris O
  */
 public interface AbNGraphFrameInitializers {
+    
+    public OAFRecentlyOpenedFileManager getRecentAbNWorkspaceFiles();
+    
     public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getPAreaTaxonomyInitializer();
     public GraphFrameInitializer<PAreaTaxonomy, PAreaTaxonomyConfiguration> getAreaTaxonomyInitializer();
     
@@ -24,4 +28,5 @@ public interface AbNGraphFrameInitializers {
     
     public GraphFrameInitializer<DisjointAbstractionNetwork, DisjointAbNConfiguration> getDisjointPAreaTaxonomyInitializer();
     public GraphFrameInitializer<DisjointAbstractionNetwork, DisjointAbNConfiguration> getDisjointTANInitializer();
+    
 }

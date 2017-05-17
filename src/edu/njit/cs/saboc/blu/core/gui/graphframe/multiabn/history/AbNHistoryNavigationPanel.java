@@ -57,6 +57,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
         
         derivationHistory.addHistoryChangedListener( () -> {
             updateNavigationButtons();
+            refreshHistoryDisplay();
         });
 
         this.viewHistoryBtn = new AbNHistoryButton(graphFrame, derivationHistory, abnParser);
@@ -72,8 +73,15 @@ public class AbNHistoryNavigationPanel extends JPanel {
         this.add(forwardBtn);
     }
     
-    public void refreshHistoryDisplay() {
+    public final void refreshHistoryDisplay() {
         this.viewHistoryBtn.displayHistory(derivationHistory);
+    }
+    
+    public void reset() {
+        historyNavigationManager.reset();
+        
+        this.updateNavigationButtons();
+        this.refreshHistoryDisplay();
     }
 
     private void updateNavigationButtons() {

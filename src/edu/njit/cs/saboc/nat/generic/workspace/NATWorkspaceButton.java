@@ -175,8 +175,8 @@ public class NATWorkspaceButton<T extends Concept> extends JButton {
 
             auditSetName = JOptionPane.showInputDialog(
                     mainPanel.getParentFrame(),
-                    "Enter the name of the audit set (required)",
-                    "Enter Audit Set Name",
+                    "Enter the name of the workspace (required)",
+                    "Enter Workspace Name",
                     JOptionPane.QUESTION_MESSAGE);
         }
         

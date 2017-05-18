@@ -68,7 +68,9 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
 
     @Override
     public TargetAbstractionNetwork expandAggregateNode(AggregateTargetGroup node) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        AggregateTargetAbNGenerator generator = new AggregateTargetAbNGenerator();
+
+        return generator.createExpandedTargetAbN(this, node);
     }
 
     @Override

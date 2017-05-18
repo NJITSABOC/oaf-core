@@ -117,6 +117,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 }
 
                 abnExplorationPanel.getDisplayPanel().kill();
+                
+                historyNavigationPanel.reset();
             }
 
             @Override
@@ -153,6 +155,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                     optCurrentTaskBarPanel.get().updatePopupLocations(frame.getSize());
                 }
             }
+            
+            
         });
 
         this.setSize(1200, 512);

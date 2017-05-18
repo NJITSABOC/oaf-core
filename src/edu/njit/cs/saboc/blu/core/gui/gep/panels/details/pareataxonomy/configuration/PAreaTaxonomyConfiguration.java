@@ -32,10 +32,12 @@ public abstract class PAreaTaxonomyConfiguration extends PartitionedAbNConfigura
         super.setTextConfiguration(textConfig);
     }
     
+    @Override
     public PAreaTaxonomyUIConfiguration getUIConfiguration() {
         return (PAreaTaxonomyUIConfiguration)super.getUIConfiguration();
     }
 
+    @Override
     public PAreaTaxonomyTextConfiguration getTextConfiguration() {
         return (PAreaTaxonomyTextConfiguration)super.getTextConfiguration();
     }
@@ -53,6 +55,7 @@ public abstract class PAreaTaxonomyConfiguration extends PartitionedAbNConfigura
     }
     
     public DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> getDisjointPAreaTaxonomyFor(Area area) {
+        
         DisjointAbNGenerator<PAreaTaxonomy<PArea>, PArea> generator = new DisjointAbNGenerator<>();
         
         DisjointAbstractionNetwork<DisjointNode<PArea>, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy = 

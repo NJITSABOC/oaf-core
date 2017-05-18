@@ -8,7 +8,6 @@ import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import org.json.simple.JSONObject;
 
@@ -60,18 +59,6 @@ public class PartitionedNodeDisjointAbNDerivation<
     public DisjointAbstractionNetwork getAbstractionNetwork() {
         
         PartitionedAbstractionNetwork<T, V> partitionedAbN = parentAbNDerivation.getAbstractionNetwork();
-        
-        Optional<V> theNode = partitionedAbN
-                .getBaseAbstractionNetwork()
-                .getNodes()
-                .stream()
-                .filter( (node) -> {
-                    PartitionedNode pNode = (PartitionedNode)node;
-                    
-                    return pNode.getName().equalsIgnoreCase(partitionedNode.getName());
-                }).findAny();
-        
-        V partitionedNode = theNode.get();
 
         Set<SinglyRootedNode> overlappingNodes = new HashSet<>();
         

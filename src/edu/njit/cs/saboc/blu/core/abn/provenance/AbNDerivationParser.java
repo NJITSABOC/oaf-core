@@ -13,14 +13,19 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SimpleDisjointAbNDeriv
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.SubsetDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.disjoint.DisjointSubjectSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateAncestorSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregatePAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateRootSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AncestorSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.ExpandedSubtaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RelationshipSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.RootSubtaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.SimplePAreaTaxonomyDerivation;
@@ -154,6 +159,8 @@ public abstract class AbNDerivationParser {
             return parseAggregateTargetAbNDerivation(obj);
         } else if(className.equalsIgnoreCase("TargetAbNFromPAreaDerivation")) {
             return parseTargetAbNFromPAreaDerivation(obj);
+        } else if(className.equalsIgnoreCase("DisjointSubjectSubtaxonomy")) {
+            return parseDisjointSubjectSubtaxonomyDerivation(obj);
         } else {
             throw new AbNParseException("Unknown derivation history type specified");
         }
@@ -388,6 +395,34 @@ public abstract class AbNDerivationParser {
                 new DisjointTANFactory(), 
                 parentAbNDerivation, 
                 (PartitionedNode)node.get());
+    }
+    
+    public DisjointSubjectSubtaxonomyDerivation parseDisjointSubjectSubtaxonomyDerivation(JSONObject obj) throws AbNParseException {
+
+        if (!obj.containsKey("AreaName")) {
+            throw new AbNParseException("Area not specified.");
+        }
+
+        PAreaTaxonomyDerivation parentAbNDerivation = getBaseAbNDerivation(obj);
+
+        PAreaTaxonomy<PArea> taxonomy = parentAbNDerivation.getAbstractionNetwork();
+
+        String areaName = (String) obj.get("AreaName");
+
+        Optional<Area> node = taxonomy.getAreaTaxonomy().getNodes().stream().filter( (area) -> {
+            Area a = (Area)area;
+            
+            return a.getName().equalsIgnoreCase(areaName);
+        }).findAny();
+
+        if (!node.isPresent()) {
+            throw new AbNParseException("Area not found.");
+        }
+
+        return new DisjointSubjectSubtaxonomyDerivation(
+                parentAbNDerivation,
+                node.get(),
+                new DisjointPAreaTaxonomyFactory());
     }
 
     public ExpandedDisjointAbNDerivation parseExpandedDisjointAbNDerivation(JSONObject obj) throws AbNParseException {

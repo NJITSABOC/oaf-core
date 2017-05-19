@@ -16,6 +16,7 @@ public class SourceConceptList extends NodeConceptList<TargetGroup> {
     private final TargetAbNConfiguration config;
     
     public SourceConceptList(TargetAbNConfiguration config) {
+        
         super(new SourceConceptTableModel(config), config);
         
         this.config = config;

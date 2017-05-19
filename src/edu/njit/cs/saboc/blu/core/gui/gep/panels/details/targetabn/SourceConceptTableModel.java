@@ -44,8 +44,7 @@ public class SourceConceptTableModel extends AbstractNodeEntityTableModel<Concep
         }
         
         return new Object [] {
-            item.getName(),
-            item.getIDAsString(),
+            item,
             targetNameStr
         };
     }

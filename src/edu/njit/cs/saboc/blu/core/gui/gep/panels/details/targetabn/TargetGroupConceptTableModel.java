@@ -16,7 +16,6 @@ public class TargetGroupConceptTableModel extends AbstractNodeEntityTableModel<C
         
         super(new String [] {
             config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
-            "ID",
             String.format("# Source %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
         
@@ -36,8 +35,7 @@ public class TargetGroupConceptTableModel extends AbstractNodeEntityTableModel<C
         }
         
         return new Object [] {
-            concept.getName(),
-            concept.getID(),
+            concept,
             sourceCount
         };
     }

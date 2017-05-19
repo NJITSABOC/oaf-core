@@ -184,7 +184,7 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
         
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
         
-        this.showFullDisjointTaxonomyBtn = new JButton("Display Full " + config.getTextConfiguration().getAbNTypeName(false));
+        this.showFullDisjointTaxonomyBtn = new JButton("Display Complete Disjoint " + config.getTextConfiguration().getAbNTypeName(false));
         this.showFullDisjointTaxonomyBtn.addActionListener( (ae) -> {
             this.deriveDisjointAbNSubsetAction.deriveCompleteDisjointAbN();
         });
@@ -210,6 +210,7 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
         return selectedOverlaps;
     }
 
+    @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
     }
@@ -242,6 +243,7 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
         this.overlappingNodeTable.setContents(entries);
     }
 
+    @Override
     public void clearContents() {
         super.clearContents();
 
@@ -251,6 +253,7 @@ public class DisjointAbNSubsetSelectionPanel<T extends SinglyRootedNode> extends
         this.selectedSubsetList.clearContents();
     }
 
+    @Override
     public final void resetView() {
 
     }

@@ -28,6 +28,8 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
+import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspace;
+import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspaceManager;
 
 /**
  *
@@ -52,20 +54,27 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final AbNDerivationHistory abnDerivationHistory;
 
     private final AbNHistoryNavigationPanel historyNavigationPanel;
+    
+    private Optional<AbNWorkspace> optWorkspace;
+    
+    private final AbNWorkspaceManager workspaceManager;
+    
+    private final AbNDerivationParser abnParser;
 
     public MultiAbNGraphFrame(
             JFrame parentFrame, 
             AbNGraphFrameInitializers initializers, 
             AbNDerivationParser abnParser) {
 
-        super("Ontology Abstraction Framework (OAF) Display",
-                true, //resizable
-                true, //closable
-                true, //maximizable
-                true);//iconifiable
+        super("Ontology Abstraction Framework (OAF) Abstraction Network Viewer",
+                true, // resizable
+                true, // closable
+                true, // maximizable
+                false);// iconifiable
 
         this.parentFrame = parentFrame;
         this.initializers = initializers;
+        this.abnParser = abnParser;
 
         this.displayManager = new MultiAbNDisplayManager(this, null);
 
@@ -74,14 +83,20 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         this.abnExplorationPanel = new AbNExplorationPanel();
         this.abnExplorationPanel.showLoading();
+        
+        this.optWorkspace = Optional.empty();
+        
+        this.workspaceManager = new AbNWorkspaceManager(
+                this,
+                initializers.getRecentAbNWorkspaceFiles(), 
+                abnParser);
 
         this.setLayout(new BorderLayout());
 
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(taskPanel, BorderLayout.CENTER);
-
-
-        this.abnDerivationHistory = new AbNDerivationHistory();
+        
+        this.abnDerivationHistory = new AbNDerivationHistory(this);
 
         this.historyNavigationPanel = new AbNHistoryNavigationPanel(
                 this,
@@ -102,6 +117,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 }
 
                 abnExplorationPanel.getDisplayPanel().kill();
+                
+                historyNavigationPanel.reset();
             }
 
             @Override
@@ -138,6 +155,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                     optCurrentTaskBarPanel.get().updatePopupLocations(frame.getSize());
                 }
             }
+            
+            
         });
 
         this.setSize(1200, 512);
@@ -150,6 +169,31 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
     public AbNExplorationPanel getAbNExplorationPanel() {
         return abnExplorationPanel;
+    }
+    
+    public AbNDerivationHistory getDerivationHistory() {
+        return abnDerivationHistory;
+    }
+    
+    public Optional<AbNWorkspace> getWorkspace() {
+        return this.optWorkspace;
+    }
+    
+    public AbNWorkspaceManager getWorkspaceManager() {
+        return workspaceManager;
+    }
+    
+    public void setWorkspace(AbNWorkspace workspace) {
+        this.optWorkspace = Optional.of(workspace);
+        
+        this.abnDerivationHistory.setHistory(workspace.getWorkspaceHistory().getHistory());
+        this.historyNavigationPanel.reset();
+        
+        this.abnDerivationHistory.getHistory().get(abnDerivationHistory.getHistory().size() - 1).displayEntry();
+    }
+    
+    public void clearWorkspace() {
+        this.optWorkspace = Optional.empty();
     }
     
     public void displayAbstractionNetwork(AbstractionNetwork<?> abn) {

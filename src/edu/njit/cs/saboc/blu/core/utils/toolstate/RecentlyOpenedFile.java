@@ -1,4 +1,4 @@
-package edu.njit.cs.saboc.blu.core.utils.recentlyopenedfile;
+package edu.njit.cs.saboc.blu.core.utils.toolstate;
 
 import java.io.File;
 import java.util.Date;

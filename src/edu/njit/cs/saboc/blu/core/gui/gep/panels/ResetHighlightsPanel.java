@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JButton;
 
@@ -19,10 +20,13 @@ public class ResetHighlightsPanel extends AbNDisplayWidget {
         
         this.setLayout(new BorderLayout());
         
-        JButton resetHighlightsButton = new JButton("<html><div align='center'>Clear Search Result Highlights");
+        JButton resetHighlightsButton = new JButton("<html><div align='center'>Clear Highlights");
         resetHighlightsButton.addActionListener( (ae) -> {
             panel.getAbNPainter().clearHighlights();
         });
+        
+        resetHighlightsButton.setForeground(Color.RED);
+        resetHighlightsButton.setBackground(new Color(240, 240, 255));
         
         this.add(resetHighlightsButton, BorderLayout.CENTER);
     }
@@ -38,22 +42,31 @@ public class ResetHighlightsPanel extends AbNDisplayWidget {
         }
     }
     
-    public void draw(AbNDisplayPanel display_panel){
+    public void draw(AbNDisplayPanel displayPanel){
         
-        this.setBounds(display_panel.getWidth() / 2 - panelSize.width / 2, display_panel.getHeight() - panelSize.height - 20, panelSize.width, panelSize.height);
-        display_panel.add(this);
-        if(display_panel.getAbNPainter().showingHighlights()) {
+        this.setBounds(
+                displayPanel.getWidth() - 150, 
+                displayPanel.getHeight() - panelSize.height - 80, 
+                panelSize.width, 
+                panelSize.height);
+        
+        displayPanel.add(this);
+        
+        if(displayPanel.getAbNPainter().showingHighlights()) {
             this.setVisible(true);
         } else {
             this.setVisible(false);
-            display_panel.remove(this);
+            
+            displayPanel.remove(this);
         }        
     }
     
+    @Override
     public void displayPanelResized(AbNDisplayPanel displayPanel) {
+        
         this.setBounds(
-                displayPanel.getWidth() - 400, 
-                displayPanel.getHeight() - panelSize.height - 20, 
+                displayPanel.getWidth() - 150, 
+                displayPanel.getHeight() - panelSize.height - 80, 
                 panelSize.width, 
                 panelSize.height);
     }

@@ -23,6 +23,7 @@ public class HierarchyDepthVisitor<T> extends TopologicalVisitor<T> {
         super(theHierarchy);
     }
     
+    @Override
     public void visit(T node) {
         Hierarchy<T> theHierarchy = super.getHierarchy();
         
@@ -31,7 +32,7 @@ public class HierarchyDepthVisitor<T> extends TopologicalVisitor<T> {
         int maxParentDepth = -1;
 
         for (T parent : parents) {
-            if (depth.get(parent) > maxParentDepth) {
+            if (depth.containsKey(parent) && depth.get(parent) > maxParentDepth) {
                 maxParentDepth = depth.get(parent);
             }
         }

@@ -43,6 +43,6 @@ public abstract class PAreaTaxonomyFactory {
                 pareaHierarchy, 
                 conceptHierarchy);
     }
-    
+
     public abstract Set<InheritableProperty> getRelationships(Concept c);
 }

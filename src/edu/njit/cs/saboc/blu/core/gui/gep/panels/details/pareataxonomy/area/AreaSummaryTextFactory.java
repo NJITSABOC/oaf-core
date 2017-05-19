@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.area;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
+import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.disjoint.DisjointSubjectSubtaxonomyGenerator;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.text.NodeSummaryTextFactory;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;

@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspaceButton;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,6 +18,8 @@ public class AbNHistoryNavigationPanel extends JPanel {
     private final JButton backBtn;
     private final JButton forwardBtn;
    
+    private final AbNWorkspaceButton workspaceBtn;
+    
     private final AbNHistoryButton viewHistoryBtn;
     
     private final AbNDerivationHistory derivationHistory;
@@ -54,19 +57,31 @@ public class AbNHistoryNavigationPanel extends JPanel {
         
         derivationHistory.addHistoryChangedListener( () -> {
             updateNavigationButtons();
+            refreshHistoryDisplay();
         });
 
         this.viewHistoryBtn = new AbNHistoryButton(graphFrame, derivationHistory, abnParser);
+     
+        this.workspaceBtn = new AbNWorkspaceButton(graphFrame);
         
         this.add(backBtn);
         this.add(Box.createHorizontalStrut(4));
         this.add(viewHistoryBtn);
+        this.add(Box.createHorizontalStrut(2));
+        this.add(workspaceBtn);
         this.add(Box.createHorizontalStrut(4));
         this.add(forwardBtn);
     }
     
-    public void refreshHistoryDisplay() {
+    public final void refreshHistoryDisplay() {
         this.viewHistoryBtn.displayHistory(derivationHistory);
+    }
+    
+    public void reset() {
+        historyNavigationManager.reset();
+        
+        this.updateNavigationButtons();
+        this.refreshHistoryDisplay();
     }
 
     private void updateNavigationButtons() {

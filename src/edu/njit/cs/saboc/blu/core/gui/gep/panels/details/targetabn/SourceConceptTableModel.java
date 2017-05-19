@@ -20,7 +20,6 @@ public class SourceConceptTableModel extends AbstractNodeEntityTableModel<Concep
         
         super(new String [] {
             String.format("Source %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
-            "ID",
             String.format("Target %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))
         });
     }

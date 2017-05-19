@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.reports.AbNReportPanel;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +32,7 @@ public class PatriarchIntersectionReport extends AbNReportPanel<ClusterTribalAbs
             @Override
             protected String getBorderText(Optional<ArrayList<PatriarchIntersectionResult>> entities) {
                 
-                String base = "Patriarch Metrics";
+                String base = "Patriarch Intersection Metrics";
                 
                 if(entities.isPresent()) {
                     base = String.format("%s (%d)", base, entities.get().size());
@@ -40,6 +41,10 @@ public class PatriarchIntersectionReport extends AbNReportPanel<ClusterTribalAbs
                 return base;
             }
         };
+        
+        this.setLayout(new BorderLayout());
+        
+        this.add(reportList, BorderLayout.CENTER);
     }
 
     @Override

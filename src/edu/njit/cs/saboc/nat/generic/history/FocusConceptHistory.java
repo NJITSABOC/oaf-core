@@ -1,7 +1,9 @@
 package edu.njit.cs.saboc.nat.generic.history;
 
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -108,18 +110,25 @@ public class FocusConceptHistory<T extends Concept> {
     }
     
     public JSONArray toJSON() {
-        
+        return toJSON(conceptHistory.size());
+    }
+    
+    public JSONArray toJSON(int entryExportLimit) {
+        int limit = Math.min(entryExportLimit, conceptHistory.size());
+
+        List<FocusConceptHistoryEntry<T>> sublist = conceptHistory.subList(conceptHistory.size() - limit, conceptHistory.size());
+
         JSONArray arr = new JSONArray();
-        
-        this.conceptHistory.forEach( (entry) -> {
+
+        sublist.forEach((entry) -> {
             JSONObject obj = new JSONObject();
-            
+
             obj.put("conceptid", entry.getConcept().getIDAsString());
             obj.put("time", entry.getTimeViewed().getTime());
-            
+
             arr.add(obj);
         });
-        
+
         return arr;
     }
 }

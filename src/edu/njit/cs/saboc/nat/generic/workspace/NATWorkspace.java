@@ -197,7 +197,7 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
             obj.put("auditset", auditSet.get().getAbsolutePath());
         }
 
-        obj.put("history", workspaceHistory.toJSON());
+        obj.put("history", workspaceHistory.toJSON(400));
         
         if (FileUtilities.ensureFileExistsAndWritable(super.getFile())) {
             try (FileWriter fileWriter = new FileWriter(super.getFile())) {

@@ -23,9 +23,13 @@ public class TANDetailsPanel extends AbNDetailsPanel<ClusterTribalAbstractionNet
 
         AbNContainerReportPanel areaReportPanel = new AbNContainerReportPanel(config);
         areaReportPanel.displayAbNReport(config.getTribalAbstractionNetwork());
+        
+        PatriarchIntersectionReport intersectingPatriarchReport = new PatriarchIntersectionReport(config);
+        intersectingPatriarchReport.displayAbNReport(config.getTribalAbstractionNetwork());
 
         super.addDetailsTab("Cluster TAN Levels", levelReportPanel);
         super.addDetailsTab("Bands in Cluster TAN", areaReportPanel);
+        super.addDetailsTab("Patriarch Metrics", intersectingPatriarchReport);
         
         PartitionedAbNSelectionPanel abnTypeSelectionPanel = new PartitionedAbNSelectionPanel() {
 

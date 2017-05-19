@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import java.util.ArrayList;
+import java.util.List;
 import org.json.simple.JSONArray;
 
 /**
@@ -72,9 +73,18 @@ public class AbNDerivationHistory {
     } 
     
     public JSONArray toJSON() {
+        return toJSON(entries.size());
+    }
+    
+    public JSONArray toJSON(int entryExportLimit) {
+        
+        int limit = Math.min(entryExportLimit, entries.size());
+        
+        List<AbNDerivationHistoryEntry> sublist = entries.subList(entries.size() - limit, entries.size());
+        
         JSONArray arr = new JSONArray();
         
-        entries.forEach( (entry) -> {
+        sublist.forEach( (entry) -> {
             arr.add(entry.toJSON());
         });
         

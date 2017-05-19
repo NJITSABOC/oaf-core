@@ -138,7 +138,7 @@ public class AbNWorkspace extends OAFWorkspace {
         JSONObject obj = new JSONObject();
         
         obj.put("name", super.getName());
-        obj.put("history", derivationHistory.toJSON());
+        obj.put("history", derivationHistory.toJSON(25));
         
         if (FileUtilities.ensureFileExistsAndWritable(super.getFile())) {
             try (FileWriter fileWriter = new FileWriter(super.getFile())) {

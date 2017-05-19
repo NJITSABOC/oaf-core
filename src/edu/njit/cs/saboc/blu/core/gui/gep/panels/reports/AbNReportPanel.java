@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public abstract class AbNReportPanel<T extends AbstractionNetwork> extends JPanel {
     

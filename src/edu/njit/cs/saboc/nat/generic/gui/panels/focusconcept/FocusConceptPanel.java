@@ -15,6 +15,7 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.GoogleSe
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.OpenBrowserButton;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.PubMedSearchConfig;
 import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.linkeddata.WikipediaSearchConfig;
+import edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu.FocusConceptRightClickMenu;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,8 +24,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -33,10 +32,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -52,16 +51,11 @@ import javax.swing.ToolTipManager;
  */
 public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
-    private ArrayList<T> bookMarkedEntries = new ArrayList<>();    
     private JEditorPane jtf;
     
     private JButton backButton;
-    private JPopupMenu popup = new JPopupMenu();
     private JButton forwardButton;
     
-    //focusConcept
-    private JPopupMenu bookmarks = new JPopupMenu();
-       
     private EditFocusConceptPanel editFocusConceptPanel;
 
     private FocusConceptHistory<T> history;
@@ -70,11 +64,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private JPanel focusConceptPanel;
     
-    private ArrayList<JButton> optionButtons = new ArrayList<>();
-    
-    private static int maxRecentHistory = 5;
-    
+    private final ArrayList<JButton> optionButtons = new ArrayList<>();
+        
     private boolean pending = false;
+    
     private final EntityRightClickManager<T> rightClickManager = new EntityRightClickManager<>();
 
     public FocusConceptPanel(
@@ -106,11 +99,12 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
         backButton.addActionListener((ae) -> {
+            
             if(history.getPosition() > 0) {
                 history.historyBack();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
-                //add nagvigationhistory to the top of history list
+                
                 history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
                 forwardButton.setEnabled(true);
@@ -120,17 +114,17 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             }
         });
+        
         backButton.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
 
                 if (e.getButton() == MouseEvent.BUTTON3){
-                    navigationRightClickMenu(history, e, mainPanel);
+                    showRecentHistoryMenu(history, e, mainPanel);
                 }
-            } 
-
-
+            }
         });
+        
         forwardButton.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
         forwardButton.addActionListener((ae) -> {
             
@@ -138,7 +132,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 history.historyForward();
                 
                 mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(history.getPosition()).getConcept(), false);
-                //history.addNavigationHistory(history.getHistory().get(history.getPosition()).getConcept());
                 
                 backButton.setEnabled(true);
                 
@@ -147,7 +140,6 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             }
         });
-        
 
         jtf = new JEditorPane() {
             
@@ -263,8 +255,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                         display();
                     }
                 }
-                if (e.getButton() == MouseEvent.BUTTON3){
-                    textPaneRightClickMenu(history, e, mainPanel);
+                
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    rightClickManager.setRightClickedItem(mainPanel.getFocusConceptManager().getActiveFocusConcept());
+                    rightClickManager.showPopup(e);
                 }
             }
         });
@@ -280,10 +274,12 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         this.addOptionButton(new OpenBrowserButton(mainPanel, new PubMedSearchConfig()));
         
         this.addOptionButton(new NATWorkspaceButton(mainPanel));
+        
+        this.setRightClickMenuGenerator(new FocusConceptRightClickMenu(mainPanel, mainPanel.getDataSource()));
     }
 
     private void setConcept() {
-
+        
         if(jtf.isEditable()) {
             doConceptChange(jtf.getText());
         }
@@ -313,13 +309,11 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         jtf.setCaretPosition(0);
         jtf.getCaret().setVisible(false);
         jtf.setEditable(false);
-
         
         editFocusConceptPanel.clearEdits();
     }
 
     private void doConceptChange(String str) {
-        
         FocusConceptManager<T> focusConceptManager = getMainPanel().getFocusConceptManager();
         
         Optional<T> concept = getMainPanel().getDataSource().getOntology().getConceptFromID(str);
@@ -375,78 +369,49 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         jtf.setFont(jtf.getFont().deriveFont(Font.BOLD));
         jtf.setText("Please enter a valid concept.");
     }
-
     
-    public void navigationRightClickMenu(FocusConceptHistory<T> history, MouseEvent e, NATBrowserPanel<T> mainPanel){
-        popup.removeAll();
-        JMenuItem conceptMenuItem;
-        T concept;
-        HashSet <T> recentHistorySet= new HashSet <T>();
+    public void showRecentHistoryMenu(
+            FocusConceptHistory<T> history,
+            MouseEvent e, 
+            NATBrowserPanel<T> mainPanel) {
         
+        JPopupMenu popup = new JPopupMenu();
         
+        Set<T> recentHistorySet = new HashSet<>();
+
         int count = history.getHistory().size();
         int lastEntryIdx = count - 1;
         int i = 0;
-        while ( i < count && recentHistorySet.size() < maxRecentHistory){
+        
+        final int MAX_RECENT_HISTORY = 10;
+        
+        while ( i < count && recentHistorySet.size() < MAX_RECENT_HISTORY) {
             int idx = lastEntryIdx - i;
-            concept = history.getHistory().get(idx).getConcept();
-            if (recentHistorySet.contains(concept)){
+            
+            T concept = history.getHistory().get(idx).getConcept();
+            
+            if (recentHistorySet.contains(concept)) {
                 i++;
+                
                 continue;
             } else {
                 recentHistorySet.add(concept);
             }
-            conceptMenuItem = new JMenuItem(concept.getName());
+            
+            JMenuItem conceptMenuItem = new JMenuItem(concept.getName());
 
-            //JMenuItem selection
-            conceptMenuItem.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    mainPanel.getFocusConceptManager().navigateTo(history.getHistory().get(idx).getConcept(), false);
-                }
+            conceptMenuItem.addActionListener((ae) -> {
+                mainPanel.getFocusConceptManager().navigateTo(
+                        history.getHistory().get(idx).getConcept(), false);
             });
 
             popup.add(conceptMenuItem);
             i++;
         }
 
-
         popup.show(e.getComponent(), e.getX(), e.getY());
     }
 
-    
-    public void textPaneRightClickMenu(FocusConceptHistory<T> history, MouseEvent e, NATBrowserPanel<T> mainPanel){
-        bookmarks.removeAll();
-        JMenuItem add_to_bookmark = new JMenuItem("add to bookmark");
-        JMenu bookmark = new JMenu("bookmark");
-        
-        add_to_bookmark.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //save item
-                bookMarkedEntries.add(mainPanel.getFocusConceptManager().getActiveFocusConcept());
-            }
-        });
-        bookmarks.add(add_to_bookmark);
-        
-        //add submenu(bookmarked entries) to rightclick menu
-        if(bookMarkedEntries.size() > 0){
-            int n = bookMarkedEntries.size();
-            for (int i = 0; i < n; i++){
-                T entry = bookMarkedEntries.get(i);
-                JMenuItem bookMarkedItem = new JMenuItem(entry.getName());
-                bookMarkedItem.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        //nagvigate to this entry
-                        mainPanel.getFocusConceptManager().navigateTo(entry, false);                        
-                    }
-                });
-                bookmark.add(bookMarkedItem);
-            }
-            //add submenu
-            bookmarks.add(bookmark);
-        }
-        
-        bookmarks.show(e.getComponent(), e.getX(), e.getY());        
-    }
     public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
         rightClickManager.setMenuGenerator(generator);
     }

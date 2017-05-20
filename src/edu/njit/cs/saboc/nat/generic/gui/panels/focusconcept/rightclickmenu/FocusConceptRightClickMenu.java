@@ -9,10 +9,12 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.AuditCommentReportDialog;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
+import edu.njit.cs.saboc.nat.generic.history.BookmarkManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
@@ -45,12 +47,12 @@ public class FocusConceptRightClickMenu<T extends Concept> extends AuditReportRi
     @Override
     public ArrayList<JComponent> buildRightClickMenuFor(T item) {
         
+        ArrayList<JComponent> components = new ArrayList<>();
+        
         if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
             AuditSet<T> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
             T focusConcept = mainPanel.getFocusConceptManager().getActiveFocusConcept();
-            
-            ArrayList<JComponent> components = new ArrayList<>();
-            
+
             if(auditSet.getConcepts().contains(focusConcept)) {
                 Optional<AuditResult<T>> optAuditResult = auditSet.getAuditResult(focusConcept);
                 
@@ -82,10 +84,46 @@ public class FocusConceptRightClickMenu<T extends Concept> extends AuditReportRi
                 components.add(generateRemoveErrorMenu(auditSet, focusConcept, reportedChildErrors));
             }
             
-            return components;
+            components.add(new JSeparator());
         }
 
-        return new ArrayList<>();
+       
+        BookmarkManager<T> bookmarkManager = mainPanel.getBookmarkManager();
+        
+        JMenuItem addToBookmarks = new JMenuItem("Add Bookmark");
+        addToBookmarks.addActionListener( (ae) -> {
+           bookmarkManager.addBookmark(
+                mainPanel.getFocusConceptManager().getActiveFocusConcept());
+        });
+        
+        components.add(addToBookmarks);
+
+
+
+        if (!bookmarkManager.getBookmarks().isEmpty()) {
+            
+            JMenu bookmarkMenu = new JMenu("Bookmarks");
+
+            int n = bookmarkManager.getBookmarks().size();
+
+            for (int i = 0; i < n; i++) {
+                T entry = bookmarkManager.getBookmarks().get(i);
+
+                JMenuItem bookMarkedItem = new JMenuItem(entry.getName());
+
+                bookMarkedItem.addActionListener( (ae) -> {
+                    mainPanel.getFocusConceptManager().navigateTo(entry, false);
+                });
+
+                bookmarkMenu.add(bookMarkedItem);
+            }
+
+            bookmarkMenu.add(bookmarkMenu);
+            
+            components.add(bookmarkMenu);
+        }
+        
+        return components;
     }
 
     @Override

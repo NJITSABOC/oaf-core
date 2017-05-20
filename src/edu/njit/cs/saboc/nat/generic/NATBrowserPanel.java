@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoader;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoaderException;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
+import edu.njit.cs.saboc.nat.generic.history.BookmarkManager;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspace;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceManager;
 import java.awt.BorderLayout;
@@ -35,6 +36,8 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     
     private final AuditDatabase<T> auditDatabase;
     
+    private final BookmarkManager<T> bookmarkManager;
+    
     private Optional<NATWorkspace<T>> optWorkspace;
     
     public NATBrowserPanel(
@@ -60,6 +63,8 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
             focusConceptManager.refresh();
         });
         
+        this.bookmarkManager = new BookmarkManager<>();
+        
         this.optWorkspace = Optional.empty();
         
         layout.createLayout(this);
@@ -74,6 +79,10 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     
     public FocusConceptManager<T> getFocusConceptManager() {
         return focusConceptManager;
+    }
+    
+    public BookmarkManager<T> getBookmarkManager() {
+        return bookmarkManager;
     }
     
     public AuditDatabase<T> getAuditDatabase() {

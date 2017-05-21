@@ -25,6 +25,8 @@ public class AbNExplorationPanel extends JPanel {
 
     private final FloatingAbNDashboardFrame dashboardFrame;
     
+    boolean firstAbNShown = false;
+    
     public AbNExplorationPanel() {
         super(new BorderLayout());
 
@@ -99,8 +101,10 @@ public class AbNExplorationPanel extends JPanel {
         displayPanel.initialize(graph, painter, initializer.getInitialDisplayAction());
 
         // Add display-specific widgets and wizbangs
-        initializer.initializeAbNDisplayPanel(displayPanel);
+        initializer.initializeAbNDisplayPanel(displayPanel, !firstAbNShown);
         initializer.initializeAbNDDashboardPanel(dashboardPanel);
+        
+        this.firstAbNShown = true;
         
         displayPanel.resetUpdateables();
         displayPanel.updateWidgetLocations();
@@ -108,5 +112,7 @@ public class AbNExplorationPanel extends JPanel {
         config.getUIConfiguration().setDisplayPanel(displayPanel);
         
         dashboardFrame.setVisible(true);
+        
+        initializer.showAbNAlerts(displayPanel);
     }
 }

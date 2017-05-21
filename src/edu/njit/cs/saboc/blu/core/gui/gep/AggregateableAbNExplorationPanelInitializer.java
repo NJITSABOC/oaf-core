@@ -17,8 +17,8 @@ public class AggregateableAbNExplorationPanelInitializer extends BaseAbNExplorat
     }
 
     @Override
-    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
-        super.initializeAbNDisplayPanel(displayPanel);
+    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
+        super.initializeAbNDisplayPanel(displayPanel, startUp);
         
         AggregatationSliderPanel aggregationPanel = new AggregatationSliderPanel(displayPanel, aggregationAction);
         

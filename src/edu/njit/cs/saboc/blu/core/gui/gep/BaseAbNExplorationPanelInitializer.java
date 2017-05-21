@@ -1,9 +1,13 @@
 
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationTutorialPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.ViewportNavigationListener;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -16,7 +20,7 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
     }
 
     @Override
-    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
+    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
         NavigationPanel navigationPanel = new NavigationPanel(displayPanel);
         navigationPanel.addNavigationPanelListener(new ViewportNavigationListener(displayPanel));
         
@@ -25,6 +29,12 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
         });
         
         displayPanel.addWidget(navigationPanel);
+        
+        if (startUp) {
+            NavigationTutorialPanel tutorialPanel = new NavigationTutorialPanel(displayPanel);
+
+            displayPanel.addWidget(tutorialPanel);
+        }
     }
 
     @Override
@@ -35,5 +45,36 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
     @Override
     public AbNInitialDisplayAction getInitialDisplayAction() {
         return new AbNInitialDisplayAction();
+    }
+
+    @Override
+    public void showAbNAlerts(AbNDisplayPanel displayPanel) {
+        AbstractionNetwork abn = displayPanel.getGraph().getAbstractionNetwork();
+        
+        
+        if (abn instanceof AggregateableAbstractionNetwork) {
+
+            if (abn.getNodeCount() >= 1000) {
+
+                Thread waitThread = new Thread(() -> {
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+
+                    }
+
+                    SwingUtilities.invokeLater(() -> {
+                        JOptionPane.showMessageDialog(null,
+                                "<html>This abstraction network is relatively large."
+                                + "<p>To reduce its size use the aggregation slider at the bottom right. "
+                                + "<p>This will hide nodes that summarize fewer than the specified"
+                                + "<p>number of concepts.");
+                    });
+                });
+                
+                waitThread.start();
+            }
+        }
     }
 }

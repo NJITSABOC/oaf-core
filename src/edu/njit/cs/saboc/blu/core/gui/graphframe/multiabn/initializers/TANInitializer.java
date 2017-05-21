@@ -74,8 +74,8 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
                 }) {
 
                     @Override
-                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
-                        super.initializeAbNDisplayPanel(displayPanel);
+                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
+                        super.initializeAbNDisplayPanel(displayPanel, startUp);
 
                         MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
 

@@ -79,8 +79,8 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
                 }) {
 
                     @Override
-                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel) {
-                        super.initializeAbNDisplayPanel(displayPanel);
+                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
+                        super.initializeAbNDisplayPanel(displayPanel, startUp);
 
                         MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
                         

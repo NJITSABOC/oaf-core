@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configura
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.PartitionedAbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import javax.swing.JFrame;
 
 /**
@@ -18,6 +19,10 @@ public abstract class AreaTaxonomyInitializer extends PAreaTaxonomyInitializer {
     @Override
     public PAreaInitializerType getInitializerType() {
         return PAreaInitializerType.AreaTaxonomy;
+    }
+    
+    public AreaTaxonomyInitializer(AbNWarningManager warningManager) {
+        super(warningManager);
     }
 
     @Override

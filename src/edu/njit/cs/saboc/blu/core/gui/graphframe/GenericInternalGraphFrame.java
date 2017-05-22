@@ -4,10 +4,11 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
-import edu.njit.cs.saboc.blu.core.gui.gep.BaseAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.BaseAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -62,6 +63,8 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
     private final JPanel toggleButtonPanel = new JPanel();
 
     private ArrayList<PopupToggleButton> toggleMenuButtons = new ArrayList<>();
+    
+    private final AbNWarningManager warningManager;
 
     protected GenericInternalGraphFrame(JFrame parentFrame, String title) {
         super(title,
@@ -77,6 +80,8 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
 
         this.gep = new AbNExplorationPanel();
         this.gep.showLoading();
+        
+        this.warningManager = new AbNWarningManager();
 
         tabbedPane.addTab("Explore", gep);
         tabbedPane.addTab("Edit", scroller);
@@ -293,7 +298,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
                 graph,
                 painter,
                 gepConfiguration,
-                new BaseAbNExplorationPanelInitializer());
+                new BaseAbNExplorationPanelInitializer(warningManager));
     }
 
     public void displayAbstractionNetwork(

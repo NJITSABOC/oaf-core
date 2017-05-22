@@ -19,9 +19,9 @@ public class Ontology<T extends Concept> {
     public Ontology(Hierarchy<T> conceptHierarchy) {
         this.conceptHierarchy = conceptHierarchy;
         
-        conceptHierarchy.getNodes().forEach( (concept -> {
+        conceptHierarchy.getNodes().forEach( (T concept) -> {
             concepts.put(concept.getID(), concept);
-        }));
+        });
     }
     
     public Hierarchy<T> getConceptHierarchy() {

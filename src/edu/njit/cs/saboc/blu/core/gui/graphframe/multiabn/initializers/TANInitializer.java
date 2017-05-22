@@ -4,8 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.tan.ClusterTANGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
-import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -13,6 +13,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNod
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.tan.AggregateTANPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.tan.TANPainter;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
@@ -29,6 +30,13 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
         ClusterTAN,
         BandTAN
     }
+    
+    private final AbNWarningManager warningManager;
+    
+    public TANInitializer(AbNWarningManager warningManager) {
+        this.warningManager = warningManager;
+    }
+    
     
     public TANInitializerType getInitializerType() {
         return TANInitializerType.ClusterTAN;
@@ -68,7 +76,7 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
-        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound) -> {
+        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer(warningManager, (bound) -> {
                     ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
                     config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
                 }) {

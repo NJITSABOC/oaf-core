@@ -3,7 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;

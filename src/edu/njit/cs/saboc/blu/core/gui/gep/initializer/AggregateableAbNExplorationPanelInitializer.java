@@ -1,8 +1,10 @@
 
-package edu.njit.cs.saboc.blu.core.gui.gep;
+package edu.njit.cs.saboc.blu.core.gui.gep.initializer;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel.AggregationAction;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 
 /**
  *
@@ -12,7 +14,12 @@ public class AggregateableAbNExplorationPanelInitializer extends BaseAbNExplorat
     
     private final AggregationAction aggregationAction;
     
-    public AggregateableAbNExplorationPanelInitializer(AggregationAction aggregationAction) {
+    public AggregateableAbNExplorationPanelInitializer(
+            AbNWarningManager warningManager, 
+            AggregationAction aggregationAction) {
+        
+        super(warningManager);
+        
         this.aggregationAction = aggregationAction;
     }
 

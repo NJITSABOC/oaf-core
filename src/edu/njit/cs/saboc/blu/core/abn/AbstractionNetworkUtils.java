@@ -39,12 +39,16 @@ public class AbstractionNetworkUtils {
 
         Set<Concept> parents = conceptHierarchy.getParents(root);
 
-        parents.forEach((parent) -> {
-            allNodes.forEach((disjointNode) -> {
-                if (disjointNode.getConcepts().contains(parent)) {
-                    parentNodeDetails.add(new ParentNodeDetails<>(parent, disjointNode));
+        parents.forEach( (parent) -> {
+            
+            allNodes.forEach( (otherNode) -> {
+                
+                if (otherNode.getHierarchy().getNodes().contains(parent)) {
+                    parentNodeDetails.add(new ParentNodeDetails<>(parent, otherNode));
                 }
+                
             });
+            
         });
 
         return parentNodeDetails;

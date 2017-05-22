@@ -4,14 +4,15 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.PAreaTaxonomyGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanelGUIInitializer;
-import edu.njit.cs.saboc.blu.core.gui.gep.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.pareataxonomy.AggregatePAreaTaxonomyPainter;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
@@ -27,6 +28,12 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     public static enum PAreaInitializerType {
         PAreaTaxonomy,
         AreaTaxonomy
+    }
+    
+    private final AbNWarningManager warningManager;
+    
+    public PAreaTaxonomyInitializer(AbNWarningManager warningManager) {
+        this.warningManager = warningManager;
     }
     
     public PAreaInitializerType getInitializerType() {
@@ -73,9 +80,11 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
         
-        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer((bound) -> {
+        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer(warningManager, (bound) -> {
+            
                     PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
                     config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
+                    
                 }) {
 
                     @Override

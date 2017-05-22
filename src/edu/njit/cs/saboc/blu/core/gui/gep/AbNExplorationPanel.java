@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.initializer.BaseAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
@@ -8,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel.AbNEntitySelectionListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
+import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
@@ -81,9 +84,10 @@ public class AbNExplorationPanel extends JPanel {
      public void initialize(
             AbstractionNetworkGraph graph, 
             AbNConfiguration config, 
-            AbNPainter painter) {
+            AbNPainter painter,
+            AbNWarningManager warningManager) {
          
-         initialize(graph, config, painter, new BaseAbNExplorationPanelInitializer());
+         initialize(graph, config, painter, new BaseAbNExplorationPanelInitializer(warningManager));
      }
     
     public void initialize(

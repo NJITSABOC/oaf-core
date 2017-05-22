@@ -19,23 +19,27 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     
     private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorDisjointAbNDerivation(
             DisjointAbNDerivation aggregateBase, 
             int minBound,
-            Concept selectedAggregatePAreaRoot) {
+            Concept selectedAggregatePAreaRoot,
+            boolean isWeightedAggregated) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
         this.minBound = minBound;
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateAncestorDisjointAbNDerivation(AggregateAncestorDisjointAbNDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
                 deriveTaxonomy.getBound(), 
-                deriveTaxonomy.getSelectedRoot());
+                deriveTaxonomy.getSelectedRoot(),
+                deriveTaxonomy.isWeightedAggregated());
     }
 
     @Override
@@ -91,7 +95,13 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
         result.put("BaseDerivation", aggregateBase.serializeToJSON());
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
     }    
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
 }

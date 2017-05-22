@@ -17,7 +17,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     
     private final RootSubtaxonomy nonAggregatedRootSubtaxonomy;
     private final int aggregateBound;
-    private final boolean weightedAggregated;
+    private final boolean isWeightedAggregated;
     
     
     public AggregateRootSubtaxonomy(
@@ -25,18 +25,19 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
             int aggregateBound,
             RootSubtaxonomy nonAggregatedRootSubtaxonomy,
             PAreaTaxonomy subtaxonomy,
-            boolean weightedAggregated) {
+            boolean isWeightedAggregated) {
         
         super(aggregatedSuperAbN, 
                 subtaxonomy, 
                 new AggregateRootSubtaxonomyDerivation(
                         aggregatedSuperAbN.getDerivation(), 
                         aggregateBound, 
-                        subtaxonomy.getRootPArea().getRoot()));
+                        subtaxonomy.getRootPArea().getRoot(),
+                        isWeightedAggregated));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
         this.aggregateBound = aggregateBound;
-        this.weightedAggregated = weightedAggregated;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateRootSubtaxonomy(AggregateRootSubtaxonomy subtaxonomy) {
@@ -44,7 +45,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
                 subtaxonomy.getAggregateBound(), 
                 subtaxonomy.getNonAggregateSourceAbN(), 
                 subtaxonomy,
-                subtaxonomy.weightedAggregated);
+                subtaxonomy.isWeightedAggregated);
     }
     
     @Override
@@ -73,8 +74,8 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     }
       
     @Override
-    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean weightedAggregated) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, weightedAggregated);
+    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean isWeightedAggregated) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, isWeightedAggregated);
     }
 
     @Override
@@ -89,6 +90,6 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(aggregateBound, weightedAggregated);
+        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
     }
 }

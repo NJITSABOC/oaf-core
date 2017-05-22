@@ -19,23 +19,27 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
     private final ClusterTANDerivation aggregateBase;
     private final int minBound;
     private final Concept selectedAggregateClusterRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
             int minBound,
-            Concept selectedAggregateClusterRoot) {
+            Concept selectedAggregateClusterRoot,
+            boolean isWeightedAggregated) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
         this.minBound = minBound;
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateAncestorSubTANDerivation(AggregateAncestorSubTANDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
                 deriveTaxonomy.getBound(), 
-                deriveTaxonomy.getSelectedRoot());
+                deriveTaxonomy.getSelectedRoot(),
+                deriveTaxonomy.isWeightedAggregated());
     }
 
     @Override
@@ -94,7 +98,13 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
     }   
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
 }

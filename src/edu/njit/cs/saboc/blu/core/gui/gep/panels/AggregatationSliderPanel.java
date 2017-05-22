@@ -45,7 +45,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private boolean initialized = false;
     
-    private boolean weightedFlag = false;
+    private boolean isWeightedAggregated = false;
     
     public AggregatationSliderPanel(AbNDisplayPanel displayPanel, AggregationAction aggregationAction) {
         super(displayPanel);
@@ -64,12 +64,13 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             int newValue = aggregationSlider.getValue();
             
             if (initialized && !aggregationSlider.getValueIsAdjusting()) {
-                setBound(newValue, weightedFlag);
+                setBound(newValue, isWeightedAggregated);
 
                 displayCurrentBound();  
                 displayCurrentWeightedCheckBox();
             } else {
-                displayBound(newValue);               
+                displayBound(newValue);
+                displayCurrentWeightedCheckBox();
             }
             
 
@@ -88,7 +89,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             try {
                 int x = Integer.parseInt(txt);
                 
-                setBound(Math.max(1, x), weightedFlag);
+                setBound(Math.max(1, x), isWeightedAggregated);
             } catch (NumberFormatException nfe) {
 
             }
@@ -102,12 +103,12 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             if (ie.getStateChange()==ItemEvent.SELECTED){
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
                 if(currentBound != 1) setBound(aggregationSlider.getValue(), true);
-                weightedFlag = true;                
+                isWeightedAggregated = true;                
             }
             else{
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
                 setBound(aggregationSlider.getValue(), false);
-                weightedFlag = false;
+                isWeightedAggregated = false;
             } 
         });
         
@@ -118,7 +119,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     private void setBound(int bound, boolean weightedAggregated) {
-        if (currentBound != bound || weightedFlag != weightedAggregated) {
+        if (currentBound != bound || isWeightedAggregated != weightedAggregated) {
             aggregationAction.createAndDisplayAggregateAbN(bound, weightedAggregated);
         }
     }
@@ -132,7 +133,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     private void displayCurrentWeightedCheckBox(){
-        displayWeightedFlag(weightedFlag);
+        displayWeightedFlag(isWeightedAggregated);
     }
     
     private void displayWeightedFlag(boolean flag){   
@@ -211,7 +212,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             aggregationCheckBox.setSelected(weightedAggregate);
             
             this.currentBound = abnBound;
-            this.weightedFlag = weightedAggregate;
+            this.isWeightedAggregated = weightedAggregate;
         } else {
             this.initialized = true;
         }

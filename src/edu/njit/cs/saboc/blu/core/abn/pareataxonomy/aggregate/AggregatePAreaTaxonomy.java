@@ -23,7 +23,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> 
         implements AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> {
            
-    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(PAreaTaxonomy nonAggregateTaxonomy, int bound, boolean weightedAggregated) {
+    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(PAreaTaxonomy nonAggregateTaxonomy, int bound, boolean isWeightedAggregated) {
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
         
         return generator.createAggregatePAreaTaxonomy(
@@ -31,7 +31,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 new PAreaTaxonomyGenerator(),
                 new AggregateAbNGenerator<>(),
                 bound,
-                weightedAggregated);
+                isWeightedAggregated);
     }
     
     
@@ -44,7 +44,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 selectedRoot.getAggregatedHierarchy().getRoot());
         
         int aggregateBound = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregateBound();
-        boolean weightedAggregated = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregatedProperty().getWeighted();
+        boolean isWeightedAggregated = ((AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)superAggregateTaxonomy).getAggregatedProperty().getWeighted();
         
         PAreaTaxonomy aggregateRootSubtaxonomy = nonAggregateRootSubtaxonomy.getAggregated(aggregateBound);
         
@@ -53,7 +53,7 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
                 aggregateBound,
                 nonAggregateRootSubtaxonomy, 
                 aggregateRootSubtaxonomy,
-                weightedAggregated
+                isWeightedAggregated
         );
     }
     
@@ -110,22 +110,22 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
     private final int minBound;
     
-    private final boolean weightedAggregated;
+    private final boolean isWeightedAggregated;
     
     public AggregatePAreaTaxonomy(
             PAreaTaxonomy nonAggregateBaseTaxonomy,
             int minBound,
             PAreaTaxonomy aggregatedPAreaTaxonomy,
-            boolean weightedAggregated) {
+            boolean isWeightedAggregated) {
     
         super(aggregatedPAreaTaxonomy.getAreaTaxonomy(), 
                 aggregatedPAreaTaxonomy.getPAreaHierarchy(), 
                 nonAggregateBaseTaxonomy.getSourceHierarchy(), 
-                new AggregatePAreaTaxonomyDerivation(nonAggregateBaseTaxonomy.getDerivation(), minBound));
+                new AggregatePAreaTaxonomyDerivation(nonAggregateBaseTaxonomy.getDerivation(), minBound, isWeightedAggregated));
         
         this.nonAggregateBaseTaxonomy = nonAggregateBaseTaxonomy;
         this.minBound = minBound;
-        this.weightedAggregated = weightedAggregated;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     @Override
@@ -159,8 +159,8 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     }
     
     @Override
-    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean weightedAggregated) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, weightedAggregated);
+    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean isWeightedAggregated) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, isWeightedAggregated);
     }
 
     @Override
@@ -175,6 +175,6 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(minBound, weightedAggregated);
+        return new AggregatedProperty(minBound, isWeightedAggregated);
     }
 }

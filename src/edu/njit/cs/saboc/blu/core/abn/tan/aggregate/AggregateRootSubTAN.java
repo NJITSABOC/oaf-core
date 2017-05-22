@@ -19,14 +19,14 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
     
     private final ClusterTribalAbstractionNetwork nonAggregateSourceTAN;
     private final int minBound;
-    private final boolean weightedAggregated;
+    private final boolean isWeightedAggregated;
     
     public AggregateRootSubTAN(
             ClusterTribalAbstractionNetwork aggregateSourceTAN, 
             int aggregateBound, 
             ClusterTribalAbstractionNetwork nonAggregateRootTAN,
             ClusterTribalAbstractionNetwork<?> subTAN,
-            boolean weightedAggregated) {
+            boolean isWeightedAggregated) {
         
         super(aggregateSourceTAN, 
                 subTAN.getBandTAN(), 
@@ -36,13 +36,14 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
                 new AggregateRootSubTANDerivation(
                         aggregateSourceTAN.getDerivation(), 
                         aggregateBound, 
-                        subTAN.getClusterHierarchy().getRoot().getRoot())
+                        subTAN.getClusterHierarchy().getRoot().getRoot(),
+                        isWeightedAggregated)
         );
         
         
         this.minBound = aggregateBound;
         this.nonAggregateSourceTAN = nonAggregateRootTAN;
-        this.weightedAggregated = weightedAggregated;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateRootSubTAN(AggregateRootSubTAN subTAN) {
@@ -74,7 +75,7 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean isWeightedAggregated) {
         return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
     }
 
@@ -104,7 +105,7 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
     
         @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, weightedAggregated);
+        return new AggregatedProperty(minBound, isWeightedAggregated);
     }
 
 }

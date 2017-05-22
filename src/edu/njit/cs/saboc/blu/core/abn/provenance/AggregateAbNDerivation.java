@@ -17,6 +17,12 @@ public interface AggregateAbNDerivation<T extends AbNDerivation> {
     public int getBound();
     
     /**
+     * Return the flag that was used to create weighted or non-weighted aggregate abstraction network (>1)
+     * @return 
+     */
+    public boolean isWeightedAggregated();
+    
+    /**
      * Returns the derivation used to create the non-aggregated version of the
      * abstraction network
      * @return 

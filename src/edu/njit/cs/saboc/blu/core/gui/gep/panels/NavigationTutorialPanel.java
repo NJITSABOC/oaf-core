@@ -2,10 +2,13 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -63,11 +66,16 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
                 displayText(tutorialText[currentTutorialLocation]);
                 
                 if(currentTutorialLocation == tutorialText.length) {
-                    nextBtn.setText("Close");
+                    nextBtn.setVisible(false);
                 }
             } else {
                 this.setVisible(false);
             }
+        });
+        
+        JButton closeBtn = new JButton(ImageManager.getImageManager().getIcon("cancel.png"));
+        closeBtn.addActionListener( (ae) -> { 
+           this.setVisible(false);
         });
         
         this.descriptionPane = new JEditorPane();
@@ -87,7 +95,14 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
         this.setBackground(new Color(220, 220, 255));
         
         JPanel nextPanel = new JPanel();
+        nextPanel.setLayout(new BoxLayout(nextPanel, BoxLayout.Y_AXIS));
+        
+        nextPanel.add(closeBtn);
+        nextPanel.add(Box.createVerticalStrut(30));
         nextPanel.add(nextBtn);
+        
+
+        
         nextPanel.setOpaque(false);
         
         this.add(nextPanel, BorderLayout.EAST);

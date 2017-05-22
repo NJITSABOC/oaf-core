@@ -22,6 +22,11 @@ public class DisjointAbNGraph<T extends DisjointAbstractionNetwork> extends Abst
         
         super.setAbstractionNetworkLayout(new DisjointAbNLayout<>(this, disjointAbN));
     }
+    
+    @Override
+    public DisjointAbNLayout<T> getGraphLayout() {
+        return (DisjointAbNLayout<T>)super.getGraphLayout();
+    }
 
     public DisjointAbstractionNetwork getDisjointAbN() {
         return (DisjointAbstractionNetwork)getAbstractionNetwork();

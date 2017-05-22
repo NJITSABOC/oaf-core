@@ -35,6 +35,7 @@ import javax.swing.JLabel;
  */
 public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends AbstractionNetworkGraphLayout<T> {
 
+    // Dummy node for partitioning into common sets
     private class OrganizingPartitionNode extends PartitionedNode {
 
         public OrganizingPartitionNode() {
@@ -63,6 +64,7 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
     }
     
     private class DisjointAbNOverlapPartition {
+        
         private final Set<Node> overlaps;
         private final Set<DisjointNode> nodes;
         
@@ -146,31 +148,63 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
     }
 
     private final T disjointAbN;
+    
+    private boolean recoloredOverlaps;
+
 
     public DisjointAbNLayout(AbstractionNetworkGraph<T> graph, T disjointAbN) {
         super(graph);
 
         this.disjointAbN = disjointAbN;
+        
+        this.recoloredOverlaps = false;
     }
 
     public DisjointAbstractionNetwork getDisjointAbN() {
         return disjointAbN;
     }
-
+    
+    public boolean recoloredOverlaps() {
+        return this.recoloredOverlaps;
+    }
+    
     @Override
     public void doLayout() {
 
+        // All of the overlapping nodes, even external to a given subset
+        Set<SinglyRootedNode> allOverlappingNodes = disjointAbN.getOverlappingNodes();
+        
         Set<DisjointNode> disjointNodes = disjointAbN.getAllDisjointNodes();
-
+        
+        Set<SinglyRootedNode> overlappingNodesInAbN = new HashSet<>();
+        
+        disjointNodes.forEach( (node) -> {
+            overlappingNodesInAbN.addAll(node.getOverlaps());
+        });
+        
         Color[] colors = this.createOverlapColors();
+        
+        Set<SinglyRootedNode> coloredNodes;
+        
+        if(allOverlappingNodes.size() > colors.length) {
+            if(overlappingNodesInAbN.size() < allOverlappingNodes.size()) {
+                
+                coloredNodes = overlappingNodesInAbN;
+                
+                this.recoloredOverlaps = true;
+                
+            } else {
+                coloredNodes = allOverlappingNodes;
+            }
+        } else {
+            coloredNodes = allOverlappingNodes;
+        }
 
         Map<SinglyRootedNode, Color> colorMap = new HashMap<>();
 
         int colorId = 0;
 
-        Set<SinglyRootedNode> overlappingNodes = disjointAbN.getOverlappingNodes();
-
-        for (SinglyRootedNode node : overlappingNodes) {
+        for (SinglyRootedNode node : coloredNodes) {
             if (colorId >= colors.length) {
                 colorMap.put(node, Color.GRAY);
             } else {
@@ -180,8 +214,9 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
         }
         
         Map<Integer, DisjointAbNLevelPartition> levelPartitions = createOverlapLevelPartitions(disjointNodes);
-        ArrayList<Integer> sortedLevels = new ArrayList<>(levelPartitions.keySet());
-        Collections.sort(sortedLevels);
+        ArrayList<Integer> overlapLevels = new ArrayList<>(levelPartitions.keySet());
+        
+        Collections.sort(overlapLevels);
 
         int containerX = 0;
         int containerY = 0;
@@ -193,34 +228,36 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
         
         addGraphLevel(new GraphLevel(0, getGraph(), new ArrayList<>()));
         
-        for(int level : sortedLevels) {
+        for(int level : overlapLevels) {
             addGraphLevel(
                     new GraphLevel(
                             containerY,
                             getGraph(),
-                            generateUpperRowLanes(-5, GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 3, null)));
+                            generateUpperRowLanes(
+                                    -5, 
+                                    GraphLayoutConstants.CONTAINER_ROW_HEIGHT - 7, 
+                                    3, null)));
             
             x = 0;
             y += rowMaxHeight + GraphLayoutConstants.CONTAINER_ROW_HEIGHT;
 
-            containerY++;    // Update the areaY variable to reflect the new row.
-            containerX = 0;  // Reset the areaX variable.
+            containerY++;    
+            containerX = 0;  
 
-            rowMaxHeight = 0;  // Reset the maxHeight variable since this is a new row.
+            rowMaxHeight = 0; 
 
             DisjointAbNLevelPartition levelPartition = levelPartitions.get(level);
             ArrayList<DisjointAbNOverlapPartition> overlapPartitions;
             
             if(levelPartition.getOverlapDegree() == 1) {
                 overlapPartitions = new ArrayList<>(levelPartition.getOverlapPartitions());
+                
                 overlapPartitions.sort((a,b) -> {
                     int aCount = a.getDisjointNodes().iterator().next().getConceptCount();
                     int bCount = b.getDisjointNodes().iterator().next().getConceptCount();
                     
                     return bCount - aCount;
                 });
-                
-                
             } else {
                 overlapPartitions = levelPartition.getSortedOverlapPartitions();
             }
@@ -231,7 +268,8 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
                 int disjointNodeEntriesWide = (int)Math.ceil(Math.sqrt(nodeCount));
                 
                 int partitionWidth = disjointNodeEntriesWide * (DisjointNodeEntry.DISJOINT_NODE_WIDTH + GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
-                int partitionHeight =(int) (Math.ceil((double) nodeCount / disjointNodeEntriesWide))
+                
+                int partitionHeight = (int) (Math.ceil((double) nodeCount / disjointNodeEntriesWide))
                     * (DisjointNodeEntry.DISJOINT_NODE_HEIGHT + GraphLayoutConstants.GROUP_ROW_HEIGHT);
 
                 int width = partitionWidth + GraphLayoutConstants.GROUP_CHANNEL_WIDTH;
@@ -257,7 +295,7 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
 
                 containerEntry.addPartitionEntry(currentPartition);
 
-                currentPartition.addGroupLevel(new GraphGroupLevel(0, currentPartition)); // Add a new pAreaLevel to the data representation of the current Area object.
+                currentPartition.addGroupLevel(new GraphGroupLevel(0, currentPartition));
 
                 
                 containerEntry.addRow(0, generateUpperRowLanes(-4,
@@ -283,7 +321,14 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
 
                     GraphGroupLevel currentClusterLevel = currentPartition.getGroupLevels().get(disjointGroupY);
 
-                    DisjointNodeEntry targetGroupEntry = createGroupPanel(group, currentPartition, x2, y2, disjointGroupX, currentClusterLevel, colorMap);
+                    DisjointNodeEntry targetGroupEntry = createGroupPanel(
+                            group, 
+                            currentPartition, 
+                            x2,
+                            y2, 
+                            disjointGroupX, 
+                            currentClusterLevel, 
+                            colorMap);
 
                     currentPartition.getVisibleGroups().add(targetGroupEntry);
 
@@ -305,7 +350,7 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
                         disjointGroupY++;
 
                         if (currentPartition.getGroupLevels().size() <= disjointGroupY) {
-                            currentPartition.addGroupLevel(new GraphGroupLevel(disjointGroupY, currentPartition)); // Add a new pAreaLevel to the data representation of the current Area object.
+                            currentPartition.addGroupLevel(new GraphGroupLevel(disjointGroupY, currentPartition));
 
                             containerEntry.addRow(disjointGroupY, generateUpperRowLanes(-4,
                                     GraphLayoutConstants.GROUP_ROW_HEIGHT - 5, 3, containerEntry));
@@ -419,21 +464,39 @@ public class DisjointAbNLayout<T extends DisjointAbstractionNetwork> extends Abs
 
         Collections.sort(groups, (a, b) -> b.getConceptCount() - a.getConceptCount());
 
-        Color[] dpaColors = new Color[groups.size()];
+        Color[] disjointColors = new Color[groups.size()];
 
-        for (int c = 0; c < dpaColors.length; c++) {
-            dpaColors[c] = colorMap.get(groups.get(c));
+        for (int c = 0; c < disjointColors.length; c++) {
+            disjointColors[c] = colorMap.get(groups.get(c));
         }
 
-        DisjointNodeEntry targetGroupEntry = new DisjointNodeEntry(node, getGraph(), parent, groupX, groupLevel, new ArrayList<>(), dpaColors);
+        DisjointNodeEntry targetGroupEntry = new DisjointNodeEntry(
+                node, 
+                getGraph(), 
+                parent, 
+                groupX, 
+                groupLevel, 
+                new ArrayList<>(), 
+                disjointColors);
 
-        targetGroupEntry = (DisjointNodeEntry) targetGroupEntry.labelOffset(new Point(DisjointNodeEntry.DISJOINT_LABEL_OFFSET, DisjointNodeEntry.DISJOINT_LABEL_OFFSET));
+        targetGroupEntry = (DisjointNodeEntry) targetGroupEntry.labelOffset(
+                new Point(DisjointNodeEntry.DISJOINT_LABEL_OFFSET, 
+                        DisjointNodeEntry.DISJOINT_LABEL_OFFSET));
 
-        //Make sure this panel dimensions will fit on the graph, stretch the graph if necessary
-        getGraph().stretchGraphToFitPanel(x, y, DisjointNodeEntry.DISJOINT_NODE_WIDTH, DisjointNodeEntry.DISJOINT_NODE_HEIGHT);
+        // Make sure this panel dimensions will fit on the graph, 
+        // stretch the graph if necessary
+        getGraph().stretchGraphToFitPanel(
+                x, 
+                y, 
+                DisjointNodeEntry.DISJOINT_NODE_WIDTH, 
+                DisjointNodeEntry.DISJOINT_NODE_HEIGHT);
 
-        //Setup the panel's dimensions, etc.
-        targetGroupEntry.setBounds(x, y, SinglyRootedNodeEntry.ENTRY_WIDTH, SinglyRootedNodeEntry.ENTRY_HEIGHT);
+        // Setup the panel's dimensions, etc.
+        targetGroupEntry.setBounds(
+                x, 
+                y, 
+                SinglyRootedNodeEntry.ENTRY_WIDTH, 
+                SinglyRootedNodeEntry.ENTRY_HEIGHT);
 
         parent.add(targetGroupEntry, 0);
 

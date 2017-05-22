@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.ConceptList;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
@@ -39,21 +40,40 @@ public class TANPatriarchListPanel extends AbNDerivationWizardPanel {
                 
         this.setLayout(new BorderLayout());
         
-        this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", 
-                    config.getTextConfiguration().getOntologyEntityNameConfiguration().getChildConceptTypeName(true)));
+        String childTypeStr = config.getTextConfiguration().getOntologyEntityNameConfiguration().getChildConceptTypeName(true);
+        
+        this.useChildrenBtn = new JToggleButton(String.format("Use %s as Roots", childTypeStr));
+        
         this.useChildrenBtn.addActionListener( (ae) -> {
             useChildrenSelected();
         });
+        
+        AbNTextFormatter formatter = new AbNTextFormatter(config.getTextConfiguration());
+        
+        String useChildrenTooltip = 
+                "<html>Use the selected root <conceptTypeName>'s "
+                + "<p><childConceptTypeName count=2> as the patriarch "
+                + "<p><conceptTypeName count=2>.";
+        
+        this.useChildrenBtn.setToolTipText(formatter.format(useChildrenTooltip));
+        
+        String selectRootsTooltip = 
+                "<html>Select specific <conceptTypeName count=2> as patriarchs. "
+                + "<p>Double click on a <conceptTypeName> in the root list "
+                + "<p>located on the left to add it to the list of patriarchs. "
+                + "<p>Double click on a <conceptTypeName> in the list of patriarchs "
+                + "<p>to remove it from the list of selected patriarchs.";
         
         this.userSelectionBtn = new JToggleButton("Select Individual Roots");
         this.userSelectionBtn.addActionListener( (ae) -> {
             userSelectionSelected();
         });
         
+        this.userSelectionBtn.setToolTipText(formatter.format(selectRootsTooltip));
+        
         ButtonGroup bg = new ButtonGroup();
         bg.add(useChildrenBtn);
         bg.add(userSelectionBtn);
-        
 
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         

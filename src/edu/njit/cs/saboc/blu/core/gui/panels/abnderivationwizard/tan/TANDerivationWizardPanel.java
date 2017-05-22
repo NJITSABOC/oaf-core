@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.AbNHelpButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
@@ -13,6 +14,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,6 +38,8 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     private final JButton deriveButton;
     
     private final DeriveTANAction derivationAction;
+    
+    private final AbNHelpButton<ClusterTribalAbstractionNetwork> helpBtn;
     
     private final JPanel optionsPanel;
 
@@ -66,13 +70,22 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
         
-        this.deriveButton = new JButton("Derive Tribal Abstraction Network");
+        this.deriveButton = new JButton("<html><div align='center'>Derive Tribal<p>Abstraction Network");
         this.deriveButton.addActionListener( (ae) -> {
             deriveTribalAbstractionNetwork();
         });
         
+        
+        this.helpBtn = new AbNHelpButton<>(config);
+        
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(deriveButton, BorderLayout.EAST);
+        
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.add(deriveButton);
+        buttonsPanel.add(Box.createHorizontalStrut(10));
+        buttonsPanel.add(helpBtn);
+        
+        southPanel.add(buttonsPanel, BorderLayout.EAST);
         
         this.optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
@@ -104,6 +117,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         selectedPatriarchPanel.setEnabled(value);
         
         deriveButton.setEnabled(value);
+        helpBtn.setEnabled(value);
     }
     
     public void initialize(Ontology ontology, OntologySearcher searcher) {

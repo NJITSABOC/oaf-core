@@ -1,11 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
-import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import java.awt.Font;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -33,10 +29,12 @@ public class AbNHelpButton<T extends AbstractionNetwork> extends AbNOptionsButto
     protected void displayDetailsWindow(AbNConfiguration config) {
        
         JDialog detailsDialog = new JDialog();
-        detailsDialog.setTitle(String.format("(%s) Help / Description", config.getTextConfiguration().getAbNTypeName(false)));
+        detailsDialog.setTitle(String.format("(%s) Help / Description", 
+                config.getTextConfiguration().getAbNTypeName(false)));
+        
         detailsDialog.setModal(true);
         detailsDialog.setSize(400, 400);
-        detailsDialog.setLocationRelativeTo(null);  //sets the location to the center
+        detailsDialog.setLocationRelativeTo(null);
 
         JEditorPane abnDetailsPanel = new JEditorPane();
         abnDetailsPanel.setContentType("text/html");
@@ -44,6 +42,9 @@ public class AbNHelpButton<T extends AbstractionNetwork> extends AbNOptionsButto
         abnDetailsPanel.setEditable(false);
         abnDetailsPanel.setFont(abnDetailsPanel.getFont().deriveFont(Font.BOLD, 14));
         abnDetailsPanel.setText(config.getTextConfiguration().getAbNHelpDescription());
+        
+        abnDetailsPanel.setSelectionStart(0);
+        abnDetailsPanel.setSelectionEnd(0);
 
         detailsDialog.add(new JScrollPane(abnDetailsPanel));
         detailsDialog.setResizable(true);

@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.AbNHelpButton;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -59,6 +61,8 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     private Optional<TargetHierarchyRetriever> targetSubhierarchyRetriever = Optional.empty();
     
     private final JButton deriveButton;
+    
+    private final AbNHelpButton<TargetAbstractionNetwork> helpBtn;
     
     public TargetAbNDerivationWizardPanel(
             AbNConfiguration config,
@@ -160,13 +164,21 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         
         this.add(derivationOptionsPanel, BorderLayout.CENTER);
         
-        this.deriveButton = new JButton("Derive Target Abstraction Network");
+        this.deriveButton = new JButton("<html><div align='center'>Derive Target<br>Abstraction Network");
         this.deriveButton.addActionListener( (ae) -> {
             deriveTargetAbstractionNetwork();
         });
         
+        this.helpBtn = new AbNHelpButton<>(config);
+        
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(deriveButton, BorderLayout.EAST);
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(deriveButton);
+        buttonPanel.add(Box.createHorizontalStrut(10));
+        buttonPanel.add(helpBtn);
+        
+        southPanel.add(buttonPanel, BorderLayout.EAST);
         
         this.add(southPanel, BorderLayout.SOUTH);
     }
@@ -203,6 +215,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
         sourceRootSelectionPanel.setEnabled(value);
         propertyListPanel.setEnabled(value);
         targetRootSelectionPanel.setEnabled(value);
+        helpBtn.setEnabled(value);
     }
 
     @Override

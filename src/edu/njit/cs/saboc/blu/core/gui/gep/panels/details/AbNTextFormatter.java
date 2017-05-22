@@ -29,7 +29,6 @@ public class AbNTextFormatter {
         str = str.replaceAll("<childConceptTypeName count=(?:[2-9]|\\d\\d\\d*)>", AbNObj.getOntologyEntityNameConfiguration().getChildConceptTypeName(true).toLowerCase());
         str = str.replaceAll("<childConceptTypeName( count=1 )?>", AbNObj.getOntologyEntityNameConfiguration().getChildConceptTypeName(false).toLowerCase());
         
-        
         str = str.replaceAll("<AbNTypeName count=(?:[2-9]|\\d\\d\\d*)>", AbNObj.getAbNTypeName(true).toLowerCase());
         str = str.replaceAll("<AbNTypeName( count=1| count=0)?>", AbNObj.getAbNTypeName(false).toLowerCase());
         

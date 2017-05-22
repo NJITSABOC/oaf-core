@@ -38,6 +38,7 @@ public class AbNDerivationExplanationPanel extends JPanel {
         
         JLabel titleLabel = new JLabel(String.format("%s Derivation Overview", 
                 explanation.getConfiguration().getTextConfiguration().getAbNTypeName(false)));
+        titleLabel.setFont(titleLabel.getFont().deriveFont(24.0f));
         
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         northPanel.add(titleLabel);
@@ -54,10 +55,10 @@ public class AbNDerivationExplanationPanel extends JPanel {
         imageLabel.setOpaque(false);
         
         descriptionPane = new JEditorPane();
+        descriptionPane.setContentType("text/html");
         descriptionPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
         descriptionPane.setPreferredSize(new Dimension(-1, 100));
-        descriptionPane.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
         descriptionPane.setEditable(false);
         
         
@@ -113,6 +114,9 @@ public class AbNDerivationExplanationPanel extends JPanel {
             currentLocation++;
             
             displayEntryAt(currentLocation);
+        }
+            
+        if (currentLocation < explanation.getEntries().size() - 1) {
             this.backButton.setEnabled(true);
         } else {
             this.nextButton.setEnabled(false);

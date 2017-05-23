@@ -19,7 +19,8 @@ public class TargetAbstractionNetworkFromPArea<T extends TargetGroup> extends Ta
             PAreaTaxonomy sourceTaxonomy, 
             PArea sourcePArea) {
         
-        super(targetAbN.getTargetGroupHierarchy(), 
+        super(targetAbN.getFactory(),
+                targetAbN.getTargetGroupHierarchy(), 
                 targetAbN.getSourceHierarchy(), 
                 new TargetAbNFromPAreaDerivation(
                     targetAbN.getDerivation(),

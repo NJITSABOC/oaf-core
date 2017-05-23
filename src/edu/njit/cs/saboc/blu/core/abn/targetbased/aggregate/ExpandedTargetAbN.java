@@ -18,7 +18,8 @@ public class ExpandedTargetAbN extends TargetAbstractionNetwork
             TargetAbstractionNetwork aggregateSourceAbN,
             AggregateTargetGroup aggregateTargetGroup) {
 
-        super(aggregateTargetGroup.getAggregatedHierarchy(),
+        super(aggregateSourceAbN.getFactory(),
+                aggregateTargetGroup.getAggregatedHierarchy(),
                 aggregateTargetGroup.getHierarchy(),
                 new ExpandedTargetAbNDerivation(
                         aggregateSourceAbN.getDerivation(), 

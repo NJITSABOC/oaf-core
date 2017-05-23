@@ -1,11 +1,9 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased;
 
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.AreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
-import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomyFactory;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -181,7 +179,7 @@ public class TargetAbstractionNetworkGenerator {
             });
         }
         
-        HashMap<Concept, TargetGroup> targetGroups = new HashMap<>();
+        Map<Concept, TargetGroup> targetGroups = new HashMap<>();
         
         // Create the target groups...
         targetGroupRoots.forEach((root) -> {
@@ -220,11 +218,23 @@ public class TargetAbstractionNetworkGenerator {
                 derivation);
     }
     
+    public <T extends TargetGroup> TargetAbstractionNetwork createTargetAbNFromTargetGroups(
+            TargetAbstractionNetworkFactory factory,
+            Hierarchy<T> hierarchy,
+            Hierarchy<Concept> fullSourceHierarchy) {
+        
+        Hierarchy<Concept> sourceHierarchy = AbstractionNetworkUtils.getConceptHierarchy(hierarchy, fullSourceHierarchy);
+        
+        return new TargetAbstractionNetwork(factory, hierarchy, sourceHierarchy, null);
+    }
+    
     
     /**
      * Identifies the lowest common ancestor(s) of a set of concepts that are not targets
      * of a type of relationship. Used to define the roots of the nodes in 
      * the target abstraction network.
+     * 
+     * TODO: Replace with visitor
      * 
      * @param targets
      * @param hierarchy

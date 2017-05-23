@@ -145,7 +145,9 @@ public class AbstractionNetworkUtils {
      * @param fullHierarchy
      * @return 
      */
-    public static <T extends SinglyRootedNode> Hierarchy<Concept> getConceptHierarchy(Hierarchy<T> nodeHierarchy, Hierarchy<Concept> fullHierarchy) {
+    public static <T extends SinglyRootedNode> Hierarchy<Concept> getConceptHierarchy(
+            Hierarchy<T> nodeHierarchy, 
+            Hierarchy<Concept> fullHierarchy) {
         
         Set<Concept> roots = new HashSet<>();
         

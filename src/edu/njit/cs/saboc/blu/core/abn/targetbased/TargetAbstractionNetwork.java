@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An abstraction network that summarizes subhierarchies of concepts that are 
@@ -24,19 +25,29 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     
     private boolean isAggregated = false;
     
+    private final TargetAbstractionNetworkFactory factory;
+    
     public TargetAbstractionNetwork(
+            TargetAbstractionNetworkFactory factory,
             Hierarchy<T> groupHierarchy, 
             Hierarchy<Concept> sourceHierarchy,
             TargetAbNDerivation derivation) {
         
         super(groupHierarchy, sourceHierarchy, derivation);
+        
+        this.factory = factory;
     }
-    
+        
     public TargetAbstractionNetwork(TargetAbstractionNetwork targetAbN) {
         
-        this(targetAbN.getNodeHierarchy(), 
+        this(targetAbN.getFactory(),
+                targetAbN.getNodeHierarchy(), 
                 targetAbN.getSourceHierarchy(), 
                 targetAbN.getDerivation());
+    }
+    
+    public TargetAbstractionNetworkFactory getFactory() {
+        return factory;
     }
     
     @Override
@@ -64,6 +75,24 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
                 this.getSourceHierarchy(),
                 this.getTargetGroups());
     }
+    
+    /**
+     * Since target group's getConcepts() method only returns target concepts
+     * its neccessary to check the entire hierarchy, including non-target
+     * concepts
+     * 
+     * @param concept
+     * @return 
+     */
+    public Set<TargetGroup> getTargetGroupsWith(Concept concept) {
+        
+        Set<TargetGroup> nodes = this.getTargetGroupHierarchy().getNodes().stream().filter( 
+                (node) -> {
+                    return node.getHierarchy().getNodes().contains(concept); 
+                }).collect(Collectors.toSet());
+        
+        return nodes;
+    }
 
     @Override
     public boolean isAggregated() {
@@ -77,5 +106,31 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
         return AggregateTargetAbN.createAggregated(this, smallestNode);
+    }
+    
+    public TargetAbstractionNetwork createAncestorTargetAbN(T root) {
+        Hierarchy<T> hierarchy = this.getTargetGroupHierarchy().getAncestorHierarchy(root);
+        
+        TargetAbstractionNetworkGenerator generator = new TargetAbstractionNetworkGenerator();
+        
+        TargetAbstractionNetwork abn = generator.createTargetAbNFromTargetGroups(
+                factory, 
+                hierarchy, 
+                this.getSourceHierarchy());
+        
+        return new AncestorTargetAbN(this, root, abn.getNodeHierarchy(), abn.getSourceHierarchy());
+    }
+    
+    public TargetAbstractionNetwork createDescendantTargetAbN(T root) {
+        Hierarchy<T> hierarchy = this.getTargetGroupHierarchy().getSubhierarchyRootedAt(root);
+
+        TargetAbstractionNetworkGenerator generator = new TargetAbstractionNetworkGenerator();
+        
+        TargetAbstractionNetwork abn = generator.createTargetAbNFromTargetGroups(
+                factory, 
+                hierarchy, 
+                this.getSourceHierarchy());
+
+        return new DescendantTargetAbN(this, abn.getNodeHierarchy(), abn.getSourceHierarchy());
     }
 }

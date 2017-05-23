@@ -50,7 +50,8 @@ public class AggregateTargetAbN<T extends TargetGroup> extends TargetAbstraction
             Hierarchy<T> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy) {
 
-        super(groupHierarchy, 
+        super(sourceTargetAbN.getFactory(),
+                groupHierarchy, 
                 sourceHierarchy, 
                 new AggregateTargetAbNDerivation(sourceTargetAbN.getDerivation(), minBound));
         

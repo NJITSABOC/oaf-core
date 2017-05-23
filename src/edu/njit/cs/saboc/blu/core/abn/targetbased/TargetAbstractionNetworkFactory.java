@@ -33,6 +33,7 @@ public abstract class TargetAbstractionNetworkFactory {
             TargetAbNDerivation derivation) {
         
         return new TargetAbstractionNetwork(
+                this,
                 groupHierarchy, 
                 sourceHierarchy,
                 derivation);

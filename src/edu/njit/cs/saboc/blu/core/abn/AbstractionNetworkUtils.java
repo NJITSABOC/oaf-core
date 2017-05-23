@@ -107,35 +107,35 @@ public class AbstractionNetworkUtils {
                     Hierarchy<T> fullNonAggregatedHierarchy,
                     Hierarchy<V> aggregatedAncestorHierarchy) {
 
-                Set<T> allAggregatedNodes = new HashSet<>();
+        Set<T> allAggregatedNodes = new HashSet<>();
 
-                aggregatedAncestorHierarchy.getNodes().forEach((aggregateNode) -> {
-                    allAggregatedNodes.addAll(aggregateNode.getAggregatedHierarchy().getNodes());
-                });
-                
-                Set<T> actualRoots = new HashSet<>();
-                
-                aggregatedAncestorHierarchy.getRoots().forEach( (root) -> {
-                    actualRoots.add(root.getAggregatedHierarchy().getRoot());
-                });
+        aggregatedAncestorHierarchy.getNodes().forEach((aggregateNode) -> {
+            allAggregatedNodes.addAll(aggregateNode.getAggregatedHierarchy().getNodes());
+        });
 
-                //TODO: This can be done with a topological traversal, probably
-                Hierarchy<T> potentialHierarchy = fullNonAggregatedHierarchy.getAncestorHierarchy(allAggregatedNodes);
+        Set<T> actualRoots = new HashSet<>();
 
-                Hierarchy<T> resultHierarchy = new Hierarchy<>(actualRoots);
+        aggregatedAncestorHierarchy.getRoots().forEach((root) -> {
+            actualRoots.add(root.getAggregatedHierarchy().getRoot());
+        });
 
-                allAggregatedNodes.forEach((parea) -> {
-                    resultHierarchy.addNode(parea);
-                });
+        //TODO: This can be done with a topological traversal, probably
+        Hierarchy<T> potentialHierarchy = fullNonAggregatedHierarchy.getAncestorHierarchy(allAggregatedNodes);
 
-                potentialHierarchy.getEdges().forEach((edge) -> {
-                    if (allAggregatedNodes.contains(edge.getSource()) && allAggregatedNodes.contains(edge.getTarget())) {
-                        resultHierarchy.addEdge(edge);
-                    }
-                });
+        Hierarchy<T> resultHierarchy = new Hierarchy<>(actualRoots);
 
-                return resultHierarchy;
+        allAggregatedNodes.forEach((node) -> {
+            resultHierarchy.addNode(node);
+        });
+
+        potentialHierarchy.getEdges().forEach((edge) -> {
+            if (allAggregatedNodes.contains(edge.getSource()) && allAggregatedNodes.contains(edge.getTarget())) {
+                resultHierarchy.addEdge(edge);
             }
+        });
+
+        return resultHierarchy;
+    }
 
     /**
      * Computes the complete subhierarchy of concepts that are summarized by a hierarchy of nodes
@@ -157,16 +157,17 @@ public class AbstractionNetworkUtils {
         
         Hierarchy<Concept> conceptHierarchy = new Hierarchy(roots);
 
-        nodeHierarchy.getNodes().forEach((parea) -> {
-            conceptHierarchy.addAllHierarchicalRelationships(parea.getHierarchy());
+        nodeHierarchy.getNodes().forEach( (node) -> {
+            conceptHierarchy.addAllHierarchicalRelationships(node.getHierarchy());
         });
 
-        nodeHierarchy.getNodes().forEach((parea) -> {
-            fullHierarchy.getParents(parea.getRoot()).forEach((p) -> {
+        nodeHierarchy.getNodes().forEach((node) -> {
+            
+            fullHierarchy.getParents(node.getRoot()).forEach((p) -> {
                 Concept parent = (Concept) p;
 
                 if (conceptHierarchy.contains(parent)) {
-                    conceptHierarchy.addEdge(parea.getRoot(), parent);
+                    conceptHierarchy.addEdge(node.getRoot(), parent);
                 }
             });
         });

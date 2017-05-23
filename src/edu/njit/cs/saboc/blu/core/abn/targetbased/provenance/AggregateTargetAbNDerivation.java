@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -43,6 +42,11 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     @Override
     public String getDescription() {
         return String.format("%s (aggregated: %d)", super.getDescription(), bound);
+    }
+
+    @Override
+    public String getName() {
+        return String.format("%s (aggregated)", super.getName());
     }
     
     @Override

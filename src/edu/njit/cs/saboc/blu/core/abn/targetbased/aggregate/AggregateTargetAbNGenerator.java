@@ -32,14 +32,19 @@ public class AggregateTargetAbNGenerator {
             return sourceTargetAbN;
         }
         
-        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(new AggregateTargetAbNFactory(),
+        Hierarchy<TargetGroup> sourceHierarchy = sourceTargetAbN.getTargetGroupHierarchy();
+        
+        Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(
+                        new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),
                         bound);
         
-        Hierarchy<TargetGroup> targetHierarchy = (Hierarchy<TargetGroup>)(Hierarchy<?>)reducedTargetHierarchy;
-        
-        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(sourceTargetAbN, bound, targetHierarchy, sourceTargetAbN.getSourceHierarchy());
+        TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(
+                sourceTargetAbN, 
+                bound, 
+                reducedTargetHierarchy, 
+                sourceTargetAbN.getSourceHierarchy());
 
         targetAbN.setAggregated(true);
         

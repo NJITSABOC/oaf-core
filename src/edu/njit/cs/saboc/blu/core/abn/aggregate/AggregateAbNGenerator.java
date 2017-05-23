@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -38,18 +39,18 @@ public class AggregateAbNGenerator <
             Hierarchy<Concept> sourceConceptHierarchy,
             int minNodeSize) {
         
-        HashMap<NODE_T, Hierarchy<NODE_T>> reducedGroupMembers = new HashMap<>();
+        Map<NODE_T, Hierarchy<NODE_T>> aggregateNodeMembers = new HashMap<>();
 
-        HashMap<NODE_T, Integer> groupParentCounts = new HashMap<>();
+        Map<NODE_T, Integer> nodeParentCount = new HashMap<>();
         
         // Step 1: Determine which nodes will be the roots of aggregate nodes
         Set<NODE_T> remainingNodes = new HashSet<>();
         remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
         
-        HashMap<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
+        Map<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
         for(NODE_T group : sourceHierarchy.getNodes()) {
-            groupParentCounts.put(group, sourceHierarchy.getParents(group).size());
+            nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
             
             if (group.getConceptCount() >= minNodeSize) {
                 remainingNodes.add(group);
@@ -59,11 +60,13 @@ public class AggregateAbNGenerator <
         }
         
         remainingNodes.forEach((group) -> {
-            reducedGroupMembers.put(group, new Hierarchy<>(group));
+            aggregateNodeMembers.put(group, new Hierarchy<>(group));
         });
         
         // Step 2: Do a topological tarversal of the nodes and determine 
         // which nodes will be included in the given aggregate node
+        
+        // TODO: Replace with visitor...
         Queue<NODE_T> queue = new LinkedList<>();
         queue.addAll(sourceHierarchy.getRoots());
         
@@ -83,7 +86,7 @@ public class AggregateAbNGenerator <
 
                     // Add this group to that reducing group too
                     groupSet.get(parentGroup).forEach((reducedGroup) -> {
-                        reducedGroupMembers.get(reducedGroup).addEdge(group, parentGroup);
+                        aggregateNodeMembers.get(reducedGroup).addEdge(group, parentGroup);
                     });
                 }
             }
@@ -92,12 +95,12 @@ public class AggregateAbNGenerator <
 
             if (!childGroups.isEmpty()) {
                 childGroups.forEach((childGroup) -> {
-                    int childParentCount = groupParentCounts.get(childGroup);
+                    int childParentCount = nodeParentCount.get(childGroup);
                     
                     if(childParentCount - 1 == 0) {
                         queue.add(childGroup);
                     } else {
-                        groupParentCounts.put(childGroup, childParentCount - 1);
+                        nodeParentCount.put(childGroup, childParentCount - 1);
                     }
                 });
             }
@@ -108,7 +111,7 @@ public class AggregateAbNGenerator <
         
         remainingNodes.forEach((aggregateGroup) -> {
             aggregateGroups.put(aggregateGroup, 
-                    factory.createAggregateNode(reducedGroupMembers.get(aggregateGroup), sourceConceptHierarchy));
+                    factory.createAggregateNode(aggregateNodeMembers.get(aggregateGroup), sourceConceptHierarchy));
         });
         
         Set<AGGREGATENODE_T> rootAggregateNodes = new HashSet<>();

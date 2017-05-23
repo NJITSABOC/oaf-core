@@ -39,6 +39,8 @@ import edu.njit.cs.saboc.blu.core.abn.tan.provenance.RootSubTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.SimpleClusterTANDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromPartitionedNodeDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.TANFromSinglyRootedNodeDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateAncestorTargetAbNDerivation;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateDescendantTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AncestorTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.DescendantTargetAbNDerivation;
@@ -163,6 +165,10 @@ public abstract class AbNDerivationParser {
             return parseAncestorTargetAbNDerivation(obj);
         } else if(className.equalsIgnoreCase("DescendantTargetAbN")) {
             return parseDescendantTargetAbNDerivation(obj);
+        } else if(className.equalsIgnoreCase("AggregateAncestorTargetAbN")) {
+            return parseAggregateAncestorTargetAbNDerivation(obj);
+        } else if(className.equalsIgnoreCase("AggregateDescendantTargetAbN")) {
+            return parseAggregateDescendantTargetAbNDerivation(obj);
         } else if(className.equalsIgnoreCase("TargetAbNFromPAreaDerivation")) {
             return parseTargetAbNFromPAreaDerivation(obj);
         } else if(className.equalsIgnoreCase("DisjointSubjectSubtaxonomy")) {
@@ -550,6 +556,14 @@ public abstract class AbNDerivationParser {
     
     public <T extends AbNDerivation> DescendantTargetAbNDerivation parseDescendantTargetAbNDerivation(JSONObject obj) throws AbNParseException {
         return new DescendantTargetAbNDerivation(getBaseAbNDerivation(obj), getRoot(obj));
+    }
+    
+    public <T extends AbNDerivation> AggregateAncestorTargetAbNDerivation parseAggregateAncestorTargetAbNDerivation(JSONObject obj) throws AbNParseException {
+        return new AggregateAncestorTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+    }
+    
+    public <T extends AbNDerivation> AggregateDescendantTargetAbNDerivation parseAggregateDescendantTargetAbNDerivation(JSONObject obj) throws AbNParseException {
+        return new AggregateDescendantTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
     }
     
     public <T extends AbNDerivation> TargetAbNFromPAreaDerivation parseTargetAbNFromPAreaDerivation(JSONObject obj) throws AbNParseException {

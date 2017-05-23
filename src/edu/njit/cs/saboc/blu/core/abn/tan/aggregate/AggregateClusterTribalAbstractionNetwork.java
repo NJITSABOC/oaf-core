@@ -75,35 +75,32 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
      * Creates an aggregate TAN consisting of a chosen aggregate cluster and all of its 
      * ancestor aggregate clusters
      * 
-     * @param nonAggregateTaxonomy
-     * @param superAggregateTaxonomy
+     * @param nonAggregateTAN
+     * @param superAggregateTAN
      * @param selectedRoot
      * @return 
      */
     public static final AggregateAncestorSubTAN generateAggregateAncestorSubTAN(
-            ClusterTribalAbstractionNetwork nonAggregateTaxonomy,
-            ClusterTribalAbstractionNetwork superAggregateTaxonomy,
+            ClusterTribalAbstractionNetwork nonAggregateTAN,
+            ClusterTribalAbstractionNetwork superAggregateTAN,
             AggregateCluster selectedRoot) {
         
-        Hierarchy<Cluster> actualClusterHierarchy = AbstractionNetworkUtils.getDeaggregatedAncestorHierarchy(
-                nonAggregateTaxonomy.getClusterHierarchy(), 
-                superAggregateTaxonomy.getClusterHierarchy().getAncestorHierarchy(selectedRoot));
+        Hierarchy<Cluster> actualClusterHierarchy = AbstractionNetworkUtils.getDeaggregatedAncestorHierarchy(nonAggregateTAN.getClusterHierarchy(), 
+                superAggregateTAN.getClusterHierarchy().getAncestorHierarchy(selectedRoot));
         
-        Hierarchy<Concept> sourceHierarchy = AbstractionNetworkUtils.getConceptHierarchy(
-                actualClusterHierarchy, 
-                nonAggregateTaxonomy.getSourceHierarchy());
+        Hierarchy<Concept> sourceHierarchy = AbstractionNetworkUtils.getConceptHierarchy(actualClusterHierarchy, 
+                nonAggregateTAN.getSourceHierarchy());
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-        ClusterTribalAbstractionNetwork nonAggregatedAncestorSubTAN = generator.createTANFromClusters(
-                actualClusterHierarchy, 
+        ClusterTribalAbstractionNetwork nonAggregatedAncestorSubTAN = generator.createTANFromClusters(actualClusterHierarchy, 
                 sourceHierarchy, 
-                nonAggregateTaxonomy.getSourceFactory());
+                nonAggregateTAN.getSourceFactory());
 
-        int aggregateBound = ((AggregateAbstractionNetwork)superAggregateTaxonomy).getAggregateBound();
+        int aggregateBound = ((AggregateAbstractionNetwork)superAggregateTAN).getAggregateBound();
         
         // Convert to ancestor subhierarchy
         AncestorSubTAN subTAN = new AncestorSubTAN(
-                nonAggregateTaxonomy,
+                nonAggregateTAN,
                 selectedRoot.getAggregatedHierarchy().getRoot(),
                 nonAggregatedAncestorSubTAN.getBandTAN(),
                 nonAggregatedAncestorSubTAN.getClusterHierarchy(), 
@@ -112,7 +109,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         ClusterTribalAbstractionNetwork aggregateAncestorSubtaxonomy = subTAN.getAggregated(aggregateBound);
         
         return new AggregateAncestorSubTAN(
-                superAggregateTaxonomy,
+                superAggregateTAN,
                 selectedRoot,
                 aggregateBound,
                 subTAN, 
@@ -179,6 +176,4 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     public AggregateRootSubTAN createRootSubTAN(AggregateCluster root) {
         return AggregateClusterTribalAbstractionNetwork.generateAggregateRootSubTAN(this.getNonAggregateSourceAbN(), this, root);
     }
-    
-    
 }

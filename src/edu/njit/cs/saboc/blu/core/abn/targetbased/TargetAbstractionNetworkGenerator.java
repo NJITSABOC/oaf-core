@@ -71,14 +71,14 @@ public class TargetAbstractionNetworkGenerator {
      * @param factory
      * @param sourceHierarchy
      * @param relationshipTypes
-     * @param targetHierarchy
+     * @param completeTargetHierarchy
      * @return 
      */
     public TargetAbstractionNetwork deriveTargetAbstractionNetwork(
             TargetAbstractionNetworkFactory factory,
             Hierarchy<Concept> sourceHierarchy, 
             Set<InheritableProperty> relationshipTypes, 
-            Hierarchy<Concept> targetHierarchy) {
+            Hierarchy<Concept> completeTargetHierarchy) {
         
         Map<Concept, Set<RelationshipTriple>> relationshipsToTargetHierarchy = new HashMap<>();
         
@@ -87,8 +87,11 @@ public class TargetAbstractionNetworkGenerator {
         Set<Concept> uniqueTargets = new HashSet<>();
         
         // Step 1: Identify the targets of the relationships
-        sourceHierarchy.getNodes().forEach( (concept) -> {
-            Set<RelationshipTriple> relationships = factory.getRelationshipsToTargetHierarchyFor(concept, relationshipTypes, targetHierarchy);
+        sourceHierarchy.getNodes().forEach((concept) -> {
+            Set<RelationshipTriple> relationships = factory.getRelationshipsToTargetHierarchyFor(
+                    concept, 
+                    relationshipTypes, 
+                    completeTargetHierarchy);
             
             relationshipsToTargetHierarchy.put(concept, relationships);
             
@@ -102,10 +105,12 @@ public class TargetAbstractionNetworkGenerator {
                 relationshipsFromSourceHierarchy.get(rel.getTarget()).add(rel);
             });
         });
-
-        Map<Concept, Set<Concept>> lowestNontargetAncestors = getLowestNonTargetAncestor(uniqueTargets, targetHierarchy);
         
-        Set<Concept> targetGroupRoots = new HashSet<>(Collections.singleton(targetHierarchy.getRoot()));
+        Hierarchy<Concept> utilizedTargetHierarchy = completeTargetHierarchy.getAncestorHierarchy(uniqueTargets);
+
+        Map<Concept, Set<Concept>> lowestNontargetAncestors = getLowestNonTargetAncestor(uniqueTargets, utilizedTargetHierarchy);
+        
+        Set<Concept> targetGroupRoots = new HashSet<>(Collections.singleton(utilizedTargetHierarchy.getRoot()));
         
         // Step 2: Identify the roots of the target groups (these are the 
         // lowest non-target ancestors of the target concepts).
@@ -114,19 +119,19 @@ public class TargetAbstractionNetworkGenerator {
         });
        
         // The target groups a concept belongs to
-        HashMap<Concept, Set<Concept>> conceptsGroups = new HashMap<>();
+        Map<Concept, Set<Concept>> conceptsGroups = new HashMap<>();
 
         // The subhierarchy of (all!) concepts summarized by a target group, includes non-targets
-        HashMap<Concept, Hierarchy<Concept>> conceptsInGroup = new HashMap<>();
+        Map<Concept, Hierarchy<Concept>> conceptsInGroup = new HashMap<>();
         
-        HashMap<Concept, Integer> parentCounts = new HashMap<>();
+        Map<Concept, Integer> parentCounts = new HashMap<>();
 
-        HashMap<Concept, Set<RelationshipTriple>> groupIncomingRelationships = new HashMap<>();
+        Map<Concept, Set<RelationshipTriple>> groupIncomingRelationships = new HashMap<>();
         
-        for (Concept concept : targetHierarchy.getNodes()) {
+        for (Concept concept : utilizedTargetHierarchy.getNodes()) {
             conceptsGroups.put(concept, new HashSet<>());
             
-            parentCounts.put(concept, targetHierarchy.getParents(concept).size());
+            parentCounts.put(concept, utilizedTargetHierarchy.getParents(concept).size());
             
             groupIncomingRelationships.put(concept, new HashSet<>());
 
@@ -139,14 +144,14 @@ public class TargetAbstractionNetworkGenerator {
 
         Queue<Concept> queue = new LinkedList<>();
         
-        queue.add(targetHierarchy.getRoot()); // Start from the root of the hierarchy...
+        queue.add(utilizedTargetHierarchy.getRoot()); // Start from the root of the hierarchy...
 
         // Step 3: Identify the hierarchy of concepts that belong to each 
         // target group
         while (!queue.isEmpty()) {
             Concept concept = queue.remove();
 
-            Set<Concept> parents = targetHierarchy.getParents(concept);
+            Set<Concept> parents = utilizedTargetHierarchy.getParents(concept);
             
             // Add concepts to the target group. These may be targets or not.
             if (!targetGroupRoots.contains(concept)) {
@@ -163,10 +168,11 @@ public class TargetAbstractionNetworkGenerator {
             
             // Add any incoming relationships
             conceptsGroups.get(concept).forEach( (root) -> {
-                groupIncomingRelationships.get(root).addAll(relationshipsFromSourceHierarchy.getOrDefault(concept, Collections.emptySet()));
+                groupIncomingRelationships.get(root).addAll(
+                        relationshipsFromSourceHierarchy.getOrDefault(concept, Collections.emptySet()));
             });
 
-            Set<Concept> children = targetHierarchy.getChildren(concept);
+            Set<Concept> children = utilizedTargetHierarchy.getChildren(concept);
 
             children.forEach((child) -> {
                 int childParentCount = parentCounts.get(child) - 1;
@@ -189,12 +195,12 @@ public class TargetAbstractionNetworkGenerator {
         });
         
         // Step 4: Build the target group hierarchy
-        Hierarchy<TargetGroup> nodeHierarchy = new Hierarchy<>(targetGroups.get(targetHierarchy.getRoot()));
+        Hierarchy<TargetGroup> nodeHierarchy = new Hierarchy<>(targetGroups.get(utilizedTargetHierarchy.getRoot()));
         
-        targetGroups.values().forEach( (group) -> {
+        targetGroups.values().forEach((group) -> {
             Concept root = group.getRoot();
             
-            Set<Concept> parents = targetHierarchy.getParents(root);
+            Set<Concept> parents = utilizedTargetHierarchy.getParents(root);
             
             parents.forEach( (parent) -> {
                 Set<Concept> parentGroupRoots = conceptsGroups.get(parent);
@@ -210,7 +216,7 @@ public class TargetAbstractionNetworkGenerator {
                         factory, 
                         sourceHierarchy.getRoot(), 
                         relationshipTypes.iterator().next(), 
-                        targetHierarchy.getRoot());
+                        utilizedTargetHierarchy.getRoot());
         
         return factory.createTargetAbstractionNetwork(
                 nodeHierarchy, 

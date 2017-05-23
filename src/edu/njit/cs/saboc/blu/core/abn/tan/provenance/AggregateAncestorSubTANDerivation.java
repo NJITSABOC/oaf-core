@@ -62,7 +62,7 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
   
     @Override
     public String getDescription() {
-        return String.format("Derived aggregate ancestors subtaxonomy (PArea: %s)", selectedAggregateClusterRoot.getName());
+        return String.format("Derived aggregate ancestor TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
     }
 
     @Override

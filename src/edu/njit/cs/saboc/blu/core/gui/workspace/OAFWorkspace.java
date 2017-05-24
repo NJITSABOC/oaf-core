@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.workspace;
 
-import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 import java.io.File;
 
 /**
@@ -27,6 +26,10 @@ public abstract class OAFWorkspace {
     
     public File getFile() {
         return file;
+    }
+    
+    public boolean hasFile() {
+        return file != null;
     }
 
     public abstract void loadWorkspace();

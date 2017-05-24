@@ -25,8 +25,8 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
     private final JPanel midPanel;
     private final JPanel rightPanel;
 
-    public BaseNATAdjustableLayout(ConceptBrowserDataSource<T> dataSource) {
-        super(dataSource);
+    public BaseNATAdjustableLayout() {
+        super();
         
         this.leftPanel = new JPanel(new BorderLayout());
         this.midPanel = new JPanel(new BorderLayout());

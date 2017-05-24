@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.MultiResultListPanel;
 
 /**
@@ -13,13 +12,12 @@ import edu.njit.cs.saboc.nat.generic.gui.panels.MultiResultListPanel;
  */
 public class AncestorPanel<T extends Concept> extends MultiResultListPanel<T>  {
         
-    public AncestorPanel(NATBrowserPanel<T> browserPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public AncestorPanel(NATBrowserPanel<T> browserPanel) {
         
-        super(browserPanel, dataSource);
+        super(browserPanel);
         
-        super.addResultListPanel(new ParentsPanel<>(browserPanel, dataSource, true), "Parents Only");
-        super.addResultListPanel(new GrandparentsPanel<>(browserPanel, dataSource), "Parents and Grandparents");
-        super.addResultListPanel(new FocusConceptAncestorsPanel<>(browserPanel, dataSource, true), "All Ancestors");
+        super.addResultListPanel(new ParentsPanel<>(browserPanel, true), "Parents Only");
+        super.addResultListPanel(new GrandparentsPanel<>(browserPanel), "Parents and Grandparents");
+        super.addResultListPanel(new FocusConceptAncestorsPanel<>(browserPanel, true), "All Ancestors");
     }
 }

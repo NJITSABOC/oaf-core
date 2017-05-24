@@ -30,7 +30,10 @@ import javax.swing.JRadioButton;
  * @param <V>
  * @param <U>
  */
-public class SelectRelationshipErrorReportPanel<T extends Concept, V extends InheritableProperty, U extends OntologyError<T>> extends ErrorReportPanel<T, U> {
+public class SelectRelationshipErrorReportPanel<
+        T extends Concept, 
+        V extends InheritableProperty, 
+        U extends OntologyError<T>> extends ErrorReportPanel<T, U> {
     
     private Optional<MissingRelationshipInitializer<T, V, U>> initializer = Optional.empty();
     
@@ -49,11 +52,9 @@ public class SelectRelationshipErrorReportPanel<T extends Concept, V extends Inh
     
     private final ErrorSubmissionPanel<T> errorSubmissionPanel;
         
-    public SelectRelationshipErrorReportPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public SelectRelationshipErrorReportPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.setLayout(new BorderLayout());
 
@@ -70,24 +71,23 @@ public class SelectRelationshipErrorReportPanel<T extends Concept, V extends Inh
         optionPanel.add(btnSearchForMissingParent);
         optionPanel.add(btnCommentOnly);
         
-        this.errorDescriptionPanel = new ErrorDescriptionPanel<>(mainPanel, dataSource);
+        this.errorDescriptionPanel = new ErrorDescriptionPanel<>(mainPanel);
         
-        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel, dataSource);
+        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel);
         
-        this.commentPanel = new AuditCommentPanel<>(mainPanel, dataSource);
+        this.commentPanel = new AuditCommentPanel<>(mainPanel);
         this.commentPanel.setPreferredSize(new Dimension(-1, 200));
                 
         this.propertySelectPanel = new InheritablePropertySelectionPanel(SelectionType.Single, true);
-        this.propertySelectPanel.initialize(dataSource.getAvailableProperties());
+        this.propertySelectPanel.initialize(mainPanel.getDataSource().get().getAvailableProperties());
         
         this.propertySelectPanel.setBorder(BorderFactory.createTitledBorder("Select Relationship Type"));
         
-        this.selectConceptPanel = new SelectConceptPanel<>(mainPanel, dataSource);
+        this.selectConceptPanel = new SelectConceptPanel<>(mainPanel);
         this.selectConceptPanel.setBorder(BorderFactory.createTitledBorder("Select Target"));
         
         this.errorSubmissionPanel = new ErrorSubmissionPanel<>(
                 mainPanel,
-                dataSource,
                 new ErrorSubmissionPanel.ErrorSubmissionListener() {
 
                     @Override

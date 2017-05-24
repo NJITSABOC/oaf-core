@@ -20,17 +20,21 @@ public class CommonBrowserDataRetrievers {
      * Creates a retriever for obtaining the children of the given concept
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
      * 
      * @return 
      */
-    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getChildrenRetriever(ConceptBrowserDataSource<T> dataSource) {
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getChildrenRetriever(NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<T>>() {
 
             @Override
             public ArrayList<T> getData(T concept) {
-                return getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(concept));
+                if(browserPanel.getDataSource().isPresent()) {
+                     return getSortedConceptList(browserPanel.getDataSource().get().getOntology().getConceptHierarchy().getChildren(concept));
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -45,17 +49,24 @@ public class CommonBrowserDataRetrievers {
      * Creates a retriever for obtaining the parents of the given concept
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
      * 
      * @return 
      */
-    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getParentsRetriever(ConceptBrowserDataSource<T> dataSource) {
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getParentsRetriever(
+            NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<T>>() {
 
             @Override
             public ArrayList<T> getData(T concept) {
-                return getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(concept));
+                
+                if(browserPanel.getDataSource().isPresent()) {
+                     return getSortedConceptList(browserPanel.getDataSource().get().
+                             getOntology().getConceptHierarchy().getParents(concept));
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -70,17 +81,24 @@ public class CommonBrowserDataRetrievers {
      * same parent) as the given concept.
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
      * 
      * @return 
      */
-    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getSiblingsRetriever(ConceptBrowserDataSource<T> dataSource) {
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getSiblingsRetriever(
+            NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<T>>() {
 
             @Override
             public ArrayList<T> getData(T concept) {
-                return getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getSiblings(concept));
+                
+                if(browserPanel.getDataSource().isPresent()) {
+                    return getSortedConceptList(browserPanel.getDataSource().get().
+                            getOntology().getConceptHierarchy().getSiblings(concept));
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -96,17 +114,24 @@ public class CommonBrowserDataRetrievers {
      * share all of the same parents) of a the given concept
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
      * 
      * @return 
      */
-    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getStrictSiblingsRetriever(ConceptBrowserDataSource<T> dataSource) {
+    public static <T extends Concept> DataRetriever<T, ArrayList<T>> getStrictSiblingsRetriever(
+            NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<T>>() {
 
             @Override
             public ArrayList<T> getData(T concept) {
-                return getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getStrictSiblings(concept));
+                
+                if(browserPanel.getDataSource().isPresent()) {
+                    return getSortedConceptList(browserPanel.getDataSource().get().
+                            getOntology().getConceptHierarchy().getStrictSiblings(concept));
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -125,27 +150,34 @@ public class CommonBrowserDataRetrievers {
      * parent of multiple parents
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
+     * 
      * @return 
      */
     public static <T extends Concept> DataRetriever<T, ArrayList<GrandparentResult<T>>> getGrandparentsRetriever(
-            ConceptBrowserDataSource<T> dataSource) {
+             NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<GrandparentResult<T>>>() {
 
             @Override
             public ArrayList<GrandparentResult<T>> getData(T concept) {
                 
-                ArrayList<T> parents = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(concept));
-                
-                ArrayList<GrandparentResult<T>> grandParentResults = new ArrayList<>();
-                
-                parents.forEach( (parent) -> {
-                    grandParentResults.add(new GrandparentResult<>(parent, 
-                            getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(parent))));
-                });
-                
-                return grandParentResults;
+                if (browserPanel.getDataSource().isPresent()) {
+                    ConceptBrowserDataSource<T> dataSource = browserPanel.getDataSource().get();
+                    
+                    ArrayList<T> parents = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(concept));
+
+                    ArrayList<GrandparentResult<T>> grandParentResults = new ArrayList<>();
+
+                    parents.forEach((parent) -> {
+                        grandParentResults.add(new GrandparentResult<>(parent,
+                                getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getParents(parent))));
+                    });
+
+                    return grandParentResults;
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -163,27 +195,34 @@ public class CommonBrowserDataRetrievers {
      * child of multiple children
      * 
      * @param <T>
-     * @param dataSource
+     * @param browserPanel
      * 
      * @return 
      */
     public static <T extends Concept> DataRetriever<T, ArrayList<GrandchildResult<T>>> getGrandchildrenRetriever(
-            ConceptBrowserDataSource<T> dataSource) {
+            NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<GrandchildResult<T>>>() {
 
             @Override
             public ArrayList<GrandchildResult<T>> getData(T concept) {
-                ArrayList<T> children = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(concept));
-                
-                ArrayList<GrandchildResult<T>> grandParentResults = new ArrayList<>();
-                
-                children.forEach( (child) -> {
-                    grandParentResults.add(new GrandchildResult<>(child, 
-                            getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(child))));
-                });
-                
-                return grandParentResults;
+
+                if (browserPanel.getDataSource().isPresent()) {
+                    ConceptBrowserDataSource<T> dataSource = browserPanel.getDataSource().get();
+
+                    ArrayList<T> children = getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(concept));
+
+                    ArrayList<GrandchildResult<T>> grandParentResults = new ArrayList<>();
+
+                    children.forEach((child) -> {
+                        grandParentResults.add(new GrandchildResult<>(child,
+                                getSortedConceptList(dataSource.getOntology().getConceptHierarchy().getChildren(child))));
+                    });
+
+                    return grandParentResults;
+                } else {
+                    return new ArrayList<>();
+                }
             }
 
             @Override
@@ -194,20 +233,28 @@ public class CommonBrowserDataRetrievers {
     }
     
     public static <T extends Concept> DataRetriever<T, ArrayList<T>> getTopologicalAncestorsRetriever(
-        ConceptBrowserDataSource<T> dataSource) {
+        NATBrowserPanel<T> browserPanel) {
         
         return new DataRetriever<T, ArrayList<T>>() {
 
             @Override
             public ArrayList<T> getData(T concept) {
-                ArrayList<T> topologicalAncestors = dataSource.getOntology().getConceptHierarchy().getAncestorHierarchy(concept).getTopologicalOrdering();
-                topologicalAncestors.remove(concept);
                 
-                if(!topologicalAncestors.isEmpty()) {
-                    topologicalAncestors.remove(topologicalAncestors.get(0));
+                if (browserPanel.getDataSource().isPresent()) {
+                    ArrayList<T> topologicalAncestors = browserPanel.getDataSource().get().
+                            getOntology().getConceptHierarchy().getAncestorHierarchy(concept).getTopologicalOrdering();
+                    
+                    topologicalAncestors.remove(concept);
+
+                    if (!topologicalAncestors.isEmpty()) {
+                        topologicalAncestors.remove(topologicalAncestors.get(0));
+                    }
+
+                    return topologicalAncestors;
+                } else {
+                    return new ArrayList<>();
                 }
-                
-                return topologicalAncestors;
+
             }
 
             @Override

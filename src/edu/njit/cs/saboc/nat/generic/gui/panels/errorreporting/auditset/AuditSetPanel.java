@@ -45,8 +45,8 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private final JButton btnOpenAuditSet;
     
-    public AuditSetPanel(NATBrowserPanel<T> browserPanel, ConceptBrowserDataSource<T> dataSource) {
-        super(browserPanel, dataSource);
+    public AuditSetPanel(NATBrowserPanel<T> browserPanel) {
+        super(browserPanel);
         
         this.setLayout(new BorderLayout());
         
@@ -99,8 +99,10 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
             
             menu.add(openFileOption);
             
-            if(dataSource.getRecentlyOpenedAuditSets() != null) {
-                OAFRecentlyOpenedFileManager recentAuditSetManager = dataSource.getRecentlyOpenedAuditSets();
+            Optional<ConceptBrowserDataSource<T>> optDataSource = browserPanel.getDataSource();
+            
+            if(optDataSource.isPresent() && optDataSource.get().getRecentlyOpenedAuditSets() != null) {
+                OAFRecentlyOpenedFileManager recentAuditSetManager = optDataSource.get().getRecentlyOpenedAuditSets();
                 
                 if(!recentAuditSetManager.getRecentlyOpenedFiles().isEmpty()) {
                     menu.add(new JSeparator());
@@ -164,7 +166,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
                 
         this.add(northPanel, BorderLayout.NORTH);
                 
-        this.auditConceptList = new AuditConceptList<>(browserPanel, dataSource);
+        this.auditConceptList = new AuditConceptList<>(browserPanel);
         
         this.add(auditConceptList, BorderLayout.CENTER);
     }
@@ -191,6 +193,11 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void createEmptyAuditSet() {
+        
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
         Optional<String> auditSetName = promptForAuditSetName();
 
         if (auditSetName.isPresent()) {
@@ -200,7 +207,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
             if (auditSetFile.isPresent()) {
 
                 AuditSet<T> auditSet = new AuditSet<>(
-                        getDataSource(),
+                        getMainPanel().getDataSource().get(),
                         auditSetFile.get(),
                         auditSetName.get(),
                         new HashSet<>());
@@ -222,6 +229,11 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void createAuditSetFromIDFile() {
+        
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
         Optional<File> idFile = ExportAbNUtilities.displayFileSelectOpenDialog();
         
         if(idFile.isPresent()) {
@@ -234,7 +246,7 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
                     AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromConceptIds(
                             idFile.get(),
                             auditSetFile.get(),
-                            getDataSource());
+                            getMainPanel().getDataSource().get());
 
                     auditSetCreated(auditSet);
 
@@ -258,11 +270,15 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private void auditSetCreated(AuditSet<T> auditSet) {
         
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
         setCurrentAuditSet(auditSet);
 
         auditSet.save();
 
-        OAFRecentlyOpenedFileManager recentAuditSetManager = this.getDataSource().getRecentlyOpenedAuditSets();
+        OAFRecentlyOpenedFileManager recentAuditSetManager = getMainPanel().getDataSource().get().getRecentlyOpenedAuditSets();
 
         try {
             recentAuditSetManager.addOrUpdateRecentlyOpenedFile(auditSet.getFile());
@@ -280,11 +296,17 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
     }
     
     private void loadAuditSetFromFile(File file) {
+        
+        if (!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
+        ConceptBrowserDataSource<T> dataSource = getMainPanel().getDataSource().get();
 
         try {
-            AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromJSON(file, getDataSource());
+            AuditSet<T> auditSet = AuditSetLoader.<T>createAuditSetFromJSON(file, dataSource);
             
-            OAFRecentlyOpenedFileManager recentAuditSetManager = this.getDataSource().getRecentlyOpenedAuditSets();
+            OAFRecentlyOpenedFileManager recentAuditSetManager = dataSource.getRecentlyOpenedAuditSets();
 
             try {
                 recentAuditSetManager.addOrUpdateRecentlyOpenedFile(file);

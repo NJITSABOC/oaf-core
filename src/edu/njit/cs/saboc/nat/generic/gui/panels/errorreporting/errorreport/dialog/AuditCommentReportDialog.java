@@ -14,8 +14,7 @@ import javax.swing.JDialog;
 public class AuditCommentReportDialog {
     
     public static <T extends Concept> void displayAuditCommentDialog(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource, 
+            NATBrowserPanel<T> mainPanel,
             T concept) {
         
         JDialog dialog = new JDialog();
@@ -24,7 +23,7 @@ public class AuditCommentReportDialog {
         dialog.setSize(600, 400);
         dialog.setLocationRelativeTo(mainPanel.getParentFrame());
         
-        AuditSetConceptCommentPanel<T> commentPanel = new AuditSetConceptCommentPanel<>(mainPanel, dataSource, concept);
+        AuditSetConceptCommentPanel<T> commentPanel = new AuditSetConceptCommentPanel<>(mainPanel, concept);
         
         commentPanel.addAuditSetCommentPanelListener(new AuditCommentPanelListener() {
 

@@ -33,11 +33,10 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
     
     private final NestedFilterableList<GrandparentResult<T>, T> grandParentList;
     
-    public GrandparentsPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+    public GrandparentsPanel(NATBrowserPanel<T> mainPanel) {
         
         super(mainPanel, 
-                dataSource, 
-                CommonBrowserDataRetrievers.getGrandparentsRetriever(dataSource));
+                CommonBrowserDataRetrievers.getGrandparentsRetriever(mainPanel));
 
         grandParentList = new NestedFilterableList<GrandparentResult<T>, T>() {
 
@@ -53,7 +52,7 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
                         (FilterableExtendedNeighborhoodEntry<T, GrandparentResult<T>>)entry;
                 
                 GrandparentEntryPanel<T, GrandparentResult<T>> relGroupPanel = 
-                        new GrandparentEntryPanel<>(mainPanel, groupEntry, dataSource);
+                        new GrandparentEntryPanel<>(mainPanel, groupEntry);
                 
                 return(FilterableNestedEntryPanel<FilterableNestedEntry<GrandparentResult<T>, T>>)
                         (FilterableNestedEntryPanel<?>)relGroupPanel;
@@ -97,12 +96,12 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
         
         data.forEach( (result) -> {
             
-            FilterableConceptEntry<T> parentEntry = new FilterableConceptEntry<>(result.getParent(), getDataSource());
+            FilterableConceptEntry<T> parentEntry = new FilterableConceptEntry<>(getMainPanel(), result.getParent());
             
             ArrayList<Filterable<T>> grandParentEntries = new ArrayList<>();
             
             result.getGrandparents().forEach((grandchild) -> {
-                grandParentEntries.add(new FilterableConceptEntry<>(grandchild, getDataSource()));
+                grandParentEntries.add(new FilterableConceptEntry<>(getMainPanel(), grandchild));
             });
             
             grandparents.addAll(result.getGrandparents());

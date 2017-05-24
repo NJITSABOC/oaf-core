@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
@@ -30,11 +29,8 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
     
     private final ArrayList<ErrorReportPanelListener<V>> errorReportPanelListeners = new ArrayList<>();
     
-    public ErrorReportPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
-        super(mainPanel, dataSource);
+    public ErrorReportPanel(NATBrowserPanel<T> mainPanel) {
+        super(mainPanel);
     }
     
     public void addErrorReportPanelListener(ErrorReportPanelListener<V> errorSubmissionListener) {

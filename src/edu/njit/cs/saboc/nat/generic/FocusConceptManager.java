@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic;
 
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -27,8 +26,7 @@ public class FocusConceptManager<T extends Concept> {
         public void focusConceptChanged(T concept);
     }
     
-    private final ConceptBrowserDataSource<T> dataSource;
-    private final NATBrowserPanel<T> browser;
+    private final NATBrowserPanel<T> mainPanel;
     
     private final ArrayList<FocusConceptChangedListener<T>> listeners = new ArrayList<>();
 
@@ -36,12 +34,8 @@ public class FocusConceptManager<T extends Concept> {
     
     private Optional<T> activeFocusConcept = Optional.empty();
    
-    public FocusConceptManager(
-            NATBrowserPanel<T> browser, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
-        this.browser = browser;
-        this.dataSource = dataSource;
+    public FocusConceptManager(NATBrowserPanel<T> mainPanel) {
+        this.mainPanel = mainPanel;
     }
 
     public FocusConceptHistory<T> getHistory() {
@@ -57,7 +51,10 @@ public class FocusConceptManager<T extends Concept> {
     }
 
     public void navigateToRoot() {
-        navigateTo(dataSource.getOntology().getConceptHierarchy().getRoot());
+        
+        if(mainPanel.getDataSource().isPresent()) {
+            navigateTo(mainPanel.getDataSource().get().getOntology().getConceptHierarchy().getRoot());
+        }
     }
     
     /**
@@ -81,14 +78,14 @@ public class FocusConceptManager<T extends Concept> {
         if(addHistoryEntry) {
             history.addHistoryEntry(concept);
             
-            if(browser.getWorkspace().isPresent()) {
-                browser.getWorkspace().get().getHistory().addHistoryEntry(concept);
+            if(mainPanel.getWorkspace().isPresent()) {
+                mainPanel.getWorkspace().get().getHistory().addHistoryEntry(concept);
             }
         }
     }
     
     public NATBrowserPanel<T> getNATBrowserPanel() {
-        return browser;
+        return mainPanel;
     }
 
     public T getActiveFocusConcept() {

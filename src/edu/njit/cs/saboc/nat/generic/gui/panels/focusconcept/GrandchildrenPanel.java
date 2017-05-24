@@ -33,10 +33,9 @@ public class GrandchildrenPanel<T extends Concept> extends ResultPanel<T, ArrayL
     
     private final NestedFilterableList<GrandchildResult<T>, T> grandchildList;
     
-    public GrandchildrenPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+    public GrandchildrenPanel(NATBrowserPanel<T> mainPanel) {
         super(mainPanel, 
-                dataSource, 
-                CommonBrowserDataRetrievers.getGrandchildrenRetriever(dataSource));
+                CommonBrowserDataRetrievers.getGrandchildrenRetriever(mainPanel));
 
         grandchildList = new NestedFilterableList<GrandchildResult<T>, T>() {
 
@@ -52,7 +51,7 @@ public class GrandchildrenPanel<T extends Concept> extends ResultPanel<T, ArrayL
                         (FilterableExtendedNeighborhoodEntry<T, GrandchildResult<T>>)entry;
                 
                 GrandchildEntryPanel<T, GrandchildResult<T>> relGroupPanel = 
-                        new GrandchildEntryPanel<>(mainPanel, groupEntry, dataSource);
+                        new GrandchildEntryPanel<>(mainPanel, groupEntry);
                 
                 return(FilterableNestedEntryPanel<FilterableNestedEntry<GrandchildResult<T>, T>>)
                         (FilterableNestedEntryPanel<?>)relGroupPanel;
@@ -97,12 +96,12 @@ public class GrandchildrenPanel<T extends Concept> extends ResultPanel<T, ArrayL
         
         data.forEach( (result) -> {
             
-            FilterableConceptEntry<T> childEntry = new FilterableConceptEntry<>(result.getChild(), getDataSource());
+            FilterableConceptEntry<T> childEntry = new FilterableConceptEntry<>(getMainPanel(), result.getChild());
             
             ArrayList<Filterable<T>> grandchildEntries = new ArrayList<>();
             
             result.getGrandChildren().forEach( (grandchild) -> {
-                grandchildEntries.add(new FilterableConceptEntry<>(grandchild, getDataSource()));
+                grandchildEntries.add(new FilterableConceptEntry<>(getMainPanel(), grandchild));
             });
             
             entries.add(new FilterableExtendedNeighborhoodEntry<>(result, childEntry, grandchildEntries));

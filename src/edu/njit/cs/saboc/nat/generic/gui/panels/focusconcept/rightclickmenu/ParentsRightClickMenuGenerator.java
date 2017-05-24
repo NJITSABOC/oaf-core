@@ -25,14 +25,9 @@ import javax.swing.JSeparator;
 public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditReportRightClickMenu<T, T> {
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public ParentsRightClickMenuGenerator(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
+    public ParentsRightClickMenuGenerator(NATBrowserPanel<T> mainPanel) {
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
     }
 
     @Override
@@ -60,7 +55,7 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
             
             components.add(new JSeparator());
             
-            components.addAll(ParentErrorReportOptions.createParentErrorComponents(mainPanel, dataSource, item));
+            components.addAll(ParentErrorReportOptions.createParentErrorComponents(mainPanel, item));
 
             List<ParentError<T>> reportedParentErrors = auditSet.getParentErrors(focusConcept);
                         
@@ -88,7 +83,7 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
 
             JMenuItem reportMissingParent = new JMenuItem("Report missing parent");
             reportMissingParent.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingParentDialog(mainPanel, dataSource);
+                ErrorReportDialog.displayMissingParentDialog(mainPanel);
             });
 
             components.add(reportMissingParent);

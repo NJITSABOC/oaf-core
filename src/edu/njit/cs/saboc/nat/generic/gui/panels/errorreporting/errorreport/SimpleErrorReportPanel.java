@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.initializer.ErrorReportPanelInitializer;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
 import java.awt.BorderLayout;
 import java.util.Optional;
@@ -26,21 +25,18 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
     
     private final ErrorSubmissionPanel<T> errorSubmissionPanel;
 
-    public SimpleErrorReportPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public SimpleErrorReportPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
-        this.errorDescriptionPane = new ErrorDescriptionPanel<>(mainPanel, dataSource);
+        this.errorDescriptionPane = new ErrorDescriptionPanel<>(mainPanel);
         
-        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel, dataSource);
+        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel);
         
-        this.auditCommentPanel = new AuditCommentPanel<>(mainPanel, dataSource);
+        this.auditCommentPanel = new AuditCommentPanel<>(mainPanel);
         
         this.errorSubmissionPanel = new ErrorSubmissionPanel<>(
                 mainPanel, 
-                dataSource, 
                 new ErrorSubmissionPanel.ErrorSubmissionListener() {
 
                     @Override

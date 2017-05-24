@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.renderer.BaseFilterableRender
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -22,14 +21,10 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
     private final BasicFilterableConceptRenderer<T> renderer;
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public SimpleConceptRenderer(
-            NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+    public SimpleConceptRenderer(NATBrowserPanel<T> mainPanel) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         
         this.setLayout(new BorderLayout());
         
@@ -43,10 +38,6 @@ public class SimpleConceptRenderer<T extends Concept> extends BaseFilterableRend
     
     public NATBrowserPanel<T> getMainPanel() {
         return mainPanel;
-    }
-    
-    public ConceptBrowserDataSource<T> getDataSource() {
-        return dataSource;
     }
     
     public JLabel getConceptNameLabel() {

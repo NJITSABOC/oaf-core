@@ -32,14 +32,10 @@ public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
     private class HistoryEntryList<T extends Concept> extends FilterableList<FocusConceptHistoryEntry<T>> {
         
         private final NATBrowserPanel<T> mainPanel;
-        private final ConceptBrowserDataSource<T> dataSource;
         
-        public HistoryEntryList(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+        public HistoryEntryList(NATBrowserPanel<T> mainPanel) {
             
             this.mainPanel = mainPanel;
-            this.dataSource = dataSource;
             
             super.addListMouseListener(new MouseAdapter() {
 
@@ -67,7 +63,7 @@ public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
             ArrayList<FilterableFocusConceptHistoryEntry<T>> filterableEntries = new ArrayList<>();
             
             historyEntries.forEach( (entry) -> {
-                filterableEntries.add(new FilterableFocusConceptHistoryEntry<>(entry, dataSource));
+                filterableEntries.add(new FilterableFocusConceptHistoryEntry<>(entry));
             });
 
             super.setContents(filterableEntries);
@@ -76,13 +72,11 @@ public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
 
     private final HistoryEntryList<T> historyList;
 
-    public HistoryPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public HistoryPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
-        this.historyList = new HistoryEntryList<>(mainPanel, dataSource);
+        this.historyList = new HistoryEntryList<>(mainPanel);
         
         this.setLayout(new BorderLayout());
         

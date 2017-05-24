@@ -55,13 +55,12 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     
     public ResultListPanel(
             NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<V>> dataRetriever,
             ListCellRenderer<Filterable<V>> renderer,
             boolean showFilter,
             boolean showBorder) {
         
-        super(mainPanel, dataSource, dataRetriever);
+        super(mainPanel, dataRetriever);
         
         this.showBorder = showBorder;
 

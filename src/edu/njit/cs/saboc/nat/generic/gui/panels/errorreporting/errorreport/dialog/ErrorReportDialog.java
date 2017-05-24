@@ -75,10 +75,9 @@ public class ErrorReportDialog {
     
     protected static void displaySimpleErrorReportPanel(
             NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource,
             ErrorReportPanelInitializer initializer) {
         
-        SimpleErrorReportPanel errorReportPanel = new SimpleErrorReportPanel(browserPanel, dataSource);
+        SimpleErrorReportPanel errorReportPanel = new SimpleErrorReportPanel(browserPanel);
         errorReportPanel.setInitializer(initializer);
         
         ErrorReportDialog.displayErrorReportDialog(errorReportPanel, 600, 400);
@@ -86,10 +85,9 @@ public class ErrorReportDialog {
     
     protected static void displaySelectConceptErrorReportPanel(
             NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource,
             MissingConceptInitializer initializer) {
         
-        SelectConceptErrorReportPanel errorReportPanel = new SelectConceptErrorReportPanel(browserPanel, dataSource);
+        SelectConceptErrorReportPanel errorReportPanel = new SelectConceptErrorReportPanel(browserPanel);
         errorReportPanel.setInitializer(initializer);
                 
         ErrorReportDialog.displayErrorReportDialog(errorReportPanel, 600, 650);
@@ -97,175 +95,161 @@ public class ErrorReportDialog {
     
     protected static void displaySelectRelationshipErrorReportPanel(
             NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource,
             MissingRelationshipInitializer initializer) {
         
-        SelectRelationshipErrorReportPanel errorReportPanel = new SelectRelationshipErrorReportPanel(browserPanel, dataSource);
+        SelectRelationshipErrorReportPanel errorReportPanel = new SelectRelationshipErrorReportPanel(browserPanel);
         errorReportPanel.setInitializer(initializer);
         
         ErrorReportDialog.displayErrorReportDialog(errorReportPanel, 1000, 650);
     }
     
     public static void displayErroneousChildDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             Concept erroneousChild) {
         
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
-                new ErroneousChildInitializer(dataSource.getOntology(), erroneousChild));
+                new ErroneousChildInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousChild));
     }
     
     public static void displayOtherChildErrorDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             Concept erroneousChild) {
         
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new OtherChildErrorInitializer(dataSource.getOntology(), erroneousChild));
+                new OtherChildErrorInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousChild));
     }
     
-    public static void displayMissingChildDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource) {
+    public static void displayMissingChildDialog(NATBrowserPanel<?> browserPanel) {
         
         ErrorReportDialog.displaySelectConceptErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new MissingChildInitializer(dataSource.getOntology()));
+                new MissingChildInitializer(
+                        browserPanel.getDataSource().get().getOntology()));
     }
     
     public static void displayErroneousParentDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             Concept erroneousParent) {
         
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new ErroneousParentInitializer(dataSource.getOntology(), erroneousParent));
+                new ErroneousParentInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousParent));
     }
     
     public static void displayRedundantParentErrorDialog(
-            NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel,
             Concept erroneousParent) {
 
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
-                new RedundantParentInitializer(dataSource.getOntology(), erroneousParent));
+                new RedundantParentInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousParent));
     }
     
     public static void displayOtherParentErrorDialog(
-            NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel,
             Concept erroneousParent) {
 
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
-                new OtherParentErrorInitializer(dataSource.getOntology(), erroneousParent));
+                new OtherParentErrorInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousParent));
     }
     
-    public static void displayMissingParentDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource) {
+    public static void displayMissingParentDialog(NATBrowserPanel<?> browserPanel) {
 
         ErrorReportDialog.displaySelectConceptErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new MissingParentInitializer(dataSource.getOntology()));
+                new MissingParentInitializer(
+                        browserPanel.getDataSource().get().getOntology()));
     }
     
     public static void displayReplaceParentDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             Concept erroneousParent) {
         
         ErrorReportDialog.displaySelectConceptErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new ReplaceParentInitializer(dataSource.getOntology(), erroneousParent));
+                new ReplaceParentInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        erroneousParent));
     }
     
     public static void displayErroneousSemanticRelationshipDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             InheritableProperty erroneousProperty,
             Concept erroneousParent) {
         
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
                 new ErroneousSemanticRelationshipInitializer(
-                    dataSource.getOntology(), 
+                    browserPanel.getDataSource().get().getOntology(), 
                     erroneousProperty, 
                     erroneousParent));
     }
     
     public static void displayOtherSemanticRelationshipErrorDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             InheritableProperty erroneousProperty,
             Concept erroneousParent) {
         
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
                 new OtherSemanticRelationshipErrorInitializer(
-                        dataSource.getOntology(),
+                        browserPanel.getDataSource().get().getOntology(),
                         erroneousProperty,
                         erroneousParent));
     }
     
     public static void displayReplaceTargetDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             InheritableProperty property,
             Concept erroneousTarget) {
         
         ErrorReportDialog.displaySelectConceptErrorReportPanel(
                 browserPanel, 
-                dataSource, 
-                new ReplaceTargetInitializer(dataSource.getOntology(), property, erroneousTarget));
+                new ReplaceTargetInitializer(
+                        browserPanel.getDataSource().get().getOntology(), 
+                        property, 
+                        erroneousTarget));
     }
     
-    public static void displayMissingSemanticRelationshipDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource) {
+    public static void displayMissingSemanticRelationshipDialog(NATBrowserPanel<?> browserPanel) {
         
         ErrorReportDialog.displaySelectRelationshipErrorReportPanel(
                 browserPanel, 
-                dataSource,
-                new MissingSemanticRelationshipInitializer(dataSource.getOntology()));
+                new MissingSemanticRelationshipInitializer(
+                        browserPanel.getDataSource().get().getOntology()));
     }
         
     public static void displayReplaceSemanticRelationshipDialog(
-            NATBrowserPanel browserPanel, 
-            ConceptBrowserDataSource dataSource,
+            NATBrowserPanel<?> browserPanel, 
             InheritableProperty erroneousProperty,
             Concept erroneousTarget) {
         
         ErrorReportDialog.displaySelectRelationshipErrorReportPanel(
                 browserPanel, 
-                dataSource,
                 new ReplaceSemanticRelationshipInitializer(
-                        dataSource.getOntology(), 
+                        browserPanel.getDataSource().get().getOntology(),
                         erroneousProperty, 
                         erroneousTarget));
     }
     
-    public static void displayOtherErrorDialog(
-            NATBrowserPanel browserPanel,
-            ConceptBrowserDataSource dataSource) {
+    public static void displayOtherErrorDialog(NATBrowserPanel<?> browserPanel) {
 
         ErrorReportDialog.displaySimpleErrorReportPanel(
                 browserPanel,
-                dataSource,
-                new OtherErrorReportInitializer(dataSource.getOntology()));
+                new OtherErrorReportInitializer(
+                        browserPanel.getDataSource().get().getOntology()));
     }
 }

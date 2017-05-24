@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import java.awt.Color;
@@ -20,10 +19,9 @@ public class AuditSetConceptRenderer<T extends Concept> extends DetailsConceptRe
     
     private final JLabel auditStatusLabel;
     
-    public AuditSetConceptRenderer(NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public AuditSetConceptRenderer(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.auditStatusLabel = new JLabel();
         

@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.layout.basic;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.auditset.AuditSetPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.history.HistoryPanel;
@@ -29,22 +28,21 @@ public class SearchAndHistoryPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private final AuditSetPanel<T> auditPanel;
 
-    public SearchAndHistoryPanel(NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+    public SearchAndHistoryPanel(NATBrowserPanel<T> mainPanel) {
 
-        super(mainPanel, dataSource);
+        super(mainPanel);
 
         this.setLayout(new BorderLayout());
 
-        searchPanel = new SearchPanel<>(mainPanel, dataSource);
+        searchPanel = new SearchPanel<>(mainPanel);
         searchPanel.setPreferredSize(new Dimension(450, -1));
         searchPanel.addSearchResultSelectedListener( (result) -> {
             mainPanel.getFocusConceptManager().navigateTo(result.getConcept());
         });
 
-        historyPanel = new HistoryPanel<>(mainPanel, dataSource);
+        historyPanel = new HistoryPanel<>(mainPanel);
         
-        auditPanel = new AuditSetPanel<>(mainPanel, dataSource);
+        auditPanel = new AuditSetPanel<>(mainPanel);
         
         this.tabbedPane = new JTabbedPane();
         

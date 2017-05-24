@@ -42,11 +42,9 @@ public class SelectConceptErrorReportPanel<T extends Concept, V extends Ontology
     
     private final ErrorSubmissionPanel<T> errorSubmissionPanel;
         
-    public SelectConceptErrorReportPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public SelectConceptErrorReportPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.setLayout(new BorderLayout());
 
@@ -63,18 +61,17 @@ public class SelectConceptErrorReportPanel<T extends Concept, V extends Ontology
         optionPanel.add(btnSearchForMissingParent);
         optionPanel.add(btnCommentOnly);
         
-        this.errorDescriptionPanel = new ErrorDescriptionPanel<>(mainPanel, dataSource);
+        this.errorDescriptionPanel = new ErrorDescriptionPanel<>(mainPanel);
         
-        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel, dataSource);
+        this.errorSeverityPanel = new ErrorSeverityPanel<>(mainPanel);
         
-        this.commentPanel = new AuditCommentPanel<>(mainPanel, dataSource);
+        this.commentPanel = new AuditCommentPanel<>(mainPanel);
         this.commentPanel.setPreferredSize(new Dimension(-1, 200));
                 
-        this.selectConceptPanel = new SelectConceptPanel<>(mainPanel, dataSource);
+        this.selectConceptPanel = new SelectConceptPanel<>(mainPanel);
         
         this.errorSubmissionPanel = new ErrorSubmissionPanel<>(
                 mainPanel,
-                dataSource,
                 new ErrorSubmissionListener() {
 
                     @Override

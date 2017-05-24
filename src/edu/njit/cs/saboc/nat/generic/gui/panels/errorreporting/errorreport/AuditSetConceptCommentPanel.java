@@ -28,7 +28,6 @@ public class AuditSetConceptCommentPanel<T extends Concept> extends JPanel {
     }
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
     private final AuditCommentPanel<T> commentPanel;
     
@@ -40,17 +39,15 @@ public class AuditSetConceptCommentPanel<T extends Concept> extends JPanel {
     
     public AuditSetConceptCommentPanel(
             NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource,
             T concept) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         this.concept = concept;
         
-        this.commentPanel = new AuditCommentPanel<>(mainPanel, dataSource);
+        this.commentPanel = new AuditCommentPanel<>(mainPanel);
+        
         this.errorSubmissionPanel = new ErrorSubmissionPanel<>(
                 mainPanel,
-                dataSource,
                 new ErrorSubmissionListener() {
 
                     @Override

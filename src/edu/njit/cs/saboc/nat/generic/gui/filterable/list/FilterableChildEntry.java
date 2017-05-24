@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.child.IncorrectChildError;
 import java.util.List;
@@ -19,10 +18,9 @@ public class FilterableChildEntry<T extends Concept> extends FilterableConceptEn
     
     public FilterableChildEntry(
             NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource,
             T concept) {
         
-        super(concept, dataSource);
+        super(mainPanel, concept);
         
         this.mainPanel = mainPanel;
     }

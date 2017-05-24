@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ConceptListPanel;
@@ -22,17 +21,16 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
         
     private final JCheckBox chkShowStrictOnly;
     
-    public SiblingPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
+    public SiblingPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
 
         this.setLayout(new BorderLayout());
 
         this.siblingPanel = new ConceptListPanel<>(
                 mainPanel,
-                dataSource,
-                CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource),
-                new SimpleConceptRenderer<>(mainPanel, dataSource),
+                CommonBrowserDataRetrievers.getSiblingsRetriever(mainPanel),
+                new SimpleConceptRenderer<>(mainPanel),
                 true,
                 true,
                 true);
@@ -42,9 +40,9 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
         this.chkShowStrictOnly.addActionListener((ae) -> {
             
            if(chkShowStrictOnly.isSelected()) {
-               siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getStrictSiblingsRetriever(dataSource));
+               siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getStrictSiblingsRetriever(mainPanel));
            } else {
-                siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getSiblingsRetriever(dataSource));
+                siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getSiblingsRetriever(mainPanel));
            }
         });
 

@@ -1,7 +1,6 @@
 package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import javax.swing.JPanel;
@@ -16,17 +15,14 @@ import javax.swing.JPanel;
  */
 public abstract class BaseNATPanel<T extends Concept> extends JPanel {
     
-    private final ConceptBrowserDataSource<T> dataSource;
     private final FocusConceptManager<T> focusConceptManager;
+    
     private final NATBrowserPanel<T> mainPanel;
     
-    public BaseNATPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public BaseNATPanel(NATBrowserPanel<T> mainPanel) {
 
         this.mainPanel = mainPanel;
         this.focusConceptManager = mainPanel.getFocusConceptManager();
-        this.dataSource = dataSource;
     }
     
     public NATBrowserPanel<T> getMainPanel() {
@@ -35,9 +31,5 @@ public abstract class BaseNATPanel<T extends Concept> extends JPanel {
     
     public FocusConceptManager<T> getFocusConceptManager() {
         return focusConceptManager;
-    }
-    
-    public ConceptBrowserDataSource<T> getDataSource() {
-        return dataSource;
     }
 }

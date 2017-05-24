@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import java.util.Optional;
@@ -19,13 +18,11 @@ import javax.swing.JOptionPane;
 public class ConceptAuditStateMenu<T extends Concept> extends JMenu {
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
     private final T concept;
     
     public ConceptAuditStateMenu(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource,
+            NATBrowserPanel<T> mainPanel,
             T concept) {
         
         super("Update audit status");
@@ -33,7 +30,6 @@ public class ConceptAuditStateMenu<T extends Concept> extends JMenu {
         this.setFont(this.getFont().deriveFont(14.0f));
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         this.concept = concept;
         
         JMenuItem conceptCorrectBtn = new JMenuItem("Correct");

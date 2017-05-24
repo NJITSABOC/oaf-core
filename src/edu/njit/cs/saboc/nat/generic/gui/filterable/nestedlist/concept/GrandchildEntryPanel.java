@@ -24,8 +24,7 @@ public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborh
     
     public GrandchildEntryPanel(
             NATBrowserPanel<T> mainPanel, 
-            FilterableExtendedNeighborhoodEntry<T, V> entry, 
-            ConceptBrowserDataSource<T> dataSource) {
+            FilterableExtendedNeighborhoodEntry<T, V> entry) {
         
         super(entry);
         
@@ -41,8 +40,7 @@ public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborh
                 mainPanel,
                 childEntry, 
                 entry.getCurrentFilter(), 
-                dataSource, 
-                new ConceptDescendantsRenderer<>(mainPanel, dataSource));
+                new ConceptDescendantsRenderer<>(mainPanel));
         
         this.add(childEntryPanel);
         super.addSubEntryPanel(childEntryPanel);
@@ -56,8 +54,7 @@ public class GrandchildEntryPanel<T extends Concept, V extends ExtendedNeighborh
                         mainPanel,
                         grandChildEntry, 
                         entry.getCurrentFilter(), 
-                        dataSource, 
-                        new ConceptDescendantsRenderer<>(mainPanel, dataSource));
+                        new ConceptDescendantsRenderer<>(mainPanel));
 
                 JPanel indentPanel = new JPanel(new BorderLayout());
                 indentPanel.add(Box.createHorizontalStrut(32), BorderLayout.WEST);

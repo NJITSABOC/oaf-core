@@ -17,11 +17,9 @@ public class ConceptDescendantsRenderer<T extends Concept> extends DetailsConcep
     
     private final JLabel descendantCountLabel;
     
-    public ConceptDescendantsRenderer(
-            NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+    public ConceptDescendantsRenderer(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.descendantCountLabel = new JLabel();
         this.descendantCountLabel.setFont(this.descendantCountLabel.getFont().deriveFont(Font.PLAIN, 10));
@@ -33,8 +31,12 @@ public class ConceptDescendantsRenderer<T extends Concept> extends DetailsConcep
     @Override
     public void showDetailsFor(Filterable<T> filterableEntry) {
         super.showDetailsFor(filterableEntry);
+        
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
 
-        int descendantCount = getDataSource().getDescendantCount(filterableEntry.getObject());
+        int descendantCount = getMainPanel().getDataSource().get().getDescendantCount(filterableEntry.getObject());
 
         if (descendantCount == 0) {
             this.descendantCountLabel.setForeground(new Color(64, 200, 64));

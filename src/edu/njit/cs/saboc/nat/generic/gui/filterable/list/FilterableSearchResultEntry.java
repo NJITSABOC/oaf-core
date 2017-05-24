@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,14 +16,9 @@ public class FilterableSearchResultEntry<T extends Concept> extends Filterable<N
         implements NavigableEntry<T> {
 
     private final NATConceptSearchResult<T> searchResult;
-    private final ConceptBrowserDataSource<T> dataSource;
 
-    public FilterableSearchResultEntry(
-            NATConceptSearchResult<T> concept, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
+    public FilterableSearchResultEntry(NATConceptSearchResult<T> concept) {
         this.searchResult = concept;
-        this.dataSource = dataSource;
     }
 
     @Override

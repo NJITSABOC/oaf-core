@@ -22,13 +22,14 @@ public class NATBrowserFrame<T extends Concept> extends JInternalFrame {
             ConceptBrowserDataSource<T> dataSource, 
             NATLayout layout) {
         
-        super("Neighborhood Auditing Tool (NAT)", 
+        super("Ontology Abstraction Framework (OAF) Neighborhood Auditing Tool (NAT)", 
                 true, 
                 true, 
                 true,
-                true);
+                false);
         
-        this.browser = new NATBrowserPanel<>(parentFrame, dataSource, layout);
+        this.browser = new NATBrowserPanel<>(parentFrame, layout);
+        this.browser.setDataSource(dataSource);
         
         this.setSize(1400, 600);
         

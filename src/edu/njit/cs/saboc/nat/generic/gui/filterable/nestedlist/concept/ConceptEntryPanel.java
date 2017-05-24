@@ -3,13 +3,10 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.concept;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.blu.core.utils.filterable.renderer.BaseFilterableRenderer;
-import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.SimpleConceptRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableEntryPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.Optional;
 
 /**
@@ -25,7 +22,6 @@ public class ConceptEntryPanel<T extends Concept> extends FilterableEntryPanel<F
             NATBrowserPanel<T> mainPanel,
             Filterable<T> entry, 
             Optional<String> filter, 
-            ConceptBrowserDataSource<T> dataSource, 
             BaseFilterableRenderer<T> renderer) {
         
         super(entry, filter);

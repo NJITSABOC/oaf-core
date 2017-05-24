@@ -41,14 +41,10 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
         private final ArrayList<SearchResultSelectedListener<T>> resultSelectedListeners = new ArrayList<>();
         
         private final NATBrowserPanel<T> mainPanel;
-        private final ConceptBrowserDataSource<T> dataSource;
         
-        public SearchResultsList(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+        public SearchResultsList(NATBrowserPanel<T> mainPanel) {
             
             this.mainPanel = mainPanel;
-            this.dataSource = dataSource;
             
             super.addListMouseListener(new MouseAdapter() {
 
@@ -65,14 +61,14 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
             });
             
-            super.setListCellRenderer(new SearchResultRenderer(mainPanel, dataSource));
+            super.setListCellRenderer(new SearchResultRenderer(mainPanel));
         }
         
         public void displayResults(ArrayList<NATConceptSearchResult<T>> searchResults) {
             ArrayList<FilterableSearchResultEntry<T>> filterableEntries  = new ArrayList<>();
             
             searchResults.forEach( (result) -> {
-                filterableEntries.add(new FilterableSearchResultEntry<>(result, dataSource));
+                filterableEntries.add(new FilterableSearchResultEntry<>(result));
             });
             
             super.setContents(filterableEntries);
@@ -101,11 +97,9 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
     private volatile int searchID = 0;
     private Thread searchThread = null;
 
-    public SearchPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public SearchPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.setLayout(new GridBagLayout());
 
@@ -167,7 +161,7 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
         c.fill = GridBagConstraints.BOTH;
 
 
-        this.searchResultList = new SearchResultsList<>(mainPanel, dataSource);
+        this.searchResultList = new SearchResultsList<>(mainPanel);
 
         this.add(searchResultList, c);
     }
@@ -254,17 +248,23 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
         @Override
         public void run() {
             ArrayList<NATConceptSearchResult<T>> results;
-
-            ConceptBrowserDataSource<T> dataSource = getDataSource();
             
-            if (optExact.isSelected()) {
-                results = dataSource.searchExact(term);
-            } else if (optAnywhere.isSelected()) {
-                results = dataSource.searchAnywhere(term);
-            } else if (optStarting.isSelected()) {
-                results = dataSource.searchStarting(term);
+            if (getMainPanel().getDataSource().isPresent()) {
+                ConceptBrowserDataSource<T> dataSource = getMainPanel().getDataSource().get();
+
+                if (optExact.isSelected()) {
+                    results = dataSource.searchExact(term);
+                } else if (optAnywhere.isSelected()) {
+                    results = dataSource.searchAnywhere(term);
+                } else if (optStarting.isSelected()) {
+                    results = dataSource.searchStarting(term);
+                } else if (optId.isSelected()) {
+                    results = dataSource.searchID(term);
+                } else {
+                    results = new ArrayList<>();
+                }
             } else {
-                results = dataSource.searchID(term);
+                results = new ArrayList<>();
             }
 
             SwingUtilities.invokeLater(() -> {

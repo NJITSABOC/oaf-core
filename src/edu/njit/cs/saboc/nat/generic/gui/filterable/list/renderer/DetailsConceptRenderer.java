@@ -26,16 +26,13 @@ public class DetailsConceptRenderer<T extends Concept> extends BaseFilterableRen
     private final JPanel detailsPanel;
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
     public DetailsConceptRenderer(
-            NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+            NATBrowserPanel<T> mainPanel) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         
-        this.conceptRenderer = new SimpleConceptRenderer<>(mainPanel, dataSource);
+        this.conceptRenderer = new SimpleConceptRenderer<>(mainPanel);
         this.conceptRenderer.setOpaque(false);
         
         this.detailsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -53,10 +50,6 @@ public class DetailsConceptRenderer<T extends Concept> extends BaseFilterableRen
 
     public NATBrowserPanel<T> getMainPanel() {
         return mainPanel;
-    }
-    
-    public ConceptBrowserDataSource<T> getDataSource() {
-        return dataSource;
     }
     
     protected SimpleConceptRenderer<T> getConceptRenderer() {

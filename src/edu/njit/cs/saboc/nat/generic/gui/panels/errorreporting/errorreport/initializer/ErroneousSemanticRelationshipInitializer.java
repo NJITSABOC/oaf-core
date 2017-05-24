@@ -21,7 +21,11 @@ public class ErroneousSemanticRelationshipInitializer<T extends Concept, V exten
     private final V erroneousRelType;
     private final T erroneousTarget;
 
-    public ErroneousSemanticRelationshipInitializer(Ontology<T> ontology, V erroneousRelType, T erroneousTarget) {
+    public ErroneousSemanticRelationshipInitializer(
+            Ontology<T> ontology, 
+            V erroneousRelType, 
+            T erroneousTarget) {
+        
         this.theOntology = ontology;
         
         this.erroneousRelType = erroneousRelType;

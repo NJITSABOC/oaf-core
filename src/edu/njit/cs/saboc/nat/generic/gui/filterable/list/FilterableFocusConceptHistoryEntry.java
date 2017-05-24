@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistoryEntry;
 
 /**
@@ -16,14 +15,11 @@ public class FilterableFocusConceptHistoryEntry<T extends Concept> extends Filte
         implements NavigableEntry<T> {
 
     private final FocusConceptHistoryEntry<T> historyEntry;
-    private final ConceptBrowserDataSource<T> dataSource;
 
     public FilterableFocusConceptHistoryEntry(
-            FocusConceptHistoryEntry<T> historyEntry, 
-            ConceptBrowserDataSource<T> dataSource) {
+            FocusConceptHistoryEntry<T> historyEntry) {
         
         this.historyEntry = historyEntry;
-        this.dataSource = dataSource;
     }
 
     @Override

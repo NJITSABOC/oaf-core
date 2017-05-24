@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditResult;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.ErrorParser;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.OntologyError;
-import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

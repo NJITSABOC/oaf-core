@@ -40,11 +40,9 @@ public class SelectConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private Optional<T> selectedConcept = Optional.empty();
     
-    public SelectConceptPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public SelectConceptPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
                 
         this.btnClearSelection = new JButton("Clear Selection");
         this.btnClearSelection.addActionListener( (ae) -> {
@@ -65,7 +63,7 @@ public class SelectConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         selectedConceptPanel.add(btnClearSelection, BorderLayout.EAST);
         
-        this.searchPanel = new SearchPanel<>(mainPanel, dataSource);
+        this.searchPanel = new SearchPanel<>(mainPanel);
         this.searchPanel.setBorder(
             BorderFactory.createTitledBorder(
                     BorderFactory.createLineBorder(Color.BLACK), 
@@ -78,9 +76,7 @@ public class SelectConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         this.recentConceptList = new FilterableList<>();
         this.recentConceptList.setListCellRenderer(
-                new SimpleConceptRenderer(
-                        mainPanel,
-                        dataSource));
+                new SimpleConceptRenderer(mainPanel));
         
         this.recentConceptList.addListMouseListener(new MouseAdapter() {
 
@@ -115,13 +111,12 @@ public class SelectConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             if(!recentConcepts.contains(concept)) {
                 recentConcepts.add(concept);
                 
-                entries.add(new FilterableConceptEntry<>(concept, dataSource));
+                entries.add(new FilterableConceptEntry<>(mainPanel, concept));
             }
         }
 
         this.recentConceptList.setContents(entries);
 
-        
         this.setLayout(new BorderLayout());
         
         this.add(selectedConceptPanel, BorderLayout.NORTH);

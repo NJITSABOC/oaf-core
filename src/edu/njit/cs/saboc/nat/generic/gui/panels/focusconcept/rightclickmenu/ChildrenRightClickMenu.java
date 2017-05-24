@@ -25,14 +25,9 @@ import javax.swing.JSeparator;
 public class ChildrenRightClickMenu<T extends Concept> extends AuditReportRightClickMenu<T, T> {
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public ChildrenRightClickMenu(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
+    public ChildrenRightClickMenu(NATBrowserPanel<T> mainPanel) {
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
     }
 
     @Override
@@ -65,21 +60,21 @@ public class ChildrenRightClickMenu<T extends Concept> extends AuditReportRightC
             JMenuItem removeErroneousChildBtn = new JMenuItem("Remove child (erroneous)");
             removeErroneousChildBtn.setFont(removeErroneousChildBtn.getFont().deriveFont(14.0f));
             removeErroneousChildBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayErroneousChildDialog(mainPanel, dataSource, item);
+                ErrorReportDialog.displayErroneousChildDialog(mainPanel, item);
             });
 
             
             JMenuItem otherErrorBtn = new JMenuItem("Report other error with child");
             otherErrorBtn.setFont(otherErrorBtn.getFont().deriveFont(14.0f));
             otherErrorBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayOtherChildErrorDialog(mainPanel, dataSource, item);
+                ErrorReportDialog.displayOtherChildErrorDialog(mainPanel, item);
             });
             
             
             JMenuItem missingChildBtn = new JMenuItem("Report missing child");
             missingChildBtn.setFont(missingChildBtn.getFont().deriveFont(14.0f));
             missingChildBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingChildDialog(mainPanel, dataSource);
+                ErrorReportDialog.displayMissingChildDialog(mainPanel);
             });
             
             components.add(removeErroneousChildBtn);
@@ -115,7 +110,7 @@ public class ChildrenRightClickMenu<T extends Concept> extends AuditReportRightC
             JMenuItem reportMissingChild = new JMenuItem("Report missing child");
             reportMissingChild.setFont(reportMissingChild.getFont().deriveFont(14.0f));
             reportMissingChild.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingChildDialog(mainPanel, dataSource);
+                ErrorReportDialog.displayMissingChildDialog(mainPanel);
             });
             
             components.add(reportMissingChild);

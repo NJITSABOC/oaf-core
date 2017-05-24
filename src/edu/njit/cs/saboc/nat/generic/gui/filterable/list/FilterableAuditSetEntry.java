@@ -15,28 +15,34 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 public class FilterableAuditSetEntry<T extends Concept> extends FilterableConceptEntry<T> {
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public FilterableAuditSetEntry(NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource,
+    public FilterableAuditSetEntry(
+            NATBrowserPanel<T> mainPanel,
             T concept) {
         
-        super(concept, dataSource);
+        super(mainPanel, concept);
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
     }
 
     @Override
     public String getToolTipText() {
-        T concept = super.getObject();
 
-        if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
-           return dataSource.getAuditConceptToolTipText(
-                   mainPanel.getAuditDatabase().getLoadedAuditSet().get(), concept);
-           
+        if (mainPanel.getDataSource().isPresent()) {
+            ConceptBrowserDataSource<T> dataSource = mainPanel.getDataSource().get();
+
+            T concept = super.getObject();
+
+            if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
+                return dataSource.getAuditConceptToolTipText(
+                        mainPanel.getAuditDatabase().getLoadedAuditSet().get(), concept);
+
+            } else {
+                return dataSource.getConceptToolTipText(concept);
+            }
+
         } else {
-            return dataSource.getConceptToolTipText(concept);
+            return null;
         }
     }
 

@@ -11,6 +11,7 @@ import edu.njit.cs.saboc.nat.generic.history.BookmarkManager;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspace;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceManager;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,7 +27,7 @@ import javax.swing.JPanel;
  */
 public class NATBrowserPanel<T extends Concept> extends JPanel {
 
-    private final ConceptBrowserDataSource<T> dataSource;
+    private Optional<ConceptBrowserDataSource<T>> optDataSource;
 
     private final FocusConceptManager<T> focusConceptManager;
     
@@ -40,14 +41,13 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     
     private Optional<NATWorkspace<T>> optWorkspace;
     
-    public NATBrowserPanel(
-            JFrame parentFrame, 
-            ConceptBrowserDataSource<T> dataSource, 
-            NATLayout layout) {
+    private final ArrayList<DataSourceChangeListener<T>> dataSourceChangeListeners;
+    
+    public NATBrowserPanel(JFrame parentFrame, NATLayout layout) {
         
         this.setLayout(new BorderLayout());
                
-        this.dataSource = dataSource;
+        this.optDataSource = Optional.empty();
         
         this.parentFrame = parentFrame;
         
@@ -55,9 +55,9 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         this.add(layout, BorderLayout.CENTER);    
         
-        this.focusConceptManager = new FocusConceptManager<>(this, dataSource);
+        this.focusConceptManager = new FocusConceptManager<>(this);
         
-        this.auditDatabase = new AuditDatabase<>(this, dataSource);
+        this.auditDatabase = new AuditDatabase<>(this);
         
         this.auditDatabase.addAuditDatabaseChangeListener( () -> {
             focusConceptManager.refresh();
@@ -67,14 +67,40 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         this.optWorkspace = Optional.empty();
         
+        this.dataSourceChangeListeners = new ArrayList<>();
+        
         layout.createLayout(this);
         
         this.revalidate();
         this.repaint();
     }
     
-    public ConceptBrowserDataSource<T> getDataSource() {
-        return dataSource;
+    public void addDataSourceChangeListener(DataSourceChangeListener<T> listener) {
+        this.dataSourceChangeListeners.add(listener);
+    }
+    
+    public void removeDataSourceChangeListener(DataSourceChangeListener<T> listener) {
+        this.dataSourceChangeListeners.remove(listener);
+    }
+    
+    public void setDataSource(ConceptBrowserDataSource<T> dataSource) {
+        this.optDataSource = Optional.of(dataSource);
+        
+        this.dataSourceChangeListeners.forEach( (listener) -> {
+            listener.dataSourceLoaded(dataSource);
+        });
+    }
+    
+    public void clearDataSource() {
+        this.optDataSource = Optional.empty();
+
+        this.dataSourceChangeListeners.forEach((listener) -> {
+            listener.dataSourceRemoved();
+        });
+    }
+    
+    public Optional<ConceptBrowserDataSource<T>> getDataSource() {
+        return optDataSource;
     }
     
     public FocusConceptManager<T> getFocusConceptManager() {
@@ -106,10 +132,15 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     }
     
     public NATWorkspaceManager getWorkspaceManager() {
-        return new NATWorkspaceManager(this, dataSource.getRecentlyOpenedWorkspaces());
+        return new NATWorkspaceManager(this, optDataSource.get().getRecentlyOpenedWorkspaces());
     }
     
     public void setWorkspace(NATWorkspace<T> workspace) {
+        
+        if(!this.getDataSource().isPresent()) {
+            return;
+        }
+        
         this.optWorkspace = Optional.of(workspace);
         
         this.getFocusConceptManager().getHistory().setHistory(workspace.getHistory().getHistory());
@@ -118,10 +149,9 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         if(workspace.getAuditSet().isPresent()) {
             try {
-                AuditSet<T> auditSet = AuditSetLoader.createAuditSetFromJSON(workspace.getAuditSet().get(), dataSource);
+                AuditSet<T> auditSet = AuditSetLoader.createAuditSetFromJSON(workspace.getAuditSet().get(), this.getDataSource().get());
                 
                 this.getAuditDatabase().setAuditSet(auditSet);
-                
             } catch (AuditSetLoaderException asle) {
 
             }

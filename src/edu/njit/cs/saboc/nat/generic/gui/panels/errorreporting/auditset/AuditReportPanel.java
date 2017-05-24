@@ -27,15 +27,12 @@ public class AuditReportPanel<T extends Concept> extends BaseNATPanel<T> {
     private final JEditorPane txtAuditReport;
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public AuditReportPanel(NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public AuditReportPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
         
         this.setLayout(new BorderLayout());
         
@@ -152,7 +149,8 @@ public class AuditReportPanel<T extends Concept> extends BaseNATPanel<T> {
         
         String nameRow = String.format("<tr><td><font size = '5'><b>%s</b></font></td></tr>", concept.getName());
         
-        String auditStatusRow = String.format("<tr><td width = '150'>%s</td></tr>", dataSource.getStyledAuditStatusText(auditSet, concept));
+        String auditStatusRow = String.format("<tr><td width = '150'>%s</td></tr>", 
+                mainPanel.getDataSource().get().getStyledAuditStatusText(auditSet, concept));
         
         result += nameRow;
         result += auditStatusRow;

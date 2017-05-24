@@ -2,7 +2,7 @@ package edu.njit.cs.saboc.nat.generic.gui.filterable.list;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
+import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 
 /**
  * A filterable type for displaying a concept in a filterable list
@@ -13,15 +13,12 @@ import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 public class FilterableConceptEntry<T extends Concept> extends Filterable<T> 
         implements NavigableEntry<T> {
 
+    private final NATBrowserPanel<T> browserPanel;
     private final T concept;
     
-    private final ConceptBrowserDataSource<T> dataSource;
-
-    public FilterableConceptEntry(T concept, 
-            ConceptBrowserDataSource<T> dataSource) {
-        
+    public FilterableConceptEntry(NATBrowserPanel<T> browserPanel, T concept) {
+        this.browserPanel = browserPanel;
         this.concept = concept;
-        this.dataSource = dataSource;
     }
 
     @Override
@@ -53,6 +50,11 @@ public class FilterableConceptEntry<T extends Concept> extends Filterable<T>
 
     @Override
     public String getToolTipText() {
-        return dataSource.getConceptToolTipText(concept);
+        
+        if(browserPanel.getDataSource().isPresent()) {
+            return browserPanel.getDataSource().get().getConceptToolTipText(concept);
+        } else {
+            return null;
+        }
     }
 }

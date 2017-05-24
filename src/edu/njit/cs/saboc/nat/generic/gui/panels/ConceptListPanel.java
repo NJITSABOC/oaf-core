@@ -18,7 +18,6 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
 
     public ConceptListPanel(
             NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource,
             DataRetriever<T, ArrayList<T>> dataRetriever,
             BaseFilterableRenderer<T> renderer,
             boolean navigable,
@@ -26,7 +25,6 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
             boolean showBorder) {
         
         super(mainPanel, 
-                dataSource,
                 dataRetriever,
                 renderer,
                 showFilter,
@@ -50,6 +48,6 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
 
     @Override
     protected Filterable<T> createFilterableEntry(T entry) {
-        return new FilterableConceptEntry(entry, this.getDataSource());
+        return new FilterableConceptEntry(getMainPanel(), entry);
     }
 }

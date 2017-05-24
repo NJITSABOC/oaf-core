@@ -2,12 +2,12 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -29,10 +29,9 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
     private final CardLayout contentPanelLayout;
     private final JPanel contentPanel;
     
-    public MultiResultListPanel(NATBrowserPanel<T> browserPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public MultiResultListPanel(NATBrowserPanel<T> browserPanel) {
         
-        super(browserPanel, dataSource);
+        super(browserPanel);
         
         this.optionBtnGroup = new ButtonGroup();
         this.optionBtnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -53,9 +52,10 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
      * 
      * @param resultPanel
      * @param optionName 
+     * 
+     * @return  
      */
-    public void addResultListPanel(ResultPanel resultPanel, String optionName) {
-        
+    public JRadioButton addResultListPanel(ResultPanel resultPanel, String optionName) {
         resultPanels.add(resultPanel);
         
         contentPanel.add(resultPanel, optionName);
@@ -87,5 +87,7 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
         optionBtnPanel.add(btn);
         
         this.revalidate();
+        
+        return btn;
     }
 }

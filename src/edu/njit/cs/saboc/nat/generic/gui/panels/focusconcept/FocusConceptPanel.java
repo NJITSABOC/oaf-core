@@ -5,7 +5,6 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
 import edu.njit.cs.saboc.nat.generic.FocusConceptManager;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
@@ -70,11 +69,9 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private final EntityRightClickManager<T> rightClickManager = new EntityRightClickManager<>();
 
-    public FocusConceptPanel(
-            NATBrowserPanel<T> mainPanel, 
-            ConceptBrowserDataSource<T> dataSource) {
+    public FocusConceptPanel(NATBrowserPanel<T> mainPanel) {
         
-        super(mainPanel, dataSource);
+        super(mainPanel);
 
         setLayout(new BorderLayout());
         
@@ -257,8 +254,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
                 }
                 
                 if (e.getButton() == MouseEvent.BUTTON3) {
-                    rightClickManager.setRightClickedItem(mainPanel.getFocusConceptManager().getActiveFocusConcept());
-                    rightClickManager.showPopup(e);
+                    if (mainPanel.getDataSource().isPresent()) {
+                        rightClickManager.setRightClickedItem(mainPanel.getFocusConceptManager().getActiveFocusConcept());
+                        rightClickManager.showPopup(e);
+                    }
                 }
             }
         });
@@ -275,7 +274,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         
         this.addOptionButton(new NATWorkspaceButton(mainPanel));
         
-        this.setRightClickMenuGenerator(new FocusConceptRightClickMenu(mainPanel, mainPanel.getDataSource()));
+        this.setRightClickMenuGenerator(new FocusConceptRightClickMenu(mainPanel));
     }
 
     private void setConcept() {
@@ -294,13 +293,18 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     }
 
     public void display() {
+        
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
         jtf.setContentType("text/html");
         
         editFocusConceptPanel.setVisible(false);
 
         T fc = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
         
-        String conceptString = getDataSource().getFocusConceptText(fc);
+        String conceptString = getMainPanel().getDataSource().get().getFocusConceptText(fc);
                 
         jtf.setText(conceptString);
         
@@ -314,15 +318,22 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
     }
 
     private void doConceptChange(String str) {
-        FocusConceptManager<T> focusConceptManager = getMainPanel().getFocusConceptManager();
         
-        Optional<T> concept = getMainPanel().getDataSource().getOntology().getConceptFromID(str);
+        if(!getMainPanel().getDataSource().isPresent()) {
+            return;
+        }
+        
+        NATBrowserPanel<T> mainPanel = this.getMainPanel();
+        
+        FocusConceptManager<T> focusConceptManager = mainPanel.getFocusConceptManager();
+        
+        Optional<T> concept = mainPanel.getDataSource().get().getOntology().getConceptFromID(str);
 
         if (concept.isPresent()) {
-            getMainPanel().getFocusConceptManager().navigateTo(concept.get());
+            focusConceptManager.navigateTo(concept.get());
         }
 
-        ArrayList<NATConceptSearchResult<T>> results = getMainPanel().getDataSource().searchExact(str);
+        ArrayList<NATConceptSearchResult<T>> results = mainPanel.getDataSource().get().searchExact(str);
 
         if(results.isEmpty()) {
             JOptionPane.showMessageDialog(

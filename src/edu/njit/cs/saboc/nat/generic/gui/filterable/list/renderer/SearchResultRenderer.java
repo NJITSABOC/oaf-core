@@ -4,7 +4,6 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.renderer.BaseFilterableRender
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.data.NATConceptSearchResult;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableConceptEntry;
 import java.awt.BorderLayout;
@@ -21,11 +20,9 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
     
     private final SimpleConceptRenderer<T> renderer;
     
-    public SearchResultRenderer(
-            NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+    public SearchResultRenderer(NATBrowserPanel<T> mainPanel) {
         
-        this.renderer = new SimpleConceptRenderer<>(mainPanel, dataSource);
+        this.renderer = new SimpleConceptRenderer<>(mainPanel);
 
         this.setLayout(new BorderLayout());
         
@@ -57,7 +54,7 @@ public class SearchResultRenderer<T extends Concept> extends BaseFilterableRende
     @Override
     public void showDetailsFor(Filterable<NATConceptSearchResult<T>> element) {
         
-        FilterableConceptEntry<T> conceptEntry = new FilterableConceptEntry<>(element.getObject().getConcept(), renderer.getDataSource());
+        FilterableConceptEntry<T> conceptEntry = new FilterableConceptEntry<>(renderer.getMainPanel(), element.getObject().getConcept());
         
         if(element.getCurrentFilter().isPresent()) {
             conceptEntry.setCurrentFilter(element.getCurrentFilter().get());

@@ -91,7 +91,7 @@ public class RemoveSemanticRelationshipError<T extends Concept, V extends Inheri
             return false;
         }
         
-        final ReplaceTargetError<?, ?> other = (ReplaceTargetError<?, ?>) obj;
+        final RemoveSemanticRelationshipError<?, ?> other = (RemoveSemanticRelationshipError<?, ?>) obj;
         
         if(!this.getRelType().equals(other.getRelType())) {
             return false;

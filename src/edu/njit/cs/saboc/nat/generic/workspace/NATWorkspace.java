@@ -122,6 +122,10 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
     @Override
     public final void loadWorkspace() {
         
+        if(!browserPanel.getDataSource().isPresent()) {
+            return;
+        }
+        
         JSONParser parser = new JSONParser();
 
         try (FileReader reader = new FileReader(super.getFile())) {
@@ -151,7 +155,7 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
                 conceptIds.add(entryObj.get("conceptid").toString());
             });
             
-            Set<T> concepts = this.getBrowserPanel().getDataSource().getConceptsFromIds(conceptIds);
+            Set<T> concepts = this.getBrowserPanel().getDataSource().get().getConceptsFromIds(conceptIds);
             
             Map<String, T> conceptIdMap = new HashMap<>();
             

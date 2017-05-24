@@ -24,17 +24,13 @@ public class ParentErrorDetailsRenderer<T extends Concept> extends BaseFilterabl
     private final ParentErrorSummaryLabel<T> parentErrorLabel;
     
     private final NATBrowserPanel<T> mainPanel;
-    private final ConceptBrowserDataSource<T> dataSource;
     
-    public ParentErrorDetailsRenderer(
-            NATBrowserPanel<T> mainPanel,
-            ConceptBrowserDataSource<T> dataSource) {
+    public ParentErrorDetailsRenderer(NATBrowserPanel<T> mainPanel) {
         
         this.mainPanel = mainPanel;
-        this.dataSource = dataSource;
 
-        this.conceptRenderer = new SimpleConceptRenderer<>(mainPanel, dataSource);
-        this.parentErrorLabel = new ParentErrorSummaryLabel<>(mainPanel, dataSource);
+        this.conceptRenderer = new SimpleConceptRenderer<>(mainPanel);
+        this.parentErrorLabel = new ParentErrorSummaryLabel<>(mainPanel);
         
         this.setLayout(new BorderLayout());
         

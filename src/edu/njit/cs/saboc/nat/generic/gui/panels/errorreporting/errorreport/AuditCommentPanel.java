@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,8 +19,8 @@ public class AuditCommentPanel<T extends Concept> extends BaseNATPanel<T> {
     
     private final JEditorPane commentPane;
     
-    public AuditCommentPanel(NATBrowserPanel<T> mainPanel, ConceptBrowserDataSource<T> dataSource) {
-        super(mainPanel, dataSource);
+    public AuditCommentPanel(NATBrowserPanel<T> mainPanel) {
+        super(mainPanel);
         
         this.setLayout(new BorderLayout());
                 

@@ -150,4 +150,13 @@ public class FilterPanel extends JPanel {
                 && block != null
                 && block != Character.UnicodeBlock.SPECIALS;
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.filterField.setEditable(value);
+        this.closeButton.setEnabled(value);
+    }
 }

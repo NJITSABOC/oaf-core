@@ -303,4 +303,13 @@ public class FilterableList<T> extends JPanel {
         
         return row;
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.list.setEnabled(value);
+        
+        this.filterPanel.setEnabled(value);
+    }
 }

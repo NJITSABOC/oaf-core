@@ -15,21 +15,17 @@ import javax.swing.JPanel;
  */
 public abstract class BaseNATPanel<T extends Concept> extends JPanel {
     
-    private final FocusConceptManager<T> focusConceptManager;
-    
     private final NATBrowserPanel<T> mainPanel;
     
     public BaseNATPanel(NATBrowserPanel<T> mainPanel) {
-
         this.mainPanel = mainPanel;
-        this.focusConceptManager = mainPanel.getFocusConceptManager();
     }
     
     public NATBrowserPanel<T> getMainPanel() {
         return mainPanel;
     }
-    
-    public FocusConceptManager<T> getFocusConceptManager() {
-        return focusConceptManager;
+
+    public void reset() {
+        
     }
 }

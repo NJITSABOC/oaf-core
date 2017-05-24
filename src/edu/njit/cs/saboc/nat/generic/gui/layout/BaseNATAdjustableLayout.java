@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.layout;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Optional;
@@ -24,6 +23,8 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
     private final JPanel leftPanel;
     private final JPanel midPanel;
     private final JPanel rightPanel;
+    
+    private NATBrowserPanel<T> browserPanel;
 
     public BaseNATAdjustableLayout() {
         super();
@@ -35,6 +36,8 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
     
     @Override
     public void createLayout(NATBrowserPanel<T> mainPanel) {
+        
+        this.browserPanel = mainPanel;
         
         JSplitPane leftPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         leftPane.setDividerLocation(400);
@@ -54,6 +57,10 @@ public abstract class BaseNATAdjustableLayout<T extends Concept> extends NATLayo
         this.add(leftPane, BorderLayout.CENTER);
 
         mainPanel.add(this);
+    }
+    
+    public NATBrowserPanel<T> getMainPanel() {
+        return browserPanel;
     }
     
     protected void setLeftPanelContents(JComponent panel) {

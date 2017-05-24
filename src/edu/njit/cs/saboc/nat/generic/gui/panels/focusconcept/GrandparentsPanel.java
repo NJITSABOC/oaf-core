@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableConceptEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableNestedEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.nestedlist.FilterableNestedEntryPanel;
@@ -115,5 +114,18 @@ public class GrandparentsPanel<T extends Concept> extends ResultPanel<T, ArrayLi
                 BorderFactory.createLineBorder(Color.BLACK),
                 String.format("Parents (%d) and Grandparents (%d)", data.size(), grandparents.size()))
         );
+    }
+
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.grandParentList.setEnabled(value);
+    }
+
+    @Override
+    public void reset() {
+        this.dataPending();
     }
 }

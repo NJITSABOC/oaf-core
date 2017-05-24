@@ -7,16 +7,17 @@ import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickManager;
 import edu.njit.cs.saboc.blu.core.utils.rightclickmanager.EntityRightClickMenuGenerator;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.listeners.DataLoadedListener;
 import edu.njit.cs.saboc.nat.generic.gui.panels.ResultPanel.DataRetriever;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -52,6 +53,8 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
     private final EntityRightClickManager<V> rightClickManager = new EntityRightClickManager<>();
     
     private final boolean showBorder;
+    
+    private final JButton filterButton;
     
     public ResultListPanel(
             NATBrowserPanel<T> mainPanel,
@@ -112,17 +115,17 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         
         FlowLayout buttonLayout = new FlowLayout(FlowLayout.TRAILING);
         buttonLayout.setHgap(0);
+        
+        this.filterButton = new JButton();
+
+        filterButton.setPreferredSize(new Dimension(24, 24));
+        filterButton.setIcon(ImageManager.getImageManager().getIcon("filter.png"));
+        filterButton.setToolTipText("Filter these entries");
+        filterButton.addActionListener((ae) -> {
+            list.setFilterPanelOpen(!list.filterShowing());
+        });
 
         if (showFilter) {
-            JButton filterButton = new JButton();
-            
-            filterButton.setPreferredSize(new Dimension(24, 24));
-            filterButton.setIcon(ImageManager.getImageManager().getIcon("filter.png"));
-            filterButton.setToolTipText("Filter these entries");
-            filterButton.addActionListener( (ae) -> {
-                list.setFilterPanelOpen(!list.filterShowing());
-            });
-            
             this.addOptionsComponent(filterButton);
         }
         
@@ -165,6 +168,8 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         
         optionsPanel.setEnabled(false);
         
+        displayResults(new ArrayList<>());
+        
         updateBorder("Loading...");
     }
 
@@ -206,5 +211,21 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         
         return BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), 
                 String.format("%s (%s)", type, countOrStatus));
+    }
+    
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.list.setEnabled(value);
+        this.filterButton.setEnabled(value);
+        
+        List<Component> components = Arrays.asList(this.optionsPanel.getComponents());
+        
+        components.forEach( (component) -> {
+            component.setEnabled(value);
+        });
     }
 }

@@ -63,6 +63,12 @@ public class AuditDatabase<T extends Concept> {
         loadedAuditSetChanged();
     }
     
+    public void clearLoadedAuditSet() {
+        this.loadedAuditSet = Optional.empty();
+        
+        loadedAuditSetChanged();
+    }
+    
     public Optional<AuditSet<T>> getLoadedAuditSet() {
         return loadedAuditSet;
     }

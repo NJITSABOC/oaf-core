@@ -20,9 +20,9 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
     private final ConceptListPanel<T> siblingPanel;
         
     private final JCheckBox chkShowStrictOnly;
-    
+
     public SiblingPanel(NATBrowserPanel<T> mainPanel) {
-        
+
         super(mainPanel);
 
         this.setLayout(new BorderLayout());
@@ -34,20 +34,33 @@ public class SiblingPanel<T extends Concept> extends BaseNATPanel<T> {
                 true,
                 true,
                 true);
-        
+
         this.chkShowStrictOnly = new JCheckBox("Show Strict Siblings Only");
-        
+
         this.chkShowStrictOnly.addActionListener((ae) -> {
-            
-           if(chkShowStrictOnly.isSelected()) {
-               siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getStrictSiblingsRetriever(mainPanel));
-           } else {
+
+            if (chkShowStrictOnly.isSelected()) {
+                siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getStrictSiblingsRetriever(mainPanel));
+            } else {
                 siblingPanel.setDataRetriever(CommonBrowserDataRetrievers.getSiblingsRetriever(mainPanel));
-           }
+            }
         });
 
         this.siblingPanel.addOptionsComponent(chkShowStrictOnly);
 
         this.add(siblingPanel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.siblingPanel.setEnabled(value);
+        this.chkShowStrictOnly.setEnabled(value);
+    }
+
+    @Override
+    public void reset() {
+        this.siblingPanel.reset();
     }
 }

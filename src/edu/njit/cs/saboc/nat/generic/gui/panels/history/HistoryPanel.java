@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.history;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.FilterableList;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableFocusConceptHistoryEntry;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.renderer.HistoryEntryRenderer;
 import edu.njit.cs.saboc.nat.generic.gui.panels.BaseNATPanel;
@@ -23,6 +22,7 @@ import java.util.Collections;
  * @param <T>
  */
 public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
+
     
     /**
      * A filterable list for displaying focus concept history entries
@@ -68,6 +68,10 @@ public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
 
             super.setContents(filterableEntries);
         }
+        
+        public void clearContents() {
+            super.setContents(new ArrayList<>());
+        }
     }
 
     private final HistoryEntryList<T> historyList;
@@ -99,5 +103,18 @@ public class HistoryPanel<T extends Concept> extends BaseNATPanel<T> {
                 historyList.updateHistoryDisplay();
             }
         });
+    }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.historyList.setEnabled(value);
+    }
+    
+    
+    @Override
+    public void reset() {
+        this.historyList.clearContents();
     }
 }

@@ -7,7 +7,6 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -89,5 +88,29 @@ public class MultiResultListPanel<T extends Concept> extends BaseNATPanel<T> {
         this.revalidate();
         
         return btn;
+    }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        resultPanels.forEach( (panel) -> {
+            panel.setEnabled(value);
+        });
+        
+        optionButtonList.forEach( (button) -> {
+            button.setEnabled(value);
+        });
+    }
+
+    @Override
+    public void reset() {
+        if(!optionButtonList.isEmpty()) {
+            optionButtonList.get(0).setSelected(true);
+        }
+        
+        resultPanels.forEach((panel) -> {
+            panel.dataPending();
+        });
     }
 }

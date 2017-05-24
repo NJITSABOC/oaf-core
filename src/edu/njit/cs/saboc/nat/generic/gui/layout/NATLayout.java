@@ -17,6 +17,8 @@ public abstract class NATLayout<T extends Concept> extends JPanel {
         
     public abstract void createLayout(NATBrowserPanel<T> mainPanel);
     
+    public abstract void reset();
+    
     public void resized(int newWidth, int newHeight) {
         
     }

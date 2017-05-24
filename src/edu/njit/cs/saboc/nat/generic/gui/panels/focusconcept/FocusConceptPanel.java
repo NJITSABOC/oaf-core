@@ -143,6 +143,10 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
             @Override
             public String getToolTipText(MouseEvent evt) {
                 
+                if(!mainPanel.getDataSource().isPresent()) {
+                    return null;
+                }
+                
                 if(!editFocusConceptPanel.isVisible()) {
                     
                     Rectangle conceptRect = new Rectangle(
@@ -284,6 +288,7 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         }
 
         editFocusConceptPanel.setVisible(false);
+        
         display();
     }
     
@@ -315,6 +320,8 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
         jtf.setEditable(false);
         
         editFocusConceptPanel.clearEdits();
+        
+        enableNavigationButtons();
     }
 
     private void doConceptChange(String str) {
@@ -425,5 +432,37 @@ public class FocusConceptPanel<T extends Concept> extends BaseNATPanel<T> {
 
     public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<T> generator) {
         rightClickManager.setMenuGenerator(generator);
+    }
+
+    
+    private void enableNavigationButtons() {
+        backButton.setEnabled(history.getPosition() > 0);
+        forwardButton.setEnabled(history.getPosition() < history.getHistory().size() - 1);
+    }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.jtf.setEnabled(value);
+    
+        if (value) {
+            enableNavigationButtons();
+        } else {
+            this.backButton.setEnabled(false);
+            this.forwardButton.setEnabled(false);
+        }
+        
+        this.editFocusConceptPanel.setEnabled(value);
+        
+        optionButtons.forEach( (button) -> {
+            button.setEnabled(value);
+        });
+    }
+
+    @Override
+    public void reset() {
+        this.dataEmpty();
     }
 }

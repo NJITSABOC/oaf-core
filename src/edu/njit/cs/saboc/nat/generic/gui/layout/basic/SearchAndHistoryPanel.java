@@ -52,4 +52,22 @@ public class SearchAndHistoryPanel<T extends Concept> extends BaseNATPanel<T> {
         
         this.add(tabbedPane, BorderLayout.CENTER);
     }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.tabbedPane.setEnabled(value);
+        
+        this.searchPanel.setEnabled(value);
+        this.historyPanel.setEnabled(value);
+        this.auditPanel.setEnabled(value);
+    }
+
+    @Override
+    public void reset() {
+        this.searchPanel.reset();
+        this.historyPanel.reset();
+        this.auditPanel.reset();
+    }
 }

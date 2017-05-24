@@ -60,7 +60,10 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     
     private final EntityRightClickManager<V> rightClickManager = new EntityRightClickManager<>();
     
+    private final JButton filterButton;
+    
     public NestedFilterableList() {
+        
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
         
@@ -98,7 +101,7 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
         
         this.filterPanel = new FilterPanel();
         
-        JButton filterButton = new JButton();
+        filterButton = new JButton();
 
         filterButton.setPreferredSize(new Dimension(24, 24));
         filterButton.setIcon(ImageManager.getImageManager().getIcon("filter.png"));
@@ -302,6 +305,18 @@ public abstract class NestedFilterableList<T, V> extends JPanel {
     }
     public final void setRightClickMenuGenerator(EntityRightClickMenuGenerator<V> generator) {
         this.rightClickManager.setMenuGenerator(generator);
+    }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.contentPanel.setEnabled(value);
+        this.internalPanel.setEnabled(value);
+        this.filterPanel.setEnabled(value);
+        this.filterButton.setEnabled(value);
+        
     }
     
     public abstract FilterableNestedEntryPanel<FilterableNestedEntry<T, V>> 

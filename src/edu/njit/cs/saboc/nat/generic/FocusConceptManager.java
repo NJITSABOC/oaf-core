@@ -61,6 +61,11 @@ public class FocusConceptManager<T extends Concept> {
      * Reloads all panels for the current focus concept
      */
     public final void refresh() {
+        
+        if(!mainPanel.getDataSource().isPresent()) {
+            return;
+        }
+        
         navigateTo(this.getActiveFocusConcept(), false);
     }
 

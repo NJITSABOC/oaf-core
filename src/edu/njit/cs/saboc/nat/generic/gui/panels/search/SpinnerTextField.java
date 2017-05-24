@@ -45,4 +45,12 @@ public class SpinnerTextField extends JPanel {
     public void setSpinnerVisible(boolean v) {
         spinner.setVisible(v);
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.textField.setEnabled(value);
+        this.spinner.setEnabled(value);
+    }
 }

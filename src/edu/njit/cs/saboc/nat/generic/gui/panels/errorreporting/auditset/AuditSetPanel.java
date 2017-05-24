@@ -358,4 +358,24 @@ public class AuditSetPanel<T extends Concept> extends BaseNATPanel<T> {
         
         return Optional.ofNullable(auditSetName);
     }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+
+        this.auditConceptList.setEnabled(value);
+        
+        this.nameLabel.setEnabled(value);
+        this.lastSavedDateLabel.setEnabled(value);
+    
+        this.btnCreateAuditSet.setEnabled(value);
+        this.btnExportAuditSet.setEnabled(value);
+    
+        this.btnOpenAuditSet.setEnabled(value);
+    }
+
+    @Override
+    public void reset() {
+        this.auditConceptList.reset();
+    }
 }

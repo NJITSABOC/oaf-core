@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.nat.generic.history;
 
-import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +40,8 @@ public class FocusConceptHistory<T extends Concept> {
     public final void setHistory(ArrayList<FocusConceptHistoryEntry<T>> history) {
         this.conceptHistory.clear();
         this.conceptHistory.addAll(history);
+        
+        setPosition(history.size() - 1);
 
         fireHistoryEntryAddedListeners();
     }

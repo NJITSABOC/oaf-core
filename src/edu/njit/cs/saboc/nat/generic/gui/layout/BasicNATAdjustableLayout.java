@@ -87,4 +87,25 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
     public FocusConceptPanel<T> getFocusConceptPanel() {
         return focusConceptPanel;
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.searchAndHistoryPanel.setEnabled(value);
+        this.siblingPanel.setEnabled(value);
+        this.ancestorPanel.setEnabled(value);
+        this.descendantPanel.setEnabled(value);
+        this.focusConceptPanel.setEnabled(value);
+    }
+    
+    @Override
+    public void reset() {
+        this.searchAndHistoryPanel.reset();
+        this.siblingPanel.reset();
+        this.ancestorPanel.reset();
+        this.descendantPanel.reset();
+        this.focusConceptPanel.reset();
+    }
 }

@@ -161,4 +161,22 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     public void clearWorkspace() {
         this.optWorkspace = Optional.empty();
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        
+        this.layout.setEnabled(value);
+    }
+    
+    public void reset() {
+        this.layout.reset();
+
+        clearDataSource();
+        clearWorkspace();
+
+        this.getAuditDatabase().clearLoadedAuditSet();
+        this.getBookmarkManager().setBookmarks(new ArrayList<>());
+        this.getFocusConceptManager().getHistory().setHistory(new ArrayList<>());
+    }
 }

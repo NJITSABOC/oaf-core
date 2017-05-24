@@ -166,6 +166,23 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
         this.add(searchResultList, c);
     }
     
+    
+    @Override
+    public void setEnabled(boolean value) {
+        
+        super.setEnabled(value);
+        
+        this.searchResultList.setEnabled(value);
+        this.txtSearchBox.setEnabled(value);
+        
+        this.optAnywhere.setEnabled(value);
+        this.optStarting.setEnabled(value);
+        this.optExact.setEnabled(value);
+        this.optId.setEnabled(value);
+    
+        this.btnDoSearch.setEnabled(value);
+    }
+    
     public void addSearchResultSelectedListener(SearchResultSelectedListener<T> listener) {
         this.searchResultList.addSearchResultSelectedListener(listener);
     }
@@ -290,5 +307,10 @@ public class SearchPanel<T extends Concept> extends BaseNATPanel<T> {
         searchResultList.displayResults(results);
 
         txtSearchBox.setSpinnerVisible(false);
+    }
+    
+    @Override
+    public void reset() {
+        this.searchResultList.displayResults(new ArrayList<>());
     }
 }

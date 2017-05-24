@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.utils.filterable.list.Filterable;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
 import edu.njit.cs.saboc.nat.generic.gui.filterable.list.FilterableConceptEntry;
 import edu.njit.cs.saboc.blu.core.utils.filterable.renderer.BaseFilterableRenderer;
@@ -49,5 +48,10 @@ public class ConceptListPanel<T extends Concept> extends ResultListPanel<T, T> {
     @Override
     protected Filterable<T> createFilterableEntry(T entry) {
         return new FilterableConceptEntry(getMainPanel(), entry);
+    }
+
+    @Override
+    public void reset() {
+        this.dataPending();
     }
 }

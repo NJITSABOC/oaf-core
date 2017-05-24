@@ -126,6 +126,10 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
             return;
         }
         
+        if(!super.hasFile()) {
+            return;
+        }
+        
         JSONParser parser = new JSONParser();
 
         try (FileReader reader = new FileReader(super.getFile())) {
@@ -178,8 +182,6 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
                     
                     historyEntries.add(entry);
                 }
-                
-                historyEntries.sort( (a, b) -> a.getTimeViewed().compareTo(b.getTimeViewed()));
             });
             
             this.workspaceHistory.setHistory(historyEntries);
@@ -193,6 +195,11 @@ public class NATWorkspace<T extends Concept> extends OAFWorkspace {
     
     @Override
     public final void saveWorkspace() {
+        
+        if(!super.hasFile()) {
+            return;
+        }
+        
         JSONObject obj = new JSONObject();
 
         obj.put("name", super.getName());

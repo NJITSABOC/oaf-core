@@ -168,8 +168,6 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         
         optionsPanel.setEnabled(false);
         
-        displayResults(new ArrayList<>());
-        
         updateBorder("Loading...");
     }
 
@@ -180,7 +178,7 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         data.forEach( (result) -> {
             entries.add(createFilterableEntry(result));
         });
-        
+
         list.setContents(entries);
         
         dataLoadedListeners.forEach( (listener) -> {
@@ -227,5 +225,10 @@ public abstract class ResultListPanel<T extends Concept, V> extends ResultPanel<
         components.forEach( (component) -> {
             component.setEnabled(value);
         });
+    }
+    
+    @Override
+    public void reset() {
+        this.dataPending();
     }
 }

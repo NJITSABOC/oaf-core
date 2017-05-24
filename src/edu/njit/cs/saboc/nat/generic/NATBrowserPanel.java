@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoader;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSetLoaderException;
 import edu.njit.cs.saboc.nat.generic.gui.layout.NATLayout;
 import edu.njit.cs.saboc.nat.generic.history.BookmarkManager;
+import edu.njit.cs.saboc.nat.generic.history.FocusConceptHistory;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspace;
 import edu.njit.cs.saboc.nat.generic.workspace.NATWorkspaceManager;
 import java.awt.BorderLayout;
@@ -143,9 +144,14 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
         
         this.optWorkspace = Optional.of(workspace);
         
-        this.getFocusConceptManager().getHistory().setHistory(workspace.getHistory().getHistory());
+        FocusConceptHistory<T> history = this.focusConceptManager.getHistory();
         
-        this.navigateTo(workspace.getHistory().getHistory().get(0).getConcept());
+        history.setHistory(workspace.getHistory().getHistory());
+     
+        this.getFocusConceptManager().navigateTo(
+                history.getHistory().get(history.getPosition()).getConcept(), 
+                
+                false);
         
         if(workspace.getAuditSet().isPresent()) {
             try {
@@ -172,8 +178,8 @@ public class NATBrowserPanel<T extends Concept> extends JPanel {
     public void reset() {
         this.layout.reset();
 
-        clearDataSource();
         clearWorkspace();
+        clearDataSource();
 
         this.getAuditDatabase().clearLoadedAuditSet();
         this.getBookmarkManager().setBookmarks(new ArrayList<>());

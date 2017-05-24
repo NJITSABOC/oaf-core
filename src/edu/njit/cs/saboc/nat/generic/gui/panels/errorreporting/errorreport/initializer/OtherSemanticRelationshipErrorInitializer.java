@@ -14,16 +14,19 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.OtherSemantic
  * @param <V>
  */
 public class OtherSemanticRelationshipErrorInitializer<T extends Concept, V extends InheritableProperty>
-        implements ErrorReportPanelInitializer<OtherSemanticRelationshipError<T, V>> {
-    
-    private final Ontology<T> theOntology; 
+        extends ErrorReportPanelInitializer<T, OtherSemanticRelationshipError<T, V>> {
     
     private final V erroneousRelType;
     private final T erroneousTarget;
 
-    public OtherSemanticRelationshipErrorInitializer(Ontology<T> ontology, V erroneousRelType, T erroneousTarget) {
-        this.theOntology = ontology;
+    public OtherSemanticRelationshipErrorInitializer(
+            Ontology<T> ontology, 
+            T erroneousConcept, 
+            V erroneousRelType, 
+            T erroneousTarget) {
         
+        super(ontology, erroneousConcept);
+
         this.erroneousRelType = erroneousRelType;
         this.erroneousTarget = erroneousTarget;
     }
@@ -44,7 +47,7 @@ public class OtherSemanticRelationshipErrorInitializer<T extends Concept, V exte
 
     @Override
     public OtherSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
-        return new OtherSemanticRelationshipError<>(theOntology, erroneousRelType, erroneousTarget, comment, severity);
+        return new OtherSemanticRelationshipError<>(getOntology(), erroneousRelType, erroneousTarget, comment, severity);
     }
 
     @Override

@@ -11,12 +11,10 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.MissingParentError
  * 
  * @param <T>
  */
-public class MissingParentInitializer<T extends Concept> implements MissingConceptInitializer<T, MissingParentError<T>> {
+public class MissingParentInitializer<T extends Concept> extends MissingConceptInitializer<T, MissingParentError<T>> {
     
-    private final Ontology<T> theOntology; 
-    
-    public MissingParentInitializer(Ontology<T> ontology) {
-        this.theOntology = ontology;
+    public MissingParentInitializer(Ontology<T> ontology, T erroneousConcept) {
+        super(ontology, erroneousConcept);
     }
 
     @Override
@@ -31,7 +29,7 @@ public class MissingParentInitializer<T extends Concept> implements MissingConce
 
     @Override
     public MissingParentError<T> generateError(String comment, OntologyError.Severity severity) {
-        return new MissingParentError<>(theOntology, comment, severity);
+        return new MissingParentError<>(getOntology(), comment, severity);
     }
 
     @Override

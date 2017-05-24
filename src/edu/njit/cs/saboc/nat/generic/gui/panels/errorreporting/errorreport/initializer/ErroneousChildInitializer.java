@@ -10,14 +10,18 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.child.ErroneousChildError
  * @author Chris O
  * @param <T>
  */
-public class ErroneousChildInitializer<T extends Concept> implements ErrorReportPanelInitializer<ErroneousChildError<T>> {
-    
-    private final Ontology<T> theOntology; 
+public class ErroneousChildInitializer<T extends Concept> extends ErrorReportPanelInitializer<T, ErroneousChildError<T>> {
+     
     private final T erroneousChild;
     
-    public ErroneousChildInitializer(Ontology<T> ontology, T erroneousParent) {
-        this.theOntology = ontology;
-        this.erroneousChild = erroneousParent;
+    public ErroneousChildInitializer(
+            Ontology<T> ontology, 
+            T erroneousConcept, 
+            T erroneousChild) {
+        
+        super(ontology, erroneousConcept);
+        
+        this.erroneousChild = erroneousChild;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class ErroneousChildInitializer<T extends Concept> implements ErrorReport
 
     @Override
     public ErroneousChildError<T> generateError(String comment, OntologyError.Severity severity) {
-        return new ErroneousChildError(theOntology, erroneousChild, comment, severity);
+        return new ErroneousChildError(getOntology(), erroneousChild, comment, severity);
     }
 
     @Override

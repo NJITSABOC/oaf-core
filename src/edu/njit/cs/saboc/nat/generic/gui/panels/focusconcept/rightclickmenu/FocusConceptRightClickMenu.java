@@ -60,7 +60,7 @@ public class FocusConceptRightClickMenu<T extends Concept> extends AuditReportRi
             JMenuItem otherErrorBtn = new JMenuItem("Report other type of error");
             otherErrorBtn.setFont(otherErrorBtn.getFont().deriveFont(14.0f));
             otherErrorBtn.addActionListener((ae) -> {
-                ErrorReportDialog.displayOtherErrorDialog(mainPanel);
+                ErrorReportDialog.displayOtherErrorDialog(mainPanel, focusConcept);
             });
             
             components.add(auditCommentBtn);

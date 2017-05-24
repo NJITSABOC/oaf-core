@@ -13,15 +13,20 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.ReplaceTarget
  * @param <V>
  */
 public class ReplaceTargetInitializer<T extends Concept, V extends InheritableProperty> 
-        implements MissingConceptInitializer<T, ReplaceTargetError<T, V>>  {
+        extends MissingConceptInitializer<T, ReplaceTargetError<T, V>>  {
     
-    private final Ontology<T> ontology;
-    
+
     private final V relType;
     private final T erroneousTarget;
     
-    public ReplaceTargetInitializer(Ontology<T> ontology, V relType, T erroneousTarget) {
-        this.ontology = ontology;
+    public ReplaceTargetInitializer(
+            Ontology<T> ontology, 
+            T erroneousConcept, 
+            V relType, 
+            T erroneousTarget) {
+        
+        super(ontology, erroneousConcept);
+
         this.relType = relType;
         this.erroneousTarget = erroneousTarget;
     }
@@ -42,7 +47,7 @@ public class ReplaceTargetInitializer<T extends Concept, V extends InheritablePr
 
     @Override
     public ReplaceTargetError<T, V> generateError(String comment, OntologyError.Severity severity) {
-        return new ReplaceTargetError<>(ontology, relType, erroneousTarget, comment, severity);
+        return new ReplaceTargetError<>(getOntology(), relType, erroneousTarget, comment, severity);
     }
     
     @Override

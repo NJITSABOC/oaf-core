@@ -210,7 +210,7 @@ public class SelectRelationshipErrorReportPanel<
     }
 
     @Override
-    public Optional<? extends ErrorReportPanelInitializer> getInitializer() {
+    public Optional<? extends ErrorReportPanelInitializer<T, U>> getInitializer() {
         return this.initializer;
     }
 }

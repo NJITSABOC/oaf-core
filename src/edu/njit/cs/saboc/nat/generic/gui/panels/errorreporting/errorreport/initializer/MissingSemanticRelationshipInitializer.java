@@ -15,14 +15,12 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.MissingSemant
  * @param <V>
  */
 public class MissingSemanticRelationshipInitializer<T extends Concept, V extends InheritableProperty> 
-    implements MissingRelationshipInitializer<T, V, MissingSemanticRelationshipError<T, V>> {
+        extends MissingRelationshipInitializer<T, V, MissingSemanticRelationshipError<T, V>> {
     
-    private final Ontology<T> ontology;
     
-    public MissingSemanticRelationshipInitializer(Ontology<T> ontology) {
-        this.ontology = ontology;
+    public MissingSemanticRelationshipInitializer(Ontology<T> ontology, T erroneousConcept) {
+        super(ontology, erroneousConcept);
     }
-
 
     @Override
     public String getStyledErrorDescriptionText() {
@@ -36,7 +34,7 @@ public class MissingSemanticRelationshipInitializer<T extends Concept, V extends
 
     @Override
     public MissingSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
-        return new MissingSemanticRelationshipError<>(ontology, comment, severity);
+        return new MissingSemanticRelationshipError<>(getOntology(), comment, severity);
     }
     
     @Override

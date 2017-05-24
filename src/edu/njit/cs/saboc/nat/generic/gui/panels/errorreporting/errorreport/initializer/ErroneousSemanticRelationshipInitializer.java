@@ -14,20 +14,19 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.RemoveSemanti
  * @param <V>
  */
 public class ErroneousSemanticRelationshipInitializer<T extends Concept, V extends InheritableProperty>
-        implements ErrorReportPanelInitializer<RemoveSemanticRelationshipError<T, V>> {
-    
-    private final Ontology<T> theOntology; 
-    
+        extends ErrorReportPanelInitializer<T, RemoveSemanticRelationshipError<T, V>> {
+ 
     private final V erroneousRelType;
     private final T erroneousTarget;
 
     public ErroneousSemanticRelationshipInitializer(
             Ontology<T> ontology, 
+            T erroneousConcept,
             V erroneousRelType, 
             T erroneousTarget) {
         
-        this.theOntology = ontology;
-        
+        super(ontology, erroneousConcept);
+
         this.erroneousRelType = erroneousRelType;
         this.erroneousTarget = erroneousTarget;
     }
@@ -48,7 +47,7 @@ public class ErroneousSemanticRelationshipInitializer<T extends Concept, V exten
 
     @Override
     public RemoveSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
-        return new RemoveSemanticRelationshipError<>(theOntology, erroneousRelType, erroneousTarget, comment, severity);
+        return new RemoveSemanticRelationshipError<>(getOntology(), erroneousRelType, erroneousTarget, comment, severity);
     }
 
     @Override

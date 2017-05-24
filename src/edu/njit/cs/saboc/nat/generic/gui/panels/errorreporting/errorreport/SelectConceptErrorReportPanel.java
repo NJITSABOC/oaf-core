@@ -165,7 +165,7 @@ public class SelectConceptErrorReportPanel<T extends Concept, V extends Ontology
     }
 
     @Override
-    public Optional<? extends ErrorReportPanelInitializer> getInitializer() {
+    public Optional<? extends ErrorReportPanelInitializer<T, V>> getInitializer() {
         return this.initializer;
     }
 }

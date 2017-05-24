@@ -2,7 +2,6 @@ package edu.njit.cs.saboc.nat.generic.gui.panels.focusconcept.rightclickmenu;
 
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.nat.generic.NATBrowserPanel;
-import edu.njit.cs.saboc.nat.generic.data.ConceptBrowserDataSource;
 import edu.njit.cs.saboc.nat.generic.errorreport.AuditSet;
 import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ParentError;
 import edu.njit.cs.saboc.nat.generic.gui.panels.errorreporting.errorreport.dialog.ErrorReportDialog;
@@ -32,6 +31,7 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
 
     @Override
     public ArrayList<JComponent> buildRightClickMenuFor(T item) {
+        
         if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
 
             AuditSet<T> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
@@ -55,7 +55,7 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
             
             components.add(new JSeparator());
             
-            components.addAll(ParentErrorReportOptions.createParentErrorComponents(mainPanel, item));
+            components.addAll(ParentErrorReportOptions.createParentErrorComponents(mainPanel, focusConcept, item));
 
             List<ParentError<T>> reportedParentErrors = auditSet.getParentErrors(focusConcept);
                         
@@ -83,7 +83,7 @@ public class ParentsRightClickMenuGenerator<T extends Concept> extends AuditRepo
 
             JMenuItem reportMissingParent = new JMenuItem("Report missing parent");
             reportMissingParent.addActionListener((ae) -> {
-                ErrorReportDialog.displayMissingParentDialog(mainPanel);
+                ErrorReportDialog.displayMissingParentDialog(mainPanel, focusConcept);
             });
 
             components.add(reportMissingParent);

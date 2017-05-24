@@ -14,15 +14,18 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.semanticrel.ReplaceSemant
  * @param <V>
  */
 public class ReplaceSemanticRelationshipInitializer <T extends Concept, V extends InheritableProperty> 
-    implements MissingRelationshipInitializer<T, V, ReplaceSemanticRelationshipError<T, V>> {
-    
-    private final Ontology<T> ontology;
+        extends MissingRelationshipInitializer<T, V, ReplaceSemanticRelationshipError<T, V>> {
     
     private final V incorrectProperty;
     private final T incorrectTarget;
     
-    public ReplaceSemanticRelationshipInitializer(Ontology<T> ontology, V incorrectProperty, T incorrectTarget) {
-        this.ontology = ontology;
+    public ReplaceSemanticRelationshipInitializer(
+            Ontology<T> ontology, 
+            T erroneousConcept, 
+            V incorrectProperty, 
+            T incorrectTarget) {
+        
+        super(ontology, erroneousConcept);
         
         this.incorrectProperty = incorrectProperty;
         this.incorrectTarget = incorrectTarget;
@@ -44,7 +47,7 @@ public class ReplaceSemanticRelationshipInitializer <T extends Concept, V extend
 
     @Override
     public ReplaceSemanticRelationshipError<T, V> generateError(String comment, OntologyError.Severity severity) {
-        return new ReplaceSemanticRelationshipError<>(ontology, incorrectProperty, incorrectTarget, comment, severity);
+        return new ReplaceSemanticRelationshipError<>(getOntology(), incorrectProperty, incorrectTarget, comment, severity);
     }
     
     @Override

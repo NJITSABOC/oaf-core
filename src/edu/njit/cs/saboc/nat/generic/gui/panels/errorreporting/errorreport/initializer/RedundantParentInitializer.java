@@ -10,13 +10,14 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.RedundantParentErr
  * @author Chris O
  * @param <T>
  */
-public class RedundantParentInitializer<T extends Concept> implements ErrorReportPanelInitializer<RedundantParentError<T>> {
+public class RedundantParentInitializer<T extends Concept> extends ErrorReportPanelInitializer<T, RedundantParentError<T>> {
     
-    private final Ontology<T> theOntology; 
     private final T erroneousParent;
     
-    public RedundantParentInitializer(Ontology<T> ontology, T erroneousParent) {
-        this.theOntology = ontology;
+    public RedundantParentInitializer(Ontology<T> ontology, T erroneousConcept, T erroneousParent) {
+        
+        super(ontology, erroneousConcept);
+        
         this.erroneousParent = erroneousParent;
     }
 
@@ -32,7 +33,7 @@ public class RedundantParentInitializer<T extends Concept> implements ErrorRepor
 
     @Override
     public RedundantParentError<T> generateError(String comment, OntologyError.Severity severity) {
-        return new RedundantParentError(theOntology, erroneousParent, comment, severity);
+        return new RedundantParentError(getOntology(), erroneousParent, comment, severity);
     }
 
     @Override

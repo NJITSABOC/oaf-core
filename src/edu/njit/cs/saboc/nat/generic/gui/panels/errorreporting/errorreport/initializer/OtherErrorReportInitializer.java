@@ -12,12 +12,11 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.OtherError;
  * 
  * @param <T>
  */
-public class OtherErrorReportInitializer<T extends Concept> implements ErrorReportPanelInitializer<OtherError<T>> {
+public class OtherErrorReportInitializer<T extends Concept> extends ErrorReportPanelInitializer<T, OtherError<T>> {
     
-    private final Ontology<T> ontology;
-    
-    public OtherErrorReportInitializer(Ontology<T> ontology) {
-        this.ontology = ontology;
+    public OtherErrorReportInitializer(Ontology<T> ontology, T erroneousConcept) {
+        
+        super(ontology, erroneousConcept);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class OtherErrorReportInitializer<T extends Concept> implements ErrorRepo
 
     @Override
     public OtherError<T> generateError(String comment, OntologyError.Severity severity) {
-        return new OtherError<>(ontology, comment, severity);
+        return new OtherError<>(getOntology(), comment, severity);
     }
 
     @Override

@@ -107,14 +107,14 @@ public class AuditSetRightClickMenu<T extends Concept> extends AuditReportRightC
         return new ArrayList<>();
     }
     
-    private JMenu createReportErrorsMenu(AuditSet<T> auditSet, T concept) {
+    private JMenu createReportErrorsMenu(AuditSet<T> auditSet, T auditSetConcept) {
         
         JMenu errorReportBtn = new JMenu("Report error");
         errorReportBtn.setFont(errorReportBtn.getFont().deriveFont(14.0f));
         
         if (mainPanel.getDataSource().isPresent()) {
             ArrayList<T> parents = new ArrayList<>(
-                    mainPanel.getDataSource().get().getOntology().getConceptHierarchy().getParents(concept));
+                    mainPanel.getDataSource().get().getOntology().getConceptHierarchy().getParents(auditSetConcept));
             
             parents.sort(new ConceptNameComparator<>());
 
@@ -123,7 +123,7 @@ public class AuditSetRightClickMenu<T extends Concept> extends AuditReportRightC
                 reportParentErrorBtn.setFont(reportParentErrorBtn.getFont().deriveFont(14.0f));
 
                 parents.forEach((parent) -> {
-                    reportParentErrorBtn.add(createParentErrorReportMenu(parent));
+                    reportParentErrorBtn.add(createParentErrorReportMenu(auditSetConcept, parent));
                 });
 
                 errorReportBtn.add(reportParentErrorBtn);
@@ -133,12 +133,12 @@ public class AuditSetRightClickMenu<T extends Concept> extends AuditReportRightC
         return errorReportBtn;
     }
     
-    private JMenu createParentErrorReportMenu(T parent) {
+    private JMenu createParentErrorReportMenu(T auditSetConcept, T parent) {
         
         JMenu parentMenu = new JMenu(parent.getName());
         parentMenu.setFont(parentMenu.getFont().deriveFont(14.0f));
         
-        ArrayList<JComponent> components = ParentErrorReportOptions.createParentErrorComponents(mainPanel, parent);
+        ArrayList<JComponent> components = ParentErrorReportOptions.createParentErrorComponents(mainPanel, auditSetConcept, parent);
         
         components.forEach( (component) -> {
             parentMenu.add(component);

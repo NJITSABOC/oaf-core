@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  */
 public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T>> extends ErrorReportPanel<T, V> {
 
-    private Optional<ErrorReportPanelInitializer<V>> initializer = Optional.empty();
+    private Optional<ErrorReportPanelInitializer<T, V>> initializer = Optional.empty();
     
     private final ErrorDescriptionPanel<T, V> errorDescriptionPane;
 
@@ -67,7 +67,7 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
     @Override
     public void reset() {
         if(initializer.isPresent()) {
-            ErrorReportPanelInitializer<V> theInitializer = this.initializer.get();
+            ErrorReportPanelInitializer<T, V> theInitializer = this.initializer.get();
 
             this.errorDescriptionPane.setDescription(theInitializer);
             this.errorSeverityPanel.setSeverity(theInitializer.getDefaultSeverity());
@@ -80,7 +80,7 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
         return true;
     }
     
-    public void setInitializer(ErrorReportPanelInitializer<V> initializer) {
+    public void setInitializer(ErrorReportPanelInitializer<T, V> initializer) {
         this.initializer = Optional.of(initializer);
         
         reset();
@@ -98,7 +98,7 @@ public class SimpleErrorReportPanel<T extends Concept, V extends OntologyError<T
     }
 
     @Override
-    public Optional<? extends ErrorReportPanelInitializer> getInitializer() {
+    public Optional<? extends ErrorReportPanelInitializer<T, V>> getInitializer() {
         return this.initializer;
     }
 }

@@ -42,18 +42,31 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
     }
     
     public void submitError() {
-        T focusConcept = getMainPanel().getFocusConceptManager().getActiveFocusConcept();
+        
+        if(!this.getInitializer().isPresent()) {
+            // TODO: error message?
+            
+            JOptionPane.showInternalMessageDialog(
+                    this.getParent(), 
+                    "<html>An error occured when submitting this error.", 
+                    "Error reporting error", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            return;
+        }
+        
+        T erroneousConcept = this.getInitializer().get().getErroneousConcept();
         
         V error = getError();
         
         AuditSet<T> currentAuditSet = getMainPanel().getAuditDatabase().getLoadedAuditSet().get();
         
-        if(!currentAuditSet.getConcepts().contains(focusConcept)) {
+        if(!currentAuditSet.getConcepts().contains(erroneousConcept)) {
             
             int option = JOptionPane.showInternalConfirmDialog(
                     this.getParent(), 
-                    "<html>The current Focus Concept is not part of the current Audit Set.<br>Add Focus Concept to Audit Set and report error?", 
-                    "Focus Concept Not in Audit Set", 
+                    "<html>The erroneous concept is not part of the current Audit Set.<br>Add Concept to Audit Set and report error?", 
+                    "Erroneous Concept Not in Audit Set", 
                     JOptionPane.YES_NO_OPTION, 
                     JOptionPane.INFORMATION_MESSAGE);
             
@@ -65,10 +78,10 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
                 return;
             }
             
-            currentAuditSet.addConcept(focusConcept);
+            currentAuditSet.addConcept(erroneousConcept);
         }
         
-        List<OntologyError<T>> allErrors = currentAuditSet.getAllReportedErrors(focusConcept);
+        List<OntologyError<T>> allErrors = currentAuditSet.getAllReportedErrors(erroneousConcept);
         
         if (allErrors.contains(error)) {
             
@@ -82,18 +95,15 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
                     "<html>A similar error has already been reported for this concept."
                     + "<br>Please select an option.",
                     
-                    "Focus Concept Not in Audit Set",
+                    "Error Already Reproted",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
                     null,
                     options,
                     options[1]);
-            
-            System.out.println(option);
-            
 
             if(option == 0) {
-                currentAuditSet.addError(focusConcept, error);
+                currentAuditSet.addError(erroneousConcept, error);
             } else if(option == 1) {
                 
                 List<OntologyError<T>> matchedErrors = allErrors.stream().filter( (existingError) -> {
@@ -101,7 +111,7 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
                 }).collect(Collectors.toList());
                 
                 matchedErrors.forEach( (existingError) -> {
-                    currentAuditSet.updateError(focusConcept, existingError, error);
+                    currentAuditSet.updateError(erroneousConcept, existingError, error);
                 });
                 
             } else if(option == 2) {
@@ -113,7 +123,7 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
             }
             
         } else {
-            currentAuditSet.addError(focusConcept, error);
+            currentAuditSet.addError(erroneousConcept, error);
         }
         
         errorReportPanelListeners.forEach( (listener) -> {
@@ -121,7 +131,7 @@ public abstract class ErrorReportPanel<T extends Concept, V extends OntologyErro
         });
     }
     
-    public abstract Optional<? extends ErrorReportPanelInitializer> getInitializer();
+    public abstract Optional<? extends ErrorReportPanelInitializer<T, V>> getInitializer();
     
     public abstract void reset();
     public abstract boolean errorReady();

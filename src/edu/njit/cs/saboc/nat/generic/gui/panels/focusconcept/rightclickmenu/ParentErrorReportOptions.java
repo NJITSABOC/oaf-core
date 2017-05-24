@@ -17,6 +17,7 @@ public class ParentErrorReportOptions {
     
     public static <T extends Concept> ArrayList<JComponent> createParentErrorComponents(
             NATBrowserPanel<T> mainPanel,
+            T erroneousConcept,
             T parent) {
 
         ArrayList<JComponent> components = new ArrayList<>();
@@ -24,31 +25,31 @@ public class ParentErrorReportOptions {
         JMenuItem removeErroneousParentBtn = new JMenuItem("Remove parent (erroneous)");
         removeErroneousParentBtn.setFont(removeErroneousParentBtn.getFont().deriveFont(14.0f));
         removeErroneousParentBtn.addActionListener((ae) -> {
-            ErrorReportDialog.displayErroneousParentDialog(mainPanel, parent);
+            ErrorReportDialog.displayErroneousParentDialog(mainPanel, erroneousConcept, parent);
         });
 
         JMenuItem removeRedundantParentBtn = new JMenuItem("Remove parent (redundant)");
         removeRedundantParentBtn.setFont(removeRedundantParentBtn.getFont().deriveFont(14.0f));
         removeRedundantParentBtn.addActionListener((ae) -> {
-            ErrorReportDialog.displayRedundantParentErrorDialog(mainPanel, parent);
+            ErrorReportDialog.displayRedundantParentErrorDialog(mainPanel, erroneousConcept, parent);
         });
 
         JMenuItem otherParentErrorBtn = new JMenuItem("Other error with parent");
         otherParentErrorBtn.setFont(otherParentErrorBtn.getFont().deriveFont(14.0f));
         otherParentErrorBtn.addActionListener((ae) -> {
-            ErrorReportDialog.displayOtherParentErrorDialog(mainPanel, parent);
+            ErrorReportDialog.displayOtherParentErrorDialog(mainPanel, erroneousConcept, parent);
         });
 
         JMenuItem replaceParentBtn = new JMenuItem("Replace erroneous parent");
         replaceParentBtn.setFont(replaceParentBtn.getFont().deriveFont(14.0f));
         replaceParentBtn.addActionListener((ae) -> {
-            ErrorReportDialog.displayReplaceParentDialog(mainPanel, parent);
+            ErrorReportDialog.displayReplaceParentDialog(mainPanel, erroneousConcept, parent);
         });
 
         JMenuItem reportMissingParentBtn = new JMenuItem("Report missing parent");
         reportMissingParentBtn.setFont(reportMissingParentBtn.getFont().deriveFont(14.0f));
         reportMissingParentBtn.addActionListener((ae) -> {
-            ErrorReportDialog.displayMissingParentDialog(mainPanel);
+            ErrorReportDialog.displayMissingParentDialog(mainPanel, erroneousConcept);
         });
 
         components.add(removeErroneousParentBtn);

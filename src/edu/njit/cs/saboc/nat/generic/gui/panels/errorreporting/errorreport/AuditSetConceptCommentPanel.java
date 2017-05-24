@@ -96,6 +96,7 @@ public class AuditSetConceptCommentPanel<T extends Concept> extends JPanel {
     }
     
     private void submitComment() {
+        
         if (mainPanel.getAuditDatabase().getLoadedAuditSet().isPresent()) {
             AuditSet<T> auditSet = mainPanel.getAuditDatabase().getLoadedAuditSet().get();
 
@@ -109,6 +110,7 @@ public class AuditSetConceptCommentPanel<T extends Concept> extends JPanel {
                         JOptionPane.INFORMATION_MESSAGE);
 
                 if (option == JOptionPane.NO_OPTION) {
+                    
                     commentReportPanelListeners.forEach((listener) -> {
                         listener.commentSubmissionCancelled();
                     });

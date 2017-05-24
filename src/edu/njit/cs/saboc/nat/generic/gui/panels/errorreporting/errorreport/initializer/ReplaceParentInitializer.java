@@ -11,13 +11,14 @@ import edu.njit.cs.saboc.nat.generic.errorreport.error.parent.ReplaceParentError
  * 
  * @param <T>
  */
-public class ReplaceParentInitializer<T extends Concept> implements MissingConceptInitializer<T, ReplaceParentError<T>>  {
+public class ReplaceParentInitializer<T extends Concept> extends MissingConceptInitializer<T, ReplaceParentError<T>>  {
     
-    private final Ontology<T> ontology;
     private final T erroneousParent;
     
-    public ReplaceParentInitializer(Ontology<T> ontology, T erroneousParent) {
-        this.ontology = ontology;
+    public ReplaceParentInitializer(Ontology<T> ontology, T erroneousConcept, T erroneousParent) {
+        
+        super(ontology, erroneousConcept);
+        
         this.erroneousParent = erroneousParent;
     }
 
@@ -33,7 +34,7 @@ public class ReplaceParentInitializer<T extends Concept> implements MissingConce
 
     @Override
     public ReplaceParentError<T> generateError(String comment, Severity severity) {
-        return new ReplaceParentError<>(ontology, erroneousParent, comment, severity);
+        return new ReplaceParentError<>(getOntology(), erroneousParent, comment, severity);
     }
     
     @Override

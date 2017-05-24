@@ -34,7 +34,7 @@ public class ErrorDescriptionPanel<T extends Concept, V extends OntologyError<T>
         this.add(errorDescriptionPane, BorderLayout.CENTER);
     }
     
-    public void setDescription(ErrorReportPanelInitializer<V> theInitializer) {
+    public void setDescription(ErrorReportPanelInitializer<T, V> theInitializer) {
         this.errorDescriptionPane.setText(theInitializer.getStyledErrorDescriptionText());
     }
     

@@ -21,13 +21,15 @@ public class AggregatePAreaTaxonomyGenerator {
      * @param generator
      * @param aggregateGenerator
      * @param min
+     * @param isWeightedAggregated
      * @return 
      */
     public PAreaTaxonomy createAggregatePAreaTaxonomy(
             final PAreaTaxonomy sourceTaxonomy,
             final PAreaTaxonomyGenerator generator,
             final AggregateAbNGenerator<PArea, AggregatePArea> aggregateGenerator, 
-            final int min) {
+            final int min,
+            final boolean isWeightedAggregated) {
         
         if(min == 1) {
             return sourceTaxonomy;
@@ -38,7 +40,8 @@ public class AggregatePAreaTaxonomyGenerator {
                         new AggregatePAreaTaxonomyFactory(),
                         sourceTaxonomy.getPAreaHierarchy(), 
                         sourceTaxonomy.getSourceHierarchy(),
-                        min);
+                        min,
+                        isWeightedAggregated);
 
         Hierarchy<PArea> pareaHierarchy = (Hierarchy<PArea>)(Hierarchy<?>)reducedPAreaHierarchy;
 
@@ -52,9 +55,10 @@ public class AggregatePAreaTaxonomyGenerator {
         return new AggregatePAreaTaxonomy(
                 sourceTaxonomy, 
                 min, 
-                aggregatedTaxonomy);
+                aggregatedTaxonomy,
+                isWeightedAggregated);
     }
-    
+   
     /**
      * Creates an expanded subtaxonomy from the given aggregate partial-area
      * 

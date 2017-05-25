@@ -20,13 +20,15 @@ public class AggregateTANGenerator {
      * @param generator
      * @param aggregateGenerator
      * @param min
+     * @param weightedAggregated
      * @return 
      */
     public ClusterTribalAbstractionNetwork createAggregateTAN(
             final ClusterTribalAbstractionNetwork sourceTAN,
             final TribalAbstractionNetworkGenerator generator,
             final AggregateAbNGenerator<Cluster, AggregateCluster> aggregateGenerator,
-            final int min) {
+            final int min,
+            final boolean weightedAggregated) {
 
         if (min == 1) {
             return sourceTAN;
@@ -37,7 +39,8 @@ public class AggregateTANGenerator {
                         new AggregateTANFactory(),
                         sourceTAN.getClusterHierarchy(),
                         sourceTAN.getSourceHierarchy(),
-                        min);
+                        min,
+                        weightedAggregated);
 
         Hierarchy<Cluster> clusterHierarchy = (Hierarchy<Cluster>) (Hierarchy<?>) aggregateClusterHierarchy;
 
@@ -51,7 +54,9 @@ public class AggregateTANGenerator {
                 min,
                 tan.getBandTAN(),
                 tan.getClusterHierarchy(),
-                tan.getSourceHierarchy());
+                tan.getSourceHierarchy(),
+                weightedAggregated
+        );
     }
     
     

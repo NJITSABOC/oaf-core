@@ -31,13 +31,16 @@ public class AggregateAbNGenerator <
      * @param sourceHierarchy
      * @param sourceConceptHierarchy
      * @param minNodeSize The minimum size node that is preserved
+     * @param weightedAggregated flag for weighted aggregated
      * @return 
      */
     public Hierarchy<AGGREGATENODE_T> createAggregateAbN(
             AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
             Hierarchy<NODE_T> sourceHierarchy, 
             Hierarchy<Concept> sourceConceptHierarchy,
-            int minNodeSize) {
+            int minNodeSize,
+            boolean weightedAggregated
+            ) {
         
         Map<NODE_T, Hierarchy<NODE_T>> aggregateNodeMembers = new HashMap<>();
 
@@ -50,12 +53,20 @@ public class AggregateAbNGenerator <
         Map<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
         for(NODE_T group : sourceHierarchy.getNodes()) {
+
             nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
-            
+
             if (group.getConceptCount() >= minNodeSize) {
                 remainingNodes.add(group);
-            }
-
+            }else if (weightedAggregated == true) {
+                int allDescendantsConceptCount=0;
+                for (NODE_T descendant : sourceHierarchy.getDescendants(group)){
+                    allDescendantsConceptCount = allDescendantsConceptCount + descendant.getConceptCount();                
+                }
+                if((group.getConceptCount() + allDescendantsConceptCount) >= minNodeSize){
+                    remainingNodes.add(group);
+                }
+            }            
             groupSet.put(group, new HashSet<>());
         }
         

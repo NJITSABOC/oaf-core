@@ -6,7 +6,6 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -19,22 +18,25 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     
     private final PAreaTaxonomyDerivation aggregateBase;
     private final int minBound;
-    private final Concept selectedAggregatePAreaRoot; 
+    private final Concept selectedAggregatePAreaRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateRootSubtaxonomyDerivation(
             PAreaTaxonomyDerivation aggregateBase, 
             int minBound,
-            Concept selectedAggregatePAreaRoot) {
+            Concept selectedAggregatePAreaRoot,
+            boolean isWeightedAggregated) {
         
         super(aggregateBase);
 
         this.aggregateBase = aggregateBase;
         this.minBound = minBound;
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateRootSubtaxonomyDerivation(AggregateRootSubtaxonomyDerivation derivedTaxonomy) {
-        this(derivedTaxonomy.getSuperAbNDerivation(), derivedTaxonomy.getBound(), derivedTaxonomy.getSelectedRoot());
+        this(derivedTaxonomy.getSuperAbNDerivation(), derivedTaxonomy.getBound(), derivedTaxonomy.getSelectedRoot(), derivedTaxonomy.isWeightedAggregated());
     }
     
     @Override
@@ -93,7 +95,13 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
     }
 }

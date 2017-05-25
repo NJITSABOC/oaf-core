@@ -6,10 +6,10 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateAncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.AncestorTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.DescendantTargetAbN;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
-import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -25,14 +25,16 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
 
     public static final TargetAbstractionNetwork createAggregated(
             TargetAbstractionNetwork nonAggregated, 
-            int smallestNode) {
+            int smallestNode,
+            boolean isWeightedAggregated) {
         
         AggregateTargetAbNGenerator generator = new AggregateTargetAbNGenerator();
         
         return generator.createAggregateTargetAbN(nonAggregated, 
                     new TargetAbstractionNetworkGenerator(), 
                     new AggregateAbNGenerator<>(), 
-                    smallestNode);
+                    smallestNode,
+                    isWeightedAggregated);
     }
     
     public static final AggregateAncestorTargetAbN createAggregateAncestorTargetAbN(
@@ -58,6 +60,7 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
                         sourceHierarchy);
 
         int aggregateBound = ((AggregateAbstractionNetwork)superAggregateTargetAbN).getAggregateBound();
+        boolean weightedAggregate = ((AggregateAbstractionNetwork)superAggregateTargetAbN).isWeightedAggregated();
         
         AncestorTargetAbN nonaggregateAncestorTargetAbN = new AncestorTargetAbN(
                 nonAggregateTargetAbN,
@@ -71,6 +74,7 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
                 superAggregateTargetAbN,
                 selectedRoot,
                 aggregateBound,
+                weightedAggregate,
                 nonaggregateAncestorTargetAbN, 
                 aggregateAncestorSubtaxonomy);
     }
@@ -84,12 +88,14 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
                 selectedGroup.getAggregatedHierarchy().getRoot());
 
         int aggregateBound = ((AggregateAbstractionNetwork) sourceAggregatedTargetAbN).getAggregateBound();
+        boolean weightedAggregate = ((AggregateAbstractionNetwork)sourceAggregatedTargetAbN).isWeightedAggregated();
 
         TargetAbstractionNetwork aggregateRootSubtaxonomy = nonAggregateDescendantTargetAbN.getAggregated(aggregateBound);
 
         return new AggregateDescendantTargetAbN(
                 sourceAggregatedTargetAbN,
                 aggregateBound,
+                weightedAggregate,
                 nonAggregateDescendantTargetAbN,
                 aggregateRootSubtaxonomy);
     }
@@ -108,22 +114,28 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
     private final TargetAbstractionNetwork sourceTargetAbN;
     
     private final int minBound;
+    
+    private final boolean isWeightedAggregated;
 
     public AggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             int minBound,
             Hierarchy<AggregateTargetGroup> groupHierarchy,
-            Hierarchy<Concept> sourceHierarchy) {
+            Hierarchy<Concept> sourceHierarchy,
+            boolean isWeightedAggregated) {
+
 
         super(sourceTargetAbN.getFactory(),
                 groupHierarchy, 
                 sourceHierarchy, 
-                new AggregateTargetAbNDerivation(sourceTargetAbN.getDerivation(), minBound));
+                new AggregateTargetAbNDerivation(sourceTargetAbN.getDerivation(), minBound), isWeightedAggregated);
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;
         
         this.setAggregated(true);
+
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateTargetAbN(AggregateTargetAbN base) {
@@ -131,7 +143,9 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
         this(base.getNonAggregateSourceAbN(), 
                 base.getAggregateBound(), 
                 base.getNodeHierarchy(), 
-                base.getSourceHierarchy());
+                base.getSourceHierarchy(),
+                base.getAggregatedProperty().getWeighted()
+        );
     }
 
     @Override
@@ -153,7 +167,12 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
     
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode);
+        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode, false);
+    }
+    
+     @Override
+    public TargetAbstractionNetwork getWeightedAggregated(int smallestNode, boolean isWeightedAggregated) {
+        return AggregateTargetAbN.createAggregated(getNonAggregateSourceAbN(), smallestNode, isWeightedAggregated);
     }
     
     public TargetAbstractionNetwork expandAggregateTargetGroup(AggregateTargetGroup targetGroup) {
@@ -175,5 +194,14 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
                 this,
                 root);
     }
-    
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
+    }
 }

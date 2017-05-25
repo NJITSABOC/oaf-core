@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.graph.tan.ClusterTANGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel.AggregationAction;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -76,24 +77,24 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
-        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer(warningManager, (bound) -> {
-                    ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
-                    config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
-                }) {
+        AggregationAction aggregationAction = (bound, weightedAggregated) -> {
+            if (weightedAggregated) {
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getWeightedAggregated(bound, weightedAggregated);
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
+            } else {
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
+            }
+        };
+        
+        AggregateableAbNExplorationPanelInitializer initializer = 
+                new AggregateableAbNExplorationPanelInitializer(warningManager, aggregationAction) {
 
-                    @Override
-                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
-                        super.initializeAbNDisplayPanel(displayPanel, startUp);
-
-                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
-
-                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2
-                        || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
-
-                            displayPanel.addWidget(minimapPanel);
-                        }
-                    }
-                };
+            @Override
+            public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
+                super.initializeAbNDisplayPanel(displayPanel, startUp);
+            }
+        };
 
         return initializer;
     }

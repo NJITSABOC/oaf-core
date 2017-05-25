@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -16,16 +15,18 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     
     private final PAreaTaxonomyDerivation nonAggregateSourceDerivation;
     private final int bound;
+    private final boolean isWeightedAggregated;
     
-    public AggregatePAreaTaxonomyDerivation(PAreaTaxonomyDerivation nonAggregateSourceDerivation, int bound) {
+    public AggregatePAreaTaxonomyDerivation(PAreaTaxonomyDerivation nonAggregateSourceDerivation, int bound, boolean isWeightedAggregated) {
         super(nonAggregateSourceDerivation);
         
         this.nonAggregateSourceDerivation = nonAggregateSourceDerivation;
         this.bound = bound;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregatePAreaTaxonomyDerivation(AggregatePAreaTaxonomyDerivation deriveTaxonomy) {
-        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getBound());
+        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getBound(), deriveTaxonomy.isWeightedAggregated());
     }
     
     @Override
@@ -64,7 +65,13 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
         result.put("ClassName", "AggregatePAreaTaxonomyDerivation");       
         result.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
         result.put("Bound", bound);
+        result.put("isWeightedAggregated", isWeightedAggregated);
 
         return result;
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
     }
 }

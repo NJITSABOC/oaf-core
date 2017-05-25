@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.tan.AncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
@@ -17,13 +18,15 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
     
     private final ClusterTribalAbstractionNetwork nonAggregateSourceTAN;
     private final int minBound;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorSubTAN(
             ClusterTribalAbstractionNetwork aggregateSourceTAN, 
             AggregateCluster sourceCluster,
             int aggregateBound, 
             ClusterTribalAbstractionNetwork nonAggregateRootTAN,
-            ClusterTribalAbstractionNetwork subTAN) {
+            ClusterTribalAbstractionNetwork subTAN,
+            boolean isWeightedAggregated) {
         
         super(aggregateSourceTAN, 
                 sourceCluster, 
@@ -33,10 +36,12 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 new AggregateAncestorSubTANDerivation(
                         aggregateSourceTAN.getDerivation(), 
                         aggregateBound, 
-                        sourceCluster.getRoot()));
+                        sourceCluster.getRoot(),
+                        isWeightedAggregated));
         
         this.minBound = aggregateBound;
         this.nonAggregateSourceTAN = nonAggregateRootTAN;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
     
     public AggregateAncestorSubTAN(AggregateAncestorSubTAN subTAN) {
@@ -45,7 +50,8 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 subTAN.getSelectedRoot(), 
                 subTAN.getAggregateBound(), 
                 subTAN.getNonAggregateSourceAbN(), 
-                subTAN);
+                subTAN,
+                subTAN.getAggregatedProperty().getWeighted());
     }
 
     @Override
@@ -65,7 +71,12 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
         
     @Override
     public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode);
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
+    }
+    
+    @Override
+    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean isWeightedAggregated) {
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, isWeightedAggregated);
     }
 
     @Override
@@ -90,6 +101,11 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                 this.getNonAggregateSourceAbN(), 
                 this.getSuperAbN(), 
                 root);
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
     }
     
 }

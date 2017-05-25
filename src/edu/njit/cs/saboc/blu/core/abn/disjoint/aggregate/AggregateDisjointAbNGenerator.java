@@ -24,7 +24,8 @@ public class AggregateDisjointAbNGenerator<
     public DisjointAbstractionNetwork createAggregateDisjointAbN(
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
             AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator,
-            int min) {
+            int min,
+            boolean weightedAggregated) {
 
         if (min == 1) {
             return sourceDisjointAbN;
@@ -34,7 +35,8 @@ public class AggregateDisjointAbNGenerator<
                 = aggregateGenerator.createAggregateAbN(new AggregateDisjointAbNFactory(),
                         (Hierarchy<DisjointNode<PARENTNODE_T>>)sourceDisjointAbN.getNodeHierarchy(),
                         sourceDisjointAbN.getSourceHierarchy(),
-                        min);
+                        min,
+                        weightedAggregated);
 
         AggregateDisjointAbstractionNetwork<PARENTABN_T, PARENTNODE_T> aggregateDisjointAbN = new AggregateDisjointAbstractionNetwork<>(
                 sourceDisjointAbN,
@@ -44,7 +46,9 @@ public class AggregateDisjointAbNGenerator<
                 sourceDisjointAbN.getSourceHierarchy(),
                 sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
-                sourceDisjointAbN.getOverlappingNodes());
+                sourceDisjointAbN.getOverlappingNodes(),
+                weightedAggregated
+        );
 
         return aggregateDisjointAbN;
     }

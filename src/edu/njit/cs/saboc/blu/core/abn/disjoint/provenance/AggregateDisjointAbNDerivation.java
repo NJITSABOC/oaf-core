@@ -17,15 +17,18 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     
     private final DisjointAbNDerivation nonAggregateDerivation;
     private final int aggregateBound;
+    private final boolean isWeightedAggregated;
     
     public AggregateDisjointAbNDerivation(
             DisjointAbNDerivation nonAggregateDerivation, 
-            int aggregateBound) {
+            int aggregateBound,
+            boolean isWeightedAggregated) {
         
         super(nonAggregateDerivation);
         
         this.nonAggregateDerivation = nonAggregateDerivation;
         this.aggregateBound = aggregateBound;
+        this.isWeightedAggregated = isWeightedAggregated;
     }
 
     @Override
@@ -65,7 +68,13 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
         result.put("ClassName", "AggregateDisjointAbNDerivation");       
         result.put("BaseDerivation", nonAggregateDerivation.serializeToJSON());   
         result.put("Bound", aggregateBound);
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
     }    
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
 }

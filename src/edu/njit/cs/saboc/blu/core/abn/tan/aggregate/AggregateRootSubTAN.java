@@ -108,4 +108,9 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
         return new AggregatedProperty(minBound, isWeightedAggregated);
     }
 
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
+    }
+
 }

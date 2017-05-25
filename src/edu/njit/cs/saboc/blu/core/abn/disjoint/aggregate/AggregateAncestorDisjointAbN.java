@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
@@ -45,7 +44,6 @@ public class AggregateAncestorDisjointAbN<
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
         this.aggregateBound = aggregateBound;
         this.isWeightedAggregated = isWeightedAggregated;
-        
     }
 
     @Override
@@ -81,5 +79,10 @@ public class AggregateAncestorDisjointAbN<
     @Override
     public AggregatedProperty getAggregatedProperty(){
         return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
     }
 }

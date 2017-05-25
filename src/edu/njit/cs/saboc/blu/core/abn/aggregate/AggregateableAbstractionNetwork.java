@@ -12,7 +12,9 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 public interface AggregateableAbstractionNetwork<ABN_T extends AbstractionNetwork> {
 
     public boolean isAggregated();
+    
     public ABN_T getAggregated(int smallestNode);
+    
     public ABN_T getWeightedAggregated(int smallestNode, boolean weightedAggregated);
     
 }

@@ -23,7 +23,11 @@ import edu.njit.cs.saboc.blu.core.ontology.Concept;
 public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea> 
         implements AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> {
            
-    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(PAreaTaxonomy nonAggregateTaxonomy, int bound, boolean isWeightedAggregated) {
+    public static final PAreaTaxonomy generateAggregatePAreaTaxonomy(
+            PAreaTaxonomy nonAggregateTaxonomy, 
+            int bound, 
+            boolean isWeightedAggregated) {
+        
         AggregatePAreaTaxonomyGenerator generator = new AggregatePAreaTaxonomyGenerator();
         
         return generator.createAggregatePAreaTaxonomy(
@@ -176,5 +180,10 @@ public class AggregatePAreaTaxonomy extends PAreaTaxonomy<AggregatePArea>
     @Override
     public AggregatedProperty getAggregatedProperty(){
         return new AggregatedProperty(minBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
     }
 }

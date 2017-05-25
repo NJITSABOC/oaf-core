@@ -3,13 +3,13 @@ package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateAncestorSubTAN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.AncestorTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.DescendantTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
+import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateTargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 
@@ -128,7 +128,10 @@ public class AggregateTargetAbN extends TargetAbstractionNetwork<AggregateTarget
         super(sourceTargetAbN.getFactory(),
                 groupHierarchy, 
                 sourceHierarchy, 
-                new AggregateTargetAbNDerivation(sourceTargetAbN.getDerivation(), minBound), isWeightedAggregated);
+                new AggregateTargetAbNDerivation(
+                        sourceTargetAbN.getDerivation(), 
+                        minBound, 
+                        isWeightedAggregated));
         
         this.sourceTargetAbN = sourceTargetAbN;
         this.minBound = minBound;

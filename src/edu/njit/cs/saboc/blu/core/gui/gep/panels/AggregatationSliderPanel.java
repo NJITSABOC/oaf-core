@@ -38,7 +38,6 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private final AggregationAction aggregationAction;
     
-//    private final Dimension panelSize = new Dimension(150, 48);
     private final Dimension panelSize = new Dimension(150, 70);
     
     private int currentBound = 1;
@@ -47,7 +46,10 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private boolean isWeightedAggregated = false;
     
-    public AggregatationSliderPanel(AbNDisplayPanel displayPanel, AggregationAction aggregationAction) {
+    public AggregatationSliderPanel(
+            AbNDisplayPanel displayPanel, 
+            AggregationAction aggregationAction) {
+        
         super(displayPanel);
         
         this.aggregationAction = aggregationAction;
@@ -66,13 +68,12 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             if (initialized && !aggregationSlider.getValueIsAdjusting()) {
                 setBound(newValue, isWeightedAggregated);
 
-                displayCurrentBound();  
-                displayCurrentWeightedCheckBox();
+                displayCurrentBound();
             } else {
                 displayBound(newValue);
-                displayCurrentWeightedCheckBox();
             }
             
+            displayCurrentWeightedCheckBox();
 
             // Hack solution to preventing slider listeners from triggering when programmatically setting 
             // bound value on initialization
@@ -98,30 +99,41 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             displayCurrentWeightedCheckBox();
         });
         
-        aggregationCheckBox = new JCheckBox("Weighted");
-        aggregationCheckBox.addItemListener((ie) -> { 
-            if (ie.getStateChange()==ItemEvent.SELECTED){
+        aggregationCheckBox = new JCheckBox("Use Weighted");
+        aggregationCheckBox.setToolTipText("<html>When applying aggregation consider "
+                + "<p> the size of the subhierarchy rooted at each node.");
+        
+        aggregationCheckBox.addItemListener((ie) -> {
+
+            if (aggregationCheckBox.isSelected()) {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
-                if(currentBound != 1) setBound(aggregationSlider.getValue(), true);
-                isWeightedAggregated = true;                
-            }
-            else{
+
+                if (currentBound != 1) {
+                    setBound(aggregationSlider.getValue(), true);
+                }
+                
+                isWeightedAggregated = true;
+            } else {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
+
                 setBound(aggregationSlider.getValue(), false);
+                
                 isWeightedAggregated = false;
-            } 
+            }
         });
         
-        this.add(aggregationCheckBox, BorderLayout.NORTH);
         this.add(aggregationSlider, BorderLayout.CENTER);
-        this.add(txtCurrentBound, BorderLayout.EAST);
+        this.add(aggregationCheckBox, BorderLayout.NORTH);
         
+        this.add(txtCurrentBound, BorderLayout.EAST);
     }
     
     private void setBound(int bound, boolean weightedAggregated) {
+        
         if (currentBound != bound || isWeightedAggregated != weightedAggregated) {
             aggregationAction.createAndDisplayAggregateAbN(bound, weightedAggregated);
         }
+        
     }
     
     private void displayCurrentBound() {
@@ -184,6 +196,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         int bound = 1;
         
         for(int i = 1; i <= max[0]; i++) {
+            
             if(sizeDistribution.containsKey(i)) {
                 cumulative += sizeDistribution.get(i);
             }

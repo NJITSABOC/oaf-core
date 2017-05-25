@@ -16,24 +16,30 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     implements RootedSubAbNDerivation<TargetAbNDerivation>, AggregateAbNDerivation<TargetAbNDerivation> {
     
     private final TargetAbNDerivation aggregateBase;
+    
     private final int minBound;
+    private final boolean isWeightedAggregate;
+    
     private final Concept selectedAggregateTargetGroupRoot;
     
     public AggregateAncestorTargetAbNDerivation(
             TargetAbNDerivation aggregateBase, 
             int minBound,
+            boolean isWeightedAggregate,
             Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
         this.minBound = minBound;
+        this.isWeightedAggregate = isWeightedAggregate;
         this.selectedAggregateTargetGroupRoot = selectedAggregateClusterRoot;
     }
     
     public AggregateAncestorTargetAbNDerivation(AggregateAncestorTargetAbNDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
                 deriveTaxonomy.getBound(), 
+                deriveTaxonomy.isWeightedAggregated(),
                 deriveTaxonomy.getSelectedRoot());
     }
 
@@ -51,7 +57,7 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     public int getBound() {
         return minBound;
     }
-
+    
     @Override
     public TargetAbNDerivation getNonAggregateSourceDerivation() {
         AggregateAbNDerivation<TargetAbNDerivation> derivedAggregate = (AggregateAbNDerivation<TargetAbNDerivation>)this.getSuperAbNDerivation();
@@ -96,4 +102,9 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
         
         return result;
     }   
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregate;
+    }
 }

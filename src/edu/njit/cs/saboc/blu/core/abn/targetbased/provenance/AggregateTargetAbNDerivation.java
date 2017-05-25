@@ -16,7 +16,11 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     private final int bound;
     private final boolean isWeightedAggregated;
     
-    public AggregateTargetAbNDerivation(TargetAbNDerivation nonAggregateSource, int bound, boolean isWeightedAggregated) {
+    public AggregateTargetAbNDerivation(
+            TargetAbNDerivation nonAggregateSource, 
+            int bound, 
+            boolean isWeightedAggregated) {
+        
         super(nonAggregateSource);
         
         this.nonAggregateSource = nonAggregateSource;

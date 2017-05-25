@@ -16,18 +16,23 @@ public class AggregateDescendantTargetAbNDerivation extends TargetAbNDerivation
     implements RootedSubAbNDerivation<TargetAbNDerivation>, AggregateAbNDerivation<TargetAbNDerivation> {
     
     private final TargetAbNDerivation aggregateBase;
+    
     private final int minBound;
+    private final boolean isWeightedAggregated;
+    
     private final Concept selectedAggregateClusterRoot; 
     
     public AggregateDescendantTargetAbNDerivation(
             TargetAbNDerivation aggregateBase, 
             int minBound,
+            boolean isWeightedAggregated,
             Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
 
         this.aggregateBase = aggregateBase;
         this.minBound = minBound;
+        this.isWeightedAggregated = isWeightedAggregated;
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
     }
     
@@ -36,6 +41,7 @@ public class AggregateDescendantTargetAbNDerivation extends TargetAbNDerivation
         
         this(derivedTargetAbN.getSuperAbNDerivation(), 
                 derivedTargetAbN.getBound(), 
+                derivedTargetAbN.isWeightedAggregated(),
                 derivedTargetAbN.getSelectedRoot());
     }
     
@@ -98,5 +104,10 @@ public class AggregateDescendantTargetAbNDerivation extends TargetAbNDerivation
         result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
         
         return result;
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
     }
 }

@@ -169,5 +169,10 @@ public class AggregateDisjointAbstractionNetwork<
     public AggregatedProperty getAggregatedProperty(){
         return new AggregatedProperty(aggregateBound, isWeightedAggregated);
     }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
+    }
     
 }

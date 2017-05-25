@@ -34,7 +34,11 @@ public abstract class AreaTaxonomyInitializer extends PAreaTaxonomyInitializer {
     }
 
     @Override
-    public AbstractionNetworkGraph getGraph(JFrame parentFrame, PAreaTaxonomyConfiguration config, SinglyRootedNodeLabelCreator labelCreator) {
+    public AbstractionNetworkGraph getGraph(
+            JFrame parentFrame, 
+            PAreaTaxonomyConfiguration config, 
+            SinglyRootedNodeLabelCreator labelCreator) {
+        
         return new AreaTaxonomyGraph(parentFrame, config.getPAreaTaxonomy(), labelCreator, config);
     }
 }

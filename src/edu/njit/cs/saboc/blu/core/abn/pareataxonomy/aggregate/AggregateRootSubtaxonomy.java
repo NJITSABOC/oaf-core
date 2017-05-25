@@ -16,9 +16,9 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
         implements AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> {
     
     private final RootSubtaxonomy nonAggregatedRootSubtaxonomy;
+    
     private final int aggregateBound;
     private final boolean isWeightedAggregated;
-    
     
     public AggregateRootSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
@@ -91,5 +91,10 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     @Override
     public AggregatedProperty getAggregatedProperty(){
         return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
     }
 }

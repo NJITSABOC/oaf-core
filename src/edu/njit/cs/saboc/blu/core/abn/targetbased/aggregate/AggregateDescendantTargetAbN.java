@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.DescendantTargetAbN;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.AggregateDescendantTargetAbNDerivation;
@@ -14,11 +15,14 @@ public class AggregateDescendantTargetAbN extends DescendantTargetAbN<AggregateT
         implements AggregateAbstractionNetwork<AggregateTargetGroup, TargetAbstractionNetwork> {
     
     private final TargetAbstractionNetwork nonAggregateSourceTAN;
+    
     private final int minBound;
+    private final boolean weightedAggregate;
     
     public AggregateDescendantTargetAbN(
             TargetAbstractionNetwork aggregateSourceTargetAbN, 
             int aggregateBound, 
+            boolean weightedAggregate,
             TargetAbstractionNetwork nonAggregateTargetAbN,
             TargetAbstractionNetwork<?> subTAN) {
         
@@ -29,19 +33,24 @@ public class AggregateDescendantTargetAbN extends DescendantTargetAbN<AggregateT
                 new AggregateDescendantTargetAbNDerivation(
                         aggregateSourceTargetAbN.getDerivation(), 
                         aggregateBound, 
+                        weightedAggregate,
                         subTAN.getTargetGroupHierarchy().getRoot().getRoot())
         );
         
         
         this.minBound = aggregateBound;
+        this.weightedAggregate = weightedAggregate;
+        
         this.nonAggregateSourceTAN = nonAggregateTargetAbN;
         
         this.setAggregated(true);
     }
     
     public AggregateDescendantTargetAbN(AggregateDescendantTargetAbN subTAN) {
+        
         this(subTAN.getSuperAbN(), 
                 subTAN.getAggregateBound(), 
+                subTAN.isWeightedAggregate(),
                 subTAN.getNonAggregateSourceAbN(), 
                 subTAN);
     }
@@ -55,6 +64,10 @@ public class AggregateDescendantTargetAbN extends DescendantTargetAbN<AggregateT
     public int getAggregateBound() {
         return minBound;
     }
+    
+    public boolean isWeightedAggregate() {
+        return this.weightedAggregate;
+    }
 
     @Override
     public boolean isAggregated() {
@@ -63,7 +76,7 @@ public class AggregateDescendantTargetAbN extends DescendantTargetAbN<AggregateT
         
     @Override
     public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), smallestNode);
+        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), smallestNode, false);
     }
 
     @Override
@@ -86,5 +99,15 @@ public class AggregateDescendantTargetAbN extends DescendantTargetAbN<AggregateT
                 this.getNonAggregateSourceAbN(),
                 this,
                 root);
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(this.minBound, this.weightedAggregate);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.weightedAggregate;
     }
 }

@@ -107,5 +107,9 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
     public AggregatedProperty getAggregatedProperty() {
         return new AggregatedProperty(minBound, isWeightedAggregated);
     }
-    
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
+    }
 }

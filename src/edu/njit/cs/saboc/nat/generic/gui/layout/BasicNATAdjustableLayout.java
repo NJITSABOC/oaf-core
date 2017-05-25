@@ -44,7 +44,7 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
         descendantPanel = new DescendantsPanel<>(mainPanel);
         
         JSplitPane leftPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
-        leftPane.setDividerLocation(800);
+        leftPane.setDividerLocation(650);
         
         leftPane.setTopComponent(searchAndHistoryPanel);
         leftPane.setBottomComponent(siblingPanel);
@@ -55,7 +55,6 @@ public class BasicNATAdjustableLayout<T extends Concept> extends BaseNATAdjustab
         topPane.setDividerLocation(250);
         
         topPane.setTopComponent(ancestorPanel);
-        
         
         JSplitPane bottomPane = BaseNATAdjustableLayout.createStyledSplitPane(JSplitPane.VERTICAL_SPLIT);
         bottomPane.setDividerLocation(170);

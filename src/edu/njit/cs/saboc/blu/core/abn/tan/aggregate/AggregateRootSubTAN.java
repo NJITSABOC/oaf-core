@@ -70,12 +70,7 @@ public class AggregateRootSubTAN extends RootSubTAN<AggregateCluster>
     }
         
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
-    }
-    
-    @Override
-    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean isWeightedAggregated) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
         return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
     }
 

@@ -7,7 +7,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel.AggregationAction;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AggregateSinglyRootedNodeLabelCreator;
@@ -77,14 +76,9 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
-        AggregationAction aggregationAction = (bound, weightedAggregated) -> {
-            if (weightedAggregated) {
-                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getWeightedAggregated(bound, weightedAggregated);
-                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
-            } else {
-                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound);
-                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);
-            }
+        AggregationAction aggregationAction = (bound, weightedAggregated) -> {            
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound, weightedAggregated);
+                config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);     
         };
         
         AggregateableAbNExplorationPanelInitializer initializer = 

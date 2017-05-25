@@ -67,7 +67,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         int aggregateBound = ((AggregateAbstractionNetwork)sourceAggregatedClusterTAN).getAggregateBound();
         boolean isWeightedAggregated = ((AggregateAbstractionNetwork)sourceAggregatedClusterTAN).getAggregatedProperty().getWeighted();
         
-        ClusterTribalAbstractionNetwork aggregateRootSubtaxonomy = nonAggregateRootSubtaxonomy.getAggregated(aggregateBound);
+        ClusterTribalAbstractionNetwork aggregateRootSubtaxonomy = nonAggregateRootSubtaxonomy.getAggregated(aggregateBound, isWeightedAggregated);
         
         return new AggregateRootSubTAN(
                 sourceAggregatedClusterTAN,
@@ -114,7 +114,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
                 nonAggregatedAncestorSubTAN.getClusterHierarchy(), 
                 nonAggregatedAncestorSubTAN.getSourceHierarchy()); 
         
-        ClusterTribalAbstractionNetwork aggregateAncestorSubtaxonomy = subTAN.getAggregated(aggregateBound);
+        ClusterTribalAbstractionNetwork aggregateAncestorSubtaxonomy = subTAN.getAggregated(aggregateBound, isWeightedAggregated);
         
         return new AggregateAncestorSubTAN(
                 superAggregateTAN,
@@ -169,12 +169,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, false);
-    }
-    
-    @Override
-    public ClusterTribalAbstractionNetwork getWeightedAggregated(int smallestNode, boolean isWeightedAggregated) {
+    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
         return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, isWeightedAggregated);
     }
 

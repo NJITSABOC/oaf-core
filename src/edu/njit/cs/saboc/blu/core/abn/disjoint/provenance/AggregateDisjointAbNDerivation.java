@@ -43,7 +43,7 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
 
     @Override
     public DisjointAbstractionNetwork getAbstractionNetwork() {
-        return nonAggregateDerivation.getAbstractionNetwork().getAggregated(aggregateBound);
+        return nonAggregateDerivation.getAbstractionNetwork().getAggregated(aggregateBound, isWeightedAggregated);
     }
 
     @Override

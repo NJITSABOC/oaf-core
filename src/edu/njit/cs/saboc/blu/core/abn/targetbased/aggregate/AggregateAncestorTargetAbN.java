@@ -17,13 +17,13 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     
     private final int minBound;
     
-    private final boolean weightedAggregate;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorTargetAbN(
             TargetAbstractionNetwork aggregateSourceTAN, 
             AggregateTargetGroup sourceGroup,
             int aggregateBound, 
-            boolean weightedAggregate,
+            boolean isWeightedAggregated,
             TargetAbstractionNetwork nonAggregateSourceTargetAbN,
             TargetAbstractionNetwork subTAN) {
         
@@ -34,11 +34,11 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
                 new AggregateAncestorTargetAbNDerivation(
                         aggregateSourceTAN.getDerivation(), 
                         aggregateBound, 
-                        weightedAggregate,
+                        isWeightedAggregated,
                         sourceGroup.getRoot()));
         
         this.minBound = aggregateBound;
-        this.weightedAggregate = weightedAggregate;
+        this.isWeightedAggregated = isWeightedAggregated;
         
         this.nonAggregateSourceTargetAbN = nonAggregateSourceTargetAbN;
         
@@ -66,7 +66,7 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     }
     
     public boolean isWeightedAggregated() {
-        return this.weightedAggregate;
+        return this.isWeightedAggregated;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     }
         
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), smallestNode, false);
+    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
+        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), smallestNode, isWeightedAggregated);
     }
 
     @Override
@@ -102,6 +102,6 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(this.minBound, this.weightedAggregate);
+        return new AggregatedProperty(this.minBound, this.isWeightedAggregated);
     }
 }

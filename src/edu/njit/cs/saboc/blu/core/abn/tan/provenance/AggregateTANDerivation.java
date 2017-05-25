@@ -47,7 +47,7 @@ public class AggregateTANDerivation extends ClusterTANDerivation
 
     @Override
     public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound);
+        return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound, isWeightedAggregated);
     }
     
     @Override

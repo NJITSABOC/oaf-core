@@ -153,11 +153,6 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
                 
         return new AncestorSubTAN(this, source, tan.getBandTAN(), tan.getClusterHierarchy(), tan.getSourceHierarchy());
     }
-
-    @Override
-    public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, smallestNode, false);
-    }
         
     @Override
     public boolean isAggregated() {
@@ -165,7 +160,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork<T> getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+    public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode, boolean weightedAggregated) {
         return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, smallestNode, weightedAggregated);
     }
 }

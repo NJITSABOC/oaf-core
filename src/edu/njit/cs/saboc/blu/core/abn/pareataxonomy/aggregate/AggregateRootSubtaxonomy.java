@@ -67,14 +67,9 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     public PAreaTaxonomy expandAggregateNode(AggregatePArea parea) {
        return AggregatePAreaTaxonomy.generateExpandedSubtaxonomy(this, parea);
     }
-    
+
     @Override
-    public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, false);
-    }
-      
-    @Override
-    public PAreaTaxonomy getWeightedAggregated(int aggregateBound, boolean isWeightedAggregated) {
+    public PAreaTaxonomy getAggregated(int aggregateBound, boolean isWeightedAggregated) {
         return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound, isWeightedAggregated);
     }
 

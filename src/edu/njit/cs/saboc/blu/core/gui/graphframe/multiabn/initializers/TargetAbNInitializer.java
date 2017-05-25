@@ -99,12 +99,7 @@ public abstract class TargetAbNInitializer implements GraphFrameInitializer<Targ
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TargetAbNConfiguration config) {
 
         return new AggregateableAbNExplorationPanelInitializer(warningManager, (bound, weightedAggregated) -> {
-            TargetAbstractionNetwork aggregateAbN = config.getTargetAbstractionNetwork().getAggregated(bound);
-
-            if (weightedAggregated) {
-                aggregateAbN = config.getTargetAbstractionNetwork().getWeightedAggregated(bound, weightedAggregated);
-            }
-            
+            TargetAbstractionNetwork aggregateAbN = config.getTargetAbstractionNetwork().getAggregated(bound, weightedAggregated);
             config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(aggregateAbN);
         });
     }

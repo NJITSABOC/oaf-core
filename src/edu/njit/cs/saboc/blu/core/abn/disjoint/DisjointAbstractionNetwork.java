@@ -171,23 +171,14 @@ public class DisjointAbstractionNetwork<
     public boolean isAggregated() {
         return isAggregated;
     }
-
-    @Override
-    public DisjointAbstractionNetwork getAggregated(int smallestNode) {
-        AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
-        
-        AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = new AggregateAbNGenerator<>();
-        
-        return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode, false);
-    }
     
     @Override
-    public DisjointAbstractionNetwork getWeightedAggregated(int smallestNode, boolean weightedAggregated) {
+    public DisjointAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
         AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
         
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode, weightedAggregated);
+        return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode, isWeightedAggregated);
     }
     
     

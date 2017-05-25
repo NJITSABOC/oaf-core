@@ -42,7 +42,7 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     public TargetAbstractionNetwork getAbstractionNetwork() {
         TargetAbstractionNetwork targetAbN = this.getNonAggregateSourceDerivation().getAbstractionNetwork();
         
-        return targetAbN.getAggregated(bound);
+        return targetAbN.getAggregated(bound, isWeightedAggregated);
     }
 
     @Override

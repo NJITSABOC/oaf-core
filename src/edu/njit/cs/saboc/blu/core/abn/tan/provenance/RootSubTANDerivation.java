@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -46,8 +47,8 @@ public class RootSubTANDerivation extends ClusterTANDerivation
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        ClusterTribalAbstractionNetwork tan = base.getAbstractionNetwork();
+    public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        ClusterTribalAbstractionNetwork tan = base.getAbstractionNetwork(ontology);
         
         Set<Cluster> clusters = tan.getNodesWith(clusterRootConcept);
         

@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.HashSet;
 import java.util.Set;
 import org.json.simple.JSONArray;
@@ -33,7 +34,7 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
             AbNDerivation<PartitionedAbstractionNetwork> parentAbNDerivation, 
             Set<Concept> sourceNodeRoots) {
         
-        super(factory, parentAbNDerivation.getSourceOntology());
+        super(factory);
         
         this.factory = factory;
         this.parentAbNDerivation = parentAbNDerivation;
@@ -58,8 +59,8 @@ public class SimpleDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     }
 
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        PartitionedAbstractionNetwork partitionedAbN = parentAbNDerivation.getAbstractionNetwork();
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        PartitionedAbstractionNetwork partitionedAbN = parentAbNDerivation.getAbstractionNetwork(ontology);
         
         Set<T> overlappingNodes = new HashSet<>();
         

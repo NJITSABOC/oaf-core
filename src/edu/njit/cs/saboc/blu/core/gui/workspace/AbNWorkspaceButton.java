@@ -4,6 +4,7 @@ package edu.njit.cs.saboc.blu.core.gui.workspace;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.exportabn.ExportAbNUtilities;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFRecentlyOpenedFileManager;
 import edu.njit.cs.saboc.blu.core.utils.toolstate.RecentlyOpenedFile;
 import java.awt.Image;
 import java.io.File;
@@ -64,32 +65,33 @@ public class AbNWorkspaceButton extends JButton {
         }
         
         menu.add(new JSeparator());
-
-        if (!graphFrame.getWorkspaceManager().getRecentWorkspaceFileManager().getRecentlyOpenedFiles().isEmpty()) {
+        
+        if(graphFrame.getCurrentInitializers().isPresent()) {
+            OAFRecentlyOpenedFileManager recentWorkspaceFileManager = graphFrame.getCurrentInitializers().get().getRecentAbNWorkspaceFiles();
             
-            ArrayList<RecentlyOpenedFile> recentWorkspaces = graphFrame.getWorkspaceManager().
-                    getRecentWorkspaceFileManager().getRecentlyOpenedFiles(5);
+            if (!recentWorkspaceFileManager.getRecentlyOpenedFiles().isEmpty()) {
+                ArrayList<RecentlyOpenedFile> recentWorkspaces = recentWorkspaceFileManager.getRecentlyOpenedFiles(5);
 
-            recentWorkspaces.forEach( (workspaceFile) -> {
+                recentWorkspaces.forEach((workspaceFile) -> {
 
-                SimpleDateFormat dateFormatter = new SimpleDateFormat();
-                String lastOpenedStr = dateFormatter.format(workspaceFile.getDate());
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat();
+                    String lastOpenedStr = dateFormatter.format(workspaceFile.getDate());
 
-                JMenuItem item = new JMenuItem(
-                        String.format("<html><font size = '4' color = 'blue'><b>%s</b></font> (Last opened: %s)",
-                                workspaceFile.getFile().getName(),
-                                lastOpenedStr));
+                    JMenuItem item = new JMenuItem(
+                            String.format("<html><font size = '4' color = 'blue'><b>%s</b></font> (Last opened: %s)",
+                                    workspaceFile.getFile().getName(),
+                                    lastOpenedStr));
 
-                item.addActionListener((ae) -> {
-                    loadWorkspaceFromFile(workspaceFile.getFile());
+                    item.addActionListener((ae) -> {
+                        loadWorkspaceFromFile(workspaceFile.getFile());
+                    });
+
+                    menu.add(item);
                 });
 
-                menu.add(item);
-            });
-
-            menu.add(new JSeparator());
+                menu.add(new JSeparator());
+            }
         }
-
 
         JMenuItem saveWorkspace = new JMenuItem("Create New Workspace");
         saveWorkspace.setFont(saveWorkspace.getFont().deriveFont(14.0f));

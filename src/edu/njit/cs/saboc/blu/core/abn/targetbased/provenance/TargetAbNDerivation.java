@@ -25,14 +25,12 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
     private final InheritableProperty propertyType;
     private final Concept targetHierarchyRoot;
     
-    public TargetAbNDerivation(Ontology ont, 
+    public TargetAbNDerivation(
             TargetAbstractionNetworkFactory factory,
             Concept sourceHierarchyRoot, 
             InheritableProperty propertyType, 
             Concept targetHierarchyRoot) {
-        
-        super(ont);
-        
+
         this.factory = factory;
         
         this.sourceHierarchyRoot = sourceHierarchyRoot;
@@ -41,8 +39,7 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
     }
     
     public TargetAbNDerivation(TargetAbNDerivation targetAbN) {
-        this(targetAbN.getSourceOntology(), 
-                targetAbN.getFactory(), 
+        this(targetAbN.getFactory(), 
                 targetAbN.getSourceHierarchyRoot(), 
                 targetAbN.getPropertyType(), 
                 targetAbN.getTargetHierarchyRoot());
@@ -70,14 +67,14 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
     }
 
     @Override
-    public TargetAbstractionNetwork getAbstractionNetwork() {
+    public TargetAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
         TargetAbstractionNetworkGenerator generator = new TargetAbstractionNetworkGenerator();
 
         TargetAbstractionNetwork<TargetGroup> targetAbN = generator.deriveTargetAbstractionNetwork(
                 factory, 
-                getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(sourceHierarchyRoot), 
+                ontology.getConceptHierarchy().getSubhierarchyRootedAt(sourceHierarchyRoot), 
                 propertyType, 
-                getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot));
+                ontology.getConceptHierarchy().getSubhierarchyRootedAt(targetHierarchyRoot));
         
         return targetAbN;
     }

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.buttons.PopupToggleButton;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.AbNGraphFrameInitializers;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryParser.AbNDerivationHistoryParseException;
 import java.awt.BorderLayout;
@@ -10,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -29,10 +31,11 @@ public class AbNHistoryButton extends PopupToggleButton {
     
     private final AbNDerivationHistory derivationHistory;
     
+    private Optional<AbNGraphFrameInitializers> optInitializers = Optional.empty();
+    
     public AbNHistoryButton(
             MultiAbNGraphFrame graphFrame, 
-            AbNDerivationHistory derivationHistory,
-            AbNDerivationParser abnParser) {
+            AbNDerivationHistory derivationHistory) {
         
         super(graphFrame.getParentFrame(), "History");
 
@@ -41,6 +44,7 @@ public class AbNHistoryButton extends PopupToggleButton {
         this.derivationHistory = derivationHistory;
 
         this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
+        
         displayHistory(derivationHistory);
         
         this.addActionListener( (ae) -> {
@@ -76,8 +80,13 @@ public class AbNHistoryButton extends PopupToggleButton {
 
         JButton loadBtn = new JButton("Load History");
         
-        loadBtn.addActionListener( (ae) -> {
-            loadHistoryFromFile(graphFrame, derivationHistory, abnParser);
+        loadBtn.addActionListener((ae) -> {
+            
+            if(!this.optInitializers.isPresent()) {
+                return;
+            }
+            
+            loadHistoryFromFile(graphFrame, derivationHistory, this.optInitializers.get().getAbNParser());
         });
 
         JPanel subPanel = new JPanel();
@@ -89,6 +98,18 @@ public class AbNHistoryButton extends PopupToggleButton {
         historyPanel.add(subPanel, BorderLayout.SOUTH);
 
         this.setPopupContent(historyPanel);
+    }
+    
+    public void setInitializers(AbNGraphFrameInitializers initializers) {
+        this.optInitializers = Optional.of(initializers);
+        
+        this.derivationHistoryPanel.setInitializers(initializers);
+    }
+    
+    public void clearInitializers() {
+        this.optInitializers = Optional.empty();
+        
+        this.derivationHistoryPanel.clearInitializers();
     }
     
     public final void displayHistory(AbNDerivationHistory derivationHistory) {

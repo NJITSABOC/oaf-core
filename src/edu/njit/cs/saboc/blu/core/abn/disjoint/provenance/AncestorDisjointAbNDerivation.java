@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONObject;
 
@@ -40,9 +41,9 @@ public class AncestorDisjointAbNDerivation extends DisjointAbNDerivation
     }
     
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
         
-        DisjointAbstractionNetwork sourceAbN = getSuperAbNDerivation().getAbstractionNetwork();
+        DisjointAbstractionNetwork sourceAbN = getSuperAbNDerivation().getAbstractionNetwork(ontology);
      
         Set<DisjointNode> nodes = sourceAbN.getNodesWith(disjointNodeRoot);
         

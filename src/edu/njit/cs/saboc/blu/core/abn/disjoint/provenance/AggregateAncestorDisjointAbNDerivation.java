@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONObject;
 
@@ -66,8 +67,8 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     }
 
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        DisjointAbstractionNetwork aggregateDisjointAbN = this.getSuperAbNDerivation().getAbstractionNetwork();
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        DisjointAbstractionNetwork aggregateDisjointAbN = this.getSuperAbNDerivation().getAbstractionNetwork(ontology);
         
         Set<DisjointNode> nodes = aggregateDisjointAbN.getNodesWith(selectedAggregatePAreaRoot);
         

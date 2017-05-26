@@ -43,11 +43,9 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
     private final AbNExplorationPanel abnExplorationPanel;
 
-    private Optional<AbstractionNetworkGraph> optCurrentGraph = Optional.empty();
-    
     private Optional<TaskBarPanel> optCurrentTaskBarPanel = Optional.empty();
 
-    private final AbNGraphFrameInitializers initializers;
+    private Optional<AbNGraphFrameInitializers> optInitializers;
 
     private final MultiAbNDisplayManager displayManager;
 
@@ -58,13 +56,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private Optional<AbNWorkspace> optWorkspace;
     
     private final AbNWorkspaceManager workspaceManager;
-    
-    private final AbNDerivationParser abnParser;
 
-    public MultiAbNGraphFrame(
-            JFrame parentFrame, 
-            AbNGraphFrameInitializers initializers, 
-            AbNDerivationParser abnParser) {
+    public MultiAbNGraphFrame(JFrame parentFrame) {
 
         super("Ontology Abstraction Framework (OAF) Abstraction Network Viewer",
                 true, // resizable
@@ -73,8 +66,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 false);// iconifiable
 
         this.parentFrame = parentFrame;
-        this.initializers = initializers;
-        this.abnParser = abnParser;
 
         this.displayManager = new MultiAbNDisplayManager(this, null);
 
@@ -86,10 +77,9 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         
         this.optWorkspace = Optional.empty();
         
-        this.workspaceManager = new AbNWorkspaceManager(
-                this,
-                initializers.getRecentAbNWorkspaceFiles(), 
-                abnParser);
+        this.optInitializers = Optional.empty();
+        
+        this.workspaceManager = new AbNWorkspaceManager(this);
 
         this.setLayout(new BorderLayout());
 
@@ -100,8 +90,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         this.historyNavigationPanel = new AbNHistoryNavigationPanel(
                 this,
-                abnDerivationHistory,
-                abnParser);
+                abnDerivationHistory);
 
         northPanel.add(historyNavigationPanel, BorderLayout.WEST);
 
@@ -166,6 +155,24 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public JFrame getParentFrame() {
         return parentFrame;
     }
+    
+    public void setInitializers(AbNGraphFrameInitializers initializers) {
+        this.optInitializers = Optional.of(initializers);
+        
+        this.workspaceManager.setInitializers(initializers);
+        this.historyNavigationPanel.setInitializers(initializers);
+    }
+    
+    public Optional<AbNGraphFrameInitializers> getCurrentInitializers() {
+        return this.optInitializers;
+    }
+    
+    public void clearInitializers() {
+        this.optInitializers = Optional.empty();
+        
+        this.workspaceManager.clearInitializers();
+        this.historyNavigationPanel.clearAbNDerivationParser();
+    }
 
     public AbNExplorationPanel getAbNExplorationPanel() {
         return abnExplorationPanel;
@@ -184,12 +191,20 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
     
     public void setWorkspace(AbNWorkspace workspace) {
+        
+        if(!this.optInitializers.isPresent()) {
+            return;
+        }
+        
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         this.optWorkspace = Optional.of(workspace);
         
         this.abnDerivationHistory.setHistory(workspace.getWorkspaceHistory().getHistory());
         this.historyNavigationPanel.reset();
         
-        this.abnDerivationHistory.getHistory().get(abnDerivationHistory.getHistory().size() - 1).displayEntry();
+        this.abnDerivationHistory.getHistory().get(
+                abnDerivationHistory.getHistory().size() - 1).displayEntry(initializers.getSourceOntology());
     }
     
     public void clearWorkspace() {
@@ -236,6 +251,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void displayPAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
+        
+        if(!this.optInitializers.isPresent()) {
+            return;
+        }
+        
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
@@ -248,6 +270,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy, boolean createHistoryEntry) {
+        
+        if(!this.optInitializers.isPresent()) {
+            return;
+        }
+        
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
 
         if (createHistoryEntry) {
@@ -263,6 +292,12 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
     public void displayDisjointPAreaTaxonomy(
             DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy, boolean createHistoryEntry) {
+        
+        if (!this.optInitializers.isPresent()) {
+            return;
+        }
+
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
 
         initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
 
@@ -276,6 +311,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void displayTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
+        
+        if (!this.optInitializers.isPresent()) {
+            return;
+        }
+
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         initialize(tan, initializers.getTANInitializer());
 
         if (createHistoryEntry) {
@@ -288,6 +330,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void displayBandTAN(ClusterTribalAbstractionNetwork tan, boolean createHistoryEntry) {
+
+        if (!this.optInitializers.isPresent()) {
+            return;
+        }
+
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         initialize(tan, initializers.getBandTANInitializer());
 
         if (createHistoryEntry) {
@@ -302,6 +351,12 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     public void displayDisjointTAN(
             DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster> disjointTAN,
             boolean createHistoryEntry) {
+        
+        if (!this.optInitializers.isPresent()) {
+            return;
+        }
+
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
 
         initialize(disjointTAN, initializers.getDisjointTANInitializer());
 
@@ -315,6 +370,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     }
 
     public void displayTargetAbstractionNetwork(TargetAbstractionNetwork targetAbN, boolean createHistoryEntry) {
+
+        if (!this.optInitializers.isPresent()) {
+            return;
+        }
+
+        AbNGraphFrameInitializers initializers = this.optInitializers.get();
+        
         initialize(targetAbN, initializers.getTargetAbNInitializer());
 
         if (createHistoryEntry) {
@@ -341,7 +403,6 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 optCurrentTaskBarPanel.get().clear();
             }
             
-            this.optCurrentGraph = Optional.of(graph);
             this.optCurrentTaskBarPanel = Optional.of(tbp);
             
             this.historyNavigationPanel.refreshHistoryDisplay();

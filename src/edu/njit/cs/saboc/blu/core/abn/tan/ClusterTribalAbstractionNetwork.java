@@ -45,8 +45,8 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
         this(bandTAN, 
                 clusterHierarchy, 
                 sourceHierarchy, 
-                new SimpleClusterTANDerivation(sourceHierarchy.getRoots(), 
-                        bandTAN.getSourceFactory().getSourceOntology(), 
+                new SimpleClusterTANDerivation(
+                        sourceHierarchy.getRoots(), 
                         bandTAN.getSourceFactory()));
     }
 

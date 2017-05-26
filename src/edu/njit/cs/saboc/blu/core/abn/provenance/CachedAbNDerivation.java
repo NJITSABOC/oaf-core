@@ -2,6 +2,8 @@
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
@@ -16,8 +18,6 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
     private final T abn;
     
     public CachedAbNDerivation(T abn) {
-        super(abn.getDerivation().getSourceOntology());
-        
         this.abn = abn;
     }
 
@@ -27,7 +27,7 @@ public class CachedAbNDerivation<T extends AbstractionNetwork> extends AbNDeriva
     }
 
     @Override
-    public T getAbstractionNetwork() {
+    public T getAbstractionNetwork(Ontology<Concept> ontology) {
         return abn;
     }
 

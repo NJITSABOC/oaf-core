@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDeri
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Optional;
 import org.json.simple.JSONObject;
 
@@ -48,8 +50,8 @@ public class TargetAbNFromPAreaDerivation extends TargetAbNDerivation {
     }
 
     @Override
-    public TargetAbstractionNetwork getAbstractionNetwork() {
-        PAreaTaxonomy<PArea> taxonomy = sourceDerivation.getAbstractionNetwork();
+    public TargetAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        PAreaTaxonomy<PArea> taxonomy = sourceDerivation.getAbstractionNetwork(ontology);
 
         Optional<PArea> optPArea = taxonomy.getNodes().stream().filter((parea) -> {
             return parea.getRoot().equals(super.getSourceHierarchyRoot());
@@ -62,7 +64,7 @@ public class TargetAbNFromPAreaDerivation extends TargetAbNDerivation {
                 taxonomy, 
                 optPArea.get(), 
                 super.getPropertyType(), 
-                super.getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(
+                ontology.getConceptHierarchy().getSubhierarchyRootedAt(
                         super.getTargetHierarchyRoot()));
         
         return targetAbN;

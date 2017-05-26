@@ -83,7 +83,7 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
         
         if(this.getY() + this.getHeight() > abnExplorationPanel.getHeight()) {
             
-            int offset = abnExplorationPanel.getHeight() - this.getHeight() - 10;
+            int offset = abnExplorationPanel.getHeight() - this.getHeight() - 20;
             
             this.setLocation(this.getX(), offset);
         }

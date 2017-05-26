@@ -4,6 +4,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,8 +42,8 @@ public class SubsetDisjointAbNDerivation<T extends SinglyRootedNode> extends Dis
     }
 
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        return getSuperAbNDerivation().getAbstractionNetwork().getSubsetDisjointAbN(subset);
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        return getSuperAbNDerivation().getAbstractionNetwork(ontology).getSubsetDisjointAbN(subset);
     }
 
     @Override

@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate.AggregateTargetGroup;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -43,9 +44,9 @@ public class ExpandedTargetAbNDerivation extends TargetAbNDerivation
     }
 
     @Override
-    public TargetAbstractionNetwork getAbstractionNetwork() {
+    public TargetAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
         
-        TargetAbstractionNetwork baseAggregated = base.getAbstractionNetwork();
+        TargetAbstractionNetwork baseAggregated = base.getAbstractionNetwork(ontology);
         
         AggregateAbstractionNetwork<AggregateTargetGroup, TargetAbstractionNetwork> aggregateTargetAbN = 
                 (AggregateAbstractionNetwork<AggregateTargetGroup, TargetAbstractionNetwork>)baseAggregated;

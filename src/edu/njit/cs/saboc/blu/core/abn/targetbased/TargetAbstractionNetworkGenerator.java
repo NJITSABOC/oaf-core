@@ -212,7 +212,6 @@ public class TargetAbstractionNetworkGenerator {
         });
         
         TargetAbNDerivation derivation = new TargetAbNDerivation(
-                        factory.getSourceOntology(), 
                         factory, 
                         sourceHierarchy.getRoot(), 
                         relationshipTypes.iterator().next(), 

@@ -63,7 +63,7 @@ public class AbNExplorationPanel extends JPanel {
         
         displayPanel.add(dashboardFrame);
         
-        dashboardFrame.setLocation(10, 160);
+        dashboardFrame.setLocation(80, 120);
 
         this.add(displayPanel, BorderLayout.CENTER);
     }

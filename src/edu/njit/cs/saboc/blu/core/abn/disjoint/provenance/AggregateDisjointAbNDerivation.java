@@ -2,6 +2,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 import org.json.simple.JSONObject;
 
@@ -39,8 +41,8 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     }
 
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        return nonAggregateDerivation.getAbstractionNetwork().getAggregated(aggregateBound);
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        return nonAggregateDerivation.getAbstractionNetwork(ontology).getAggregated(aggregateBound);
     }
 
     @Override

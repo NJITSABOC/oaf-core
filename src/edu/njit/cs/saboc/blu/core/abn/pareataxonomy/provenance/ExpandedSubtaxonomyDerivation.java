@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate.AggregatePArea;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,8 +46,8 @@ public class ExpandedSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
-        PAreaTaxonomy baseAggregated = base.getAbstractionNetwork();
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
+        PAreaTaxonomy baseAggregated = base.getAbstractionNetwork(ontology);
         
         AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> aggregateTaxonomy = 
                 (AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy>)baseAggregated;

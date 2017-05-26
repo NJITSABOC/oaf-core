@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,7 +55,8 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
 
     @Override
     public PAreaTaxonomyDerivation getNonAggregateSourceDerivation() {
-        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
+        AggregateAbNDerivation<PAreaTaxonomyDerivation> derivedAggregate = 
+                (AggregateAbNDerivation<PAreaTaxonomyDerivation>)this.getSuperAbNDerivation();
         
         return derivedAggregate.getNonAggregateSourceDerivation();
     }
@@ -65,8 +67,8 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
-        PAreaTaxonomy sourceTaxonomy = this.getSuperAbNDerivation().getAbstractionNetwork();
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
+        PAreaTaxonomy sourceTaxonomy = this.getSuperAbNDerivation().getAbstractionNetwork(ontology);
         
         Set<PArea> pareas = sourceTaxonomy.getNodesWith(selectedAggregatePAreaRoot);
         

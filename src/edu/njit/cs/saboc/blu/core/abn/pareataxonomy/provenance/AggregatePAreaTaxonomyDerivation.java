@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -44,8 +46,8 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
-        return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound);
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
+        return getNonAggregateSourceDerivation().getAbstractionNetwork(ontology).getAggregated(bound);
     }
     @Override
     public String getName() {

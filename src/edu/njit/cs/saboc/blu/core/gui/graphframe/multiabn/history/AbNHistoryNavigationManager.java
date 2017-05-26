@@ -1,11 +1,16 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.AbNGraphFrameInitializers;
+import java.util.Optional;
+
 /**
  *
  * @author Chris O
  */
 public class AbNHistoryNavigationManager {
     
+    private Optional<AbNGraphFrameInitializers> optInitializers = Optional.empty();
+        
     private final AbNDerivationHistory history;
     
     private int currentHistoryLocation;
@@ -37,7 +42,7 @@ public class AbNHistoryNavigationManager {
     
     public final void goBack() {
         
-        if(!canGoBack()) {
+        if(!canGoBack() || !optInitializers.isPresent()) {
             return;
         }
         
@@ -45,16 +50,27 @@ public class AbNHistoryNavigationManager {
         
         history.addEntry(history.getHistory().get(currentHistoryLocation), false);
 
-        history.getHistory().get(currentHistoryLocation).displayEntry();
+        history.getHistory().get(currentHistoryLocation).displayEntry(
+            optInitializers.get().getSourceOntology());
     }
     
     public final void goForward() {
-        if(!canGoForward()) {
+        
+        if(!canGoForward() || !optInitializers.isPresent()) {
             return;
         }
         
         currentHistoryLocation++;
         
-        history.getHistory().get(currentHistoryLocation).displayEntry();
+        history.getHistory().get(currentHistoryLocation).displayEntry(
+                optInitializers.get().getSourceOntology());
+    }
+    
+    public void setInitializers(AbNGraphFrameInitializers initializers) {
+        this.optInitializers = Optional.of(initializers);
+    }
+    
+    public void clearInitializers() {
+        this.optInitializers = Optional.empty();
     }
 }

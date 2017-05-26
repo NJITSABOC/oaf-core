@@ -40,7 +40,7 @@ public class BandTribalAbstractionNetwork extends AbstractionNetwork<Band> {
         
         super(bandHierarchy, 
                 sourceHierarchy, 
-                new SimpleClusterTANDerivation(sourceHierarchy.getRoots(), sourceFactory.getSourceOntology(), sourceFactory));
+                new SimpleClusterTANDerivation(sourceHierarchy.getRoots(), sourceFactory));
         
         this.sourceFactory = sourceFactory;
     }

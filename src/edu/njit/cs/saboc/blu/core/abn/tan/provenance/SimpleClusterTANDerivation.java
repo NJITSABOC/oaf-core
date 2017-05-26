@@ -22,14 +22,14 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
     
     private final Set<Concept> patriarchs;
     
-    public SimpleClusterTANDerivation(Set<Concept> patriarchs, Ontology sourceOntology, TANFactory factory) {
-        super(sourceOntology, factory);
+    public SimpleClusterTANDerivation(Set<Concept> patriarchs, TANFactory factory) {
+        super(factory);
         
         this.patriarchs = patriarchs;
     }
     
     public SimpleClusterTANDerivation(SimpleClusterTANDerivation base) {
-        this(base.getPatriarchs(), base.getSourceOntology(), base.getFactory());
+        this(base.getPatriarchs(), base.getFactory());
     }
             
     public Set<Concept> getPatriarchs() {
@@ -37,11 +37,11 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
     }
     
     @Override
-    public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
+    public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
 
         ClusterTribalAbstractionNetwork tan = generator.deriveTANFromMultiRootedHierarchy(
-                super.getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(patriarchs), super.getFactory());
+                ontology.getConceptHierarchy().getSubhierarchyRootedAt(patriarchs), super.getFactory());
 
         return tan;
     }

@@ -76,13 +76,13 @@ public abstract class AbNDerivationParser {
         }
     }
 
-    private final Ontology<?> sourceOntology;
+    private final Ontology<Concept> sourceOntology;
     private final ConceptLocationDataFactory conceptFactory;
     private final PropertyLocationDataFactory propertyFactory;
     private final AbNDerivationFactory derivationFactory;
 
     public AbNDerivationParser(
-            Ontology<?> ontology, 
+            Ontology<Concept> ontology, 
             ConceptLocationDataFactory conceptFactory, 
             PropertyLocationDataFactory propertyFactory, 
             AbNDerivationFactory derivationFactory) {
@@ -230,7 +230,6 @@ public abstract class AbNDerivationParser {
     public SimplePAreaTaxonomyDerivation parseSimplePAreaTaxonomyDerivation(JSONObject obj, PAreaTaxonomyFactory factory) throws AbNParseException {
         
         SimplePAreaTaxonomyDerivation result = new SimplePAreaTaxonomyDerivation(
-                sourceOntology, 
                 getRoot(obj), 
                 factory);
         
@@ -327,7 +326,7 @@ public abstract class AbNDerivationParser {
         
         JSONArray rootIdsJSON =  (JSONArray)obj.get("RootNodeIDs");
         
-        DisjointAbstractionNetwork<?, ?, ?> disjointAbN = sourceDisjointAbNDerivation.getAbstractionNetwork();
+        DisjointAbstractionNetwork<?, ?, ?> disjointAbN = sourceDisjointAbNDerivation.getAbstractionNetwork(sourceOntology);
         
         Map<String, SinglyRootedNode> rootIds = new HashMap<>();
         disjointAbN.getParentAbstractionNetwork().getNodes().forEach( (node) -> {
@@ -367,7 +366,7 @@ public abstract class AbNDerivationParser {
         
         String overlappingNodeRootIdStr = ((String)obj.get("OverlappingNodeRootId")).toLowerCase();
         
-        DisjointAbstractionNetwork<?, ?, ?> disjointAbN = sourceDisjointAbNDerivation.getAbstractionNetwork();
+        DisjointAbstractionNetwork<?, ?, ?> disjointAbN = sourceDisjointAbNDerivation.getAbstractionNetwork(sourceOntology);
         
         Optional<?> theNode = disjointAbN.getParentAbstractionNetwork().getNodes().stream().filter( 
             (node) -> {
@@ -391,7 +390,8 @@ public abstract class AbNDerivationParser {
 
         AbNDerivation<PartitionedAbstractionNetwork<?, ?>> parentAbNDerivation = getBaseAbNDerivation(obj);
 
-        PartitionedAbstractionNetwork<?, ?> partitionedAbN = (PartitionedAbstractionNetwork<?, ?>) parentAbNDerivation.getAbstractionNetwork();
+        PartitionedAbstractionNetwork<?, ?> partitionedAbN = 
+                (PartitionedAbstractionNetwork<?, ?>) parentAbNDerivation.getAbstractionNetwork(sourceOntology);
 
         String partitionedNodeName = (String) obj.get("NodeName");
 
@@ -417,7 +417,7 @@ public abstract class AbNDerivationParser {
 
         PAreaTaxonomyDerivation parentAbNDerivation = getBaseAbNDerivation(obj);
 
-        PAreaTaxonomy<PArea> taxonomy = parentAbNDerivation.getAbstractionNetwork();
+        PAreaTaxonomy<PArea> taxonomy = parentAbNDerivation.getAbstractionNetwork(sourceOntology);
 
         String areaName = (String) obj.get("AreaName");
 
@@ -480,7 +480,7 @@ public abstract class AbNDerivationParser {
             // TODO: Warning?
         }
 
-        return new SimpleClusterTANDerivation(roots, sourceOntology, factory);
+        return new SimpleClusterTANDerivation(roots, factory);
     }
 
     public RootSubTANDerivation parseRootSubTANDerivation(JSONObject obj) throws AbNParseException {
@@ -515,7 +515,8 @@ public abstract class AbNDerivationParser {
         
         AbNDerivation parentAbNDerivation = getBaseAbNDerivation(obj);
         
-        PartitionedAbstractionNetwork<?, ?> partitionedAbN = (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork();
+        PartitionedAbstractionNetwork<?, ?> partitionedAbN = 
+                (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork(sourceOntology);
         
         String partitionedNodeName = (String) obj.get("NodeName");
 

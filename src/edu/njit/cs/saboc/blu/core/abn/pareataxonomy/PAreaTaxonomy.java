@@ -40,7 +40,6 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
                 pareaHierarchy, 
                 conceptHierarchy, 
                 new SimplePAreaTaxonomyDerivation(
-                        areaTaxonomy.getPAreaTaxonomyFactory().getSourceOntology(), 
                         conceptHierarchy.getRoot(), 
                         areaTaxonomy.getPAreaTaxonomyFactory()));
     }

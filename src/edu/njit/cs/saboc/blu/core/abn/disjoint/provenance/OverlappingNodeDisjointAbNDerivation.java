@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
@@ -38,8 +40,8 @@ public class OverlappingNodeDisjointAbNDerivation<T extends SinglyRootedNode> ex
     }
     
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        DisjointAbstractionNetwork disjointAbN = getSuperAbNDerivation().getAbstractionNetwork();
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        DisjointAbstractionNetwork disjointAbN = getSuperAbNDerivation().getAbstractionNetwork(ontology);
         
         return disjointAbN.getOverlappingNodeDisjointAbN(overlappingNode);
     }

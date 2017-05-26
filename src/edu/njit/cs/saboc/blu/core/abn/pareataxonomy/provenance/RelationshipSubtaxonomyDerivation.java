@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.SubAbNDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,8 +44,8 @@ public class RelationshipSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
-        return base.getAbstractionNetwork().getRelationshipSubtaxonomy(selectedProperties);
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
+        return base.getAbstractionNetwork(ontology).getRelationshipSubtaxonomy(selectedProperties);
     }
 
     @Override

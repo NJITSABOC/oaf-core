@@ -3,8 +3,6 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbNFactory;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
-import edu.njit.cs.saboc.blu.core.ontology.Concept;
-import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 
 /**
  * Stores the arguments needed to create a disjoint abstraction network.
@@ -15,15 +13,12 @@ public abstract class DisjointAbNDerivation extends AbNDerivation<DisjointAbstra
     
     private final DisjointAbNFactory factory;
     
-    public DisjointAbNDerivation(DisjointAbNFactory factory, Ontology<Concept> sourceOntology) {
-        
-        super(sourceOntology);
-        
+    public DisjointAbNDerivation(DisjointAbNFactory factory) {        
         this.factory = factory;
     }
     
     public DisjointAbNDerivation(DisjointAbNDerivation derivedAbN) {
-        this(derivedAbN.getFactory(), derivedAbN.getSourceOntology());
+        this(derivedAbN.getFactory());
     }
     
     public DisjointAbNFactory getFactory() {

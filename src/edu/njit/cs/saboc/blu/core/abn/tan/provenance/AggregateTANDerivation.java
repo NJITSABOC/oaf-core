@@ -3,6 +3,8 @@ package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -44,8 +46,8 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        return getNonAggregateSourceDerivation().getAbstractionNetwork().getAggregated(bound);
+    public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        return getNonAggregateSourceDerivation().getAbstractionNetwork(ontology).getAggregated(bound);
     }
     
     @Override

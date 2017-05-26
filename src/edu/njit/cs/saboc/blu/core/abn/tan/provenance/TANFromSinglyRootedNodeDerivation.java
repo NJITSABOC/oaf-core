@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -32,8 +33,7 @@ public class TANFromSinglyRootedNodeDerivation <
             TANFactory factory,
             Concept nodeRoot) {
         
-        super(parentAbNDerivation.getSourceOntology(), 
-                factory);
+        super(factory);
         
         this.parentAbNDerivation = parentAbNDerivation;
         this.nodeRoot = nodeRoot;
@@ -53,8 +53,8 @@ public class TANFromSinglyRootedNodeDerivation <
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        AbstractionNetwork<V> sourceAbN = parentAbNDerivation.getAbstractionNetwork();
+    public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        AbstractionNetwork<V> sourceAbN = parentAbNDerivation.getAbstractionNetwork(ontology);
         
         Set<V> nodes = sourceAbN.getNodesWith(nodeRoot);
         
@@ -68,6 +68,7 @@ public class TANFromSinglyRootedNodeDerivation <
         return String.format("%s %s", nodeRoot.getName(), super.getAbstractionNetworkTypeName());
     }
 
+    @Override
     public JSONObject serializeToJSON() {
         JSONObject result = new JSONObject();
         

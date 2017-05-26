@@ -1,8 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.listeners.EntitySelectionListener;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.AbNGraphFrameInitializers;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Optional;
 import javax.swing.JPanel;
 
 /**
@@ -12,6 +14,8 @@ import javax.swing.JPanel;
 public class AbNDerivationHistoryPanel extends JPanel {
     
     private final AbNDerivationHistoryList derivationList;
+    
+    private Optional<AbNGraphFrameInitializers> optInitializers = Optional.empty();
     
     private AbNDerivationHistoryEntry selectedEntry;
         
@@ -29,7 +33,12 @@ public class AbNDerivationHistoryPanel extends JPanel {
 
             @Override
             public void entityDoubleClicked(AbNDerivationHistoryEntry entity) {
-                entity.displayEntry();
+                
+                if(!optInitializers.isPresent()) {
+                    return;
+                }
+                
+                entity.displayEntry(optInitializers.get().getSourceOntology());
             }
 
             @Override
@@ -39,6 +48,14 @@ public class AbNDerivationHistoryPanel extends JPanel {
         });
         
         this.add(derivationList, BorderLayout.CENTER);
+    }
+    
+    public void setInitializers(AbNGraphFrameInitializers initializers) {
+        this.optInitializers = Optional.of(initializers);
+    }
+    
+    public void clearInitializers() {
+        this.optInitializers = Optional.empty();
     }
     
     public void showHistory(AbNDerivationHistory history) {

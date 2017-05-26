@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -46,8 +47,8 @@ public class RootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
-        PAreaTaxonomy taxonomy = base.getAbstractionNetwork();
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
+        PAreaTaxonomy taxonomy = base.getAbstractionNetwork(ontology);
         
         Set<PArea> pareas = taxonomy.getNodesWith(pareaRootConcept);
         

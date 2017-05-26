@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
@@ -22,7 +24,7 @@ public class DisjointSubjectSubtaxonomyDerivation extends DisjointAbNDerivation 
             Area subtaxonomyArea,
             DisjointAbNFactory factory) {
         
-        super(factory, parentTaxonomyDerivation.getSourceOntology());
+        super(factory);
         
         this.parentTaxonomyDerivation = parentTaxonomyDerivation;
         this.subtaxonomyArea = subtaxonomyArea;
@@ -48,8 +50,8 @@ public class DisjointSubjectSubtaxonomyDerivation extends DisjointAbNDerivation 
     }
 
     @Override
-    public DisjointAbstractionNetwork getAbstractionNetwork() {
-        PAreaTaxonomy taxonomy = parentTaxonomyDerivation.getAbstractionNetwork();
+    public DisjointAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        PAreaTaxonomy taxonomy = parentTaxonomyDerivation.getAbstractionNetwork(ontology);
 
         DisjointSubjectSubtaxonomyGenerator generator = new DisjointSubjectSubtaxonomyGenerator();
         

@@ -6,6 +6,8 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TANFactory;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
+import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
 
 /**
@@ -28,7 +30,7 @@ public class TANFromPartitionedNodeDerivation<
             TANFactory factory,
             V node) {
         
-        super(parentAbNDerivation.getSourceOntology(), factory);
+        super(factory);
         
         this.parentAbNDerivation = parentAbNDerivation;
         
@@ -49,8 +51,9 @@ public class TANFromPartitionedNodeDerivation<
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork getAbstractionNetwork() {
-        PartitionedAbstractionNetwork<?, ?> partitionedAbN = (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork();
+    public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
+        PartitionedAbstractionNetwork<?, ?> partitionedAbN = 
+                (PartitionedAbstractionNetwork<?, ?>)parentAbNDerivation.getAbstractionNetwork(ontology);
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
        

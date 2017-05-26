@@ -27,7 +27,6 @@ public class AreaTaxonomy<T extends Area> extends AbstractionNetwork<T> {
             Concept root) {
         
         SimplePAreaTaxonomyDerivation derivation = new SimplePAreaTaxonomyDerivation(
-                        factory.getSourceOntology(), 
                         root, 
                         factory);
         

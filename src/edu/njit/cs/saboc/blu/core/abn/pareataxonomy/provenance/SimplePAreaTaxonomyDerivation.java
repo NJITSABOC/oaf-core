@@ -18,18 +18,16 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     private final Concept root;
 
     public SimplePAreaTaxonomyDerivation(
-            Ontology sourceOntology,
             Concept root,
             PAreaTaxonomyFactory factory) {
 
-        super(sourceOntology, factory);
+        super(factory);
 
         this.root = root;
     }
     
     public SimplePAreaTaxonomyDerivation(SimplePAreaTaxonomyDerivation derivation) {
-        this(derivation.getSourceOntology(), 
-                derivation.getRoot(), 
+        this(derivation.getRoot(), 
                 derivation.getFactory());
     }
 
@@ -38,12 +36,12 @@ public class SimplePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation {
     }
 
     @Override
-    public PAreaTaxonomy getAbstractionNetwork() {
+    public PAreaTaxonomy getAbstractionNetwork(Ontology<Concept> ontology) {
         PAreaTaxonomyGenerator generator = new PAreaTaxonomyGenerator();
 
         PAreaTaxonomy taxonomy = generator.derivePAreaTaxonomy(
                 super.getFactory(),
-                super.getSourceOntology().getConceptHierarchy().getSubhierarchyRootedAt(root));
+                ontology.getConceptHierarchy().getSubhierarchyRootedAt(root));
 
         return taxonomy;
     }

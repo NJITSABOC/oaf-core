@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
@@ -23,23 +24,21 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     
     public AggregateAncestorSubtaxonomyDerivation(
             PAreaTaxonomyDerivation aggregateBase, 
-            int minBound,
-            Concept selectedAggregatePAreaRoot,
-            boolean isWeightedAggregated) {
+            AggregatedProperty aggregatedProperty,
+            Concept selectedAggregatePAreaRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorSubtaxonomyDerivation(AggregateAncestorSubtaxonomyDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
-                deriveTaxonomy.getSelectedRoot(),
-                deriveTaxonomy.isWeightedAggregated());
+                deriveTaxonomy.getAggregatedProperty(),
+                deriveTaxonomy.getSelectedRoot());
     }
 
     @Override
@@ -105,5 +104,10 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     @Override
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return  new AggregatedProperty(minBound, isWeightedAggregated);
     }
 }

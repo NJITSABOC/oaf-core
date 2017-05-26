@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.aggregate.AggregateClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.provenance.ClusterTANDerivation;
@@ -161,6 +162,6 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
 
     @Override
     public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode, boolean weightedAggregated) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, smallestNode, weightedAggregated);
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, new AggregatedProperty(smallestNode, weightedAggregated));
     }
 }

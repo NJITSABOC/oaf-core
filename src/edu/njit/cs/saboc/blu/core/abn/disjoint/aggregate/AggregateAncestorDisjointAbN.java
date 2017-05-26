@@ -30,20 +30,19 @@ public class AggregateAncestorDisjointAbN<
     public AggregateAncestorDisjointAbN(
             AggregateDisjointNode<PARENTNODE_T> selectedRoot,
             DisjointAbstractionNetwork aggregatedSuperAbN, 
-            int aggregateBound,
+            AggregatedProperty aggregatedProperty,
             AncestorDisjointAbN nonAggregatedDisjointAbN,
-            DisjointAbstractionNetwork subAbN,
-            boolean isWeightedAggregated) {
+            DisjointAbstractionNetwork subAbN) {
         
         super(selectedRoot, 
                 aggregatedSuperAbN, 
                 subAbN.getNodeHierarchy(), 
                 nonAggregatedDisjointAbN.getSourceHierarchy(), 
-                new AggregateAncestorDisjointAbNDerivation(aggregatedSuperAbN.getDerivation(), aggregateBound, selectedRoot.getRoot(), isWeightedAggregated));
+                new AggregateAncestorDisjointAbNDerivation(aggregatedSuperAbN.getDerivation(), aggregatedProperty, selectedRoot.getRoot()));
         
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
-        this.aggregateBound = aggregateBound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.aggregateBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
 
     @Override

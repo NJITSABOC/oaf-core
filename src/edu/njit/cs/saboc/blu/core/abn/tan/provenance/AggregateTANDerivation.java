@@ -1,9 +1,9 @@
 
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -18,16 +18,16 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     private final int bound;
     private final boolean isWeightedAggregated;
     
-    public AggregateTANDerivation(ClusterTANDerivation nonAggregateSourceDerivation, int bound, boolean isWeightedAggregated) {
+    public AggregateTANDerivation(ClusterTANDerivation nonAggregateSourceDerivation, AggregatedProperty aggregatedProperty) {
         super(nonAggregateSourceDerivation);
         
         this.nonAggregateSourceDerivation = nonAggregateSourceDerivation;
-        this.bound = bound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.bound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateTANDerivation(AggregateTANDerivation deriveTaxonomy) {
-        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getBound(), deriveTaxonomy.isWeightedAggregated());
+        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getAggregatedProperty());
     }
     
     @Override
@@ -75,5 +75,10 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     @Override
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(bound, isWeightedAggregated);
     }
 }

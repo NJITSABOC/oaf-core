@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import org.json.simple.JSONObject;
@@ -17,16 +18,16 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     private final int bound;
     private final boolean isWeightedAggregated;
     
-    public AggregatePAreaTaxonomyDerivation(PAreaTaxonomyDerivation nonAggregateSourceDerivation, int bound, boolean isWeightedAggregated) {
+    public AggregatePAreaTaxonomyDerivation(PAreaTaxonomyDerivation nonAggregateSourceDerivation, AggregatedProperty aggregatedProperty) {
         super(nonAggregateSourceDerivation);
         
         this.nonAggregateSourceDerivation = nonAggregateSourceDerivation;
-        this.bound = bound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.bound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregatePAreaTaxonomyDerivation(AggregatePAreaTaxonomyDerivation deriveTaxonomy) {
-        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getBound(), deriveTaxonomy.isWeightedAggregated());
+        this(deriveTaxonomy.getNonAggregateSourceDerivation(), deriveTaxonomy.getAggregatedProperty());
     }
     
     @Override
@@ -73,5 +74,10 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     @Override
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(bound, isWeightedAggregated);
     }
 }

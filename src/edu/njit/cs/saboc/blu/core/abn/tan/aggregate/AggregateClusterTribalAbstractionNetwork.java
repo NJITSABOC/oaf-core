@@ -26,14 +26,12 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
      * Creates an aggregate TAN from a non-aggregate TAN
      * 
      * @param nonAggregatedClusterTAN
-     * @param minBound
-     * @param isWeightedAggregated
+     * @param aggregatedProperty which includes minBound and isWeightedAggregated
      * @return 
      */
     public static final ClusterTribalAbstractionNetwork generateAggregatedClusterTAN(
         ClusterTribalAbstractionNetwork nonAggregatedClusterTAN, 
-        int minBound,
-        boolean isWeightedAggregated) {
+        AggregatedProperty aggregatedProperty) {
         
         AggregateTANGenerator generator = new AggregateTANGenerator();
         
@@ -41,8 +39,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
             nonAggregatedClusterTAN, 
             new TribalAbstractionNetworkGenerator(),
             new AggregateAbNGenerator<>(),
-            minBound,
-            isWeightedAggregated);
+            aggregatedProperty);
         
         return aggregateTAN;
     }
@@ -71,10 +68,9 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         
         return new AggregateRootSubTAN(
                 sourceAggregatedClusterTAN,
-                aggregateBound,
+                new AggregatedProperty(aggregateBound, isWeightedAggregated),
                 nonAggregateRootSubtaxonomy, 
-                aggregateRootSubtaxonomy,
-                isWeightedAggregated
+                aggregateRootSubtaxonomy
         );
     }
     
@@ -119,10 +115,9 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
         return new AggregateAncestorSubTAN(
                 superAggregateTAN,
                 selectedRoot,
-                aggregateBound,
+                new AggregatedProperty(aggregateBound, isWeightedAggregated),
                 subTAN, 
-                aggregateAncestorSubtaxonomy,
-                isWeightedAggregated
+                aggregateAncestorSubtaxonomy
         );
     }
     
@@ -132,20 +127,19 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     
     public AggregateClusterTribalAbstractionNetwork(
             ClusterTribalAbstractionNetwork nonAggregateSourceTAN,
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             BandTribalAbstractionNetwork bandTAN,
             Hierarchy<AggregateCluster> clusterHierarchy,
-            Hierarchy<Concept> conceptHierarchy,
-            boolean isWeightedAggregated) {
+            Hierarchy<Concept> conceptHierarchy) {
         
         super(bandTAN, 
                 clusterHierarchy, 
                 conceptHierarchy, 
-                new AggregateTANDerivation(nonAggregateSourceTAN.getDerivation(), minBound, isWeightedAggregated));
+                new AggregateTANDerivation(nonAggregateSourceTAN.getDerivation(), aggregatedProperty));
         
         this.nonAggregateSourceTAN = nonAggregateSourceTAN;
-        this.minBound = minBound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.minBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     @Override
@@ -170,7 +164,7 @@ public class AggregateClusterTribalAbstractionNetwork extends ClusterTribalAbstr
     
     @Override
     public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), smallestNode, isWeightedAggregated);
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), new AggregatedProperty(smallestNode, isWeightedAggregated));
     }
 
     @Override

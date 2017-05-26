@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
@@ -19,18 +20,16 @@ public class AggregateTargetAbNGenerator {
      * @param sourceTargetAbN
      * @param generator
      * @param aggregateGenerator
-     * @param bound
-     * @param weightedAggregated
+     * @param aggregatedProperty which includes bound and weightedAggregated
      * @return 
      */
     public TargetAbstractionNetwork createAggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             TargetAbstractionNetworkGenerator generator,
             AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
-            int bound,
-            boolean weightedAggregated) {
+            AggregatedProperty aggregatedProperty) {
 
-        if (bound == 1) {
+        if (aggregatedProperty.getBound() == 1) {
             return sourceTargetAbN;
         }
         
@@ -38,15 +37,13 @@ public class AggregateTargetAbNGenerator {
                         new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),
-                        bound,
-                        weightedAggregated);
+                        aggregatedProperty);
         
         TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(
                 sourceTargetAbN, 
-                bound, 
+                aggregatedProperty,
                 reducedTargetHierarchy, 
-                sourceTargetAbN.getSourceHierarchy(),
-                weightedAggregated);
+                sourceTargetAbN.getSourceHierarchy());
 
         return targetAbN;
     }

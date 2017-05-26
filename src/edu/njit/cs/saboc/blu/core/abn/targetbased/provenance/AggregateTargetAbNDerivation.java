@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import org.json.simple.JSONObject;
@@ -18,14 +19,13 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     
     public AggregateTargetAbNDerivation(
             TargetAbNDerivation nonAggregateSource, 
-            int bound, 
-            boolean isWeightedAggregated) {
+            AggregatedProperty aggregatedProperty) {
         
         super(nonAggregateSource);
         
         this.nonAggregateSource = nonAggregateSource;
-        this.bound = bound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.bound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
 
     @Override
@@ -70,5 +70,10 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     @Override
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(bound, isWeightedAggregated);
     }
 }

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 
@@ -21,14 +22,13 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     
     public AggregateDisjointAbNDerivation(
             DisjointAbNDerivation nonAggregateDerivation, 
-            int aggregateBound,
-            boolean isWeightedAggregated) {
+            AggregatedProperty aggregatedProperty ) {
         
         super(nonAggregateDerivation);
         
         this.nonAggregateDerivation = nonAggregateDerivation;
-        this.aggregateBound = aggregateBound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.aggregateBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
 
     @Override
@@ -77,4 +77,11 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
     }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+    }
+    
+    
 }

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -23,23 +24,21 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
     
     public AggregateAncestorSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
-            int minBound,
-            Concept selectedAggregateClusterRoot,
-            boolean isWeightedAggregated) {
+            AggregatedProperty aggregatedProperty,
+            Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorSubTANDerivation(AggregateAncestorSubTANDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
-                deriveTaxonomy.getSelectedRoot(),
-                deriveTaxonomy.isWeightedAggregated());
+                deriveTaxonomy.getAggregatedProperty(), 
+                deriveTaxonomy.getSelectedRoot());
     }
 
     @Override
@@ -106,5 +105,10 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
     @Override
     public boolean isWeightedAggregated() {
         return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
     }
 }

@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.PAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.SimplePAreaTaxonomyDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
@@ -166,7 +167,7 @@ public class PAreaTaxonomy<T extends PArea> extends PartitionedAbstractionNetwor
 
     @Override       
     public PAreaTaxonomy getAggregated(int aggregateBound, boolean weightedAggregated) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, aggregateBound, weightedAggregated);
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this, new AggregatedProperty(aggregateBound, weightedAggregated));
     }
     
     

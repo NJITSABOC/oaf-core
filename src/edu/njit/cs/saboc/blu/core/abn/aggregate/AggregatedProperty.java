@@ -11,16 +11,16 @@ package edu.njit.cs.saboc.blu.core.abn.aggregate;
  */
 public class AggregatedProperty {
     private int bound;
-    private boolean weightedAggregated;
+    private boolean isWeighteAggregated;
 
     public AggregatedProperty() {
         this.bound=1;
-        this.weightedAggregated= false;
+        this.isWeighteAggregated= false;
     }
 
-    public AggregatedProperty(int Bound, boolean Weighted) {
+    public AggregatedProperty(int Bound, boolean isWeighted) {
         this.bound = Bound;
-        this.weightedAggregated = Weighted;
+        this.isWeighteAggregated = isWeighted;
     }
    
     public int getBound(){
@@ -28,6 +28,6 @@ public class AggregatedProperty {
     }
     
     public boolean getWeighted(){
-        return weightedAggregated;
+        return isWeighteAggregated;
     }
 }

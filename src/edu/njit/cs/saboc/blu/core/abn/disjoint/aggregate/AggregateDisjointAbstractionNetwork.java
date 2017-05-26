@@ -75,10 +75,9 @@ public class AggregateDisjointAbstractionNetwork<
         return new AggregateAncestorDisjointAbN(
                 selectedRoot, 
                 superAggregateDisjointAbN,
-                agregateAbN.getAggregateBound(),
+                agregateAbN.getAggregatedProperty(),
                 ancestorDisjointAbN,
-                aggregatedAncestorAbN,
-                agregateAbN.getAggregatedProperty().getWeighted()
+                aggregatedAncestorAbN
         );
     }
     
@@ -91,15 +90,13 @@ public class AggregateDisjointAbstractionNetwork<
     
     public AggregateDisjointAbstractionNetwork(
             DisjointAbstractionNetwork sourceAbN,
-            int aggregateBound, 
+            AggregatedProperty aggregatedProperty, 
             PARENTABN_T parentAbN, 
             Hierarchy<AggregateDisjointNode<PARENTNODE_T>> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy,
             int levels,
             Set<PARENTNODE_T> allNodes,
-            Set<PARENTNODE_T> overlappingNodes,
-            boolean isWeightedAggregated
-        ) {
+            Set<PARENTNODE_T> overlappingNodes) {
         
         super(parentAbN, 
                 groupHierarchy, 
@@ -108,11 +105,11 @@ public class AggregateDisjointAbstractionNetwork<
                 levels, 
                 allNodes, 
                 overlappingNodes,
-                new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregateBound, isWeightedAggregated));
+                new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregatedProperty));
         
         this.sourceAbN = sourceAbN;
-        this.aggregateBound = aggregateBound;
-        this.isWeightedAggregated = isWeightedAggregated;
+        this.aggregateBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
 
     @Override
@@ -137,7 +134,7 @@ public class AggregateDisjointAbstractionNetwork<
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
                 new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode, isWeightedAggregated);
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, new AggregatedProperty(smallestNode,isWeightedAggregated));
     }
     
     

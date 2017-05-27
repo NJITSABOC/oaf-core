@@ -4,7 +4,8 @@ import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.InheritableProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.AbNHelpButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetabn.buttons.TargetAbNHelpButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.rootselection.BaseRootSelectionOptionsPanel;
@@ -62,10 +63,10 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     
     private final JButton deriveButton;
     
-    private final AbNHelpButton<TargetAbstractionNetwork> helpBtn;
+    private final TargetAbNHelpButton helpBtn;
     
     public TargetAbNDerivationWizardPanel(
-            AbNConfiguration config,
+            TargetAbNConfiguration config,
             DeriveTargetAbNAction derivationAction,
             BaseRootSelectionOptionsPanel<TargetAbstractionNetwork> sourceRootSelectionPanel) {
         
@@ -169,7 +170,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
             deriveTargetAbstractionNetwork();
         });
         
-        this.helpBtn = new AbNHelpButton<>(config);
+        this.helpBtn = new TargetAbNHelpButton(config);
         
         JPanel southPanel = new JPanel(new BorderLayout());
         
@@ -184,7 +185,7 @@ public class TargetAbNDerivationWizardPanel extends AbNDerivationWizardPanel{
     }
     
      public TargetAbNDerivationWizardPanel(
-            AbNConfiguration config,
+            TargetAbNConfiguration config,
             DeriveTargetAbNAction derivationAction) {
          
          this(config, derivationAction, new GenericRootSelectionOptionsPanel(config));

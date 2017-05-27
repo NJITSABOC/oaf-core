@@ -14,6 +14,11 @@ public abstract class TargetAbNConfiguration extends AbNConfiguration<TargetGrou
         super(targetAbN);
     }
     
+    @Override
+    public TargetAbstractionNetwork getAbstractionNetwork() {
+        return this.getTargetAbstractionNetwork();
+    }
+    
     public TargetAbstractionNetwork getTargetAbstractionNetwork() {
         return (TargetAbstractionNetwork)super.getAbstractionNetwork();
     }

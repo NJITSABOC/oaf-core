@@ -1,7 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.tan;
 
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.abn.AbNHelpButton;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.buttons.TANHelpButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.tan.configuration.TANConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.AbNDerivationWizardPanel;
 import edu.njit.cs.saboc.blu.core.gui.panels.abnderivationwizard.OntologySearcher;
@@ -39,7 +39,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
     
     private final DeriveTANAction derivationAction;
     
-    private final AbNHelpButton<ClusterTribalAbstractionNetwork> helpBtn;
+    private final TANHelpButton helpBtn;
     
     private final JPanel optionsPanel;
 
@@ -76,7 +76,7 @@ public class TANDerivationWizardPanel extends AbNDerivationWizardPanel {
         });
         
         
-        this.helpBtn = new AbNHelpButton<>(config);
+        this.helpBtn = new TANHelpButton(config);
         
         JPanel southPanel = new JPanel(new BorderLayout());
         

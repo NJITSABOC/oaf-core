@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivationParser;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
 import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspace;
 import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspaceManager;
@@ -384,9 +383,13 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
     }
 
+    private AbstractionNetwork currentlyLoadingAbN = null;
+    
     private void initialize(
             AbstractionNetwork abn,
             GraphFrameInitializer initializer) {
+        
+        this.currentlyLoadingAbN = abn;
 
         this.abnExplorationPanel.showLoading();
 
@@ -399,15 +402,29 @@ public class MultiAbNGraphFrame extends JInternalFrame {
             AbNExplorationPanelGUIInitializer explorationInitializer = initializer.getExplorationGUIInitializer(config);
             TaskBarPanel tbp = initializer.getTaskBar(this, config);
 
-            if(optCurrentTaskBarPanel.isPresent()) {
-                optCurrentTaskBarPanel.get().clear();
-            }
-            
-            this.optCurrentTaskBarPanel = Optional.of(tbp);
-            
-            this.historyNavigationPanel.refreshHistoryDisplay();
+            // Only display if the AbN is the most recent AbN
+            if (abn == this.currentlyLoadingAbN) {
 
-            displayAbstractionNetwork(graph, tbp, painter, config, explorationInitializer);
+                if (optCurrentTaskBarPanel.isPresent()) {
+                    optCurrentTaskBarPanel.get().clear();
+                }
+
+                this.optCurrentTaskBarPanel = Optional.of(tbp);
+
+                this.historyNavigationPanel.refreshHistoryDisplay();
+
+                displayAbstractionNetwork(
+                        graph,
+                        tbp,
+                        painter,
+                        config,
+                        explorationInitializer);
+
+                this.currentlyLoadingAbN = null;
+                
+            } else {
+                
+            }
         });
 
         loadThread.start();

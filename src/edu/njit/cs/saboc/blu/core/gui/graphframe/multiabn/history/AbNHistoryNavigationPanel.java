@@ -77,7 +77,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
         historyNavigationManager.setInitializers(initializers);
     }
 
-    public void clearAbNDerivationParser() {
+    public void clearInitializers() {
         viewHistoryBtn.clearInitializers();
         historyNavigationManager.clearInitializers();
     }
@@ -91,6 +91,10 @@ public class AbNHistoryNavigationPanel extends JPanel {
         
         this.updateNavigationButtons();
         this.refreshHistoryDisplay();
+    }
+    
+    public void closePopups() {
+        this.viewHistoryBtn.closePopup();
     }
 
     private void updateNavigationButtons() {

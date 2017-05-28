@@ -107,6 +107,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 abnExplorationPanel.getDisplayPanel().kill();
                 
                 historyNavigationPanel.reset();
+                historyNavigationPanel.closePopups();
             }
 
             @Override
@@ -114,6 +115,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 if (optCurrentTaskBarPanel.isPresent()) {
                     optCurrentTaskBarPanel.get().closeAllPopupButtons();
                 }
+                
+                historyNavigationPanel.closePopups();
             }
 
             @Override
@@ -121,6 +124,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 if (optCurrentTaskBarPanel.isPresent()) {
                     optCurrentTaskBarPanel.get().closeAllPopupButtons();
                 }
+                
+                historyNavigationPanel.closePopups();
             }
         });
 
@@ -170,7 +175,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         this.optInitializers = Optional.empty();
         
         this.workspaceManager.clearInitializers();
-        this.historyNavigationPanel.clearAbNDerivationParser();
+        this.historyNavigationPanel.clearInitializers();
     }
 
     public AbNExplorationPanel getAbNExplorationPanel() {

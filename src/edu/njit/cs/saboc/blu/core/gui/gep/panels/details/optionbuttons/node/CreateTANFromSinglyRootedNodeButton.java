@@ -16,15 +16,17 @@ public class CreateTANFromSinglyRootedNodeButton<T extends SinglyRootedNode> ext
     
     private final TANFactory factory;
     
+    private final AbNConfiguration config;
+    
     public CreateTANFromSinglyRootedNodeButton(
             TANFactory factory,
-            
             AbNConfiguration config, 
             DisplayAbNAction displayTAN) {
         
         super(config.getTextConfiguration().getNodeTypeName(false).toLowerCase(), displayTAN);
         
         this.factory = factory;
+        this.config = config;
     }
 
     @Override
@@ -32,7 +34,9 @@ public class CreateTANFromSinglyRootedNodeButton<T extends SinglyRootedNode> ext
         SinglyRootedNode currentNode = (SinglyRootedNode)super.getCurrentNode().get();
         
         TribalAbstractionNetworkGenerator generator = new TribalAbstractionNetworkGenerator();
-        ClusterTribalAbstractionNetwork tan = generator.deriveTANFromSingleRootedHierarchy(currentNode.getHierarchy(), factory);
+        
+        ClusterTribalAbstractionNetwork tan = generator.createTANFromSinglyRootedNode(
+                config.getAbstractionNetwork(), currentNode, factory);
         
         return tan;
     }

@@ -9,7 +9,6 @@ import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**

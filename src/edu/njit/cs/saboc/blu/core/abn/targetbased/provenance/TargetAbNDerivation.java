@@ -6,7 +6,6 @@ import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkFactory;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
-import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import org.json.simple.JSONObject;
@@ -89,6 +88,7 @@ public class TargetAbNDerivation extends AbNDerivation<TargetAbstractionNetwork>
         return "Target Abstraction Network";
     }
 
+    @Override
     public JSONObject serializeToJSON() {
         JSONObject result = new JSONObject();
         

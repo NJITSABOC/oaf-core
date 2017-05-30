@@ -104,10 +104,10 @@ public class AbNDashboardPanel extends JPanel {
         selectedNode = Optional.empty();
         
         if (nodeDetailsPanel.isPresent()) {
-            compactNodeDetailsPanel.get().clearContents();
+            nodeDetailsPanel.get().clearContents();
         }
 
-        if (nodeDetailsPanel.isPresent()) {
+        if (compactNodeDetailsPanel.isPresent()) {
             compactNodeDetailsPanel.get().clearContents();
         }
     }

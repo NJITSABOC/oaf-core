@@ -26,10 +26,12 @@ public abstract class DiffPAreaTaxonomyConfiguration extends PAreaTaxonomyConfig
         super.setTextConfiguration(textConfig);
     }
     
+    @Override
     public DiffPAreaTaxonomyUIConfiguration getUIConfiguration() {
         return (DiffPAreaTaxonomyUIConfiguration)super.getUIConfiguration();
     }
 
+    @Override
     public DiffPAreaTaxonomyTextConfiguration getTextConfiguration() {
         return (DiffPAreaTaxonomyTextConfiguration)super.getTextConfiguration();
     }

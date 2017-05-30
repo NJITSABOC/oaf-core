@@ -211,15 +211,27 @@ public class DiffAbstractionNetworkGenerator {
                 childOfChanges.add(new ChildOfChange(toNode, parent, ChangeState.Removed));
             });
                         
+            
+            // TODO: This should be an arg to the derivation...
+            final boolean CHILD_OF_MODIFIED_IS_MODIFIED = false;
+
             if (toNode.strictEquals(fromNode)) {
-                if (childOfChanges.isEmpty()) {
-                    UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
 
-                    diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
+                if (CHILD_OF_MODIFIED_IS_MODIFIED) {
+                    if (childOfChanges.isEmpty()) {
+                        UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
+
+                        diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
+                    } else {
+                        ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
+
+                        diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
+                    }
                 } else {
-                    ModifiedNodeDetails nodeModifiedChanges = new ModifiedNodeDetails(toNode, Collections.emptySet(), childOfChanges);
-
-                    diffNodes.put(toNode, new ModifiedNode(fromNode, toNode, nodeModifiedChanges));
+                    
+                    UnmodifiedNodeDetails nodeUnmodifiedDetails = new UnmodifiedNodeDetails(toNode);
+                    diffNodes.put(toNode, new UnmodifiedNode(toNode, nodeUnmodifiedDetails));
+                    
                 }
             } else {
                 Set<Concept> nodeRemovedConcepts = SetUtilities.getSetDifference(fromNode.getConcepts(), toNode.getConcepts());

@@ -27,6 +27,6 @@ public class ChangeExplanationRowEntry {
     }
 
     public Object[] asRow() {
-        return new Object[]{changeType, inheritanceType, changeSummary, changeDescription};
+        return new Object[]{changeType, inheritanceType, changeSummary};
     }
 }

@@ -19,8 +19,7 @@ public class DiffNodeRootChangeExplanationModel extends OAFAbstractTableModel<Di
         super(new String [] {
            "Type", 
             "Inheritance", 
-            "Summary", 
-            "Description"
+            "Summary"
         });
         
         this.factory = factory;

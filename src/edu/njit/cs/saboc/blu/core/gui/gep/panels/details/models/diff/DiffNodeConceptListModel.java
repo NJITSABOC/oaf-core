@@ -29,7 +29,6 @@ public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntity
     public DiffNodeConceptListModel(AbNConfiguration config) {
         super(new String[] {
             config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false),
-            "ID",
             "Change",
             "Change Explanation"
         });
@@ -61,27 +60,28 @@ public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntity
 
     @Override
     protected Object[] createRow(Concept item) {
+        
         if(changedConcepts.containsKey(item)) {
             NodeConceptChange change = changedConcepts.get(item);
 
-            return new String [] {
-                item.getName(),
-                item.getIDAsString(),
+            return new Object [] {
+                item,
                 getChangeName(change),
                 getChangeExplanation(change)
             };
 
         } else {
-            return new String [] {
-                item.getName(),
-                item.getIDAsString(),
+            return new Object [] {
+                item,
                 "",
                 ""
             };
         }
+        
     }
     
     protected String getChangeName(NodeConceptChange change) {
+        
         switch(change.getChangeType()) {
 
             case AddedToOnt:

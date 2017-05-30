@@ -9,13 +9,18 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class DiffNodeTableModel<T extends Node> extends OAFAbstractTableModel<T> {
     
     public DiffNodeTableModel(AbNConfiguration configuration) {
         super(new String[] {
                     configuration.getTextConfiguration().getNodeTypeName(false),
-                    String.format("# %s", configuration.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
+            
+                    String.format("# %s", 
+                            configuration.getTextConfiguration().getOntologyEntityNameConfiguration()
+                                    .getConceptTypeName(true)),
+                    
                     "Diff State"
             });
     }

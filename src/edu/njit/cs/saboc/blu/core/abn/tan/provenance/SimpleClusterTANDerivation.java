@@ -64,7 +64,7 @@ public class SimpleClusterTANDerivation extends ClusterTANDerivation {
             name = sortedPatriarchs.get(0).getName();
             
             for(int c = 1; c <= 2; c++) {
-                name += (", " + sortedPatriarchs.get(c));
+                name += (", " + sortedPatriarchs.get(c).getName());
             }
             
             name += ", ...";

@@ -48,6 +48,9 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
 
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("%s (weighted aggregate: %d)", nonAggregateDerivation.getDescription(), aggregateBound);
+        }
         return String.format("%s (aggregate: %d)", nonAggregateDerivation.getDescription(), aggregateBound);
     }
 

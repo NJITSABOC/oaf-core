@@ -65,6 +65,8 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
   
     @Override
     public String getDescription() {
+        if(isWeightedAggregated)
+            return String.format("Derived weighted aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
         return String.format("Derived aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
     }
 

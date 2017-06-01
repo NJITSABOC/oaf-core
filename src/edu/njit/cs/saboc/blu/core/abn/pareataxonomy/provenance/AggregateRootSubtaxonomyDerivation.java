@@ -63,6 +63,9 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("Derived weighted aggregate root subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
+        }
         return String.format("Derived aggregate root subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
     }
 

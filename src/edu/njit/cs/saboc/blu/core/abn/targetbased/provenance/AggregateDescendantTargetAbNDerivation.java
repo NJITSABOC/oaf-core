@@ -68,6 +68,10 @@ public class AggregateDescendantTargetAbNDerivation extends TargetAbNDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("Derived weighted aggregate descendants target abstraction "
+                + "network (Target Group: %s)", selectedAggregateClusterRoot.getName());
+        }
         return String.format("Derived aggregate descendants target abstraction "
                 + "network (Target Group: %s)", selectedAggregateClusterRoot.getName());
     }

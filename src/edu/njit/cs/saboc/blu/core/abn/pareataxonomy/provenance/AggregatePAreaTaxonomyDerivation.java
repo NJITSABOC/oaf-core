@@ -42,6 +42,9 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
 
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), bound);
+        }
         return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), bound);
     }
 

@@ -65,6 +65,9 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("Derived weighted aggregate ancestor TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
+        }
         return String.format("Derived aggregate ancestor TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
     }
 

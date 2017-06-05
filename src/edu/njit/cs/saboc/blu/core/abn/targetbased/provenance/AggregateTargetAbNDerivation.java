@@ -56,7 +56,10 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
 
     @Override
     public String getName() {
-        return String.format("%s (aggregated)", super.getName());
+        if (isWeightedAggregated) {
+            return String.format("%s (Weighted Aggregated)", super.getName());
+        }
+        return String.format("%s (Aggregated)", super.getName());
     }
     
     @Override

@@ -56,6 +56,9 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     
     @Override
     public String getName() {
+        if (isWeightedAggregated) {
+            return String.format("%s (Weighted Aggregated)", nonAggregateSourceDerivation.getName()); 
+        }
         return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName()); 
     }
     

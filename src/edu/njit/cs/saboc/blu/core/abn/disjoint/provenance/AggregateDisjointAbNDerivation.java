@@ -56,11 +56,17 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
 
     @Override
     public String getName() {
+        if (isWeightedAggregated) {
+            return String.format("%s (Weighted Aggregated)", nonAggregateDerivation.getName());
+        }
         return String.format("%s (Aggregated)", nonAggregateDerivation.getName());
     }
 
     @Override
     public String getAbstractionNetworkTypeName() {
+        if (isWeightedAggregated) {
+            return String.format("Weighted Aggregate %s", nonAggregateDerivation.getAbstractionNetworkTypeName());
+        }
         return String.format("Aggregate %s", nonAggregateDerivation.getAbstractionNetworkTypeName());
     }
     

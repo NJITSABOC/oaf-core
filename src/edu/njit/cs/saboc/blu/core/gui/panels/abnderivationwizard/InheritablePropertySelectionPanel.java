@@ -86,6 +86,7 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         });
         
         btnSelectAll = new JButton("Select All");
+        btnSelectAll.setToolTipText("Select all of the Above Check Boxes");
         btnSelectAll.addActionListener( (ae) -> {
             propertyBoxes.forEach( (cb) -> {
                cb.setSelected(true);

@@ -6,49 +6,80 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Class for managing persistance/state files.
+ * 
  * @author Chris O
  */
 public class OAFStateFileManager {
     
-    private final OAFRecentlyOpenedFileManager recentlyOpenedOntologiesManager;
+    private OAFRecentlyOpenedFileManager recentlyOpenedOntologiesManager;
     
-    private final OAFOntologySpecificFileManager recentAbNWorkspaceManager;
+    private OAFOntologySpecificFileManager recentAbNWorkspaceManager;
     
-    private final OAFOntologySpecificFileManager recentNATWorkspaceManager;
+    private OAFOntologySpecificFileManager recentNATWorkspaceManager;
     
-    private final OAFOntologySpecificFileManager recentAuditSetsManager;
-    
-    
+    private OAFOntologySpecificFileManager recentAuditSetsManager;
     
     private final Map<File, OAFRecentlyOpenedFileManager> recentAuditSetFileManagers;
     private final Map<File, OAFRecentlyOpenedFileManager> recentAbNWorkspaceFileManagers;
     private final Map<File, OAFRecentlyOpenedFileManager> recentNATWorkspaceFileManagers;
     
-    public OAFStateFileManager(String toolName) throws RecentlyOpenedFileException {
+    
+    // Try to initialize once on OAF startup
+    private boolean initialized = false;
+    
+    public OAFStateFileManager(String toolName) {
 
-        this.recentlyOpenedOntologiesManager = new OAFRecentlyOpenedFileManager(toolName, "recently_opened_ontologies", 10);
+        try {
+            
+            this.recentlyOpenedOntologiesManager = new OAFRecentlyOpenedFileManager(toolName, "recently_opened_ontologies", 10);
 
-        this.recentAbNWorkspaceManager = new OAFOntologySpecificFileManager(
-                String.format("%s\\recentAbNWorkspace", toolName), "recentAbNWorkspace");
-        
-        this.recentNATWorkspaceManager = new OAFOntologySpecificFileManager(
-                String.format("%s\\recentNATWorkspace", toolName), "recentNATWorkspace");
+            this.recentAbNWorkspaceManager = new OAFOntologySpecificFileManager(
+                    String.format("%s\\recentAbNWorkspace", toolName), "recentAbNWorkspace");
 
-        this.recentAuditSetsManager = new OAFOntologySpecificFileManager(
-                String.format("%s\\recentAuditSets", toolName), "recentAuditSets");
-        
-        
+            this.recentNATWorkspaceManager = new OAFOntologySpecificFileManager(
+                    String.format("%s\\recentNATWorkspace", toolName), "recentNATWorkspace");
+
+            this.recentAuditSetsManager = new OAFOntologySpecificFileManager(
+                    String.format("%s\\recentAuditSets", toolName), "recentAuditSets");
+            
+            this.initialized = true;
+            
+        } catch (RecentlyOpenedFileException rofe) {
+            this.initialized = false;
+        }
+
         this.recentAuditSetFileManagers = new HashMap<>();
         this.recentAbNWorkspaceFileManagers = new HashMap<>();
         this.recentNATWorkspaceFileManagers = new HashMap<>();
     }
     
-    public OAFRecentlyOpenedFileManager getRecentlyOpenedOntologiesManager() {
+    public boolean isInitialized() {
+        return initialized;
+    }
+    
+    private void ensureInitialized() throws RecentlyOpenedFileException {
+        if(!this.isInitialized()) {
+            throw new RecentlyOpenedFileException("State File Manager not initialized.");
+        }
+    }
+    
+    private void ensureNotNull(File ontologyFile) throws RecentlyOpenedFileException {
+        if(ontologyFile == null) {
+            throw new RecentlyOpenedFileException("Cannot load recent files for null ontology file.");
+        }
+    } 
+    
+    public OAFRecentlyOpenedFileManager getRecentlyOpenedOntologiesManager() throws RecentlyOpenedFileException {
+        ensureInitialized();
+        
         return recentlyOpenedOntologiesManager;
     }
 
     public OAFRecentlyOpenedFileManager getRecentlyOpenedAuditSets(File ontologyFile) throws RecentlyOpenedFileException {
+        
+        ensureInitialized();
+        ensureNotNull(ontologyFile);
 
         if (!recentAuditSetFileManagers.containsKey(ontologyFile)) {
             recentAuditSetFileManagers.put(ontologyFile,
@@ -61,6 +92,9 @@ public class OAFStateFileManager {
     
 
     public OAFRecentlyOpenedFileManager getRecentAbNWorkspaces(File ontologyFile) throws RecentlyOpenedFileException {
+        
+        ensureInitialized();
+        ensureNotNull(ontologyFile);
 
         if (!recentAbNWorkspaceFileManagers.containsKey(ontologyFile)) {
             recentAbNWorkspaceFileManagers.put(ontologyFile,
@@ -73,6 +107,9 @@ public class OAFStateFileManager {
     
 
     public OAFRecentlyOpenedFileManager getRecentNATWorkspaces(File ontologyFile) throws RecentlyOpenedFileException {
+        
+        ensureInitialized();
+        ensureNotNull(ontologyFile);
 
         if (!recentNATWorkspaceFileManagers.containsKey(ontologyFile)) {
             recentNATWorkspaceFileManagers.put(ontologyFile,

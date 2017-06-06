@@ -25,10 +25,14 @@ public class AbNHistoryNavigationPanel extends JPanel {
     private final AbNDerivationHistory derivationHistory;
     
     private final AbNHistoryNavigationManager historyNavigationManager;
+    
+    private final MultiAbNGraphFrame graphFrame;
 
     public AbNHistoryNavigationPanel(
             MultiAbNGraphFrame graphFrame,
             AbNDerivationHistory derivationHistory) {
+        
+        this.graphFrame = graphFrame;
         
         this.derivationHistory = derivationHistory;
         
@@ -46,7 +50,7 @@ public class AbNHistoryNavigationPanel extends JPanel {
 
         forwardBtn = new JButton();
         forwardBtn.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
-        forwardBtn.addActionListener((ae) -> {
+        forwardBtn.addActionListener( (ae) -> {
             historyNavigationManager.goForward();
             
             updateNavigationButtons();
@@ -63,6 +67,11 @@ public class AbNHistoryNavigationPanel extends JPanel {
      
         this.workspaceBtn = new AbNWorkspaceButton(graphFrame);
         
+        if(!graphFrame.getStateFileManager().isInitialized()) {
+            workspaceBtn.setEnabled(false);
+            workspaceBtn.setToolTipText("OAF Workspaces are disabled (unable to create AppData folder)");
+        }
+        
         this.add(backBtn);
         this.add(Box.createHorizontalStrut(4));
         this.add(viewHistoryBtn);
@@ -75,11 +84,29 @@ public class AbNHistoryNavigationPanel extends JPanel {
     public void setInitializers(AbNGraphFrameInitializers initializers) {
         viewHistoryBtn.setInitializers(initializers);
         historyNavigationManager.setInitializers(initializers);
+        
+        updateWorkspaceButton(initializers);
+    }
+    
+    private void updateWorkspaceButton(AbNGraphFrameInitializers initializers) {
+        
+        if(graphFrame.getStateFileManager().isInitialized()) {
+            
+            if(initializers.getRecentAbNWorkspaceFiles() != null) {
+                workspaceBtn.setEnabled(true);
+                
+                return;
+            }
+        }
+        
+        workspaceBtn.setEnabled(false);
     }
 
     public void clearInitializers() {
         viewHistoryBtn.clearInitializers();
         historyNavigationManager.clearInitializers();
+        
+        workspaceBtn.setEnabled(false);
     }
     
     public final void refreshHistoryDisplay() {

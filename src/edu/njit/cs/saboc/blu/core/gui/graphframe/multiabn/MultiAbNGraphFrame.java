@@ -29,6 +29,7 @@ import javax.swing.event.InternalFrameEvent;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistory;
 import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspace;
 import edu.njit.cs.saboc.blu.core.gui.workspace.AbNWorkspaceManager;
+import edu.njit.cs.saboc.blu.core.utils.toolstate.OAFStateFileManager;
 
 /**
  *
@@ -45,18 +46,27 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private Optional<TaskBarPanel> optCurrentTaskBarPanel = Optional.empty();
 
     private Optional<AbNGraphFrameInitializers> optInitializers;
+    
 
     private final MultiAbNDisplayManager displayManager;
+    
+    
 
     private final AbNDerivationHistory abnDerivationHistory;
 
     private final AbNHistoryNavigationPanel historyNavigationPanel;
     
+    
+    
     private Optional<AbNWorkspace> optWorkspace;
     
     private final AbNWorkspaceManager workspaceManager;
+    
+    private final OAFStateFileManager stateFileManager;
 
-    public MultiAbNGraphFrame(JFrame parentFrame) {
+    public MultiAbNGraphFrame(
+            JFrame parentFrame, 
+            OAFStateFileManager stateFileManager) {
 
         super("Ontology Abstraction Framework (OAF) Abstraction Network Viewer",
                 true, // resizable
@@ -65,6 +75,7 @@ public class MultiAbNGraphFrame extends JInternalFrame {
                 false);// iconifiable
 
         this.parentFrame = parentFrame;
+        this.stateFileManager = stateFileManager;
 
         this.displayManager = new MultiAbNDisplayManager(this, null);
 
@@ -158,6 +169,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
     public JFrame getParentFrame() {
         return parentFrame;
+    }
+    
+    public OAFStateFileManager getStateFileManager() {
+        return stateFileManager;
     }
     
     public void setInitializers(AbNGraphFrameInitializers initializers) {

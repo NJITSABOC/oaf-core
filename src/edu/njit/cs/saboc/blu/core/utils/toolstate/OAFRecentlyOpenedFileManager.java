@@ -61,11 +61,21 @@ public class OAFRecentlyOpenedFileManager {
     
     private void ensureInitialized() throws RecentlyOpenedFileException {
         
+        if(recentFilesFile == null) {
+            throw new RecentlyOpenedFileException(
+                    "Specified recent files config file is null: " 
+                    + recentFilesFile.getAbsolutePath());
+        }
+        
         File parentFile = recentFilesFile.getParentFile();
+        
+        if(parentFile == null) {
+            throw new RecentlyOpenedFileException("Parent file is null: " + recentFilesFile.getAbsolutePath());
+        }
         
         if (!parentFile.exists()) {
             if (!parentFile.mkdirs()) {
-                throw new RecentlyOpenedFileException("Cannot create required appdata folders.");
+                throw new RecentlyOpenedFileException("Cannot create required appdata folders: " + recentFilesFile.getAbsolutePath());
             }
         }
         

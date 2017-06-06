@@ -1,14 +1,10 @@
 package edu.njit.cs.saboc.blu.core.gui.gep;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
  *
@@ -61,9 +57,11 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
         
         showFull();
         
+        /*
         JComponent titlePanel = (BasicInternalFrameTitlePane)((BasicInternalFrameUI)getUI()).getNorthPane();
         titlePanel.setPreferredSize(new Dimension(-1, 10));
         titlePanel.setBackground(new Color(100, 100, 255));
+        */
         
         this.setFrameIcon(null);
         

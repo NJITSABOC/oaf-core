@@ -67,6 +67,7 @@ public class AbNWorkspaceButton extends JButton {
         menu.add(new JSeparator());
         
         if(graphFrame.getCurrentInitializers().isPresent()) {
+            
             OAFRecentlyOpenedFileManager recentWorkspaceFileManager = graphFrame.getCurrentInitializers().get().getRecentAbNWorkspaceFiles();
             
             if (!recentWorkspaceFileManager.getRecentlyOpenedFiles().isEmpty()) {

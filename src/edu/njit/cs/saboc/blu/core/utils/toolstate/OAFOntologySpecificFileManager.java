@@ -36,6 +36,7 @@ public class OAFOntologySpecificFileManager {
         
         this.fileType = fileType;
         
+        // TODO: Make appdata location user-selectable
         this.ontologyFileListFile = new File(String.format("appdata\\%s\\%s", appDataSubFolder, fileType));
         
         ensureInitialized();

@@ -20,9 +20,10 @@ public class AbNDerivationHistoryTableModel extends OAFAbstractTableModel<AbNDer
     protected Object[] createRow(AbNDerivationHistoryEntry item) {
         SimpleDateFormat entryTimeFormat = new SimpleDateFormat ("MM/dd/yyyy hh:mm:ss a");
         
-        return new Object[] {
+        return new Object[]{
             entryTimeFormat.format(item.getDate()),
             item.getDerivation().getName()
         };
     }
+    
 }

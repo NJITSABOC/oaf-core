@@ -67,13 +67,13 @@ public abstract class AbstractEntityList<T> extends JPanel {
         this.entityTable.setFont(entityTable.getFont().deriveFont(Font.PLAIN, 14));
         
         setDefaultTableStringRenderer(new MultiLineTextRenderer(entityTable));
-
+               
         this.entityTable.addMouseListener(new MouseAdapter() {
             
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (entityTable.getSelectedRow() >= 0) {
-
+                    
                     T entity = tableModel.getItemAtRow(sorter.convertRowIndexToModel(entityTable.getSelectedRow()));
 
                     if (e.getClickCount() == 1) {
@@ -86,7 +86,7 @@ public abstract class AbstractEntityList<T> extends JPanel {
                         });
                     }
 
-                } else {
+                } else {                    
                     selectionListeners.forEach((listener) -> {
                         listener.noEntitySelected();
                     });

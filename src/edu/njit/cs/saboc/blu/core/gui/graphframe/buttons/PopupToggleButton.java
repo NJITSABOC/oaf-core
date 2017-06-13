@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -30,7 +32,13 @@ public class PopupToggleButton extends JToggleButton {
         popup.setFocusableWindowState(true);
         popup.setFocusable(true);
         
-       
+        popup.addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowLostFocus(WindowEvent we) {
+                doUnselected();
+            }
+        });
+             
         this.addActionListener( (ae) -> {
             
             if(isSelected()) {
@@ -71,6 +79,7 @@ public class PopupToggleButton extends JToggleButton {
         setSelected(true);
         
         popup.setVisible(true);
+        popup.requestFocusInWindow();
         
         
         if(taskBarPanel != null) {

@@ -20,6 +20,7 @@ public class MouseOverJTable extends JTable {
         addMouseListener(lst);
     }
 
+    @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component c = super.prepareRenderer(renderer, row, column);
         if (isRowSelected(row)) {
@@ -37,18 +38,20 @@ public class MouseOverJTable extends JTable {
 
     private class RollOverListener extends MouseInputAdapter {
 
+        @Override
         public void mouseExited(MouseEvent e) {
             rollOverRowIndex = -1;
             repaint();
         }
-
+        
+        @Override
         public void mouseMoved(MouseEvent e) {
             int row = rowAtPoint(e.getPoint());
             
             if (row != rollOverRowIndex) {
                 rollOverRowIndex = row;
                 repaint();
-            }
+            }          
         }
     }
 }

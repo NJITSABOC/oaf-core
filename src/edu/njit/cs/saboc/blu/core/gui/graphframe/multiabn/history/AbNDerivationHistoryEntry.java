@@ -4,6 +4,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
+import java.awt.Component;
 import java.util.Date;
 import javax.swing.SwingUtilities;
 import org.json.simple.JSONObject;
@@ -13,7 +14,7 @@ import org.json.simple.JSONObject;
  * @author Chris O
  * @param <T>
  */
-public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> {
+public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> extends Component{
    
     private final MultiAbNGraphFrame graphFrame;
 

@@ -28,28 +28,29 @@ public class AbNHistoryButton extends PopupToggleButton {
     private final AbNDerivationHistoryPanel derivationHistoryPanel;
     
     private final AbNDerivationHistory derivationHistory;
-    
+       
     public AbNHistoryButton(
             MultiAbNGraphFrame graphFrame, 
             AbNDerivationHistory derivationHistory,
             AbNDerivationParser abnParser) {
-        
+                
         super(graphFrame.getParentFrame(), "History");
-
+                
         JPanel historyPanel = new JPanel(new BorderLayout());
         
         this.derivationHistory = derivationHistory;
 
-        this.derivationHistoryPanel = new AbNDerivationHistoryPanel();
+        this.derivationHistoryPanel = new AbNDerivationHistoryPanel(); 
         displayHistory(derivationHistory);
         
         this.addActionListener( (ae) -> {
             this.derivationHistoryPanel.showHistory(derivationHistory);
+            historyPanel.grabFocus();
         });
 
         JButton saveBtn = new JButton("Save Selected Entry");
         saveBtn.addActionListener((se) -> {
-
+            
             AbNDerivationHistoryEntry entry = derivationHistoryPanel.getSelectedEntry();
 
             JSONArray arr = new JSONArray();
@@ -87,8 +88,8 @@ public class AbNHistoryButton extends PopupToggleButton {
 
         historyPanel.add(derivationHistoryPanel, BorderLayout.CENTER);
         historyPanel.add(subPanel, BorderLayout.SOUTH);
-
-        this.setPopupContent(historyPanel);
+        
+        this.setPopupContent(historyPanel);               
     }
     
     public final void displayHistory(AbNDerivationHistory derivationHistory) {

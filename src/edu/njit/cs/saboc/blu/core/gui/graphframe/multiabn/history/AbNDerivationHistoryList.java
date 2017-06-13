@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
+import edu.njit.cs.saboc.blu.core.gui.utils.renderers.SingleLineTextRenderer;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ public class AbNDerivationHistoryList extends AbstractEntityList<AbNDerivationHi
     
     public AbNDerivationHistoryList() {
         super(new AbNDerivationHistoryTableModel());
+        this.setDefaultTableRenderer(String.class, new SingleLineTextRenderer(this.getEntityTable()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.panels.derivationexplanation;
 
+import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -81,9 +83,13 @@ public class AbNDerivationExplanationPanel extends JPanel {
             showNext();
         });
         
+        this.nextButton.setIcon(ImageManager.getImageManager().getIcon("right-arrow.png"));
+        this.nextButton.setHorizontalTextPosition(SwingConstants.LEFT);
+        
         this.backButton.addActionListener( (ae) -> {
             showPrevious();
         });
+        this.backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
         
         this.currentLocationLabel = new JLabel();
         

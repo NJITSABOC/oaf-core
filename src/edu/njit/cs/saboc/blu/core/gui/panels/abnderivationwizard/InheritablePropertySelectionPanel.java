@@ -76,7 +76,8 @@ public class InheritablePropertySelectionPanel extends AbNDerivationWizardPanel 
         
         this.add(propertyScroller, BorderLayout.CENTER);
 
-        btnUnselectAll = new JButton("Select None");
+        btnUnselectAll = new JButton("Deselect All");
+        btnUnselectAll.setToolTipText("Deselect all of the Above Check Boxes");
         btnUnselectAll.addActionListener( (ae) -> {
             propertyBoxes.forEach( (cb) -> {
                cb.setSelected(false);

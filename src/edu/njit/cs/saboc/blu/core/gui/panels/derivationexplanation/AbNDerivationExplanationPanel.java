@@ -75,9 +75,14 @@ public class AbNDerivationExplanationPanel extends JPanel {
                 
         
         JPanel southPanel = new JPanel(new BorderLayout());
+        this.currentLocationLabel = new JLabel("test");
+        FlowLayout pageNumberLayout = new FlowLayout(FlowLayout.CENTER);
+        JPanel pageNumberPanel = new JPanel(pageNumberLayout);
+        pageNumberPanel.add(currentLocationLabel);
         
         southPanel.add(backButton, BorderLayout.WEST);
         southPanel.add(nextButton, BorderLayout.EAST);
+        southPanel.add(pageNumberPanel, BorderLayout.CENTER);
         
         this.nextButton.addActionListener((ae) -> {
             showNext();
@@ -91,12 +96,8 @@ public class AbNDerivationExplanationPanel extends JPanel {
         });
         this.backButton.setIcon(ImageManager.getImageManager().getIcon("left-arrow.png"));
         
-        this.currentLocationLabel = new JLabel();
+
         
-        JPanel southCenterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        southCenterPanel.add(currentLocationLabel);
-        
-        southPanel.add(southCenterPanel, BorderLayout.CENTER);
         
         
         this.add(southPanel, BorderLayout.SOUTH);
@@ -147,5 +148,7 @@ public class AbNDerivationExplanationPanel extends JPanel {
         
         this.imageLabel.setIcon(entry.getImage());
         this.descriptionPane.setText(entry.getText());
+        
+        currentLocationLabel.setText(Integer.toString(currentLocation + 1));
     }
 }

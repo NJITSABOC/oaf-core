@@ -38,7 +38,9 @@ public class PAreaTaxonomyDerivationExplanation extends AbNDerivationExplanation
         
         
         String str3 =  "<html><font size = '6'>Sets of <conceptTypeName count=2> that have the exact same "
-                + "types of <propertyTypeName count=2> are identified.";
+                + "types of <propertyTypeName count=2> are identified. Every set is shown "
+                + "with a dashed line around it. The black dashed line has no <propertyTypeName count=2> "
+                + "and therefore an empty set symbol \u00D8 is shown.";
         
         str3 = formatter.format(str3);
         

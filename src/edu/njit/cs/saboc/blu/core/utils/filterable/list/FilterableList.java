@@ -44,6 +44,8 @@ public class FilterableList<T> extends JPanel {
     
     private final JList<Filterable<T>> list;
     
+    private final JScrollPane scrollpane;
+    
     private final ArrayList<FilterableListSelectionListener<T>> selectionListeners = new ArrayList<>();
     
     private final FilterPanel filterPanel;
@@ -129,7 +131,7 @@ public class FilterableList<T> extends JPanel {
         InputMap inputMap = list.getInputMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), "Copy");
 
-        JScrollPane scrollpane = new JScrollPane(list);
+        scrollpane = new JScrollPane(list);
         add(scrollpane, BorderLayout.CENTER);
         
         this.filterPanel = new FilterPanel();
@@ -302,6 +304,14 @@ public class FilterableList<T> extends JPanel {
         int row = this.list.locationToIndex(e.getPoint());
         
         return row;
+    }
+    
+    public int getVerticalScrollLocation() {
+        return scrollpane.getVerticalScrollBar().getValue();
+    }
+    
+    public void setVerticalScrollLocation(int location) {
+        this.scrollpane.getViewport().setViewPosition(new Point(0, location));
     }
     
     @Override

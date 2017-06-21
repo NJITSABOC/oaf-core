@@ -10,7 +10,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -116,7 +115,9 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             } else {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
 
-                setBound(aggregationSlider.getValue(), false);
+                if(currentBound != 1) {
+                    setBound(aggregationSlider.getValue(), false);
+                }
                 
                 isWeightedAggregated = false;
             }

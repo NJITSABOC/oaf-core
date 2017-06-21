@@ -74,8 +74,6 @@ public class PopupToggleButton extends JToggleButton {
     }
         
     public final void doSelected() {
-        setIcon(ImageManager.getImageManager().getIcon("cancel.png"));
-        
         setSelected(true);
         
         popup.setVisible(true);
@@ -90,8 +88,6 @@ public class PopupToggleButton extends JToggleButton {
     }
     
     public final void doUnselected() {
-        setIcon(null);
-        
         setSelected(false);
 
         popup.setVisible(false);

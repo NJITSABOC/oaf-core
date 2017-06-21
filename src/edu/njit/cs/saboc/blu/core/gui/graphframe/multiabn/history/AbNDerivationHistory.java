@@ -53,7 +53,8 @@ public class AbNDerivationHistory {
     }
     
     public void addEntry(AbNDerivationHistoryEntry entry, boolean fireListeners) {
-        
+
+
         entries.add(entry);
 
         if (fireListeners) {

@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -20,22 +21,24 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
     private final ClusterTANDerivation aggregateBase;
     private final int minBound;
     private final Concept selectedAggregateClusterRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorSubTANDerivation(AggregateAncestorSubTANDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
+                deriveTaxonomy.getAggregatedProperty(), 
                 deriveTaxonomy.getSelectedRoot());
     }
 
@@ -63,6 +66,9 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("Derived weighted aggregate ancestor TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
+        }
         return String.format("Derived aggregate ancestor TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
     }
 
@@ -95,7 +101,18 @@ public class AggregateAncestorSubTANDerivation extends ClusterTANDerivation
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
     }   
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
+    }
 }

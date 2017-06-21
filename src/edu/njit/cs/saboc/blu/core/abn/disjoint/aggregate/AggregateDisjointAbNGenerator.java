@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.abn.disjoint.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
@@ -24,9 +25,9 @@ public class AggregateDisjointAbNGenerator<
     public DisjointAbstractionNetwork createAggregateDisjointAbN(
             DisjointAbstractionNetwork<T, PARENTABN_T, PARENTNODE_T> sourceDisjointAbN,
             AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator,
-            int min) {
-
-        if (min == 1) {
+            AggregatedProperty aggregatedProperty) {
+        
+        if (aggregatedProperty.getBound() == 1) {
             return sourceDisjointAbN;
         }
 
@@ -34,17 +35,18 @@ public class AggregateDisjointAbNGenerator<
                 = aggregateGenerator.createAggregateAbN(new AggregateDisjointAbNFactory(),
                         (Hierarchy<DisjointNode<PARENTNODE_T>>)sourceDisjointAbN.getNodeHierarchy(),
                         sourceDisjointAbN.getSourceHierarchy(),
-                        min);
+                        aggregatedProperty);
 
         AggregateDisjointAbstractionNetwork<PARENTABN_T, PARENTNODE_T> aggregateDisjointAbN = new AggregateDisjointAbstractionNetwork<>(
                 sourceDisjointAbN,
-                min,
+                aggregatedProperty,
                 sourceDisjointAbN.getParentAbstractionNetwork(),
                 reducedNodeHierarchy,
                 sourceDisjointAbN.getSourceHierarchy(),
                 sourceDisjointAbN.getLevelCount(),
                 sourceDisjointAbN.getAllSourceNodes(),
-                sourceDisjointAbN.getOverlappingNodes());
+                sourceDisjointAbN.getOverlappingNodes()
+        );
 
         return aggregateDisjointAbN;
     }

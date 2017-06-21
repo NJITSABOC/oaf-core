@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.ExpandedSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
@@ -20,16 +21,16 @@ public class AggregatePAreaTaxonomyGenerator {
      * @param sourceTaxonomy
      * @param generator
      * @param aggregateGenerator
-     * @param min
+     * @param aggregatedProperty which includes min and isWeightedAggregated
      * @return 
      */
     public PAreaTaxonomy createAggregatePAreaTaxonomy(
             final PAreaTaxonomy sourceTaxonomy,
             final PAreaTaxonomyGenerator generator,
             final AggregateAbNGenerator<PArea, AggregatePArea> aggregateGenerator, 
-            final int min) {
+            final AggregatedProperty aggregatedProperty) {
         
-        if(min == 1) {
+        if(aggregatedProperty.getBound() == 1) {
             return sourceTaxonomy;
         }
         
@@ -38,7 +39,7 @@ public class AggregatePAreaTaxonomyGenerator {
                         new AggregatePAreaTaxonomyFactory(),
                         sourceTaxonomy.getPAreaHierarchy(), 
                         sourceTaxonomy.getSourceHierarchy(),
-                        min);
+                        aggregatedProperty);
 
         Hierarchy<PArea> pareaHierarchy = (Hierarchy<PArea>)(Hierarchy<?>)reducedPAreaHierarchy;
 
@@ -51,10 +52,10 @@ public class AggregatePAreaTaxonomyGenerator {
                        
         return new AggregatePAreaTaxonomy(
                 sourceTaxonomy, 
-                min, 
+                aggregatedProperty,
                 aggregatedTaxonomy);
     }
-    
+   
     /**
      * Creates an expanded subtaxonomy from the given aggregate partial-area
      * 

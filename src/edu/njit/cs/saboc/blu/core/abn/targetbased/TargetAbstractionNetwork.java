@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.CachedAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.provenance.TargetAbNDerivation;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
@@ -104,8 +105,8 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     }
 
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode) {
-        return AggregateTargetAbN.createAggregated(this, smallestNode);
+    public TargetAbstractionNetwork<T> getAggregated(int smallestNode, boolean weightedAggregated) {
+        return AggregateTargetAbN.createAggregated(this, new AggregatedProperty(smallestNode, weightedAggregated));
     }
     
     public TargetAbstractionNetwork createAncestorTargetAbN(T root) {

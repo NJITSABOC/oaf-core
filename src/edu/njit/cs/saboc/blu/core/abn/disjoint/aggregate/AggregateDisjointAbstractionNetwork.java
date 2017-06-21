@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.AncestorDisjointAbN;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
@@ -62,7 +63,7 @@ public class AggregateDisjointAbstractionNetwork<
         
         AggregateAbstractionNetwork agregateAbN = (AggregateAbstractionNetwork)superAggregateDisjointAbN;
         
-        DisjointAbstractionNetwork aggregatedAncestorAbN = unaggregatedAncestorAbN.getAggregated(agregateAbN.getAggregateBound());
+        DisjointAbstractionNetwork aggregatedAncestorAbN = unaggregatedAncestorAbN.getAggregated(agregateAbN.getAggregateBound(), agregateAbN.isWeightedAggregated());
         
         AncestorDisjointAbN ancestorDisjointAbN = new AncestorDisjointAbN(
             (DisjointNode)selectedRoot.getAggregatedHierarchy().getRoot(), 
@@ -74,9 +75,10 @@ public class AggregateDisjointAbstractionNetwork<
         return new AggregateAncestorDisjointAbN(
                 selectedRoot, 
                 superAggregateDisjointAbN,
-                agregateAbN.getAggregateBound(),
+                agregateAbN.getAggregatedProperty(),
                 ancestorDisjointAbN,
-                aggregatedAncestorAbN);
+                aggregatedAncestorAbN
+        );
     }
     
     
@@ -84,9 +86,11 @@ public class AggregateDisjointAbstractionNetwork<
     
     private final int aggregateBound;
     
+    private final boolean isWeightedAggregated;
+    
     public AggregateDisjointAbstractionNetwork(
             DisjointAbstractionNetwork sourceAbN,
-            int aggregateBound, 
+            AggregatedProperty aggregatedProperty, 
             PARENTABN_T parentAbN, 
             Hierarchy<AggregateDisjointNode<PARENTNODE_T>> groupHierarchy,
             Hierarchy<Concept> sourceHierarchy,
@@ -101,10 +105,11 @@ public class AggregateDisjointAbstractionNetwork<
                 levels, 
                 allNodes, 
                 overlappingNodes,
-                new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregateBound));
+                new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregatedProperty));
         
         this.sourceAbN = sourceAbN;
-        this.aggregateBound = aggregateBound;
+        this.aggregateBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
 
     @Override
@@ -123,14 +128,15 @@ public class AggregateDisjointAbstractionNetwork<
     }
     
     @Override
-    public DisjointAbstractionNetwork getAggregated(int smallestNode) {
+    public DisjointAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
         AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
         
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
                 new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, smallestNode);
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, new AggregatedProperty(smallestNode,isWeightedAggregated));
     }
+    
     
     @Override
     public ExpandedDisjointAbN expandAggregateNode(AggregateDisjointNode<PARENTNODE_T> aggregateNode) {
@@ -145,4 +151,15 @@ public class AggregateDisjointAbstractionNetwork<
                 root);
         
     }
+    
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
+    }
+    
 }

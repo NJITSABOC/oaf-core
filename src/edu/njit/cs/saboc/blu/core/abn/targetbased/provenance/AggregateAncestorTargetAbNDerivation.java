@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
@@ -17,24 +18,28 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     implements RootedSubAbNDerivation<TargetAbNDerivation>, AggregateAbNDerivation<TargetAbNDerivation> {
     
     private final TargetAbNDerivation aggregateBase;
+    
     private final int minBound;
+    private final boolean isWeightedAggregate;
+    
     private final Concept selectedAggregateTargetGroupRoot;
     
     public AggregateAncestorTargetAbNDerivation(
             TargetAbNDerivation aggregateBase, 
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
+        this.isWeightedAggregate = aggregatedProperty.getWeighted();
         this.selectedAggregateTargetGroupRoot = selectedAggregateClusterRoot;
     }
     
     public AggregateAncestorTargetAbNDerivation(AggregateAncestorTargetAbNDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
+                deriveTaxonomy.getAggregatedProperty(),
                 deriveTaxonomy.getSelectedRoot());
     }
 
@@ -52,7 +57,7 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     public int getBound() {
         return minBound;
     }
-
+    
     @Override
     public TargetAbNDerivation getNonAggregateSourceDerivation() {
         AggregateAbNDerivation<TargetAbNDerivation> derivedAggregate = (AggregateAbNDerivation<TargetAbNDerivation>)this.getSuperAbNDerivation();
@@ -62,6 +67,9 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregate) {
+                return String.format("Derived weighted aggregate ancestors target abstraction network (Target Group: %s)", selectedAggregateTargetGroupRoot.getName());
+        }
         return String.format("Derived aggregate ancestors target abstraction network (Target Group: %s)", selectedAggregateTargetGroupRoot.getName());
     }
 
@@ -97,4 +105,14 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
         
         return result;
     }   
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregate;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregate);
+    }
 }

@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.graph.pareataxonomy.PAreaTaxonomyGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel.AggregationAction;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.MinimapPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
@@ -79,27 +80,29 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
-        
-        AggregateableAbNExplorationPanelInitializer initializer = new AggregateableAbNExplorationPanelInitializer(warningManager, (bound) -> {
-            
-                    PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound);
-                    config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);
-                    
-                }) {
 
-                    @Override
-                    public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
-                        super.initializeAbNDisplayPanel(displayPanel, startUp);
+        AggregationAction aggregationAction = (bound, weightedAggregated) -> {
+           
+                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound, weightedAggregated);            
+                config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);           
+        };
 
-                        MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
-                        
-                        if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2 || 
-                                displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
-                            
-                            displayPanel.addWidget(minimapPanel);
-                        }
-                    }
-                };
+        AggregateableAbNExplorationPanelInitializer initializer = 
+                new AggregateableAbNExplorationPanelInitializer(warningManager, aggregationAction) {
+
+            @Override
+            public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {
+                super.initializeAbNDisplayPanel(displayPanel, startUp);
+
+                MinimapPanel minimapPanel = new MinimapPanel(displayPanel);
+
+                if (displayPanel.getGraph().getWidth() > displayPanel.getWidth() * 2
+                        || displayPanel.getGraph().getHeight() > displayPanel.getHeight() * 2) {
+
+                    displayPanel.addWidget(minimapPanel);
+                }
+            }
+        };
 
         return initializer;
     }

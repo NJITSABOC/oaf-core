@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.RootSubtaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance.AggregateRootSubtaxonomyDerivation;
@@ -15,12 +16,13 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
         implements AggregateAbstractionNetwork<AggregatePArea, PAreaTaxonomy> {
     
     private final RootSubtaxonomy nonAggregatedRootSubtaxonomy;
-    private final int aggregateBound;
     
+    private final int aggregateBound;
+    private final boolean isWeightedAggregated;
     
     public AggregateRootSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
-            int aggregateBound,
+            AggregatedProperty aggregatedProperty,
             RootSubtaxonomy nonAggregatedRootSubtaxonomy,
             PAreaTaxonomy subtaxonomy) {
         
@@ -28,16 +30,18 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
                 subtaxonomy, 
                 new AggregateRootSubtaxonomyDerivation(
                         aggregatedSuperAbN.getDerivation(), 
-                        aggregateBound, 
-                        subtaxonomy.getRootPArea().getRoot()));
+                        aggregatedProperty, 
+                        subtaxonomy.getRootPArea().getRoot()
+                ));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
-        this.aggregateBound = aggregateBound;
+        this.aggregateBound = aggregatedProperty.getBound();
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateRootSubtaxonomy(AggregateRootSubtaxonomy subtaxonomy) {
         this(subtaxonomy.getSuperAbN(), 
-                subtaxonomy.getAggregateBound(), 
+                subtaxonomy.getAggregatedProperty(), 
                 subtaxonomy.getNonAggregateSourceAbN(), 
                 subtaxonomy);
     }
@@ -61,10 +65,10 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     public PAreaTaxonomy expandAggregateNode(AggregatePArea parea) {
        return AggregatePAreaTaxonomy.generateExpandedSubtaxonomy(this, parea);
     }
-    
+
     @Override
-    public PAreaTaxonomy getAggregated(int aggregateBound) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), aggregateBound);
+    public PAreaTaxonomy getAggregated(int aggregateBound, boolean isWeightedAggregated) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), new AggregatedProperty(aggregateBound, isWeightedAggregated));
     }
 
     @Override
@@ -75,5 +79,15 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     @Override
     public PAreaTaxonomy createAncestorSubtaxonomy(AggregatePArea source) {
         return AggregatePAreaTaxonomy.generateAggregateAncestorSubtaxonomy(this.getNonAggregateSourceAbN(), this, source);
+    }
+    
+    @Override
+    public AggregatedProperty getAggregatedProperty(){
+        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return this.isWeightedAggregated;
     }
 }

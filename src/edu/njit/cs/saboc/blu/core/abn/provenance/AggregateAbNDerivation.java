@@ -1,6 +1,8 @@
 
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
+
 /**
  * An interface for defining the derivation of some kind of 
  * aggregate abstraction network 
@@ -15,6 +17,18 @@ public interface AggregateAbNDerivation<T extends AbNDerivation> {
      * @return 
      */
     public int getBound();
+    
+    /**
+     * Return the flag that was used to create weighted or non-weighted aggregate abstraction network
+     * @return 
+     */
+    public boolean isWeightedAggregated();
+    
+    /**
+     * Return the AggregatedProperty
+     * @return 
+     */
+    public AggregatedProperty getAggregatedProperty();
     
     /**
      * Returns the derivation used to create the non-aggregated version of the

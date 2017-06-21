@@ -30,14 +30,17 @@ public class AggregateAbNGenerator <
      * @param factory
      * @param sourceHierarchy
      * @param sourceConceptHierarchy
-     * @param minNodeSize The minimum size node that is preserved
+     * @param aggregatedProperty which includes 
+     * minNodeSize The minimum size node that is preserved and 
+     * isWeightedAggregated flag for weighted aggregated
      * @return 
      */
     public Hierarchy<AGGREGATENODE_T> createAggregateAbN(
             AggregateAbNFactory<NODE_T, AGGREGATENODE_T> factory,
             Hierarchy<NODE_T> sourceHierarchy, 
             Hierarchy<Concept> sourceConceptHierarchy,
-            int minNodeSize) {
+            AggregatedProperty aggregatedProperty
+            ) {
         
         Map<NODE_T, Hierarchy<NODE_T>> aggregateNodeMembers = new HashMap<>();
 
@@ -48,14 +51,24 @@ public class AggregateAbNGenerator <
         remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
         
         Map<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
+        int minNodeSize = aggregatedProperty.getBound();
+        boolean isWeighteAggregated = aggregatedProperty.getWeighted();
         
         for(NODE_T group : sourceHierarchy.getNodes()) {
+
             nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
-            
+
             if (group.getConceptCount() >= minNodeSize) {
                 remainingNodes.add(group);
-            }
-
+            }else if (isWeighteAggregated == true) {
+                int allDescendantsConceptCount=0;
+                for (NODE_T descendant : sourceHierarchy.getDescendants(group)){
+                    allDescendantsConceptCount = allDescendantsConceptCount + descendant.getConceptCount();                
+                }
+                if((group.getConceptCount() + allDescendantsConceptCount) >= minNodeSize){
+                    remainingNodes.add(group);
+                }
+            }            
             groupSet.put(group, new HashSet<>());
         }
         

@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.targetbased.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetAbstractionNetworkGenerator;
 import edu.njit.cs.saboc.blu.core.abn.targetbased.TargetGroup;
@@ -19,35 +20,31 @@ public class AggregateTargetAbNGenerator {
      * @param sourceTargetAbN
      * @param generator
      * @param aggregateGenerator
-     * @param bound
+     * @param aggregatedProperty which includes bound and weightedAggregated
      * @return 
      */
     public TargetAbstractionNetwork createAggregateTargetAbN(
             TargetAbstractionNetwork sourceTargetAbN,
             TargetAbstractionNetworkGenerator generator,
             AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
-            int bound) {
+            AggregatedProperty aggregatedProperty) {
 
-        if (bound == 1) {
+        if (aggregatedProperty.getBound() == 1) {
             return sourceTargetAbN;
         }
-        
-        Hierarchy<TargetGroup> sourceHierarchy = sourceTargetAbN.getTargetGroupHierarchy();
         
         Hierarchy<AggregateTargetGroup> reducedTargetHierarchy = aggregateGenerator.createAggregateAbN(
                         new AggregateTargetAbNFactory(),
                         sourceTargetAbN.getTargetGroupHierarchy(),
                         sourceTargetAbN.getSourceHierarchy(),
-                        bound);
+                        aggregatedProperty);
         
         TargetAbstractionNetwork targetAbN = new AggregateTargetAbN(
                 sourceTargetAbN, 
-                bound, 
+                aggregatedProperty,
                 reducedTargetHierarchy, 
                 sourceTargetAbN.getSourceHierarchy());
 
-        targetAbN.setAggregated(true);
-        
         return targetAbN;
     }
     

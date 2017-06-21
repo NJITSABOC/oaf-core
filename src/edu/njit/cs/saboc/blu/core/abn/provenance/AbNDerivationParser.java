@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.provenance;
 
 import edu.njit.cs.saboc.blu.core.abn.PartitionedAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateAncestorDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AggregateDisjointAbNDerivation;
@@ -210,6 +211,16 @@ public abstract class AbNDerivationParser {
         }
     }
     
+    protected boolean isWeightedAggregated(JSONObject obj) throws AbNParseException{
+        if (!obj.containsKey("isWeightedAggregated")) {
+            throw new AbNParseException("Weighted Aggregate not specified.");
+        }
+        
+        System.out.println("isWeightedAggregated: " + obj.get("isWeightedAggregated"));
+        
+        return Boolean.valueOf(obj.get("isWeightedAggregated").toString());   
+    }
+    
     protected <T extends AbNDerivation> T getBaseAbNDerivation(JSONObject obj, String key) throws AbNParseException {
         
         if (!obj.containsKey(key)) {
@@ -279,15 +290,22 @@ public abstract class AbNDerivationParser {
     }
 
     public AggregateRootSubtaxonomyDerivation parseAggregateRootSubtaxonomyDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateRootSubtaxonomyDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateRootSubtaxonomyDerivation(
+                getBaseAbNDerivation(obj), 
+                aggregatedProperty, 
+                getRoot(obj) 
+                );
     }
 
     public AggregatePAreaTaxonomyDerivation parseAggregatePAreaTaxonomyDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregatePAreaTaxonomyDerivation(getBaseAbNDerivation(obj), getBound(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregatePAreaTaxonomyDerivation(getBaseAbNDerivation(obj), aggregatedProperty);
     }
 
     public AggregateAncestorSubtaxonomyDerivation parseAggregateAncestorSubtaxonomyDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateAncestorSubtaxonomyDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateAncestorSubtaxonomyDerivation(getBaseAbNDerivation(obj),aggregatedProperty, getRoot(obj));
     }
 
     public SimpleDisjointAbNDerivation parseSimpleDisjointAbNDerivation(JSONObject obj) throws AbNParseException {
@@ -446,11 +464,13 @@ public abstract class AbNDerivationParser {
     }
 
     public AggregateDisjointAbNDerivation parseAggregateDisjointAbNDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateDisjointAbNDerivation(getBaseAbNDerivation(obj), getBound(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateDisjointAbNDerivation(getBaseAbNDerivation(obj), aggregatedProperty);
     }
 
     public AggregateAncestorDisjointAbNDerivation parseAggregateAncestorDisjointAbNDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateAncestorDisjointAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateAncestorDisjointAbNDerivation(getBaseAbNDerivation(obj), aggregatedProperty, getRoot(obj));
     }
 
     public SimpleClusterTANDerivation parseSimpleClusterTANDerivation(JSONObject obj) throws AbNParseException {
@@ -496,15 +516,18 @@ public abstract class AbNDerivationParser {
     }
 
     public AggregateTANDerivation parseAggregateTANDerivation(JSONObject obj) throws AbNParseException {
-         return new AggregateTANDerivation(getBaseAbNDerivation(obj), getBound(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+         return new AggregateTANDerivation(getBaseAbNDerivation(obj), aggregatedProperty);
     }
 
     public AggregateRootSubTANDerivation parseAggregateRootSubTANDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateRootSubTANDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateRootSubTANDerivation(getBaseAbNDerivation(obj), aggregatedProperty, getRoot(obj));
     }
 
     public AggregateAncestorSubTANDerivation parseAggregateAncestorSubTANDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateAncestorSubTANDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateAncestorSubTANDerivation(getBaseAbNDerivation(obj), aggregatedProperty, getRoot(obj));
     }
 
     public TANFromPartitionedNodeDerivation parseTANFromPartitionedNodeDerivation(JSONObject obj) throws AbNParseException {
@@ -548,7 +571,10 @@ public abstract class AbNDerivationParser {
     }
 
     public <T extends AbNDerivation> AggregateTargetAbNDerivation parseAggregateTargetAbNDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateTargetAbNDerivation(
+                getBaseAbNDerivation(obj), 
+                aggregatedProperty);
     }
     
     public <T extends AbNDerivation> AncestorTargetAbNDerivation parseAncestorTargetAbNDerivation(JSONObject obj) throws AbNParseException {
@@ -560,11 +586,19 @@ public abstract class AbNDerivationParser {
     }
     
     public <T extends AbNDerivation> AggregateAncestorTargetAbNDerivation parseAggregateAncestorTargetAbNDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateAncestorTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateAncestorTargetAbNDerivation(
+                getBaseAbNDerivation(obj), 
+                aggregatedProperty, 
+                getRoot(obj));
     }
     
     public <T extends AbNDerivation> AggregateDescendantTargetAbNDerivation parseAggregateDescendantTargetAbNDerivation(JSONObject obj) throws AbNParseException {
-        return new AggregateDescendantTargetAbNDerivation(getBaseAbNDerivation(obj), getBound(obj), getRoot(obj));
+        AggregatedProperty aggregatedProperty = new AggregatedProperty(getBound(obj),isWeightedAggregated(obj));
+        return new AggregateDescendantTargetAbNDerivation(
+                getBaseAbNDerivation(obj), 
+                aggregatedProperty, 
+                getRoot(obj));
     }
     
     public <T extends AbNDerivation> TargetAbNFromPAreaDerivation parseTargetAbNFromPAreaDerivation(JSONObject obj) throws AbNParseException {

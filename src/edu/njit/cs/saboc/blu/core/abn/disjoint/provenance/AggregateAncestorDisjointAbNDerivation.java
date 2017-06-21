@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.disjoint.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointNode;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
@@ -20,22 +21,24 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     
     private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorDisjointAbNDerivation(
             DisjointAbNDerivation aggregateBase, 
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             Concept selectedAggregatePAreaRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorDisjointAbNDerivation(AggregateAncestorDisjointAbNDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
+                deriveTaxonomy.getAggregatedProperty(), 
                 deriveTaxonomy.getSelectedRoot());
     }
 
@@ -63,6 +66,8 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
   
     @Override
     public String getDescription() {
+        if(isWeightedAggregated)
+            return String.format("Derived weighted aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
         return String.format("Derived aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
     }
 
@@ -92,7 +97,18 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
         result.put("BaseDerivation", aggregateBase.serializeToJSON());
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
     }    
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
+    }
 }

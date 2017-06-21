@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
@@ -19,22 +20,24 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
     
     private final ClusterTANDerivation aggregateBase;
     private final int minBound;
-    private final Concept selectedAggregateClusterRoot; 
+    private final Concept selectedAggregateClusterRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateRootSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             Concept selectedAggregateClusterRoot) {
         
         super(aggregateBase);
 
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateRootSubTANDerivation(AggregateRootSubTANDerivation derivedTaxonomy) {
-        this(derivedTaxonomy.getSuperAbNDerivation(), derivedTaxonomy.getBound(), derivedTaxonomy.getSelectedRoot());
+        this(derivedTaxonomy.getSuperAbNDerivation(), derivedTaxonomy.getAggregatedProperty(), derivedTaxonomy.getSelectedRoot());
     }
     
     @Override
@@ -61,6 +64,9 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+        return String.format("Derived weighted aggregate root Sub TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
+        }
         return String.format("Derived aggregate root Sub TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
     }
 
@@ -93,7 +99,18 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return new AggregatedProperty(minBound, isWeightedAggregated);
     }
 }

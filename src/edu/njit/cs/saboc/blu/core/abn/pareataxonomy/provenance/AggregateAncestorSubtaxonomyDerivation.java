@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
@@ -7,7 +8,6 @@ import edu.njit.cs.saboc.blu.core.abn.provenance.RootedSubAbNDerivation;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.util.Set;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -20,24 +20,25 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     
     private final PAreaTaxonomyDerivation aggregateBase;
     private final int minBound;
-    
     private final Concept selectedAggregatePAreaRoot;
+    private final boolean isWeightedAggregated;
     
     public AggregateAncestorSubtaxonomyDerivation(
             PAreaTaxonomyDerivation aggregateBase, 
-            int minBound,
+            AggregatedProperty aggregatedProperty,
             Concept selectedAggregatePAreaRoot) {
         
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = minBound;
+        this.minBound = aggregatedProperty.getBound();
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
+        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorSubtaxonomyDerivation(AggregateAncestorSubtaxonomyDerivation deriveTaxonomy) {
         this(deriveTaxonomy.getSuperAbNDerivation(), 
-                deriveTaxonomy.getBound(), 
+                deriveTaxonomy.getAggregatedProperty(),
                 deriveTaxonomy.getSelectedRoot());
     }
 
@@ -66,6 +67,9 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
   
     @Override
     public String getDescription() {
+        if (isWeightedAggregated) {
+            return String.format("Derived weighted aggregate ancestors subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
+        }
         return String.format("Derived aggregate ancestors subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
     }
 
@@ -96,7 +100,18 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
         result.put("Bound", minBound);
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
+        result.put("isWeightedAggregated", isWeightedAggregated);
         
         return result;
+    }
+
+    @Override
+    public boolean isWeightedAggregated() {
+        return isWeightedAggregated;
+    }
+
+    @Override
+    public AggregatedProperty getAggregatedProperty() {
+        return  new AggregatedProperty(minBound, isWeightedAggregated);
     }
 }

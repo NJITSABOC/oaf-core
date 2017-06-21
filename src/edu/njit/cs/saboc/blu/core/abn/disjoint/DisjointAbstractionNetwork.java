@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.abn.AbstractionNetworkUtils;
 import edu.njit.cs.saboc.blu.core.abn.ParentNodeDetails;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateableAbstractionNetwork;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.AncestorDisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.DisjointAbNDerivation;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.provenance.OverlappingNodeDisjointAbNDerivation;
@@ -171,15 +172,17 @@ public class DisjointAbstractionNetwork<
     public boolean isAggregated() {
         return isAggregated;
     }
-
+    
     @Override
-    public DisjointAbstractionNetwork getAggregated(int smallestNode) {
+    public DisjointAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
         AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
         
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this, aggregateGenerator, smallestNode);
+        return generator.createAggregateDisjointAbN(this, aggregateGenerator, new AggregatedProperty(smallestNode, isWeightedAggregated));
     }
+    
+    
     
     public AncestorDisjointAbN<T, PARENTABN_T, PARENTNODE_T> getAncestorDisjointAbN(T root) {
         Hierarchy<T> ancestorSubhierarchy = this.getNodeHierarchy().getAncestorHierarchy(root);

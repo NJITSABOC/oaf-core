@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.tan.aggregate;
 
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregateAbNGenerator;
+import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.tan.Cluster;
 import edu.njit.cs.saboc.blu.core.abn.tan.ClusterTribalAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.tan.TribalAbstractionNetworkGenerator;
@@ -19,16 +20,16 @@ public class AggregateTANGenerator {
      * @param sourceTAN
      * @param generator
      * @param aggregateGenerator
-     * @param min
+     * @param aggregatedProperty which includes min and weightedAggregated
      * @return 
      */
     public ClusterTribalAbstractionNetwork createAggregateTAN(
             final ClusterTribalAbstractionNetwork sourceTAN,
             final TribalAbstractionNetworkGenerator generator,
             final AggregateAbNGenerator<Cluster, AggregateCluster> aggregateGenerator,
-            final int min) {
+            final AggregatedProperty aggregatedProperty) {
 
-        if (min == 1) {
+        if (aggregatedProperty.getBound() == 1) {
             return sourceTAN;
         }
 
@@ -37,7 +38,7 @@ public class AggregateTANGenerator {
                         new AggregateTANFactory(),
                         sourceTAN.getClusterHierarchy(),
                         sourceTAN.getSourceHierarchy(),
-                        min);
+                        aggregatedProperty);
 
         Hierarchy<Cluster> clusterHierarchy = (Hierarchy<Cluster>) (Hierarchy<?>) aggregateClusterHierarchy;
 
@@ -48,10 +49,11 @@ public class AggregateTANGenerator {
 
         return new AggregateClusterTribalAbstractionNetwork(
                 sourceTAN,
-                min,
+                aggregatedProperty,
                 tan.getBandTAN(),
                 tan.getClusterHierarchy(),
-                tan.getSourceHierarchy());
+                tan.getSourceHierarchy()
+        );
     }
     
     

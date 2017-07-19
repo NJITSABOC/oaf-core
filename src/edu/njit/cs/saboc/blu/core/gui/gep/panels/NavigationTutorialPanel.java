@@ -1,13 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
-import edu.njit.cs.saboc.blu.core.gui.iconmanager.ImageManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -17,18 +12,14 @@ import javax.swing.JPanel;
  *
  * @author Chris O
  */
-public class NavigationTutorialPanel extends AbNDisplayWidget {
+public class NavigationTutorialPanel extends JPanel {
     
     private final JEditorPane descriptionPane;
     
     private int currentTutorialLocation = 0;
     
-    private final Dimension panelSize = new Dimension(350, 120);
-    
-    public NavigationTutorialPanel(AbNDisplayPanel panel) {
-        
-        super(panel);
-        
+    public NavigationTutorialPanel() {
+
         this.setLayout(new BorderLayout());
         
         this.setBorder(BorderFactory.createEtchedBorder());
@@ -41,9 +32,13 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
                 + "details in the Dashboard panel (on the left, by default). "
                 + "Click outside of any node to view the details of the abstraction network.";
         
-        String minimapTutorial = "<html><b>Minimap: </b> Shown at the top right when available, "
+        String minimapTutorial = "<html><b>Overview: </b> Shown at the top right when available, "
                 + "provides a high level view of the current abstraction network. Clicking on the "
-                + "minimap will navigate you to that location in the abstraction network.";
+                + "abstraction network overview will navigate you to that location in the abstraction network.";
+        
+        String historyTutorial = "<html><b>History: </b> To see which abstraction networks you have "
+                + "previously viewed click on \"History.\" Use the left and right arrows to "
+                + "navigate backwards and forwards through the history, respectively.";
         
         String aggregationTutorial = "<html><b>Aggregation: </b> Most abstraction networks can be "
                 + "<i>aggregated</i> using the aggregation menu at the bottom right. Aggregation "
@@ -53,6 +48,7 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
             navigateTutorial, 
             selectionTutorial,
             minimapTutorial,
+            historyTutorial,
             aggregationTutorial
         };
         
@@ -71,11 +67,6 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
             } else {
                 this.setVisible(false);
             }
-        });
-        
-        JButton closeBtn = new JButton(ImageManager.getImageManager().getIcon("cancel.png"));
-        closeBtn.addActionListener( (ae) -> { 
-           this.setVisible(false);
         });
         
         this.descriptionPane = new JEditorPane();
@@ -97,11 +88,7 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
         JPanel nextPanel = new JPanel();
         nextPanel.setLayout(new BoxLayout(nextPanel, BoxLayout.Y_AXIS));
         
-        nextPanel.add(closeBtn);
-        nextPanel.add(Box.createVerticalStrut(30));
         nextPanel.add(nextBtn);
-        
-
         
         nextPanel.setOpaque(false);
         
@@ -110,17 +97,13 @@ public class NavigationTutorialPanel extends AbNDisplayWidget {
         displayText(tutorialText[currentTutorialLocation]);
     }
     
+    
+    
     private void displayText(String text) {
         descriptionPane.setText(text);
     }
     
-    @Override
-    public void displayPanelResized(AbNDisplayPanel displayPanel) {
-        
-        this.setBounds(
-                displayPanel.getWidth() - 600, 
-                8, 
-                panelSize.width, 
-                panelSize.height);
+    private boolean canGoForward() {
+        return false;
     }
 }

@@ -31,7 +31,7 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
         
         internalPanel.add(dashboardPanel, BorderLayout.CENTER);
         
-        btnShowFullDetails = new JToggleButton("Show Complete Details");
+        btnShowFullDetails = new JToggleButton("Show More Details");
         
         btnShowFullDetails.addActionListener( (ae) -> { 
             if(btnShowFullDetails.isSelected()) {
@@ -41,7 +41,7 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
             }
         });
         
-        btnShowFullDetails.setSelected(true);
+        btnShowFullDetails.setSelected(false);
         
         JPanel southPanel = new JPanel();
         
@@ -55,7 +55,7 @@ public class FloatingAbNDashboardFrame extends JInternalFrame {
         
         this.setMinimumSize(new Dimension(520, 150));
         
-        showFull();
+        showCompact();
         
         /*
         JComponent titlePanel = (BasicInternalFrameTitlePane)((BasicInternalFrameUI)getUI()).getNorthPane();

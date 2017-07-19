@@ -31,7 +31,7 @@ public class AbNDashboardPanel extends JPanel {
     private Optional<NodeDashboardPanel> partitionedNodeDetailsPanel = Optional.empty();
     private Optional<CompactNodeDashboardPanel> compactPartitionedNodeDetailsPanel = Optional.empty();
 
-    private boolean showCompact = false;
+    private boolean showCompact = true;
 
     private Optional<SinglyRootedNode> selectedNode = Optional.empty();
     private Optional<PartitionedNode> selectedPartitionedNode = Optional.empty();

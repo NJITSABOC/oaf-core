@@ -105,8 +105,8 @@ public class TargetAbstractionNetwork<T extends TargetGroup> extends Abstraction
     }
 
     @Override
-    public TargetAbstractionNetwork<T> getAggregated(int smallestNode, boolean weightedAggregated) {
-        return AggregateTargetAbN.createAggregated(this, new AggregatedProperty(smallestNode, weightedAggregated));
+    public TargetAbstractionNetwork<T> getAggregated(AggregatedProperty ap) {
+        return AggregateTargetAbN.createAggregated(this, ap);
     }
     
     public TargetAbstractionNetwork createAncestorTargetAbN(T root) {

@@ -15,9 +15,7 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     
     private final TargetAbstractionNetwork nonAggregateSourceTargetAbN;
     
-    private final int minBound;
-    
-    private final boolean isWeightedAggregated;
+    private final AggregatedProperty ap;
     
     public AggregateAncestorTargetAbN(
             TargetAbstractionNetwork aggregateSourceTAN, 
@@ -35,8 +33,7 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
                         aggregatedProperty,
                         sourceGroup.getRoot()));
         
-        this.minBound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.ap = aggregatedProperty;
         
         this.nonAggregateSourceTargetAbN = nonAggregateSourceTargetAbN;
         
@@ -59,11 +56,12 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     
     @Override
     public int getAggregateBound() {
-        return minBound;
+        return ap.getBound();
     }
     
+    @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return this.ap.getWeighted();
     }
 
     @Override
@@ -72,8 +70,8 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
     }
         
     @Override
-    public TargetAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
-        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), new AggregatedProperty(smallestNode, isWeightedAggregated));
+    public TargetAbstractionNetwork getAggregated(AggregatedProperty ap) {
+        return AggregateTargetAbN.createAggregated(this.getNonAggregateSourceAbN(), ap);
     }
 
     @Override
@@ -99,6 +97,6 @@ public class AggregateAncestorTargetAbN extends AncestorTargetAbN<AggregateTarge
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(this.minBound, this.isWeightedAggregated);
+        return ap;
     }
 }

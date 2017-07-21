@@ -161,7 +161,7 @@ public class ClusterTribalAbstractionNetwork<T extends Cluster> extends Partitio
     }
 
     @Override
-    public ClusterTribalAbstractionNetwork<T> getAggregated(int smallestNode, boolean weightedAggregated) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, new AggregatedProperty(smallestNode, weightedAggregated));
+    public ClusterTribalAbstractionNetwork<T> getAggregated(AggregatedProperty ap) {
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this, ap);
     }
 }

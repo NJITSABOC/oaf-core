@@ -17,8 +17,7 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
         implements AggregateAbstractionNetwork<AggregateCluster, ClusterTribalAbstractionNetwork> {
     
     private final ClusterTribalAbstractionNetwork nonAggregateSourceTAN;
-    private final int minBound;
-    private final boolean isWeightedAggregated;
+    private final AggregatedProperty ap;
     
     public AggregateAncestorSubTAN(
             ClusterTribalAbstractionNetwork aggregateSourceTAN, 
@@ -37,9 +36,8 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
                         aggregatedProperty, 
                         sourceCluster.getRoot()));
         
-        this.minBound = aggregatedProperty.getBound();
+        this.ap = aggregatedProperty;
         this.nonAggregateSourceTAN = nonAggregateRootTAN;
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorSubTAN(AggregateAncestorSubTAN subTAN) {
@@ -58,7 +56,7 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
     
     @Override
     public int getAggregateBound() {
-        return minBound;
+        return ap.getBound();
     }
 
     @Override
@@ -67,8 +65,8 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
     }
            
     @Override
-    public ClusterTribalAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
-        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), new AggregatedProperty(smallestNode, isWeightedAggregated));
+    public ClusterTribalAbstractionNetwork getAggregated(AggregatedProperty ap) {
+        return AggregateClusterTribalAbstractionNetwork.generateAggregatedClusterTAN(this.getNonAggregateSourceAbN(), ap);
     }
 
     @Override
@@ -97,11 +95,11 @@ public class AggregateAncestorSubTAN extends AncestorSubTAN<AggregateCluster>
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, isWeightedAggregated);
+        return ap;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return this.ap.getWeighted();
     }
 }

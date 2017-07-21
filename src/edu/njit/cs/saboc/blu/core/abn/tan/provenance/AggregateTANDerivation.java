@@ -19,6 +19,8 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     private final ClusterTANDerivation nonAggregateSourceDerivation;
     private final int bound;
     private final boolean isWeightedAggregated;
+    private final int autoScaleBound;
+    private final boolean isAutoScaled;    
     
     public AggregateTANDerivation(ClusterTANDerivation nonAggregateSourceDerivation, AggregatedProperty aggregatedProperty) {
         super(nonAggregateSourceDerivation);
@@ -26,6 +28,8 @@ public class AggregateTANDerivation extends ClusterTANDerivation
         this.nonAggregateSourceDerivation = nonAggregateSourceDerivation;
         this.bound = aggregatedProperty.getBound();
         this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
+        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateTANDerivation(AggregateTANDerivation deriveTaxonomy) {

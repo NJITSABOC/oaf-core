@@ -22,6 +22,8 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
     private final int minBound;
     private final Concept selectedAggregateClusterRoot;
     private final boolean isWeightedAggregated;
+    private final int autoScaleBound;
+    private final boolean isAutoScaled;
     
     public AggregateRootSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
@@ -34,6 +36,8 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         this.minBound = aggregatedProperty.getBound();
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
         this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
+        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateRootSubTANDerivation(AggregateRootSubTANDerivation derivedTaxonomy) {

@@ -23,9 +23,8 @@ public class AggregateAncestorDisjointAbN<
 
             implements AggregateAbstractionNetwork<AggregateDisjointNode<PARENTNODE_T>, DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T>> {
     
-    private final int aggregateBound;
+    private final AggregatedProperty ap;
     private final AncestorDisjointAbN nonAggregatedDisjointAbN;
-    private final boolean isWeightedAggregated;
     
     public AggregateAncestorDisjointAbN(
             AggregateDisjointNode<PARENTNODE_T> selectedRoot,
@@ -41,8 +40,7 @@ public class AggregateAncestorDisjointAbN<
                 new AggregateAncestorDisjointAbNDerivation(aggregatedSuperAbN.getDerivation(), aggregatedProperty, selectedRoot.getRoot()));
         
         this.nonAggregatedDisjointAbN = nonAggregatedDisjointAbN;
-        this.aggregateBound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.ap = aggregatedProperty;
     }
 
     @Override
@@ -52,7 +50,7 @@ public class AggregateAncestorDisjointAbN<
 
     @Override
     public int getAggregateBound() {
-        return aggregateBound;
+        return ap.getBound();
     }
 
     @Override
@@ -77,11 +75,11 @@ public class AggregateAncestorDisjointAbN<
 
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+        return ap;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return ap.getWeighted();
     }
 }

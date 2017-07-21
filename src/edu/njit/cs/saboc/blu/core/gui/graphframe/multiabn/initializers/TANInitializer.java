@@ -76,8 +76,8 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
-        AggregationAction aggregationAction = (bound, weightedAggregated) -> {            
-                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(bound, weightedAggregated);
+        AggregationAction aggregationAction = (ap) -> {            
+                ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(ap);
                 config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);     
         };
         

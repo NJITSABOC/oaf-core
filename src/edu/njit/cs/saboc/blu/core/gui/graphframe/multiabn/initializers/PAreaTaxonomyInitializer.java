@@ -81,9 +81,9 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
 
-        AggregationAction aggregationAction = (bound, weightedAggregated) -> {
+        AggregationAction aggregationAction = (ap) -> {
            
-                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(bound, weightedAggregated);            
+                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(ap);            
                 config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);           
         };
 

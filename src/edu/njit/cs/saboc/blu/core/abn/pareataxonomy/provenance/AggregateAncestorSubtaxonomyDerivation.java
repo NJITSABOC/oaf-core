@@ -22,6 +22,8 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
     private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
     private final boolean isWeightedAggregated;
+    private final int autoScaleBound;
+    private final boolean isAutoScaled;
     
     public AggregateAncestorSubtaxonomyDerivation(
             PAreaTaxonomyDerivation aggregateBase, 
@@ -34,6 +36,8 @@ public class AggregateAncestorSubtaxonomyDerivation extends PAreaTaxonomyDerivat
         this.minBound = aggregatedProperty.getBound();
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
         this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
+        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateAncestorSubtaxonomyDerivation(AggregateAncestorSubtaxonomyDerivation deriveTaxonomy) {

@@ -30,7 +30,7 @@ public class AggregatePAreaTaxonomyGenerator {
             final AggregateAbNGenerator<PArea, AggregatePArea> aggregateGenerator, 
             final AggregatedProperty aggregatedProperty) {
         
-        if(aggregatedProperty.getBound() == 1) {
+        if(aggregatedProperty.getBound() == 1 && aggregatedProperty.getAutoScaleBound()==-1) {
             return sourceTaxonomy;
         }
         

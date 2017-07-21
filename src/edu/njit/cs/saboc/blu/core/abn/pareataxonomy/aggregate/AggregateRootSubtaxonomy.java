@@ -17,8 +17,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     
     private final RootSubtaxonomy nonAggregatedRootSubtaxonomy;
     
-    private final int aggregateBound;
-    private final boolean isWeightedAggregated;
+    private final AggregatedProperty ap;
     
     public AggregateRootSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
@@ -35,8 +34,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
                 ));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
-        this.aggregateBound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.ap = aggregatedProperty;
     }
     
     public AggregateRootSubtaxonomy(AggregateRootSubtaxonomy subtaxonomy) {
@@ -53,7 +51,7 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
 
     @Override
     public int getAggregateBound() {
-        return aggregateBound;
+        return ap.getBound();
     }
 
     @Override
@@ -67,8 +65,8 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     }
 
     @Override
-    public PAreaTaxonomy getAggregated(int aggregateBound, boolean isWeightedAggregated) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), new AggregatedProperty(aggregateBound, isWeightedAggregated));
+    public PAreaTaxonomy getAggregated(AggregatedProperty ap) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), ap);
     }
 
     @Override
@@ -83,11 +81,11 @@ public class AggregateRootSubtaxonomy extends RootSubtaxonomy<AggregatePArea>
     
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+        return ap;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return this.ap.getWeighted();
     }
 }

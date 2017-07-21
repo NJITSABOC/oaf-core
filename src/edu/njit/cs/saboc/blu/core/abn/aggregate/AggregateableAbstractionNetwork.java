@@ -13,6 +13,6 @@ public interface AggregateableAbstractionNetwork<ABN_T extends AbstractionNetwor
 
     public boolean isAggregated();
     
-    public ABN_T getAggregated(int smallestNode, boolean isWeightedAggregated);
+    public ABN_T getAggregated(AggregatedProperty ap);
     
 }

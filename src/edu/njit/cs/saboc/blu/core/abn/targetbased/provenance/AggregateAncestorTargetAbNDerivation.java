@@ -21,6 +21,8 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     
     private final int minBound;
     private final boolean isWeightedAggregate;
+    private final int autoScaleBound;
+    private final boolean isAutoScaled;    
     
     private final Concept selectedAggregateTargetGroupRoot;
     
@@ -35,6 +37,8 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
         this.minBound = aggregatedProperty.getBound();
         this.isWeightedAggregate = aggregatedProperty.getWeighted();
         this.selectedAggregateTargetGroupRoot = selectedAggregateClusterRoot;
+        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
+        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateAncestorTargetAbNDerivation(AggregateAncestorTargetAbNDerivation deriveTaxonomy) {

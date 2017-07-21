@@ -17,8 +17,7 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     
     private final AncestorSubtaxonomy nonAggregatedRootSubtaxonomy;
     
-    private final int aggregateBound;
-    private final boolean isWeightedAggregated;
+    private final AggregatedProperty ap;
     
     public AggregateAncestorSubtaxonomy(
             PAreaTaxonomy aggregatedSuperAbN, 
@@ -36,8 +35,7 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
                         selectedRoot.getRoot()));
         
         this.nonAggregatedRootSubtaxonomy = nonAggregatedRootSubtaxonomy;
-        this.aggregateBound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.ap = aggregatedProperty;
     }
     
     public AggregateAncestorSubtaxonomy(AggregateAncestorSubtaxonomy subtaxonomy) {
@@ -56,7 +54,7 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
 
     @Override
     public int getAggregateBound() {
-        return aggregateBound;
+        return ap.getBound();
     }
 
     @Override
@@ -70,8 +68,8 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     }
     
     @Override
-    public PAreaTaxonomy getAggregated(int aggregateBound, boolean isWeightedAggregated) {
-        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), new AggregatedProperty(aggregateBound, isWeightedAggregated));
+    public PAreaTaxonomy getAggregated(AggregatedProperty ap) {
+        return AggregatePAreaTaxonomy.generateAggregatePAreaTaxonomy(this.getNonAggregateSourceAbN(), ap);
     }
     
 
@@ -87,11 +85,11 @@ public class AggregateAncestorSubtaxonomy extends AncestorSubtaxonomy<AggregateP
     
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+        return ap;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return this.ap.getWeighted();
     }
 }

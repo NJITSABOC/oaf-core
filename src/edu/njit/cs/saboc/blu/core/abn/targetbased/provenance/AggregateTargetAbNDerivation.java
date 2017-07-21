@@ -18,6 +18,8 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     private final TargetAbNDerivation nonAggregateSource;
     private final int bound;
     private final boolean isWeightedAggregated;
+    private final int autoScaleBound;
+    private final boolean isAutoScaled;
     
     public AggregateTargetAbNDerivation(
             TargetAbNDerivation nonAggregateSource, 
@@ -28,6 +30,8 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
         this.nonAggregateSource = nonAggregateSource;
         this.bound = aggregatedProperty.getBound();
         this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
+        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
 
     @Override

@@ -3,12 +3,14 @@ package edu.njit.cs.saboc.blu.core.abn.aggregate;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.datastructure.hierarchy.Hierarchy;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Generates aggregate abstraction networks. Takes as input a hierarchy of
@@ -45,18 +47,62 @@ public class AggregateAbNGenerator <
         Map<NODE_T, Hierarchy<NODE_T>> aggregateNodeMembers = new HashMap<>();
 
         Map<NODE_T, Integer> nodeParentCount = new HashMap<>();
+        Map<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
         
         // Step 1: Determine which nodes will be the roots of aggregate nodes
         Set<NODE_T> remainingNodes = new HashSet<>();
         remainingNodes.addAll(sourceHierarchy.getRoots()); // The roots are always included
+                
+        for(NODE_T group : sourceHierarchy.getNodes()) {
+            nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
+            groupSet.put(group, new HashSet<>());
+        }
         
-        Map<NODE_T, HashSet<NODE_T>> groupSet = new HashMap<>();
+        int threshold = aggregatedProperty.getAutoScaleBound();
+        boolean isAutoScaled = aggregatedProperty.getAutoScaled();
+        
+        if (isAutoScaled) {
+            if (threshold > remainingNodes.size()) {
+                int top = threshold - remainingNodes.size();
+
+                Map<NODE_T, Integer> remaingNodesWithCount = new HashMap<>();
+
+                for (NODE_T group : sourceHierarchy.getNodes()) {
+                    if (remainingNodes.contains(group)) 
+                        continue;
+                    int allDescendantsConceptCount = 0;
+                    for (NODE_T descendant : sourceHierarchy.getDescendants(group)) {
+                        allDescendantsConceptCount = allDescendantsConceptCount + descendant.getConceptCount();
+                    }
+                    remaingNodesWithCount.put(group, group.getConceptCount() + allDescendantsConceptCount);
+                }
+                Map<NODE_T, Integer> sorted
+                        = remaingNodesWithCount.entrySet().stream()
+                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                        .limit(top)
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                
+                int weightedBound = sorted.values().stream().min(Integer::compare).get();
+                //TO-Do 
+                // set the weighted aggregated by this smallest weighted aggregated value here.
+//                aggregatedProperty.setBound(weightedBound);
+//                aggregatedProperty.setWeighted(true);
+           
+                remainingNodes.addAll(sorted.keySet());
+
+            } else {
+                System.out.println("Hirarchy already has equal or more than " + threshold + " nodes as roots!");
+            }
+
+        }
+        else{
+
         int minNodeSize = aggregatedProperty.getBound();
         boolean isWeighteAggregated = aggregatedProperty.getWeighted();
-        
+               
         for(NODE_T group : sourceHierarchy.getNodes()) {
 
-            nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
+//            nodeParentCount.put(group, sourceHierarchy.getParents(group).size());
 
             if (group.getConceptCount() >= minNodeSize) {
                 remainingNodes.add(group);
@@ -69,7 +115,8 @@ public class AggregateAbNGenerator <
                     remainingNodes.add(group);
                 }
             }            
-            groupSet.put(group, new HashSet<>());
+//            groupSet.put(group, new HashSet<>());
+            }
         }
         
         remainingNodes.forEach((group) -> {

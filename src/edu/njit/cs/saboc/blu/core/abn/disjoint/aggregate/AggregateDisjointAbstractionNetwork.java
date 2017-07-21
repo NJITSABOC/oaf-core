@@ -63,7 +63,7 @@ public class AggregateDisjointAbstractionNetwork<
         
         AggregateAbstractionNetwork agregateAbN = (AggregateAbstractionNetwork)superAggregateDisjointAbN;
         
-        DisjointAbstractionNetwork aggregatedAncestorAbN = unaggregatedAncestorAbN.getAggregated(agregateAbN.getAggregateBound(), agregateAbN.isWeightedAggregated());
+        DisjointAbstractionNetwork aggregatedAncestorAbN = unaggregatedAncestorAbN.getAggregated(agregateAbN.getAggregatedProperty());
         
         AncestorDisjointAbN ancestorDisjointAbN = new AncestorDisjointAbN(
             (DisjointNode)selectedRoot.getAggregatedHierarchy().getRoot(), 
@@ -84,9 +84,7 @@ public class AggregateDisjointAbstractionNetwork<
     
     private final DisjointAbstractionNetwork<DisjointNode<PARENTNODE_T>, PARENTABN_T, PARENTNODE_T> sourceAbN;
     
-    private final int aggregateBound;
-    
-    private final boolean isWeightedAggregated;
+    private final AggregatedProperty ap;
     
     public AggregateDisjointAbstractionNetwork(
             DisjointAbstractionNetwork sourceAbN,
@@ -108,8 +106,7 @@ public class AggregateDisjointAbstractionNetwork<
                 new AggregateDisjointAbNDerivation(sourceAbN.getDerivation(), aggregatedProperty));
         
         this.sourceAbN = sourceAbN;
-        this.aggregateBound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
+        this.ap= aggregatedProperty;
     }
 
     @Override
@@ -119,7 +116,7 @@ public class AggregateDisjointAbstractionNetwork<
 
     @Override
     public int getAggregateBound() {
-        return aggregateBound;
+        return ap.getBound();
     }
     
     @Override
@@ -128,13 +125,13 @@ public class AggregateDisjointAbstractionNetwork<
     }
     
     @Override
-    public DisjointAbstractionNetwork getAggregated(int smallestNode, boolean isWeightedAggregated) {
+    public DisjointAbstractionNetwork getAggregated(AggregatedProperty ap) {
         AggregateDisjointAbNGenerator generator = new AggregateDisjointAbNGenerator();
         
         AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator = 
                 new AggregateAbNGenerator<>();
         
-        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, new AggregatedProperty(smallestNode,isWeightedAggregated));
+        return generator.createAggregateDisjointAbN(this.getNonAggregateSourceAbN(), aggregateGenerator, ap);
     }
     
     
@@ -154,12 +151,12 @@ public class AggregateDisjointAbstractionNetwork<
     
     @Override
     public AggregatedProperty getAggregatedProperty(){
-        return new AggregatedProperty(aggregateBound, isWeightedAggregated);
+        return ap;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregated;
+        return this.ap.getWeighted();
     }
     
 }

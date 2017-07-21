@@ -19,9 +19,8 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
     
     private final DisjointAbNDerivation aggregateBase;
     
-    private final int minBound;
+    private final AggregatedProperty ap;
     private final Concept selectedAggregatePAreaRoot;
-    private final boolean isWeightedAggregated;
     
     public AggregateAncestorDisjointAbNDerivation(
             DisjointAbNDerivation aggregateBase, 
@@ -31,9 +30,8 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = aggregatedProperty.getBound();
+        this.ap = aggregatedProperty;
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
     }
     
     public AggregateAncestorDisjointAbNDerivation(AggregateAncestorDisjointAbNDerivation deriveTaxonomy) {
@@ -54,7 +52,7 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
 
     @Override
     public int getBound() {
-        return minBound;
+        return ap.getBound();
     }
 
     @Override
@@ -66,7 +64,7 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
   
     @Override
     public String getDescription() {
-        if(isWeightedAggregated)
+        if(ap.getWeighted())
             return String.format("Derived weighted aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
         return String.format("Derived aggregate ancestordisjoint (%s)", selectedAggregatePAreaRoot.getName());
     }
@@ -95,20 +93,22 @@ public class AggregateAncestorDisjointAbNDerivation extends DisjointAbNDerivatio
 
         result.put("ClassName", "AggregateAncestorDisjointAbNDerivation");       
         result.put("BaseDerivation", aggregateBase.serializeToJSON());
-        result.put("Bound", minBound);
+        result.put("Bound", ap.getBound());
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
-        result.put("isWeightedAggregated", isWeightedAggregated);
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
         
         return result;
     }    
 
     @Override
     public boolean isWeightedAggregated() {
-        return isWeightedAggregated;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, isWeightedAggregated);
+        return ap;
     }
 }

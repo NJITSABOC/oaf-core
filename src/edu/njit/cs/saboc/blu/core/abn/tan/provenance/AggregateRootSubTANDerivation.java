@@ -19,11 +19,8 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
     implements RootedSubAbNDerivation<ClusterTANDerivation>, AggregateAbNDerivation<ClusterTANDerivation> {
     
     private final ClusterTANDerivation aggregateBase;
-    private final int minBound;
     private final Concept selectedAggregateClusterRoot;
-    private final boolean isWeightedAggregated;
-    private final int autoScaleBound;
-    private final boolean isAutoScaled;
+    private final AggregatedProperty ap;
     
     public AggregateRootSubTANDerivation(
             ClusterTANDerivation aggregateBase, 
@@ -33,11 +30,8 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         super(aggregateBase);
 
         this.aggregateBase = aggregateBase;
-        this.minBound = aggregatedProperty.getBound();
+        this.ap = aggregatedProperty;
         this.selectedAggregateClusterRoot = selectedAggregateClusterRoot;
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
-        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
-        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateRootSubTANDerivation(AggregateRootSubTANDerivation derivedTaxonomy) {
@@ -56,7 +50,7 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
 
     @Override
     public int getBound() {
-        return minBound;
+        return ap.getBound();
     }
 
     @Override
@@ -68,7 +62,7 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
   
     @Override
     public String getDescription() {
-        if (isWeightedAggregated) {
+        if (ap.getWeighted()) {
         return String.format("Derived weighted aggregate root Sub TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
         }
         return String.format("Derived aggregate root Sub TAN (Cluster: %s)", selectedAggregateClusterRoot.getName());
@@ -101,20 +95,22 @@ public class AggregateRootSubTANDerivation extends ClusterTANDerivation
         
         result.put("ClassName", "AggregateRootSubTANDerivation");       
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.put("Bound", minBound);
+        result.put("Bound", ap.getBound());
         result.put("ConceptID", selectedAggregateClusterRoot.getIDAsString());
-        result.put("isWeightedAggregated", isWeightedAggregated);
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
         
         return result;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return isWeightedAggregated;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, isWeightedAggregated);
+        return ap;
     }
 }

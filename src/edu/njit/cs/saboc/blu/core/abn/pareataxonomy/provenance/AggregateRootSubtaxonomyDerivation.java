@@ -19,11 +19,8 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
     implements RootedSubAbNDerivation<PAreaTaxonomyDerivation>, AggregateAbNDerivation<PAreaTaxonomyDerivation> {
     
     private final PAreaTaxonomyDerivation aggregateBase;
-    private final int minBound;
     private final Concept selectedAggregatePAreaRoot;
-    private final boolean isWeightedAggregated;
-    private final int autoScaleBound;
-    private final boolean isAutoScaled;
+    private final AggregatedProperty ap;
     
     public AggregateRootSubtaxonomyDerivation(
             PAreaTaxonomyDerivation aggregateBase, 
@@ -33,11 +30,8 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
         super(aggregateBase);
 
         this.aggregateBase = aggregateBase;
-        this.minBound = aggregatedProperty.getBound();
+        this.ap = aggregatedProperty;
         this.selectedAggregatePAreaRoot = selectedAggregatePAreaRoot;
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
-        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
-        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateRootSubtaxonomyDerivation(AggregateRootSubtaxonomyDerivation derivedTaxonomy) {
@@ -56,7 +50,7 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
 
     @Override
     public int getBound() {
-        return minBound;
+        return ap.getBound();
     }
 
     @Override
@@ -69,7 +63,7 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
   
     @Override
     public String getDescription() {
-        if (isWeightedAggregated) {
+        if (ap.getWeighted()) {
             return String.format("Derived weighted aggregate root subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
         }
         return String.format("Derived aggregate root subtaxonomy (PArea: %s)", selectedAggregatePAreaRoot.getName());
@@ -102,20 +96,22 @@ public class AggregateRootSubtaxonomyDerivation extends PAreaTaxonomyDerivation
 
         result.put("ClassName","AggregateRootSubtaxonomyDerivation");       
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.put("Bound", minBound);
+        result.put("Bound", ap.getBound());
         result.put("ConceptID", selectedAggregatePAreaRoot.getIDAsString());
-        result.put("isWeightedAggregated", isWeightedAggregated);
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
         
         return result;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return isWeightedAggregated;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, isWeightedAggregated);
+        return ap;
     }
 }

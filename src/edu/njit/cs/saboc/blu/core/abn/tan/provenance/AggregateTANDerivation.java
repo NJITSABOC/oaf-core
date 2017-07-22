@@ -17,19 +17,13 @@ public class AggregateTANDerivation extends ClusterTANDerivation
         implements AggregateAbNDerivation<ClusterTANDerivation> {
     
     private final ClusterTANDerivation nonAggregateSourceDerivation;
-    private final int bound;
-    private final boolean isWeightedAggregated;
-    private final int autoScaleBound;
-    private final boolean isAutoScaled;    
+    private final AggregatedProperty ap;    
     
     public AggregateTANDerivation(ClusterTANDerivation nonAggregateSourceDerivation, AggregatedProperty aggregatedProperty) {
         super(nonAggregateSourceDerivation);
         
         this.nonAggregateSourceDerivation = nonAggregateSourceDerivation;
-        this.bound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
-        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
-        this.isAutoScaled = aggregatedProperty.getAutoScaled();
+        this.ap = aggregatedProperty;
     }
     
     public AggregateTANDerivation(AggregateTANDerivation deriveTaxonomy) {
@@ -43,26 +37,26 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     
     @Override
     public int getBound() {
-        return bound;
+        return ap.getBound();
     }
 
     @Override
     public String getDescription() {
-        if (isWeightedAggregated) {
-            return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), bound);
+        if (ap.getWeighted()) {
+            return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
 
         }
-        return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), bound);
+        return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
     }
 
     @Override
     public ClusterTribalAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
-        return getNonAggregateSourceDerivation().getAbstractionNetwork(ontology).getAggregated(bound, isWeightedAggregated);
+        return getNonAggregateSourceDerivation().getAbstractionNetwork(ontology).getAggregated(ap);
     }
     
     @Override
     public String getName() {
-        if (isWeightedAggregated) {
+        if (ap.getWeighted()) {
             return String.format("%s (Weighted Aggregated)", nonAggregateSourceDerivation.getName()); 
         }
         return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName()); 
@@ -79,19 +73,21 @@ public class AggregateTANDerivation extends ClusterTANDerivation
         
         result.put("ClassName", "AggregateTANDerivation");       
         result.put("BaseDerivation", nonAggregateSourceDerivation.serializeToJSON());   
-        result.put("Bound", bound);
-        result.put("isWeightedAggregated", isWeightedAggregated);
+        result.put("Bound", ap.getBound());
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
         
         return result;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return isWeightedAggregated;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(bound, isWeightedAggregated);
+        return ap;
     }
 }

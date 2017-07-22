@@ -19,10 +19,7 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
     
     private final TargetAbNDerivation aggregateBase;
     
-    private final int minBound;
-    private final boolean isWeightedAggregate;
-    private final int autoScaleBound;
-    private final boolean isAutoScaled;    
+    private final AggregatedProperty ap;    
     
     private final Concept selectedAggregateTargetGroupRoot;
     
@@ -34,11 +31,8 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
         super(aggregateBase);
         
         this.aggregateBase = aggregateBase;
-        this.minBound = aggregatedProperty.getBound();
-        this.isWeightedAggregate = aggregatedProperty.getWeighted();
+        this.ap = aggregatedProperty;       
         this.selectedAggregateTargetGroupRoot = selectedAggregateClusterRoot;
-        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
-        this.isAutoScaled = aggregatedProperty.getAutoScaled();
     }
     
     public AggregateAncestorTargetAbNDerivation(AggregateAncestorTargetAbNDerivation deriveTaxonomy) {
@@ -59,7 +53,7 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
 
     @Override
     public int getBound() {
-        return minBound;
+        return ap.getBound();
     }
     
     @Override
@@ -71,7 +65,7 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
   
     @Override
     public String getDescription() {
-        if (isWeightedAggregate) {
+        if (ap.getWeighted()) {
                 return String.format("Derived weighted aggregate ancestors target abstraction network (Target Group: %s)", selectedAggregateTargetGroupRoot.getName());
         }
         return String.format("Derived aggregate ancestors target abstraction network (Target Group: %s)", selectedAggregateTargetGroupRoot.getName());
@@ -104,19 +98,22 @@ public class AggregateAncestorTargetAbNDerivation extends TargetAbNDerivation
 
         result.put("ClassName", "AggregateAncestorTargetAbNDerivation");       
         result.put("BaseDerivation", aggregateBase.serializeToJSON());   
-        result.put("Bound", minBound);
+        result.put("Bound", ap.getBound());
         result.put("ConceptID", selectedAggregateTargetGroupRoot.getIDAsString());
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
         
         return result;
     }   
 
     @Override
     public boolean isWeightedAggregated() {
-        return this.isWeightedAggregate;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(minBound, isWeightedAggregate);
+        return ap;
     }
 }

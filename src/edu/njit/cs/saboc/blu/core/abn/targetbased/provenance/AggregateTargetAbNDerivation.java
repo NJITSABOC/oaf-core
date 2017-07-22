@@ -16,10 +16,7 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     implements AggregateAbNDerivation<TargetAbNDerivation> {
     
     private final TargetAbNDerivation nonAggregateSource;
-    private final int bound;
-    private final boolean isWeightedAggregated;
-    private final int autoScaleBound;
-    private final boolean isAutoScaled;
+    private final AggregatedProperty ap;
     
     public AggregateTargetAbNDerivation(
             TargetAbNDerivation nonAggregateSource, 
@@ -28,15 +25,12 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
         super(nonAggregateSource);
         
         this.nonAggregateSource = nonAggregateSource;
-        this.bound = aggregatedProperty.getBound();
-        this.isWeightedAggregated = aggregatedProperty.getWeighted();
-        this.autoScaleBound = aggregatedProperty.getAutoScaleBound();
-        this.isAutoScaled = aggregatedProperty.getAutoScaled();
+        this.ap = aggregatedProperty;
     }
 
     @Override
     public int getBound() {
-        return bound;
+        return ap.getBound();
     }
 
     @Override
@@ -48,21 +42,21 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     public TargetAbstractionNetwork getAbstractionNetwork(Ontology<Concept> ontology) {
         TargetAbstractionNetwork targetAbN = this.getNonAggregateSourceDerivation().getAbstractionNetwork(ontology);
         
-        return targetAbN.getAggregated(bound, isWeightedAggregated);
+        return targetAbN.getAggregated(ap);
     }
 
     @Override
     public String getDescription() {
-        if (isWeightedAggregated) {
-            return String.format("%s (weighted aggregated: %d)", super.getDescription(), bound);
+        if (ap.getWeighted()) {
+            return String.format("%s (weighted aggregated: %d)", super.getDescription(), ap.getBound());
 
         }
-        return String.format("%s (aggregated: %d)", super.getDescription(), bound);
+        return String.format("%s (aggregated: %d)", super.getDescription(), ap.getBound());
     }
 
     @Override
     public String getName() {
-        if (isWeightedAggregated) {
+        if (ap.getWeighted()) {
             return String.format("%s (Weighted Aggregated)", super.getName());
         }
         return String.format("%s (Aggregated)", super.getName());
@@ -74,19 +68,21 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
 
         result.put("ClassName","AggregateTargetAbNDerivation");       
         result.put("BaseDerivation", nonAggregateSource.serializeToJSON());   
-        result.put("Bound", bound);
-        result.put("isWeightedAggregated", isWeightedAggregated);
+        result.put("Bound", ap.getBound());
+        result.put("isWeightedAggregated", ap.getWeighted());
+        result.put("AutoScaleBound", ap.getAutoScaleBound());
+        result.put("isAutoScaled", ap.getAutoScaled());
 
         return result;
     }
 
     @Override
     public boolean isWeightedAggregated() {
-        return isWeightedAggregated;
+        return ap.getWeighted();
     }
 
     @Override
     public AggregatedProperty getAggregatedProperty() {
-        return new AggregatedProperty(bound, isWeightedAggregated);
+        return ap;
     }
 }

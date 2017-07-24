@@ -45,7 +45,21 @@ public class DiffTaxonomyPainter extends AbNPainter {
         }
 
 
-        super.paintPartitionedNodeAtPoint(g2d, entry, p, scale);
+        Stroke savedStroke = g2d.getStroke();
+        
+        g2d.setPaint(Color.WHITE);
+        g2d.fillRect(p.x, p.y, (int)(entry.getWidth() * scale), (int)(entry.getHeight() * scale));
+        
+        g2d.setStroke(new BasicStroke(2));
+        g2d.setPaint(Color.BLACK);
+        g2d.drawRect(p.x, p.y, (int)(entry.getWidth() * scale), (int)(entry.getHeight() * scale));
+        
+        if (showingHighlights && !partitionedNodeHighlighted(entry)) {
+            g2d.setPaint(new Color(0, 0, 0, 128));
+            g2d.fillRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
+        }
+        
+        g2d.setStroke(savedStroke);
     }
     
     public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {

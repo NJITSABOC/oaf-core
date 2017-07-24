@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.njit.cs.saboc.blu.core.gui.utils.renderers;
 
 import java.awt.Component;
@@ -46,6 +41,7 @@ public class SingleLineTextRenderer extends JTextArea implements TableCellRender
             if(row >= 0 && row < table.getRowCount()) {
                 table.setRowHeight(row, Math.max(height + 10, currentHeight));
             }
+            
         } else {
             setText("");
         }

@@ -6,6 +6,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffNodeRootChangeExplanationModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffNodeRootChangeExplanationModel.ChangeExplanationRowEntryFactory;
+import edu.njit.cs.saboc.blu.core.gui.utils.renderers.SingleLineTextRenderer;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -18,7 +19,10 @@ public class DiffNodeRootChangeExplanationList extends AbstractEntityList<DiffAb
     private final AbNConfiguration config;
     
     public DiffNodeRootChangeExplanationList(ChangeExplanationRowEntryFactory entryFactory, AbNConfiguration config) {
+        
         super(new DiffNodeRootChangeExplanationModel(entryFactory));
+        
+        this.setDefaultTableRenderer(String.class, new SingleLineTextRenderer(this.getEntityTable()));
         
         this.config = config;
     }

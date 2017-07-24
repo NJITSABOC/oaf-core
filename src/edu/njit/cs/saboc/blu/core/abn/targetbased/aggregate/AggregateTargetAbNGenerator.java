@@ -29,7 +29,7 @@ public class AggregateTargetAbNGenerator {
             AggregateAbNGenerator<TargetGroup, AggregateTargetGroup> aggregateGenerator,
             AggregatedProperty aggregatedProperty) {
 
-        if (aggregatedProperty.getBound() == 1) {
+        if (aggregatedProperty.getBound() == 1 && aggregatedProperty.getAutoScaled() ==false) {
             return sourceTargetAbN;
         }
         

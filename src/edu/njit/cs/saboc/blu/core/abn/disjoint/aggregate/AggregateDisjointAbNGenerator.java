@@ -27,7 +27,7 @@ public class AggregateDisjointAbNGenerator<
             AggregateAbNGenerator<DisjointNode<PARENTNODE_T>, AggregateDisjointNode<PARENTNODE_T>> aggregateGenerator,
             AggregatedProperty aggregatedProperty) {
         
-        if (aggregatedProperty.getBound() == 1) {
+        if (aggregatedProperty.getBound() == 1 && aggregatedProperty.getAutoScaled()==false) {
             return sourceDisjointAbN;
         }
 

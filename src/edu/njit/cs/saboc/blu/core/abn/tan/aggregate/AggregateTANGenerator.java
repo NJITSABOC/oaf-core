@@ -29,7 +29,7 @@ public class AggregateTANGenerator {
             final AggregateAbNGenerator<Cluster, AggregateCluster> aggregateGenerator,
             final AggregatedProperty aggregatedProperty) {
 
-        if (aggregatedProperty.getBound() == 1) {
+        if (aggregatedProperty.getBound() == 1 && aggregatedProperty.getAutoScaled()==false) {
             return sourceTAN;
         }
 

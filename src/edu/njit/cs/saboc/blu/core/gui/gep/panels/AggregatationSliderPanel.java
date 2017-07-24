@@ -315,13 +315,13 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                          
             this.currentBound = abnBound;
             this.isWeightedAggregated = weightedAggregate;
-            this.autoScaleBound = autoBound;
+            this.autoScaleBound = Math.min(nodes.size(), autoBound);
             this.isAutoScaled = autoScaled;
             
             aggregationSlider.setValue(abnBound);
             aggregationCheckBox.setSelected(weightedAggregate);
             autoScaleCheckBox.setSelected(autoScaled);
-            txtAutoBound.setText(String.valueOf(autoBound));
+            txtAutoBound.setText(String.valueOf(this.autoScaleBound));
                        
         } else {
             this.initialized = true;

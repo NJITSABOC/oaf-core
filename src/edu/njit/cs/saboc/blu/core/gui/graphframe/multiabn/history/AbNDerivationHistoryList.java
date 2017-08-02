@@ -13,6 +13,7 @@ public class AbNDerivationHistoryList extends AbstractEntityList<AbNDerivationHi
     
     public AbNDerivationHistoryList() {
         super(new AbNDerivationHistoryTableModel());
+        
         this.setDefaultTableRenderer(String.class, new SingleLineTextRenderer(this.getEntityTable()));
     }
 

@@ -31,6 +31,8 @@ public class NavigationPanel extends AbNDisplayWidget {
     private final JButton moveDownBtn;
     private final JButton moveLeftBtn;
     private final JButton moveRightBtn;
+    
+    private final JButton navHelpBtn;
 
     private final ArrayList<NavigationPanelListener> listeners = new ArrayList<>();
     
@@ -69,11 +71,16 @@ public class NavigationPanel extends AbNDisplayWidget {
 
         moveRightBtn = new JButton("\u2192");
         moveRightBtn.setBounds(140, 40, 50, 25);
+        
+        navHelpBtn = new JButton("Help!");
+        navHelpBtn.setBounds(80, 80, 70, 30);
 
         this.add(moveUpBtn);
         this.add(moveLeftBtn);
         this.add(moveDownBtn);
         this.add(moveRightBtn);
+        
+        this.add(navHelpBtn);
     }
     
     public void setZoomLevel(int newZoomLevel) {

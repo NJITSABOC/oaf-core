@@ -41,9 +41,7 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
         displayPanel.addWidget(navigationPanel);
         
         if (startUp) {
-            NavigationTutorialPanel tutorialPanel = new NavigationTutorialPanel(displayPanel);
-
-            displayPanel.addWidget(tutorialPanel);
+            // Do first time startup stuff
         }
     }
 

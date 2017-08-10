@@ -80,7 +80,8 @@ public class NavigationPanel extends AbNDisplayWidget {
         this.add(moveDownBtn);
         this.add(moveRightBtn);
         
-        this.add(navHelpBtn);
+        // TODO: Reimplement help button
+        //this.add(navHelpBtn);
     }
     
     public void setZoomLevel(int newZoomLevel) {

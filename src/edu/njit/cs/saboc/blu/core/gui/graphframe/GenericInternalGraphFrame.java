@@ -67,6 +67,7 @@ public abstract class GenericInternalGraphFrame<T extends AbstractionNetwork>
     private final AbNWarningManager warningManager;
 
     protected GenericInternalGraphFrame(JFrame parentFrame, String title) {
+        
         super(title,
                 true, //resizable
                 true, //closable

@@ -3,7 +3,6 @@ package edu.njit.cs.saboc.blu.core.gui.frame;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -14,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.BevelBorder;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -165,23 +165,16 @@ public class OAFMainFrame extends JFrame {
             abnSelectionFrame = abnSelectionFrameFactory.createAbNSelectionFrame(OAFMainFrame.this);
             
             desktopPane.add(abnSelectionFrame);
-            
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-            if (screenSize.getWidth() < abnSelectionFrame.getWidth() || 
-                    screenSize.getHeight() < abnSelectionFrame.getHeight()) {
+            if (abnSelectionFrame.getWidth() > desktopPane.getWidth() || 
+                    abnSelectionFrame.getHeight() > desktopPane.getHeight()) {
                 
-                Dimension contentSize = getContentPane().getSize();
-                
-                int contentWidth = contentSize.width;
-                int contentHeight = contentSize.height;
-                
-                abnSelectionFrame.setLocation(0, 0);
-                abnSelectionFrame.setSize(contentWidth, contentHeight);
+                abnSelectionFrame.setSize(desktopPane.getSize());
+                abnSelectionFrame.setLocation(new Point(0, 0));
                 
             } else {
                 abnSelectionFrame.setLocation(
-                        getWidth() / 2 - abnSelectionFrame.getWidth() / 2, 
+                        getWidth() / 2 - abnSelectionFrame.getWidth() / 2,
                         getHeight() / 2 - abnSelectionFrame.getHeight() + 300);
             }
 
@@ -445,15 +438,23 @@ public class OAFMainFrame extends JFrame {
      * @param frame Internal frame to be added.
      */
     public void addInternalFrame(JInternalFrame frame) {
+        
         desktopPane.add(frame);
-
+        
         for (int i = desktopPane.getComponentCount() - 2; i >= 0; i--) {
             Component c = desktopPane.getComponent(i);
             int index = desktopPane.getComponentZOrder(c) + 1;
             desktopPane.setComponentZOrder(c, index);
         }
 
-        frame.setLocation(getWidth() / 2 - frame.getWidth() / 2, getHeight() / 2 - frame.getHeight() / 2 - 100);
+        if(frame.getWidth() > desktopPane.getWidth() || 
+                frame.getHeight() > desktopPane.getHeight()) {
+            
+            frame.setSize(desktopPane.getSize());
+            frame.setLocation(new Point(0, 0));
+        } else {
+            frame.setLocation(getWidth() / 2 - frame.getWidth() / 2, getHeight() / 2 - frame.getHeight() / 2 - 100);
+        }
 
         desktopPane.setComponentZOrder(frame, 0);
 

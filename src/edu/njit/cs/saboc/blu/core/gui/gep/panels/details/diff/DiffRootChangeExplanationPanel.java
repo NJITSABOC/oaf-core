@@ -14,6 +14,7 @@ import java.util.Set;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class DiffRootChangeExplanationPanel<T extends SinglyRootedNode> extends BaseNodeInformationPanel<T> {
     

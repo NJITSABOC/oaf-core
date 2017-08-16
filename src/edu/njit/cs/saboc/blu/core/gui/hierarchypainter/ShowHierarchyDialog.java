@@ -24,7 +24,7 @@ public class ShowHierarchyDialog {
         
         dialog.setSize(800, 600);
         dialog.setLocationRelativeTo(null);
-        dialog.setResizable(false);
+        //dialog.setResizable(false);
         
         dialog.setModal(true);
         

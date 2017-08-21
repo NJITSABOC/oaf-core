@@ -19,6 +19,7 @@ public class AggregatedProperty {
         this.bound=1;
         this.isWeighteAggregated= false;
         this.autoScaleBound = -1;
+        this.isAutoScaled = false;
     }
 
     public AggregatedProperty(int Bound, boolean isWeighted, int autoScaleBound, boolean isAutoScaled) {

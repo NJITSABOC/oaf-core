@@ -1,5 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
+import com.sun.media.sound.FFT;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
@@ -14,6 +15,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNExplorationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNDerivationHistoryEntry;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history.AbNHistoryNavigationPanel;
 import java.awt.BorderLayout;
@@ -63,6 +65,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
     private final AbNWorkspaceManager workspaceManager;
     
     private final OAFStateFileManager stateFileManager;
+    
+    private final FrameState frameState;
 
     public MultiAbNGraphFrame(
             JFrame parentFrame, 
@@ -90,6 +94,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         this.optInitializers = Optional.empty();
         
         this.workspaceManager = new AbNWorkspaceManager(this);
+        
+        this.frameState = new FrameState();
 
         this.setLayout(new BorderLayout());
 
@@ -276,14 +282,15 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
         
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
-        
-        initialize(taxonomy, initializers.getPAreaTaxonomyInitializer());
+
+        initialize(taxonomy, initializers.getPAreaTaxonomyInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(taxonomy);
         }
     }
 
+    
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
         displayAreaTaxonomy(taxonomy, true);
     }

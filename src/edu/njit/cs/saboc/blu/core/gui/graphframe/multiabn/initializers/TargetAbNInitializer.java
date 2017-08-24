@@ -7,6 +7,7 @@ import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.targetabn.TargetAbNGraph;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AbNExplorationPanelGUIInitializer;
 import edu.njit.cs.saboc.blu.core.gui.gep.initializer.AggregateableAbNExplorationPanelInitializer;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.AggregatationSliderPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.targetbased.configuration.TargetAbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
@@ -16,6 +17,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.GenericAbNTaskBarPanel;
 import javax.swing.JFrame;
 
@@ -26,9 +28,11 @@ import javax.swing.JFrame;
 public abstract class TargetAbNInitializer implements GraphFrameInitializer<TargetAbstractionNetwork, TargetAbNConfiguration> {
 
     private final AbNWarningManager warningManager;
+    private final FrameState frameState;
 
-    public TargetAbNInitializer(AbNWarningManager warningManager) {
+    public TargetAbNInitializer(AbNWarningManager warningManager, FrameState frameState) {
         this.warningManager = warningManager;
+        this.frameState = frameState;
     }
 
     @Override
@@ -97,10 +101,12 @@ public abstract class TargetAbNInitializer implements GraphFrameInitializer<Targ
 
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TargetAbNConfiguration config) {
-
-        return new AggregateableAbNExplorationPanelInitializer(warningManager, (ap) -> {
+        AggregatationSliderPanel.AggregationAction aggregationAction = (ap) -> {
+            frameState.setAggregateProperty(ap);
             TargetAbstractionNetwork aggregateAbN = config.getTargetAbstractionNetwork().getAggregated(ap);
             config.getUIConfiguration().getAbNDisplayManager().displayTargetAbstractionNetwork(aggregateAbN);
-        });
+        };
+        
+        return new AggregateableAbNExplorationPanelInitializer(warningManager, frameState, aggregationAction);
     }
 }

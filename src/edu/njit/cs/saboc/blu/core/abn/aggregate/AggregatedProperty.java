@@ -18,7 +18,7 @@ public class AggregatedProperty {
     public AggregatedProperty() {
         this.bound=1;
         this.isWeighteAggregated= false;
-        this.autoScaleBound = -1;
+        this.autoScaleBound = 25; //default value for auto aggregation
         this.isAutoScaled = false;
     }
 

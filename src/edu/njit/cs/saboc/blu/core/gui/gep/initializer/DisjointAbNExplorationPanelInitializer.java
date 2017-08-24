@@ -12,6 +12,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNCon
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningMessage;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.DisjointAbNWarningManager;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Set;
@@ -32,9 +33,10 @@ public class DisjointAbNExplorationPanelInitializer extends AggregateableAbNExpl
             DisjointAbNConfiguration config, 
             PartitionedAbNConfiguration parentConfig, 
             AggregationAction aggregationAction,
-            AbNWarningManager warningManager) {
+            AbNWarningManager warningManager,
+            FrameState frameState) {
         
-        super(warningManager, aggregationAction);
+        super(warningManager, frameState, aggregationAction);
         
         this.config = config;
         this.parentConfig = parentConfig;

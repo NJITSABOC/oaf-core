@@ -17,6 +17,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
 import javax.swing.JFrame;
 
@@ -32,9 +33,11 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     }
     
     private final AbNWarningManager warningManager;
+    private final FrameState frameState;
     
-    public TANInitializer(AbNWarningManager warningManager) {
+    public TANInitializer(AbNWarningManager warningManager, FrameState frameState) {
         this.warningManager = warningManager;
+        this.frameState = frameState;
     }
     
     
@@ -76,13 +79,14 @@ public abstract class TANInitializer implements GraphFrameInitializer<ClusterTri
     @Override
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(TANConfiguration config) {
 
-        AggregationAction aggregationAction = (ap) -> {            
+        AggregationAction aggregationAction = (ap) -> {
+                frameState.setAggregateProperty(ap);
                 ClusterTribalAbstractionNetwork aggregateTAN = config.getAbstractionNetwork().getAggregated(ap);
                 config.getUIConfiguration().getAbNDisplayManager().displayTribalAbstractionNetwork(aggregateTAN);     
         };
         
         AggregateableAbNExplorationPanelInitializer initializer = 
-                new AggregateableAbNExplorationPanelInitializer(warningManager, aggregationAction) {
+                new AggregateableAbNExplorationPanelInitializer(warningManager, frameState, aggregationAction) {
 
             @Override
             public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {

@@ -4,6 +4,7 @@ package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.history;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AbNDerivation;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import edu.njit.cs.saboc.blu.core.ontology.Ontology;
 import java.awt.Component;
@@ -19,6 +20,7 @@ import org.json.simple.JSONObject;
 public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> extends Component{
    
     private final MultiAbNGraphFrame graphFrame;
+    private final FrameState frameState;
 
     private final AbNDerivation<T> derivation;
 
@@ -31,7 +33,7 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> extends Com
         
         this.derivation = derivation;
         this.graphFrame = graphFrame;
-        
+        this.frameState = new FrameState(graphFrame.getFrameState().getAggregateProperty());        
         this.entryDate = date;
     }
     
@@ -56,7 +58,7 @@ public class AbNDerivationHistoryEntry<T extends AbstractionNetwork> extends Com
            T abn = derivation.getAbstractionNetwork(ontology);
            
            SwingUtilities.invokeLater( () -> {
-               graphFrame.displayAbstractionNetwork(abn, false);
+               graphFrame.displayAbstractionNetwork(abn, false, frameState);
            });
         });
         

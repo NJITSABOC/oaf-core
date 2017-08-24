@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.PartitionedAbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import javax.swing.JFrame;
 
 /**
@@ -21,8 +22,8 @@ public abstract class AreaTaxonomyInitializer extends PAreaTaxonomyInitializer {
         return PAreaInitializerType.AreaTaxonomy;
     }
     
-    public AreaTaxonomyInitializer(AbNWarningManager warningManager) {
-        super(warningManager);
+    public AreaTaxonomyInitializer(AbNWarningManager warningManager, FrameState frameState) {
+        super(warningManager, frameState);
     }
 
     @Override

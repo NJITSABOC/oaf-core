@@ -8,10 +8,12 @@ import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,14 +60,18 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     
     private boolean isAutoScaled = false;
     
+    private FrameState frameState;
+    
     public AggregatationSliderPanel(
-            AbNDisplayPanel displayPanel, 
+            AbNDisplayPanel displayPanel,
+            FrameState frameState,
             AggregationAction aggregationAction) {
         
         super(displayPanel);
         
+        this.frameState = frameState;
         this.aggregationAction = aggregationAction;
-        
+               
         this.setLayout(new GridLayout(2, 1, 1, 1));
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
 
@@ -123,8 +129,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             } catch (NumberFormatException nfe) {
 
             }           
-            displayCurrentScaleBound();
-            displayCurrentScaleCheckBox();
+            displayCurrentAutoScaleBound();
+            displayCurrentAutoScaleCheckBox();
         });
                 
         autoScaleCheckBox = new JCheckBox("Use Auto Scale");
@@ -189,12 +195,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         aggregationPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         
         this.add(autoScalePanel);             
-        this.add(aggregationPanel);
-        
+        this.add(aggregationPanel);            
         
     }
     
-    private void setBound(int bound, boolean weightedAggregated) {
+    private void setBound(int bound, boolean weightedAggregated) {        
         AggregatedProperty aggregatedProperty = new AggregatedProperty(bound, weightedAggregated, autoScaleBound, false);
         if (currentBound != bound || isWeightedAggregated != weightedAggregated) {
             aggregationAction.createAndDisplayAggregateAbN(aggregatedProperty);
@@ -209,6 +214,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         }
     }
     
+    private void setFrameState(FrameState frameState){
+        aggregationAction.createAndDisplayAggregateAbN(frameState.getAggregateProperty());
+        frameState.setInitialized(false);
+    }
+    
     
     private void displayCurrentBound() {
         displayBound(currentBound);
@@ -219,22 +229,22 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     private void displayCurrentWeightedCheckBox(){
-        displayWeightedFlag(isWeightedAggregated);
+        displayWeightedCheckBox(isWeightedAggregated);
     }
     
-    private void displayWeightedFlag(boolean flag){   
+    private void displayWeightedCheckBox(boolean flag){   
         aggregationCheckBox.setSelected(flag);
     }
     
-    private void displayCurrentScaleBound(){
-        displayScaleBound(autoScaleBound);
+    private void displayCurrentAutoScaleBound(){
+        displayAutoScaleBound(autoScaleBound);
     }
     
-    private void displayScaleBound(int bound){
+    private void displayAutoScaleBound(int bound){
         txtAutoBound.setText(Integer.toString(bound));
     }
     
-    private void displayCurrentScaleCheckBox(){
+    private void displayCurrentAutoScaleCheckBox(){
         displayAutoScaleCheckBox(isAutoScaled);
     }
     
@@ -305,25 +315,31 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         aggregationSlider.setMaximum(bound);
         
-        this.initialized = false;
-        
+//        this.initialized = false;
         if(abn instanceof AggregateAbstractionNetwork) {
-            int abnBound = ((AggregateAbstractionNetwork)abn).getAggregateBound();
-            boolean weightedAggregate = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getWeighted();
-            int autoBound = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaleBound();
-            boolean autoScaled = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaled();
-                         
-            this.currentBound = abnBound;
-            this.isWeightedAggregated = weightedAggregate;
-            this.autoScaleBound = Math.min(nodes.size(), autoBound);
-            this.isAutoScaled = autoScaled;
             
-            aggregationSlider.setValue(abnBound);
-            aggregationCheckBox.setSelected(weightedAggregate);
-            autoScaleCheckBox.setSelected(autoScaled);
+            this.currentBound = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getBound();
+            this.isWeightedAggregated = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getWeighted();
+            this.autoScaleBound = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaleBound();
+            this.isAutoScaled = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaled();
+                         
+            aggregationSlider.setValue(currentBound);
+            aggregationCheckBox.setSelected(isWeightedAggregated);
+            autoScaleCheckBox.setSelected(isAutoScaled);
             txtAutoBound.setText(String.valueOf(this.autoScaleBound));
-                       
+            
+            
         } else {
+            this.currentBound = frameState.getAggregateProperty().getBound();
+            this.isWeightedAggregated = frameState.getAggregateProperty().getWeighted();
+            this.autoScaleBound = frameState.getAggregateProperty().getAutoScaleBound();
+            this.isAutoScaled = frameState.getAggregateProperty().getAutoScaled();
+            
+            aggregationSlider.setValue(currentBound);
+            aggregationCheckBox.setSelected(isWeightedAggregated);
+            autoScaleCheckBox.setSelected(isAutoScaled);
+            txtAutoBound.setText(String.valueOf(this.autoScaleBound));
+            
             this.initialized = true;
         }
     }

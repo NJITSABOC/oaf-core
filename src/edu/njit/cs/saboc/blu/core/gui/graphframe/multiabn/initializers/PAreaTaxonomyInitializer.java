@@ -17,6 +17,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.GraphFrameInitializer;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.MultiAbNGraphFrame;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.TaskBarPanel;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.taskbarpanels.PartitionedAbNTaskBarPanel;
 import javax.swing.JFrame;
 
@@ -32,9 +33,11 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     }
     
     private final AbNWarningManager warningManager;
+    private final FrameState frameState;
     
-    public PAreaTaxonomyInitializer(AbNWarningManager warningManager) {
+    public PAreaTaxonomyInitializer(AbNWarningManager warningManager, FrameState frameState) {
         this.warningManager = warningManager;
+        this.frameState = frameState;
     }
     
     public PAreaInitializerType getInitializerType() {
@@ -82,13 +85,13 @@ public abstract class PAreaTaxonomyInitializer implements GraphFrameInitializer<
     public AbNExplorationPanelGUIInitializer getExplorationGUIInitializer(PAreaTaxonomyConfiguration config) {
 
         AggregationAction aggregationAction = (ap) -> {
-           
-                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(ap);            
+                frameState.setAggregateProperty(ap);
+                PAreaTaxonomy aggregateTaxonomy = config.getPAreaTaxonomy().getAggregated(frameState.getAggregateProperty());            
                 config.getUIConfiguration().getAbNDisplayManager().displayPAreaTaxonomy(aggregateTaxonomy);           
         };
 
         AggregateableAbNExplorationPanelInitializer initializer = 
-                new AggregateableAbNExplorationPanelInitializer(warningManager, aggregationAction) {
+                new AggregateableAbNExplorationPanelInitializer(warningManager, frameState, aggregationAction) {
 
             @Override
             public void initializeAbNDisplayPanel(AbNDisplayPanel displayPanel, boolean startUp) {

@@ -8,6 +8,7 @@ import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.AbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.PartitionedAbNPainter;
 import edu.njit.cs.saboc.blu.core.gui.gep.utils.drawing.SinglyRootedNodeLabelCreator;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
+import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import javax.swing.JFrame;
 
 /**
@@ -16,8 +17,8 @@ import javax.swing.JFrame;
  */
 public abstract class BandTANInitializer extends TANInitializer {
     
-    public BandTANInitializer(AbNWarningManager warningManager) {
-        super(warningManager);
+    public BandTANInitializer(AbNWarningManager warningManager, FrameState frameState) {
+        super(warningManager, frameState);
     }
     
     @Override

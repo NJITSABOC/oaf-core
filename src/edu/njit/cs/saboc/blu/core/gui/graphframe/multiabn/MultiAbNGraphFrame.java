@@ -1,6 +1,5 @@
 package edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn;
 
-import com.sun.media.sound.FFT;
 import edu.njit.cs.saboc.blu.core.abn.AbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.disjoint.DisjointAbstractionNetwork;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.DisjointPArea;
@@ -177,6 +176,10 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         return parentFrame;
     }
     
+    public FrameState getFrameState(){
+        return frameState;
+    }
+    
     public OAFStateFileManager getStateFileManager() {
         return stateFileManager;
     }
@@ -267,6 +270,40 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
     }
     
+    
+    public void displayAbstractionNetwork(AbstractionNetwork<?> abn, boolean createHistoryEntry, FrameState frameState) {
+        this.frameState.setAggregateProperty(frameState.getAggregateProperty());
+        displayAbstractionNetwork(abn, createHistoryEntry);
+    }
+    
+    public AbstractionNetwork<?> applyFrameState(AbstractionNetwork<?> abn, FrameState frameState) {
+        
+        if (abn instanceof PAreaTaxonomy) {
+            return ((PAreaTaxonomy) abn).getAggregated(frameState.getAggregateProperty());
+        } else if (abn instanceof ClusterTribalAbstractionNetwork) {
+            return ((ClusterTribalAbstractionNetwork) abn).getAggregated(frameState.getAggregateProperty());
+        } else if (abn instanceof TargetAbstractionNetwork) {
+            return ((TargetAbstractionNetwork) abn).getAggregated(frameState.getAggregateProperty());
+        } else if (abn instanceof DisjointAbstractionNetwork) {
+            DisjointAbstractionNetwork<?, ?, ?> disjointAbN = (DisjointAbstractionNetwork) abn;
+
+            if (disjointAbN.getParentAbstractionNetwork() instanceof PAreaTaxonomy) {
+
+                return ((DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea>) disjointAbN).getAggregated(frameState.getAggregateProperty());
+
+            } else if (disjointAbN.getParentAbstractionNetwork() instanceof ClusterTribalAbstractionNetwork) {
+
+                return ((DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>) disjointAbN).getAggregated(frameState.getAggregateProperty());
+            } else {
+                return abn;
+            }
+
+        } else {
+            return abn;
+        }
+    }
+    
+    
     public void addDerivationHistoryEntry(AbstractionNetwork<?> abn) {
         this.abnDerivationHistory.addEntry(new AbNDerivationHistoryEntry<>(abn.getDerivation(), this), true);
     }
@@ -282,15 +319,16 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
         
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
-
+        
+        taxonomy = (PAreaTaxonomy)applyFrameState(taxonomy, frameState);
         initialize(taxonomy, initializers.getPAreaTaxonomyInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(taxonomy);
         }
     }
-
     
+
     public void displayAreaTaxonomy(PAreaTaxonomy taxonomy) {
         displayAreaTaxonomy(taxonomy, true);
     }
@@ -302,14 +340,14 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
         
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
-        
-        initialize(taxonomy, initializers.getAreaTaxonomyInitializer());
+        taxonomy = (PAreaTaxonomy)applyFrameState(taxonomy, frameState);
+        initialize(taxonomy, initializers.getAreaTaxonomyInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(taxonomy);
         }
     }
-
+    
     public void displayDisjointPAreaTaxonomy(
             DisjointAbstractionNetwork<DisjointPArea, PAreaTaxonomy<PArea>, PArea> disjointTaxonomy) {
 
@@ -324,14 +362,15 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
 
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
-
-        initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer());
+        
+        disjointTaxonomy = disjointTaxonomy.getAggregated(frameState.getAggregateProperty());       
+        initialize(disjointTaxonomy, initializers.getDisjointPAreaTaxonomyInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(disjointTaxonomy);
         }
     }
-
+    
     public void displayTAN(ClusterTribalAbstractionNetwork tan) {
         displayTAN(tan, true);
     }
@@ -344,13 +383,14 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
         
-        initialize(tan, initializers.getTANInitializer());
+        tan = (ClusterTribalAbstractionNetwork)applyFrameState(tan, frameState);
+        initialize(tan, initializers.getTANInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(tan);
         }
     }
-
+    
     public void displayBandTAN(ClusterTribalAbstractionNetwork tan) {
         displayBandTAN(tan, true);
     }
@@ -363,7 +403,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
         
-        initialize(tan, initializers.getBandTANInitializer());
+        tan = (ClusterTribalAbstractionNetwork)applyFrameState(tan, frameState);
+        initialize(tan, initializers.getBandTANInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(tan);
@@ -383,8 +424,9 @@ public class MultiAbNGraphFrame extends JInternalFrame {
         }
 
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
-
-        initialize(disjointTAN, initializers.getDisjointTANInitializer());
+        
+        disjointTAN = (DisjointAbstractionNetwork<DisjointCluster, ClusterTribalAbstractionNetwork<Cluster>, Cluster>)applyFrameState(disjointTAN, frameState);
+        initialize(disjointTAN, initializers.getDisjointTANInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(disjointTAN);
@@ -403,7 +445,8 @@ public class MultiAbNGraphFrame extends JInternalFrame {
 
         AbNGraphFrameInitializers initializers = this.optInitializers.get();
         
-        initialize(targetAbN, initializers.getTargetAbNInitializer());
+        targetAbN = (TargetAbstractionNetwork)applyFrameState(targetAbN, frameState);
+        initialize(targetAbN, initializers.getTargetAbNInitializer(frameState));
 
         if (createHistoryEntry) {
             addDerivationHistoryEntry(targetAbN);

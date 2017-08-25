@@ -66,8 +66,8 @@ public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntity
 
             return new Object [] {
                 item,
-                getChangeName(change),
-                getChangeExplanation(change)
+                change.getChangeName(config.getTextConfiguration()),
+                change.getChangeDescription(config.getTextConfiguration())
             };
 
         } else {
@@ -78,108 +78,5 @@ public class DiffNodeConceptListModel<T extends Node> extends AbstractNodeEntity
             };
         }
         
-    }
-    
-    protected String getChangeName(NodeConceptChange change) {
-        
-        switch(change.getChangeType()) {
-
-            case AddedToOnt:
-                return "Added to ontology";
-                
-            case AddedToHierarchy:
-                return "Added to subhierarchy";
-                
-            case AddedToNode:
-                return String.format("Added to %s (still summarized by other %s)", 
-                        config.getTextConfiguration().getNodeTypeName(false).toLowerCase(),
-                        config.getTextConfiguration().getNodeTypeName(true).toLowerCase());
-                
-            case MovedFromNode:
-                return String.format("Moved from %s", 
-                        config.getTextConfiguration().getNodeTypeName(false));
-    
-
-            case RemovedFromOnt:
-                return "Removed from ontology";
-                
-            case RemovedFromHierarchy:
-                return "Removed from subhierarchy";
-                
-            case RemovedFromNode:
-                return String.format("Removed from %s (still in other %s)", 
-                        config.getTextConfiguration().getNodeTypeName(false).toLowerCase(),
-                        config.getTextConfiguration().getNodeTypeName(true).toLowerCase());
-                
-            case MovedToNode:
-                return String.format("Moved to %s", 
-                        config.getTextConfiguration().getNodeTypeName(false));
-        }
-        
-        return "[UNKNOWN CHANGE TYPE]";
-    }
-    
-    private String getChangeExplanation(NodeConceptChange change) {
-        switch(change.getChangeType()) {
-
-            case AddedToOnt:
-                return "";
-                
-            case AddedToHierarchy:
-                return "";
-                
-            case AddedToNode:
-                ConceptAddedToNode addedToNodeChange = (ConceptAddedToNode)change;
-                
-                ArrayList<String> otherNodeNames = new ArrayList<>();
-
-                addedToNodeChange.getOtherNodes().forEach( (node) -> {
-                    otherNodeNames.add(node.getName());
-                });
-                
-                Collections.sort(otherNodeNames);
-
-                
-                String nameList = otherNodeNames.toString();
-                
-                nameList = nameList.substring(1, nameList.length() - 1);
-                
-                return nameList;
-                
-            case MovedFromNode:
-                ConceptMovedFromNode movedFromNodeChange = (ConceptMovedFromNode)change;
-                
-                return movedFromNodeChange.getMovedFrom().getName();
-    
-            case RemovedFromOnt:
-                return "";
-                
-            case RemovedFromHierarchy:
-                return "";
-                
-            case RemovedFromNode:
-                ConceptRemovedFromNode removedFromNodeChange = (ConceptRemovedFromNode)change;
-                
-                ArrayList<String> remainingNodeNames = new ArrayList<>();
-
-                removedFromNodeChange.getOtherNodes().forEach( (node) -> {
-                    remainingNodeNames.add(node.getName());
-                });
-                
-                Collections.sort(remainingNodeNames);
-                
-                String remainingNodeNamesStr = remainingNodeNames.toString();
-
-                remainingNodeNamesStr = remainingNodeNamesStr.substring(1, remainingNodeNamesStr.length() - 1);
-                
-                return remainingNodeNamesStr;
-                
-            case MovedToNode:
-                ConceptMovedToNode movedToNodeChange = (ConceptMovedToNode)change;
-                
-                return movedToNodeChange.getMovedTo().getName();
-        }
-        
-        return "[UNKNOWN CHANGE TYPE]";
     }
 }

@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.abn.diff.change.concepts;
 
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ public class ConceptAddedToNode extends NodeConceptChange {
     private final Set<Node> otherCurrentNodes;
     
     public ConceptAddedToNode(Node node, Concept concept, Set<Node> otherCurrentNodes) {
-        super(NodeConceptSetChangeType.AddedToNode, node, concept);
+        super(node, concept);
         
         this.otherCurrentNodes = otherCurrentNodes;
     }
@@ -24,4 +26,34 @@ public class ConceptAddedToNode extends NodeConceptChange {
     public Set<Node> getOtherNodes() {
         return otherCurrentNodes;
     }
+
+    @Override
+    public String getChangeName(AbNTextConfiguration config) {
+        AbNTextFormatter factory = new AbNTextFormatter(config);
+        
+        String str = "<conceptTypeName> added to <nodeTypeName>.";
+
+        str = factory.format(str);
+        
+        return str;
+    }
+
+    @Override
+    public String getChangeDescription(AbNTextConfiguration config) {
+        
+        AbNTextFormatter factory = new AbNTextFormatter(config);
+        
+        String str = "<conceptName> was added to <diffNodeName> <nodeTypeName>, "
+                + "while still in <nodeCount> other <nodeTypeName count=<nodeCount>>.";
+        
+        str = str.replaceAll("<conceptName>", super.getConcept().getName());
+        str = str.replaceAll("<diffNodeName>", super.getNode().getName());
+        str = str.replaceAll("<nodeCount>", Integer.toString(otherCurrentNodes.size()));
+        
+        str = factory.format(str);
+        
+        return str;
+    }
+    
+    
 }

@@ -11,6 +11,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.NodeDetailsPanel;
  */
 public class DiffPartitionedNodePanel<T extends PartitionedNode> extends NodeDashboardPanel<T> {
     
+    private final DiffNodeChangesPanel<T> diffNodeChangesPanel;
+    
     private final DiffPartitionedNodeSubNodeList groupListPanel;
     
     public DiffPartitionedNodePanel(
@@ -18,6 +20,11 @@ public class DiffPartitionedNodePanel<T extends PartitionedNode> extends NodeDas
             PartitionedAbNConfiguration configuration) {
         
         super(diffContainerDetailsPanel, configuration);
+        
+        this.diffNodeChangesPanel = new DiffNodeChangesPanel<>(configuration);
+        
+        addInformationTab(diffNodeChangesPanel, String.format("%s Changes", 
+                configuration.getTextConfiguration().getContainerTypeName(false)));
         
         this.groupListPanel = new DiffPartitionedNodeSubNodeList(configuration);
         

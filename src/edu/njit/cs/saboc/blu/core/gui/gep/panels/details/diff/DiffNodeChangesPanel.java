@@ -11,6 +11,7 @@ import java.util.ArrayList;
 /**
  *
  * @author Chris O
+ * @param <T>
  */
 public class DiffNodeChangesPanel<T extends Node> extends BaseNodeInformationPanel<T>  {
     

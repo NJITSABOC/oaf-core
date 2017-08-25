@@ -14,17 +14,19 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.conf
 public class DiffAreaDetailsPanel extends NodeDetailsPanel<DiffArea> {
     
     public DiffAreaDetailsPanel(DiffPAreaTaxonomyConfiguration config) {
+        
         super(new AreaSummaryPanel(config, new DiffAreaSummaryTextFactory(config)),
                 config.getUIConfiguration().getPartitionedNodeOptionsPanel(),
                 new NodeConceptList(new DiffPartitionedNodeConceptListModel(config), config),
                 config);
     }
     
-    public DiffAreaDetailsPanel(DiffPAreaTaxonomyConfiguration config, DiffAreaSummaryTextFactory textFactory) {
+    public DiffAreaDetailsPanel(DiffPAreaTaxonomyConfiguration config, 
+            DiffAreaSummaryTextFactory textFactory) {
+        
         super(new AreaSummaryPanel(config, textFactory),
                 config.getUIConfiguration().getPartitionedNodeOptionsPanel(),
                 new NodeConceptList(new DiffPartitionedNodeConceptListModel(config), config),
                 config);
     }
-
 }

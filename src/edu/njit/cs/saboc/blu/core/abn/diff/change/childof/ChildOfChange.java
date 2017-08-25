@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.abn.diff.change.childof;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.AbNChange;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 
 /**
  * Represents a chance to the CHILD OF links between two 
@@ -17,7 +18,11 @@ public class ChildOfChange implements AbNChange {
     private final Node parent;
     private final ChangeState state;
     
-    public ChildOfChange(Node child, Node parent, ChangeState state) {
+    public ChildOfChange(
+            Node child, 
+            Node parent, 
+            ChangeState state) {
+        
         this.child = child;
         this.parent = parent;
         this.state = state;
@@ -36,7 +41,7 @@ public class ChildOfChange implements AbNChange {
     }
 
     @Override
-    public String getChangeName() {
+    public String getChangeName(AbNTextConfiguration config) {
         if(state.equals(ChangeState.Introduced)) {
             return "Child of introduced";
         } else {
@@ -45,7 +50,7 @@ public class ChildOfChange implements AbNChange {
     }
 
     @Override
-    public String getChangeDescription() {
+    public String getChangeDescription(AbNTextConfiguration config) {
         if(state.equals(ChangeState.Introduced)) {
             return String.format("Child of to %s introduced", parent.getName());
         } else {

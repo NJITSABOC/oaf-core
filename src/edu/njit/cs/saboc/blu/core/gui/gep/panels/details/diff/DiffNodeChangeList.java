@@ -17,7 +17,7 @@ public class DiffNodeChangeList extends AbstractEntityList<AbNChange> {
     private final AbNConfiguration configuration;
     
     public DiffNodeChangeList(AbNConfiguration configuration) {
-        this(new DiffNodeChangesTableModel(), configuration);
+        this(new DiffNodeChangesTableModel(configuration), configuration);
     }
     
     public DiffNodeChangeList(OAFAbstractTableModel<AbNChange> model, AbNConfiguration configuration) {

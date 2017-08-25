@@ -1,5 +1,7 @@
 package edu.njit.cs.saboc.blu.core.abn.diff.change;
 
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
+
 
 /**
  * Represents a type of change that affected an abstraction network
@@ -7,6 +9,6 @@ package edu.njit.cs.saboc.blu.core.abn.diff.change;
  * @author Chris
  */
 public interface AbNChange {
-    public String getChangeName();
-    public String getChangeDescription();
+    public String getChangeName(AbNTextConfiguration config);
+    public String getChangeDescription(AbNTextConfiguration config);
 }

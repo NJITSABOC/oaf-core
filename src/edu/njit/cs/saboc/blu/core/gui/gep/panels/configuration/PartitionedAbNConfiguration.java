@@ -27,6 +27,7 @@ public abstract class PartitionedAbNConfiguration<T extends SinglyRootedNode, V 
         super.setTextConfiguration(config);
     }
 
+    @Override
     public PartitionedAbstractionNetwork getAbstractionNetwork() {
         return (PartitionedAbstractionNetwork)super.getAbstractionNetwork();
     }

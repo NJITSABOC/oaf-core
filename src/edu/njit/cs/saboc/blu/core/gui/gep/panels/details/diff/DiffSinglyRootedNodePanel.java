@@ -34,12 +34,17 @@ public class DiffSinglyRootedNodePanel<T extends SinglyRootedNode> extends NodeD
         addInformationTab(groupHierarchyPanel, String.format("%s Hierarchy", 
                 configuration.getTextConfiguration().getNodeTypeName(false)));
         
-        this.diffNodeChangesPanel = new DiffNodeChangesPanel<>(configuration);
+        this.diffNodeChangesPanel = new DiffNodeChangesPanel<>(
+                configuration,
+                configuration.getTextConfiguration());
         
         addInformationTab(diffNodeChangesPanel, String.format("%s Changes", 
                 configuration.getTextConfiguration().getNodeTypeName(false)));
         
-        this.rootChangesPanel = new DiffRootChangeExplanationPanel<>(configuration, changeExplanationFactory);
+        this.rootChangesPanel = new DiffRootChangeExplanationPanel<>(
+                configuration, 
+                configuration.getTextConfiguration(),
+                changeExplanationFactory);
         
         changeExplanationPanelIndex = addInformationTab(rootChangesPanel, String.format("%s Change Explanation",
                 configuration.getTextConfiguration().getNodeTypeName(false)));

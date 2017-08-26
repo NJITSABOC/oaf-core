@@ -19,7 +19,7 @@ public class OverlappingConceptReportTableModel extends OAFAbstractTableModel<Ov
             String.format("Overlapping %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false)),
             "Degree of Overlap",
             String.format("Overlapping %s", config.getTextConfiguration().getNodeTypeName(true)), 
-            String.format("%s", config.getTextConfiguration().getContainerTypeName(false))
+            String.format("%s", config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false))
         });
         
         this.config = config;

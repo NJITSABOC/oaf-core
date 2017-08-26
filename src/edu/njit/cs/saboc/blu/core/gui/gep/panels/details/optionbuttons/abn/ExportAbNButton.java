@@ -66,13 +66,13 @@ public class ExportAbNButton<T extends AbstractionNetwork> extends AbNOptionsBut
 
         if (exportFile.isPresent()) {
             String fullChoice = String.format("Full Export (Hierarchy, Level, %s, %s, %s, %s Unique Identifiers)",
-                    partitionedConfig.getTextConfiguration().getContainerTypeName(true),
+                    partitionedConfig.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true),
                     config.getTextConfiguration().getNodeTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(false));
 
             String containerChoice = String.format("%s and %s Only",
-                    partitionedConfig.getTextConfiguration().getContainerTypeName(true),
+                    partitionedConfig.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true),
                     config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
 
             String groupChoice = String.format("%s and %s Only",

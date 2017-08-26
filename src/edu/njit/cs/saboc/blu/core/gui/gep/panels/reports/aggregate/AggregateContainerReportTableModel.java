@@ -19,7 +19,7 @@ public class AggregateContainerReportTableModel extends OAFAbstractTableModel<Co
     public AggregateContainerReportTableModel(PartitionedAbNConfiguration config) {
         
         super(new String[] {
-            config.getTextConfiguration().getContainerTypeName(false),
+            config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false),
             String.format("# Regular %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Aggregate %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Removed %s", config.getTextConfiguration().getNodeTypeName(true)),

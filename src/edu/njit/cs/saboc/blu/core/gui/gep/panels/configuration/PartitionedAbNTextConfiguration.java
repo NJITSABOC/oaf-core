@@ -14,11 +14,8 @@ public abstract class PartitionedAbNTextConfiguration<T extends SinglyRootedNode
     public PartitionedAbNTextConfiguration(OntologyEntityNameConfiguration ontologyEntityNameConfiguration) {
         super(ontologyEntityNameConfiguration);
     }
-    
-    public abstract String getBaseAbstractionNetworkTypeName(boolean plural);
-    
-    public abstract String getContainerTypeName(boolean plural);
-    public abstract String getContainerHelpDescription(V container);
-    
+     
+    public abstract AbNTextConfiguration getBaseAbNTextConfiguration();
+        
     public abstract String getDisjointNodeTypeName(boolean plural);
 }

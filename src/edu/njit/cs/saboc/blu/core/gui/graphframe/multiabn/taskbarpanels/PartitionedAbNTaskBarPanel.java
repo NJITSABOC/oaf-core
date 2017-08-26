@@ -43,7 +43,7 @@ public class PartitionedAbNTaskBarPanel extends TaskBarPanel {
                 + "| %s: <font color='RED'><b>%d</b></font> "
                 + "| %s: <font color='RED'><b>%d</b></font>",
                 
-                partitionedConfig.getTextConfiguration().getContainerTypeName(true),
+                partitionedConfig.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true),
                 partitionNodeCount, 
                 partitionedConfig.getTextConfiguration().getNodeTypeName(true),
                 singlyRootedNodeCount, 

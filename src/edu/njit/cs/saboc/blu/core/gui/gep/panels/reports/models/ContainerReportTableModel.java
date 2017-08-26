@@ -15,7 +15,7 @@ public class ContainerReportTableModel extends OAFAbstractTableModel<ContainerRe
     public ContainerReportTableModel(PartitionedAbNConfiguration config) {
         
         super(new String[] {
-            config.getTextConfiguration().getContainerTypeName(false),
+            config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false),
             "Level",
             String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),

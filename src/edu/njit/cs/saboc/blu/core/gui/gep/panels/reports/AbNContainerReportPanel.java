@@ -37,9 +37,10 @@ public class AbNContainerReportPanel extends AbNReportPanel {
                     
             public String getBorderText(Optional<ArrayList<ContainerReport>> reports) {
                 if(reports.isPresent()) {
-                    return String.format("%s (%d total)", config.getTextConfiguration().getContainerTypeName(true), reports.get().size());
+                    return String.format("%s (%d total)", 
+                            config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true), reports.get().size());
                 } else {
-                    return config.getTextConfiguration().getContainerTypeName(true);
+                    return config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true);
                 }
             }
         };

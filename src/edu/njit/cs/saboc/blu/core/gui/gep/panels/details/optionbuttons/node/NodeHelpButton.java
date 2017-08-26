@@ -35,8 +35,11 @@ public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
             nodeTypeName = config.getTextConfiguration().getNodeTypeName(false);
             nodeHelpDescription = config.getTextConfiguration().getNodeHelpDescription(curNode);
         } else {
-            nodeTypeName = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).getContainerTypeName(false);
-            nodeHelpDescription = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).getContainerHelpDescription((PartitionedNode) curNode);
+            nodeTypeName = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).
+                    getBaseAbNTextConfiguration().getNodeTypeName(false);
+            
+            nodeHelpDescription = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).
+                    getBaseAbNTextConfiguration().getNodeHelpDescription(curNode);
         }
 
         JDialog detailsDialog = new JDialog();

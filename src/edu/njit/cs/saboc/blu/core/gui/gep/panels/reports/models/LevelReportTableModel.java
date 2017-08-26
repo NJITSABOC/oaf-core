@@ -13,7 +13,7 @@ public class LevelReportTableModel extends OAFAbstractTableModel<AbNLevelReport>
     public LevelReportTableModel(PartitionedAbNConfiguration config) {
         super(new String [] { 
            "Level",
-            String.format("# %s", config.getTextConfiguration().getContainerTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true)),
             String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true)),
             String.format("# Overlapping %s", config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true))

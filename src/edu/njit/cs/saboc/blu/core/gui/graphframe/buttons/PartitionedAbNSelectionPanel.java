@@ -49,7 +49,7 @@ public abstract class PartitionedAbNSelectionPanel extends JPanel {
         this.btnShowBase.setSelected(!showingFull);
         
         this.btnShowFull.setText(config.getTextConfiguration().getAbNTypeName(false));
-        this.btnShowBase.setText(config.getTextConfiguration().getBaseAbstractionNetworkTypeName(false));
+        this.btnShowBase.setText(config.getTextConfiguration().getBaseAbNTextConfiguration().getAbNTypeName(false));
         
         this.revalidate();
         this.repaint();

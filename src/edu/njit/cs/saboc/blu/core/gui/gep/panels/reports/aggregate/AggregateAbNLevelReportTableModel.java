@@ -17,7 +17,7 @@ public class AggregateAbNLevelReportTableModel extends OAFAbstractTableModel<AbN
      public AggregateAbNLevelReportTableModel(PartitionedAbNConfiguration config) {
         super(new String [] { 
            "Level",
-            String.format("# %s", config.getTextConfiguration().getContainerTypeName(true)),
+            String.format("# %s", config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true)),
             String.format("# Regular %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Aggregate %s", config.getTextConfiguration().getNodeTypeName(true)),
             String.format("# Removed %s", config.getTextConfiguration().getNodeTypeName(true)),

@@ -4,6 +4,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.DiffNodeInstance;
 import edu.njit.cs.saboc.blu.core.abn.diff.change.AbNChange;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class DiffNodeChangesPanel<T extends Node> extends BaseNodeInformationPan
     
     private final DiffNodeChangeList changeList;
     
-    public DiffNodeChangesPanel(AbNConfiguration config) {
+    public DiffNodeChangesPanel(AbNConfiguration config, 
+            AbNTextConfiguration textConfig) {
+        
         this.setLayout(new BorderLayout());
         
-        this.changeList = new DiffNodeChangeList(config);
+        this.changeList = new DiffNodeChangeList(config, textConfig);
         
         this.add(changeList, BorderLayout.CENTER);
     }

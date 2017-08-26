@@ -19,7 +19,7 @@ public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedN
 
     private static final String getToolTipStr(PartitionedAbNConfiguration config) {
         return String.format("Export %s's %s.",
-                config.getTextConfiguration().getContainerTypeName(false),
+                config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false),
                 config.getTextConfiguration().getOntologyEntityNameConfiguration().getConceptTypeName(true));
     }
     
@@ -48,7 +48,8 @@ public class ExportPartitionedNodeButton<T extends PartitionedNode<SinglyRootedN
             
             String[] choices = {firstChoice, secondChoice};
             
-            String description = String.format("Select %s Export Option", config.getTextConfiguration().getContainerTypeName(false));
+            String description = String.format("Select %s Export Option", 
+                    config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false));
             
             String input = (String) JOptionPane.showInputDialog(null, 
                     description,

@@ -2,6 +2,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.change.AbNChange;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbstractEntityList;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffNodeChangesTableModel;
@@ -16,8 +17,12 @@ public class DiffNodeChangeList extends AbstractEntityList<AbNChange> {
     
     private final AbNConfiguration configuration;
     
-    public DiffNodeChangeList(AbNConfiguration configuration) {
-        this(new DiffNodeChangesTableModel(configuration), configuration);
+    public DiffNodeChangeList(
+            AbNConfiguration configuration,
+            AbNTextConfiguration textConfig) {
+        
+        
+        this(new DiffNodeChangesTableModel(textConfig), configuration);
     }
     
     public DiffNodeChangeList(OAFAbstractTableModel<AbNChange> model, AbNConfiguration configuration) {

@@ -10,6 +10,7 @@ import edu.njit.cs.saboc.blu.core.graph.AbstractionNetworkGraph;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
+import edu.njit.cs.saboc.blu.core.graph.layout.NodeInclusionTester;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configuration.PAreaTaxonomyConfiguration;
 import edu.njit.cs.saboc.blu.core.ontology.Concept;
@@ -19,7 +20,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.JLabel;
 
 /**
@@ -27,7 +30,7 @@ import javax.swing.JLabel;
  * @author Chris O
  * @param <T>
  */
-public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
+public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy<? extends PArea>> extends BasePAreaTaxonomyLayout<T> {
 
     private final PAreaTaxonomyConfiguration config;
 
@@ -37,6 +40,18 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
             PAreaTaxonomyConfiguration config) {
 
         super(graph, taxonomy);
+
+        this.config = config;
+    }
+    
+    public NoRegionsPAreaTaxonomyLayout(
+            PAreaTaxonomyGraph graph,
+            T taxonomy,
+            PAreaTaxonomyConfiguration config,
+            NodeInclusionTester<Area> areaInclusionTester,
+            NodeInclusionTester<PArea> pareaInclusionTester) {
+
+        super(graph, taxonomy, areaInclusionTester, pareaInclusionTester);
 
         this.config = config;
     }
@@ -71,6 +86,8 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
 
         addGraphLevel(new GraphLevel(0, graph, new ArrayList<>())); // Add the first level of areas (the single pArea 0-relationship level) to the data representation of the graph.
 
+        NodeInclusionTester<PArea> includePAreaTester = super.getIncludePAreaTester();
+        
         for (Area area : super.getAreasInLayout()) {  // Loop through the areas and generate the diagram for each of them
             int x2;
             int y2;
@@ -98,9 +115,11 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
 
             levelWidth = 0;
 
-            ArrayList<PArea> areaPAreas = new ArrayList<>(area.getPAreas());
-
-            areaPAreas.sort((a, b) -> {
+            List<PArea> includedPAreas = area.getPAreas().stream().filter( (parea) -> {
+               return includePAreaTester.includeInLayout(parea);
+            }).collect(Collectors.toList());
+            
+            includedPAreas.sort((a, b) -> {
                 if (a.getConceptCount() == b.getConceptCount()) {
                     return a.getRoot().getName().compareToIgnoreCase(b.getRoot().getName());
                 } else {
@@ -108,7 +127,7 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
                 }
             });
 
-            int pareaCount = areaPAreas.size();
+            int pareaCount = includedPAreas.size();
 
             // Take the number of cells and find the square root of it (rounded up) to
             // find the minimum width required for a square that could hold all the pAreas.
@@ -155,7 +174,6 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
 
             regionBump = 0;
 
-            pareaCount = areaPAreas.size();
             int horizontalPAreas;
 
             x2 = (int) (1.5 * GraphLayoutConstants.GROUP_CHANNEL_WIDTH);
@@ -200,7 +218,7 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
 
             int i = 0;
 
-            for (PArea parea : areaPAreas) { // Draw the pArea inside this region
+            for (PArea parea : includedPAreas) { // Draw the pArea inside this region
                 PAreaEntry pareaEntry;
 
                 currentPAreaLevel = currentRegion.getGroupLevels().get(pAreaY);
@@ -280,6 +298,7 @@ public class NoRegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BaseP
 
         countStr = String.format("(%s, %s)", conceptStr, pareaStr);
 
+        // TODO: Reimplement...
         final int MAX_RELS_DISPLAYED = 8;
 
         Canvas canvas = new Canvas();

@@ -9,13 +9,18 @@ import edu.njit.cs.saboc.blu.core.graph.edges.GraphGroupLevel;
 import edu.njit.cs.saboc.blu.core.graph.edges.GraphLevel;
 import edu.njit.cs.saboc.blu.core.graph.layout.AbstractionNetworkGraphLayout;
 import edu.njit.cs.saboc.blu.core.graph.layout.GraphLayoutConstants;
+import edu.njit.cs.saboc.blu.core.graph.layout.IncludeAllNodesTester;
+import edu.njit.cs.saboc.blu.core.graph.layout.NodeInclusionTester;
 import edu.njit.cs.saboc.blu.core.graph.nodes.SinglyRootedNodeEntry;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.JLabel;
 
 /**
@@ -24,7 +29,7 @@ import javax.swing.JLabel;
  * 
  * @param <T>
  */
-public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends AbstractionNetworkGraphLayout<T> {
+public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy<? extends PArea>> extends AbstractionNetworkGraphLayout<T> {
 
     public static ArrayList<Color> getTaxonomyLevelColors() {
         
@@ -56,28 +61,55 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy> extends A
         return colors;
     }
     
-    private final PAreaTaxonomy taxonomy;
+    private final T taxonomy;
+    
+    private final NodeInclusionTester<Area> includeAreaTester;
+    private final NodeInclusionTester<PArea> includePAreaTester;
 
     protected BasePAreaTaxonomyLayout(AbstractionNetworkGraph<T> graph, T taxonomy) {
+        this(graph, taxonomy, new IncludeAllNodesTester(), new IncludeAllNodesTester());
+    }
+    
+    protected BasePAreaTaxonomyLayout(
+            AbstractionNetworkGraph<T> graph, 
+            T taxonomy,
+            NodeInclusionTester<Area> includeAreaTester, 
+            NodeInclusionTester<PArea> includePAreaTester) {
+        
         super(graph);
 
         this.taxonomy = taxonomy;
+        
+        this.includeAreaTester = includeAreaTester;
+        this.includePAreaTester = includePAreaTester;
+    }
+    
+    protected NodeInclusionTester<Area> getIncludeAreaTester() {
+        return this.includeAreaTester;
+    } 
+    
+    protected NodeInclusionTester<PArea> getIncludePAreaTester() {
+        return this.includePAreaTester;
     }
     
     @Override
     public void doLayout() {
         ArrayList<Area> sortedAreas = new ArrayList<>();    // Used for generating the graph
         ArrayList<Area> levelAreas = new ArrayList<>();     // Used for generating the graph
+        
+        Set<Area> taxonomyAreas = taxonomy.getAreas();
 
-        ArrayList<Area> tempAreas = new ArrayList<>(taxonomy.getAreas());
-
+        List<Area> includedAreas = taxonomyAreas.stream().filter( (area) -> {
+            return includeAreaTester.includeInLayout(area);
+        }).collect(Collectors.toList());
+        
         Area lastArea = null;
 
-        Collections.sort(tempAreas, (a, b) -> {
+        Collections.sort(includedAreas, (a, b) -> {
             return a.getRelationships().size() - b.getRelationships().size();
         });
 
-        for (Area area : tempAreas) {
+        for (Area area : includedAreas) {
             if (lastArea != null && lastArea.getRelationships().size() != area.getRelationships().size()) {
                 levelAreas.sort((a, b) -> a.getPAreas().size() - b.getPAreas().size());
 

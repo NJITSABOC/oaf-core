@@ -66,7 +66,7 @@ public class ResetHighlightsPanel extends AbNDisplayWidget {
         
         this.setBounds(
                 displayPanel.getWidth() - 150, 
-                displayPanel.getHeight() - panelSize.height - 80, 
+                displayPanel.getHeight() - panelSize.height - 150, 
                 panelSize.width, 
                 panelSize.height);
     }

@@ -7,7 +7,6 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDashboardPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNInitialDisplayAction;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.NavigationTutorialPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.ViewportNavigationListener;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 import javax.swing.JOptionPane;
@@ -59,7 +58,7 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
     public void showAbNAlerts(AbNDisplayPanel displayPanel) {
         AbstractionNetwork abn = displayPanel.getGraph().getAbstractionNetwork();
         
-        if (warningManager.showAggregationWarning()) {
+        if (warningManager != null && warningManager.showAggregationWarning()) {
 
             if (abn instanceof AggregateableAbstractionNetwork) {
 

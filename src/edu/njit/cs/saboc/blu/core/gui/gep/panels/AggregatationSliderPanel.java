@@ -23,6 +23,7 @@ import javax.swing.JTextField;
  * @author Chris O
  */
 public class AggregatationSliderPanel extends AbNDisplayWidget {
+    
     public static AggregationAction AggregationAction;
     
     public interface AggregationAction {

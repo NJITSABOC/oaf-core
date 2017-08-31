@@ -19,9 +19,20 @@ public class PAreaTaxonomyGraph<T extends PAreaTaxonomy> extends AbstractionNetw
             final SinglyRootedNodeLabelCreator labelCreator,
             final PAreaTaxonomyConfiguration config) {
         
+        this(parentFrame, taxonomy, labelCreator, config, new DefaultPAreaTaxonomyLayoutFactory());
+    }
+    
+    public PAreaTaxonomyGraph(
+            final JFrame parentFrame, 
+            final T taxonomy, 
+            final SinglyRootedNodeLabelCreator labelCreator,
+            final PAreaTaxonomyConfiguration config,
+            final PAreaTaxonomyLayoutFactory layoutFactory) {
+        
         super(taxonomy, labelCreator);
         
-        super.setAbstractionNetworkLayout(new NoRegionsPAreaTaxonomyLayout(this, taxonomy, config));
+        super.setAbstractionNetworkLayout(
+                layoutFactory.createLayout(this, taxonomy, config));
     }
 
     public T getPAreaTaxonomy() {

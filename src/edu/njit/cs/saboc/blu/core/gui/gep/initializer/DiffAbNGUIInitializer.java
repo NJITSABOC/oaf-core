@@ -1,8 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.initializer;
 
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.DiffTaxonomySubsetSelectionButton.DiffTaxonomySubsetCreationAction;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.DiffTaxonomySubsetSelectionPanel;
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.DiffTaxonomySubsetSelectionPanel.DiffTaxonomySubsetCreationAction;
 import edu.njit.cs.saboc.blu.core.gui.gep.warning.AbNWarningManager;
 
 /**

@@ -232,7 +232,6 @@ public class AbNDisplayPanel extends JPanel {
         this.graph = graph;
         this.painter = painter;
         
-                
         this.selectionStateMonitor.initialize(this);
         
         this.viewport = new Viewport(graph);

@@ -100,7 +100,21 @@ public abstract class BasePAreaTaxonomyLayout<T extends PAreaTaxonomy<? extends 
         Set<Area> taxonomyAreas = taxonomy.getAreas();
 
         List<Area> includedAreas = taxonomyAreas.stream().filter( (area) -> {
-            return includeAreaTester.includeInLayout(area);
+            
+            if(includeAreaTester.includeInLayout(area)) {
+                
+                Set<PArea> pareas = area.getPAreas();
+                
+                // There must be at least one parea from this area included in the layout
+                // for the area to be included in the layout
+                
+                return pareas.stream().anyMatch( (parea) -> {
+                   return  includePAreaTester.includeInLayout(parea);
+                });
+
+            } else {
+                return false;
+            }
         }).collect(Collectors.toList());
         
         Area lastArea = null;

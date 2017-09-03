@@ -479,6 +479,10 @@ public class InheritablePropertyChanges extends OntologyChanges {
                                                 HierarchicalConnectionState.Added,
                                                 ChangeInheritanceType.Direct);
 
+                                if(!hierarchicalPropertyChanges.containsKey(transferredConcept)) {
+                                    hierarchicalPropertyChanges.put(transferredConcept, new HashSet<>());
+                                }
+                                
                                 hierarchicalPropertyChanges.get(transferredConcept).add(directChange);
                                 
                                 InheritablePropertyHierarchyChange indirectChange

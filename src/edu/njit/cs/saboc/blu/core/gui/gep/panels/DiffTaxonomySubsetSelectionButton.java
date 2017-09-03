@@ -7,10 +7,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -55,6 +58,9 @@ public class DiffTaxonomySubsetSelectionButton extends JButton {
             
             btnApply.addActionListener( (ae) -> {
                 
+                DiffTaxonomySubsetSelectionButton.this.setToolTipText(
+                        createStyledStatusTooltipText());
+                
                 stateMenu.setVisible(false);
                 
                 creationAction.diffTaxonomySubsetCreated(
@@ -67,6 +73,8 @@ public class DiffTaxonomySubsetSelectionButton extends JButton {
         }
     }
     
+    private final DiffTaxonomyNodeSelectionPanel selectionPanel;
+    
     private final JPopupMenu stateMenu;
     
     public DiffTaxonomySubsetSelectionButton(DiffTaxonomySubsetCreationAction creationAction) {
@@ -75,7 +83,7 @@ public class DiffTaxonomySubsetSelectionButton extends JButton {
         
         this.stateMenu = new JPopupMenu();
         
-        DiffTaxonomyNodeSelectionPanel selectionPanel = new DiffTaxonomyNodeSelectionPanel(creationAction);
+        this.selectionPanel = new DiffTaxonomyNodeSelectionPanel(creationAction);
         
         this.stateMenu.add(selectionPanel);
 
@@ -85,6 +93,47 @@ public class DiffTaxonomySubsetSelectionButton extends JButton {
                     0, 
                     -140 - this.getHeight());
         });
+        
+        this.setToolTipText(createStyledStatusTooltipText());
+    }
+    
+    private String createStyledStatusTooltipText() {
+        
+        List<String> selectedAreaStates = this.selectionPanel.diffAreaPanel.getSelectedChangeStates().stream().map(
+                (state) -> state.name()).collect(Collectors.toList());
+        
+        List<String> selectedPAreaStates = this.selectionPanel.diffPAreaPanel.getSelectedChangeStates().stream().map(
+                (state) -> state.name()).collect(Collectors.toList());
+        
+        Collections.sort(selectedAreaStates);
+        Collections.sort(selectedPAreaStates);
+       
+        String result = "<html><b>Diff Taxonomy Display Options: </b><br>";
+        
+        result += "Diff Areas: ";
+        
+        if(selectedAreaStates.isEmpty()) {
+            result += "<i>[none]</i>";
+        } else {
+            String areaStates = selectedAreaStates.toString();
+            areaStates = String.format("<i>%s</i>", areaStates.substring(1, areaStates.length() - 1));
+            
+            result += areaStates;
+        }
+        
+        result += "<p>";
+        result += "Diff Partial-areas: ";
+        
+        if(selectedPAreaStates.isEmpty()) {
+            result += "<i>[none]</i>";
+        } else {
+            String pareaStates = selectedPAreaStates.toString();
+            pareaStates = String.format("<i>%s</i>", pareaStates.substring(1, pareaStates.length() - 1));
+            
+            result += pareaStates;
+        }
+        
+        return result;
     }
 }
 

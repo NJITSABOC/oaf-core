@@ -168,12 +168,13 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                
                 if(e.getButton() == MouseEvent.BUTTON3) {
                     
                     int row = entityTable.rowAtPoint(e.getPoint());
                     
                     if(row >= 0) {
-                        rightClickManager.setRightClickedItem(tableModel.getItemAtRow(row));
+                        rightClickManager.setRightClickedItem(tableModel.getItemAtRow(sorter.convertRowIndexToModel(row)));
                     } else {
                         rightClickManager.clearRightClickedItem();
                     }

@@ -18,12 +18,15 @@ public class DiffNodeChangesPanel<T extends Node> extends BaseNodeInformationPan
     
     private final DiffNodeChangeList changeList;
     
-    public DiffNodeChangesPanel(AbNConfiguration config, 
+    public DiffNodeChangesPanel(
+            AbNConfiguration config, 
             AbNTextConfiguration textConfig) {
         
         this.setLayout(new BorderLayout());
         
         this.changeList = new DiffNodeChangeList(config, textConfig);
+        this.changeList.setRightClickMenuGenerator(
+                new DiffNodeRightClickMenuGenerator(config, textConfig));
         
         this.add(changeList, BorderLayout.CENTER);
     }

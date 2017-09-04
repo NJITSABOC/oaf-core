@@ -21,7 +21,6 @@ public class DiffNodeChangeList extends AbstractEntityList<AbNChange> {
             AbNConfiguration configuration,
             AbNTextConfiguration textConfig) {
         
-        
         this(new DiffNodeChangesTableModel(textConfig), configuration);
     }
     

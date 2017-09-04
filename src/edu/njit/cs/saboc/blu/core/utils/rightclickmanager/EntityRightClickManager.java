@@ -62,6 +62,7 @@ public class EntityRightClickManager<T> {
     }
     
     private void buildPopup(ArrayList<JComponent> components) {
+        
         components.forEach((component) -> {
             popup.add(component);
         });

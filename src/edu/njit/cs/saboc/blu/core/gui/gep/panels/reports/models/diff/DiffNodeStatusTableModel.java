@@ -16,8 +16,8 @@ public class DiffNodeStatusTableModel extends OAFAbstractTableModel<DiffNodeStat
     public DiffNodeStatusTableModel(AbNConfiguration config) {
         super(new String [] {
             config.getTextConfiguration().getNodeTypeName(false),
-            "Root State",
-            "Type"
+            "Status as Root",
+            "Concept State"
         });
         
         this.config = config;

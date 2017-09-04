@@ -24,7 +24,7 @@ public class ConceptMovedIntoHierarchy extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> introduced to ontology subhierarchy.";
+        String str = "Added to subhierarchy";
 
         str = factory.format(str);
         

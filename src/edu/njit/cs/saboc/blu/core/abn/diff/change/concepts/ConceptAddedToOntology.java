@@ -21,7 +21,7 @@ public class ConceptAddedToOntology extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> introduced to ontology.";
+        String str = "Introduced to ontology";
 
         str = factory.format(str);
         

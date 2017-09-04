@@ -41,6 +41,7 @@ import javax.swing.table.TableRowSorter;
 public abstract class AbstractEntityList<T> extends JPanel {
 
     private final MouseOverJTable entityTable;
+    
     private OAFAbstractTableModel<T> tableModel;
 
     private final ArrayList<EntitySelectionListener<T>> selectionListeners = new ArrayList<>();
@@ -236,6 +237,15 @@ public abstract class AbstractEntityList<T> extends JPanel {
 
     public OAFAbstractTableModel<T> getTableModel() {
         return tableModel;
+    }
+    
+    public T getItemAtRow(int row) {
+        
+        if(row < 0 || row >= tableModel.getRowCount()) {
+            throw new IndexOutOfBoundsException(Integer.toString(row));
+        }
+        
+        return tableModel.getItemAtRow(sorter.convertRowIndexToModel(row));
     }
     
     public void setTableModel(OAFAbstractTableModel<T> model) {

@@ -1,6 +1,7 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.buttons;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.change.ChangeState;
+import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.diff.DiffPAreaTaxonomy;
@@ -8,6 +9,7 @@ import edu.njit.cs.saboc.blu.core.graph.nodes.AbNNodeEntry;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.diff.configuration.DiffPAreaTaxonomyConfiguration;
+import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -36,6 +38,9 @@ public class ViewMatchingDiffPAreaButton extends NodeOptionButton<PArea> {
                 
                 if(matchingEntry.isPresent()) {
                     config.getUIConfiguration().getDisplayPanel().getAutoScroller().snapToNodeEntry(matchingEntry.get());
+                    
+                    config.getUIConfiguration().getDisplayPanel().highlightSinglyRootedNodes(
+                            Collections.singleton(matchedDiffPArea.get()));
                 }
             }
         });

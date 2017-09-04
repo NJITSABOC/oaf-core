@@ -29,7 +29,7 @@ public class ConceptMovedFromNode extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> moved from different <nodeTypeName>.";
+        String str = "Moved from <nodeTypeName>";
 
         str = factory.format(str);
         

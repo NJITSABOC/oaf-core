@@ -24,7 +24,7 @@ public class ConceptMovedOutOfHierarchy extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> removed from ontology subhierarchy.";
+        String str = "Removed from subhierarchy";
 
         str = factory.format(str);
         

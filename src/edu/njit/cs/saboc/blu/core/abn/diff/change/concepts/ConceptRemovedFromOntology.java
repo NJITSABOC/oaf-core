@@ -21,7 +21,7 @@ public class ConceptRemovedFromOntology extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> deleted from ontology.";
+        String str = "Deleted from ontology";
 
         str = factory.format(str);
         

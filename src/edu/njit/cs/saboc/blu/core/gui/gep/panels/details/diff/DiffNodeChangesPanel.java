@@ -26,7 +26,7 @@ public class DiffNodeChangesPanel<T extends Node> extends BaseNodeInformationPan
         
         this.changeList = new DiffNodeChangeList(config, textConfig);
         this.changeList.setRightClickMenuGenerator(
-                new DiffNodeRightClickMenuGenerator(config, textConfig));
+                new DiffNodeChangesRightClickMenuGenerator(config, textConfig));
         
         this.add(changeList, BorderLayout.CENTER);
     }

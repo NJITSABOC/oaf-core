@@ -31,7 +31,7 @@ public class ConceptRemovedFromNode extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> revoved from <nodeTypeName>.";
+        String str = "Removed from <nodeTypeName>";
 
         str = factory.format(str);
         

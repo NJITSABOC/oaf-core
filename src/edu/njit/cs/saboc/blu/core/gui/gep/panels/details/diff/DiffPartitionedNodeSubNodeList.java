@@ -52,7 +52,17 @@ public class DiffPartitionedNodeSubNodeList<T extends PartitionedNode, V extends
             }
         });
         
-        this.conceptList = new NodeConceptList<>(new DiffNodeConceptListModel(configuration), configuration);
+        DiffNodeConceptListModel listModel = new DiffNodeConceptListModel(
+                configuration,
+                configuration.getTextConfiguration());
+        
+        this.conceptList = new NodeConceptList<>(listModel, configuration);
+        
+        this.conceptList.setRightClickMenuGenerator(
+                new DiffNodeConceptRightClickMenuGenerator(
+                    configuration, 
+                    configuration.getTextConfiguration(),
+                    listModel));
         
         splitPane.setTopComponent(nodeList);
         splitPane.setBottomComponent(conceptList);

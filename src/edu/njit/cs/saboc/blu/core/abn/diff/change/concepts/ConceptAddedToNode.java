@@ -31,7 +31,7 @@ public class ConceptAddedToNode extends NodeConceptChange {
     public String getChangeName(AbNTextConfiguration config) {
         AbNTextFormatter factory = new AbNTextFormatter(config);
         
-        String str = "<conceptTypeName> added to <nodeTypeName>.";
+        String str = "Added to <nodeTypeName>";
 
         str = factory.format(str);
         

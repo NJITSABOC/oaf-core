@@ -43,6 +43,7 @@ public class PopoutDetailsButton<T> extends IconOptionButton<T> {
         detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         detailsDialog.setVisible(true);
         detailsDialog.setModal(true);
+        detailsDialog.setAlwaysOnTop(true);
     }
 
     @Override

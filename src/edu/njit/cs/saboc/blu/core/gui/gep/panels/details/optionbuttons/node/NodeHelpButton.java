@@ -41,10 +41,17 @@ public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
         }
 
         JDialog detailsDialog = new JDialog();
+        
         detailsDialog.setTitle(String.format("(%s) Help / Description",nodeTypeName));
-        detailsDialog.setModal(true);
+        
         detailsDialog.setSize(400, 400);
+        
         detailsDialog.setLocationRelativeTo(null);  //sets the location to the center
+
+        detailsDialog.setResizable(true);
+        detailsDialog.setAlwaysOnTop(true);
+
+        detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JEditorPane nodeDetailsPane = new JEditorPane();
         nodeDetailsPane.setContentType("text/html");
@@ -54,9 +61,8 @@ public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
         nodeDetailsPane.setText(nodeHelpDescription);
 
         detailsDialog.add(new JScrollPane(nodeDetailsPane));
-        detailsDialog.setResizable(true);
-
-        detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        
+        
         detailsDialog.setVisible(true);
     }
 

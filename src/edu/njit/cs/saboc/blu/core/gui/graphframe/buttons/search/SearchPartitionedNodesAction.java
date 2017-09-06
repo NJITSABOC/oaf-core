@@ -17,7 +17,7 @@ public class SearchPartitionedNodesAction extends BluGraphSearchAction<Partition
     private final PartitionedAbNConfiguration config;
     
     public SearchPartitionedNodesAction(PartitionedAbNConfiguration config) {
-        super(config.getTextConfiguration().getContainerTypeName(true));
+        super(config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(true));
         
         this.config = config;
     }

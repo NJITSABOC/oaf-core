@@ -55,6 +55,8 @@ public class GraphSelectionStateMonitor implements UpdateableAbNDisplayEntity {
         containers.forEach( (entry) -> {
             partitionEntries.addAll(entry.getPartitionEntries());
         });
+        
+        resetAll();
     }
     
     public SinglyRootedNodeEntry getSelectedGroupEntry() {

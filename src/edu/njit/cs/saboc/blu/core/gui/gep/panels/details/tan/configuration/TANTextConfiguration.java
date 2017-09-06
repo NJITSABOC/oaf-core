@@ -20,6 +20,8 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
 
     private final ClusterTribalAbstractionNetwork<Cluster> tan;
     
+    private final BandTANTextConfiguration bandTANTextConfig;
+    
     public TANTextConfiguration(
             OntologyEntityNameConfiguration ontologyEntityNameConfig, 
             ClusterTribalAbstractionNetwork<Cluster> tan) {
@@ -27,6 +29,13 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
         super(ontologyEntityNameConfig);
         
         this.tan = tan;
+        
+        this.bandTANTextConfig = new BandTANTextConfiguration(ontologyEntityNameConfig);
+    }
+    
+    @Override
+    public BandTANTextConfiguration getBaseAbNTextConfiguration() {
+        return bandTANTextConfig;
     }
     
     public ClusterTribalAbstractionNetwork getTAN() {
@@ -37,15 +46,6 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
     public String getAbNName() {
         return tan.getDerivation().getName();
     }
-    
-    @Override
-    public String getBaseAbstractionNetworkTypeName(boolean plural) {
-        if(plural) {
-            return "Band TANs";
-        } else {
-            return "Band TAN";
-        }
-    }
 
     @Override
     public String getAbNTypeName(boolean plural) {
@@ -53,15 +53,6 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
             return "Cluster TANs";
         } else {
             return "Cluster TAN";
-        }
-    }
-    
-    @Override
-    public String getContainerTypeName(boolean plural) {
-        if (plural) {
-            return "Bands";
-        } else {
-            return "Band";
         }
     }
 
@@ -81,21 +72,6 @@ public abstract class TANTextConfiguration extends PartitionedAbNTextConfigurati
         } else {
             return "Disjoint Cluster";
         }
-    }
-
-    @Override
-    public String getContainerHelpDescription(Band container) {
-  
-        String result = "A <b>band</b> summarizes the set of all <conceptTypeName count=2> that "
-                + "exist at the intersection of the same subhierarchies. "
-                + "The <conceptTypeName count=2> summarized by a band are all descendants of "
-                + "the same patriarch <conceptTypeName count=2>. "
-                + "Each <conceptTypeName count=2> is summarized by exactly one band.";
-
-    
-        AbNTextFormatter formatter = new AbNTextFormatter(this);
-        
-        return formatter.format(result);
     }
 
     @Override

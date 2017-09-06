@@ -3,6 +3,7 @@ package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.pareataxonomy.configur
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.Area;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PArea;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.OntologyEntityNameConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.AbNTextFormatter;
@@ -14,6 +15,8 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.text.AggregateAbNTextGe
  */
 public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextConfiguration<PArea, Area> {
     
+    private final AreaTaxonomyTextConfiguration areaTaxonomyTextConfig;
+    
     private final PAreaTaxonomy taxonomy;
 
     public PAreaTaxonomyTextConfiguration(
@@ -23,10 +26,18 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
         super(ontologyEntityNameConfig);
         
         this.taxonomy = taxonomy;
+        
+        this.areaTaxonomyTextConfig = new AreaTaxonomyTextConfiguration(
+                this.getOntologyEntityNameConfiguration());
     }
     
     public PAreaTaxonomy getPAreaTaxonomy() {
         return taxonomy;
+    }
+
+    @Override
+    public AreaTaxonomyTextConfiguration getBaseAbNTextConfiguration() {
+        return areaTaxonomyTextConfig;
     }
 
     @Override
@@ -94,15 +105,6 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
     }
 
     @Override
-    public String getBaseAbstractionNetworkTypeName(boolean plural) {
-        if(plural) {
-            return "Area Taxonomies";
-        } else {
-            return "Area Taxonomy";
-        }
-    }
-    
-    @Override
     public String getAbNTypeName(boolean plural) {
         if(plural) {
             return "Partial-area Taxonomies";
@@ -121,15 +123,6 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
     }
 
     @Override
-    public String getContainerTypeName(boolean plural) {
-        if(plural) {
-            return "Areas";
-        } else {
-            return "Area";
-        }
-    }
-
-    @Override
     public String getNodeTypeName(boolean plural) {
         if(plural) {
             return "Partial-areas";
@@ -138,16 +131,6 @@ public abstract class PAreaTaxonomyTextConfiguration extends PartitionedAbNTextC
         }
     }
     
-    @Override
-    public String getContainerHelpDescription(Area node) {
-        String helpDesc = "<html>An <b>area</b> represents a set of <conceptTypeName count=2> (shown below) "
-                + "that are defined using the exact same types of <propertyTypeName count=2>.";
-
-        AbNTextFormatter formatter = new AbNTextFormatter(this);
-
-        return formatter.format(helpDesc);
-    }
-
     @Override
     public String getNodeHelpDescription(PArea parea) {
 

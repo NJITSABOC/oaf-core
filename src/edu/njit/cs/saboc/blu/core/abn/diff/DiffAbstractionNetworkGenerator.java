@@ -139,11 +139,15 @@ public class DiffAbstractionNetworkGenerator {
         // Step 4: For every introduced node, figure out what happened to its concepts
         // and log the change(s)
         introducedNodes.forEach((introducedNode) -> {
+            
             Set<NodeConceptChange> changes = new HashSet<>();
             
-            introducedNode.getConcepts().forEach((concept) -> {
+            introducedNode.getConcepts().forEach( (concept) -> {
+                
                 if(hierarchicalChanges.getAddedOntConcepts().contains(concept)) {
+                    
                     changes.add(new ConceptAddedToOntology(introducedNode, concept));
+                    
                 } else {
                     if(fromConceptNodes.containsKey(concept)) {
                         Set<Node> currentConceptNodes = toConceptNodes.get(concept);

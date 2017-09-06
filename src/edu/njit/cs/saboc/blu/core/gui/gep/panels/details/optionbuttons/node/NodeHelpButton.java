@@ -1,8 +1,6 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node;
 
-import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.optionbuttons.node.NodeOptionButton;
 import edu.njit.cs.saboc.blu.core.abn.node.Node;
-import edu.njit.cs.saboc.blu.core.abn.node.PartitionedNode;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.PartitionedAbNTextConfiguration;
@@ -35,15 +33,25 @@ public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
             nodeTypeName = config.getTextConfiguration().getNodeTypeName(false);
             nodeHelpDescription = config.getTextConfiguration().getNodeHelpDescription(curNode);
         } else {
-            nodeTypeName = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).getContainerTypeName(false);
-            nodeHelpDescription = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).getContainerHelpDescription((PartitionedNode) curNode);
+            nodeTypeName = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).
+                    getBaseAbNTextConfiguration().getNodeTypeName(false);
+            
+            nodeHelpDescription = ((PartitionedAbNTextConfiguration) config.getTextConfiguration()).
+                    getBaseAbNTextConfiguration().getNodeHelpDescription(curNode);
         }
 
         JDialog detailsDialog = new JDialog();
+        
         detailsDialog.setTitle(String.format("(%s) Help / Description",nodeTypeName));
-        detailsDialog.setModal(true);
+        
         detailsDialog.setSize(400, 400);
+        
         detailsDialog.setLocationRelativeTo(null);  //sets the location to the center
+
+        detailsDialog.setResizable(true);
+        detailsDialog.setAlwaysOnTop(true);
+
+        detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JEditorPane nodeDetailsPane = new JEditorPane();
         nodeDetailsPane.setContentType("text/html");
@@ -53,9 +61,8 @@ public class NodeHelpButton<T extends Node> extends NodeOptionButton<T> {
         nodeDetailsPane.setText(nodeHelpDescription);
 
         detailsDialog.add(new JScrollPane(nodeDetailsPane));
-        detailsDialog.setResizable(true);
-
-        detailsDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        
+        
         detailsDialog.setVisible(true);
     }
 

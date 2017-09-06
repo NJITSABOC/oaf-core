@@ -10,19 +10,27 @@ import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.AbNDisplayWidget;
 import edu.njit.cs.saboc.blu.core.gui.graphframe.multiabn.framestate.FrameState;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import sun.java2d.loops.CompositeType;
 
 /**
  *
@@ -39,6 +47,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     private final JTextField txtCurrentBound;
     
     private final JTextField txtAutoBound;
+    
+    private final JComboBox<String> selectBox;
     
     private final JCheckBox aggregationCheckBox;
     
@@ -69,6 +79,9 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         this.frameState = frameState;
         this.aggregationAction = aggregationAction;
+        String[] choices = {"Auto Scale", "Manual Scale"};
+        this.selectBox = new JComboBox<>(choices);
+        selectBox.setSelectedIndex(0);
                
         this.setLayout(new GridLayout(2, 1, 1, 1));
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
@@ -160,10 +173,12 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                     setAutoScale(autoScaleBound, true);    
                 }                   
                 isAutoScaled = true;
+                setPanelEnabled(aggregationPanel, false);
             } else {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
                 setAutoScale(autoScaleBound, false);
-                isAutoScaled = false;                
+                isAutoScaled = false;  
+                setPanelEnabled(aggregationPanel, true);
             }
         });
         
@@ -177,7 +192,8 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                     setBound(aggregationSlider.getValue(), true);
                 }
                 
-                isWeightedAggregated = true;             
+                isWeightedAggregated = true; 
+                setPanelEnabled(autoScalePanel, false);
             } else {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
 
@@ -186,14 +202,34 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 }
                 
                 isWeightedAggregated = false;
+                setPanelEnabled(autoScalePanel, true);
             }
         });
-                
+        
+
+       
+
+
         autoScalePanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         aggregationPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         
-        this.add(autoScalePanel);             
-        this.add(aggregationPanel);            
+        JPanel cards = new JPanel(new CardLayout());
+        cards.add(autoScalePanel, "Auto Scale");
+        cards.add(aggregationPanel, "Manual Scale");
+        
+        selectBox.addActionListener((ae) -> {
+            
+                JComboBox jcb = (JComboBox) ae.getSource();
+                CardLayout cl = (CardLayout) cards.getLayout();
+                cl.show(cards, jcb.getSelectedItem().toString());
+                 
+        });
+
+        
+        this.add(selectBox);
+        this.add(cards);
+//        this.add(autoScalePanel);             
+//        this.add(aggregationPanel);            
         
     }
     
@@ -353,12 +389,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     }
     
     
-    private void setAutoPanelEnabled(JPanel panel, Boolean isEnabled) {
+    private void setPanelEnabled(JPanel panel, Boolean isEnabled) {
         panel.setEnabled(isEnabled);
         for (Component cp : panel.getComponents()) {
             cp.setEnabled(isEnabled);
         }
-        autoScaleCheckBox.setEnabled(!isEnabled);
     }
 
     

@@ -23,7 +23,8 @@ public class CreateTANFromPartitionedNodeButton<T extends PartitionedNode> exten
             PartitionedAbNConfiguration config,
             DisplayAbNAction listener) {
         
-        super(config.getTextConfiguration().getContainerTypeName(false).toLowerCase(), listener);
+        super(config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false).toLowerCase(), 
+                listener);
         
         this.factory = factory;
         

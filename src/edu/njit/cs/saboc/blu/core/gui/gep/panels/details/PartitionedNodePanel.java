@@ -27,7 +27,7 @@ public class PartitionedNodePanel<T extends PartitionedNode> extends NodeDashboa
         this.groupListPanel = new PartitionedNodeSubNodeList(configuration);
         
         String subnodeListTabTitle = String.format("%s's %s", 
-                configuration.getTextConfiguration().getContainerTypeName(false), 
+                configuration.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false), 
                 configuration.getTextConfiguration().getNodeTypeName(true));
         
         super.addInformationTab(groupListPanel, subnodeListTabTitle);

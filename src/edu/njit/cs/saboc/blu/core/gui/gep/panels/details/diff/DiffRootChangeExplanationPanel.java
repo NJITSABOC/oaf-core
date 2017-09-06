@@ -5,6 +5,7 @@ import edu.njit.cs.saboc.blu.core.abn.diff.explain.DiffAbNConceptChange;
 import edu.njit.cs.saboc.blu.core.abn.diff.explain.DiffAbNConceptChanges;
 import edu.njit.cs.saboc.blu.core.abn.node.SinglyRootedNode;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.BaseNodeInformationPanel;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff.DiffNodeRootChangeExplanationModel.ChangeExplanationRowEntryFactory;
 import java.awt.BorderLayout;
@@ -22,12 +23,16 @@ public class DiffRootChangeExplanationPanel<T extends SinglyRootedNode> extends 
     
     private final DiffNodeRootChangeExplanationList changeList;
     
-    public DiffRootChangeExplanationPanel(AbNConfiguration config, ChangeExplanationRowEntryFactory factory) {
+    public DiffRootChangeExplanationPanel(
+            AbNConfiguration config, 
+            AbNTextConfiguration textConfig,
+            ChangeExplanationRowEntryFactory factory) {
+        
         this.setLayout(new BorderLayout());
 
         this.config = config;
         
-        this.changeList = new DiffNodeRootChangeExplanationList(factory, config);
+        this.changeList = new DiffNodeRootChangeExplanationList(factory, textConfig);
         
         this.add(changeList, BorderLayout.CENTER);
     }

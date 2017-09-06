@@ -133,6 +133,8 @@ public class AbNDisplayPanel extends JPanel {
     private final ArrayList<AbNEntitySelectionListener> selectionListeners = new ArrayList<>();
     private final ArrayList<ZoomFactorChangedListener> zoomFactorChangedListeners = new ArrayList<>();
     
+    private AbNInitialDisplayAction initialDisplayAction = null;
+    
     private final ResetHighlightsPanel resetHighlightsPanel;
         
     public AbNDisplayPanel() {
@@ -211,11 +213,17 @@ public class AbNDisplayPanel extends JPanel {
     public void removeZoomFactorChangedListener(ZoomFactorChangedListener listener) {
         zoomFactorChangedListeners.remove(listener);
     }
+    
+    public void reset() {
+        this.initialize(graph, painter, this.initialDisplayAction);
+    }
         
     public void initialize(
             AbstractionNetworkGraph graph, 
             AbNPainter painter, 
             AbNInitialDisplayAction initialDisplayAction) {
+        
+        this.initialDisplayAction = initialDisplayAction;
 
         autoScroller.cancelAutoNavigation();
         
@@ -223,6 +231,8 @@ public class AbNDisplayPanel extends JPanel {
 
         this.graph = graph;
         this.painter = painter;
+        
+        this.selectionStateMonitor.initialize(this);
         
         this.viewport = new Viewport(graph);
         

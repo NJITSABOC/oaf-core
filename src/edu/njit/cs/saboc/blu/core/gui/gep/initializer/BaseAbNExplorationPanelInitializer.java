@@ -58,7 +58,7 @@ public class BaseAbNExplorationPanelInitializer implements AbNExplorationPanelGU
     public void showAbNAlerts(AbNDisplayPanel displayPanel) {
         AbstractionNetwork abn = displayPanel.getGraph().getAbstractionNetwork();
         
-        if (warningManager.showAggregationWarning()) {
+        if (warningManager != null && warningManager.showAggregationWarning()) {
 
             if (abn instanceof AggregateableAbstractionNetwork) {
 

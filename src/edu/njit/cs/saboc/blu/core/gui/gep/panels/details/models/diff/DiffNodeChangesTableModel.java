@@ -1,6 +1,8 @@
 package edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.diff;
 
 import edu.njit.cs.saboc.blu.core.abn.diff.change.AbNChange;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNConfiguration;
+import edu.njit.cs.saboc.blu.core.gui.gep.panels.configuration.AbNTextConfiguration;
 import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTableModel;
 
 /**
@@ -9,18 +11,21 @@ import edu.njit.cs.saboc.blu.core.gui.gep.panels.details.models.OAFAbstractTable
  */
 public class DiffNodeChangesTableModel extends OAFAbstractTableModel<AbNChange> {
     
-    public DiffNodeChangesTableModel() {
+    private final AbNTextConfiguration textConfig;
+    
+    public DiffNodeChangesTableModel(AbNTextConfiguration textConfig) {
         super(new String[] {
-            "Change type",
             "Change description"
         });
+        
+        this.textConfig = textConfig;
     }
 
     @Override
     protected Object[] createRow(AbNChange item) {
+        
         return new Object [] {
-            item.getChangeName(),
-            item.getChangeDescription()
+            item.getChangeDescription(textConfig)
         };
     }
 }

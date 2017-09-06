@@ -62,11 +62,11 @@ public class DiffTaxonomyPainter extends AbNPainter {
         g2d.setStroke(savedStroke);
     }
     
-    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry group, Point p, double scale) {
+    public void paintSinglyRootedNodeAtPoint(Graphics2D g2d, SinglyRootedNodeEntry entry, Point p, double scale) {
 
         Color bgColor;
 
-        DiffPArea parea = (DiffPArea) group.getNode();
+        DiffPArea parea = (DiffPArea) entry.getNode();
 
         if (parea.getPAreaState() == ChangeState.Introduced) {
             bgColor = new Color(220, 255, 220);
@@ -78,23 +78,23 @@ public class DiffTaxonomyPainter extends AbNPainter {
             bgColor = Color.WHITE;
         }
 
-        if (group.isMousedOver()) {
+        if (entry.isMousedOver()) {
             bgColor = bgColor.brighter();
         }
 
         g2d.setPaint(bgColor);
 
-        g2d.fillRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
+        g2d.fillRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
 
         Stroke savedStroke = g2d.getStroke();
 
         Color outlineColor;
 
-        if (group.isMousedOver()) {
+        if (entry.isMousedOver()) {
             g2d.setStroke(new BasicStroke(2));
             outlineColor = Color.CYAN;
         } else {
-            if (group.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
+            if (entry.getHighlightState().equals(AbNNodeEntry.HighlightState.Selected)) {
                 g2d.setStroke(new BasicStroke(2));
             } else {
                 g2d.setStroke(new BasicStroke(1));
@@ -105,7 +105,14 @@ public class DiffTaxonomyPainter extends AbNPainter {
 
         g2d.setPaint(outlineColor);
 
-        g2d.drawRect(p.x, p.y, (int) (group.getWidth() * scale), (int) (group.getHeight() * scale));
+        g2d.drawRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
+        
+        if(super.showingHighlights()) {
+            if (!highlightedSinglyRootedNodes.contains(entry)) {
+                g2d.setPaint(new Color(0, 0, 0, 128));
+                g2d.fillRect(p.x, p.y, (int) (entry.getWidth() * scale), (int) (entry.getHeight() * scale));
+            }
+        }
 
         g2d.setStroke(savedStroke);
     }

@@ -16,23 +16,33 @@ public class MouseOverJTable extends JTable {
         super(model);
         
         RollOverListener lst = new RollOverListener();
+        
         addMouseMotionListener(lst);
         addMouseListener(lst);
     }
 
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+        
         Component c = super.prepareRenderer(renderer, row, column);
+        
         if (isRowSelected(row)) {
+            
             c.setForeground(getSelectionForeground());
             c.setBackground(getSelectionBackground());
+            
         } else if (row == rollOverRowIndex) {
-            c.setForeground(getSelectionForeground());
+            
+            c.setForeground(Color.BLACK);
             c.setBackground(Color.YELLOW);
+            
         } else {
+            
             c.setForeground(getForeground());
             c.setBackground(getBackground());
+            
         }
+        
         return c;
     }
 

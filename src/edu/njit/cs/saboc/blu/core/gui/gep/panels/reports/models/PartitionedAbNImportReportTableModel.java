@@ -23,7 +23,7 @@ public class PartitionedAbNImportReportTableModel extends OAFAbstractTableModel<
             String.format("# %s", config.getTextConfiguration().getNodeTypeName(true)), 
             config.getTextConfiguration().getNodeTypeName(true), 
             "Level",
-            config.getTextConfiguration().getContainerTypeName(false)
+            config.getTextConfiguration().getBaseAbNTextConfiguration().getNodeTypeName(false)
         });
         
         this.config = config;

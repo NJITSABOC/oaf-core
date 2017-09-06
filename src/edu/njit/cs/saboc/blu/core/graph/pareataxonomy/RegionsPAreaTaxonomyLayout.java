@@ -28,7 +28,7 @@ import javax.swing.JLabel;
  * @author Chris O
  * @param <T>
  */
-public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy> extends BasePAreaTaxonomyLayout<T> {
+public class RegionsPAreaTaxonomyLayout<T extends PAreaTaxonomy<? extends PArea>> extends BasePAreaTaxonomyLayout<T> {
     
     private final PAreaTaxonomyConfiguration config;
 

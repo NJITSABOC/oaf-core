@@ -13,7 +13,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +29,7 @@ import javax.swing.JTextField;
  * @author Chris O
  */
 public class AggregatationSliderPanel extends AbNDisplayWidget {
-    public static AggregationAction AggregationAction;
-    
+   
     public interface AggregationAction {
         public void createAndDisplayAggregateAbN(AggregatedProperty ap);
     }

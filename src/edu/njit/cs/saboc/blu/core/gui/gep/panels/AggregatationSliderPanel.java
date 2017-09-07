@@ -15,14 +15,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -30,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import sun.java2d.loops.CompositeType;
 
 /**
  *
@@ -51,12 +45,12 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
     private final JComboBox<String> selectBox;
     
     private final JCheckBox aggregationCheckBox;
-    
-    private final JCheckBox autoScaleCheckBox;
-    
+       
     private final AggregationAction aggregationAction;
     
-    private final Dimension panelSize = new Dimension(170, 120);
+    private final JPanel cards;
+    
+    private final Dimension panelSize = new Dimension(170, 100);
     
     private int currentBound = 1;
         
@@ -79,11 +73,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         this.frameState = frameState;
         this.aggregationAction = aggregationAction;
-        String[] choices = {"Auto Scale", "Manual Scale"};
+        String[] choices = {"Manual Scale", "Auto Scale"};
         this.selectBox = new JComboBox<>(choices);
         selectBox.setSelectedIndex(0);
                
-        this.setLayout(new GridLayout(2, 1, 1, 1));
+        this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
 
         aggregationSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 1);
@@ -141,11 +135,10 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
 
             }           
             displayCurrentAutoScaleBound();
-            displayCurrentAutoScaleCheckBox();
         });
                 
-        autoScaleCheckBox = new JCheckBox("Use Auto Scale");
-        autoScaleCheckBox.setToolTipText("<html>Auto aggregate on hierarchy "
+        
+        selectBox.setToolTipText("<html>Auto or manually aggregate on hierarchy "
                 + "<p> to the given number of nodes displayed.");
         
         aggregationCheckBox = new JCheckBox("Use Weighted");
@@ -154,7 +147,6 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         
         JPanel autoScalePanel = new JPanel(new BorderLayout());        
-        autoScalePanel.add(autoScaleCheckBox, BorderLayout.NORTH);
         autoScalePanel.add(new JLabel("Aggregate to "), BorderLayout.WEST);
         autoScalePanel.add(txtAutoBound, BorderLayout.CENTER);
         autoScalePanel.add(new JLabel("Node(s)"), BorderLayout.EAST);
@@ -164,25 +156,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         aggregationPanel.add(aggregationCheckBox, BorderLayout.NORTH);
         aggregationPanel.add(aggregationSlider, BorderLayout.CENTER);
         aggregationPanel.add(txtCurrentBound, BorderLayout.EAST);
-        
-        autoScaleCheckBox.addItemListener((ie) -> {
-
-            if (autoScaleCheckBox.isSelected()) {
-                this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Auto Scaled"));
-                if (!isAutoScaled) {
-                    setAutoScale(autoScaleBound, true);    
-                }                   
-                isAutoScaled = true;
-                setPanelEnabled(aggregationPanel, false);
-            } else {
-                this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
-                setAutoScale(autoScaleBound, false);
-                isAutoScaled = false;  
-                setPanelEnabled(aggregationPanel, true);
-            }
-        });
-        
-               
+                       
         aggregationCheckBox.addItemListener((ie) -> {
 
             if (aggregationCheckBox.isSelected()) {
@@ -193,7 +167,6 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 }
                 
                 isWeightedAggregated = true; 
-                setPanelEnabled(autoScalePanel, false);
             } else {
                 this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
 
@@ -202,37 +175,37 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
                 }
                 
                 isWeightedAggregated = false;
-                setPanelEnabled(autoScalePanel, true);
             }
         });
         
 
-       
-
-
         autoScalePanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         aggregationPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         
-        JPanel cards = new JPanel(new CardLayout());
-        cards.add(autoScalePanel, "Auto Scale");
+        cards = new JPanel(new CardLayout());       
         cards.add(aggregationPanel, "Manual Scale");
+        cards.add(autoScalePanel, "Auto Scale");
         
-        selectBox.addActionListener((ae) -> {
-            
+        selectBox.addActionListener((ae) -> {           
                 JComboBox jcb = (JComboBox) ae.getSource();
                 CardLayout cl = (CardLayout) cards.getLayout();
-                cl.show(cards, jcb.getSelectedItem().toString());
-                 
+                String item = jcb.getSelectedItem().toString();
+                cl.show(cards, item);
+                if (item.equalsIgnoreCase("Auto Scale")) {
+                    this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Auto Scaled"));
+                    setAutoScale(autoScaleBound, true);    
+                }else{
+                    this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
+                    setAutoScale(autoScaleBound, false);
+                }
+                
         });
 
         
-        this.add(selectBox);
-        this.add(cards);
-//        this.add(autoScalePanel);             
-//        this.add(aggregationPanel);            
-        
+        this.add(selectBox, BorderLayout.NORTH);
+        this.add(cards, BorderLayout.CENTER);                   
     }
-    
+     
     private void setBound(int bound, boolean weightedAggregated) {        
         AggregatedProperty aggregatedProperty = new AggregatedProperty(bound, weightedAggregated, autoScaleBound, false);
         if (currentBound != bound || isWeightedAggregated != weightedAggregated) {
@@ -247,13 +220,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             aggregationAction.createAndDisplayAggregateAbN(aggregatedProperty);
         }
     }
-    
-    private void setFrameState(FrameState frameState){
-        aggregationAction.createAndDisplayAggregateAbN(frameState.getAggregateProperty());
-        frameState.setInitialized(false);
-    }
-    
-    
+       
     private void displayCurrentBound() {
         displayBound(currentBound);
     }
@@ -278,13 +245,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         txtAutoBound.setText(Integer.toString(bound));
     }
     
-    private void displayCurrentAutoScaleCheckBox(){
-        displayAutoScaleCheckBox(isAutoScaled);
-    }
     
-    private void displayAutoScaleCheckBox(boolean flag){
-        autoScaleCheckBox.setSelected(flag);
-    }
     
     @Override
     public void initialize(AbNDisplayPanel displayPanel) {
@@ -349,33 +310,31 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         aggregationSlider.setMaximum(bound);
         
-//        this.initialized = false;
-        if(abn instanceof AggregateAbstractionNetwork) {
-            
-            this.currentBound = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getBound();
-            this.isWeightedAggregated = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getWeighted();
-            this.autoScaleBound = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaleBound();
-            this.isAutoScaled = ((AggregateAbstractionNetwork)abn).getAggregatedProperty().getAutoScaled();
-                         
-            aggregationSlider.setValue(currentBound);
-            aggregationCheckBox.setSelected(isWeightedAggregated);
-            autoScaleCheckBox.setSelected(isAutoScaled);
-            txtAutoBound.setText(String.valueOf(this.autoScaleBound));
-            
-            
+        this.currentBound = frameState.getAggregateProperty().getBound();
+        this.isWeightedAggregated = frameState.getAggregateProperty().getWeighted();
+        this.autoScaleBound = frameState.getAggregateProperty().getAutoScaleBound();
+        this.isAutoScaled = frameState.getAggregateProperty().getAutoScaled();
+
+        aggregationSlider.setValue(currentBound);
+        aggregationCheckBox.setSelected(isWeightedAggregated);
+        txtAutoBound.setText(String.valueOf(this.autoScaleBound));
+
+        CardLayout cl = (CardLayout) cards.getLayout();
+        if (isAutoScaled) {
+            selectBox.setSelectedItem("Auto Scale");
+            cl.show(cards, "Auto Scale");
         } else {
-            this.currentBound = frameState.getAggregateProperty().getBound();
-            this.isWeightedAggregated = frameState.getAggregateProperty().getWeighted();
-            this.autoScaleBound = frameState.getAggregateProperty().getAutoScaleBound();
-            this.isAutoScaled = frameState.getAggregateProperty().getAutoScaled();
-            
-            aggregationSlider.setValue(currentBound);
-            aggregationCheckBox.setSelected(isWeightedAggregated);
-            autoScaleCheckBox.setSelected(isAutoScaled);
-            txtAutoBound.setText(String.valueOf(this.autoScaleBound));
-            
+            selectBox.setSelectedItem("Manual Scale");
+            cl.show(cards, "Manual Scale");
+            if (weightedAggregatedFlag) {
+            this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
+        }
+        }
+
+        if (!(abn instanceof AggregateAbstractionNetwork)) {
             this.initialized = true;
         }
+    
     }
 
     @Override

@@ -48,7 +48,10 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
 
     @Override
     public String getDescription() {
-        if (ap.getWeighted()) {
+        if (ap.getAutoScaled()) {
+            return String.format("%s (auto weighted aggregated: %d)", nonAggregateDerivation.getDescription(), ap.getAutoScaleBound());
+        }
+        else if (ap.getWeighted()) {
             return String.format("%s (weighted aggregate: %d)", nonAggregateDerivation.getDescription(), ap.getBound());
         }
         return String.format("%s (aggregate: %d)", nonAggregateDerivation.getDescription(), ap.getBound());
@@ -56,7 +59,10 @@ public class AggregateDisjointAbNDerivation extends DisjointAbNDerivation
 
     @Override
     public String getName() {
-        if (ap.getWeighted()) {
+        if (ap.getAutoScaled()) {
+            return String.format("%s (Auto Weighted Aggregated)", nonAggregateDerivation.getName());
+        }
+        else if (ap.getWeighted()) {
             return String.format("%s (Weighted Aggregated)", nonAggregateDerivation.getName());
         }
         return String.format("%s (Aggregated)", nonAggregateDerivation.getName());

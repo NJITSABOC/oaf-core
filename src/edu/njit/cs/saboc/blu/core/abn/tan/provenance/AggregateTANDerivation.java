@@ -42,9 +42,11 @@ public class AggregateTANDerivation extends ClusterTANDerivation
 
     @Override
     public String getDescription() {
-        if (ap.getWeighted()) {
+        if (ap.getAutoScaled()) {
+            return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getAutoScaleBound());
+        }
+        else if (ap.getWeighted()) {
             return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
-
         }
         return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
     }
@@ -56,10 +58,14 @@ public class AggregateTANDerivation extends ClusterTANDerivation
     
     @Override
     public String getName() {
-        if (ap.getWeighted()) {
+        if (ap.getAutoScaled()) {
+            return String.format("%s (Auto Weighted Aggregated)", nonAggregateSourceDerivation.getName());
+        }
+        else if (ap.getWeighted()) {
             return String.format("%s (Weighted Aggregated)", nonAggregateSourceDerivation.getName()); 
         }
-        return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName()); 
+        else
+            return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName()); 
     }
     
     @Override

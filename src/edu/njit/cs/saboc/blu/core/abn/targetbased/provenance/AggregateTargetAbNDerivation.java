@@ -46,7 +46,10 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
     }
 
     @Override
-    public String getDescription() {
+    public String getDescription() {      
+        if (ap.getAutoScaled()) {
+            return String.format("%s (auto weighted aggregated: %d)", super.getDescription(), ap.getAutoScaleBound());
+        }
         if (ap.getWeighted()) {
             return String.format("%s (weighted aggregated: %d)", super.getDescription(), ap.getBound());
 
@@ -56,10 +59,14 @@ public class AggregateTargetAbNDerivation extends TargetAbNDerivation
 
     @Override
     public String getName() {
-        if (ap.getWeighted()) {
-            return String.format("%s (Weighted Aggregated)", super.getName());
+        if (ap.getAutoScaled()) {
+            return String.format("%s (Auto Weighted Aggregated)", super.getName());
         }
-        return String.format("%s (Aggregated)", super.getName());
+        else if (ap.getWeighted()) {
+            return String.format("%s (Weighted Aggregated)", super.getName());
+        } 
+        else
+            return String.format("%s (Aggregated)", super.getName());
     }
     
     @Override

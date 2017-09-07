@@ -1,6 +1,7 @@
 
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.NodeTest;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;
@@ -42,10 +43,14 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
 
     @Override
     public String getDescription() {
-        if (ap.getWeighted()) {
+        if (ap.getAutoScaled()) {
+            return String.format("%s (auto weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getAutoScaleBound());
+        }
+        else if (ap.getWeighted()) {
             return String.format("%s (weighted aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
         }
-        return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
+        else
+            return String.format("%s (aggregated: %d)", nonAggregateSourceDerivation.getDescription(), ap.getBound());
     }
 
     @Override
@@ -55,12 +60,14 @@ public class AggregatePAreaTaxonomyDerivation extends PAreaTaxonomyDerivation
     
     @Override
     public String getName() {
-        
-        if (ap.getWeighted()) {
-            return String.format("%s (Weighted Aggregated)", nonAggregateSourceDerivation.getName());
+        if (ap.getAutoScaled()) {
+            return String.format("%s (Auto Weighted Aggregated)", nonAggregateSourceDerivation.getName());
         }
-        
-        return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName());
+        else if (ap.getWeighted()) {
+            return String.format("%s (Weighted Aggregated)", nonAggregateSourceDerivation.getName());
+        } 
+        else
+            return String.format("%s (Aggregated)", nonAggregateSourceDerivation.getName());
     }
 
     @Override

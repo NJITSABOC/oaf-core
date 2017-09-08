@@ -56,7 +56,7 @@ public class OAFRecentlyOpenedFileManager {
             String fileType, 
             int fileLimit) throws RecentlyOpenedFileException {
         
-        this(new File(String.format("appdata\\%s\\%s", appDataSubDir, fileType)), fileLimit);
+        this(new File(String.format("%s\\%s\\%s", OAFStateFileManager.ROOT_FOLDER_DIR, appDataSubDir, fileType)), fileLimit);
     }
     
     private void ensureInitialized() throws RecentlyOpenedFileException {

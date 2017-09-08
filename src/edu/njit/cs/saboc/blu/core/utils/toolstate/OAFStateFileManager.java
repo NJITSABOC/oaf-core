@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class OAFStateFileManager {
     
+    public static final String ROOT_FOLDER_DIR = "oaf-appdata";
+    
     private OAFRecentlyOpenedFileManager recentlyOpenedOntologiesManager;
     
     private OAFOntologySpecificFileManager recentAbNWorkspaceManager;

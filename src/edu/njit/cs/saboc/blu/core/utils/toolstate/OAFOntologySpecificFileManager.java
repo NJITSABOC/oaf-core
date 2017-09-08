@@ -37,7 +37,7 @@ public class OAFOntologySpecificFileManager {
         this.fileType = fileType;
         
         // TODO: Make appdata location user-selectable
-        this.ontologyFileListFile = new File(String.format("appdata\\%s\\%s", appDataSubFolder, fileType));
+        this.ontologyFileListFile = new File(String.format("%s\\%s\\%s", OAFStateFileManager.ROOT_FOLDER_DIR, appDataSubFolder, fileType));
         
         ensureInitialized();
         
@@ -57,7 +57,7 @@ public class OAFOntologySpecificFileManager {
                     Integer.toHexString(ontologyFile.getPath().hashCode()), 
                     fileType);
             
-            File filesFile = new File(String.format("appdata\\%s\\%s", appDataSubFolder, fileName));
+            File filesFile = new File(String.format("%s\\%s\\%s", OAFStateFileManager.ROOT_FOLDER_DIR, appDataSubFolder, fileName));
             
             if(!FileUtilities.ensureFileExistsAndWritable(filesFile)) {
                 throw new RecentlyOpenedFileException("Cannot create ontology specific configuration file.");
@@ -74,7 +74,7 @@ public class OAFOntologySpecificFileManager {
     private void ensureInitialized() throws RecentlyOpenedFileException {
         
         try {
-            Files.createDirectories(Paths.get(String.format("appdata\\%s", appDataSubFolder)));
+            Files.createDirectories(Paths.get(String.format("%s\\%s", OAFStateFileManager.ROOT_FOLDER_DIR, appDataSubFolder)));
         } catch (IOException ioe) {
             throw new RecentlyOpenedFileException("Cannot create appdata folders.");
         }

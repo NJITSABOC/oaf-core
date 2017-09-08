@@ -59,7 +59,7 @@ public class AggregateDisjointAbstractionNetwork<
                 nonAggregateDisjointAbN.getLevelCount(), 
                 nonAggregateDisjointAbN.getAllSourceNodes(), 
                 nonAggregateDisjointAbN.getOverlappingNodes(), 
-                null);
+                nonAggregateDisjointAbN.getDerivation()); // TODO: Is this call to getDerivation() correct?
         
         AggregateAbstractionNetwork agregateAbN = (AggregateAbstractionNetwork)superAggregateDisjointAbN;
         
@@ -70,7 +70,7 @@ public class AggregateDisjointAbstractionNetwork<
             nonAggregateDisjointAbN, 
             unaggregatedAncestorAbN.getNodeHierarchy(), 
             unaggregatedAncestorAbN.getSourceHierarchy(), 
-            null);
+            unaggregatedAncestorAbN.getDerivation()); // TODO: Is this call to getDerivation() correct?
 
         return new AggregateAncestorDisjointAbN(
                 selectedRoot, 

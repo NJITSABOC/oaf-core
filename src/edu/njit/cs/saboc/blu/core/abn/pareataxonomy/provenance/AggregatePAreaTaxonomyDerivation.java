@@ -1,7 +1,6 @@
 
 package edu.njit.cs.saboc.blu.core.abn.pareataxonomy.provenance;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.NodeTest;
 import edu.njit.cs.saboc.blu.core.abn.aggregate.AggregatedProperty;
 import edu.njit.cs.saboc.blu.core.abn.pareataxonomy.PAreaTaxonomy;
 import edu.njit.cs.saboc.blu.core.abn.provenance.AggregateAbNDerivation;

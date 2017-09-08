@@ -14,7 +14,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +72,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         
         this.frameState = frameState;
         this.aggregationAction = aggregationAction;
-        String[] choices = {"Manual Scale", "Auto Scale"};
+        String[] choices = {"Manual Aggregate", "Auto Aggregate"};
         this.selectBox = new JComboBox<>(choices);
         selectBox.setSelectedIndex(0);
                
@@ -104,7 +103,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         });
         
         this.txtCurrentBound = new JTextField();
-        this.txtCurrentBound.setText("1");
+        this.txtCurrentBound.setText("25");
         this.txtCurrentBound.setPreferredSize(new Dimension(30, -1));
         
         this.txtCurrentBound.addActionListener((ae) -> {
@@ -183,16 +182,16 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         aggregationPanel.setBorder(BorderFactory.createDashedBorder(Color.BLACK));
         
         cards = new JPanel(new CardLayout());       
-        cards.add(aggregationPanel, "Manual Scale");
-        cards.add(autoScalePanel, "Auto Scale");
+        cards.add(aggregationPanel, "Manual Aggregate");
+        cards.add(autoScalePanel, "Auto Aggregate");
         
         selectBox.addActionListener((ae) -> {           
                 JComboBox jcb = (JComboBox) ae.getSource();
                 CardLayout cl = (CardLayout) cards.getLayout();
                 String item = jcb.getSelectedItem().toString();
                 cl.show(cards, item);
-                if (item.equalsIgnoreCase("Auto Scale")) {
-                    this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Auto Scaled"));
+                if (item.equalsIgnoreCase("Auto Aggregate")) {
+                    this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Auto Aggregate"));
                     setAutoScale(autoScaleBound, true);    
                 }else{
                     this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Aggregate"));
@@ -321,11 +320,11 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
 
         CardLayout cl = (CardLayout) cards.getLayout();
         if (isAutoScaled) {
-            selectBox.setSelectedItem("Auto Scale");
-            cl.show(cards, "Auto Scale");
+            selectBox.setSelectedItem("Auto Aggregate");
+            cl.show(cards, "Auto Aggregate");
         } else {
-            selectBox.setSelectedItem("Manual Scale");
-            cl.show(cards, "Manual Scale");
+            selectBox.setSelectedItem("Manual Aggregate");
+            cl.show(cards, "Manual Aggregate");
             if (weightedAggregatedFlag) {
             this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
         }

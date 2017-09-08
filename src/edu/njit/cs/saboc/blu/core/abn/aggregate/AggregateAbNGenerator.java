@@ -82,7 +82,7 @@ public class AggregateAbNGenerator <
                         .limit(top)
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 
-                int weightedBound = sorted.values().stream().min(Integer::compare).get();
+//                int weightedBound = sorted.values().stream().min(Integer::compare).get();
                 //TO-Do 
                 // set the weighted aggregated by this smallest weighted aggregated value here.
 //                aggregatedProperty.setBound(weightedBound);

@@ -103,7 +103,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
         });
         
         this.txtCurrentBound = new JTextField();
-        this.txtCurrentBound.setText("25");
+        this.txtCurrentBound.setText("1");
         this.txtCurrentBound.setPreferredSize(new Dimension(30, -1));
         
         this.txtCurrentBound.addActionListener((ae) -> {
@@ -327,7 +327,7 @@ public class AggregatationSliderPanel extends AbNDisplayWidget {
             cl.show(cards, "Manual Aggregate");
             if (weightedAggregatedFlag) {
             this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Weighted Aggregate"));
-        }
+            }
         }
 
         if (!(abn instanceof AggregateAbstractionNetwork)) {

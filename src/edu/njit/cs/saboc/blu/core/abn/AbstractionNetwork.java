@@ -37,11 +37,6 @@ public abstract class AbstractionNetwork<NODE_T extends Node> {
         this.nodeHierarchy = nodeHierarchy;
         this.sourceHierarchy = sourceHierarchy;
         this.derivation = derivation;
-        
-        if(derivation == null) {
-            System.err.println("NULL DERIVATION! --- " + this);
-            throw new RuntimeException();
-        }
     }
     
     public AbNDerivation getDerivation() {
